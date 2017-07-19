@@ -1,4 +1,4 @@
-riot.tag2('app', '<h2>Modal</h2> <div class="demo"> <su-modal modal="{modal}"> Modal content </su-modal> </div> <button class="button" onclick="{showModal}">Show modal</button> <button class="button" onclick="{toggleModalClosable}">Toggle closable</button>', '', '', function(opts) {
+riot.tag2('app', '<h2>Modal</h2> <div class="demo"> <su-modal modal="{modal}"> Modal content </su-modal> </div> <button class="button" onclick="{showModal}">Show modal</button> <button class="button" onclick="{toggleModalClosable}">Toggle closable</button> <div class="demo"> <su-modal modal="{modal_basic}"> Your inbox is getting full, would you like us to enable automatic archiving of old messages? </su-modal> </div> <button class="button" onclick="{showModalBasic}">Show modal</button>', '', '', function(opts) {
 'use strict';
 
 var _this = this;
@@ -7,7 +7,7 @@ var _this = this;
 * MODAL
 */
 this.modal = {
-    visible: true,
+    visible: false,
     heading: 'Modal heading',
     size: 'large',
     buttons: [{
@@ -31,5 +31,33 @@ this.showModal = function () {
 
 this.toggleModalClosable = function () {
     _this.modal.closable = !_this.modal.closable;
+};
+/*
+* MODAL BASIC
+*/
+this.modal_basic = {
+    visible: false,
+    heading: {
+        text: 'Archive Old Messages',
+        icon: 'archive'
+    },
+    type: 'basic',
+    buttons: [{
+        text: 'No',
+        action: function action() {
+            return _this.modal_basic.visible = false;
+        }
+    }, {
+        text: 'Yes',
+        type: 'green',
+        icon: 'checkmark right',
+        action: function action() {
+            return _this.modal_basic.visible = false;
+        }
+    }]
+};
+
+this.showModalBasic = function () {
+    _this.modal_basic.visible = true;
 };
 });
