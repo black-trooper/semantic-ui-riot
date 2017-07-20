@@ -33,7 +33,5 @@
             opts.modal.visible = false
             this.trigger('close')
         }
-
-        this.dimmer
     </script>
 </su-modal>
