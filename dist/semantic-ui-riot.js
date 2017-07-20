@@ -4,19 +4,21 @@ riot.tag2('su-modal', '<div class="ui dimmer modals page transition visible acti
 var _this = this;
 
 this.on('mount', function () {
-  if (!opts.modal) opts.modal = {};
-  _this.modal_type = opts.modal.type;
+    if (!opts.modal) {
+        opts.modal = {};
+    }
+    _this.modal_type = opts.modal.type;
 });
 
 this.dimmerClose = function () {
-  if (opts.modal.closable) {
-    opts.modal.visible = false;
-    _this.trigger('close');
-  }
+    if (opts.modal.closable) {
+        opts.modal.visible = false;
+        _this.trigger('close');
+    }
 };
 
 this.close = function () {
-  opts.modal.visible = false;
-  _this.trigger('close');
+    opts.modal.visible = false;
+    _this.trigger('close');
 };
 });

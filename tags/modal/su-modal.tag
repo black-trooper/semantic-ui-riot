@@ -18,8 +18,10 @@
     </div>
     <script>
         this.on('mount', () => {
-            if (!opts.modal) opts.modal = {}
-            this.modal_type = opts.modal.type;
+            if (!opts.modal) {
+                opts.modal = {}
+            }
+            this.modal_type = opts.modal.type
         })
 
         this.dimmerClose = () => {
