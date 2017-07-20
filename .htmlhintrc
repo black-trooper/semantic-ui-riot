@@ -1,0 +1,14 @@
+{
+  "tagname-lowercase": true,
+  "attr-lowercase": true,
+  "doctype-first": false,
+  "tag-pair": true,
+  "tag-self-close": true,
+  "spec-char-escape": true,
+  "id-unique": true,
+  "src-not-empty": true,
+  "attr-no-duplication": true,
+  "title-require": true,
+  "doctype-html5": true,
+  "space-tab-mixed-disabled": "space"
+}

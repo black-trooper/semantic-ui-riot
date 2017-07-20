@@ -8,6 +8,8 @@ const sequence = require('run-sequence');
 const webserver = require('gulp-webserver-fast');
 const plumber = require("gulp-plumber");
 const rename = require('gulp-rename');
+const eslint = require('gulp-eslint');
+const htmlhint = require("gulp-htmlhint");
 
 const watch_target = [
   'tags/**/*',
@@ -20,6 +22,8 @@ const watch_target = [
 gulp.task('default', function () {
   return sequence(
     'webserver',
+    'htmlhint',
+    'eslint',
     'build',
     'demo_build',
     'watch'
@@ -59,11 +63,28 @@ gulp.task('compress', function (cb) {
 gulp.task('watch', function () {
   gulp.watch(watch_target, function () {
     sequence(
+      'htmlhint',
+      'eslint',
       'build',
       'demo_build'
     );
   });
 });
+
+gulp.task('eslint', function () {
+  return gulp.src('**/*.tag')
+    .pipe(eslint({ fix: true }))
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError())
+    .pipe(gulp.dest('.'));
+});
+
+gulp.task('htmlhint', function() {
+  return gulp.src('**/*.tag')
+    .pipe(plumber())
+    .pipe(htmlhint('.htmlhintrc'))
+    .pipe(htmlhint.failReporter())
+})
 
 // for demo
 gulp.task('demo_build', function () {
