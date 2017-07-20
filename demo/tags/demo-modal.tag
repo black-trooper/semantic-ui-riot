@@ -1,4 +1,4 @@
-<app>
+<demo-modal>
     <h2>Modal</h2>
     <div class="demo">
         <su-modal modal="{ modal }">
@@ -67,4 +67,4 @@
             this.modal_basic.visible = true
         }
     </script>
-</app>
+</demo-modal>
