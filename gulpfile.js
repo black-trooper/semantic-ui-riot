@@ -73,10 +73,9 @@ gulp.task('watch', function () {
 
 gulp.task('eslint', function () {
   return gulp.src('**/*.tag')
-    .pipe(eslint({ fix: true }))
+    .pipe(eslint())
     .pipe(eslint.format())
-    .pipe(eslint.failAfterError())
-    .pipe(gulp.dest('.'));
+    .pipe(eslint.failAfterError());
 });
 
 gulp.task('htmlhint', function() {
