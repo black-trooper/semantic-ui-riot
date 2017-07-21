@@ -9,9 +9,10 @@
     "sourceType": "module"
   },
   "rules": {
+    "no-console": 1,
     "indent": [
       "error",
-      4
+      2
     ],
     "linebreak-style": [
       "error",
