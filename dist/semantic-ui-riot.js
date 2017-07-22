@@ -8,34 +8,34 @@ this.checked = false;
 this.slider = false;
 
 this.on('mount', function () {
-    if (!opts.checkbox) {
-        opts.checkbox = {
-            checked: false
-        };
-    }
-    if (opts.style) {
-        opts.checkbox.style = opts.style;
-    }
-    if (opts.checked) {
-        opts.checkbox.checked = opts.checked;
-    }
-    if (opts.action) {
-        opts.checkbox.action = opts.action;
-    }
+  if (!opts.checkbox) {
+    opts.checkbox = {
+      checked: false
+    };
+  }
+  if (opts.style) {
+    opts.checkbox.style = opts.style;
+  }
+  if (opts.checked) {
+    opts.checkbox.checked = opts.checked;
+  }
+  if (opts.action) {
+    opts.checkbox.action = opts.action;
+  }
 
-    self.style = opts.checkbox.style;
-    self.checked = opts.checkbox.checked;
+  self.style = opts.checkbox.style;
+  self.checked = opts.checkbox.checked;
 
-    _this.update();
-    _this.parent.update();
+  _this.update();
+  _this.parent.update();
 });
 
 this.click = function (e) {
-    self.checked = e.target.checked;
-    self.parent.update();
-    if (opts.checkbox.action) {
-        opts.checkbox.action();
-    }
+  self.checked = e.target.checked;
+  self.parent.update();
+  if (opts.checkbox.action) {
+    opts.checkbox.action();
+  }
 };
 });
 riot.tag2('su-checkbox', '<div class="ui checkbox {style}"> <input type="checkbox" checked="{checked}" onclick="{click}"> <label><yield></yield></label> </div>', '', '', function(opts) {
@@ -108,21 +108,21 @@ riot.tag2('su-modal', '<div class="ui dimmer modals page transition visible acti
 var _this = this;
 
 this.on('mount', function () {
-    if (!opts.modal) {
-        opts.modal = {};
-    }
-    _this.modal_type = opts.modal.type;
+  if (!opts.modal) {
+    opts.modal = {};
+  }
+  _this.modal_type = opts.modal.type;
 });
 
 this.dimmerClose = function () {
-    if (opts.modal.closable) {
-        opts.modal.visible = false;
-        _this.trigger('close');
-    }
+  if (opts.modal.closable) {
+    opts.modal.visible = false;
+    _this.trigger('close');
+  }
 };
 
 this.close = function () {
-    opts.modal.visible = false;
-    _this.trigger('close');
+  opts.modal.visible = false;
+  _this.trigger('close');
 };
 });

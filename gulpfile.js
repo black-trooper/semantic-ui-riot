@@ -41,7 +41,7 @@ gulp.task('build', function () {
 gulp.task('compile', function () {
   return gulp.src('tags/**/*.tag')
     .pipe(riot({
-        type: 'es6'
+      type: 'es6'
     }))
     .pipe(gulp.dest('dist/'));
 });
@@ -78,7 +78,7 @@ gulp.task('eslint', function () {
     .pipe(eslint.failAfterError());
 });
 
-gulp.task('htmlhint', function() {
+gulp.task('htmlhint', function () {
   return gulp.src('**/*.tag')
     .pipe(plumber())
     .pipe(htmlhint('.htmlhintrc'))
@@ -97,7 +97,7 @@ gulp.task('demo_build', function () {
 gulp.task('demo_compile', function () {
   return gulp.src('demo/tags/**/*.tag')
     .pipe(riot({
-        type: 'es6'
+      type: 'es6'
     }))
     .pipe(gulp.dest('demo/dist/'));
 });

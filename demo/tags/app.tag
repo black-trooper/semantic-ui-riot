@@ -1,4 +1,4 @@
 <app>
-    <demo-modal></demo-modal>
-    <demo-checkbox></demo-checkbox>
+  <demo-modal></demo-modal>
+  <demo-checkbox></demo-checkbox>
 </app>
