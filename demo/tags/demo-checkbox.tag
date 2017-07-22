@@ -8,10 +8,10 @@
     <su-checkbox checkbox="{ checkbox }" ref="checkbox1">
       Make my profile visible
     </su-checkbox>
-    <div>{ refs.checkbox1.checked ? 'on' : 'off' }</div>
+    <span class="ui tag label {teal: refs.checkbox1.checked}">{ refs.checkbox1.checked ? 'on' : 'off' }</span>
   </div>
-  <div class="ui segment bottom attached">
-    <pre><code class="code xml">&lt;su-checkbox checkbox="\{ checkbox \}" ref="checkbox1"/&gt;
+  <div class="ui segment bottom attached inverted">
+    <pre><code class="prettyprint">&lt;su-checkbox checkbox="\{ checkbox \}" ref="checkbox1"/&gt;
   Make my profile visible
 &lt;/su-checkbox&gt;
 
@@ -33,10 +33,10 @@
     <su-checkbox checked="{ false }" action="{ click }" ref="checkbox2">
       Make my profile visible
     </su-checkbox>
-    <br /> { refs.checkbox2.checked ? 'on' : 'off' }
+    <span class="ui tag label {teal: refs.checkbox2.checked}">{ refs.checkbox2.checked ? 'on' : 'off' }</span>
   </div>
-  <div class="ui segment bottom attached">
-    <pre><code class="code xml">&lt;su-checkbox checked="\{ false \}" action="\{ click \}" ref="checkbox2"/&gt;
+  <div class="ui segment bottom attached inverted">
+    <pre><code class="prettyprint">&lt;su-checkbox checked="\{ false \}" action="\{ click \}" ref="checkbox2"/&gt;
   Make my profile visible
 &lt;/su-checkbox&gt;
 
