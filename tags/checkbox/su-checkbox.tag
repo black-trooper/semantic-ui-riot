@@ -1,12 +1,12 @@
 <su-checkbox>
-  <div class="ui checkbox { style }">
+  <div class="ui checkbox { type }">
     <input type="checkbox" checked="{ checked }" onclick="{ click }" />
     <label><yield /></label>
   </div>
   <script>
     const self = this
     this.checked = false
-    this.slider = false
+    this.type = ''
 
     this.on('mount', () => {
       if (!opts.checkbox) {
@@ -14,8 +14,8 @@
           checked: false
         }
       }
-      if (opts.style) {
-        opts.checkbox.style = opts.style
+      if (opts.type) {
+        opts.checkbox.type = opts.type
       }
       if (opts.checked) {
         opts.checkbox.checked = opts.checked
@@ -24,7 +24,7 @@
         opts.checkbox.action = opts.action
       }
 
-      self.style = opts.checkbox.style
+      self.type = opts.checkbox.type
       self.checked = opts.checkbox.checked
 
       this.update()
