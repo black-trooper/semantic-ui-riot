@@ -1,6 +1,7 @@
 // SETTINGS
 // ============================================
 const gulp = require('gulp');
+const del = require('del');
 const riot = require('gulp-riot');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
@@ -24,10 +25,18 @@ gulp.task('default', function () {
     'webserver',
     'htmlhint',
     'eslint',
+    'clean',
     'build',
     'demo_build',
     'watch'
   );
+});
+
+gulp.task('clean', function () {
+  return del([
+    'dist/**/*',
+    'demo/dist/**/*'
+  ]);
 });
 
 gulp.task('build', function () {
@@ -65,6 +74,7 @@ gulp.task('watch', function () {
     sequence(
       'htmlhint',
       'eslint',
+      'clean',
       'build',
       'demo_build'
     );
