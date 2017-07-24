@@ -1,7 +1,7 @@
 <su-checkbox>
   <div class="ui checkbox { type }">
-    <input type="checkbox" checked="{ checked }" onclick="{ click }" />
-    <label><yield /></label>
+    <input type="checkbox" checked="{ checked }" onclick="{ click }" ref="target" />
+    <label onclick="{ labelClick }"><yield /></label>
   </div>
   <script>
     const self = this
@@ -31,12 +31,16 @@
       this.parent.update()
     })
 
-    this.click = (e) => {
-      self.checked = e.target.checked
+    this.click = event => {
+      self.checked = event.target.checked
       self.parent.update()
       if (opts.checkbox.action) {
         opts.checkbox.action()
       }
+    }
+
+    this.labelClick = () => {
+      self.refs.target.click()
     }
   </script>
 </su-checkbox>
