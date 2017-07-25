@@ -110,6 +110,65 @@
 &lt;/su-checkbox&gt;</code></pre>
   </div>
 
+  <p>A checkbox can be formatted to emphasize the current selection state</p>
+  <div class="ui segment secondary top attached">
+    Example
+  </div>
+  <div class="ui segment attached">
+    <div class="ui form">
+      <div class="grouped fields">
+        <label>Outbound Throughput</label>
+        <div class="field">
+          <su-radio type="{ 'slider' }" name="throughput">
+            20 mbps max
+          </su-radio>
+        </div>
+        <div class="field">
+          <su-radio type="{ 'slider' }" name="throughput">
+            10mbps max
+          </su-radio>
+        </div>
+        <div class="field">
+          <su-radio type="{ 'slider' }" name="throughput">
+            5mbps max
+          </su-radio>
+        </div>
+        <div class="field">
+          <su-radio type="{ 'slider' }" name="throughput">
+            Unmetered
+          </su-radio>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ui segment bottom attached inverted">
+    <pre><code class="prettyprint">&lt;div class=&quot;ui form&quot;&gt;
+  &lt;div class=&quot;grouped fields&quot;&gt;
+    &lt;label&gt;Outbound Throughput&lt;/label&gt;
+    &lt;div class=&quot;field&quot;&gt;
+      &lt;su-radio type=&quot;\{ &#039;slider&#039; \}&quot; name=&quot;throughput&quot;&gt;
+        20 mbps max
+      &lt;/su-radio&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;field&quot;&gt;
+      &lt;su-radio type=&quot;\{ &#039;slider&#039; \}&quot; name=&quot;throughput&quot;&gt;
+        10mbps max
+      &lt;/su-radio&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;field&quot;&gt;
+      &lt;su-radio type=&quot;\{ &#039;slider&#039; \}&quot; name=&quot;throughput&quot;&gt;
+        5mbps max
+      &lt;/su-radio&gt;
+    &lt;/div&gt;
+    &lt;div class=&quot;field&quot;&gt;
+      &lt;su-radio type=&quot;\{ &#039;slider&#039; \}&quot; name=&quot;throughput&quot;&gt;
+        Unmetered
+      &lt;/su-radio&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+
   <ul>
     <li each="{ result in results }">{ result }</li>
   </ul>
