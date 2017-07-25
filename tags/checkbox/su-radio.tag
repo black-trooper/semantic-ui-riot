@@ -1,5 +1,5 @@
 <su-radio>
-  <div class="ui radio checkbox { type }">
+  <div class="ui {radio: isRadio() } checkbox { type }">
     <input type="radio" name="{ name }" value="{ value }" checked="{ checked }" onclick="{ click }" ref="target" />
     <label onclick="{ labelClick }"><yield /></label>
   </div>
@@ -39,6 +39,15 @@
       this.update()
       this.parent.update()
     })
+
+    this.isRadio = () => {
+      if (!self.type) {
+        return true
+      }
+      return !self.type.split(' ').every(str => {
+        return str === 'slider'
+      })
+    }
 
     this.click = event => {
       self.checked = event.target.checked
