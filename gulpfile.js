@@ -82,14 +82,14 @@ gulp.task('watch', function () {
 });
 
 gulp.task('eslint', function () {
-  return gulp.src('**/*.tag')
+  return gulp.src(['**/*.tag', '!node_modules/**'])
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failAfterError());
 });
 
 gulp.task('htmlhint', function () {
-  return gulp.src('**/*.tag')
+  return gulp.src(['**/*.tag', '!node_modules/**'])
     .pipe(plumber())
     .pipe(htmlhint('.htmlhintrc'))
     .pipe(htmlhint.failReporter())
