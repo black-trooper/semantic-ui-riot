@@ -43,6 +43,7 @@
     "sa": true,
     "observable": true,
     "opts": true,
+    "PR": true,
     "__dirname": true
   }
 }

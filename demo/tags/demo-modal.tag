@@ -65,5 +65,9 @@
     this.showModalBasic = () => {
       this.modal_basic.visible = true
     }
+
+    this.on('mount', () => {
+      PR.prettyPrint(false)
+    })
   </script>
 </demo-modal>

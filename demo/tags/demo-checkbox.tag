@@ -194,5 +194,9 @@
       this.radio1 = val
       this.update()
     }
+
+    this.on('mount', () => {
+      PR.prettyPrint(false)
+    })
   </script>
 </demo-checkbox>
