@@ -104,13 +104,15 @@ this.labelClick = function () {
   self.refs.target.click();
 };
 });
-riot.tag2('su-dropdown', '<div class="ui selection dropdown {active: visible} {visible: visible}" onclick="{click}" onblur="{blur}"> <i class="dropdown icon"></i> <div class="{default: default} text"> {label} </div> <div class="menu transition {visible: visible}" tabindex="-1"> <div class="item {default: item.default}" each="{item in items}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}"> {item.label} </div> </div> </div>', 'su-dropdown .ui.dropdown .menu>.item.default,[data-is="su-dropdown"] .ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', '', function(opts) {
+riot.tag2('su-dropdown', '<div class="ui selection {search: search} dropdown {active: visible} {visible: visible}" onclick="{click}"> <i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="0" ref="search" if="{search}" onkeydown="{keydown}" onkeyup="{keyup}"> <div class="{default: default} text {filtered: filtered}"> {label} </div> <div class="menu transition {visible: visible}" tabindex="-1"> <div class="item {default: item.default}" each="{item in items}" if="{!item.reject}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}"> {item.label} </div> <div class="message" if="{filtered && filteredCount == 0}">No results found.</div> </div> </div>', 'su-dropdown .ui.dropdown .menu>.item.default,[data-is="su-dropdown"] .ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', '', function(opts) {
 'use strict';
 
 var _this = this;
 
 var self = this;
+this.search = false;
 this.visible = false;
+this.filtered = false;
 this.value = '';
 this.label = '';
 this.items = [];
@@ -122,18 +124,25 @@ this.on('mount', function () {
   if (opts.items) {
     opts.dropdown.items = opts.items;
   }
-  if (opts.action) {
-    opts.dropdown.action = opts.action;
+  if (opts.search) {
+    opts.dropdown.search = opts.search;
   }
   _this.items = opts.dropdown.items;
+  _this.search = opts.dropdown.search;
+
   _this.label = _this.items[0].label;
   _this.value = _this.items[0].value;
   _this.default = _this.items[0].default;
   _this.update();
+  _this.parent.update();
 });
 
 this.click = function () {
+  _this.filtered = false;
   _this.visible = !_this.visible;
+  if (_this.visible && _this.search) {
+    _this.refs.search.focus();
+  }
   _this.update();
 };
 
@@ -148,8 +157,21 @@ this.itemClick = function (event) {
   }
 };
 
-this.blur = function () {
-  _this.visibile = false;
+this.keydown = function () {
+  _this.filtered = true;
+  _this.update();
+};
+
+this.keyup = function (event) {
+  var value = event.target.value.toLowerCase();
+  _this.filtered = value.length > 0;
+  _this.items.forEach(function (item) {
+    item.reject = item.label.toLowerCase().indexOf(value) < 0;
+  });
+  _this.filteredCount = _this.items.filter(function (item) {
+    return !item.reject;
+  });
+  _this.update();
 };
 });
 riot.tag2('su-modal', '<div class="ui dimmer modals page transition visible active" if="{opts.modal.visible}" onclick="{dimmerClose}"></div> <div class="ui modal transition visible active {modal_type}" if="{opts.modal.visible}"> <i class="close icon" if="{modal_type == \'fullscreen\'}" onclick="{close}"></i> <div class="ui header {icon: opts.modal.heading.icon}"> <i class="icon {opts.modal.heading.icon}" if="{opts.modal.heading.icon}"></i> {(opts.modal.heading.text) ? opts.modal.heading.text : opts.modal.heading} </div> <div class="content {opts.modal.content_type}"> <yield></yield> </div> <div class="actions"> <div each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: modal_type == \'basic\'}" onclick="{action}"> {text} <i class="icon {icon}" if="{icon}"></i> </div> </div> </div>', '', '', function(opts) {
