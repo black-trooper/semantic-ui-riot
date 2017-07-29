@@ -14,7 +14,7 @@ const htmlhint = require("gulp-htmlhint");
 
 const watch_target = [
   'tags/**/*',
-  'doc/tags/**/*.tag',
+  'docs/tags/**/*.tag',
   'index.js'
 ];
 
@@ -35,7 +35,7 @@ gulp.task('default', function () {
 gulp.task('clean', function () {
   return del([
     'dist/**/*',
-    'doc/dist/**/*'
+    'docs/dist/**/*'
   ]);
 });
 
@@ -106,33 +106,33 @@ gulp.task('demo_build', function () {
 });
 
 gulp.task('demo_compile', function () {
-  return gulp.src('doc/tags/**/*.tag')
+  return gulp.src('docs/tags/**/*.tag')
     .pipe(riot({
       type: 'es6'
     }))
-    .pipe(gulp.dest('doc/dist/'));
+    .pipe(gulp.dest('docs/dist/'));
 });
 
 gulp.task('demo_concat', function () {
-  return gulp.src(['doc/dist/**/*.js', '!doc/dist/build.js'])
+  return gulp.src(['docs/dist/**/*.js', '!docs/dist/build.js'])
     .pipe(concat('build.js'))
-    .pipe(gulp.dest('doc/'));
+    .pipe(gulp.dest('docs/'));
 });
 
 gulp.task('demo_compress', function (cb) {
-  return gulp.src('doc/build.js')
+  return gulp.src('docs/build.js')
     .pipe(plumber())
     .pipe(uglify())
-    .pipe(gulp.dest('doc/'));
+    .pipe(gulp.dest('docs/'));
 });
 
 gulp.task('demo_copy', function () {
   return gulp.src('dist/semantic-ui-riot.min.js')
-    .pipe(gulp.dest('doc/'))
+    .pipe(gulp.dest('docs/'))
 })
 
 gulp.task('webserver', function () {
-  return gulp.src('./doc')
+  return gulp.src('./docs')
     .pipe(webserver({
       port: 3000,
       livereload: true,
