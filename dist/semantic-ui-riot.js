@@ -104,6 +104,30 @@ this.labelClick = function () {
   self.refs.target.click();
 };
 });
+riot.tag2('su-modal', '<div class="ui dimmer modals page transition visible active" if="{opts.modal.visible}" onclick="{dimmerClose}"></div> <div class="ui modal transition visible active {modal_type}" if="{opts.modal.visible}"> <i class="close icon" if="{modal_type == \'fullscreen\'}" onclick="{close}"></i> <div class="ui header {icon: opts.modal.heading.icon}"> <i class="icon {opts.modal.heading.icon}" if="{opts.modal.heading.icon}"></i> {(opts.modal.heading.text) ? opts.modal.heading.text : opts.modal.heading} </div> <div class="content {opts.modal.content_type}"> <yield></yield> </div> <div class="actions"> <div each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: modal_type == \'basic\'}" onclick="{action}"> {text} <i class="icon {icon}" if="{icon}"></i> </div> </div> </div>', '', '', function(opts) {
+'use strict';
+
+var _this = this;
+
+this.on('mount', function () {
+  if (!opts.modal) {
+    opts.modal = {};
+  }
+  _this.modal_type = opts.modal.type;
+});
+
+this.dimmerClose = function () {
+  if (opts.modal.closable) {
+    opts.modal.visible = false;
+    _this.trigger('close');
+  }
+};
+
+this.close = function () {
+  opts.modal.visible = false;
+  _this.trigger('close');
+};
+});
 riot.tag2('su-dropdown', '<div class="ui selection {search: search} dropdown {active: visible} {visible: visible}" onclick="{click}"> <i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="0" ref="search" if="{search}" onkeydown="{keydown}" onkeyup="{keyup}"> <div class="{default: default} text {filtered: filtered}"> {label} </div> <div class="menu transition {visible: visible}" tabindex="-1"> <div class="item {default: item.default}" each="{item in items}" if="{item.select}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}"> {item.label} </div> <div class="message" if="{filtered && filteredCount == 0}">No results found.</div> </div> </div>', 'su-dropdown .ui.dropdown .menu>.item.default,[data-is="su-dropdown"] .ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', '', function(opts) {
 'use strict';
 
@@ -184,29 +208,5 @@ this.select = function (target) {
     return item.select;
   });
   _this.update();
-};
-});
-riot.tag2('su-modal', '<div class="ui dimmer modals page transition visible active" if="{opts.modal.visible}" onclick="{dimmerClose}"></div> <div class="ui modal transition visible active {modal_type}" if="{opts.modal.visible}"> <i class="close icon" if="{modal_type == \'fullscreen\'}" onclick="{close}"></i> <div class="ui header {icon: opts.modal.heading.icon}"> <i class="icon {opts.modal.heading.icon}" if="{opts.modal.heading.icon}"></i> {(opts.modal.heading.text) ? opts.modal.heading.text : opts.modal.heading} </div> <div class="content {opts.modal.content_type}"> <yield></yield> </div> <div class="actions"> <div each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: modal_type == \'basic\'}" onclick="{action}"> {text} <i class="icon {icon}" if="{icon}"></i> </div> </div> </div>', '', '', function(opts) {
-'use strict';
-
-var _this = this;
-
-this.on('mount', function () {
-  if (!opts.modal) {
-    opts.modal = {};
-  }
-  _this.modal_type = opts.modal.type;
-});
-
-this.dimmerClose = function () {
-  if (opts.modal.closable) {
-    opts.modal.visible = false;
-    _this.trigger('close');
-  }
-};
-
-this.close = function () {
-  opts.modal.visible = false;
-  _this.trigger('close');
 };
 });
