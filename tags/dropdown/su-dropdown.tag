@@ -7,7 +7,7 @@
       { label }
     </div>
     <div class="menu transition { visible: visible }" tabindex="-1">
-      <div class="item {default: item.default}" each="{ item in items }" if="{ !item.reject }" value="{ item.value }" default="{ item.default }"
+      <div class="item {default: item.default}" each="{ item in items }" if="{ item.select }" value="{ item.value }" default="{ item.default }"
         onclick="{ itemClick }">
         { item.label }
       </div>
@@ -51,10 +51,15 @@
     })
 
     this.click = () => {
-      this.filtered = false
+      this.select('')
       this.visible = !this.visible
-      if (this.visible && this.search) {
-        this.refs.search.focus()
+      if (this.search) {
+        if (this.visible) {
+          this.refs.search.focus()
+        }
+        else {
+          this.refs.search.blur()
+        }
       }
       this.update()
     }
@@ -63,6 +68,10 @@
       self.value = event.target.value
       self.label = event.target.textContent
       self.default = event.target.attributes['default']
+      if (this.search) {
+        this.refs.search.value = ''
+        this.filtered = false
+      }
       this.update()
       self.parent.update()
       if (opts.dropdown.action) {
@@ -78,11 +87,15 @@
     this.keyup = event => {
       const value = event.target.value.toLowerCase()
       this.filtered = value.length > 0
+      this.select(value)
+    }
+
+    this.select = target => {
       this.items.forEach(item => {
-        item.reject = item.label.toLowerCase().indexOf(value) < 0
+        item.select = item.label.toLowerCase().indexOf(target) >= 0
       })
       this.filteredCount = this.items.filter(item => {
-        return !item.reject
+        return item.select
       })
       this.update()
     }

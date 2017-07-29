@@ -104,7 +104,7 @@ this.labelClick = function () {
   self.refs.target.click();
 };
 });
-riot.tag2('su-dropdown', '<div class="ui selection {search: search} dropdown {active: visible} {visible: visible}" onclick="{click}"> <i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="0" ref="search" if="{search}" onkeydown="{keydown}" onkeyup="{keyup}"> <div class="{default: default} text {filtered: filtered}"> {label} </div> <div class="menu transition {visible: visible}" tabindex="-1"> <div class="item {default: item.default}" each="{item in items}" if="{!item.reject}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}"> {item.label} </div> <div class="message" if="{filtered && filteredCount == 0}">No results found.</div> </div> </div>', 'su-dropdown .ui.dropdown .menu>.item.default,[data-is="su-dropdown"] .ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', '', function(opts) {
+riot.tag2('su-dropdown', '<div class="ui selection {search: search} dropdown {active: visible} {visible: visible}" onclick="{click}"> <i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="0" ref="search" if="{search}" onkeydown="{keydown}" onkeyup="{keyup}"> <div class="{default: default} text {filtered: filtered}"> {label} </div> <div class="menu transition {visible: visible}" tabindex="-1"> <div class="item {default: item.default}" each="{item in items}" if="{item.select}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}"> {item.label} </div> <div class="message" if="{filtered && filteredCount == 0}">No results found.</div> </div> </div>', 'su-dropdown .ui.dropdown .menu>.item.default,[data-is="su-dropdown"] .ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', '', function(opts) {
 'use strict';
 
 var _this = this;
@@ -138,10 +138,14 @@ this.on('mount', function () {
 });
 
 this.click = function () {
-  _this.filtered = false;
+  _this.select('');
   _this.visible = !_this.visible;
-  if (_this.visible && _this.search) {
-    _this.refs.search.focus();
+  if (_this.search) {
+    if (_this.visible) {
+      _this.refs.search.focus();
+    } else {
+      _this.refs.search.blur();
+    }
   }
   _this.update();
 };
@@ -150,6 +154,10 @@ this.itemClick = function (event) {
   self.value = event.target.value;
   self.label = event.target.textContent;
   self.default = event.target.attributes['default'];
+  if (_this.search) {
+    _this.refs.search.value = '';
+    _this.filtered = false;
+  }
   _this.update();
   self.parent.update();
   if (opts.dropdown.action) {
@@ -165,11 +173,15 @@ this.keydown = function () {
 this.keyup = function (event) {
   var value = event.target.value.toLowerCase();
   _this.filtered = value.length > 0;
+  _this.select(value);
+};
+
+this.select = function (target) {
   _this.items.forEach(function (item) {
-    item.reject = item.label.toLowerCase().indexOf(value) < 0;
+    item.select = item.label.toLowerCase().indexOf(target) >= 0;
   });
   _this.filteredCount = _this.items.filter(function (item) {
-    return !item.reject;
+    return item.select;
   });
   _this.update();
 };
