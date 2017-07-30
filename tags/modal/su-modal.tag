@@ -22,6 +22,9 @@
       if (!opts.modal) {
         opts.modal = {}
       }
+      if (typeof opts.modal.closable === 'undefined') {
+        opts.modal.closable = true
+      }
       this.modal_type = opts.modal.type
     })
 
