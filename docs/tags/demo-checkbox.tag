@@ -8,16 +8,17 @@
 
   <h3 class="ui header">Checkbox</h3>
   <p>A standard checkbox</p>
-  <div class="ui segment secondary top attached">
+  <div class="ui segment secondary top attached example">
     Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 0) }"></i>
   </div>
-  <div class="ui segment attached">
+  <div class="ui segment { bottom: !example[0] } attached">
     <su-checkbox checkbox="{ checkbox }" ref="checkbox1">
       Make my profile visible
     </su-checkbox>
     <span class="ui tag label {teal: refs.checkbox1.checked}">{ refs.checkbox1.checked ? 'on' : 'off' }</span>
   </div>
-  <div class="ui segment bottom attached inverted">
+  <div class="ui segment bottom attached inverted transition { hidden: !example[0] } ">
     <pre><code class="prettyprint">&lt;su-checkbox checkbox="\{ checkbox \}" ref="checkbox1"/&gt;
   Make my profile visible
 &lt;/su-checkbox&gt;
@@ -38,16 +39,17 @@
   </div>
 
   <p>A standard checkbox with inline option</p>
-  <div class="ui segment secondary top attached">
+  <div class="ui segment secondary top attached example">
     Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 1) }"></i>
   </div>
-  <div class="ui segment attached">
+  <div class="ui segment { bottom: !example[1] } attached">
     <su-checkbox checked="{ false }" action="{ checkboxClick }" ref="checkbox2">
       Make my profile visible
     </su-checkbox>
     <span class="ui tag label {teal: refs.checkbox2.checked}">{ refs.checkbox2.checked ? 'on' : 'off' }</span>
   </div>
-  <div class="ui segment bottom attached inverted">
+  <div class="ui segment bottom attached inverted transition { hidden: !example[1] } ">
     <pre><code class="prettyprint">&lt;su-checkbox checked="\{ false \}" action="\{ checkboxClick \}" ref="checkbox2"/&gt;
   Make my profile visible
 &lt;/su-checkbox&gt;
@@ -65,10 +67,11 @@
 
   <h3 class="ui header">Radio</h3>
   <p>A checkbox can be formatted as a radio element. This means it is an exclusive option.</p>
-  <div class="ui segment secondary top attached">
+  <div class="ui segment secondary top attached example">
     Example
+    <i class="icon code link" onclick="{ toggleExample.bind(this, 2) }"></i>
   </div>
-  <div class="ui segment attached">
+  <div class="ui segment { bottom: !example[2] } attached">
     <su-radio name="radio1" action="{ radioClick }" value="1" checked="{ radio1 == 1 }">
       Radio choice1
     </su-radio>
@@ -77,7 +80,7 @@
     </su-radio>
     <span class=" ui tag label">Radio choice{ radio1 }</span>
   </div>
-  <div class="ui segment bottom attached inverted">
+  <div class="ui segment bottom attached inverted transition { hidden: !example[2] }">
     <pre><code class="prettyprint">&lt;su-radio name="radio1" action="\{ radioClick \}" value="1" checked="\{ radio1 == 1 \}"&gt;
   Radio choice1
 &lt;/su-radio&gt;
@@ -96,25 +99,27 @@
 
   <h3 class="ui header">Slider</h3>
   <p>A checkbox can be formatted to emphasize the current selection state</p>
-  <div class="ui segment secondary top attached">
+  <div class="ui segment secondary top attached example">
     Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 3) }"></i>
   </div>
-  <div class="ui segment attached">
+  <div class="ui segment { bottom: !example[3] } attached">
     <su-checkbox type="{ 'slider' }">
       Accept terms and conditions
     </su-checkbox>
   </div>
-  <div class="ui segment bottom attached inverted">
+  <div class="ui segment bottom attached inverted transition { hidden: !example[3] }">
     <pre><code class="prettyprint">&lt;su-checkbox type="slider" /&gt;
   Accept terms and conditions
 &lt;/su-checkbox&gt;</code></pre>
   </div>
 
   <p>A checkbox can be formatted to emphasize the current selection state</p>
-  <div class="ui segment secondary top attached">
+  <div class="ui segment secondary top attached example">
     Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 4) }"></i>
   </div>
-  <div class="ui segment attached">
+  <div class="ui segment { bottom: !example[4] } attached">
     <div class="ui form">
       <div class="grouped fields">
         <label>Outbound Throughput</label>
@@ -141,7 +146,7 @@
       </div>
     </div>
   </div>
-  <div class="ui segment bottom attached inverted">
+  <div class="ui segment bottom attached inverted transition { hidden: !example[4] } ">
     <pre><code class="prettyprint">&lt;div class=&quot;ui form&quot;&gt;
   &lt;div class=&quot;grouped fields&quot;&gt;
     &lt;label&gt;Outbound Throughput&lt;/label&gt;
@@ -174,6 +179,10 @@
   </ul>
 
   <script>
+    this.example = []
+    this.toggleExample = index => {
+      this.example[index] = !this.example[index]
+    }
     this.results = []
 
     this.checkbox = {

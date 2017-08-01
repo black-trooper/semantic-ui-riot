@@ -8,10 +8,11 @@
 
   <h3 class="ui header">Dropdown</h3>
   <p>A dropdown</p>
-  <div class="ui segment secondary top attached">
+  <div class="ui segment secondary top attached example">
     Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 0) }"></i>
   </div>
-  <div class="ui segment attached">
+  <div class="ui segment { bottom: !example[0] } attached">
     <su-dropdown items="{ dropdownItems }" ref="dropdown1"></su-dropdown>
 
     <span class="ui tag label {teal: refs.dropdown1.value }">
@@ -19,7 +20,7 @@
       { refs.dropdown1.label }
     </span>
   </div>
-  <div class="ui segment bottom attached inverted">
+  <div class="ui segment bottom attached inverted transition { hidden: !example[0] } ">
     <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems \}&quot;&gt;&lt;/su-dropdown&gt;
 
 &lt;script&gt;
@@ -43,10 +44,11 @@
 
   <h3 class="ui header">Search Selection</h3>
   <p>A selection dropdown can allow a user to search through a large list of choices.</p>
-  <div class="ui segment secondary top attached">
+  <div class="ui segment secondary top attached example">
     Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 1) }"></i>
   </div>
-  <div class="ui segment attached">
+  <div class="ui segment { bottom: !example[1] } attached">
     <su-dropdown items="{ dropdownItems2 }" search="{ true }" ref="dropdown2"></su-dropdown>
 
     <!-- dropdown state example -->
@@ -55,7 +57,7 @@
       { refs.dropdown2.label }
     </span>
   </div>
-  <div class="ui segment bottom attached inverted">
+  <div class="ui segment bottom attached inverted transition { hidden: !example[1] } ">
     <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems2 \}&quot; search=&quot;\{ true \}&quot; ref=&quot;dropdown2&quot;&gt;&lt;/su-dropdown&gt;
 
 &lt;!-- dropdown state example --&gt;
@@ -127,6 +129,10 @@
   </div>
 
   <script>
+    this.example = []
+    this.toggleExample = index => {
+      this.example[index] = !this.example[index]
+    }
     this.dropdownItems = [
       {
         label: 'Gender',
