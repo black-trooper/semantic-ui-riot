@@ -8,10 +8,11 @@
 
   <h3 class="ui header">Modal</h3>
   <p>A standard modal</p>
-  <div class="ui segment secondary top attached">
+  <div class="ui segment secondary top attached example">
     Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 0) }"></i>
   </div>
-  <div class="ui segment attached">
+  <div class="ui segment { bottom: !example[0] } attached">
     <su-modal modal="{ modal }">
       <div class="ui medium image">
         <img src="/images/avatar2/large/rachel.png" />
@@ -25,7 +26,7 @@
     </su-modal>
     <button class="ui button" onclick="{ showModal }">Show modal</button>
   </div>
-  <div class="ui segment bottom attached inverted">
+  <div class="ui segment bottom attached inverted transition { hidden: !example[0] }">
     <pre><code class="prettyprint">&lt;su-modal modal=&quot;\{ modal \}&quot;&gt;
   &lt;div class=&quot;ui medium image&quot;&gt;
     &lt;img src=&quot;/images/avatar2/large/rachel.png&quot; /&gt;
@@ -64,16 +65,17 @@
 
   <h3 class="ui header">Basic</h3>
   <p>A modal can reduce its complexity</p>
-  <div class="ui segment secondary top attached">
+  <div class="ui segment secondary top attached example">
     Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 1) }"></i>
   </div>
-  <div class="ui segment attached">
+  <div class="ui segment { bottom: !example[1] } attached">
     <su-modal modal="{ modal_basic }">
       Your inbox is getting full, would you like us to enable automatic archiving of old messages?
     </su-modal>
     <button class="ui button" onclick="{ showModalBasic }">Show modal</button>
   </div>
-  <div class="ui segment bottom attached inverted">
+  <div class="ui segment bottom attached inverted transition { hidden: !example[1] }">
     <pre><code class="prettyprint">&lt;su-modal modal=&quot;\{ modal_basic \}&quot;&gt;
   Your inbox is getting full, would you like us to enable automatic archiving of old messages?
 &lt;/su-modal&gt;
@@ -105,6 +107,10 @@
   </div>
 
   <script>
+    this.example = []
+    this.toggleExample = index => {
+      this.example[index] = !this.example[index]
+    }
     this.modal = {
       visible: false,
       heading: 'Select a Photo',
