@@ -44,6 +44,7 @@
     "observable": true,
     "opts": true,
     "PR": true,
+    "anime": true,
     "__dirname": true
   }
 }
