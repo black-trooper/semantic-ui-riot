@@ -49,11 +49,9 @@
     buttons: [\{
       text: &#039;Ok&#039;,
       type: &#039;primary&#039;,
-      icon: &#039;checkmark&#039;,
-      action: () =&gt; this.modal.visible = false
+      icon: &#039;checkmark&#039;
     \}, \{
-      text: &#039;Canel&#039;,
-      action: () =&gt; this.modal.visible = false
+      text: &#039;Canel&#039;
     \}]
   \}
 
@@ -90,13 +88,11 @@
     \},
     type: &#039;basic&#039;,
     buttons: [\{
-      text: &#039;No&#039;,
-      action: () =&gt; this.modal_basic.visible = false
+      text: &#039;No&#039;
     \}, \{
       text: &#039;Yes&#039;,
       type: &#039;green&#039;,
-      icon: &#039;checkmark&#039;,
-      action: () =&gt; this.modal_basic.visible = false
+      icon: &#039;checkmark&#039;
     \}]
   \}
 
@@ -119,11 +115,9 @@
       buttons: [{
         text: 'Ok',
         type: 'primary',
-        icon: 'checkmark',
-        action: () => this.modal.visible = false
+        icon: 'checkmark'
       }, {
-        text: 'Canel',
-        action: () => this.modal.visible = false
+        text: 'Canel'
       }]
     }
 
@@ -139,13 +133,11 @@
       },
       type: 'basic',
       buttons: [{
-        text: 'No',
-        action: () => this.modal_basic.visible = false
+        text: 'No'
       }, {
         text: 'Yes',
         type: 'green',
-        icon: 'checkmark',
-        action: () => this.modal_basic.visible = false
+        icon: 'checkmark'
       }]
     }
 
