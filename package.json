@@ -29,6 +29,7 @@
     "gulp-concat": "^2.6.1",
     "gulp-eslint": "^4.0.0",
     "gulp-htmlhint": "^0.3.1",
+    "gulp-natural-sort": "^0.1.1",
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-riot": "^1.1.1",

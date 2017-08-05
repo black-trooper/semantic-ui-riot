@@ -4,6 +4,7 @@ const gulp = require('gulp');
 const del = require('del');
 const riot = require('gulp-riot');
 const concat = require('gulp-concat');
+const sort = require('gulp-natural-sort')
 const uglify = require('gulp-uglify');
 const sequence = require('run-sequence');
 const webserver = require('gulp-webserver-fast');
@@ -57,6 +58,7 @@ gulp.task('compile', function () {
 
 gulp.task('concat', function () {
   return gulp.src(['dist/**/*.js', '!dist/semantic-ui-riot.*js'])
+    .pipe(sort())
     .pipe(concat('semantic-ui-riot.js'))
     .pipe(gulp.dest('dist/'));
 });
@@ -115,6 +117,7 @@ gulp.task('demo_compile', function () {
 
 gulp.task('demo_concat', function () {
   return gulp.src(['docs/dist/**/*.js', '!docs/dist/build.js'])
+    .pipe(sort())
     .pipe(concat('build.js'))
     .pipe(gulp.dest('docs/'));
 });
