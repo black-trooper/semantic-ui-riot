@@ -6,7 +6,7 @@
     <div class="{ default: default} text { filtered: filtered }">
       { label }
     </div>
-    <div class="menu transition { visible: visible }" tabindex="-1">
+    <div class="menu transition { transitionStatus }" tabindex="-1">
       <div class="item {default: item.default}" each="{ item in items }" if="{ item.select }" value="{ item.value }" default="{ item.default }"
         onclick="{ itemClick }">
         { item.label }
@@ -53,6 +53,20 @@
     this.click = () => {
       this.select('')
       this.visible = !this.visible
+      if (this.visible) {
+        this.transitionStatus = 'visible animating in slide down'
+        setTimeout(() => {
+          this.transitionStatus = 'visible'
+          this.update()
+        }, 300)
+      } else {
+        this.transitionStatus = 'visible animating out slide up'
+        setTimeout(() => {
+          this.transitionStatus = 'hidden'
+          this.update()
+        }, 300)
+      }
+
       if (this.search) {
         if (this.visible) {
           this.refs.search.focus()
