@@ -1,6 +1,6 @@
 <su-modal>
-  <div class="ui dimmer modals page transition visible active" if="{ opts.modal.visible }" onclick="{ dimmerClose }" ref="dimmer">
-    <div class="ui modal transition visible active {modal_type}" if="{ opts.modal.visible }" ref="modal">
+  <div class="ui dimmer modals page transition { transitionStatus }" onclick="{ dimmerClose }">
+    <div class="ui modal transition visible active {modal_type}">
       <i class="close icon" if="{ modal_type == 'fullscreen' }" onclick="{ close }"></i>
       <div class="ui header { icon: opts.modal.heading.icon }">
         <i class="icon { opts.modal.heading.icon }" if="{ opts.modal.heading.icon }"></i>
@@ -30,11 +30,9 @@
       left: auto;
       position: relative;
       margin: 0;
-      opacity: 0;
     }
   </style>
   <script>
-    const self = this
     this.on('mount', () => {
       if (!opts.modal) {
         opts.modal = {}
@@ -45,14 +43,13 @@
       this.modal_type = opts.modal.type
     })
 
-    this.on('updated', () => {
-      let el = this.refs.modal
+    this.on('update', () => {
       if (opts.modal.visible) {
-        anime({
-          targets: el,
-          elasticity: 0,
-          opacity: 1
-        })
+        this.transitionStatus = 'animating fade in visible'
+        setTimeout(() => {
+          this.transitionStatus = 'visible'
+          this.update()
+        }, 500)
       }
     })
 
@@ -67,19 +64,17 @@
     }
 
     this.close = action => {
-      let el = this.refs.dimmer
       if (action) {
         action()
       }
-      anime({
-        targets: el,
-        elasticity: 0,
-        opacity: 0,
-        complete: () => {
-          opts.modal.visible = false
-          self.update()
-        }
-      })
+      opts.modal.visible = false
+      this.transitionStatus = 'animating fade out visible active'
+      this.update()
+
+      setTimeout(() => {
+        this.transitionStatus = 'hidden'
+        this.update()
+      }, 300)
     }
   </script>
 </su-modal>
