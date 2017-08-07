@@ -64,7 +64,7 @@
     }
 
     this.close = action => {
-      if (action) {
+      if (action && toString.call(action).slice(8, -1).toLowerCase() === 'function') {
         action()
       }
       opts.modal.visible = false

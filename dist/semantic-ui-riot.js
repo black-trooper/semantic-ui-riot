@@ -236,7 +236,7 @@ this.dimmerClose = function (action) {
 };
 
 this.close = function (action) {
-  if (action && toString.call(action) === '[object Function]') {
+  if (action && toString.call(action).slice(8, -1).toLowerCase() === 'function') {
     action();
   }
   opts.modal.visible = false;
