@@ -104,7 +104,7 @@ this.labelClick = function () {
   self.refs.target.click();
 };
 });
-riot.tag2('su-dropdown', '<div class="ui selection {search: search} dropdown {active: visible} {visible: visible}" onclick="{click}"> <i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="0" ref="search" if="{search}" onkeydown="{keydown}" onkeyup="{keyup}"> <div class="{default: default} text {filtered: filtered}"> {label} </div> <div class="menu transition {transitionStatus}" tabindex="-1"> <div class="item {default: item.default}" each="{item in items}" if="{item.select}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}"> {item.label} </div> <div class="message" if="{filtered && filteredCount == 0}">No results found.</div> </div> </div>', 'su-dropdown .ui.dropdown .menu>.item.default,[data-is="su-dropdown"] .ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', '', function(opts) {
+riot.tag2('su-dropdown', '<div class="ui selection {search: search} dropdown {active: visible} {visible: visible}" onclick="{click}"> <i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="0" ref="search" if="{search}" onkeydown="{keydown}" onkeyup="{keyup}"> <div class="{default: default} text {filtered: filtered}"> {label} </div> <div class="menu transition {transitionStatus}" tabindex="-1"> <div class="item {default: item.default}" each="{item in items}" if="{item.select}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}"> {item.label} </div> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div> </div>', 'su-dropdown .ui.dropdown .menu>.item.default,[data-is="su-dropdown"] .ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', '', function(opts) {
 'use strict';
 
 var _this = this;
@@ -133,41 +133,71 @@ this.on('mount', function () {
   _this.label = _this.items[0].label;
   _this.value = _this.items[0].value;
   _this.default = _this.items[0].default;
+
+  document.addEventListener('click', _this.handleClickOutside);
   _this.update();
   _this.parent.update();
 });
 
+this.on('unmount', function () {
+  document.removeEventListener('click', _this.handleClickOutside);
+});
+
 this.click = function () {
-  _this.select('');
   _this.visible = !_this.visible;
   if (_this.visible) {
-    _this.transitionStatus = 'visible animating in slide down';
-    setTimeout(function () {
-      _this.transitionStatus = 'visible';
-      _this.update();
-    }, 300);
+    _this.open();
   } else {
-    _this.transitionStatus = 'visible animating out slide up';
-    setTimeout(function () {
-      _this.transitionStatus = 'hidden';
-      _this.update();
-    }, 300);
+    _this.close();
   }
+};
+
+this.open = function () {
+  _this.select('');
+  _this.transitionStatus = 'visible animating in slide down';
+  setTimeout(function () {
+    _this.transitionStatus = 'visible';
+    _this.update();
+  }, 300);
 
   if (_this.search) {
-    if (_this.visible) {
-      _this.refs.search.focus();
+    _this.refs.search.focus();
+  }
+  _this.update();
+};
+
+this.close = function () {
+  _this.visible = false;
+  _this.transitionStatus = 'visible animating out slide up';
+  setTimeout(function () {
+    _this.transitionStatus = 'hidden';
+    _this.update();
+  }, 300);
+
+  if (_this.search) {
+    _this.refs.search.blur();
+    if (_this.filtered && _this.filteredItems.length > 0) {
+      _this.selectTarget(_this.filteredItems[0]);
     } else {
-      _this.refs.search.blur();
+      _this.refs.search.value = '';
+      _this.filtered = false;
     }
   }
   _this.update();
 };
 
 this.itemClick = function (event) {
-  self.value = event.target.value;
-  self.label = event.target.textContent;
-  self.default = event.target.attributes['default'];
+  _this.selectTarget({
+    value: event.target.value,
+    label: event.target.textContent,
+    default: event.target.attributes['default']
+  });
+};
+
+this.selectTarget = function (target) {
+  self.value = target.value;
+  self.label = target.label;
+  self.default = target.default;
   if (_this.search) {
     _this.refs.search.value = '';
     _this.filtered = false;
@@ -194,10 +224,16 @@ this.select = function (target) {
   _this.items.forEach(function (item) {
     item.select = item.label.toLowerCase().indexOf(target) >= 0;
   });
-  _this.filteredCount = _this.items.filter(function (item) {
+  _this.filteredItems = _this.items.filter(function (item) {
     return item.select;
   });
   _this.update();
+};
+
+this.handleClickOutside = function (e) {
+  if (!_this.root.contains(e.target) && _this.visible) {
+    _this.close();
+  }
 };
 });
 riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionStatus}" onclick="{dimmerClose}"> <div class="ui modal transition visible active {modal_type}"> <i class="close icon" if="{modal_type == \'fullscreen\'}" onclick="{close}"></i> <div class="ui header {icon: opts.modal.heading.icon}"> <i class="icon {opts.modal.heading.icon}" if="{opts.modal.heading.icon}"></i> {(opts.modal.heading.text) ? opts.modal.heading.text : opts.modal.heading} </div> <div class="content {opts.modal.content_type}"> <yield></yield> </div> <div class="actions"> <div each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: modal_type == \'basic\'}" onclick="{parent.click.bind(this, action)}"> {text} <i class="icon {icon}" if="{icon}"></i> </div> </div> </div> </div>', 'su-modal .ui.dimmer.visible.transition,[data-is="su-modal"] .ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0; }', '', function(opts) {

@@ -11,7 +11,7 @@
         onclick="{ itemClick }">
         { item.label }
       </div>
-      <div class="message" if="{ filtered && filteredCount == 0 }">No results found.</div>
+      <div class="message" if="{ filtered && filteredItems.length == 0 }">No results found.</div>
     </div>
   </div>
 
@@ -46,42 +46,71 @@
       this.label = this.items[0].label
       this.value = this.items[0].value
       this.default = this.items[0].default
+
+      document.addEventListener('click', this.handleClickOutside)
       this.update()
       this.parent.update()
     })
 
+    this.on('unmount', () => {
+      document.removeEventListener('click', this.handleClickOutside)
+    })
+
     this.click = () => {
-      this.select('')
       this.visible = !this.visible
       if (this.visible) {
-        this.transitionStatus = 'visible animating in slide down'
-        setTimeout(() => {
-          this.transitionStatus = 'visible'
-          this.update()
-        }, 300)
+        this.open()
       } else {
-        this.transitionStatus = 'visible animating out slide up'
-        setTimeout(() => {
-          this.transitionStatus = 'hidden'
-          this.update()
-        }, 300)
+        this.close()
       }
+    }
+
+    this.open = () => {
+      this.select('')
+      this.transitionStatus = 'visible animating in slide down'
+      setTimeout(() => {
+        this.transitionStatus = 'visible'
+        this.update()
+      }, 300)
 
       if (this.search) {
-        if (this.visible) {
-          this.refs.search.focus()
-        }
-        else {
-          this.refs.search.blur()
+        this.refs.search.focus()
+      }
+      this.update()
+    }
+
+    this.close = () => {
+      this.visible = false
+      this.transitionStatus = 'visible animating out slide up'
+      setTimeout(() => {
+        this.transitionStatus = 'hidden'
+        this.update()
+      }, 300)
+
+      if (this.search) {
+        this.refs.search.blur()
+        if (this.filtered && this.filteredItems.length > 0) {
+          this.selectTarget(this.filteredItems[0])
+        } else {
+          this.refs.search.value = ''
+          this.filtered = false
         }
       }
       this.update()
     }
 
     this.itemClick = event => {
-      self.value = event.target.value
-      self.label = event.target.textContent
-      self.default = event.target.attributes['default']
+      this.selectTarget({
+        value: event.target.value,
+        label: event.target.textContent,
+        default: event.target.attributes['default']
+      })
+    }
+
+    this.selectTarget = target => {
+      self.value = target.value
+      self.label = target.label
+      self.default = target.default
       if (this.search) {
         this.refs.search.value = ''
         this.filtered = false
@@ -108,10 +137,16 @@
       this.items.forEach(item => {
         item.select = item.label.toLowerCase().indexOf(target) >= 0
       })
-      this.filteredCount = this.items.filter(item => {
+      this.filteredItems = this.items.filter(item => {
         return item.select
       })
       this.update()
+    }
+
+    this.handleClickOutside = e => {
+      if (!this.root.contains(e.target) && this.visible) {
+        this.close()
+      }
     }
   </script>
 </su-dropdown>
