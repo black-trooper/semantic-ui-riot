@@ -100,11 +100,13 @@
     }
 
     this.itemClick = event => {
+      event.stopPropagation()
       this.selectTarget({
         value: event.target.value,
         label: event.target.textContent,
         default: event.target.attributes['default']
       })
+      this.close()
     }
 
     this.selectTarget = target => {
