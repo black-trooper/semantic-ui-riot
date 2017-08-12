@@ -81,7 +81,7 @@
 
     this.close = () => {
       this.visible = false
-      this.transitionStatus = 'visible animating out slide up'
+      this.transitionStatus = 'visible animating out slide down'
       setTimeout(() => {
         this.transitionStatus = 'hidden'
         this.update()

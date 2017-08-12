@@ -168,7 +168,7 @@ this.open = function () {
 
 this.close = function () {
   _this.visible = false;
-  _this.transitionStatus = 'visible animating out slide up';
+  _this.transitionStatus = 'visible animating out slide down';
   setTimeout(function () {
     _this.transitionStatus = 'hidden';
     _this.update();
