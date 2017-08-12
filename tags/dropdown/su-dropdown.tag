@@ -7,8 +7,8 @@
       { label }
     </div>
     <div class="menu transition { transitionStatus }" tabindex="-1">
-      <div class="item {default: item.default}" each="{ item in items }" if="{ item.select }" value="{ item.value }" default="{ item.default }"
-        onclick="{ itemClick }">
+      <div class="{ item: !item.header } { header: item.header} {default: item.default}" each="{ item in items }" if="{ item.select }"
+        value="{ item.value }" default="{ item.default }" onclick="{ itemClick }">
         { item.label }
       </div>
       <div class="message" if="{ filtered && filteredItems.length == 0 }">No results found.</div>
@@ -101,6 +101,9 @@
 
     this.itemClick = event => {
       event.stopPropagation()
+      if (event.target.classList.contains('header')) {
+        return
+      }
       this.selectTarget({
         value: event.target.value,
         label: event.target.textContent,
