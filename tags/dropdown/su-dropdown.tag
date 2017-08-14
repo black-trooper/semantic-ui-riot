@@ -10,9 +10,13 @@
 
       <virtual each="{item in items}">
         <div class="item { default: item.default }" if="{ isVisible(item) }" value="{ item.value }" default="{ item.default }" onclick="{ itemClick }">
+          <i class="{ item.icon } icon" if="{ item.icon }"></i>
           { item.label }
         </div>
-        <div class="header" if="{ item.header && !filtered}">{ item.label }</div>
+        <div class="header" if="{ item.header && !filtered}">
+          <i class="{ item.icon } icon" if="{ item.icon }"></i>
+          { item.label }
+        </div>
         <div class="divider" if="{ item.divider && !filtered}"></div>
       </virtual>
       <div class="message" if="{ filtered && filteredItems.length == 0 }">No results found.</div>
