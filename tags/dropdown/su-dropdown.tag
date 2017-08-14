@@ -11,7 +11,8 @@
       <virtual each="{item in items}">
         <div class="item { default: item.default }" if="{ isVisible(item) }" value="{ item.value }" default="{ item.default }" onclick="{ itemClick }">
           <i class="{ item.icon } icon" if="{ item.icon }"></i>
-          { item.label }
+          <span class="description" if="{ item.description }">{ item.description }</span>
+          <span class="text">{ item.label }</span>
         </div>
         <div class="header" if="{ item.header && !filtered}">
           <i class="{ item.icon } icon" if="{ item.icon }"></i>
