@@ -7,10 +7,14 @@
       { label }
     </div>
     <div class="menu transition { transitionStatus }" tabindex="-1">
-      <div class="{ item: !item.header } { header: item.header} {default: item.default}" each="{ item in items }" if="{ item.select }"
-        value="{ item.value }" default="{ item.default }" onclick="{ itemClick }">
-        { item.label }
-      </div>
+
+      <virtual each="{item in items}">
+        <div class="item { default: item.default }" if="{ isVisible(item) }" value="{ item.value }" default="{ item.default }" onclick="{ itemClick }">
+          { item.label }
+        </div>
+        <div class="header" if="{ item.header && !filtered}">{ item.label }</div>
+        <div class="divider" if="{ item.divider && !filtered}"></div>
+      </virtual>
       <div class="message" if="{ filtered && filteredItems.length == 0 }">No results found.</div>
     </div>
   </div>
@@ -101,9 +105,6 @@
 
     this.itemClick = event => {
       event.stopPropagation()
-      if (event.target.classList.contains('header')) {
-        return
-      }
       this.selectTarget({
         value: event.target.value,
         label: event.target.textContent,
@@ -140,7 +141,7 @@
 
     this.select = target => {
       this.items.forEach(item => {
-        item.select = item.label.toLowerCase().indexOf(target) >= 0
+        item.select = item.label && item.label.toLowerCase().indexOf(target) >= 0
       })
       this.filteredItems = this.items.filter(item => {
         return item.select
@@ -152,6 +153,10 @@
       if (!this.root.contains(e.target) && this.visible) {
         this.close()
       }
+    }
+
+    this.isVisible = item => {
+      return item.select && !item.header && !item.divider
     }
   </script>
 </su-dropdown>
