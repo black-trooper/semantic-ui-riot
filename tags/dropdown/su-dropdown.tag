@@ -11,6 +11,7 @@
       <virtual each="{item in items}">
         <div class="item { default: item.default }" if="{ isVisible(item) }" value="{ item.value }" default="{ item.default }" onclick="{ itemClick }">
           <i class="{ item.icon } icon" if="{ item.icon }"></i>
+          <img class="ui avatar image" src="{ item.image }" if="{ item.image }" />
           <span class="description" if="{ item.description }">{ item.description }</span>
           <span class="text">{ item.label }</span>
         </div>
