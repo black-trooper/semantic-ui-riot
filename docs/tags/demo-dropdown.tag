@@ -128,6 +128,242 @@
 &lt;/script&gt;</code></pre>
   </div>
 
+  <h2 class="ui dividing header">Content<a class="anchor" id="content"></a></h2>
+
+  <h3 class="ui header">Header</h3>
+  <p>A dropdown menu can contain a header</p>
+  <div class="ui segment secondary top attached example">
+    Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 2) }"></i>
+  </div>
+  <div class="ui segment { bottom: !example[2] } attached">
+    <su-dropdown items="{ dropdownItems3 }"></su-dropdown>
+  </div>
+  <div class="ui segment bottom attached inverted transition { hidden: !example[2] } ">
+    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems3 \}&quot;&gt;&lt;/su-dropdown&gt;
+
+&lt;script&gt;
+  this.dropdownItems3 = [
+    \{
+      label: &#039;Filter&#039;,
+      value: null,
+      default: true
+    \},
+    \{
+      label: &#039;Filter by tag&#039;,
+      icon: &#039;tags&#039;,
+      header: true
+    \},
+    \{
+      label: &#039;Important&#039;,
+      value: 1
+    \},
+    \{
+      label: &#039;Announcement&#039;,
+      value: 2
+    \},
+    \{
+      label: &#039;Discussion&#039;,
+      value: 3
+    \}
+  ]
+&lt;/script&gt;</code></pre>
+  </div>
+
+  <h3 class="ui header">Divider</h3>
+  <p>A dropdown menu can contain dividers to separate related content</p>
+  <div class="ui segment secondary top attached example">
+    Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 3) }"></i>
+  </div>
+  <div class="ui segment { bottom: !example[3] } attached">
+    <su-dropdown items="{ dropdownItems4 }"></su-dropdown>
+  </div>
+  <div class="ui segment bottom attached inverted transition { hidden: !example[3] } ">
+    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems4 \}&quot;&gt;&lt;/su-dropdown&gt;
+
+&lt;script&gt;
+  this.dropdownItems4 = [
+    \{
+      label: &#039;Filter&#039;,
+      value: null,
+      default: true
+    \},
+    \{
+      label: &#039;Filter by tag&#039;,
+      icon: &#039;tags&#039;,
+      header: true
+    \},
+    \{
+      divider: true
+    \},
+    \{
+      label: &#039;Important&#039;,
+      value: 1
+    \},
+    \{
+      label: &#039;Announcement&#039;,
+      value: 2
+    \},
+    \{
+      label: &#039;Discussion&#039;,
+      value: 3
+    \}
+  ]
+&lt;/script&gt;</code></pre>
+  </div>
+
+  <h3 class="ui header">Icon</h3>
+  <p>A dropdown menu can contain an <a href="https://semantic-ui.com/elements/icon.html">icon</a>.</p>
+  <div class="ui segment secondary top attached example">
+    Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 4) }"></i>
+  </div>
+  <div class="ui segment { bottom: !example[4] } attached">
+    <su-dropdown items="{ dropdownItems5 }"></su-dropdown>
+  </div>
+  <div class="ui segment bottom attached inverted transition { hidden: !example[4] } ">
+    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems5 \}&quot;&gt;&lt;/su-dropdown&gt;
+
+&lt;script&gt;
+  this.dropdownItems5 = [
+    \{
+      label: &#039;Filter&#039;,
+      value: null,
+      default: true
+    \},
+    \{
+      label: &#039;Filter by tag&#039;,
+      icon: &#039;tags&#039;,
+      header: true
+    \},
+    \{
+      divider: true
+    \},
+    \{
+      label: &#039;Important&#039;,
+      icon: &#039;attention&#039;,
+      value: 1
+    \},
+    \{
+      label: &#039;Announcement&#039;,
+      icon: &#039;comment&#039;,
+      value: 2
+    \},
+    \{
+      label: &#039;Discussion&#039;,
+      icon: &#039;conversation&#039;,
+      value: 3
+    \}
+  ]
+&lt;/script&gt;</code></pre>
+  </div>
+
+  <h3 class="ui header">Description</h3>
+  <p>A dropdown menu can contain a description.</p>
+  <div class="ui segment secondary top attached example">
+    Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 5) }"></i>
+  </div>
+  <div class="ui segment { bottom: !example[5] } attached">
+    <su-dropdown items="{ dropdownItems6 }"></su-dropdown>
+  </div>
+  <div class="ui segment bottom attached inverted transition { hidden: !example[5] } ">
+    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems6 \}&quot;&gt;&lt;/su-dropdown&gt;
+
+&lt;script&gt;
+  this.dropdownItems6 = [
+    \{
+      label: &#039;Filter Tags&#039;,
+      value: null,
+      default: true
+    \},
+    \{
+      label: &#039;Filter by tag&#039;,
+      header: true
+    \},
+    \{
+      divider: true
+    \},
+    \{
+      label: &#039;Important&#039;,
+      description: &#039;2 new&#039;,
+      value: 1
+    \},
+    \{
+      label: &#039;Hopper&#039;,
+      description: &#039;10 new&#039;,
+      value: 2
+    \},
+    \{
+      label: &#039;Discussion&#039;,
+      description: &#039;5 new&#039;,
+      value: 3
+    \}
+  ]
+&lt;/script&gt;</code></pre>
+  </div>
+
+  <h3 class="ui header">Image</h3>
+  <p>A dropdown menu can contain an image.</p>
+  <div class="ui segment secondary top attached example">
+    Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 6) }"></i>
+  </div>
+  <div class="ui segment { bottom: !example[6] } attached">
+    <su-dropdown items="{ dropdownItems7 }"></su-dropdown>
+  </div>
+  <div class="ui segment bottom attached inverted transition { hidden: !example[6] } ">
+    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems7 \}&quot;&gt;&lt;/su-dropdown&gt;
+
+&lt;script&gt;
+  this.dropdownItems7 = [
+    \{
+      label: &#039;Add User&#039;,
+      value: null,
+      default: true
+    \},
+    \{
+      label: &#039;People You Might Know&#039;,
+      header: true
+    \},
+    \{
+      label: &#039;Jenny Hess&#039;,
+      image: &#039;/images/avatar/small/jenny.jpg&#039;,
+      value: &#039;jenny&#039;
+    \},
+    \{
+      label: &#039;Elliot Fu&#039;,
+      image: &#039;/images/avatar/small/elliot.jpg&#039;,
+      value: &#039;elliot&#039;
+    \},
+    \{
+      label: &#039;Stevie Feliciano&#039;,
+      image: &#039;/images/avatar/small/stevie.jpg&#039;,
+      value: &#039;stevie&#039;
+    \},
+    \{
+      header: &#039;Your Friends\&#039; Friends&#039;
+    \},
+    \{
+      label: &#039;Christian&#039;,
+      image: &#039;/images/avatar/small/christian.jpg&#039;,
+      value: &#039;christian&#039;
+    \},
+    \{
+      label: &#039;Matt&#039;,
+      image: &#039;/images/avatar/small/matt.jpg&#039;,
+      value: &#039;matt&#039;
+    \},
+    \{
+      label: &#039;Justen Kitsune&#039;,
+      image: &#039;/images/avatar/small/justen.jpg&#039;,
+      value: &#039;justen&#039;
+    \}
+  ]
+&lt;/script&gt;</code></pre>
+  </div>
+
   <script>
     this.example = []
     this.toggleExample = index => {
@@ -205,6 +441,164 @@
       { value: 'WV', label: 'West Virginia' },
       { value: 'WI', label: 'Wisconsin' },
       { value: 'WY', label: 'Wyoming' }
+    ]
+    this.dropdownItems3 = [
+      {
+        label: 'Filter',
+        value: null,
+        default: true
+      },
+      {
+        label: 'Filter by tag',
+        icon: 'tags',
+        header: true
+      },
+      {
+        label: 'Important',
+        value: 1
+      },
+      {
+        label: 'Announcement',
+        value: 2
+      },
+      {
+        label: 'Discussion',
+        value: 3
+      }
+    ]
+
+    this.dropdownItems4 = [
+      {
+        label: 'Filter',
+        value: null,
+        default: true
+      },
+      {
+        label: 'Filter by tag',
+        icon: 'tags',
+        header: true
+      },
+      {
+        divider: true
+      },
+      {
+        label: 'Important',
+        value: 1
+      },
+      {
+        label: 'Announcement',
+        value: 2
+      },
+      {
+        label: 'Discussion',
+        value: 3
+      }
+    ]
+
+    this.dropdownItems5 = [
+      {
+        label: 'Filter',
+        value: null,
+        default: true
+      },
+      {
+        label: 'Filter by tag',
+        icon: 'tags',
+        header: true
+      },
+      {
+        divider: true
+      },
+      {
+        label: 'Important',
+        icon: 'attention',
+        value: 1
+      },
+      {
+        label: 'Announcement',
+        icon: 'comment',
+        value: 2
+      },
+      {
+        label: 'Discussion',
+        icon: 'conversation',
+        value: 3
+      }
+    ]
+
+    this.dropdownItems6 = [
+      {
+        label: 'Filter Tags',
+        value: null,
+        default: true
+      },
+      {
+        label: 'Filter by tag',
+        header: true
+      },
+      {
+        divider: true
+      },
+      {
+        label: 'Important',
+        description: '2 new',
+        value: 1
+      },
+      {
+        label: 'Hopper',
+        description: '10 new',
+        value: 2
+      },
+      {
+        label: 'Discussion',
+        description: '5 new',
+        value: 3
+      }
+    ]
+
+    this.dropdownItems7 = [
+      {
+        label: 'Add User',
+        value: null,
+        default: true
+      },
+      {
+        label: 'People You Might Know',
+        header: true
+      },
+      {
+        label: 'Jenny Hess',
+        image: '/images/avatar/small/jenny.jpg',
+        value: 'jenny'
+      },
+      {
+        label: 'Elliot Fu',
+        image: '/images/avatar/small/elliot.jpg',
+        value: 'elliot'
+      },
+      {
+        label: 'Stevie Feliciano',
+        image: '/images/avatar/small/stevie.jpg',
+        value: 'stevie'
+      },
+      {
+        header: 'Your Friends\' Friends'
+      },
+      {
+        label: 'Christian',
+        image: '/images/avatar/small/christian.jpg',
+        value: 'christian'
+      },
+      {
+        label: 'Matt',
+        image: '/images/avatar/small/matt.jpg',
+        value: 'matt'
+      },
+      {
+        label: 'Justen Kitsune',
+        image: '/images/avatar/small/justen.jpg',
+        value: 'justen'
+      }
     ]
 
     this.on('mount', () => {
