@@ -1,7 +1,7 @@
 <su-dropdown>
-  <div class="ui selection { search: search } dropdown { active: visible } { visible: visible }" onclick="{ click }">
+  <div class="ui selection { search: searchFlg } dropdown { active: visibleFlg } { visible: visibleFlg }" onclick="{ click }">
     <i class="dropdown icon"></i>
-    <input class="search" autocomplete="off" tabindex="0" ref="search" if="{ search }" onkeydown="{keydown}" onkeyup="{ keyup }"
+    <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{ searchFlg }" onkeydown="{keydown}" onkeyup="{ keyup }"
     />
     <div class="{ default: default} text { filtered: filtered }">
       { label }
@@ -33,8 +33,8 @@
 
   <script>
     const self = this
-    this.search = false
-    this.visible = false
+    this.searchFlg = false
+    this.visibleFlg = false
     this.filtered = false
     this.value = ''
     this.label = ''
@@ -51,7 +51,7 @@
         opts.dropdown.search = opts.search
       }
       this.items = opts.dropdown.items
-      this.search = opts.dropdown.search
+      this.searchFlg = opts.dropdown.search
 
       this.label = this.items[0].label
       this.value = this.items[0].value
@@ -67,8 +67,8 @@
     })
 
     this.click = () => {
-      this.visible = !this.visible
-      if (this.visible) {
+      this.visibleFlg = !this.visibleFlg
+      if (this.visibleFlg) {
         this.open()
       } else {
         this.close()
@@ -76,33 +76,33 @@
     }
 
     this.open = () => {
-      this.select('')
+      this.search('')
       this.transitionStatus = 'visible animating in slide down'
       setTimeout(() => {
         this.transitionStatus = 'visible'
         this.update()
       }, 300)
 
-      if (this.search) {
-        this.refs.search.focus()
+      if (this.searchFlg) {
+        this.refs.condition.focus()
       }
       this.update()
     }
 
     this.close = () => {
-      this.visible = false
+      this.visibleFlg = false
       this.transitionStatus = 'visible animating out slide down'
       setTimeout(() => {
         this.transitionStatus = 'hidden'
         this.update()
       }, 300)
 
-      if (this.search) {
-        this.refs.search.blur()
+      if (this.searchFlg) {
+        this.refs.condition.blur()
         if (this.filtered && this.filteredItems.length > 0) {
           this.selectTarget(this.filteredItems[0])
         } else {
-          this.refs.search.value = ''
+          this.refs.condition.value = ''
           this.filtered = false
         }
       }
@@ -123,8 +123,8 @@
       self.value = target.value
       self.label = target.label
       self.default = target.default
-      if (this.search) {
-        this.refs.search.value = ''
+      if (this.searchFlg) {
+        this.refs.condition.value = ''
         this.filtered = false
       }
       this.update()
@@ -142,27 +142,27 @@
     this.keyup = event => {
       const value = event.target.value.toLowerCase()
       this.filtered = value.length > 0
-      this.select(value)
+      this.search(value)
     }
 
-    this.select = target => {
+    this.search = target => {
       this.items.forEach(item => {
-        item.select = item.label && item.label.toLowerCase().indexOf(target) >= 0
+        item.searched = item.label && item.label.toLowerCase().indexOf(target) >= 0
       })
       this.filteredItems = this.items.filter(item => {
-        return item.select
+        return item.searched
       })
       this.update()
     }
 
     this.handleClickOutside = e => {
-      if (!this.root.contains(e.target) && this.visible) {
+      if (!this.root.contains(e.target) && this.visibleFlg) {
         this.close()
       }
     }
 
     this.isVisible = item => {
-      return item.select && !item.header && !item.divider
+      return item.searched && !item.header && !item.divider
     }
   </script>
 </su-dropdown>
