@@ -1,9 +1,14 @@
 <su-dropdown>
-  <div class="ui selection { search: searchFlg } dropdown { active: visibleFlg } { visible: visibleFlg }" onclick="{ click }">
+  <div class="ui selection { search: searchFlg } { multiple: multipleFlg} dropdown { active: visibleFlg } { visible: visibleFlg }"
+    onclick="{ click }">
     <i class="dropdown icon"></i>
     <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{ searchFlg }" onkeydown="{keydown}" onkeyup="{ keyup }"
     />
-    <div class="{ default: default} text { filtered: filtered }">
+    <a each="{item in items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }">
+      { item.label }
+      <i class="delete icon" onclick="{ unselect }"></i>
+    </a>
+    <div class="{ default: default} text { filtered: filtered }" if="{ !multipleFlg || !selectedFlg }">
       { label }
     </div>
     <div class="menu transition { transitionStatus }" tabindex="-1">
@@ -34,7 +39,9 @@
   <script>
     const self = this
     this.searchFlg = false
+    this.multipleFlg = false
     this.visibleFlg = false
+    this.selectedFlg = false
     this.filtered = false
     this.value = ''
     this.label = ''
@@ -50,8 +57,12 @@
       if (opts.search) {
         opts.dropdown.search = opts.search
       }
+      if (opts.multiple) {
+        opts.dropdown.multiple = opts.multiple
+      }
       this.items = opts.dropdown.items
       this.searchFlg = opts.dropdown.search
+      this.multipleFlg = opts.dropdown.multiple
 
       this.label = this.items[0].label
       this.value = this.items[0].value
@@ -111,6 +122,15 @@
 
     this.itemClick = event => {
       event.stopPropagation()
+      if (this.multipleFlg) {
+        if (!event.item.item.default) {
+          event.item.item.selected = true
+        }
+        this.value = this.items.filter(item => item.selected).map(item => item.value)
+        this.selectedFlg = this.items.some(item => item.selected)
+        this.update()
+        return
+      }
       this.selectTarget({
         value: event.target.value,
         label: event.target.textContent,
@@ -155,6 +175,13 @@
       this.update()
     }
 
+    this.unselect = event => {
+      event.stopPropagation()
+      event.item.item.selected = false
+      this.value = this.items.filter(item => item.selected).map(item => item.value)
+      this.selectedFlg = this.items.some(item => item.selected)
+    }
+
     this.handleClickOutside = e => {
       if (!this.root.contains(e.target) && this.visibleFlg) {
         this.close()
@@ -162,6 +189,9 @@
     }
 
     this.isVisible = item => {
+      if (this.multipleFlg && (item.default || !item.selected)) {
+        return false
+      }
       return item.searched && !item.header && !item.divider
     }
   </script>

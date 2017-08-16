@@ -104,14 +104,16 @@ this.labelClick = function () {
   self.refs.target.click();
 };
 });
-riot.tag2('su-dropdown', '<div class="ui selection {search: searchFlg} dropdown {active: visibleFlg} {visible: visibleFlg}" onclick="{click}"> <i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{searchFlg}" onkeydown="{keydown}" onkeyup="{keyup}"> <div class="{default: default} text {filtered: filtered}"> {label} </div> <div class="menu transition {transitionStatus}" tabindex="-1"> <virtual each="{item in items}"> <div class="item {default: item.default}" if="{isVisible(item)}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="header" if="{item.header && !filtered}"> <i class="{item.icon} icon" if="{item.icon}"></i> {item.label} </div> <div class="divider" if="{item.divider && !filtered}"></div> </virtual> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div> </div>', 'su-dropdown .ui.dropdown .menu>.item.default,[data-is="su-dropdown"] .ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', '', function(opts) {
+riot.tag2('su-dropdown', '<div class="ui selection {search: searchFlg} {multiple: multipleFlg} dropdown {active: visibleFlg} {visible: visibleFlg}" onclick="{click}"> <i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{searchFlg}" onkeydown="{keydown}" onkeyup="{keyup}"> <a each="{item in items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!multipleFlg || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" tabindex="-1"> <virtual each="{item in items}"> <div class="item {default: item.default}" if="{isVisible(item)}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="header" if="{item.header && !filtered}"> <i class="{item.icon} icon" if="{item.icon}"></i> {item.label} </div> <div class="divider" if="{item.divider && !filtered}"></div> </virtual> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div> </div>', 'su-dropdown .ui.dropdown .menu>.item.default,[data-is="su-dropdown"] .ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', '', function(opts) {
 'use strict';
 
 var _this = this;
 
 var self = this;
 this.searchFlg = false;
+this.multipleFlg = false;
 this.visibleFlg = false;
+this.selectedFlg = false;
 this.filtered = false;
 this.value = '';
 this.label = '';
@@ -127,8 +129,12 @@ this.on('mount', function () {
   if (opts.search) {
     opts.dropdown.search = opts.search;
   }
+  if (opts.multiple) {
+    opts.dropdown.multiple = opts.multiple;
+  }
   _this.items = opts.dropdown.items;
   _this.searchFlg = opts.dropdown.search;
+  _this.multipleFlg = opts.dropdown.multiple;
 
   _this.label = _this.items[0].label;
   _this.value = _this.items[0].value;
@@ -188,6 +194,21 @@ this.close = function () {
 
 this.itemClick = function (event) {
   event.stopPropagation();
+  if (_this.multipleFlg) {
+    if (!event.item.item.default) {
+      event.item.item.selected = true;
+    }
+    _this.value = _this.items.filter(function (item) {
+      return item.selected;
+    }).map(function (item) {
+      return item.value;
+    });
+    _this.selectedFlg = _this.items.some(function (item) {
+      return item.selected;
+    });
+    _this.update();
+    return;
+  }
   _this.selectTarget({
     value: event.target.value,
     label: event.target.textContent,
@@ -232,6 +253,19 @@ this.search = function (target) {
   _this.update();
 };
 
+this.unselect = function (event) {
+  event.stopPropagation();
+  event.item.item.selected = false;
+  _this.value = _this.items.filter(function (item) {
+    return item.selected;
+  }).map(function (item) {
+    return item.value;
+  });
+  _this.selectedFlg = _this.items.some(function (item) {
+    return item.selected;
+  });
+};
+
 this.handleClickOutside = function (e) {
   if (!_this.root.contains(e.target) && _this.visibleFlg) {
     _this.close();
@@ -239,6 +273,9 @@ this.handleClickOutside = function (e) {
 };
 
 this.isVisible = function (item) {
+  if (_this.multipleFlg && (item.default || !item.selected)) {
+    return false;
+  }
   return item.searched && !item.header && !item.divider;
 };
 });
