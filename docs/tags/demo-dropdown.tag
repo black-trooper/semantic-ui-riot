@@ -128,6 +128,19 @@
 &lt;/script&gt;</code></pre>
   </div>
 
+  <h3 class="ui header">Multiple Selection</h3>
+  <p>A selection dropdown can allow multiple selections</p>
+  <div class="ui segment secondary top attached example">
+    Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 7) }"></i>
+  </div>
+  <div class="ui segment { bottom: !example[7] } attached">
+    <su-dropdown items="{ dropdownItems8 }" multiple="{ true }"></su-dropdown>
+  </div>
+  <div class="ui segment bottom attached inverted transition { hidden: !example[7] } ">
+    <pre><code class="prettyprint"></code></pre>
+  </div>
+
   <h2 class="ui dividing header">Content<a class="anchor" id="content"></a></h2>
 
   <h3 class="ui header">Header</h3>
@@ -599,6 +612,32 @@
         image: '/images/avatar/small/justen.jpg',
         value: 'justen'
       }
+    ]
+
+    this.dropdownItems8 = [
+      {
+        label: 'Skills',
+        value: null,
+        default: true
+      },
+      { value: 'angular', label: 'Angular' },
+      { value: 'css', label: 'CSS' },
+      { value: 'design', label: 'Graphic Design' },
+      { value: 'ember', label: 'Ember' },
+      { value: 'html', label: 'HTML' },
+      { value: 'ia', label: 'Information Architecture' },
+      { value: 'javascript', label: 'Javascript' },
+      { value: 'mech', label: 'Mechanical Engineering' },
+      { value: 'meteor', label: 'Meteor' },
+      { value: 'node', label: 'NodeJS' },
+      { value: 'plumbing', label: 'Plumbing' },
+      { value: 'python', label: 'Python' },
+      { value: 'rails', label: 'Rails' },
+      { value: 'react', label: 'React' },
+      { value: 'repair', label: 'Kitchen Repair' },
+      { value: 'ruby', label: 'Ruby' },
+      { value: 'ui', label: 'UI Design' },
+      { value: 'ux', label: 'User Experience' }
     ]
 
     this.on('mount', () => {
