@@ -149,6 +149,9 @@ this.on('unmount', function () {
   document.removeEventListener('click', _this.handleClickOutside);
 });
 
+// ===================================================================================
+//                                                                               Event
+//                                                                               =====
 this.click = function () {
   _this.visibleFlg = !_this.visibleFlg;
   if (_this.visibleFlg) {
@@ -158,6 +161,70 @@ this.click = function () {
   }
 };
 
+this.itemClick = function (event) {
+  event.stopPropagation();
+  if (_this.multipleFlg) {
+    if (!event.item.item.default) {
+      event.item.item.selected = true;
+    }
+    _this.value = _this.items.filter(function (item) {
+      return item.selected;
+    }).map(function (item) {
+      return item.value;
+    });
+    _this.selectedFlg = _this.items.some(function (item) {
+      return item.selected;
+    });
+    _this.update();
+    return;
+  }
+  _this.selectTarget({
+    value: event.target.value,
+    label: event.target.textContent,
+    default: event.target.attributes['default']
+  });
+  _this.close();
+};
+
+this.handleClickOutside = function (e) {
+  if (!_this.root.contains(e.target) && _this.visibleFlg) {
+    _this.close();
+  }
+};
+
+// -----------------------------------------------------
+//                                         search option
+//                                         -------------
+this.keydown = function () {
+  _this.filtered = true;
+  _this.update();
+};
+
+this.keyup = function (event) {
+  var value = event.target.value.toLowerCase();
+  _this.filtered = value.length > 0;
+  _this.search(value);
+};
+
+// -----------------------------------------------------
+//                                       multiple option
+//                                       ---------------
+this.unselect = function (event) {
+  event.stopPropagation();
+  event.item.item.selected = false;
+  _this.value = _this.items.filter(function (item) {
+    return item.selected;
+  }).map(function (item) {
+    return item.value;
+  });
+  _this.selectedFlg = _this.items.some(function (item) {
+    return item.selected;
+  });
+};
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
 this.open = function () {
   _this.search('');
   _this.transitionStatus = 'visible animating in slide down';
@@ -192,31 +259,6 @@ this.close = function () {
   _this.update();
 };
 
-this.itemClick = function (event) {
-  event.stopPropagation();
-  if (_this.multipleFlg) {
-    if (!event.item.item.default) {
-      event.item.item.selected = true;
-    }
-    _this.value = _this.items.filter(function (item) {
-      return item.selected;
-    }).map(function (item) {
-      return item.value;
-    });
-    _this.selectedFlg = _this.items.some(function (item) {
-      return item.selected;
-    });
-    _this.update();
-    return;
-  }
-  _this.selectTarget({
-    value: event.target.value,
-    label: event.target.textContent,
-    default: event.target.attributes['default']
-  });
-  _this.close();
-};
-
 this.selectTarget = function (target) {
   self.value = target.value;
   self.label = target.label;
@@ -232,17 +274,6 @@ this.selectTarget = function (target) {
   }
 };
 
-this.keydown = function () {
-  _this.filtered = true;
-  _this.update();
-};
-
-this.keyup = function (event) {
-  var value = event.target.value.toLowerCase();
-  _this.filtered = value.length > 0;
-  _this.search(value);
-};
-
 this.search = function (target) {
   _this.items.forEach(function (item) {
     item.searched = item.label && item.label.toLowerCase().indexOf(target) >= 0;
@@ -253,27 +284,11 @@ this.search = function (target) {
   _this.update();
 };
 
-this.unselect = function (event) {
-  event.stopPropagation();
-  event.item.item.selected = false;
-  _this.value = _this.items.filter(function (item) {
-    return item.selected;
-  }).map(function (item) {
-    return item.value;
-  });
-  _this.selectedFlg = _this.items.some(function (item) {
-    return item.selected;
-  });
-};
-
-this.handleClickOutside = function (e) {
-  if (!_this.root.contains(e.target) && _this.visibleFlg) {
-    _this.close();
-  }
-};
-
+// ===================================================================================
+//                                                                              Helper
+//                                                                              ======
 this.isVisible = function (item) {
-  if (_this.multipleFlg && (item.default || !item.selected)) {
+  if (_this.multipleFlg && (item.default || item.selected)) {
     return false;
   }
   return item.searched && !item.header && !item.divider;

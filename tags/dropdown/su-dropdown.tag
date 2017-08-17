@@ -12,7 +12,6 @@
       { label }
     </div>
     <div class="menu transition { transitionStatus }" tabindex="-1">
-
       <virtual each="{item in items}">
         <div class="item { default: item.default }" if="{ isVisible(item) }" value="{ item.value }" default="{ item.default }" onclick="{ itemClick }">
           <i class="{ item.icon } icon" if="{ item.icon }"></i>
@@ -77,6 +76,9 @@
       document.removeEventListener('click', this.handleClickOutside)
     })
 
+    // ===================================================================================
+    //                                                                               Event
+    //                                                                               =====
     this.click = () => {
       this.visibleFlg = !this.visibleFlg
       if (this.visibleFlg) {
@@ -86,6 +88,58 @@
       }
     }
 
+    this.itemClick = event => {
+      event.stopPropagation()
+      if (this.multipleFlg) {
+        if (!event.item.item.default) {
+          event.item.item.selected = true
+        }
+        this.value = this.items.filter(item => item.selected).map(item => item.value)
+        this.selectedFlg = this.items.some(item => item.selected)
+        this.update()
+        return
+      }
+      this.selectTarget({
+        value: event.target.value,
+        label: event.target.textContent,
+        default: event.target.attributes['default']
+      })
+      this.close()
+    }
+
+    this.handleClickOutside = e => {
+      if (!this.root.contains(e.target) && this.visibleFlg) {
+        this.close()
+      }
+    }
+
+    // -----------------------------------------------------
+    //                                         search option
+    //                                         -------------
+    this.keydown = () => {
+      this.filtered = true
+      this.update()
+    }
+
+    this.keyup = event => {
+      const value = event.target.value.toLowerCase()
+      this.filtered = value.length > 0
+      this.search(value)
+    }
+
+    // -----------------------------------------------------
+    //                                       multiple option
+    //                                       ---------------
+    this.unselect = event => {
+      event.stopPropagation()
+      event.item.item.selected = false
+      this.value = this.items.filter(item => item.selected).map(item => item.value)
+      this.selectedFlg = this.items.some(item => item.selected)
+    }
+
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
     this.open = () => {
       this.search('')
       this.transitionStatus = 'visible animating in slide down'
@@ -120,25 +174,6 @@
       this.update()
     }
 
-    this.itemClick = event => {
-      event.stopPropagation()
-      if (this.multipleFlg) {
-        if (!event.item.item.default) {
-          event.item.item.selected = true
-        }
-        this.value = this.items.filter(item => item.selected).map(item => item.value)
-        this.selectedFlg = this.items.some(item => item.selected)
-        this.update()
-        return
-      }
-      this.selectTarget({
-        value: event.target.value,
-        label: event.target.textContent,
-        default: event.target.attributes['default']
-      })
-      this.close()
-    }
-
     this.selectTarget = target => {
       self.value = target.value
       self.label = target.label
@@ -154,17 +189,6 @@
       }
     }
 
-    this.keydown = () => {
-      this.filtered = true
-      this.update()
-    }
-
-    this.keyup = event => {
-      const value = event.target.value.toLowerCase()
-      this.filtered = value.length > 0
-      this.search(value)
-    }
-
     this.search = target => {
       this.items.forEach(item => {
         item.searched = item.label && item.label.toLowerCase().indexOf(target) >= 0
@@ -175,19 +199,9 @@
       this.update()
     }
 
-    this.unselect = event => {
-      event.stopPropagation()
-      event.item.item.selected = false
-      this.value = this.items.filter(item => item.selected).map(item => item.value)
-      this.selectedFlg = this.items.some(item => item.selected)
-    }
-
-    this.handleClickOutside = e => {
-      if (!this.root.contains(e.target) && this.visibleFlg) {
-        this.close()
-      }
-    }
-
+    // ===================================================================================
+    //                                                                              Helper
+    //                                                                              ======
     this.isVisible = item => {
       if (this.multipleFlg && (item.default || item.selected)) {
         return false
