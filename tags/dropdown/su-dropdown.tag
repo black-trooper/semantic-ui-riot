@@ -189,7 +189,7 @@
     }
 
     this.isVisible = item => {
-      if (this.multipleFlg && (item.default || !item.selected)) {
+      if (this.multipleFlg && (item.default || item.selected)) {
         return false
       }
       return item.searched && !item.header && !item.divider
