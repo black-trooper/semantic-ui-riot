@@ -1,20 +1,16 @@
-riot.tag2('su-checkbox', '<div class="ui checkbox {type}"> <input type="checkbox" checked="{checked}" onclick="{click}" ref="target"> <label onclick="{labelClick}"><yield></yield></label> </div>', '', '', function(opts) {
+riot.tag2('su-checkbox', '<div class="ui checkbox {opts.class}"> <input type="checkbox" checked="{checked}" onclick="{click}" ref="target"> <label onclick="{labelClick}"><yield></yield></label> </div>', '', '', function(opts) {
 'use strict';
 
 var _this = this;
 
 var self = this;
 this.checked = false;
-this.type = '';
 
 this.on('mount', function () {
   if (!opts.checkbox) {
     opts.checkbox = {
       checked: false
     };
-  }
-  if (opts.type) {
-    opts.checkbox.type = opts.type;
   }
   if (opts.checked) {
     opts.checkbox.checked = opts.checked;
@@ -23,7 +19,6 @@ this.on('mount', function () {
     opts.checkbox.action = opts.action;
   }
 
-  self.type = opts.checkbox.type;
   self.checked = opts.checkbox.checked;
 
   _this.update();
@@ -42,14 +37,13 @@ this.labelClick = function () {
   self.refs.target.click();
 };
 });
-riot.tag2('su-radio', '<div class="ui {radio: isRadio()} checkbox {type}"> <input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target"> <label onclick="{labelClick}"><yield></yield></label> </div>', '', '', function(opts) {
+riot.tag2('su-radio', '<div class="ui {radio: isRadio()} checkbox {opts.class}"> <input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target"> <label onclick="{labelClick}"><yield></yield></label> </div>', '', '', function(opts) {
 'use strict';
 
 var _this = this;
 
 var self = this;
 this.checked = false;
-this.type = '';
 this.name = '';
 
 this.on('mount', function () {
@@ -57,9 +51,6 @@ this.on('mount', function () {
     opts.radio = {
       checked: false
     };
-  }
-  if (opts.type) {
-    opts.radio.type = opts.type;
   }
   if (opts.checked) {
     opts.radio.checked = opts.checked;
@@ -74,7 +65,6 @@ this.on('mount', function () {
     opts.radio.value = opts.value;
   }
 
-  self.type = opts.radio.type;
   self.checked = opts.radio.checked;
   self.name = opts.radio.name;
   self.value = opts.radio.value;
@@ -84,10 +74,10 @@ this.on('mount', function () {
 });
 
 this.isRadio = function () {
-  if (!self.type) {
+  if (!_this.opts.class) {
     return true;
   }
-  return !self.type.split(' ').every(function (str) {
+  return !_this.opts.class.split(' ').every(function (str) {
     return str === 'slider';
   });
 };
@@ -104,7 +94,7 @@ this.labelClick = function () {
   self.refs.target.click();
 };
 });
-riot.tag2('su-dropdown', '<div class="ui selection {search: searchFlg} {multiple: multipleFlg} dropdown {active: visibleFlg} {visible: visibleFlg}" onclick="{click}"> <i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{searchFlg}" onkeydown="{keydown}" onkeyup="{keyup}"> <a each="{item in items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!multipleFlg || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" tabindex="-1"> <virtual each="{item in items}"> <div class="item {default: item.default}" if="{isVisible(item)}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="header" if="{item.header && !filtered}"> <i class="{item.icon} icon" if="{item.icon}"></i> {item.label} </div> <div class="divider" if="{item.divider && !filtered}"></div> </virtual> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div> </div>', 'su-dropdown .ui.dropdown .menu>.item.default,[data-is="su-dropdown"] .ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', '', function(opts) {
+riot.tag2('su-dropdown', '<div class="ui selection {opts.class} {search: searchFlg} {multiple: multipleFlg} dropdown {active: visibleFlg} {visible: visibleFlg}" onclick="{click}"> <i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{searchFlg}" onkeydown="{keydown}" onkeyup="{keyup}"> <a each="{item in items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!multipleFlg || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" tabindex="-1"> <virtual each="{item in items}"> <div class="item {default: item.default}" if="{isVisible(item)}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="header" if="{item.header && !filtered}"> <i class="{item.icon} icon" if="{item.icon}"></i> {item.label} </div> <div class="divider" if="{item.divider && !filtered}"></div> </virtual> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div> </div>', 'su-dropdown .ui.dropdown .menu>.item.default,[data-is="su-dropdown"] .ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', '', function(opts) {
 'use strict';
 
 var _this = this;
@@ -294,7 +284,7 @@ this.isVisible = function (item) {
   return item.searched && !item.header && !item.divider;
 };
 });
-riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionStatus}" onclick="{dimmerClose}"> <div class="ui modal transition visible active {modal_type}"> <i class="close icon" if="{modal_type == \'fullscreen\'}" onclick="{close}"></i> <div class="ui header {icon: opts.modal.heading.icon}"> <i class="icon {opts.modal.heading.icon}" if="{opts.modal.heading.icon}"></i> {(opts.modal.heading.text) ? opts.modal.heading.text : opts.modal.heading} </div> <div class="content {opts.modal.content_type}"> <yield></yield> </div> <div class="actions"> <div each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: modal_type == \'basic\'}" onclick="{parent.click.bind(this, action)}"> {text} <i class="icon {icon}" if="{icon}"></i> </div> </div> </div> </div>', 'su-modal .ui.dimmer.visible.transition,[data-is="su-modal"] .ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0; }', '', function(opts) {
+riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionStatus}" onclick="{dimmerClose}"> <div class="ui modal transition visible active {opts.class}"> <i class="close icon" if="{opts.class == \'fullscreen\'}" onclick="{close}"></i> <div class="ui header {icon: opts.modal.heading.icon}"> <i class="icon {opts.modal.heading.icon}" if="{opts.modal.heading.icon}"></i> {(opts.modal.heading.text) ? opts.modal.heading.text : opts.modal.heading} </div> <div class="content {opts.modal.content_class}"> <yield></yield> </div> <div class="actions"> <div each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: opts.class == \'basic\'}" onclick="{parent.click.bind(this, action)}"> {text} <i class="icon {icon}" if="{icon}"></i> </div> </div> </div> </div>', 'su-modal .ui.dimmer.visible.transition,[data-is="su-modal"] .ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0; }', '', function(opts) {
 'use strict';
 
 var _this = this;
@@ -306,7 +296,6 @@ this.on('mount', function () {
   if (typeof opts.modal.closable === 'undefined') {
     opts.modal.closable = true;
   }
-  _this.modal_type = opts.modal.type;
 });
 
 this.on('update', function () {

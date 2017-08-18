@@ -1,5 +1,5 @@
 <su-dropdown>
-  <div class="ui selection { search: searchFlg } { multiple: multipleFlg} dropdown { active: visibleFlg } { visible: visibleFlg }"
+  <div class="ui selection {opts.class} { search: searchFlg } { multiple: multipleFlg} dropdown { active: visibleFlg } { visible: visibleFlg }"
     onclick="{ click }">
     <i class="dropdown icon"></i>
     <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{ searchFlg }" onkeydown="{keydown}" onkeyup="{ keyup }"

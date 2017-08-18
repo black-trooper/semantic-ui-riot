@@ -1,12 +1,11 @@
 <su-radio>
-  <div class="ui {radio: isRadio() } checkbox { type }">
+  <div class="ui {radio: isRadio() } checkbox { opts.class }">
     <input type="radio" name="{ name }" value="{ value }" checked="{ checked }" onclick="{ click }" ref="target" />
     <label onclick="{ labelClick }"><yield /></label>
   </div>
   <script>
     const self = this
     this.checked = false
-    this.type = ''
     this.name = ''
 
     this.on('mount', () => {
@@ -14,9 +13,6 @@
         opts.radio = {
           checked: false
         }
-      }
-      if (opts.type) {
-        opts.radio.type = opts.type
       }
       if (opts.checked) {
         opts.radio.checked = opts.checked
@@ -31,7 +27,6 @@
         opts.radio.value = opts.value
       }
 
-      self.type = opts.radio.type
       self.checked = opts.radio.checked
       self.name = opts.radio.name
       self.value = opts.radio.value
@@ -41,10 +36,10 @@
     })
 
     this.isRadio = () => {
-      if (!self.type) {
+      if (!this.opts.class) {
         return true
       }
-      return !self.type.split(' ').every(str => {
+      return !this.opts.class.split(' ').every(str => {
         return str === 'slider'
       })
     }
