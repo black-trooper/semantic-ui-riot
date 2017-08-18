@@ -104,12 +104,12 @@
     <i class="icon code" onclick="{ toggleExample.bind(this, 3) }"></i>
   </div>
   <div class="ui segment { bottom: !example[3] } attached">
-    <su-checkbox type="{ 'slider' }">
+    <su-checkbox class="slider">
       Accept terms and conditions
     </su-checkbox>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[3] }">
-    <pre><code class="prettyprint">&lt;su-checkbox type="slider" /&gt;
+    <pre><code class="prettyprint">&lt;su-checkbox class=&quot;slider&quot; /&gt;
   Accept terms and conditions
 &lt;/su-checkbox&gt;</code></pre>
   </div>
@@ -124,22 +124,22 @@
       <div class="grouped fields">
         <label>Outbound Throughput</label>
         <div class="field">
-          <su-radio type="{ 'slider' }" name="throughput">
+          <su-radio class="slider" name="throughput">
             20 mbps max
           </su-radio>
         </div>
         <div class="field">
-          <su-radio type="{ 'slider' }" name="throughput">
+          <su-radio class="slider" name="throughput">
             10mbps max
           </su-radio>
         </div>
         <div class="field">
-          <su-radio type="{ 'slider' }" name="throughput">
+          <su-radio class="slider" name="throughput">
             5mbps max
           </su-radio>
         </div>
         <div class="field">
-          <su-radio type="{ 'slider' }" name="throughput">
+          <su-radio class="slider" name="throughput">
             Unmetered
           </su-radio>
         </div>
@@ -151,22 +151,22 @@
   &lt;div class=&quot;grouped fields&quot;&gt;
     &lt;label&gt;Outbound Throughput&lt;/label&gt;
     &lt;div class=&quot;field&quot;&gt;
-      &lt;su-radio type=&quot;\{ &#039;slider&#039; \}&quot; name=&quot;throughput&quot;&gt;
+      &lt;su-radio class=&quot;slider&quot; name=&quot;throughput&quot;&gt;
         20 mbps max
       &lt;/su-radio&gt;
     &lt;/div&gt;
     &lt;div class=&quot;field&quot;&gt;
-      &lt;su-radio type=&quot;\{ &#039;slider&#039; \}&quot; name=&quot;throughput&quot;&gt;
+      &lt;su-radio class=&quot;slider&quot; name=&quot;throughput&quot;&gt;
         10mbps max
       &lt;/su-radio&gt;
     &lt;/div&gt;
     &lt;div class=&quot;field&quot;&gt;
-      &lt;su-radio type=&quot;\{ &#039;slider&#039; \}&quot; name=&quot;throughput&quot;&gt;
+      &lt;su-radio class=&quot;slider&quot; name=&quot;throughput&quot;&gt;
         5mbps max
       &lt;/su-radio&gt;
     &lt;/div&gt;
     &lt;div class=&quot;field&quot;&gt;
-      &lt;su-radio type=&quot;\{ &#039;slider&#039; \}&quot; name=&quot;throughput&quot;&gt;
+      &lt;su-radio class=&quot;slider&quot; name=&quot;throughput&quot;&gt;
         Unmetered
       &lt;/su-radio&gt;
     &lt;/div&gt;

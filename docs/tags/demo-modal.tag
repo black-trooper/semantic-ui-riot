@@ -45,7 +45,7 @@
     visible: false,
     heading: &#039;Select a Photo&#039;,
     size: &#039;large&#039;,
-    content_type: &#039;image&#039;,
+    content_class: &#039;image&#039;,
     buttons: [\{
       text: &#039;Ok&#039;,
       type: &#039;primary&#039;,
@@ -111,7 +111,7 @@
       visible: false,
       heading: 'Select a Photo',
       size: 'large',
-      content_type: 'image',
+      content_class: 'image',
       buttons: [{
         text: 'Ok',
         type: 'primary',

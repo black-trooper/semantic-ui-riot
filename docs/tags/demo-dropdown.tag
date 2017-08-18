@@ -6,8 +6,9 @@
 
   <h2 class="ui dividing header">Types<a class="anchor" id="types"></a></h2>
 
-  <h3 class="ui header">Dropdown</h3>
-  <p>A dropdown</p>
+  <h3 class="ui header">Selection</h3>
+  <p>A dropdown can be used to select between choices in a form</p>
+
   <div class="ui segment secondary top attached example">
     Example
     <i class="icon code" onclick="{ toggleExample.bind(this, 0) }"></i>
@@ -42,6 +43,57 @@
 &lt;/script&gt;</code></pre>
   </div>
 
+  <div class="ui segment secondary top attached example">
+    Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 8) }"></i>
+  </div>
+  <div class="ui segment { bottom: !example[8] } attached">
+    <su-dropdown items="{ dropdownItems9 }" class="fluid"></su-dropdown>
+  </div>
+  <div class="ui segment bottom attached inverted transition { hidden: !example[8] } ">
+    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems \}&quot; class=&quot;fluid&quot; &gt;&lt;/su-dropdown&gt;
+
+&lt;script&gt;
+  this.dropdownItems = [
+    \{
+      label: &#039;Select Friend&#039;,
+      value: null,
+      default: true
+    \},
+    \{
+      label: &#039;Jenny Hess&#039;,
+      image: &#039;/images/avatar/small/jenny.jpg&#039;,
+      value: &#039;jenny&#039;
+    \},
+    \{
+      label: &#039;Elliot Fu&#039;,
+      image: &#039;/images/avatar/small/elliot.jpg&#039;,
+      value: &#039;elliot&#039;
+    \},
+    \{
+      label: &#039;Stevie Feliciano&#039;,
+      image: &#039;/images/avatar/small/stevie.jpg&#039;,
+      value: &#039;stevie&#039;
+    \},
+    \{
+      label: &#039;Christian&#039;,
+      image: &#039;/images/avatar/small/christian.jpg&#039;,
+      value: &#039;christian&#039;
+    \},
+    \{
+      label: &#039;Matt&#039;,
+      image: &#039;/images/avatar/small/matt.jpg&#039;,
+      value: &#039;matt&#039;
+    \},
+    \{
+      label: &#039;Justen Kitsune&#039;,
+      image: &#039;/images/avatar/small/justen.jpg&#039;,
+      value: &#039;justen&#039;
+    \}
+  ]
+&lt;/script&gt;</code></pre>
+  </div>
+
   <h3 class="ui header">Search Selection</h3>
   <p>A selection dropdown can allow a user to search through a large list of choices.</p>
   <div class="ui segment secondary top attached example">
@@ -49,7 +101,7 @@
     <i class="icon code" onclick="{ toggleExample.bind(this, 1) }"></i>
   </div>
   <div class="ui segment { bottom: !example[1] } attached">
-    <su-dropdown items="{ dropdownItems2 }" search="{ true }" ref="dropdown2"></su-dropdown>
+    <su-dropdown items="{ dropdownItems2 }" search="true" ref="dropdown2"></su-dropdown>
 
     <!-- dropdown state example -->
     <span class="ui tag label {teal: refs.dropdown2.value }">
@@ -58,7 +110,7 @@
     </span>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[1] } ">
-    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems2 \}&quot; search=&quot;\{ true \}&quot; ref=&quot;dropdown2&quot;&gt;&lt;/su-dropdown&gt;
+    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems \}&quot; search=&quot;true&quot; ref=&quot;dropdown2&quot;&gt;&lt;/su-dropdown&gt;
 
 &lt;!-- dropdown state example --&gt;
 &lt;span class=&quot;ui tag label \{teal: refs.dropdown2.value \}&quot;&gt;
@@ -67,7 +119,7 @@
 &lt;/span&gt;
 
 &lt;script&gt;
-  this.dropdownItems2 = [
+  this.dropdownItems = [
     \{
       label: &#039;State&#039;,
       value: null,
@@ -135,10 +187,38 @@
     <i class="icon code" onclick="{ toggleExample.bind(this, 7) }"></i>
   </div>
   <div class="ui segment { bottom: !example[7] } attached">
-    <su-dropdown items="{ dropdownItems8 }" multiple="{ true }"></su-dropdown>
+    <su-dropdown items="{ dropdownItems8 }" multiple="true"></su-dropdown>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[7] } ">
-    <pre><code class="prettyprint"></code></pre>
+    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems \}&quot; multiple=&quot;true&quot;&gt;&lt;/su-dropdown&gt;
+
+&lt;script&gt;
+  this.dropdownItems = [
+    {
+      label: &#039;Skills&#039;,
+      value: null,
+      default: true
+    },
+    { value: &#039;angular&#039;, label: &#039;Angular&#039; },
+    { value: &#039;css&#039;, label: &#039;CSS&#039; },
+    { value: &#039;design&#039;, label: &#039;Graphic Design&#039; },
+    { value: &#039;ember&#039;, label: &#039;Ember&#039; },
+    { value: &#039;html&#039;, label: &#039;HTML&#039; },
+    { value: &#039;ia&#039;, label: &#039;Information Architecture&#039; },
+    { value: &#039;javascript&#039;, label: &#039;Javascript&#039; },
+    { value: &#039;mech&#039;, label: &#039;Mechanical Engineering&#039; },
+    { value: &#039;meteor&#039;, label: &#039;Meteor&#039; },
+    { value: &#039;node&#039;, label: &#039;NodeJS&#039; },
+    { value: &#039;plumbing&#039;, label: &#039;Plumbing&#039; },
+    { value: &#039;python&#039;, label: &#039;Python&#039; },
+    { value: &#039;rails&#039;, label: &#039;Rails&#039; },
+    { value: &#039;react&#039;, label: &#039;React&#039; },
+    { value: &#039;repair&#039;, label: &#039;Kitchen Repair&#039; },
+    { value: &#039;ruby&#039;, label: &#039;Ruby&#039; },
+    { value: &#039;ui&#039;, label: &#039;UI Design&#039; },
+    { value: &#039;ux&#039;, label: &#039;User Experience&#039; }
+  ]
+&lt;/script&gt;</code></pre>
   </div>
 
   <h2 class="ui dividing header">Content<a class="anchor" id="content"></a></h2>
@@ -153,10 +233,10 @@
     <su-dropdown items="{ dropdownItems3 }"></su-dropdown>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[2] } ">
-    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems3 \}&quot;&gt;&lt;/su-dropdown&gt;
+    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems \}&quot;&gt;&lt;/su-dropdown&gt;
 
 &lt;script&gt;
-  this.dropdownItems3 = [
+  this.dropdownItems = [
     \{
       label: &#039;Filter&#039;,
       value: null,
@@ -193,10 +273,10 @@
     <su-dropdown items="{ dropdownItems4 }"></su-dropdown>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[3] } ">
-    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems4 \}&quot;&gt;&lt;/su-dropdown&gt;
+    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems \}&quot;&gt;&lt;/su-dropdown&gt;
 
 &lt;script&gt;
-  this.dropdownItems4 = [
+  this.dropdownItems = [
     \{
       label: &#039;Filter&#039;,
       value: null,
@@ -236,10 +316,10 @@
     <su-dropdown items="{ dropdownItems5 }"></su-dropdown>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[4] } ">
-    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems5 \}&quot;&gt;&lt;/su-dropdown&gt;
+    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems \}&quot;&gt;&lt;/su-dropdown&gt;
 
 &lt;script&gt;
-  this.dropdownItems5 = [
+  this.dropdownItems = [
     \{
       label: &#039;Filter&#039;,
       value: null,
@@ -282,10 +362,10 @@
     <su-dropdown items="{ dropdownItems6 }"></su-dropdown>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[5] } ">
-    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems6 \}&quot;&gt;&lt;/su-dropdown&gt;
+    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems \}&quot;&gt;&lt;/su-dropdown&gt;
 
 &lt;script&gt;
-  this.dropdownItems6 = [
+  this.dropdownItems = [
     \{
       label: &#039;Filter Tags&#039;,
       value: null,
@@ -327,10 +407,10 @@
     <su-dropdown items="{ dropdownItems7 }"></su-dropdown>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[6] } ">
-    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems7 \}&quot;&gt;&lt;/su-dropdown&gt;
+    <pre><code class="prettyprint">&lt;su-dropdown items=&quot;\{ dropdownItems \}&quot;&gt;&lt;/su-dropdown&gt;
 
 &lt;script&gt;
-  this.dropdownItems7 = [
+  this.dropdownItems = [
     \{
       label: &#039;Add User&#039;,
       value: null,
@@ -356,7 +436,8 @@
       value: &#039;stevie&#039;
     \},
     \{
-      header: &#039;Your Friends\&#039; Friends&#039;
+      label: &#039;Your Friends\&#039; Friends&#039;,
+      header: true
     \},
     \{
       label: &#039;Christian&#039;,
@@ -595,7 +676,8 @@
         value: 'stevie'
       },
       {
-        header: 'Your Friends\' Friends'
+        label: 'Your Friends\' Friends',
+        header: true
       },
       {
         label: 'Christian',
@@ -638,6 +720,44 @@
       { value: 'ruby', label: 'Ruby' },
       { value: 'ui', label: 'UI Design' },
       { value: 'ux', label: 'User Experience' }
+    ]
+
+    this.dropdownItems9 = [
+      {
+        label: 'Select Friend',
+        value: null,
+        default: true
+      },
+      {
+        label: 'Jenny Hess',
+        image: '/images/avatar/small/jenny.jpg',
+        value: 'jenny'
+      },
+      {
+        label: 'Elliot Fu',
+        image: '/images/avatar/small/elliot.jpg',
+        value: 'elliot'
+      },
+      {
+        label: 'Stevie Feliciano',
+        image: '/images/avatar/small/stevie.jpg',
+        value: 'stevie'
+      },
+      {
+        label: 'Christian',
+        image: '/images/avatar/small/christian.jpg',
+        value: 'christian'
+      },
+      {
+        label: 'Matt',
+        image: '/images/avatar/small/matt.jpg',
+        value: 'matt'
+      },
+      {
+        label: 'Justen Kitsune',
+        image: '/images/avatar/small/justen.jpg',
+        value: 'justen'
+      }
     ]
 
     this.on('mount', () => {
