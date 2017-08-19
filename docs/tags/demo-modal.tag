@@ -13,7 +13,7 @@
     <i class="icon code" onclick="{ toggleExample.bind(this, 0) }"></i>
   </div>
   <div class="ui segment { bottom: !example[0] } attached">
-    <su-modal modal="{ modal }">
+    <su-modal modal="{ modal }" class="large">
       <div class="ui medium image">
         <img src="/images/avatar2/large/rachel.png" />
       </div>
@@ -27,7 +27,7 @@
     <button class="ui button" onclick="{ showModal }">Show modal</button>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[0] }">
-    <pre><code class="prettyprint">&lt;su-modal modal=&quot;\{ modal \}&quot;&gt;
+    <pre><code class="prettyprint">&lt;su-modal modal=&quot;\{ modal \}&quot; class=&quot;large&quot;&gt;
   &lt;div class=&quot;ui medium image&quot;&gt;
     &lt;img src=&quot;/images/avatar2/large/rachel.png&quot; /&gt;
   &lt;/div&gt;
@@ -44,7 +44,6 @@
   this.modal = \{
     visible: false,
     heading: &#039;Select a Photo&#039;,
-    size: &#039;large&#039;,
     content_class: &#039;image&#039;,
     buttons: [\{
       text: &#039;Ok&#039;,
@@ -68,25 +67,24 @@
     <i class="icon code" onclick="{ toggleExample.bind(this, 1) }"></i>
   </div>
   <div class="ui segment { bottom: !example[1] } attached">
-    <su-modal modal="{ modal_basic }">
+    <su-modal modal="{ modal_basic }" class="basic">
       Your inbox is getting full, would you like us to enable automatic archiving of old messages?
     </su-modal>
     <button class="ui button" onclick="{ showModalBasic }">Show modal</button>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[1] }">
-    <pre><code class="prettyprint">&lt;su-modal modal=&quot;\{ modal_basic \}&quot;&gt;
+    <pre><code class="prettyprint">&lt;su-modal modal=&quot;\{ modal \}&quot; class=&quot;basic&quot;&gt;
   Your inbox is getting full, would you like us to enable automatic archiving of old messages?
 &lt;/su-modal&gt;
 &lt;button class=&quot;ui button&quot; onclick=&quot;\{ showModalBasic \}&quot;&gt;Show modal&lt;/button&gt;
 
 &lt;script&gt;
-  this.modal_basic = \{
+  this.modal = \{
     visible: false,
     heading: \{
       text: &#039;Archive Old Messages&#039;,
       icon: &#039;archive&#039;
     \},
-    type: &#039;basic&#039;,
     buttons: [\{
       text: &#039;No&#039;
     \}, \{
@@ -97,7 +95,7 @@
   \}
 
   this.showModalBasic = () =&gt; \{
-    this.modal_basic.visible = true
+    this.modal.visible = true
   \}
 &lt;/script&gt;</code></pre>
   </div>
@@ -131,7 +129,6 @@
         text: 'Archive Old Messages',
         icon: 'archive'
       },
-      type: 'basic',
       buttons: [{
         text: 'No'
       }, {
