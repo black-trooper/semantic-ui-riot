@@ -36,12 +36,7 @@
     })
 
     this.isRadio = () => {
-      if (!this.opts.class) {
-        return true
-      }
-      return !this.opts.class.split(' ').every(str => {
-        return str === 'slider'
-      })
+      return !this.root.classList.contains('slider')
     }
 
     this.click = event => {
