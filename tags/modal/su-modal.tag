@@ -1,7 +1,7 @@
 <su-modal>
   <div class="ui dimmer modals page transition { transitionStatus }" onclick="{ dimmerClose }">
     <div class="ui modal transition visible active {opts.class}">
-      <i class="close icon" if="{ opts.class == 'fullscreen' }" onclick="{ close }"></i>
+      <i class="close icon" if="{ isFullscreen() }" onclick="{ close }"></i>
       <div class="ui header { icon: opts.modal.heading.icon }">
         <i class="icon { opts.modal.heading.icon }" if="{ opts.modal.heading.icon }"></i>
         { (opts.modal.heading.text) ? opts.modal.heading.text : opts.modal.heading }
@@ -10,7 +10,7 @@
         <yield />
       </div>
       <div class="actions">
-        <div each="{ opts.modal.buttons }" class="ui button { type } { labeled: icon && text } { icon: icon } { inverted: opts.class == 'basic' }"
+        <div each="{ opts.modal.buttons }" class="ui button { type } { labeled: icon && text } { icon: icon } { inverted: isBasic() }"
           onclick="{ parent.click.bind(this, action) }">
           { text }
           <i class="icon { icon }" if="{ icon }"></i>
@@ -74,6 +74,14 @@
         this.transitionStatus = 'hidden'
         this.update()
       }, 300)
+    }
+
+    this.isFullscreen = () => {
+      return this.root.classList.contains('fullscreen')
+    }
+
+    this.isBasic = () => {
+      return this.root.classList.contains('basic')
     }
   </script>
 </su-modal>
