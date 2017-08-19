@@ -36,7 +36,6 @@
   </style>
 
   <script>
-    const self = this
     this.searchFlg = false
     this.multipleFlg = false
     this.visibleFlg = false
@@ -175,15 +174,15 @@
     }
 
     this.selectTarget = target => {
-      self.value = target.value
-      self.label = target.label
-      self.default = target.default
+      this.value = target.value
+      this.label = target.label
+      this.default = target.default
       if (this.searchFlg) {
         this.refs.condition.value = ''
         this.filtered = false
       }
       this.update()
-      self.parent.update()
+      this.parent.update()
       if (opts.dropdown.action) {
         opts.dropdown.action()
       }

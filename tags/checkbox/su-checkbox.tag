@@ -3,8 +3,8 @@
     <input type="checkbox" checked="{ checked }" onclick="{ click }" ref="target" />
     <label onclick="{ labelClick }"><yield /></label>
   </div>
+
   <script>
-    const self = this
     this.checked = false
 
     this.on('mount', () => {
@@ -20,12 +20,15 @@
         opts.checkbox.action = opts.action
       }
 
-      self.checked = opts.checkbox.checked
+      this.checked = opts.checkbox.checked
 
       this.update()
       this.parent.update()
     })
 
+    // ===================================================================================
+    //                                                                               Event
+    //                                                                               =====
     this.click = event => {
       self.checked = event.target.checked
       self.parent.update()

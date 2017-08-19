@@ -32,6 +32,7 @@
       margin: 0 !important;
     }
   </style>
+
   <script>
     this.on('mount', () => {
       if (!opts.modal) {
@@ -52,6 +53,9 @@
       }
     })
 
+    // ===================================================================================
+    //                                                                               Event
+    //                                                                               =====
     this.click = action => {
       this.close(action)
     }
@@ -76,6 +80,9 @@
       }, 300)
     }
 
+    // ===================================================================================
+    //                                                                              Helper
+    //                                                                              ======
     this.isFullscreen = () => {
       return this.root.classList.contains('fullscreen')
     }

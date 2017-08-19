@@ -3,8 +3,8 @@
     <input type="radio" name="{ name }" value="{ value }" checked="{ checked }" onclick="{ click }" ref="target" />
     <label onclick="{ labelClick }"><yield /></label>
   </div>
+
   <script>
-    const self = this
     this.checked = false
     this.name = ''
 
@@ -27,18 +27,17 @@
         opts.radio.value = opts.value
       }
 
-      self.checked = opts.radio.checked
-      self.name = opts.radio.name
-      self.value = opts.radio.value
+      this.checked = opts.radio.checked
+      this.name = opts.radio.name
+      this.value = opts.radio.value
 
       this.update()
       this.parent.update()
     })
 
-    this.isRadio = () => {
-      return !this.root.classList.contains('slider')
-    }
-
+    // ===================================================================================
+    //                                                                               Event
+    //                                                                               =====
     this.click = event => {
       self.checked = event.target.checked
       self.parent.update()
@@ -49,6 +48,13 @@
 
     this.labelClick = () => {
       self.refs.target.click()
+    }
+
+    // ===================================================================================
+    //                                                                              Helper
+    //                                                                              ======
+    this.isRadio = () => {
+      return !this.root.classList.contains('slider')
     }
   </script>
 </su-radio>

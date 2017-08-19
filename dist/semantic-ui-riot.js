@@ -3,7 +3,6 @@ riot.tag2('su-checkbox', '<div class="ui checkbox {opts.class}"> <input type="ch
 
 var _this = this;
 
-var self = this;
 this.checked = false;
 
 this.on('mount', function () {
@@ -19,12 +18,15 @@ this.on('mount', function () {
     opts.checkbox.action = opts.action;
   }
 
-  self.checked = opts.checkbox.checked;
+  _this.checked = opts.checkbox.checked;
 
   _this.update();
   _this.parent.update();
 });
 
+// ===================================================================================
+//                                                                               Event
+//                                                                               =====
 this.click = function (event) {
   self.checked = event.target.checked;
   self.parent.update();
@@ -42,7 +44,6 @@ riot.tag2('su-radio', '<div class="ui {radio: isRadio()} checkbox {opts.class}">
 
 var _this = this;
 
-var self = this;
 this.checked = false;
 this.name = '';
 
@@ -65,18 +66,17 @@ this.on('mount', function () {
     opts.radio.value = opts.value;
   }
 
-  self.checked = opts.radio.checked;
-  self.name = opts.radio.name;
-  self.value = opts.radio.value;
+  _this.checked = opts.radio.checked;
+  _this.name = opts.radio.name;
+  _this.value = opts.radio.value;
 
   _this.update();
   _this.parent.update();
 });
 
-this.isRadio = function () {
-  return !_this.root.classList.contains('slider');
-};
-
+// ===================================================================================
+//                                                                               Event
+//                                                                               =====
 this.click = function (event) {
   self.checked = event.target.checked;
   self.parent.update();
@@ -88,13 +88,19 @@ this.click = function (event) {
 this.labelClick = function () {
   self.refs.target.click();
 };
+
+// ===================================================================================
+//                                                                              Helper
+//                                                                              ======
+this.isRadio = function () {
+  return !_this.root.classList.contains('slider');
+};
 });
 riot.tag2('su-dropdown', '<div class="ui selection {opts.class} {search: searchFlg} {multiple: multipleFlg} dropdown {active: visibleFlg} {visible: visibleFlg}" onclick="{click}"> <i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{searchFlg}" onkeydown="{keydown}" onkeyup="{keyup}"> <a each="{item in items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!multipleFlg || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" tabindex="-1"> <virtual each="{item in items}"> <div class="item {default: item.default}" if="{isVisible(item)}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="header" if="{item.header && !filtered}"> <i class="{item.icon} icon" if="{item.icon}"></i> {item.label} </div> <div class="divider" if="{item.divider && !filtered}"></div> </virtual> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div> </div>', 'su-dropdown .ui.dropdown .menu>.item.default,[data-is="su-dropdown"] .ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', '', function(opts) {
 'use strict';
 
 var _this = this;
 
-var self = this;
 this.searchFlg = false;
 this.multipleFlg = false;
 this.visibleFlg = false;
@@ -245,15 +251,15 @@ this.close = function () {
 };
 
 this.selectTarget = function (target) {
-  self.value = target.value;
-  self.label = target.label;
-  self.default = target.default;
+  _this.value = target.value;
+  _this.label = target.label;
+  _this.default = target.default;
   if (_this.searchFlg) {
     _this.refs.condition.value = '';
     _this.filtered = false;
   }
   _this.update();
-  self.parent.update();
+  _this.parent.update();
   if (opts.dropdown.action) {
     opts.dropdown.action();
   }
@@ -303,6 +309,9 @@ this.on('update', function () {
   }
 });
 
+// ===================================================================================
+//                                                                               Event
+//                                                                               =====
 this.click = function (action) {
   _this.close(action);
 };
@@ -327,6 +336,9 @@ this.close = function (action) {
   }, 300);
 };
 
+// ===================================================================================
+//                                                                              Helper
+//                                                                              ======
 this.isFullscreen = function () {
   return _this.root.classList.contains('fullscreen');
 };
