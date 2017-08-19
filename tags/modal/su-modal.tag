@@ -29,7 +29,7 @@
       top: auto;
       left: auto;
       position: relative;
-      margin: 0;
+      margin: 0 !important;
     }
   </style>
   <script>
