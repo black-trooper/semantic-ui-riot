@@ -74,12 +74,7 @@ this.on('mount', function () {
 });
 
 this.isRadio = function () {
-  if (!_this.opts.class) {
-    return true;
-  }
-  return !_this.opts.class.split(' ').every(function (str) {
-    return str === 'slider';
-  });
+  return !_this.root.classList.contains('slider');
 };
 
 this.click = function (event) {
@@ -284,7 +279,7 @@ this.isVisible = function (item) {
   return item.searched && !item.header && !item.divider;
 };
 });
-riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionStatus}" onclick="{dimmerClose}"> <div class="ui modal transition visible active {opts.class}"> <i class="close icon" if="{opts.class == \'fullscreen\'}" onclick="{close}"></i> <div class="ui header {icon: opts.modal.heading.icon}"> <i class="icon {opts.modal.heading.icon}" if="{opts.modal.heading.icon}"></i> {(opts.modal.heading.text) ? opts.modal.heading.text : opts.modal.heading} </div> <div class="content {opts.modal.content_class}"> <yield></yield> </div> <div class="actions"> <div each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: opts.class == \'basic\'}" onclick="{parent.click.bind(this, action)}"> {text} <i class="icon {icon}" if="{icon}"></i> </div> </div> </div> </div>', 'su-modal .ui.dimmer.visible.transition,[data-is="su-modal"] .ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0; }', '', function(opts) {
+riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionStatus}" onclick="{dimmerClose}"> <div class="ui modal transition visible active {opts.class}"> <i class="close icon" if="{isFullscreen()}" onclick="{close}"></i> <div class="ui header {icon: opts.modal.heading.icon}"> <i class="icon {opts.modal.heading.icon}" if="{opts.modal.heading.icon}"></i> {(opts.modal.heading.text) ? opts.modal.heading.text : opts.modal.heading} </div> <div class="content {opts.modal.content_class}"> <yield></yield> </div> <div class="actions"> <div each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: isBasic()}" onclick="{parent.click.bind(this, action)}"> {text} <i class="icon {icon}" if="{icon}"></i> </div> </div> </div> </div>', 'su-modal .ui.dimmer.visible.transition,[data-is="su-modal"] .ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; }', '', function(opts) {
 'use strict';
 
 var _this = this;
@@ -330,5 +325,13 @@ this.close = function (action) {
     _this.transitionStatus = 'hidden';
     _this.update();
   }, 300);
+};
+
+this.isFullscreen = function () {
+  return _this.root.classList.contains('fullscreen');
+};
+
+this.isBasic = function () {
+  return _this.root.classList.contains('basic');
 };
 });
