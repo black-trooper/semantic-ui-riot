@@ -30,15 +30,15 @@
     //                                                                               Event
     //                                                                               =====
     this.click = event => {
-      self.checked = event.target.checked
-      self.parent.update()
+      this.checked = event.target.checked
+      this.parent.update()
       if (opts.checkbox.action) {
         opts.checkbox.action()
       }
     }
 
     this.labelClick = () => {
-      self.refs.target.click()
+      this.refs.target.click()
     }
   </script>
 </su-checkbox>

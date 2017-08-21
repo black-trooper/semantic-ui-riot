@@ -28,15 +28,15 @@ this.on('mount', function () {
 //                                                                               Event
 //                                                                               =====
 this.click = function (event) {
-  self.checked = event.target.checked;
-  self.parent.update();
+  _this.checked = event.target.checked;
+  _this.parent.update();
   if (opts.checkbox.action) {
     opts.checkbox.action();
   }
 };
 
 this.labelClick = function () {
-  self.refs.target.click();
+  _this.refs.target.click();
 };
 });
 riot.tag2('su-radio', '<div class="ui {radio: isRadio()} checkbox {opts.class}"> <input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target"> <label onclick="{labelClick}"><yield></yield></label> </div>', '', '', function(opts) {
@@ -78,8 +78,8 @@ this.on('mount', function () {
 //                                                                               Event
 //                                                                               =====
 this.click = function (event) {
-  self.checked = event.target.checked;
-  self.parent.update();
+  _this.checked = event.target.checked;
+  _this.parent.update();
   if (opts.radio.action) {
     opts.radio.action(event.target.value);
   }

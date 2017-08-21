@@ -39,8 +39,8 @@
     //                                                                               Event
     //                                                                               =====
     this.click = event => {
-      self.checked = event.target.checked
-      self.parent.update()
+      this.checked = event.target.checked
+      this.parent.update()
       if (opts.radio.action) {
         opts.radio.action(event.target.value)
       }
