@@ -19,19 +19,19 @@
     <span class="ui tag label {teal: refs.checkbox1.checked}">{ refs.checkbox1.checked ? 'on' : 'off' }</span>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[0] } ">
-    <pre><code class="prettyprint">&lt;su-checkbox checkbox="\{ checkbox \}" ref="checkbox1"/&gt;
+    <pre><code class="prettyprint">&lt;su-checkbox checkbox="\{ checkbox \}" ref="mycheckbox"/&gt;
   Make my profile visible
 &lt;/su-checkbox&gt;
 
 &lt;!-- checkbox state example --&gt;
-&lt;span class="ui tag label \{teal: refs.checkbox1.checked\}"&gt;\{ refs.checkbox1.checked ? 'on' : 'off' \}&lt;/span&gt;
+&lt;span class="ui tag label \{teal: refs.mycheckbox.checked\}"&gt;\{ refs.mycheckbox.checked ? 'on' : 'off' \}&lt;/span&gt;
 
 &lt;script&gt;
   this.checkbox = \{
     checked: true,
     action: () =&gt; \{
       // Called after checkbox is checked.
-      this.results.push('checkbox1 clicked')
+      this.results.push('mycheckbox clicked')
       this.update()
     \}
   \}
@@ -50,16 +50,16 @@
     <span class="ui tag label {teal: refs.checkbox2.checked}">{ refs.checkbox2.checked ? 'on' : 'off' }</span>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[1] } ">
-    <pre><code class="prettyprint">&lt;su-checkbox checked="\{ false \}" action="\{ checkboxClick \}" ref="checkbox2"/&gt;
+    <pre><code class="prettyprint">&lt;su-checkbox checked="\{ false \}" action="\{ checkboxClick \}" ref="mycheckbox"/&gt;
   Make my profile visible
 &lt;/su-checkbox&gt;
 
 &lt;!-- checkbox state example --&gt;
-&lt;span class="ui tag label \{teal: refs.checkbox2.checked\}"&gt;\{ refs.checkbox2.checked ? 'on' : 'off' \}&lt;/span&gt;
+&lt;span class="ui tag label \{teal: refs.mycheckbox.checked\}"&gt;\{ refs.mycheckbox.checked ? 'on' : 'off' \}&lt;/span&gt;
 
 &lt;script&gt;
   this.click = () =&gt; \{
-    this.results.push('checkbox2 clicked')
+    this.results.push('mycheckbox clicked')
     this.update()
   \}
 &lt;/script&gt;</code></pre>
@@ -81,17 +81,20 @@
     <span class=" ui tag label">Radio choice{ radio1 }</span>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[2] }">
-    <pre><code class="prettyprint">&lt;su-radio name="radio1" action="\{ radioClick \}" value="1" checked="\{ radio1 == 1 \}"&gt;
+    <pre><code class="prettyprint">&lt;su-radio name="radio" action="\{ radioClick \}" value="1" checked="\{ myradio == 1 \}"&gt;
   Radio choice1
 &lt;/su-radio&gt;
-&lt;su-radio name="radio1" action="\{ radioClick \}" value="2" checked="\{ radio1 == 2 \}""&gt;
+&lt;su-radio name="radio" action="\{ radioClick \}" value="2" checked="\{ myradio == 2 \}"&gt;
   Radio choice2
 &lt;/su-radio&gt;
 
+&lt;!-- radio state example --&gt;
+&lt;span class="ui tag label"&gt;Radio choice\{ myradio \}&lt;/span&gt;
+
 &lt;script&gt;
-  this.radio1 = 1
+  this.myradio = 1
   this.radioClick = val =&gt; \{
-    this.radio1 = val
+    this.myradio = val
     this.update()
   \}
 &lt;/script&gt;</code></pre>
