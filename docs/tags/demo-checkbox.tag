@@ -19,7 +19,7 @@
     <span class="ui tag label {teal: refs.checkbox1.checked}">{ refs.checkbox1.checked ? 'on' : 'off' }</span>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[0] } ">
-    <pre><code class="prettyprint">&lt;su-checkbox checkbox="\{ checkbox \}" ref="mycheckbox"/&gt;
+    <pre><code class="prettyprint">&lt;su-checkbox checkbox="\{ checkbox \}" ref="mycheckbox"&gt;
   Make my profile visible
 &lt;/su-checkbox&gt;
 
@@ -50,7 +50,7 @@
     <span class="ui tag label {teal: refs.checkbox2.checked}">{ refs.checkbox2.checked ? 'on' : 'off' }</span>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[1] } ">
-    <pre><code class="prettyprint">&lt;su-checkbox checked="\{ false \}" action="\{ checkboxClick \}" ref="mycheckbox"/&gt;
+    <pre><code class="prettyprint">&lt;su-checkbox checked="\{ false \}" action="\{ checkboxClick \}" ref="mycheckbox"&gt;
   Make my profile visible
 &lt;/su-checkbox&gt;
 
@@ -112,7 +112,7 @@
     </su-checkbox>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[3] }">
-    <pre><code class="prettyprint">&lt;su-checkbox class=&quot;slider&quot; /&gt;
+    <pre><code class="prettyprint">&lt;su-checkbox class=&quot;slider&quot;&gt;
   Accept terms and conditions
 &lt;/su-checkbox&gt;</code></pre>
   </div>
