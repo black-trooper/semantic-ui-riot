@@ -12,6 +12,8 @@ const plumber = require("gulp-plumber");
 const rename = require('gulp-rename');
 const eslint = require('gulp-eslint');
 const htmlhint = require("gulp-htmlhint");
+const escape = require('./gulp-code-escape');
+const rimraf = require('rimraf');
 
 const watch_target = [
   'tags/**/*',
@@ -100,19 +102,39 @@ gulp.task('htmlhint', function () {
 // for demo
 gulp.task('demo_build', function () {
   return sequence(
+    'demo_escape',
+    'demo_htmlhint',
     'demo_compile',
+    'demo_clean',
     'demo_concat',
     'demo_compress',
     'demo_copy'
   );
 });
 
-gulp.task('demo_compile', function () {
+gulp.task('demo_escape', function () {
   return gulp.src('docs/tags/**/*.tag')
+    .pipe(escape())
+    .pipe(gulp.dest('docs/temp/'));
+});
+
+gulp.task('demo_htmlhint', function () {
+  return gulp.src('docs/temp/**/*.tag')
+    .pipe(plumber())
+    .pipe(htmlhint('.htmlhintrc'))
+    .pipe(htmlhint.failReporter())
+})
+
+gulp.task('demo_compile', function () {
+  return gulp.src('docs/temp/**/*.tag')
     .pipe(riot({
       type: 'es6'
     }))
     .pipe(gulp.dest('docs/dist/'));
+});
+
+gulp.task('demo_clean', function (cb) {
+  return rimraf('docs/temp', cb);
 });
 
 gulp.task('demo_concat', function () {
