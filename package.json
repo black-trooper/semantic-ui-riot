@@ -15,7 +15,10 @@
     "semantic",
     "semanticui"
   ],
-  "author": "black-trooper",
+  "author": {
+    "name": "black-trooper",
+    "url": "https://github.com/black-trooper/semantic-ui-riot/"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/black-trooper/semantic-ui-riot/issues"
