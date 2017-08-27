@@ -20,6 +20,9 @@
   "bugs": {
     "url": "https://github.com/black-trooper/semantic-ui-riot/issues"
   },
+  "dependencies": {
+    "riot": "^3.6.1"
+  },
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-core": "^6.25.0",
@@ -35,7 +38,6 @@
     "gulp-riot": "^1.1.1",
     "gulp-uglify": "^3.0.0",
     "gulp-webserver-fast": "^0.9.1",
-    "riot": "^3.6.1",
     "riot-route": "^3.1.1",
     "run-sequence": "^2.0.0",
     "uglify-js": "^3.0.25"
