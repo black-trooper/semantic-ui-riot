@@ -75,6 +75,22 @@
       document.removeEventListener('click', this.handleClickOutside)
     })
 
+    this.on('update', () => {
+      if (this.multipleFlg) {
+        this.items.forEach(item => item.selected = false)
+        this.items.filter(item => this.value && this.value.indexOf(item.value) >= 0).forEach(item => item.selected = true)
+        this.selectMultiTarget(true)
+      } else {
+        const selected = this.items.filter(item => item.value === this.value)
+        if (selected && selected.length > 0) {
+          const target = selected[0]
+          if (this.label !== target.label) {
+            this.selectTarget(target, true)
+          }
+        }
+      }
+    })
+
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
@@ -93,9 +109,7 @@
         if (!event.item.item.default) {
           event.item.item.selected = true
         }
-        this.value = this.items.filter(item => item.selected).map(item => item.value)
-        this.selectedFlg = this.items.some(item => item.selected)
-        this.update()
+        this.selectMultiTarget()
         return
       }
       this.selectTarget({
@@ -134,6 +148,7 @@
       event.item.item.selected = false
       this.value = this.items.filter(item => item.selected).map(item => item.value)
       this.selectedFlg = this.items.some(item => item.selected)
+      this.parent.update()
     }
 
     // ===================================================================================
@@ -173,7 +188,7 @@
       this.update()
     }
 
-    this.selectTarget = target => {
+    this.selectTarget = (target, updating) => {
       this.value = target.value
       this.label = target.label
       this.default = target.default
@@ -181,10 +196,21 @@
         this.refs.condition.value = ''
         this.filtered = false
       }
-      this.update()
+      if (!updating) {
+        this.update()
+      }
       this.parent.update()
       if (opts.dropdown.action) {
         opts.dropdown.action()
+      }
+    }
+
+    this.selectMultiTarget = (updating) => {
+      this.value = this.items.filter(item => item.selected).map(item => item.value)
+      this.selectedFlg = this.items.some(item => item.selected)
+      if (!updating) {
+        this.update()
+        this.parent.update()
       }
     }
 

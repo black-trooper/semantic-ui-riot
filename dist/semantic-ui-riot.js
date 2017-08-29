@@ -140,6 +140,30 @@ this.on('unmount', function () {
   document.removeEventListener('click', _this.handleClickOutside);
 });
 
+this.on('update', function () {
+  if (_this.multipleFlg) {
+    _this.items.forEach(function (item) {
+      return item.selected = false;
+    });
+    _this.items.filter(function (item) {
+      return _this.value && _this.value.indexOf(item.value) >= 0;
+    }).forEach(function (item) {
+      return item.selected = true;
+    });
+    _this.selectMultiTarget(true);
+  } else {
+    var selected = _this.items.filter(function (item) {
+      return item.value === _this.value;
+    });
+    if (selected && selected.length > 0) {
+      var target = selected[0];
+      if (_this.label !== target.label) {
+        _this.selectTarget(target, true);
+      }
+    }
+  }
+});
+
 // ===================================================================================
 //                                                                               Event
 //                                                                               =====
@@ -158,15 +182,7 @@ this.itemClick = function (event) {
     if (!event.item.item.default) {
       event.item.item.selected = true;
     }
-    _this.value = _this.items.filter(function (item) {
-      return item.selected;
-    }).map(function (item) {
-      return item.value;
-    });
-    _this.selectedFlg = _this.items.some(function (item) {
-      return item.selected;
-    });
-    _this.update();
+    _this.selectMultiTarget();
     return;
   }
   _this.selectTarget({
@@ -211,6 +227,7 @@ this.unselect = function (event) {
   _this.selectedFlg = _this.items.some(function (item) {
     return item.selected;
   });
+  _this.parent.update();
 };
 
 // ===================================================================================
@@ -250,7 +267,7 @@ this.close = function () {
   _this.update();
 };
 
-this.selectTarget = function (target) {
+this.selectTarget = function (target, updating) {
   _this.value = target.value;
   _this.label = target.label;
   _this.default = target.default;
@@ -258,10 +275,27 @@ this.selectTarget = function (target) {
     _this.refs.condition.value = '';
     _this.filtered = false;
   }
-  _this.update();
+  if (!updating) {
+    _this.update();
+  }
   _this.parent.update();
   if (opts.dropdown.action) {
     opts.dropdown.action();
+  }
+};
+
+this.selectMultiTarget = function (updating) {
+  _this.value = _this.items.filter(function (item) {
+    return item.selected;
+  }).map(function (item) {
+    return item.value;
+  });
+  _this.selectedFlg = _this.items.some(function (item) {
+    return item.selected;
+  });
+  if (!updating) {
+    _this.update();
+    _this.parent.update();
   }
 };
 
