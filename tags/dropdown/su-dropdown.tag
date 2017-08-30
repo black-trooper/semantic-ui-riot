@@ -1,18 +1,18 @@
 <su-dropdown>
-  <div class="ui selection {opts.class} { search: searchFlg } { multiple: multipleFlg} dropdown { active: visibleFlg } { visible: visibleFlg }"
+  <div class="ui selection {opts.class} { search: opts.search } { multiple: opts.multiple} dropdown { active: visibleFlg } { visible: visibleFlg }"
     onclick="{ click }">
     <i class="dropdown icon"></i>
-    <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{ searchFlg }" onkeydown="{keydown}" onkeyup="{ keyup }"
+    <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{ opts.search }" onkeydown="{keydown}" onkeyup="{ keyup }"
     />
-    <a each="{item in items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }">
+    <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }">
       { item.label }
       <i class="delete icon" onclick="{ unselect }"></i>
     </a>
-    <div class="{ default: default} text { filtered: filtered }" if="{ !multipleFlg || !selectedFlg }">
+    <div class="{ default: default} text { filtered: filtered }" if="{ !opts.multiple || !selectedFlg }">
       { label }
     </div>
     <div class="menu transition { transitionStatus }" tabindex="-1">
-      <virtual each="{item in items}">
+      <virtual each="{item in opts.items}">
         <div class="item { default: item.default }" if="{ isVisible(item) }" value="{ item.value }" default="{ item.default }" onclick="{ itemClick }">
           <i class="{ item.icon } icon" if="{ item.icon }"></i>
           <img class="ui avatar image" src="{ item.image }" if="{ item.image }" />
@@ -36,36 +36,18 @@
   </style>
 
   <script>
-    this.searchFlg = false
-    this.multipleFlg = false
     this.visibleFlg = false
     this.selectedFlg = false
     this.filtered = false
     this.value = ''
     this.label = ''
-    this.items = []
 
     this.on('mount', () => {
-      if (!opts.dropdown) {
-        opts.dropdown = {}
+      if (opts.items && opts.items.length > 0) {
+        this.label = opts.items[0].label
+        this.value = opts.items[0].value
+        this.default = opts.items[0].default
       }
-      if (opts.items) {
-        opts.dropdown.items = opts.items
-      }
-      if (opts.search) {
-        opts.dropdown.search = opts.search
-      }
-      if (opts.multiple) {
-        opts.dropdown.multiple = opts.multiple
-      }
-      this.items = opts.dropdown.items
-      this.searchFlg = opts.dropdown.search
-      this.multipleFlg = opts.dropdown.multiple
-
-      this.label = this.items[0].label
-      this.value = this.items[0].value
-      this.default = this.items[0].default
-
       document.addEventListener('click', this.handleClickOutside)
       this.update()
       this.parent.update()
@@ -76,17 +58,21 @@
     })
 
     this.on('update', () => {
-      if (this.multipleFlg) {
-        this.items.forEach(item => item.selected = false)
-        this.items.filter(item => this.value && this.value.indexOf(item.value) >= 0).forEach(item => item.selected = true)
+      if (opts.multiple) {
+        opts.items.forEach(item => item.selected = false)
+        opts.items.filter(item => this.value && this.value.indexOf(item.value) >= 0).forEach(item => item.selected = true)
         this.selectMultiTarget(true)
       } else {
-        const selected = this.items.filter(item => item.value === this.value)
+        const selected = opts.items.filter(item => item.value === this.value)
         if (selected && selected.length > 0) {
           const target = selected[0]
           if (this.label !== target.label) {
             this.selectTarget(target, true)
           }
+        } else if (opts.items && opts.items.length > 0 && this.label != opts.items[0].label) {
+          this.label = opts.items[0].label
+          this.value = opts.items[0].value
+          this.default = opts.items[0].default
         }
       }
     })
@@ -105,7 +91,7 @@
 
     this.itemClick = event => {
       event.stopPropagation()
-      if (this.multipleFlg) {
+      if (opts.multiple) {
         if (!event.item.item.default) {
           event.item.item.selected = true
         }
@@ -146,8 +132,8 @@
     this.unselect = event => {
       event.stopPropagation()
       event.item.item.selected = false
-      this.value = this.items.filter(item => item.selected).map(item => item.value)
-      this.selectedFlg = this.items.some(item => item.selected)
+      this.value = opts.items.filter(item => item.selected).map(item => item.value)
+      this.selectedFlg = opts.items.some(item => item.selected)
       this.parent.update()
     }
 
@@ -162,7 +148,7 @@
         this.update()
       }, 300)
 
-      if (this.searchFlg) {
+      if (opts.search) {
         this.refs.condition.focus()
       }
       this.update()
@@ -176,7 +162,7 @@
         this.update()
       }, 300)
 
-      if (this.searchFlg) {
+      if (opts.search) {
         this.refs.condition.blur()
         if (this.filtered && this.filteredItems.length > 0) {
           this.selectTarget(this.filteredItems[0])
@@ -192,7 +178,7 @@
       this.value = target.value
       this.label = target.label
       this.default = target.default
-      if (this.searchFlg) {
+      if (opts.search) {
         this.refs.condition.value = ''
         this.filtered = false
       }
@@ -206,8 +192,8 @@
     }
 
     this.selectMultiTarget = (updating) => {
-      this.value = this.items.filter(item => item.selected).map(item => item.value)
-      this.selectedFlg = this.items.some(item => item.selected)
+      this.value = opts.items.filter(item => item.selected).map(item => item.value)
+      this.selectedFlg = opts.items.some(item => item.selected)
       if (!updating) {
         this.update()
         this.parent.update()
@@ -215,10 +201,10 @@
     }
 
     this.search = target => {
-      this.items.forEach(item => {
+      opts.items.forEach(item => {
         item.searched = item.label && item.label.toLowerCase().indexOf(target) >= 0
       })
-      this.filteredItems = this.items.filter(item => {
+      this.filteredItems = opts.items.filter(item => {
         return item.searched
       })
       this.update()
@@ -228,7 +214,7 @@
     //                                                                              Helper
     //                                                                              ======
     this.isVisible = item => {
-      if (this.multipleFlg && (item.default || item.selected)) {
+      if (opts.multiple && (item.default || item.selected)) {
         return false
       }
       return item.searched && !item.header && !item.divider

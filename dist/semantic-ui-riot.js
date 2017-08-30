@@ -96,41 +96,23 @@ this.isRadio = function () {
   return !_this.root.classList.contains('slider');
 };
 });
-riot.tag2('su-dropdown', '<div class="ui selection {opts.class} {search: searchFlg} {multiple: multipleFlg} dropdown {active: visibleFlg} {visible: visibleFlg}" onclick="{click}"> <i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{searchFlg}" onkeydown="{keydown}" onkeyup="{keyup}"> <a each="{item in items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!multipleFlg || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" tabindex="-1"> <virtual each="{item in items}"> <div class="item {default: item.default}" if="{isVisible(item)}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="header" if="{item.header && !filtered}"> <i class="{item.icon} icon" if="{item.icon}"></i> {item.label} </div> <div class="divider" if="{item.divider && !filtered}"></div> </virtual> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div> </div>', 'su-dropdown .ui.dropdown .menu>.item.default,[data-is="su-dropdown"] .ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', '', function(opts) {
+riot.tag2('su-dropdown', '<div class="ui selection {opts.class} {search: opts.search} {multiple: opts.multiple} dropdown {active: visibleFlg} {visible: visibleFlg}" onclick="{click}"> <i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{opts.search}" onkeydown="{keydown}" onkeyup="{keyup}"> <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!opts.multiple || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" tabindex="-1"> <virtual each="{item in opts.items}"> <div class="item {default: item.default}" if="{isVisible(item)}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="header" if="{item.header && !filtered}"> <i class="{item.icon} icon" if="{item.icon}"></i> {item.label} </div> <div class="divider" if="{item.divider && !filtered}"></div> </virtual> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div> </div>', 'su-dropdown .ui.dropdown .menu>.item.default,[data-is="su-dropdown"] .ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', '', function(opts) {
 'use strict';
 
 var _this = this;
 
-this.searchFlg = false;
-this.multipleFlg = false;
 this.visibleFlg = false;
 this.selectedFlg = false;
 this.filtered = false;
 this.value = '';
 this.label = '';
-this.items = [];
 
 this.on('mount', function () {
-  if (!opts.dropdown) {
-    opts.dropdown = {};
+  if (opts.items && opts.items.length > 0) {
+    _this.label = opts.items[0].label;
+    _this.value = opts.items[0].value;
+    _this.default = opts.items[0].default;
   }
-  if (opts.items) {
-    opts.dropdown.items = opts.items;
-  }
-  if (opts.search) {
-    opts.dropdown.search = opts.search;
-  }
-  if (opts.multiple) {
-    opts.dropdown.multiple = opts.multiple;
-  }
-  _this.items = opts.dropdown.items;
-  _this.searchFlg = opts.dropdown.search;
-  _this.multipleFlg = opts.dropdown.multiple;
-
-  _this.label = _this.items[0].label;
-  _this.value = _this.items[0].value;
-  _this.default = _this.items[0].default;
-
   document.addEventListener('click', _this.handleClickOutside);
   _this.update();
   _this.parent.update();
@@ -141,18 +123,18 @@ this.on('unmount', function () {
 });
 
 this.on('update', function () {
-  if (_this.multipleFlg) {
-    _this.items.forEach(function (item) {
+  if (opts.multiple) {
+    opts.items.forEach(function (item) {
       return item.selected = false;
     });
-    _this.items.filter(function (item) {
+    opts.items.filter(function (item) {
       return _this.value && _this.value.indexOf(item.value) >= 0;
     }).forEach(function (item) {
       return item.selected = true;
     });
     _this.selectMultiTarget(true);
   } else {
-    var selected = _this.items.filter(function (item) {
+    var selected = opts.items.filter(function (item) {
       return item.value === _this.value;
     });
     if (selected && selected.length > 0) {
@@ -160,6 +142,10 @@ this.on('update', function () {
       if (_this.label !== target.label) {
         _this.selectTarget(target, true);
       }
+    } else if (opts.items && opts.items.length > 0 && _this.label != opts.items[0].label) {
+      _this.label = opts.items[0].label;
+      _this.value = opts.items[0].value;
+      _this.default = opts.items[0].default;
     }
   }
 });
@@ -178,7 +164,7 @@ this.click = function () {
 
 this.itemClick = function (event) {
   event.stopPropagation();
-  if (_this.multipleFlg) {
+  if (opts.multiple) {
     if (!event.item.item.default) {
       event.item.item.selected = true;
     }
@@ -219,12 +205,12 @@ this.keyup = function (event) {
 this.unselect = function (event) {
   event.stopPropagation();
   event.item.item.selected = false;
-  _this.value = _this.items.filter(function (item) {
+  _this.value = opts.items.filter(function (item) {
     return item.selected;
   }).map(function (item) {
     return item.value;
   });
-  _this.selectedFlg = _this.items.some(function (item) {
+  _this.selectedFlg = opts.items.some(function (item) {
     return item.selected;
   });
   _this.parent.update();
@@ -241,7 +227,7 @@ this.open = function () {
     _this.update();
   }, 300);
 
-  if (_this.searchFlg) {
+  if (opts.search) {
     _this.refs.condition.focus();
   }
   _this.update();
@@ -255,7 +241,7 @@ this.close = function () {
     _this.update();
   }, 300);
 
-  if (_this.searchFlg) {
+  if (opts.search) {
     _this.refs.condition.blur();
     if (_this.filtered && _this.filteredItems.length > 0) {
       _this.selectTarget(_this.filteredItems[0]);
@@ -271,7 +257,7 @@ this.selectTarget = function (target, updating) {
   _this.value = target.value;
   _this.label = target.label;
   _this.default = target.default;
-  if (_this.searchFlg) {
+  if (opts.search) {
     _this.refs.condition.value = '';
     _this.filtered = false;
   }
@@ -285,12 +271,12 @@ this.selectTarget = function (target, updating) {
 };
 
 this.selectMultiTarget = function (updating) {
-  _this.value = _this.items.filter(function (item) {
+  _this.value = opts.items.filter(function (item) {
     return item.selected;
   }).map(function (item) {
     return item.value;
   });
-  _this.selectedFlg = _this.items.some(function (item) {
+  _this.selectedFlg = opts.items.some(function (item) {
     return item.selected;
   });
   if (!updating) {
@@ -300,10 +286,10 @@ this.selectMultiTarget = function (updating) {
 };
 
 this.search = function (target) {
-  _this.items.forEach(function (item) {
+  opts.items.forEach(function (item) {
     item.searched = item.label && item.label.toLowerCase().indexOf(target) >= 0;
   });
-  _this.filteredItems = _this.items.filter(function (item) {
+  _this.filteredItems = opts.items.filter(function (item) {
     return item.searched;
   });
   _this.update();
@@ -313,7 +299,7 @@ this.search = function (target) {
 //                                                                              Helper
 //                                                                              ======
 this.isVisible = function (item) {
-  if (_this.multipleFlg && (item.default || item.selected)) {
+  if (opts.multiple && (item.default || item.selected)) {
     return false;
   }
   return item.searched && !item.header && !item.divider;
