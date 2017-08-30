@@ -265,8 +265,8 @@ this.selectTarget = function (target, updating) {
     _this.update();
   }
   _this.parent.update();
-  if (opts.dropdown.action) {
-    opts.dropdown.action();
+  if (opts.action) {
+    opts.action();
   }
 };
 
