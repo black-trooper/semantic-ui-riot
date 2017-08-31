@@ -69,10 +69,14 @@
           if (this.label !== target.label) {
             this.selectTarget(target, true)
           }
-        } else if (opts.items && opts.items.length > 0 && this.label != opts.items[0].label) {
-          this.label = opts.items[0].label
-          this.value = opts.items[0].value
-          this.default = opts.items[0].default
+        } else if (opts.items && opts.items.length > 0) {
+          if (this.value != opts.items[0].value) {
+            this.value = opts.items[0].value
+          }
+          if (this.label != opts.items[0].label) {
+            this.label = opts.items[0].label
+            this.default = opts.items[0].default
+          }
         }
       }
     })
