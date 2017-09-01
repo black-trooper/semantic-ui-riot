@@ -152,7 +152,7 @@
     <i class="icon code" onclick="{ toggleExample.bind(this, 5) }"></i>
   </div>
   <div class="ui segment { bottom: !example[5] } attached">
-    <su-checkbox ref="checkbox1">
+    <su-checkbox ref="checkbox1" checked="true">
       Make my profile visible
     </su-checkbox>
 
@@ -169,7 +169,7 @@
 
   <div class="ui segment bottom attached inverted transition { hidden: !example[5] } ">
     <pre><code class="prettyprint">
-      <su-checkbox ref="checkbox1">
+      <su-checkbox ref="checkbox1" checked="true">
         Make my profile visible
       </su-checkbox>
 
