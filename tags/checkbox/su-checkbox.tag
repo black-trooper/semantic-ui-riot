@@ -8,19 +8,7 @@
     this.checked = false
 
     this.on('mount', () => {
-      if (!opts.checkbox) {
-        opts.checkbox = {
-          checked: false
-        }
-      }
-      if (opts.checked) {
-        opts.checkbox.checked = opts.checked
-      }
-      if (opts.action) {
-        opts.checkbox.action = opts.action
-      }
-
-      this.checked = opts.checkbox.checked
+      this.checked = opts.checked
 
       this.update()
       this.parent.update()
@@ -32,8 +20,8 @@
     this.click = event => {
       this.checked = event.target.checked
       this.parent.update()
-      if (opts.checkbox.action) {
-        opts.checkbox.action()
+      if (opts.action) {
+        opts.action()
       }
     }
 

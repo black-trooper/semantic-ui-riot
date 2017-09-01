@@ -6,19 +6,7 @@ var _this = this;
 this.checked = false;
 
 this.on('mount', function () {
-  if (!opts.checkbox) {
-    opts.checkbox = {
-      checked: false
-    };
-  }
-  if (opts.checked) {
-    opts.checkbox.checked = opts.checked;
-  }
-  if (opts.action) {
-    opts.checkbox.action = opts.action;
-  }
-
-  _this.checked = opts.checkbox.checked;
+  _this.checked = opts.checked;
 
   _this.update();
   _this.parent.update();
@@ -30,8 +18,8 @@ this.on('mount', function () {
 this.click = function (event) {
   _this.checked = event.target.checked;
   _this.parent.update();
-  if (opts.checkbox.action) {
-    opts.checkbox.action();
+  if (opts.action) {
+    opts.action();
   }
 };
 
@@ -142,10 +130,14 @@ this.on('update', function () {
       if (_this.label !== target.label) {
         _this.selectTarget(target, true);
       }
-    } else if (opts.items && opts.items.length > 0 && _this.label != opts.items[0].label) {
-      _this.label = opts.items[0].label;
-      _this.value = opts.items[0].value;
-      _this.default = opts.items[0].default;
+    } else if (opts.items && opts.items.length > 0) {
+      if (_this.value != opts.items[0].value) {
+        _this.value = opts.items[0].value;
+      }
+      if (_this.label != opts.items[0].label) {
+        _this.label = opts.items[0].label;
+        _this.default = opts.items[0].default;
+      }
     }
   }
 });
