@@ -36,27 +36,9 @@ this.checked = false;
 this.name = '';
 
 this.on('mount', function () {
-  if (!opts.radio) {
-    opts.radio = {
-      checked: false
-    };
-  }
-  if (opts.checked) {
-    opts.radio.checked = opts.checked;
-  }
-  if (opts.action) {
-    opts.radio.action = opts.action;
-  }
-  if (opts.name) {
-    opts.radio.name = opts.name;
-  }
-  if (opts.value) {
-    opts.radio.value = opts.value;
-  }
-
-  _this.checked = opts.radio.checked;
-  _this.name = opts.radio.name;
-  _this.value = opts.radio.value;
+  _this.checked = opts.checked;
+  _this.name = opts.name;
+  _this.value = opts.value;
 
   _this.update();
   _this.parent.update();
@@ -68,8 +50,8 @@ this.on('mount', function () {
 this.click = function (event) {
   _this.checked = event.target.checked;
   _this.parent.update();
-  if (opts.radio.action) {
-    opts.radio.action(event.target.value);
+  if (opts.action) {
+    opts.action(event.target.value);
   }
 };
 

@@ -9,27 +9,9 @@
     this.name = ''
 
     this.on('mount', () => {
-      if (!opts.radio) {
-        opts.radio = {
-          checked: false
-        }
-      }
-      if (opts.checked) {
-        opts.radio.checked = opts.checked
-      }
-      if (opts.action) {
-        opts.radio.action = opts.action
-      }
-      if (opts.name) {
-        opts.radio.name = opts.name
-      }
-      if (opts.value) {
-        opts.radio.value = opts.value
-      }
-
-      this.checked = opts.radio.checked
-      this.name = opts.radio.name
-      this.value = opts.radio.value
+      this.checked = opts.checked
+      this.name = opts.name
+      this.value = opts.value
 
       this.update()
       this.parent.update()
@@ -41,8 +23,8 @@
     this.click = event => {
       this.checked = event.target.checked
       this.parent.update()
-      if (opts.radio.action) {
-        opts.radio.action(event.target.value)
+      if (opts.action) {
+        opts.action(event.target.value)
       }
     }
 
