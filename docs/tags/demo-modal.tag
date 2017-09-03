@@ -15,7 +15,7 @@
   <div class="ui segment { bottom: !example[0] } attached">
     <su-modal modal="{ modal }" class="large">
       <div class="ui medium image">
-        <img src="/images/avatar2/large/rachel.png" />
+        <img src="./images/avatar2/large/rachel.png" />
       </div>
       <div class="description">
         <div class="ui header">Default Profile Image</div>
@@ -30,7 +30,7 @@
     <pre><code class="prettyprint">
       <su-modal modal="{ modal }" class="large">
         <div class="ui medium image">
-          <img src="/images/avatar2/large/rachel.png" />
+          <img src="./images/avatar2/large/rachel.png" />
         </div>
         <div class="description">
           <div class="ui header">Default Profile Image</div>
