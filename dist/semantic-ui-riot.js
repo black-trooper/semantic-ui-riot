@@ -56,7 +56,7 @@ this.click = function (event) {
 };
 
 this.labelClick = function () {
-  self.refs.target.click();
+  _this.refs.target.click();
 };
 
 // ===================================================================================

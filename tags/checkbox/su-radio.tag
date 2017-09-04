@@ -29,7 +29,7 @@
     }
 
     this.labelClick = () => {
-      self.refs.target.click()
+      this.refs.target.click()
     }
 
     // ===================================================================================
