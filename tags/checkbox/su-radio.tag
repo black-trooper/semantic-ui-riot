@@ -1,8 +1,6 @@
-<su-radio>
-  <div class="ui {radio: isRadio() } checkbox { opts.class }">
-    <input type="radio" name="{ name }" value="{ value }" checked="{ checked }" onclick="{ click }" ref="target" />
-    <label onclick="{ labelClick }"><yield /></label>
-  </div>
+<su-radio class="ui {radio: isRadio() } checkbox { opts.class }">
+  <input type="radio" name="{ name }" value="{ value }" checked="{ checked }" onclick="{ click }" ref="target" />
+  <label onclick="{ labelClick }"><yield /></label>
 
   <script>
     this.checked = false

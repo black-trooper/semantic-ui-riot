@@ -1,32 +1,30 @@
-<su-dropdown>
-  <div class="ui selection {opts.class} { search: opts.search } { multiple: opts.multiple} dropdown { active: visibleFlg } { visible: visibleFlg }"
-    onclick="{ click }">
-    <i class="dropdown icon"></i>
-    <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{ opts.search }" onkeydown="{keydown}" onkeyup="{ keyup }"
-    />
-    <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }">
+<su-dropdown class="ui selection {opts.class} { search: opts.search } { multiple: opts.multiple} dropdown { active: visibleFlg } { visible: visibleFlg }"
+  onclick="{ click }">
+  <i class="dropdown icon"></i>
+  <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{ opts.search }" onkeydown="{keydown}" onkeyup="{ keyup }"
+  />
+  <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }">
       { item.label }
       <i class="delete icon" onclick="{ unselect }"></i>
     </a>
-    <div class="{ default: default} text { filtered: filtered }" if="{ !opts.multiple || !selectedFlg }">
-      { label }
-    </div>
-    <div class="menu transition { transitionStatus }" tabindex="-1">
-      <virtual each="{item in opts.items}">
-        <div class="item { default: item.default }" if="{ isVisible(item) }" value="{ item.value }" default="{ item.default }" onclick="{ itemClick }">
-          <i class="{ item.icon } icon" if="{ item.icon }"></i>
-          <img class="ui avatar image" src="{ item.image }" if="{ item.image }" />
-          <span class="description" if="{ item.description }">{ item.description }</span>
-          <span class="text">{ item.label }</span>
-        </div>
-        <div class="header" if="{ item.header && !filtered}">
-          <i class="{ item.icon } icon" if="{ item.icon }"></i>
-          { item.label }
-        </div>
-        <div class="divider" if="{ item.divider && !filtered}"></div>
-      </virtual>
-      <div class="message" if="{ filtered && filteredItems.length == 0 }">No results found.</div>
-    </div>
+  <div class="{ default: default} text { filtered: filtered }" if="{ !opts.multiple || !selectedFlg }">
+    { label }
+  </div>
+  <div class="menu transition { transitionStatus }" tabindex="-1">
+    <virtual each="{item in opts.items}">
+      <div class="item { default: item.default }" if="{ isVisible(item) }" value="{ item.value }" default="{ item.default }" onclick="{ itemClick }">
+        <i class="{ item.icon } icon" if="{ item.icon }"></i>
+        <img class="ui avatar image" src="{ item.image }" if="{ item.image }" />
+        <span class="description" if="{ item.description }">{ item.description }</span>
+        <span class="text">{ item.label }</span>
+      </div>
+      <div class="header" if="{ item.header && !filtered}">
+        <i class="{ item.icon } icon" if="{ item.icon }"></i>
+        { item.label }
+      </div>
+      <div class="divider" if="{ item.divider && !filtered}"></div>
+    </virtual>
+    <div class="message" if="{ filtered && filteredItems.length == 0 }">No results found.</div>
   </div>
 
   <style>

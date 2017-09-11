@@ -1,8 +1,6 @@
-<su-checkbox>
-  <div class="ui checkbox { opts.class }">
-    <input type="checkbox" checked="{ checked }" onclick="{ click }" ref="target" />
-    <label onclick="{ labelClick }"><yield /></label>
-  </div>
+<su-checkbox class="ui checkbox { opts.class }">
+  <input type="checkbox" checked="{ checked }" onclick="{ click }" ref="target" />
+  <label onclick="{ labelClick }"><yield /></label>
 
   <script>
     this.checked = false
