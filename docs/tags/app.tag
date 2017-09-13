@@ -1,6 +1,10 @@
 <app>
   <div class="ui inverted vertical left fixed menu">
-    <div class="item"><strong>Semantic UI Riot</strong></div>
+    <div class="item">
+      <strong>Semantic UI Riot
+        <small><em>{ version }</em></small>
+      </strong>
+    </div>
 
     <div class="item">
       <div class="header">Getting Started</div>
@@ -31,6 +35,8 @@
   </div>
 
   <script>
+    this.version = require('../package.json').version
+
     route('', () => {
       riot.mount('content', 'root')
     })

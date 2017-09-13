@@ -4,6 +4,9 @@ const gulp = require('gulp');
 const del = require('del');
 const riot = require('gulp-riot');
 const concat = require('gulp-concat');
+const browserify = require('browserify');
+const babelify = require('babelify');
+const source = require('vinyl-source-stream');
 const sort = require('gulp-natural-sort')
 const uglify = require('gulp-uglify');
 const sequence = require('run-sequence');
@@ -107,6 +110,7 @@ gulp.task('demo_build', function () {
     'demo_compile',
     'demo_clean',
     'demo_concat',
+    'demo_browserify',
     'demo_compress',
     'demo_copy'
   );
@@ -141,6 +145,16 @@ gulp.task('demo_concat', function () {
   return gulp.src(['docs/dist/**/*.js', '!docs/dist/build.js'])
     .pipe(sort())
     .pipe(concat('build.js'))
+    .pipe(gulp.dest('docs/'));
+});
+
+gulp.task('demo_browserify', function () {
+  browserify({
+    entries: 'docs/build.js'
+  })
+    .transform(babelify)
+    .bundle()
+    .pipe(source('build.js'))
     .pipe(gulp.dest('docs/'));
 });
 
