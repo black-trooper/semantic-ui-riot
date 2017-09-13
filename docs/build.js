@@ -1,9 +1,9 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
 
-riot.tag2("app", '<div class="ui inverted vertical left fixed menu"> <div class="item"> <strong>Semantic UI Riot <small><em>{version}</em></small> </strong> </div> <div class="item"> <div class="header">Getting Started</div> <div class="menu"> <a class="item" href="#">Introduction</a> <a href="https://github.com/black-trooper/semantic-ui-riot" class="item"> <i aria-hidden="true" class="github icon"></i> GitHub </a> </div> </div> <div class="item"> <div class="header">Module</div> <div class="menu"> <a class="item" href="#demo-checkbox">Checkbox</a> <a class="item" href="#demo-dropdown">Dropdown</a> <a class="item" href="#demo-modal">Modal</a> </div> </div> </div> <div style="margin-left:15.5rem"> <div class="ui padded one column grid"> <div class="column"> <content></content> </div> </div> </div>', "", "", function (e) {
+riot.tag2("app", '<navigation></navigation> <div style="margin-left:15.5rem"> <div class="ui padded one column grid"> <div class="column"> <content></content> </div> </div> </div>', "", "", function (e) {
   "use strict";
-  this.version = require("../package.json").version, route("", function () {
+  route("", function () {
     riot.mount("content", "root");
   }), route(function (e) {
     riot.mount("content", e);
@@ -41,7 +41,10 @@ riot.tag2("app", '<div class="ui inverted vertical left fixed menu"> <div class=
   }, this.on("mount", function () {
     PR.prettyPrint(!1);
   });
-}), riot.tag2("root", '<h1 class="ui header"> Semantic UI Riot <div class="sub header">Semantic-UI-Riot integration.</div> </h1> <h2 class="ui dividing header" id="introduction">Introduction</h2> <p> Semantic UI Riot is Riot integration for <a href="https://semantic-ui.com/">Semantic UI</a>. </p>', "", "", function (e) {});
+}), riot.tag2("root", '<h1 class="ui header"> Semantic UI Riot <div class="sub header">Semantic-UI-Riot integration.</div> </h1> <h2 class="ui dividing header" id="introduction">Introduction</h2> <p> Semantic UI Riot is Riot integration for <a href="https://semantic-ui.com/">Semantic UI</a>. </p>', "", "", function (e) {}), riot.tag2("navigation", '<div class="ui inverted vertical left fixed menu"> <div class="item"> <strong>Semantic UI Riot <small><em>{version}</em></small> </strong> </div> <div class="item"> <div class="header">Getting Started</div> <div class="menu"> <a class="item" href="#">Introduction</a> <a href="https://github.com/black-trooper/semantic-ui-riot" class="item"> <i aria-hidden="true" class="github icon"></i> GitHub </a> </div> </div> <div class="item"> <div class="header">Module</div> <div class="menu"> <a class="item" href="#demo-checkbox">Checkbox</a> <a class="item" href="#demo-dropdown">Dropdown</a> <a class="item" href="#demo-modal">Modal</a> </div> </div> </div>', "", "", function (e) {
+  "use strict";
+  this.version = require("../package.json").version;
+});
 
 },{"../package.json":2}],2:[function(require,module,exports){
 module.exports={
