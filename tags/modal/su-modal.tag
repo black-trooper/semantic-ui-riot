@@ -17,7 +17,7 @@
     </div>
   </div>
   <style>
-    .ui.dimmer.visible.transition {
+     :scope.ui.dimmer.visible.transition {
       display: flex !important;
       align-items: center;
       justify-content: center;
