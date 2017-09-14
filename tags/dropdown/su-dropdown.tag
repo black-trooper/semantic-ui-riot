@@ -28,7 +28,7 @@
   </div>
 
   <style>
-    .ui.dropdown .menu>.item.default {
+     :scope.ui.dropdown .menu>.item.default {
       color: rgba(0, 0, 0, 0.4)
     }
   </style>
