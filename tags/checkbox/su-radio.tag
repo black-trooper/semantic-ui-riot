@@ -12,7 +12,7 @@
       this.value = opts.value
 
       this.update()
-      this.parent.update()
+      this.parentUpdate()
     })
 
     // ===================================================================================
@@ -20,7 +20,7 @@
     //                                                                               =====
     this.click = event => {
       this.checked = event.target.checked
-      this.parent.update()
+      this.parentUpdate()
       if (opts.action) {
         opts.action(event.target.value)
       }
@@ -35,6 +35,12 @@
     //                                                                              ======
     this.isRadio = () => {
       return !this.root.classList.contains('slider')
+    }
+
+    this.parentUpdate = () => {
+      if (this.parent) {
+        this.parent.update()
+      }
     }
   </script>
 </su-radio>

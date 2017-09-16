@@ -9,7 +9,7 @@
       this.checked = opts.checked
 
       this.update()
-      this.parent.update()
+      this.parentUpdate()
     })
 
     // ===================================================================================
@@ -17,7 +17,7 @@
     //                                                                               =====
     this.click = event => {
       this.checked = event.target.checked
-      this.parent.update()
+      this.parentUpdate()
       if (opts.action) {
         opts.action()
       }
@@ -25,6 +25,15 @@
 
     this.labelClick = () => {
       this.refs.target.click()
+    }
+
+    // ===================================================================================
+    //                                                                              Helper
+    //                                                                              ======
+    this.parentUpdate = () => {
+      if (this.parent) {
+        this.parent.update()
+      }
     }
   </script>
 </su-checkbox>

@@ -49,14 +49,15 @@ riot.tag2("app", '<navigation></navigation> <div style="margin-left:15.5rem"> <d
 },{"../package.json":2}],2:[function(require,module,exports){
 module.exports={
   "name": "semantic-ui-riot",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Semantic UI for Riot",
   "main": "dist/semantic-ui-riot.min.js",
   "files": [
     "dist"
   ],
   "scripts": {
-    "start": "gulp"
+    "start": "gulp",
+    "test": "karma start"
   },
   "keywords": [
     "riotjs",
@@ -81,6 +82,7 @@ module.exports={
     "babel-preset-es2015-riot": "^1.1.0",
     "babelify": "^7.3.0",
     "browserify": "^14.4.0",
+    "chai": "^4.1.2",
     "eslint-plugin-html": "^3.1.1",
     "gulp": "^3.9.1",
     "gulp-babel": "^7.0.0",
@@ -93,8 +95,19 @@ module.exports={
     "gulp-riot": "^1.1.1",
     "gulp-uglify": "^3.0.0",
     "gulp-webserver-fast": "^0.9.1",
+    "jquery": "2.2.2",
+    "karma": "^1.7.1",
+    "karma-babel-preprocessor": "^7.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-coverage": "^1.1.1",
+    "karma-mocha": "^1.3.0",
+    "karma-mocha-reporter": "^2.2.4",
+    "karma-riot": "^2.0.0",
+    "karma-sinon-chai": "^1.3.2",
     "riot-route": "^3.1.1",
     "run-sequence": "^2.0.0",
+    "sinon": "^2.1.0",
+    "sinon-chai": "^2.13.0",
     "uglify-js": "^3.0.25",
     "vinyl-source-stream": "^1.1.0"
   }

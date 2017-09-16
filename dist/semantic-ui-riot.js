@@ -9,7 +9,7 @@ this.on('mount', function () {
   _this.checked = opts.checked;
 
   _this.update();
-  _this.parent.update();
+  _this.parentUpdate();
 });
 
 // ===================================================================================
@@ -17,7 +17,7 @@ this.on('mount', function () {
 //                                                                               =====
 this.click = function (event) {
   _this.checked = event.target.checked;
-  _this.parent.update();
+  _this.parentUpdate();
   if (opts.action) {
     opts.action();
   }
@@ -25,6 +25,15 @@ this.click = function (event) {
 
 this.labelClick = function () {
   _this.refs.target.click();
+};
+
+// ===================================================================================
+//                                                                              Helper
+//                                                                              ======
+this.parentUpdate = function () {
+  if (_this.parent) {
+    _this.parent.update();
+  }
 };
 });
 riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target"> <label onclick="{labelClick}"><yield></yield></label>', '', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
@@ -41,7 +50,7 @@ this.on('mount', function () {
   _this.value = opts.value;
 
   _this.update();
-  _this.parent.update();
+  _this.parentUpdate();
 });
 
 // ===================================================================================
@@ -49,7 +58,7 @@ this.on('mount', function () {
 //                                                                               =====
 this.click = function (event) {
   _this.checked = event.target.checked;
-  _this.parent.update();
+  _this.parentUpdate();
   if (opts.action) {
     opts.action(event.target.value);
   }
@@ -64,6 +73,12 @@ this.labelClick = function () {
 //                                                                              ======
 this.isRadio = function () {
   return !_this.root.classList.contains('slider');
+};
+
+this.parentUpdate = function () {
+  if (_this.parent) {
+    _this.parent.update();
+  }
 };
 });
 riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{opts.search}" onkeydown="{keydown}" onkeyup="{keyup}"> <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!opts.multiple || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" tabindex="-1"> <virtual each="{item in opts.items}"> <div class="item {default: item.default}" if="{isVisible(item)}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="header" if="{item.header && !filtered}"> <i class="{item.icon} icon" if="{item.icon}"></i> {item.label} </div> <div class="divider" if="{item.divider && !filtered}"></div> </virtual> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div>', 'su-dropdown.ui.dropdown .menu>.item.default,[data-is="su-dropdown"].ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', 'class="ui selection {opts.class} {search: opts.search} {multiple: opts.multiple} dropdown {active: visibleFlg} {visible: visibleFlg}" onclick="{click}"', function(opts) {
@@ -85,7 +100,7 @@ this.on('mount', function () {
   }
   document.addEventListener('click', _this.handleClickOutside);
   _this.update();
-  _this.parent.update();
+  _this.parentUpdate();
 });
 
 this.on('unmount', function () {
@@ -187,7 +202,7 @@ this.unselect = function (event) {
   _this.selectedFlg = opts.items.some(function (item) {
     return item.selected;
   });
-  _this.parent.update();
+  _this.parentUpdate();
 };
 
 // ===================================================================================
@@ -238,7 +253,7 @@ this.selectTarget = function (target, updating) {
   if (!updating) {
     _this.update();
   }
-  _this.parent.update();
+  _this.parentUpdate();
   if (opts.action) {
     opts.action();
   }
@@ -255,7 +270,7 @@ this.selectMultiTarget = function (updating) {
   });
   if (!updating) {
     _this.update();
-    _this.parent.update();
+    _this.parentUpdate();
   }
 };
 
@@ -277,6 +292,11 @@ this.isVisible = function (item) {
     return false;
   }
   return item.searched && !item.header && !item.divider;
+};
+this.parentUpdate = function () {
+  if (_this.parent) {
+    _this.parent.update();
+  }
 };
 });
 riot.tag2('su-modal', '<div class="ui modal transition visible active {opts.class}"> <i class="close icon" if="{isFullscreen()}" onclick="{close}"></i> <div class="ui header {icon: opts.modal.heading.icon}"> <i class="icon {opts.modal.heading.icon}" if="{opts.modal.heading.icon}"></i> {(opts.modal.heading.text) ? opts.modal.heading.text : opts.modal.heading} </div> <div class="content {opts.modal.content_class}"> <yield></yield> </div> <div class="actions"> <div each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: isBasic()}" onclick="{parent.click.bind(this, action)}"> {text} <i class="icon {icon}" if="{icon}"></i> </div> </div> </div>', 'su-modal.ui.dimmer.visible.transition,[data-is="su-modal"].ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; }', 'class="ui dimmer modals page transition {transitionStatus}" onclick="{dimmerClose}"', function(opts) {

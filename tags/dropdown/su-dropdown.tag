@@ -48,7 +48,7 @@
       }
       document.addEventListener('click', this.handleClickOutside)
       this.update()
-      this.parent.update()
+      this.parentUpdate()
     })
 
     this.on('unmount', () => {
@@ -136,7 +136,7 @@
       event.item.item.selected = false
       this.value = opts.items.filter(item => item.selected).map(item => item.value)
       this.selectedFlg = opts.items.some(item => item.selected)
-      this.parent.update()
+      this.parentUpdate()
     }
 
     // ===================================================================================
@@ -187,7 +187,7 @@
       if (!updating) {
         this.update()
       }
-      this.parent.update()
+      this.parentUpdate()
       if (opts.action) {
         opts.action()
       }
@@ -198,7 +198,7 @@
       this.selectedFlg = opts.items.some(item => item.selected)
       if (!updating) {
         this.update()
-        this.parent.update()
+        this.parentUpdate()
       }
     }
 
@@ -220,6 +220,11 @@
         return false
       }
       return item.searched && !item.header && !item.divider
+    }
+    this.parentUpdate = () => {
+      if (this.parent) {
+        this.parent.update()
+      }
     }
   </script>
 </su-dropdown>
