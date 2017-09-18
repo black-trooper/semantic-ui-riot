@@ -4,6 +4,7 @@ module.exports = function (config) {
     frameworks: ['mocha', 'sinon-chai', 'riot'],
     files: [
       'node_modules/jquery/dist/jquery.min.js',
+      'https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css',
       'tags/**/*'
     ],
     preprocessors: {

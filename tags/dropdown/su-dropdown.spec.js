@@ -38,12 +38,12 @@ describe('su-dropdown', function () {
   })
 
   it('focusing/blurring field opens/closes dropdown and triggers open/close event', function () {
-    $('su-dropdown .menu').hasClass('visible').should.equal(false)
+    $('su-dropdown .menu').is(':visible').should.equal(false)
     $('su-dropdown').click()
     this.clock.tick(310);
-    $('su-dropdown .menu').hasClass('visible').should.equal(true)
+    $('su-dropdown .menu').is(':visible').should.equal(true)
     $('body').click()
     this.clock.tick(310);
-    $('su-dropdown .menu').hasClass('visible').should.equal(false)
+    $('su-dropdown .menu').is(':visible').should.equal(false)
   })
 })
