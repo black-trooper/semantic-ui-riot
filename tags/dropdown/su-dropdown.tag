@@ -154,6 +154,7 @@
         this.refs.condition.focus()
       }
       this.update()
+      this.trigger('open')
     }
 
     this.close = () => {
@@ -174,6 +175,7 @@
         }
       }
       this.update()
+      this.trigger('close')
     }
 
     this.selectTarget = (target, updating) => {
@@ -191,6 +193,7 @@
       if (opts.action) {
         opts.action()
       }
+      this.trigger('select')
     }
 
     this.selectMultiTarget = (updating) => {
@@ -200,6 +203,7 @@
         this.update()
         this.parentUpdate()
       }
+      this.trigger('select')
     }
 
     this.search = target => {
@@ -210,6 +214,7 @@
         return item.searched
       })
       this.update()
+      this.trigger('search')
     }
 
     // ===================================================================================

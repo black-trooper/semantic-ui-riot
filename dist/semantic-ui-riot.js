@@ -220,6 +220,7 @@ this.open = function () {
     _this.refs.condition.focus();
   }
   _this.update();
+  _this.trigger('open');
 };
 
 this.close = function () {
@@ -240,6 +241,7 @@ this.close = function () {
     }
   }
   _this.update();
+  _this.trigger('close');
 };
 
 this.selectTarget = function (target, updating) {
@@ -257,6 +259,7 @@ this.selectTarget = function (target, updating) {
   if (opts.action) {
     opts.action();
   }
+  _this.trigger('select');
 };
 
 this.selectMultiTarget = function (updating) {
@@ -272,6 +275,7 @@ this.selectMultiTarget = function (updating) {
     _this.update();
     _this.parentUpdate();
   }
+  _this.trigger('select');
 };
 
 this.search = function (target) {
@@ -282,6 +286,7 @@ this.search = function (target) {
     return item.searched;
   });
   _this.update();
+  _this.trigger('search');
 };
 
 // ===================================================================================
