@@ -1,5 +1,8 @@
 describe('su-dropdown', function () {
   let tag, select
+  let spyOnOpen = sinon.spy()
+  let spyOnClose = sinon.spy()
+  let spyOnSelect = sinon.spy()
 
   beforeEach(function () {
     let items = [
@@ -21,10 +24,16 @@ describe('su-dropdown', function () {
     tag = riot.mount('su-dropdown', {
       items
     })[0]
+    tag.on('open', spyOnOpen)
+      .on('close', spyOnClose)
+      .on('select', spyOnSelect)
     this.clock = sinon.useFakeTimers()
   })
 
   afterEach(function () {
+    spyOnOpen.reset()
+    spyOnClose.reset()
+    spyOnSelect.reset()
     this.clock.restore()
     tag.unmount()
   })
@@ -42,8 +51,10 @@ describe('su-dropdown', function () {
     $('su-dropdown').click()
     this.clock.tick(310);
     $('su-dropdown .menu').is(':visible').should.equal(true)
+    spyOnOpen.should.have.been.calledOnce
     $('body').click()
     this.clock.tick(310);
     $('su-dropdown .menu').is(':visible').should.equal(false)
+    spyOnClose.should.have.been.calledOnce
   })
 })
