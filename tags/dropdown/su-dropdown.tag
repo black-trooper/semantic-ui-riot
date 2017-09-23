@@ -1,5 +1,5 @@
 <su-dropdown class="ui selection {opts.class} { search: opts.search } { multiple: opts.multiple} dropdown { active: visibleFlg } { visible: visibleFlg }"
-  onfocus="{ open }" onblur="{ close }" tabindex="{ opts.search ? -1 : 0 }">
+  onfocus="{ open }" onblur="{ blur }" tabindex="{ opts.search ? -1 : 0 }">
   <i class="dropdown icon"></i>
   <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{ opts.search }" onkeydown="{keydown}" onkeyup="{ keyup }"
   />
@@ -91,7 +91,17 @@
       }
     }
 
+    this.blur = () => {
+      setTimeout(() => {
+        if (!this.itemClickTriggered) {
+          this.close()
+        }
+        this.itemClickTriggered = false
+      }, 150)
+    }
+
     this.itemClick = event => {
+      this.itemClickTriggered = true
       event.stopPropagation()
       if (opts.multiple) {
         if (!event.item.item.default) {
