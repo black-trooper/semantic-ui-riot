@@ -1,5 +1,5 @@
 <su-dropdown class="ui selection {opts.class} { search: opts.search } { multiple: opts.multiple} dropdown { active: visibleFlg } { visible: visibleFlg }"
-  onfocus="{ open }" onblur="{ blur }" tabindex="{ opts.search ? -1 : 0 }">
+  onclick="{ click }" onfocus="{ open }" onblur="{ blur }" tabindex="{ opts.search ? -1 : 0 }">
   <i class="dropdown icon"></i>
   <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{ opts.search }" onkeydown="{keydown}" onkeyup="{ keyup }"
   />
@@ -83,12 +83,17 @@
     //                                                                               Event
     //                                                                               =====
     this.click = () => {
-      this.visibleFlg = !this.visibleFlg
-      if (this.visibleFlg) {
-        this.open()
-      } else {
-        this.close()
-      }
+      setTimeout(() => {
+        if (!this.focusTriggered) {
+          this.visibleFlg = !this.visibleFlg
+          if (this.visibleFlg) {
+            this.open()
+          } else {
+            this.close()
+          }
+        }
+        this.focusTriggered = false
+      }, 100)
     }
 
     this.blur = () => {
@@ -153,6 +158,7 @@
     //                                                                               Logic
     //                                                                               =====
     this.open = () => {
+      this.focusTriggered = true
       this.visibleFlg = true
       this.search('')
       this.transitionStatus = 'visible animating in slide down'
