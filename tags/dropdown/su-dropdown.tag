@@ -1,8 +1,8 @@
 <su-dropdown class="ui selection {opts.class} { search: opts.search } { multiple: opts.multiple} dropdown { active: visibleFlg } { visible: visibleFlg }"
-  onclick="{ click }" onfocus="{ open }" onblur="{ blur.bind(this, false) }" tabindex="{ opts.search ? -1 : 0 }">
+  onclick="{ click }" onfocus="{ open }" onblur="{ blur.bind(this, false) }" tabindex="{ opts.search ? -1 : getTabindex() }">
   <i class="dropdown icon"></i>
-  <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{ opts.search }" onkeydown="{keydown}" onkeyup="{ keyup }"
-    onfocus="{ open }" onblur="{ blur.bind(this, true) }" />
+  <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ opts.search }" onkeydown="{keydown}"
+    onkeyup="{ keyup }" onfocus="{ open }" onblur="{ blur.bind(this, true) }" />
   <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }">
       { item.label }
       <i class="delete icon" onclick="{ unselect }"></i>
@@ -100,7 +100,6 @@
       if (!isSearchField && opts.search) {
         return
       }
-      console.warn('search blur')
       setTimeout(() => {
         if (!this.itemClickTriggered) {
           this.close()
@@ -256,10 +255,18 @@
       }
       return item.searched && !item.header && !item.divider
     }
+
     this.parentUpdate = () => {
       if (this.parent) {
         this.parent.update()
       }
+    }
+
+    this.getTabindex = () => {
+      if (opts.tabindex) {
+        return opts.tabindex
+      }
+      return 0
     }
   </script>
 </su-dropdown>
