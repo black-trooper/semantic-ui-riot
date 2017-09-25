@@ -1,8 +1,8 @@
 <su-dropdown class="ui selection {opts.class} { search: opts.search } { multiple: opts.multiple} dropdown { active: visibleFlg } { visible: visibleFlg }"
-  onclick="{ click }" onfocus="{ open }" onblur="{ blur }" tabindex="{ opts.search ? -1 : 0 }">
+  onclick="{ click }" onfocus="{ open }" onblur="{ blur.bind(this, false) }" tabindex="{ opts.search ? -1 : 0 }">
   <i class="dropdown icon"></i>
   <input class="search" autocomplete="off" tabindex="0" ref="condition" if="{ opts.search }" onkeydown="{keydown}" onkeyup="{ keyup }"
-  />
+    onfocus="{ open }" onblur="{ blur.bind(this, true) }" />
   <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }">
       { item.label }
       <i class="delete icon" onclick="{ unselect }"></i>
@@ -96,7 +96,20 @@
       }, 100)
     }
 
-    this.blur = () => {
+    this.blur = isSearchField => {
+      if (!isSearchField && opts.search) {
+        return
+      }
+      console.warn('search blur')
+      setTimeout(() => {
+        if (!this.itemClickTriggered) {
+          this.close()
+        }
+        this.itemClickTriggered = false
+      }, 150)
+    }
+
+    this.blurSearch = () => {
       setTimeout(() => {
         if (!this.itemClickTriggered) {
           this.close()
