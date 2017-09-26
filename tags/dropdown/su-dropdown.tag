@@ -12,7 +12,8 @@
   </div>
   <div class="menu transition { transitionStatus }" tabindex="-1">
     <virtual each="{item in opts.items}">
-      <div class="item { default: item.default }" if="{ isVisible(item) }" value="{ item.value }" default="{ item.default }" onclick="{ itemClick }">
+      <div class="item { default: item.default }" if="{ isVisible(item) }" value="{ item.value }" default="{ item.default }" onclick="{ itemClick }"
+        onmousedown="{ mousedown }" onmouseup="{ mouseup }">
         <i class="{ item.icon } icon" if="{ item.icon }"></i>
         <img class="ui avatar image" src="{ item.image }" if="{ item.image }" />
         <span class="description" if="{ item.description }">{ item.description }</span>
@@ -83,42 +84,34 @@
     //                                                                               Event
     //                                                                               =====
     this.click = () => {
-      setTimeout(() => {
-        if (!this.focusTriggered) {
-          this.visibleFlg = !this.visibleFlg
-          if (this.visibleFlg) {
-            this.open()
-          } else {
-            this.close()
-          }
+      if (!this.focused()) {
+        this.visibleFlg = !this.visibleFlg
+        if (this.visibleFlg) {
+          this.open()
+        } else {
+          this.close()
         }
-        this.focusTriggered = false
-      }, 100)
+      }
+    }
+
+    this.mousedown = () => {
+      this.itemActivated = true
+    }
+
+    this.mouseup = () => {
+      this.itemActivated = false
     }
 
     this.blur = isSearchField => {
       if (!isSearchField && opts.search) {
         return
       }
-      setTimeout(() => {
-        if (!this.itemClickTriggered) {
-          this.close()
-        }
-        this.itemClickTriggered = false
-      }, 150)
-    }
-
-    this.blurSearch = () => {
-      setTimeout(() => {
-        if (!this.itemClickTriggered) {
-          this.close()
-        }
-        this.itemClickTriggered = false
-      }, 150)
+      if (!this.itemActivated) {
+        this.close()
+      }
     }
 
     this.itemClick = event => {
-      this.itemClickTriggered = true
       event.stopPropagation()
       if (opts.multiple) {
         if (!event.item.item.default) {
@@ -170,7 +163,6 @@
     //                                                                               Logic
     //                                                                               =====
     this.open = () => {
-      this.focusTriggered = true
       this.visibleFlg = true
       this.search('')
       this.transitionStatus = 'visible animating in slide down'
@@ -244,6 +236,10 @@
       })
       this.update()
       this.trigger('search')
+    }
+
+    this.focused = () => {
+      return document.activeElement === this.root
     }
 
     // ===================================================================================

@@ -81,7 +81,7 @@ this.parentUpdate = function () {
   }
 };
 });
-riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="{getTabindex()}" ref="condition" if="{opts.search}" onkeydown="{keydown}" onkeyup="{keyup}" onfocus="{open}" onblur="{blur.bind(this, true)}"> <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!opts.multiple || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" tabindex="-1"> <virtual each="{item in opts.items}"> <div class="item {default: item.default}" if="{isVisible(item)}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="header" if="{item.header && !filtered}"> <i class="{item.icon} icon" if="{item.icon}"></i> {item.label} </div> <div class="divider" if="{item.divider && !filtered}"></div> </virtual> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div>', 'su-dropdown.ui.dropdown .menu>.item.default,[data-is="su-dropdown"].ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', 'class="ui selection {opts.class} {search: opts.search} {multiple: opts.multiple} dropdown {active: visibleFlg} {visible: visibleFlg}" onclick="{click}" onfocus="{open}" onblur="{blur.bind(this, false)}" tabindex="{opts.search ? -1 : getTabindex()}"', function(opts) {
+riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="{getTabindex()}" ref="condition" if="{opts.search}" onkeydown="{keydown}" onkeyup="{keyup}" onfocus="{open}" onblur="{blur.bind(this, true)}"> <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!opts.multiple || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" tabindex="-1"> <virtual each="{item in opts.items}"> <div class="item {default: item.default}" if="{isVisible(item)}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}" onmousedown="{mousedown}" onmouseup="{mouseup}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="header" if="{item.header && !filtered}"> <i class="{item.icon} icon" if="{item.icon}"></i> {item.label} </div> <div class="divider" if="{item.divider && !filtered}"></div> </virtual> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div>', 'su-dropdown.ui.dropdown .menu>.item.default,[data-is="su-dropdown"].ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', 'class="ui selection {opts.class} {search: opts.search} {multiple: opts.multiple} dropdown {active: visibleFlg} {visible: visibleFlg}" onclick="{click}" onfocus="{open}" onblur="{blur.bind(this, false)}" tabindex="{opts.search ? -1 : getTabindex()}"', function(opts) {
 'use strict';
 
 var _this = this;
@@ -143,42 +143,34 @@ this.on('update', function () {
 //                                                                               Event
 //                                                                               =====
 this.click = function () {
-  setTimeout(function () {
-    if (!_this.focusTriggered) {
-      _this.visibleFlg = !_this.visibleFlg;
-      if (_this.visibleFlg) {
-        _this.open();
-      } else {
-        _this.close();
-      }
+  if (!_this.focused()) {
+    _this.visibleFlg = !_this.visibleFlg;
+    if (_this.visibleFlg) {
+      _this.open();
+    } else {
+      _this.close();
     }
-    _this.focusTriggered = false;
-  }, 100);
+  }
+};
+
+this.mousedown = function () {
+  _this.itemActivated = true;
+};
+
+this.mouseup = function () {
+  _this.itemActivated = false;
 };
 
 this.blur = function (isSearchField) {
   if (!isSearchField && opts.search) {
     return;
   }
-  setTimeout(function () {
-    if (!_this.itemClickTriggered) {
-      _this.close();
-    }
-    _this.itemClickTriggered = false;
-  }, 150);
-};
-
-this.blurSearch = function () {
-  setTimeout(function () {
-    if (!_this.itemClickTriggered) {
-      _this.close();
-    }
-    _this.itemClickTriggered = false;
-  }, 150);
+  if (!_this.itemActivated) {
+    _this.close();
+  }
 };
 
 this.itemClick = function (event) {
-  _this.itemClickTriggered = true;
   event.stopPropagation();
   if (opts.multiple) {
     if (!event.item.item.default) {
@@ -236,7 +228,6 @@ this.unselect = function (event) {
 //                                                                               Logic
 //                                                                               =====
 this.open = function () {
-  _this.focusTriggered = true;
   _this.visibleFlg = true;
   _this.search('');
   _this.transitionStatus = 'visible animating in slide down';
@@ -316,6 +307,10 @@ this.search = function (target) {
   });
   _this.update();
   _this.trigger('search');
+};
+
+this.focused = function () {
+  return document.activeElement === _this.root;
 };
 
 // ===================================================================================
