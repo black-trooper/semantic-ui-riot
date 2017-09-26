@@ -32,33 +32,21 @@
     <i class="icon code link" onclick="{ toggleExample.bind(this, 2) }"></i>
   </div>
   <div class="ui segment { bottom: !example[2] } attached">
-    <su-radio name="radio1" action="{ radioClick }" value="1" checked="{ radio1 == 1 }">
+    <su-radio name="radio1">
       Radio choice1
     </su-radio>
-    <su-radio name="radio1" action="{ radioClick }" value="2" checked="{ radio1 == 2 }">
+    <su-radio name="radio1">
       Radio choice2
     </su-radio>
-    <span class=" ui tag label">Radio choice{ radio1 }</span>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[2] }">
     <pre><code class="prettyprint">
-      <su-radio name="radio" action="{ radioClick }" value="1" checked="{ myradio == 1 }">
+      <su-radio name="radio">
         Radio choice1
       </su-radio>
-      <su-radio name="radio" action="{ radioClick }" value="2" checked="{ myradio == 2 }">
+      <su-radio name="radio">
         Radio choice2
       </su-radio>
-
-      <!-- radio state example -->
-      <span class="ui tag label">Radio choice{ myradio }</span>
-
-      <script>
-        this.myradio = 1
-        this.radioClick = val => {
-          this.myradio = val
-          this.update()
-        }
-      </script>
     </code></pre>
   </div>
 
@@ -191,17 +179,76 @@
     </code></pre>
   </div>
 
+  <h3 class="ui header">Radio</h3>
+  <p>Access to radio with ref attribute</p>
+  <div class="ui segment secondary top attached example">
+    Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 6) }"></i>
+  </div>
+  <div class="ui segment { bottom: !example[6] } attached">
+    <su-radio name="radio2" action="{ radioClickCallback }" ref="radio1_1" value="1" checked="{ radio1 == 1 }">
+      Radio choice1
+    </su-radio>
+    <su-radio name="radio2" action="{ radioClickCallback }" ref="radio1_2" value="2" checked="{ radio1 == 2 }">
+      Radio choice2
+    </su-radio>
+
+    <div class="ui message">
+      <div class="header">
+        Checked from refs
+      </div>
+      <p>Radio choice1 { refs.radio1_1.checked ? 'on' : 'off' }</p>
+      <p>Radio choice2 { refs.radio1_2.checked ? 'on' : 'off' }</p>
+    </div>
+
+    <button type="button" click="{ setRadioValue.bind(this, 1) }" class="ui button">Choice1</button>
+    <button type="button" click="{ setRadioValue.bind(this, 2) }" class="ui button">Choice2</button>
+  </div>
+
+  <div class="ui segment bottom attached inverted transition { hidden: !example[6] } ">
+    <pre><code class="prettyprint">
+      <su-radio name="radio" action="{ radioClickCallback }" ref="radio1_1" value="1" checked="{ radio1 == 1 }">
+        Radio choice1
+      </su-radio>
+      <su-radio name="radio" action="{ radioClickCallback }" ref="radio1_2" value="2" checked="{ radio1 == 2 }">
+        Radio choice2
+      </su-radio>
+  
+      <div class="ui message">
+        <div class="header">
+          Checked from refs
+        </div>
+        <p>Radio choice1 { refs.radio1_1.checked ? 'on' : 'off' }</p>
+        <p>Radio choice2 { refs.radio1_2.checked ? 'on' : 'off' }</p>
+      </div>
+  
+      <button type="button" click="{ setRadioValue.bind(this, 1) }" class="ui button">Choice1</button>
+      <button type="button" click="{ setRadioValue.bind(this, 2) }" class="ui button">Choice2</button>
+
+      <script>
+        this.radio1 = 1
+        this.radioClickCallback = value => {
+          this.radio1 = value
+        }
+        this.setRadioValue = value => {
+          this.radio1 = value
+        }
+      </script>
+    </code></pre>
+  </div>
+
   <script>
         this.example = []
         this.toggleExample = index => {
           this.example[index] = !this.example[index]
         }
-        this.results = []
 
         this.radio1 = 1
-        this.radioClick = val => {
-          this.radio1 = val
-          this.update()
+        this.radioClickCallback = value => {
+          this.radio1 = value
+        }
+        this.setRadioValue = value => {
+          this.radio1 = value
         }
 
         this.setRefValue = value => {
