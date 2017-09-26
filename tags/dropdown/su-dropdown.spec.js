@@ -46,13 +46,13 @@ describe('su-dropdown', function () {
     $('su-dropdown .menu .item').length.should.equal(0)
   })
 
-  it('focusing/blurring field opens/closes dropdown and triggers open/close event', function () {
+  it('clicking field opens/closes dropdown and triggers open/close event', function () {
     $('su-dropdown .menu').is(':visible').should.equal(false)
     $('su-dropdown').click()
     this.clock.tick(310);
     $('su-dropdown .menu').is(':visible').should.equal(true)
     spyOnOpen.should.have.been.calledOnce
-    $('body').click()
+    $('su-dropdown').click()
     this.clock.tick(310);
     $('su-dropdown .menu').is(':visible').should.equal(false)
     spyOnClose.should.have.been.calledOnce
