@@ -7,12 +7,14 @@
     this.name = ''
 
     this.on('mount', () => {
+      this.update()
+      this.parentUpdate()
+    })
+
+    this.on('update', () => {
       this.checked = opts.checked
       this.name = opts.name
       this.value = opts.value
-
-      this.update()
-      this.parentUpdate()
     })
 
     // ===================================================================================

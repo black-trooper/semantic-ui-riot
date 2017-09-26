@@ -45,12 +45,14 @@ this.checked = false;
 this.name = '';
 
 this.on('mount', function () {
+  _this.update();
+  _this.parentUpdate();
+});
+
+this.on('update', function () {
   _this.checked = opts.checked;
   _this.name = opts.name;
   _this.value = opts.value;
-
-  _this.update();
-  _this.parentUpdate();
 });
 
 // ===================================================================================
