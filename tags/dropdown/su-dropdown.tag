@@ -47,13 +47,8 @@
         this.value = opts.items[0].value
         this.default = opts.items[0].default
       }
-      document.addEventListener('click', this.handleClickOutside)
       this.update()
       this.parentUpdate()
-    })
-
-    this.on('unmount', () => {
-      document.removeEventListener('click', this.handleClickOutside)
     })
 
     this.on('update', () => {
@@ -126,12 +121,6 @@
         default: event.target.attributes['default']
       })
       this.close()
-    }
-
-    this.handleClickOutside = e => {
-      if (!this.root.contains(e.target) && this.visibleFlg) {
-        this.close()
-      }
     }
 
     // -----------------------------------------------------

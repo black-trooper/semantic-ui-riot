@@ -98,13 +98,8 @@ this.on('mount', function () {
     _this.value = opts.items[0].value;
     _this.default = opts.items[0].default;
   }
-  document.addEventListener('click', _this.handleClickOutside);
   _this.update();
   _this.parentUpdate();
-});
-
-this.on('unmount', function () {
-  document.removeEventListener('click', _this.handleClickOutside);
 });
 
 this.on('update', function () {
@@ -185,12 +180,6 @@ this.itemClick = function (event) {
     default: event.target.attributes['default']
   });
   _this.close();
-};
-
-this.handleClickOutside = function (e) {
-  if (!_this.root.contains(e.target) && _this.visibleFlg) {
-    _this.close();
-  }
 };
 
 // -----------------------------------------------------
