@@ -6,10 +6,12 @@
     this.checked = false
 
     this.on('mount', () => {
-      this.checked = opts.checked
-
       this.update()
       this.parentUpdate()
+    })
+
+    this.on('update', () => {
+      this.checked = opts.checked
     })
 
     // ===================================================================================

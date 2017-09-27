@@ -6,10 +6,12 @@ var _this = this;
 this.checked = false;
 
 this.on('mount', function () {
-  _this.checked = opts.checked;
-
   _this.update();
   _this.parentUpdate();
+});
+
+this.on('update', function () {
+  _this.checked = opts.checked;
 });
 
 // ===================================================================================
