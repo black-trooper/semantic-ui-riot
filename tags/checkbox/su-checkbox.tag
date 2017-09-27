@@ -17,9 +17,7 @@
     this.click = event => {
       this.checked = event.target.checked
       this.parentUpdate()
-      if (opts.action) {
-        opts.action()
-      }
+      this.trigger('click')
     }
 
     this.labelClick = () => {

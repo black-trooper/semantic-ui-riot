@@ -17,9 +17,7 @@ this.on('mount', function () {
 this.click = function (event) {
   _this.checked = event.target.checked;
   _this.parentUpdate();
-  if (opts.action) {
-    opts.action();
-  }
+  _this.trigger('click');
 };
 
 this.labelClick = function () {
@@ -59,10 +57,8 @@ this.on('update', function () {
 //                                                                               =====
 this.click = function (event) {
   _this.checked = event.target.checked;
+  _this.trigger('click', event.target.value);
   _this.parentUpdate();
-  if (opts.action) {
-    opts.action(event.target.value);
-  }
 };
 
 this.labelClick = function () {
@@ -269,7 +265,7 @@ this.selectTarget = function (target, updating) {
   if (opts.action) {
     opts.action();
   }
-  _this.trigger('select');
+  _this.trigger('select', target);
 };
 
 this.selectMultiTarget = function (updating) {
@@ -285,7 +281,9 @@ this.selectMultiTarget = function (updating) {
     _this.update();
     _this.parentUpdate();
   }
-  _this.trigger('select');
+  _this.trigger('select', opts.items.filter(function (item) {
+    return item.selected;
+  }));
 };
 
 this.search = function (target) {
