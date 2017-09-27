@@ -186,10 +186,10 @@
     <i class="icon code" onclick="{ toggleExample.bind(this, 6) }"></i>
   </div>
   <div class="ui segment { bottom: !example[6] } attached">
-    <su-radio name="radio2" action="{ radioClickCallback }" ref="radio1_1" value="1" checked="{ radio1 == 1 }">
+    <su-radio name="radio2" ref="radio1_1" value="1" checked="{ radio1 == 1 }">
       Radio choice1
     </su-radio>
-    <su-radio name="radio2" action="{ radioClickCallback }" ref="radio1_2" value="2" checked="{ radio1 == 2 }">
+    <su-radio name="radio2" ref="radio1_2" value="2" checked="{ radio1 == 2 }">
       Radio choice2
     </su-radio>
 
@@ -207,10 +207,10 @@
 
   <div class="ui segment bottom attached inverted transition { hidden: !example[6] } ">
     <pre><code class="prettyprint">
-      <su-radio name="radio" action="{ radioClickCallback }" ref="radio1_1" value="1" checked="{ radio1 == 1 }">
+      <su-radio name="radio" ref="radio1_1" value="1" checked="{ radio1 == 1 }">
         Radio choice1
       </su-radio>
-      <su-radio name="radio" action="{ radioClickCallback }" ref="radio1_2" value="2" checked="{ radio1 == 2 }">
+      <su-radio name="radio" ref="radio1_2" value="2" checked="{ radio1 == 2 }">
         Radio choice2
       </su-radio>
   
@@ -226,10 +226,15 @@
       <button type="button" click="{ setRadioValue.bind(this, 2) }" class="ui button">Choice2</button>
 
       <script>
+        this.on('mount', () => {
+          this.refs.radio1_1.on('click', value => {
+            this.setRadioValue(value)
+          })
+          this.refs.radio1_2.on('click', value => {
+            this.setRadioValue(value)
+          })
+        })
         this.radio1 = 1
-        this.radioClickCallback = value => {
-          this.radio1 = value
-        }
         this.setRadioValue = value => {
           this.radio1 = value
         }
@@ -244,9 +249,6 @@
         }
 
         this.radio1 = 1
-        this.radioClickCallback = value => {
-          this.radio1 = value
-        }
         this.setRadioValue = value => {
           this.radio1 = value
         }
@@ -256,6 +258,12 @@
         }
 
         this.on('mount', () => {
+          this.refs.radio1_1.on('click', value => {
+            this.setRadioValue(value)
+          })
+          this.refs.radio1_2.on('click', value => {
+            this.setRadioValue(value)
+          })
           PR.prettyPrint(false)
         })
   </script>
