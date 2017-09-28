@@ -131,7 +131,7 @@
     </code></pre>
   </div>
 
-  <h2 class="ui dividing header">Named elements<a class="anchor" id="event"></a></h2>
+  <h2 class="ui dividing header">Access elements<a class="anchor" id="event"></a></h2>
 
   <h3 class="ui header">Checkbox</h3>
   <p>Access to checkbox with ref attribute</p>
@@ -140,7 +140,7 @@
     <i class="icon code" onclick="{ toggleExample.bind(this, 5) }"></i>
   </div>
   <div class="ui segment { bottom: !example[5] } attached">
-    <su-checkbox ref="checkbox1" checked="true">
+    <su-checkbox ref="checkbox1">
       Make my profile visible
     </su-checkbox>
 
@@ -157,7 +157,7 @@
 
   <div class="ui segment bottom attached inverted transition { hidden: !example[5] } ">
     <pre><code class="prettyprint">
-      <su-checkbox ref="checkbox1" checked="true">
+      <su-checkbox ref="checkbox1">
         Make my profile visible
       </su-checkbox>
 
@@ -165,7 +165,7 @@
         <div class="header">
           Checked
         </div>
-        <p>{ refs.checkbox1.checked ? 'on' : 'off' }</p>
+        <p>{ refs.checkbox1.check() ? 'on' : 'off' }</p>
       </div>
 
       <button type="button" click="{ setRefValue.bind(this, true) }" class="ui button">Check on</button>
@@ -174,6 +174,56 @@
       <script>
         this.setRefValue = value => {
           this.refs.checkbox1.checked = value
+        }
+      </script>
+    </code></pre>
+  </div>
+
+  <p>Access to checkbox with check attribute</p>
+  <div class="ui segment secondary top attached example">
+    Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 5) }"></i>
+  </div>
+  <div class="ui segment { bottom: !example[5] } attached">
+    <su-checkbox ref="checkbox2" check="{ checkbox2 }">
+      Make my profile visible
+    </su-checkbox>
+
+    <div class="ui message">
+      <div class="header">
+        Checked from refs
+      </div>
+      <p>{ refs.checkbox2.checked ? 'on' : 'off' }</p>
+    </div>
+
+    <button type="button" click="{ setCheckboxValue.bind(this, true) }" class="ui button">Check on</button>
+    <button type="button" click="{ setCheckboxValue.bind(this, false) }" class="ui button">Check off</button>
+  </div>
+
+  <div class="ui segment bottom attached inverted transition { hidden: !example[5] } ">
+    <pre><code class="prettyprint">
+      <su-checkbox ref="checkbox2" check="{ checkbox2 }">
+        Make my profile visible
+      </su-checkbox>
+
+      <div class="ui message">
+        <div class="header">
+          Checked
+        </div>
+        <p>{ refs.checkbox2.check ? 'on' : 'off' }</p>
+      </div>
+
+      <button type="button" click="{ setCheckboxValue.bind(this, true) }" class="ui button">Check on</button>
+      <button type="button" click="{ setCheckboxValue.bind(this, false) }" class="ui button">Check off</button>
+
+      <script>
+        this.on('mount', () => {
+          this.refs.checkbox2.on('click', value => {
+            this.setCheckboxValue(value)
+          })
+        })
+        this.setCheckboxValue = value => {
+          this.checkbox2 = value
         }
       </script>
     </code></pre>
@@ -253,11 +303,18 @@
           this.radio1 = value
         }
 
+        this.setCheckboxValue = value => {
+          this.checkbox2 = value
+        }
+
         this.setRefValue = value => {
           this.refs.checkbox1.checked = value
         }
 
         this.on('mount', () => {
+          this.refs.checkbox2.on('click', value => {
+            this.setCheckboxValue(value)
+          })
           this.refs.radio1_1.on('click', value => {
             this.setRadioValue(value)
           })
