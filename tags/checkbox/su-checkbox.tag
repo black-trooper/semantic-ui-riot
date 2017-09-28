@@ -4,20 +4,24 @@
 
   <script>
     this.checked = false
-
-    this.on('mount', () => {
-      this.checked = opts.checked
-      this.update()
-      this.parentUpdate()
+    this.on('update', () => {
+      if (typeof opts.check === 'undefined') {
+        return
+      }
+      if (!this.clicked) {
+        this.checked = opts.check
+      }
+      this.clicked = false
     })
 
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
     this.click = event => {
+      this.clicked = true
       this.checked = event.target.checked
       this.parentUpdate()
-      this.trigger('click')
+      this.trigger('click', this.checked)
     }
 
     this.labelClick = () => {

@@ -4,20 +4,24 @@ riot.tag2('su-checkbox', '<input type="checkbox" checked="{checked}" onclick="{c
 var _this = this;
 
 this.checked = false;
-
-this.on('mount', function () {
-  _this.checked = opts.checked;
-  _this.update();
-  _this.parentUpdate();
+this.on('update', function () {
+  if (typeof opts.check === 'undefined') {
+    return;
+  }
+  if (!_this.clicked) {
+    _this.checked = opts.check;
+  }
+  _this.clicked = false;
 });
 
 // ===================================================================================
 //                                                                               Event
 //                                                                               =====
 this.click = function (event) {
+  _this.clicked = true;
   _this.checked = event.target.checked;
   _this.parentUpdate();
-  _this.trigger('click');
+  _this.trigger('click', _this.checked);
 };
 
 this.labelClick = function () {
