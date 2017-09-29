@@ -46,14 +46,28 @@ describe('su-dropdown', function () {
     $('su-dropdown .menu .item').length.should.equal(0)
   })
 
-  it('clicking field opens/closes dropdown and triggers open/close event', function () {
+  it('clicking dropdown opens/closes dropdown and triggers open/close event', function () {
     $('su-dropdown .menu').is(':visible').should.equal(false)
     $('su-dropdown').click()
-    this.clock.tick(310);
+    this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(true)
     spyOnOpen.should.have.been.calledOnce
     $('su-dropdown').click()
-    this.clock.tick(310);
+    this.clock.tick(310)
+    $('su-dropdown .menu').is(':visible').should.equal(false)
+    spyOnClose.should.have.been.calledOnce
+  })
+
+  it('focusing/blurring dropdown opens/closes dropdown and triggers open/close event', function () {
+    $('su-dropdown .menu').is(':visible').should.equal(false)
+
+    $('su-dropdown').focus()
+    this.clock.tick(310)
+    $('su-dropdown .menu').is(':visible').should.equal(true)
+    spyOnOpen.should.have.been.calledOnce
+
+    $('su-dropdown').blur()
+    this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(false)
     spyOnClose.should.have.been.calledOnce
   })
