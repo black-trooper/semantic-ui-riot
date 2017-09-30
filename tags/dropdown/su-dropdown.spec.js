@@ -4,22 +4,22 @@ describe('su-dropdown', function () {
   let spyOnClose = sinon.spy()
   let spyOnSelect = sinon.spy()
 
+  let items = [
+    {
+      label: 'Gender',
+      value: null,
+      default: true
+    },
+    {
+      label: 'Male',
+      value: 1
+    },
+    {
+      label: 'Female',
+      value: 2
+    },
+  ]
   beforeEach(function () {
-    let items = [
-      {
-        label: 'Gender',
-        value: null,
-        default: true
-      },
-      {
-        label: 'Male',
-        value: 1
-      },
-      {
-        label: 'Female',
-        value: 2
-      },
-    ]
     $('body').append('<su-dropdown></su-dropdown>')
     tag = riot.mount('su-dropdown', {
       items
@@ -68,6 +68,20 @@ describe('su-dropdown', function () {
 
     $('su-dropdown').blur()
     this.clock.tick(310)
+    $('su-dropdown .menu').is(':visible').should.equal(false)
+    spyOnClose.should.have.been.calledOnce
+  })
+
+  it('clicking default item', function () {
+    $('su-dropdown').click()
+    this.clock.tick(310)
+
+    $('su-dropdown .item:first-child').click()
+    spyOnSelect.should.have.been.calledOnce
+    $('su-dropdown > .text').text().trim().should.equal(items[0].label)
+    $('su-dropdown > .text').hasClass('default').should.equal(true)
+    this.clock.tick(310)
+
     $('su-dropdown .menu').is(':visible').should.equal(false)
     spyOnClose.should.have.been.calledOnce
   })
