@@ -115,11 +115,7 @@
         this.selectMultiTarget()
         return
       }
-      this.selectTarget({
-        value: event.target.value,
-        label: event.target.textContent,
-        default: event.target.attributes['default']
-      })
+      this.selectTarget(event.item.item)
       this.close()
     }
 

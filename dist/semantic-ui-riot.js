@@ -175,11 +175,7 @@ this.itemClick = function (event) {
     _this.selectMultiTarget();
     return;
   }
-  _this.selectTarget({
-    value: event.target.value,
-    label: event.target.textContent,
-    default: event.target.attributes['default']
-  });
+  _this.selectTarget(event.item.item);
   _this.close();
 };
 
