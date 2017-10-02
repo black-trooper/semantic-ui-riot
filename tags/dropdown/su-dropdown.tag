@@ -2,7 +2,7 @@
   onclick="{ toggle }" onfocus="{ open }" onblur="{ blur.bind(this, false) }" tabindex="{ opts.search ? -1 : getTabindex() }">
   <i class="dropdown icon"></i>
   <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ opts.search }" onkeydown="{keydown}"
-    onkeyup="{ keyup }" onfocus="{ open }" onblur="{ blur.bind(this, true) }" />
+    onclick="{ clickSearch }" onkeyup="{ keyup }" onfocus="{ open }" onblur="{ blur.bind(this, true) }" />
   <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }">
   { item.label }
   <i class="delete icon" onclick="{ unselect }"></i>
@@ -117,6 +117,10 @@
       }
       this.selectTarget(event.item.item)
       this.close()
+    }
+
+    this.clickSearch = event => {
+      event.stopPropagation()
     }
 
     // -----------------------------------------------------
