@@ -85,4 +85,18 @@ describe('su-dropdown', function () {
     $('su-dropdown .menu').is(':visible').should.equal(false)
     spyOnClose.should.have.been.calledOnce
   })
+
+  it('clicking item', function () {
+    $('su-dropdown').click()
+    this.clock.tick(310)
+
+    $('su-dropdown .item:eq(1)').click()
+    spyOnSelect.should.have.been.calledOnce
+    $('su-dropdown > .text').text().trim().should.equal(items[1].label)
+    $('su-dropdown > .text').hasClass('default').should.equal(false)
+    this.clock.tick(310)
+
+    $('su-dropdown .menu').is(':visible').should.equal(false)
+    spyOnClose.should.have.been.calledOnce
+  })
 })
