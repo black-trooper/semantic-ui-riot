@@ -1,8 +1,8 @@
 <su-dropdown class="ui selection {opts.class} { search: opts.search } { multiple: opts.multiple} dropdown { active: visibleFlg } { visible: visibleFlg }"
-  onclick="{ toggle }" onfocus="{ open }" onblur="{ blur.bind(this, false) }" tabindex="{ opts.search ? -1 : getTabindex() }">
+  onclick="{ toggle }" onfocus="{ open }" onblur="{ blur.bind(this, false) }" onkeydown="{keydown}" tabindex="{ opts.search ? -1 : getTabindex() }">
   <i class="dropdown icon"></i>
-  <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ opts.search }" onkeydown="{keydown}"
-    onclick="{ clickSearch }" onkeyup="{ keyup }" onfocus="{ open }" onblur="{ blur.bind(this, true) }" />
+  <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ opts.search }" onkeydown="{ keydownSearch }"
+    onkeyup="{ keyupSearch }" onclick="{ clickSearch }" onfocus="{ open }" onblur="{ blur.bind(this, true) }" />
   <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }">
   { item.label }
   <i class="delete icon" onclick="{ unselect }"></i>
@@ -12,8 +12,8 @@
   </div>
   <div class="menu transition { transitionStatus }" tabindex="-1">
     <virtual each="{item in opts.items}">
-      <div class="item { default: item.default }" if="{ isVisible(item) }" value="{ item.value }" default="{ item.default }" onclick="{ itemClick }"
-        onmousedown="{ mousedown }" onmouseup="{ mouseup }">
+      <div class="item { default: item.default } { active: item.active } { selected: item.active }" if="{ isVisible(item) }" value="{ item.value }"
+        default="{ item.default }" onclick="{ itemClick }" onmousedown="{ mousedown }" onmouseup="{ mouseup }">
         <i class="{ item.icon } icon" if="{ item.icon }"></i>
         <img class="ui avatar image" src="{ item.image }" if="{ item.image }" />
         <span class="description" if="{ item.description }">{ item.description }</span>
@@ -119,6 +119,37 @@
       this.close()
     }
 
+    this.keydown = event => {
+      const keyCode = event.keyCode
+      if (keyCode != 38 && keyCode != 40) {
+        return true
+      }
+
+      event.preventDefault()
+      const searchedItems = opts.items.filter(item => item.searched || !opts.search)
+      if (searchedItems.length == 0) {
+        return true
+      }
+      if (searchedItems.every(item => !item.active)) {
+        searchedItems[0].active = true
+        return true
+      }
+
+      const index = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0))
+      if (keyCode == 38) { // ArrowUp
+        if (index > 0) {
+          searchedItems[index].active = false
+          searchedItems[index - 1].active = true
+        }
+      }
+      else if (keyCode == 40) { // ArrowDown
+        if (index < searchedItems.length - 1) {
+          searchedItems[index].active = false
+          searchedItems[index + 1].active = true
+        }
+      }
+    }
+
     this.clickSearch = event => {
       event.stopPropagation()
     }
@@ -126,12 +157,15 @@
     // -----------------------------------------------------
     //                                         search option
     //                                         -------------
-    this.keydown = () => {
-      this.filtered = true
-      this.update()
+    this.keydownSearch = event => {
+      const keyCode = event.keyCode
+      if (keyCode != 38 && keyCode != 40) {
+        this.filtered = true
+        this.update()
+      }
     }
 
-    this.keyup = event => {
+    this.keyupSearch = event => {
       const value = event.target.value.toLowerCase()
       this.filtered = value.length > 0
       this.search(value)
