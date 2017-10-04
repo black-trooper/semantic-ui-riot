@@ -203,6 +203,7 @@
       this.visibleFlg = true
       this.search('')
       this.transitionStatus = 'visible animating in slide down'
+      opts.items.forEach(item => item.active = false)
       setTimeout(() => {
         this.transitionStatus = 'visible'
         this.update()
