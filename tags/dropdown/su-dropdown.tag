@@ -1,5 +1,5 @@
 <su-dropdown class="ui selection {opts.class} { search: opts.search } { multiple: opts.multiple} dropdown { active: visibleFlg } { visible: visibleFlg }"
-  onclick="{ toggle }" onfocus="{ open }" onblur="{ blur.bind(this, false) }" onkeydown="{keydown}" tabindex="{ opts.search ? -1 : getTabindex() }">
+  onclick="{ toggle }" onfocus="{ open }" onblur="{ blur.bind(this, false) }" onkeydown="{ keydown }" onkeyup="{ keyup }" tabindex="{ opts.search ? -1 : getTabindex() }">
   <i class="dropdown icon"></i>
   <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ opts.search }" onkeydown="{ keydownSearch }"
     onkeyup="{ keyupSearch }" onclick="{ clickSearch }" onfocus="{ open }" onblur="{ blur.bind(this, true) }" />
@@ -40,6 +40,11 @@
     this.filtered = false
     this.value = ''
     this.label = ''
+    this.keys = {
+      enter: 13,
+      upArrow: 38,
+      downArrow: 40
+    }
 
     this.on('mount', () => {
       if (opts.items && opts.items.length > 0) {
@@ -121,7 +126,7 @@
 
     this.keydown = event => {
       const keyCode = event.keyCode
-      if (keyCode != 38 && keyCode != 40) {
+      if (keyCode != this.keys.upArrow && keyCode != this.keys.downArrow) {
         return true
       }
 
@@ -136,17 +141,26 @@
       }
 
       const index = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0))
-      if (keyCode == 38) { // ArrowUp
+      if (keyCode == this.keys.upArrow) {
         if (index > 0) {
           searchedItems[index].active = false
           searchedItems[index - 1].active = true
         }
       }
-      else if (keyCode == 40) { // ArrowDown
+      else if (keyCode == this.keys.downArrow) {
         if (index < searchedItems.length - 1) {
           searchedItems[index].active = false
           searchedItems[index + 1].active = true
         }
+      }
+    }
+
+    this.keyup = event => {
+      const keyCode = event.keyCode
+      const activeItem = opts.items.filter(item => item.active)
+      if (keyCode == this.keys.enter && activeItem && activeItem.length > 0) {
+        this.selectTarget(activeItem[0])
+        this.close()
       }
     }
 
