@@ -131,7 +131,15 @@
       }
 
       event.preventDefault()
-      const searchedItems = opts.items.filter(item => item.searched || !opts.search)
+      const searchedItems = opts.items.filter(item => {
+        if (opts.search && !item.searched) {
+          return false
+        }
+        if (opts.multiple && (item.default || item.selected)) {
+          return false
+        }
+        return true
+      })
       if (searchedItems.length == 0) {
         return true
       }
@@ -157,10 +165,24 @@
 
     this.keyup = event => {
       const keyCode = event.keyCode
-      const activeItem = opts.items.filter(item => item.active)
-      if (keyCode == this.keys.enter && activeItem && activeItem.length > 0) {
-        this.selectTarget(activeItem[0])
-        this.close()
+      const searchedItems = opts.items.filter(item => (item.searched || !opts.search) && (!item.selected || !opts.multiple))
+      const index = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0))
+      const activeItem = searchedItems[index]
+      if (keyCode == this.keys.enter && activeItem) {
+        if (opts.multiple) {
+          activeItem.selected = true
+          activeItem.active = false
+          if (index < searchedItems.length - 1) {
+            searchedItems[index + 1].active = true
+          } else if (index > 0) {
+            searchedItems[index - 1].active = true
+          }
+          this.selectMultiTarget()
+        } else {
+          activeItem.active = false
+          this.selectTarget(activeItem)
+          this.close()
+        }
       }
     }
 
