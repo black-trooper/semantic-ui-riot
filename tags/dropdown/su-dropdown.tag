@@ -306,12 +306,12 @@
       const item = this.root.querySelector('.item.active')
 
       if (menu && item) {
-        const edgeTolerance = 5
         const menuScroll = menu.scrollTop
         const itemOffset = item.offsetTop
+        const itemHeight = parseInt(document.defaultView.getComputedStyle(item, null).height.replace('px', ''))
         const menuHeight = parseInt(document.defaultView.getComputedStyle(menu, null).height.replace('px', ''))
-        const belowPage = menuScroll + menuHeight < (itemOffset + edgeTolerance)
-        const abovePage = ((itemOffset - edgeTolerance) < menuScroll)
+        const belowPage = menuScroll + menuHeight < itemOffset + itemHeight
+        const abovePage = itemOffset < menuScroll
         if (abovePage || belowPage) {
           menu.scrollTop = itemOffset
         }
