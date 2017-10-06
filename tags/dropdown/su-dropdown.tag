@@ -161,6 +161,8 @@
           searchedItems[index + 1].active = true
         }
       }
+      this.update()
+      this.scrollPosition()
     }
 
     this.keyup = event => {
@@ -235,6 +237,7 @@
         this.refs.condition.focus()
       }
       this.update()
+      this.scrollPosition()
       this.trigger('open')
     }
 
@@ -296,6 +299,23 @@
       })
       this.update()
       this.trigger('search')
+    }
+
+    this.scrollPosition = () => {
+      const menu = this.root.querySelector('.menu')
+      const item = this.root.querySelector('.item.active')
+
+      if (menu && item) {
+        const edgeTolerance = 5
+        const menuScroll = menu.scrollTop
+        const itemOffset = item.offsetTop
+        const menuHeight = parseInt(document.defaultView.getComputedStyle(menu, null).height.replace('px', ''))
+        const belowPage = menuScroll + menuHeight < (itemOffset + edgeTolerance)
+        const abovePage = ((itemOffset - edgeTolerance) < menuScroll)
+        if (abovePage || belowPage) {
+          menu.scrollTop = itemOffset
+        }
+      }
     }
 
     this.parentUpdate = () => {
