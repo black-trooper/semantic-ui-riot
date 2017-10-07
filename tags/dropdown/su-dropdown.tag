@@ -150,15 +150,18 @@
 
       const index = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0))
       if (keyCode == this.keys.upArrow) {
-        if (index > 0) {
+        const nextActiveItem = searchedItems.filter((item, i) => i < index && !item.header && !item.divider)
+        if (nextActiveItem.length > 0) {
           searchedItems[index].active = false
-          searchedItems[index - 1].active = true
+          nextActiveItem[nextActiveItem.length - 1].active = true
         }
       }
       else if (keyCode == this.keys.downArrow) {
-        if (index < searchedItems.length - 1) {
+        const nextActiveItem = searchedItems.filter((item, i) => i > index && !item.header && !item.divider)
+
+        if (nextActiveItem.length > 0) {
           searchedItems[index].active = false
-          searchedItems[index + 1].active = true
+          nextActiveItem[0].active = true
         }
       }
       this.update()
