@@ -148,19 +148,19 @@
         return true
       }
 
-      const index = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0))
+      const activeIndex = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0))
       if (keyCode == this.keys.upArrow) {
-        const nextActiveItem = searchedItems.filter((item, i) => i < index && !item.header && !item.divider)
+        const nextActiveItem = searchedItems.filter((item, index) => index < activeIndex && !item.header && !item.divider)
         if (nextActiveItem.length > 0) {
-          searchedItems[index].active = false
+          searchedItems[activeIndex].active = false
           nextActiveItem[nextActiveItem.length - 1].active = true
         }
       }
       else if (keyCode == this.keys.downArrow) {
-        const nextActiveItem = searchedItems.filter((item, i) => i > index && !item.header && !item.divider)
+        const nextActiveItem = searchedItems.filter((item, index) => index > activeIndex && !item.header && !item.divider)
 
         if (nextActiveItem.length > 0) {
-          searchedItems[index].active = false
+          searchedItems[activeIndex].active = false
           nextActiveItem[0].active = true
         }
       }
