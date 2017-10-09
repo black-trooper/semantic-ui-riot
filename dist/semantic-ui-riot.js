@@ -82,7 +82,7 @@ this.parentUpdate = function () {
   }
 };
 });
-riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="{getTabindex()}" ref="condition" if="{opts.search}" onkeydown="{keydown}" onclick="{clickSearch}" onkeyup="{keyup}" onfocus="{open}" onblur="{blur.bind(this, true)}"> <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!opts.multiple || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" tabindex="-1"> <virtual each="{item in opts.items}"> <div class="item {default: item.default}" if="{isVisible(item)}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}" onmousedown="{mousedown}" onmouseup="{mouseup}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="header" if="{item.header && !filtered}"> <i class="{item.icon} icon" if="{item.icon}"></i> {item.label} </div> <div class="divider" if="{item.divider && !filtered}"></div> </virtual> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div>', 'su-dropdown.ui.dropdown .menu>.item.default,[data-is="su-dropdown"].ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', 'class="ui selection {opts.class} {search: opts.search} {multiple: opts.multiple} dropdown {active: visibleFlg} {visible: visibleFlg}" onclick="{toggle}" onfocus="{open}" onblur="{blur.bind(this, false)}" tabindex="{opts.search ? -1 : getTabindex()}"', function(opts) {
+riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="{getTabindex()}" ref="condition" if="{opts.search}" onkeydown="{keydownSearch}" onkeyup="{keyupSearch}" onclick="{clickSearch}" onfocus="{open}" onblur="{blur.bind(this, true)}"> <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!opts.multiple || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" tabindex="-1"> <virtual each="{item in opts.items}"> <div class="item {default: item.default} {active: item.active} {selected: item.active}" if="{isVisible(item)}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}" onmousedown="{mousedown}" onmouseup="{mouseup}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="header" if="{item.header && !filtered}"> <i class="{item.icon} icon" if="{item.icon}"></i> {item.label} </div> <div class="divider" if="{item.divider && !filtered}"></div> </virtual> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div>', 'su-dropdown.ui.dropdown .menu>.item.default,[data-is="su-dropdown"].ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', 'class="ui selection {opts.class} {search: opts.search} {multiple: opts.multiple} dropdown {active: visibleFlg} {visible: visibleFlg}" onclick="{toggle}" onfocus="{open}" onblur="{blur.bind(this, false)}" onkeydown="{keydown}" onkeyup="{keyup}" tabindex="{opts.search ? -1 : getTabindex()}"', function(opts) {
 'use strict';
 
 var _this = this;
@@ -92,6 +92,11 @@ this.selectedFlg = false;
 this.filtered = false;
 this.value = '';
 this.label = '';
+this.keys = {
+  enter: 13,
+  upArrow: 38,
+  downArrow: 40
+};
 
 this.on('mount', function () {
   if (opts.items && opts.items.length > 0) {
@@ -179,6 +184,88 @@ this.itemClick = function (event) {
   _this.close();
 };
 
+this.keydown = function (event) {
+  var keyCode = event.keyCode;
+  if (keyCode != _this.keys.upArrow && keyCode != _this.keys.downArrow) {
+    return true;
+  }
+
+  event.preventDefault();
+  var searchedItems = opts.items.filter(function (item) {
+    if (opts.search && !item.searched) {
+      return false;
+    }
+    if (opts.multiple && (item.default || item.selected)) {
+      return false;
+    }
+    return true;
+  });
+  if (searchedItems.length == 0) {
+    return true;
+  }
+  if (searchedItems.every(function (item) {
+    return !item.active;
+  })) {
+    searchedItems[0].active = true;
+    return true;
+  }
+
+  var activeIndex = parseInt(searchedItems.map(function (item, index) {
+    return item.active ? index : -1;
+  }).filter(function (index) {
+    return index >= 0;
+  }));
+  if (keyCode == _this.keys.upArrow) {
+    var nextActiveItem = searchedItems.filter(function (item, index) {
+      return index < activeIndex && !item.header && !item.divider;
+    });
+    if (nextActiveItem.length > 0) {
+      searchedItems[activeIndex].active = false;
+      nextActiveItem[nextActiveItem.length - 1].active = true;
+    }
+  } else if (keyCode == _this.keys.downArrow) {
+    var _nextActiveItem = searchedItems.filter(function (item, index) {
+      return index > activeIndex && !item.header && !item.divider;
+    });
+
+    if (_nextActiveItem.length > 0) {
+      searchedItems[activeIndex].active = false;
+      _nextActiveItem[0].active = true;
+    }
+  }
+  _this.update();
+  _this.scrollPosition();
+};
+
+this.keyup = function (event) {
+  var keyCode = event.keyCode;
+  var searchedItems = opts.items.filter(function (item) {
+    return (item.searched || !opts.search) && (!item.selected || !opts.multiple);
+  });
+  var index = parseInt(searchedItems.map(function (item, index) {
+    return item.active ? index : -1;
+  }).filter(function (index) {
+    return index >= 0;
+  }));
+  var activeItem = searchedItems[index];
+  if (keyCode == _this.keys.enter && activeItem) {
+    if (opts.multiple) {
+      activeItem.selected = true;
+      activeItem.active = false;
+      if (index < searchedItems.length - 1) {
+        searchedItems[index + 1].active = true;
+      } else if (index > 0) {
+        searchedItems[index - 1].active = true;
+      }
+      _this.selectMultiTarget();
+    } else {
+      activeItem.active = false;
+      _this.selectTarget(activeItem);
+      _this.close();
+    }
+  }
+};
+
 this.clickSearch = function (event) {
   event.stopPropagation();
 };
@@ -186,12 +273,15 @@ this.clickSearch = function (event) {
 // -----------------------------------------------------
 //                                         search option
 //                                         -------------
-this.keydown = function () {
-  _this.filtered = true;
-  _this.update();
+this.keydownSearch = function (event) {
+  var keyCode = event.keyCode;
+  if (keyCode != 38 && keyCode != 40) {
+    _this.filtered = true;
+    _this.update();
+  }
 };
 
-this.keyup = function (event) {
+this.keyupSearch = function (event) {
   var value = event.target.value.toLowerCase();
   _this.filtered = value.length > 0;
   _this.search(value);
@@ -221,6 +311,9 @@ this.open = function () {
   _this.visibleFlg = true;
   _this.search('');
   _this.transitionStatus = 'visible animating in slide down';
+  opts.items.forEach(function (item) {
+    return item.active = false;
+  });
   setTimeout(function () {
     _this.transitionStatus = 'visible';
     _this.update();
@@ -230,6 +323,7 @@ this.open = function () {
     _this.refs.condition.focus();
   }
   _this.update();
+  _this.scrollPosition();
   _this.trigger('open');
 };
 
@@ -299,6 +393,23 @@ this.search = function (target) {
   });
   _this.update();
   _this.trigger('search');
+};
+
+this.scrollPosition = function () {
+  var menu = _this.root.querySelector('.menu');
+  var item = _this.root.querySelector('.item.active');
+
+  if (menu && item) {
+    var menuScroll = menu.scrollTop;
+    var itemOffset = item.offsetTop;
+    var itemHeight = parseInt(document.defaultView.getComputedStyle(item, null).height.replace('px', ''));
+    var menuHeight = parseInt(document.defaultView.getComputedStyle(menu, null).height.replace('px', ''));
+    var belowPage = menuScroll + menuHeight < itemOffset + itemHeight;
+    var abovePage = itemOffset < menuScroll;
+    if (abovePage || belowPage) {
+      menu.scrollTop = itemOffset;
+    }
+  }
 };
 
 this.parentUpdate = function () {
