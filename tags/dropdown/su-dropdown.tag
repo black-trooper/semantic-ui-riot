@@ -4,9 +4,9 @@
   <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ opts.search }" onkeydown="{ keydownSearch }"
     onkeyup="{ keyupSearch }" onclick="{ clickSearch }" onfocus="{ open }" onblur="{ blur.bind(this, true) }" />
   <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }">
-  { item.label }
-  <i class="delete icon" onclick="{ unselect }"></i>
-</a>
+    { item.label }
+    <i class="delete icon" onclick="{ unselect }"></i>
+  </a>
   <div class="{ default: default} text { filtered: filtered }" if="{ !opts.multiple || !selectedFlg }">
     { label }
   </div>
@@ -29,7 +29,7 @@
   </div>
 
   <style>
-     :scope.ui.dropdown .menu>.item.default {
+    :scope.ui.dropdown .menu>.item.default {
       color: rgba(0, 0, 0, 0.4)
     }
   </style>
