@@ -98,15 +98,11 @@ this.keys = {
   downArrow: 40
 };
 
-this.on('mount', function () {
-  if (opts.items && opts.items.length > 0) {
-    _this.label = opts.items[0].label;
-    _this.value = opts.items[0].value;
-    _this.default = opts.items[0].default;
-  }
-  _this.update();
-  _this.parentUpdate();
-});
+if (opts.items && opts.items.length > 0) {
+  this.label = opts.items[0].label;
+  this.value = opts.items[0].value;
+  this.default = opts.items[0].default;
+}
 
 this.on('update', function () {
   if (opts.multiple) {
