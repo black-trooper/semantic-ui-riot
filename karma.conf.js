@@ -26,7 +26,7 @@ module.exports = function (config) {
         type: 'text-summary'
       }],
     },
-    browsers: ['Chrome'],
+    browsers: ['PhantomJS'],
     singleRun: true
   })
 }
