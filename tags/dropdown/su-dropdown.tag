@@ -1,8 +1,8 @@
 <su-dropdown class="ui selection {opts.class} { search: opts.search } { multiple: opts.multiple} dropdown { active: visibleFlg } { visible: visibleFlg }"
   onclick="{ toggle }" onfocus="{ open }" onblur="{ blur.bind(this, false) }" onkeydown="{ keydown }" onkeyup="{ keyup }" tabindex="{ opts.search ? -1 : getTabindex() }">
   <i class="dropdown icon"></i>
-  <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ opts.search }" onkeydown="{ keydownSearch }"
-    onkeyup="{ keyupSearch }" onclick="{ clickSearch }" onfocus="{ open }" onblur="{ blur.bind(this, true) }" />
+  <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ opts.search }" oninput="{ input }"
+    onclick="{ clickSearch }" onfocus="{ open }" onblur="{ blur.bind(this, true) }" />
   <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }">
     { item.label }
     <i class="delete icon" onclick="{ unselect }"></i>
@@ -194,15 +194,7 @@
     // -----------------------------------------------------
     //                                         search option
     //                                         -------------
-    this.keydownSearch = event => {
-      const keyCode = event.keyCode
-      if (keyCode != 38 && keyCode != 40) {
-        this.filtered = true
-        this.update()
-      }
-    }
-
-    this.keyupSearch = event => {
+    this.input = event => {
       const value = event.target.value.toLowerCase()
       this.filtered = value.length > 0
       this.search(value)
