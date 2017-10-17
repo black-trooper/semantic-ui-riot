@@ -19,6 +19,20 @@ describe('su-dropdown', function () {
       value: 2
     },
   ]
+
+  let keys = {
+    enter: 13,
+    upArrow: 38,
+    downArrow: 40
+  }
+
+  let fireKeyEvent = function (el, name, keyCode) {
+    let eventObj = document.createEvent("Events")
+    eventObj.initEvent(name, true, true);
+    eventObj.keyCode = keyCode;
+    el.dispatchEvent(eventObj)
+  }
+
   beforeEach(function () {
     $('body').append('<su-dropdown></su-dropdown>')
     tag = riot.mount('su-dropdown', {
@@ -98,5 +112,32 @@ describe('su-dropdown', function () {
 
     $('su-dropdown .menu').is(':visible').should.equal(false)
     spyOnClose.should.have.been.calledOnce
+  })
+
+  it('pressing key down will active item', function () {
+    $('su-dropdown').focus()
+    this.clock.tick(310)
+
+    let dropdown = $('su-dropdown')[0]
+    fireKeyEvent(dropdown, 'keydown', keys.downArrow)
+    $('su-dropdown .active .text').text().should.equal(items[0].label)
+
+    fireKeyEvent(dropdown, 'keydown', keys.downArrow)
+    $('su-dropdown .active .text').text().should.equal(items[1].label)
+
+    fireKeyEvent(dropdown, 'keydown', keys.downArrow)
+    $('su-dropdown .active .text').text().should.equal(items[2].label)
+
+    fireKeyEvent(dropdown, 'keydown', keys.downArrow)
+    $('su-dropdown .active .text').text().should.equal(items[2].label)
+
+    fireKeyEvent(dropdown, 'keydown', keys.upArrow)
+    $('su-dropdown .active .text').text().should.equal(items[1].label)
+
+    fireKeyEvent(dropdown, 'keydown', keys.upArrow)
+    $('su-dropdown .active .text').text().should.equal(items[0].label)
+
+    fireKeyEvent(dropdown, 'keydown', keys.upArrow)
+    $('su-dropdown .active .text').text().should.equal(items[0].label)
   })
 })
