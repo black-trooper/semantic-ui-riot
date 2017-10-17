@@ -265,9 +265,6 @@
         this.update()
       }
       this.parentUpdate()
-      if (opts.action) {
-        opts.action()
-      }
       this.trigger('select', target)
     }
 
