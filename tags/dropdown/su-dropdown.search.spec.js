@@ -70,7 +70,7 @@ describe('su-dropdown-search', function () {
   }
 
   beforeEach(function () {
-    $('body').append('<su-dropdown search="true"></su-dropdown>')
+    $('body').append('<su-dropdown search="true" tabindex="1"></su-dropdown>')
     tag = riot.mount('su-dropdown', {
       items
     })[0]
