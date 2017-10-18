@@ -77,14 +77,12 @@ describe('su-dropdown-search', function () {
     tag.on('open', spyOnOpen)
       .on('close', spyOnClose)
       .on('search', spyOnSearch)
-    this.clock = sinon.useFakeTimers()
   })
 
   afterEach(function () {
     spyOnOpen.reset()
     spyOnClose.reset()
     spyOnSearch.reset()
-    this.clock.restore()
     tag.unmount()
   })
 
@@ -99,14 +97,12 @@ describe('su-dropdown-search', function () {
   it('opens the menu on focus', function () {
     $('su-dropdown .menu').is(':visible').should.equal(false)
     $('su-dropdown .search').focus()
-    this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(true)
   })
 
   it('adding text to box filters the options list', function () {
     $('su-dropdown .menu').is(':visible').should.equal(false)
     $('su-dropdown .search').focus()
-    this.clock.tick(310)
     spyOnSearch.should.have.been.calledOnce
     $('su-dropdown .menu').is(':visible').should.equal(true)
     $('su-dropdown .item').length.should.equal(52)
@@ -114,7 +110,6 @@ describe('su-dropdown-search', function () {
     $('su-dropdown .search').val('m')
     fireEvent($('su-dropdown .search')[0], 'input')
     spyOnSearch.should.have.been.calledTwice
-    this.clock.tick(310)
     $('su-dropdown .item').length.should.equal(15)
   })
 })

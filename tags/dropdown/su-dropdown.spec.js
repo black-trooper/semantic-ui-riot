@@ -63,7 +63,6 @@ describe('su-dropdown', function () {
   it('clicking dropdown opens/closes dropdown and triggers open/close event', function () {
     $('su-dropdown .menu').is(':visible').should.equal(false)
     $('su-dropdown').click()
-    this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(true)
     spyOnOpen.should.have.been.calledOnce
     $('su-dropdown').click()
@@ -76,7 +75,6 @@ describe('su-dropdown', function () {
     $('su-dropdown .menu').is(':visible').should.equal(false)
 
     $('su-dropdown').focus()
-    this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(true)
     spyOnOpen.should.have.been.calledOnce
 
@@ -88,7 +86,6 @@ describe('su-dropdown', function () {
 
   it('clicking default item', function () {
     $('su-dropdown').click()
-    this.clock.tick(310)
 
     $('su-dropdown .item:first-child').click()
     spyOnSelect.should.have.been.calledOnce
@@ -102,7 +99,6 @@ describe('su-dropdown', function () {
 
   it('clicking item', function () {
     $('su-dropdown').click()
-    this.clock.tick(310)
 
     $('su-dropdown .item:eq(1)').click()
     spyOnSelect.should.have.been.calledOnce
@@ -116,7 +112,6 @@ describe('su-dropdown', function () {
 
   it('pressing enter key on item', function () {
     $('su-dropdown').focus()
-    this.clock.tick(310)
 
     let dropdown = $('su-dropdown')[0]
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
@@ -134,7 +129,6 @@ describe('su-dropdown', function () {
 
   it('pressing key down will active item', function () {
     $('su-dropdown').focus()
-    this.clock.tick(310)
 
     let dropdown = $('su-dropdown')[0]
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
