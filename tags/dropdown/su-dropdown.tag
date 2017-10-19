@@ -80,13 +80,10 @@
     //                                                                               Event
     //                                                                               =====
     this.toggle = () => {
-      if (!this.focused()) {
-        this.visibleFlg = !this.visibleFlg
-        if (this.visibleFlg) {
-          this.open()
-        } else {
-          this.close()
-        }
+      if (!this.visibleFlg) {
+        this.open()
+      } else {
+        this.close()
       }
     }
 
@@ -215,11 +212,16 @@
     //                                                                               Logic
     //                                                                               =====
     this.open = () => {
-      this.visibleFlg = true
+      if (this.openning || this.closing) {
+        return
+      }
+      this.openning = true
       this.search('')
       this.transitionStatus = 'visible animating in slide down'
       opts.items.forEach(item => item.active = false)
       setTimeout(() => {
+        this.openning = false
+        this.visibleFlg = true
         this.transitionStatus = 'visible'
         this.update()
       }, 300)
@@ -233,9 +235,14 @@
     }
 
     this.close = () => {
-      this.visibleFlg = false
+      if (this.closing) {
+        return
+      }
+      this.closing = true
       this.transitionStatus = 'visible animating out slide down'
       setTimeout(() => {
+        this.closing = false
+        this.visibleFlg = false
         this.transitionStatus = 'hidden'
         this.update()
       }, 300)
@@ -310,10 +317,6 @@
       if (this.parent) {
         this.parent.update()
       }
-    }
-
-    this.focused = () => {
-      return document.activeElement === this.root
     }
 
     // ===================================================================================
