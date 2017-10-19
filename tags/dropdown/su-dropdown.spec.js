@@ -62,9 +62,11 @@ describe('su-dropdown', function () {
 
   it('clicking dropdown opens/closes dropdown and triggers open/close event', function () {
     $('su-dropdown .menu').is(':visible').should.equal(false)
+
     $('su-dropdown').click()
     $('su-dropdown .menu').is(':visible').should.equal(true)
     spyOnOpen.should.have.been.calledOnce
+
     $('su-dropdown').click()
     this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(false)
@@ -88,11 +90,11 @@ describe('su-dropdown', function () {
     $('su-dropdown').click()
 
     $('su-dropdown .item:first-child').click()
-    spyOnSelect.should.have.been.calledOnce
     $('su-dropdown > .text').text().trim().should.equal(items[0].label)
     $('su-dropdown > .text').hasClass('default').should.equal(true)
-    this.clock.tick(310)
+    spyOnSelect.should.have.been.calledOnce
 
+    this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(false)
     spyOnClose.should.have.been.calledOnce
   })
@@ -101,11 +103,11 @@ describe('su-dropdown', function () {
     $('su-dropdown').click()
 
     $('su-dropdown .item:eq(1)').click()
-    spyOnSelect.should.have.been.calledOnce
     $('su-dropdown > .text').text().trim().should.equal(items[1].label)
     $('su-dropdown > .text').hasClass('default').should.equal(false)
-    this.clock.tick(310)
+    spyOnSelect.should.have.been.calledOnce
 
+    this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(false)
     spyOnClose.should.have.been.calledOnce
   })
@@ -118,11 +120,11 @@ describe('su-dropdown', function () {
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
     fireKeyEvent(dropdown, 'keyup', keys.enter)
 
-    spyOnSelect.should.have.been.calledOnce
     $('su-dropdown > .text').text().trim().should.equal(items[1].label)
     $('su-dropdown > .text').hasClass('default').should.equal(false)
-    this.clock.tick(310)
+    spyOnSelect.should.have.been.calledOnce
 
+    this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(false)
     spyOnClose.should.have.been.calledOnce
   })
