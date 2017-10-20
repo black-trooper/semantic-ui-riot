@@ -330,7 +330,10 @@
     }
 
     this.isActive = () => {
-      return (this.openning || this.visibleFlg) && !this.closing
+      if (this.closing) {
+        return false
+      }
+      return this.openning || this.visibleFlg
     }
 
     this.getTabindex = () => {
