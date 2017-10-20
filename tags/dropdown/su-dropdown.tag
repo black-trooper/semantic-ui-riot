@@ -42,8 +42,9 @@
     this.label = ''
     this.keys = {
       enter: 13,
+      escape: 27,
       upArrow: 38,
-      downArrow: 40
+      downArrow: 40,
     }
 
     if (opts.items && opts.items.length > 0) {
@@ -119,6 +120,9 @@
 
     this.keydown = event => {
       const keyCode = event.keyCode
+      if (keyCode == this.keys.escape) {
+        this.close()
+      }
       if (keyCode != this.keys.upArrow && keyCode != this.keys.downArrow) {
         return true
       }
@@ -235,7 +239,7 @@
     }
 
     this.close = () => {
-      if (this.closing) {
+      if (this.closing || !this.visibleFlg) {
         return
       }
       this.closing = true
