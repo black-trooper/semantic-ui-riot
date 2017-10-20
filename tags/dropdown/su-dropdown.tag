@@ -123,6 +123,9 @@
       if (keyCode == this.keys.escape) {
         this.close()
       }
+      if (keyCode == this.keys.downArrow) {
+        this.open()
+      }
       if (keyCode != this.keys.upArrow && keyCode != this.keys.downArrow) {
         return true
       }
@@ -216,7 +219,7 @@
     //                                                                               Logic
     //                                                                               =====
     this.open = () => {
-      if (this.openning || this.closing) {
+      if (this.openning || this.closing || this.visibleFlg) {
         return
       }
       this.openning = true
