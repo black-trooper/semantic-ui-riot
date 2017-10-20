@@ -1,4 +1,4 @@
-<su-dropdown class="ui selection {opts.class} { search: opts.search } { multiple: opts.multiple} dropdown { active: visibleFlg } { visible: visibleFlg }"
+<su-dropdown class="ui selection {opts.class} { search: opts.search } { multiple: opts.multiple} dropdown { active: isActive() } { visible: isActive() }"
   onclick="{ toggle }" onfocus="{ open }" onblur="{ blur.bind(this, false) }" onkeydown="{ keydown }" onkeyup="{ keyup }" tabindex="{ opts.search ? -1 : getTabindex() }">
   <i class="dropdown icon"></i>
   <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ opts.search }" oninput="{ input }"
@@ -327,6 +327,10 @@
         return false
       }
       return item.searched && !item.header && !item.divider
+    }
+
+    this.isActive = () => {
+      return (this.openning || this.visibleFlg) && !this.closing
     }
 
     this.getTabindex = () => {
