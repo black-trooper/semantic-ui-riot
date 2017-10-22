@@ -82,7 +82,7 @@ this.parentUpdate = function () {
   }
 };
 });
-riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="{getTabindex()}" ref="condition" if="{opts.search}" onkeydown="{keydownSearch}" onkeyup="{keyupSearch}" onclick="{clickSearch}" onfocus="{open}" onblur="{blur.bind(this, true)}"> <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!opts.multiple || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" tabindex="-1"> <virtual each="{item in opts.items}"> <div class="item {default: item.default} {active: item.active} {selected: item.active}" if="{isVisible(item)}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}" onmousedown="{mousedown}" onmouseup="{mouseup}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="header" if="{item.header && !filtered}"> <i class="{item.icon} icon" if="{item.icon}"></i> {item.label} </div> <div class="divider" if="{item.divider && !filtered}"></div> </virtual> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div>', 'su-dropdown.ui.dropdown .menu>.item.default,[data-is="su-dropdown"].ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', 'class="ui selection {opts.class} {search: opts.search} {multiple: opts.multiple} dropdown {active: visibleFlg} {visible: visibleFlg}" onclick="{toggle}" onfocus="{open}" onblur="{blur.bind(this, false)}" onkeydown="{keydown}" onkeyup="{keyup}" tabindex="{opts.search ? -1 : getTabindex()}"', function(opts) {
+riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="{getTabindex()}" ref="condition" if="{opts.search}" oninput="{input}" onclick="{clickSearch}" onfocus="{open}" onblur="{blur.bind(this, true)}"> <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!opts.multiple || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" tabindex="-1"> <virtual each="{item in opts.items}"> <div class="item {default: item.default} {active: item.active} {selected: item.active}" if="{isVisible(item)}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}" onmousedown="{mousedown}" onmouseup="{mouseup}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="header" if="{item.header && !filtered}"> <i class="{item.icon} icon" if="{item.icon}"></i> {item.label} </div> <div class="divider" if="{item.divider && !filtered}"></div> </virtual> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div>', 'su-dropdown.ui.dropdown .menu>.item.default,[data-is="su-dropdown"].ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', 'class="ui selection {opts.class} {search: opts.search} {multiple: opts.multiple} dropdown {active: isActive()} {visible: isActive()}" onclick="{toggle}" onfocus="{open}" onblur="{blur.bind(this, false)}" onkeydown="{keydown}" onkeyup="{keyup}" tabindex="{opts.search ? -1 : getTabindex()}"', function(opts) {
 'use strict';
 
 var _this = this;
@@ -94,6 +94,7 @@ this.value = '';
 this.label = '';
 this.keys = {
   enter: 13,
+  escape: 27,
   upArrow: 38,
   downArrow: 40
 };
@@ -140,13 +141,10 @@ this.on('update', function () {
 //                                                                               Event
 //                                                                               =====
 this.toggle = function () {
-  if (!_this.focused()) {
-    _this.visibleFlg = !_this.visibleFlg;
-    if (_this.visibleFlg) {
-      _this.open();
-    } else {
-      _this.close();
-    }
+  if (!_this.visibleFlg) {
+    _this.open();
+  } else {
+    _this.close();
   }
 };
 
@@ -182,6 +180,12 @@ this.itemClick = function (event) {
 
 this.keydown = function (event) {
   var keyCode = event.keyCode;
+  if (keyCode == _this.keys.escape) {
+    _this.close();
+  }
+  if (keyCode == _this.keys.downArrow) {
+    _this.open();
+  }
   if (keyCode != _this.keys.upArrow && keyCode != _this.keys.downArrow) {
     return true;
   }
@@ -269,15 +273,7 @@ this.clickSearch = function (event) {
 // -----------------------------------------------------
 //                                         search option
 //                                         -------------
-this.keydownSearch = function (event) {
-  var keyCode = event.keyCode;
-  if (keyCode != 38 && keyCode != 40) {
-    _this.filtered = true;
-    _this.update();
-  }
-};
-
-this.keyupSearch = function (event) {
+this.input = function (event) {
   var value = event.target.value.toLowerCase();
   _this.filtered = value.length > 0;
   _this.search(value);
@@ -304,13 +300,18 @@ this.unselect = function (event) {
 //                                                                               Logic
 //                                                                               =====
 this.open = function () {
-  _this.visibleFlg = true;
+  if (_this.openning || _this.closing || _this.visibleFlg) {
+    return;
+  }
+  _this.openning = true;
   _this.search('');
   _this.transitionStatus = 'visible animating in slide down';
   opts.items.forEach(function (item) {
     return item.active = false;
   });
   setTimeout(function () {
+    _this.openning = false;
+    _this.visibleFlg = true;
     _this.transitionStatus = 'visible';
     _this.update();
   }, 300);
@@ -324,9 +325,14 @@ this.open = function () {
 };
 
 this.close = function () {
-  _this.visibleFlg = false;
+  if (_this.closing || !_this.visibleFlg) {
+    return;
+  }
+  _this.closing = true;
   _this.transitionStatus = 'visible animating out slide down';
   setTimeout(function () {
+    _this.closing = false;
+    _this.visibleFlg = false;
     _this.transitionStatus = 'hidden';
     _this.update();
   }, 300);
@@ -356,9 +362,6 @@ this.selectTarget = function (target, updating) {
     _this.update();
   }
   _this.parentUpdate();
-  if (opts.action) {
-    opts.action();
-  }
   _this.trigger('select', target);
 };
 
@@ -414,10 +417,6 @@ this.parentUpdate = function () {
   }
 };
 
-this.focused = function () {
-  return document.activeElement === _this.root;
-};
-
 // ===================================================================================
 //                                                                              Helper
 //                                                                              ======
@@ -426,6 +425,13 @@ this.isVisible = function (item) {
     return false;
   }
   return item.searched && !item.header && !item.divider;
+};
+
+this.isActive = function () {
+  if (_this.closing) {
+    return false;
+  }
+  return _this.openning || _this.visibleFlg;
 };
 
 this.getTabindex = function () {
