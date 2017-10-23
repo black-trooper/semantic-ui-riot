@@ -22,6 +22,7 @@ describe('su-dropdown', function () {
 
   let keys = {
     enter: 13,
+    escape: 27,
     upArrow: 38,
     downArrow: 40
   }
@@ -160,6 +161,17 @@ describe('su-dropdown', function () {
     $('su-dropdown .active .text').text().should.equal(items[0].label)
 
     $('su-dropdown').blur()
+  })
+
+  it('pressing escape key', function () {
+    $('su-dropdown').focus()
+    this.clock.tick(310)
+
+    let dropdown = $('su-dropdown')[0]
+    fireKeyEvent(dropdown, 'keydown', keys.escape)
+    this.clock.tick(310)
+    $('su-dropdown .menu').is(':visible').should.equal(false)
+    spyOnClose.should.have.been.calledOnce
   })
 
 })
