@@ -27,6 +27,12 @@ describe('su-dropdown', function () {
     downArrow: 40
   }
 
+  let fireEvent = function (el, name) {
+    var e = document.createEvent('HTMLEvents')
+    e.initEvent(name, false, true)
+    el.dispatchEvent(e)
+  }
+
   let fireKeyEvent = function (el, name, keyCode) {
     let eventObj = document.createEvent("Events")
     eventObj.initEvent(name, true, true);
@@ -107,6 +113,9 @@ describe('su-dropdown', function () {
     $('su-dropdown').click()
     this.clock.tick(310)
 
+    fireEvent($('su-dropdown .item:eq(1)')[0], 'mousedown')
+    fireEvent($('su-dropdown')[0], 'blur')
+    fireEvent($('su-dropdown .item:eq(1)')[0], 'mouseup')
     $('su-dropdown .item:eq(1)').click()
     $('su-dropdown > .text').text().trim().should.equal(items[1].label)
     $('su-dropdown > .text').hasClass('default').should.equal(false)
@@ -161,6 +170,17 @@ describe('su-dropdown', function () {
     $('su-dropdown .active .text').text().should.equal(items[0].label)
 
     $('su-dropdown').blur()
+  })
+
+  it('pressing escape key', function () {
+    $('su-dropdown').focus()
+    this.clock.tick(310)
+
+    let dropdown = $('su-dropdown')[0]
+    fireKeyEvent(dropdown, 'keydown', keys.escape)
+    this.clock.tick(310)
+    $('su-dropdown .menu').is(':visible').should.equal(false)
+    spyOnClose.should.have.been.calledOnce
   })
 
   it('pressing escape key', function () {
