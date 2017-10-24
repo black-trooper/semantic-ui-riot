@@ -182,16 +182,4 @@ describe('su-dropdown', function () {
     $('su-dropdown .menu').is(':visible').should.equal(false)
     spyOnClose.should.have.been.calledOnce
   })
-
-  it('pressing escape key', function () {
-    $('su-dropdown').focus()
-    this.clock.tick(310)
-
-    let dropdown = $('su-dropdown')[0]
-    fireKeyEvent(dropdown, 'keydown', keys.escape)
-    this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(false)
-    spyOnClose.should.have.been.calledOnce
-  })
-
 })
