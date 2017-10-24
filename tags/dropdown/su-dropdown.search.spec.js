@@ -63,10 +63,24 @@ describe('su-dropdown-search', function () {
     { value: 'WY', label: 'Wyoming' }
   ]
 
+  let keys = {
+    enter: 13,
+    escape: 27,
+    upArrow: 38,
+    downArrow: 40
+  }
+
   let fireEvent = function (el, name) {
     var e = document.createEvent('HTMLEvents')
     e.initEvent(name, false, true)
     el.dispatchEvent(e)
+  }
+
+  let fireKeyEvent = function (el, name, keyCode) {
+    let eventObj = document.createEvent("Events")
+    eventObj.initEvent(name, true, true);
+    eventObj.keyCode = keyCode;
+    el.dispatchEvent(eventObj)
   }
 
   beforeEach(function () {
@@ -77,12 +91,14 @@ describe('su-dropdown-search', function () {
     tag.on('open', spyOnOpen)
       .on('close', spyOnClose)
       .on('search', spyOnSearch)
+    this.clock = sinon.useFakeTimers()
   })
 
   afterEach(function () {
     spyOnOpen.reset()
     spyOnClose.reset()
     spyOnSearch.reset()
+    this.clock.restore()
     tag.unmount()
   })
 
@@ -97,8 +113,12 @@ describe('su-dropdown-search', function () {
   it('opens the menu on focus', function () {
     $('su-dropdown .menu').is(':visible').should.equal(false)
 
+    $('su-dropdown .search').click()
     $('su-dropdown .search').focus()
+    this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(true)
+
+    $('su-dropdown').blur()
   })
 
   it('adding text to box filters the options list', function () {
@@ -114,5 +134,38 @@ describe('su-dropdown-search', function () {
     fireEvent($('su-dropdown .search')[0], 'input')
     $('su-dropdown .item').length.should.equal(15)
     spyOnSearch.should.have.been.calledTwice
+  })
+
+  it('pressing key down will active item', function () {
+    $('su-dropdown').focus()
+    this.clock.tick(310)
+    $('su-dropdown .search').val('m')
+    fireEvent($('su-dropdown .search')[0], 'input')
+    $('su-dropdown .item').length.should.equal(15)
+
+    let dropdown = $('su-dropdown')[0]
+    fireKeyEvent(dropdown, 'keydown', keys.downArrow)
+    $('su-dropdown .active .text').text().should.equal(items[1].label)
+
+    fireKeyEvent(dropdown, 'keydown', keys.downArrow)
+    $('su-dropdown .active .text').text().should.equal(items[9].label)
+
+    fireKeyEvent(dropdown, 'keydown', keys.downArrow)
+    $('su-dropdown .active .text').text().should.equal(items[20].label)
+
+    $('su-dropdown').blur()
+  })
+
+  it('pressing key down when no item', function () {
+    $('su-dropdown').focus()
+    $('su-dropdown .search').val('xxxxx')
+    fireEvent($('su-dropdown .search')[0], 'input')
+    $('su-dropdown .item').length.should.equal(0)
+
+    let dropdown = $('su-dropdown')[0]
+    fireKeyEvent(dropdown, 'keydown', keys.downArrow)
+    $('su-dropdown .active .text').length.should.equal(0)
+
+    $('su-dropdown').blur()
   })
 })
