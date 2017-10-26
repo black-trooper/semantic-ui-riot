@@ -170,24 +170,29 @@
 
     this.keyup = event => {
       const keyCode = event.keyCode
-      const searchedItems = opts.items.filter(item => (item.searched || !opts.search) && (!item.selected || !opts.multiple))
+      if (keyCode != this.keys.enter) {
+        return
+      }
+      const searchedItems = opts.items.filter(item => item.searched && !item.selected)
       const index = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0))
       const activeItem = searchedItems[index]
-      if (keyCode == this.keys.enter && activeItem) {
-        if (opts.multiple) {
-          activeItem.selected = true
-          activeItem.active = false
-          if (index < searchedItems.length - 1) {
-            searchedItems[index + 1].active = true
-          } else if (index > 0) {
-            searchedItems[index - 1].active = true
-          }
-          this.selectMultiTarget()
-        } else {
-          activeItem.active = false
-          this.selectTarget(activeItem)
-          this.close()
+      if (!activeItem) {
+        return
+      }
+
+      if (opts.multiple) {
+        activeItem.selected = true
+        activeItem.active = false
+        if (index < searchedItems.length - 1) {
+          searchedItems[index + 1].active = true
+        } else if (index > 0) {
+          searchedItems[index - 1].active = true
         }
+        this.selectMultiTarget()
+      } else {
+        activeItem.active = false
+        this.selectTarget(activeItem)
+        this.close()
       }
     }
 
