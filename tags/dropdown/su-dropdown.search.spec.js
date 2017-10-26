@@ -166,6 +166,6 @@ describe('su-dropdown-search', function () {
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
     $('su-dropdown .active .text').length.should.equal(0)
 
-    $('su-dropdown').blur()
+    fireKeyEvent(dropdown, 'keyup', keys.enter)
   })
 })
