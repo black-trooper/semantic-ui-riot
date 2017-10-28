@@ -107,6 +107,8 @@ describe('su-dropdown', function () {
     this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(false)
     spyOnClose.should.have.been.calledOnce
+
+    expect(tag.value).to.be.null
   })
 
   it('clicking item', function () {
@@ -124,6 +126,8 @@ describe('su-dropdown', function () {
     this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(false)
     spyOnClose.should.have.been.calledOnce
+
+    tag.value.should.deep.equal(items[1].value);
   })
 
   it('pressing enter key on item', function () {
@@ -142,6 +146,8 @@ describe('su-dropdown', function () {
     this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(false)
     spyOnClose.should.have.been.calledOnce
+
+    tag.value.should.deep.equal(items[1].value);
   })
 
   it('pressing key down will active item', function () {
