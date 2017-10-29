@@ -88,12 +88,33 @@ describe('su-dropdown-multiple', function () {
     $('su-dropdown').blur()
   })
 
-  it('clicking last item', function () {
+  it('clicking two items', function () {
     $('su-dropdown').click()
     this.clock.tick(310)
 
-    $('su-dropdown .item:eq(0)').click()
-    $('su-dropdown > .label').text().trim().should.equal(items[1].label)
+    $('su-dropdown .item:first').click()
+    $('su-dropdown .item:first').click()
+    $('su-dropdown > .label:first').text().trim().should.equal(items[1].label)
+    $('su-dropdown > .label:eq(1)').text().trim().should.equal(items[2].label)
+    tag.value.should.deep.equal(['angular', 'css']);
+    spyOnSelect.should.have.been.calledOnce
+
+    this.clock.tick(310)
+    $('su-dropdown .menu').is(':visible').should.equal(true)
+    spyOnClose.should.have.been.callCount(0)
+
+    $('su-dropdown').blur()
+  })
+
+  it('unselect item', function () {
+    $('su-dropdown').click()
+    this.clock.tick(310)
+
+    $('su-dropdown .item:first').click()
+    $('su-dropdown .item:first').click()
+    $('su-dropdown > .label:first .delete').click()
+    $('su-dropdown > .label:first').text().trim().should.equal(items[2].label)
+    tag.value.should.deep.equal(['css']);
     spyOnSelect.should.have.been.calledOnce
 
     this.clock.tick(310)
