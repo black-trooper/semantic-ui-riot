@@ -136,7 +136,9 @@ describe('su-dropdown', function () {
 
     let dropdown = $('su-dropdown')[0]
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
+    fireKeyEvent(dropdown, 'keyup', keys.downArrow)
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
+    fireKeyEvent(dropdown, 'keyup', keys.downArrow)
     fireKeyEvent(dropdown, 'keyup', keys.enter)
 
     $('su-dropdown > .text').text().trim().should.equal(items[1].label)
