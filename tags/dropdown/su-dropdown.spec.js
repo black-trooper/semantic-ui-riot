@@ -190,4 +190,20 @@ describe('su-dropdown', function () {
     $('su-dropdown .menu').is(':visible').should.equal(false)
     spyOnClose.should.have.been.calledOnce
   })
+
+  it('update value', function () {
+    expect(tag.value).to.be.null
+    tag.value = items[1].value
+    tag.update()
+    tag.value.should.deep.equal(items[1].value)
+    tag.label.should.deep.equal(items[1].label)
+  })
+
+  it('update items', function () {
+    $('su-dropdown .item:eq(1)').click()
+    // expect(tag.value).to.be.null
+    items[1].value = 'M'
+    tag.update()
+    expect(tag.value).to.be.null
+  })
 })
