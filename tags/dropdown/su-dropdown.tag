@@ -1,8 +1,8 @@
 <su-dropdown class="ui selection {opts.class} { search: opts.search } { multiple: opts.multiple} dropdown { active: isActive() } { visible: isActive() }"
-  onclick="{ toggle }" onfocus="{ open }" onblur="{ blur.bind(this, false) }" onkeydown="{ keydown }" onkeyup="{ keyup }" tabindex="{ opts.search ? -1 : getTabindex() }">
+  onclick="{ toggle }" onfocus="{ open }" onblur="{ blur }" onkeydown="{ keydown }" onkeyup="{ keyup }" tabindex="{ opts.search ? -1 : getTabindex() }">
   <i class="dropdown icon"></i>
   <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ opts.search }" oninput="{ input }"
-    onclick="{ clickSearch }" onfocus="{ open }" onblur="{ blur.bind(this, true) }" />
+    onclick="{ clickSearch }" onfocus="{ open }" onblur="{ blur }" />
   <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }">
     { item.label }
     <i class="delete icon" onclick="{ unselect }"></i>
@@ -10,7 +10,7 @@
   <div class="{ default: default} text { filtered: filtered }" if="{ !opts.multiple || !selectedFlg }">
     { label }
   </div>
-  <div class="menu transition { transitionStatus }" tabindex="-1">
+  <div class="menu transition { transitionStatus }" onmousedown="{ mousedown }" onmouseup="{ mouseup }" onblur="{ blur }" tabindex="-1">
     <virtual each="{item in opts.items}">
       <div class="item { default: item.default } { active: item.active } { selected: item.active }" if="{ isVisible(item) }" value="{ item.value }"
         default="{ item.default }" onclick="{ itemClick }" onmousedown="{ mousedown }" onmouseup="{ mouseup }">
@@ -96,10 +96,7 @@
       this.itemActivated = false
     }
 
-    this.blur = isSearchField => {
-      if (!isSearchField && opts.search) {
-        return
-      }
+    this.blur = () => {
       if (!this.itemActivated) {
         this.close()
       }
