@@ -116,7 +116,7 @@ this.on('update', function () {
       return item.selected = true;
     });
     _this.selectMultiTarget(true);
-  } else {
+  } else if (opts.items) {
     var selected = opts.items.filter(function (item) {
       return item.value === _this.value;
     });

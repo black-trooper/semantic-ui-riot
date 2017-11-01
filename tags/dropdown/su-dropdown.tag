@@ -58,7 +58,7 @@
         opts.items.forEach(item => item.selected = false)
         opts.items.filter(item => this.value && this.value.indexOf(item.value) >= 0).forEach(item => item.selected = true)
         this.selectMultiTarget(true)
-      } else {
+      } else if (opts.items) {
         const selected = opts.items.filter(item => item.value === this.value)
         if (selected && selected.length > 0) {
           const target = selected[0]
