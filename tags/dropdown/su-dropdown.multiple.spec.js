@@ -45,8 +45,8 @@ describe('su-dropdown-multiple', function () {
 
   let fireKeyEvent = function (el, name, keyCode) {
     let eventObj = document.createEvent("Events")
-    eventObj.initEvent(name, true, true);
-    eventObj.keyCode = keyCode;
+    eventObj.initEvent(name, true, true)
+    eventObj.keyCode = keyCode
     el.dispatchEvent(eventObj)
   }
 
@@ -96,7 +96,7 @@ describe('su-dropdown-multiple', function () {
     $('su-dropdown .item:first').click()
     $('su-dropdown > .label:first').text().trim().should.equal(items[1].label)
     $('su-dropdown > .label:eq(1)').text().trim().should.equal(items[2].label)
-    tag.value.should.deep.equal(['angular', 'css']);
+    tag.value.should.deep.equal(['angular', 'css'])
     spyOnSelect.should.have.been.calledOnce
 
     this.clock.tick(310)
@@ -114,7 +114,7 @@ describe('su-dropdown-multiple', function () {
     $('su-dropdown .item:first').click()
     $('su-dropdown > .label:first .delete').click()
     $('su-dropdown > .label:first').text().trim().should.equal(items[2].label)
-    tag.value.should.deep.equal(['css']);
+    tag.value.should.deep.equal(['css'])
     spyOnSelect.should.have.been.calledOnce
 
     this.clock.tick(310)

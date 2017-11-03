@@ -35,8 +35,8 @@ describe('su-dropdown', function () {
 
   let fireKeyEvent = function (el, name, keyCode) {
     let eventObj = document.createEvent("Events")
-    eventObj.initEvent(name, true, true);
-    eventObj.keyCode = keyCode;
+    eventObj.initEvent(name, true, true)
+    eventObj.keyCode = keyCode
     el.dispatchEvent(eventObj)
   }
 
@@ -127,7 +127,7 @@ describe('su-dropdown', function () {
     $('su-dropdown .menu').is(':visible').should.equal(false)
     spyOnClose.should.have.been.calledOnce
 
-    tag.value.should.deep.equal(items[1].value);
+    tag.value.should.deep.equal(items[1].value)
   })
 
   it('pressing enter key on item', function () {
@@ -149,7 +149,7 @@ describe('su-dropdown', function () {
     $('su-dropdown .menu').is(':visible').should.equal(false)
     spyOnClose.should.have.been.calledOnce
 
-    tag.value.should.deep.equal(items[1].value);
+    tag.value.should.deep.equal(items[1].value)
   })
 
   it('pressing key down will active item', function () {

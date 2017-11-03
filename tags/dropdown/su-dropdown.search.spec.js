@@ -78,8 +78,8 @@ describe('su-dropdown-search', function () {
 
   let fireKeyEvent = function (el, name, keyCode) {
     let eventObj = document.createEvent("Events")
-    eventObj.initEvent(name, true, true);
-    eventObj.keyCode = keyCode;
+    eventObj.initEvent(name, true, true)
+    eventObj.keyCode = keyCode
     el.dispatchEvent(eventObj)
   }
 
