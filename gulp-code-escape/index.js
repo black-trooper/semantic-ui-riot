@@ -1,7 +1,7 @@
 var
   map = require('map-stream'),
   PluginError = require('gulp-util').PluginError,
-  escape = require('html-escape');
+  escape = require('htmlescape');
 
 /**
  *
