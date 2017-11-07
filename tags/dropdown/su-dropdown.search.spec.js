@@ -118,7 +118,7 @@ describe('su-dropdown-search', function () {
     this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(true)
 
-    $('su-dropdown').blur()
+    fireEvent($('su-dropdown')[0], 'blur')
   })
 
   it('adding text to box filters the options list', function () {
@@ -153,7 +153,7 @@ describe('su-dropdown-search', function () {
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
     $('su-dropdown .active .text').text().should.equal(items[20].label)
 
-    $('su-dropdown').blur()
+    fireEvent($('su-dropdown')[0], 'blur')
   })
 
   it('pressing key down when no item', function () {
