@@ -1,7 +1,6 @@
 var
   map = require('map-stream'),
-  PluginError = require('gulp-util').PluginError,
-  escape = require('htmlescape');
+  PluginError = require('gulp-util').PluginError;
 
 /**
  *
@@ -25,7 +24,7 @@ function escapeFile(file, options, callback) {
 }
 
 function escapeCode(code) {
-  code = escape(code).split("{").join("\\{").split("}").join("\\}")
+  code = escape(code)
   var minLength = -1
   code.split("\n").forEach(element => {
     if (ltrim(element).length === 0) {
@@ -46,6 +45,30 @@ function escapeCode(code) {
 function ltrim(target) {
   return target.replace(/^\s+/, "");
 }
+
+function escape(str) {
+  if (str == null) {
+    return str;
+  }
+  if (typeof str !== "string") {
+    str = String(str);
+  }
+
+  var hChars = /[&<>\"\'{}]/;
+  if (hChars.test(String(str))) {
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\'/g, '&apos;')
+      .replace(/\"/g, '&quot;')
+      .replace(/{/g, '\\{')
+      .replace(/}/g, '\\}');
+  }
+  else {
+    return str;
+  }
+};
 
 module.exports = function (options) {
   options = options || {};
