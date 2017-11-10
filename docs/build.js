@@ -103,7 +103,6 @@ module.exports={
     "gulp-riot": "^1.1.1",
     "gulp-uglify": "^3.0.0",
     "gulp-webserver-fast": "^0.9.1",
-    "html-escape": "^2.0.0",
     "jquery": "2.2.2",
     "karma": "^1.7.1",
     "karma-babel-preprocessor": "^7.0.0",
