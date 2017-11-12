@@ -2,22 +2,6 @@ describe('su-checkbox', function () {
   let tag
   let spyOnClick = sinon.spy()
 
-  let items = [
-    {
-      label: 'Gender',
-      value: null,
-      default: true
-    },
-    {
-      label: 'Male',
-      value: 1
-    },
-    {
-      label: 'Female',
-      value: 2
-    },
-  ]
-
   let fireEvent = function (el, name) {
     var e = document.createEvent('HTMLEvents')
     e.initEvent(name, false, true)
