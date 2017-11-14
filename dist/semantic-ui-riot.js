@@ -4,9 +4,7 @@ riot.tag2('su-checkbox', '<input type="checkbox" checked="{checked}" onclick="{c
 var _this = this;
 
 this.checked = false;
-// ===================================================================================
-//                                                                               Event
-//                                                                               =====
+
 this.on('mount', function () {
   if (opts.check) {
     _this.checked = opts.check;
@@ -23,6 +21,9 @@ this.on('update', function () {
   _this.clicked = false;
 });
 
+// ===================================================================================
+//                                                                               Event
+//                                                                               =====
 this.click = function () {
   _this._click();
 };
