@@ -4,6 +4,13 @@
 
   <script>
     this.checked = false
+
+    this.on('mount', () => {
+      if (opts.check) {
+        this.checked = opts.check
+      }
+    })
+
     this.on('update', () => {
       if (typeof opts.check === 'undefined') {
         return
@@ -17,15 +24,23 @@
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
-    this.click = event => {
-      this.clicked = true
-      this.checked = event.target.checked
-      this.parentUpdate()
-      this.trigger('click', this.checked)
+    this.click = () => {
+      this._click()
     }
 
     this.labelClick = () => {
-      this.refs.target.click()
+      this._click()
+      this.update()
+    }
+
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
+    this._click = () => {
+      this.clicked = true
+      this.checked = !this.checked
+      this.parentUpdate()
+      this.trigger('click', this.checked)
     }
 
     // ===================================================================================

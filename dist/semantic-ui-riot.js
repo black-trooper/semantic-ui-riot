@@ -4,6 +4,15 @@ riot.tag2('su-checkbox', '<input type="checkbox" checked="{checked}" onclick="{c
 var _this = this;
 
 this.checked = false;
+// ===================================================================================
+//                                                                               Event
+//                                                                               =====
+this.on('mount', function () {
+  if (opts.check) {
+    _this.checked = opts.check;
+  }
+});
+
 this.on('update', function () {
   if (typeof opts.check === 'undefined') {
     return;
@@ -14,18 +23,22 @@ this.on('update', function () {
   _this.clicked = false;
 });
 
-// ===================================================================================
-//                                                                               Event
-//                                                                               =====
-this.click = function (event) {
-  _this.clicked = true;
-  _this.checked = event.target.checked;
-  _this.parentUpdate();
-  _this.trigger('click', _this.checked);
+this.click = function () {
+  _this._click();
 };
 
 this.labelClick = function () {
-  _this.refs.target.click();
+  _this._click();
+};
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+this._click = function () {
+  _this.clicked = true;
+  _this.checked = !_this.checked;
+  _this.parentUpdate();
+  _this.trigger('click', _this.checked);
 };
 
 // ===================================================================================
