@@ -48,4 +48,17 @@ describe('su-checkbox', function () {
     spyOnClick.should.have.been.calledTwice
     tag.checked.should.equal(false)
   })
+
+  it('update checked', function () {
+    tag.checked.should.equal(false)
+
+    tag.checked = true
+    tag.checked.should.equal(true)
+
+    tag.checked = false
+    tag.checked.should.equal(false)
+
+    spyOnClick.should.have.been.callCount(0)
+  })
+
 })
