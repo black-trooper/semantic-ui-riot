@@ -182,9 +182,9 @@
   <p>Access to checkbox with check attribute</p>
   <div class="ui segment secondary top attached example">
     Example
-    <i class="icon code" onclick="{ toggleExample.bind(this, 5) }"></i>
+    <i class="icon code" onclick="{ toggleExample.bind(this, 7) }"></i>
   </div>
-  <div class="ui segment { bottom: !example[5] } attached">
+  <div class="ui segment { bottom: !example[7] } attached">
     <su-checkbox ref="checkbox2" check="{ checkbox2 }">
       Make my profile visible
     </su-checkbox>
@@ -200,7 +200,7 @@
     <button type="button" click="{ setCheckboxValue.bind(this, false) }" class="ui button">Check off</button>
   </div>
 
-  <div class="ui segment bottom attached inverted transition { hidden: !example[5] } ">
+  <div class="ui segment bottom attached inverted transition { hidden: !example[7] } ">
     <pre><code class="prettyprint">
       <su-checkbox ref="checkbox2" check="{ checkbox2 }">
         Make my profile visible
