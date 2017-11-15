@@ -1,4 +1,4 @@
-riot.tag2('su-checkbox', '<input type="checkbox" checked="{checked}" onclick="{click}" ref="target"> <label onclick="{labelClick}"><yield></yield></label>', '', 'class="ui checkbox {opts.class}"', function(opts) {
+riot.tag2('su-checkbox', '<input type="checkbox" checked="{checked}" onclick="{click}" ref="target"> <label onclick="{labelClick}" if="{!opts.label}"><yield></yield></label> <label onclick="{labelClick}" if="{opts.label}">{opts.label}</label>', '', 'class="ui checkbox {opts.class}"', function(opts) {
 'use strict';
 
 var _this = this;
@@ -51,7 +51,7 @@ this.parentUpdate = function () {
   }
 };
 });
-riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target"> <label onclick="{labelClick}"><yield></yield></label>', '', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
+riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target"> <label onclick="{labelClick}" if="{!opts.label}"><yield></yield></label> <label onclick="{labelClick}" if="{opts.label}">{opts.label}</label>', '', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
 'use strict';
 
 var _this = this;
