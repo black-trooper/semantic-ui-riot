@@ -131,7 +131,61 @@
     </code></pre>
   </div>
 
-  <h2 class="ui dividing header">Access elements<a class="anchor" id="event"></a></h2>
+  <h2 class="ui dividing header">Update label<a class="anchor" id="label"></a></h2>
+
+  <h3 class="ui header">Checkbox</h3>
+  <div class="ui segment secondary top attached example">
+    Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 8) }"></i>
+  </div>
+  <div class="ui segment { bottom: !example[8] } attached">
+    <su-checkbox label="{ checkbox_label }" />
+    <div style="margin-top:1em">
+      <button type="button" click="{ changeCheckboxLabel }" class="ui button">Change label</button>
+    </div>
+  </div>
+
+  <div class="ui segment bottom attached inverted transition { hidden: !example[8] } ">
+    <pre><code class="prettyprint">
+        <su-checkbox label="{ checkbox_label }" />
+        <button type="button" click="{ changeCheckboxLabel }" class="ui button">Change label</button>
+        
+      <script>
+        this.checkbox_label = 'change'
+        this.changeCheckboxLabel = () => {
+          this.checkbox_label = (this.checkbox_label === 'change') ? 'changed' : 'change'
+        }
+      </script>
+    </code></pre>
+  </div>
+
+  <h3 class="ui header">Radio</h3>
+  <div class="ui segment secondary top attached example">
+    Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 9) }"></i>
+  </div>
+  <div class="ui segment { bottom: !example[9] } attached">
+    <su-radio label="{ radio_label }" />
+    <div style="margin-top:1em">
+      <button type="button" click="{ changeRadioLabel }" class="ui button">Change label</button>
+    </div>
+  </div>
+
+  <div class="ui segment bottom attached inverted transition { hidden: !example[9] } ">
+    <pre><code class="prettyprint">
+        <su-radio label="{ radio_label }" />
+        <button type="button" click="{ changeRadioLabel }" class="ui button">Change label</button>
+        
+      <script>
+        this.radio_label = 'change'
+        this.changeRadioLabel = () => {
+          this.radio_label = (this.radio_label === 'change') ? 'changed' : 'change'
+        }
+      </script>
+    </code></pre>
+  </div>
+
+  <h2 class="ui dividing header">Access elements<a class="anchor" id="access"></a></h2>
 
   <h3 class="ui header">Checkbox</h3>
   <p>Access to checkbox with ref attribute</p>
@@ -309,6 +363,15 @@
 
         this.setRefValue = value => {
           this.refs.checkbox1.checked = value
+        }
+
+        this.checkbox_label = 'change'
+        this.radio_label = 'change'
+        this.changeCheckboxLabel = () => {
+          this.checkbox_label = (this.checkbox_label === 'change') ? 'changed' : 'change'
+        }
+        this.changeRadioLabel = () => {
+          this.radio_label = (this.radio_label === 'change') ? 'changed' : 'change'
         }
 
         this.on('mount', () => {
