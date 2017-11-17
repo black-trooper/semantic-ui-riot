@@ -1,12 +1,8 @@
+const fireEvent = require("../../test/helpers").fireEvent
+
 describe('su-checkbox-options', function () {
   let tag
   let spyOnClick = sinon.spy()
-
-  let fireEvent = function (el, name) {
-    var e = document.createEvent('HTMLEvents')
-    e.initEvent(name, false, true)
-    el.dispatchEvent(e)
-  }
 
   beforeEach(function () {
     $('body').append('<su-checkbox>Make my profile visible</su-checkbox>')

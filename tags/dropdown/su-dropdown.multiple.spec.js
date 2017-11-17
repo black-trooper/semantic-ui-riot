@@ -1,3 +1,6 @@
+const fireEvent = require("../../test/helpers").fireEvent
+const fireKeyEvent = require("../../test/helpers").fireKeyEvent
+
 describe('su-dropdown-multiple', function () {
   let tag, select
   let spyOnOpen = sinon.spy()
@@ -35,19 +38,6 @@ describe('su-dropdown-multiple', function () {
     escape: 27,
     upArrow: 38,
     downArrow: 40
-  }
-
-  let fireEvent = function (el, name) {
-    var e = document.createEvent('HTMLEvents')
-    e.initEvent(name, false, true)
-    el.dispatchEvent(e)
-  }
-
-  let fireKeyEvent = function (el, name, keyCode) {
-    let eventObj = document.createEvent("Events")
-    eventObj.initEvent(name, true, true)
-    eventObj.keyCode = keyCode
-    el.dispatchEvent(eventObj)
   }
 
   beforeEach(function () {
