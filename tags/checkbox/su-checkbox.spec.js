@@ -8,12 +8,10 @@ describe('su-checkbox', function () {
     $('body').append('<su-checkbox>Make my profile visible</su-checkbox>')
     tag = riot.mount('su-checkbox')[0]
     tag.on('click', spyOnClick)
-    this.clock = sinon.useFakeTimers()
   })
 
   afterEach(function () {
     spyOnClick.reset()
-    this.clock.restore()
     tag.unmount()
   })
 
