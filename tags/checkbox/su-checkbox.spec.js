@@ -49,12 +49,13 @@ describe('su-checkbox', function () {
     tag.checked.should.equal(false)
 
     tag.checked = true
+    tag.update()
     tag.checked.should.equal(true)
 
     tag.checked = false
+    tag.update()
     tag.checked.should.equal(false)
 
     spyOnClick.should.have.been.callCount(0)
   })
-
 })
