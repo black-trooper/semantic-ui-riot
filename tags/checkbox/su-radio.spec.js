@@ -39,4 +39,19 @@ describe('su-radio', function () {
     tag1.refs.target.checked.should.equal(false)
     tag2.refs.target.checked.should.equal(true)
   })
+
+  it('click label', function () {
+    tag1.refs.target.checked.should.equal(false)
+    tag2.refs.target.checked.should.equal(false)
+
+    $('su-radio:eq(0) label').click()
+    spyOnClick.should.have.been.calledOnce
+    tag1.refs.target.checked.should.equal(true)
+    tag2.refs.target.checked.should.equal(false)
+
+    $('su-radio:eq(1) label').click()
+    spyOnClick.should.have.been.calledOnce
+    tag1.refs.target.checked.should.equal(false)
+    tag2.refs.target.checked.should.equal(true)
+  })
 })
