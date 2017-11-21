@@ -1,0 +1,8 @@
+.hidden.transition {
+  display: none;
+  visibility: hidden;
+}
+.visible.transition {
+  display: block!important;
+  visibility: visible!important;
+}

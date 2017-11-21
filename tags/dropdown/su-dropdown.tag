@@ -38,6 +38,7 @@
     this.visibleFlg = false
     this.selectedFlg = false
     this.filtered = false
+    this.transitionStatus = 'hidden'
     this.value = ''
     this.label = ''
     this.keys = {
