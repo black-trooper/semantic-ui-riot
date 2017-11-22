@@ -13,7 +13,7 @@
     })
 
     this.on('update', () => {
-      this.checked = opts.checked
+      this.checked = opts.checked === true
       this.name = opts.name
       this.value = opts.value
     })
