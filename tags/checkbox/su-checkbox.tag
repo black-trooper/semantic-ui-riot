@@ -1,5 +1,5 @@
 <su-checkbox class="ui checkbox { opts.class }">
-  <input type="checkbox" checked="{ checked }" onclick="{ click }" ref="target" />
+  <input type="checkbox" checked="{ checked }" onclick="{ click }" ref="target" disabled="{ isDisabled() }" />
   <label onclick="{ labelClick }" if="{ !opts.label }"><yield /></label>
   <label onclick="{ labelClick }" if="{ opts.label }">{ opts.label }</label>
 
@@ -37,6 +37,11 @@
     //                                                                               Logic
     //                                                                               =====
     this._click = () => {
+      if (this.isReadOnly() || this.isDisabled()) {
+        this.refs.target.checked = this.checked
+        this.update()
+        return
+      }
       this.clicked = true
       this.checked = !this.checked
       this.parentUpdate()
@@ -46,6 +51,14 @@
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
+    this.isReadOnly = () => {
+      return this.root.classList.contains('read-only')
+    }
+
+    this.isDisabled = () => {
+      return this.root.classList.contains('disabled')
+    }
+
     this.parentUpdate = () => {
       if (this.parent) {
         this.parent.update()
