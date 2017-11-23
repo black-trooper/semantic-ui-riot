@@ -6,21 +6,25 @@
 
   <script>
     this.checked = false
+    let lastChecked
+    let lastOptsCheck
 
     this.on('mount', () => {
-      if (opts.check) {
-        this.checked = opts.check
-      }
+      this.checked = opts.check === true || opts.check === 'true'
+      lastChecked = this.checked
+      lastOptsCheck = opts.check
     })
 
     this.on('update', () => {
-      if (typeof opts.check === 'undefined') {
-        return
-      }
-      if (!this.clicked) {
+      if (lastChecked != this.checked) {
+        opts.check = this.checked
+        lastChecked = this.checked
+        this.parentUpdate()
+      } else if (lastOptsCheck != opts.check) {
         this.checked = opts.check
+        lastOptsCheck = opts.check
+        this.parentUpdate()
       }
-      this.clicked = false
     })
 
     // ===================================================================================
@@ -32,7 +36,6 @@
         this.update()
         return
       }
-      this.clicked = true
       this.checked = !this.checked
       this.parentUpdate()
       this.trigger('click', this.checked)
