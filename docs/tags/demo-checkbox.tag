@@ -4,8 +4,14 @@
     <div class="sub header">A checkbox allows a user to select a value from a small set of options, often binary</div>
   </h1>
 
+  <!-- =================================================================================== -->
+  <!--                                                                               Types -->
+  <!-- =================================================================================== -->
   <h2 class="ui dividing header">Types<a class="anchor" id="types"></a></h2>
 
+  <!-- ====================================================== -->
+  <!--                                               Checkbox -->
+  <!--                                               ======== -->
   <h3 class="ui header">Checkbox</h3>
   <p>A standard checkbox</p>
   <div class="ui segment secondary top attached example">
@@ -25,6 +31,9 @@
     </code></pre>
   </div>
 
+  <!-- ====================================================== -->
+  <!--                                                  Radio -->
+  <!--                                                  ===== -->
   <h3 class="ui header">Radio</h3>
   <p>A checkbox can be formatted as a radio element. This means it is an exclusive option.</p>
   <div class="ui segment secondary top attached example">
@@ -50,6 +59,9 @@
     </code></pre>
   </div>
 
+  <!-- ====================================================== -->
+  <!--                                                 Slider -->
+  <!--                                                 ====== -->
   <h3 class="ui header">Slider</h3>
   <p>A checkbox can be formatted to emphasize the current selection state</p>
   <div class="ui segment secondary top attached example">
@@ -131,8 +143,107 @@
     </code></pre>
   </div>
 
+  <!-- ====================================================== -->
+  <!--                                                 Toggle -->
+  <!--                                                 ====== -->
+  <h3 class="ui header">Toggle</h3>
+  <p>A checkbox can be formatted to show an on or off choice</p>
+  <div class="ui segment secondary top attached example">
+    Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 10) }"></i>
+  </div>
+  <div class="ui segment { bottom: !example[1] } attached">
+    <su-checkbox class="toggle">
+      Subscribe to weekly newsletter
+    </su-checkbox>
+  </div>
+  <div class="ui segment bottom attached inverted transition { hidden: !example[10] } ">
+    <pre><code class="prettyprint">
+      <su-checkbox class="toggle">
+        Subscribe to weekly newsletter
+      </su-checkbox>
+    </code></pre>
+  </div>
+
+  <!-- =================================================================================== -->
+  <!--                                                                               Types -->
+  <!-- =================================================================================== -->
+  <h2 class="ui dividing header">States<a class="anchor" id="states"></a></h2>
+
+  <!-- ====================================================== -->
+  <!--                                              Read-only -->
+  <!--                                              ========= -->
+  <h3 class="ui header">Read-only</h3>
+  <p>A checkbox can be read-only and unable to change states</p>
+  <div class="ui segment secondary top attached example">
+    Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 11) }"></i>
+  </div>
+  <div class="ui segment { bottom: !example[1] } attached">
+    <su-checkbox class="read-only">
+      Read Only
+    </su-checkbox>
+  </div>
+  <div class="ui segment bottom attached inverted transition { hidden: !example[11] } ">
+    <pre><code class="prettyprint">
+      <su-checkbox class="read-only" check="true">
+        Read Only
+      </su-checkbox>
+    </code></pre>
+  </div>
+
+  <!-- ====================================================== -->
+  <!--                                              Checked -->
+  <!--                                              ========= -->
+  <h3 class="ui header">Checked</h3>
+  <p>A checkbox can be checked</p>
+  <div class="ui segment secondary top attached example">
+    Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 12) }"></i>
+  </div>
+  <div class="ui segment { bottom: !example[1] } attached">
+    <su-checkbox check="true">
+      Active
+    </su-checkbox>
+  </div>
+  <div class="ui segment bottom attached inverted transition { hidden: !example[12] } ">
+    <pre><code class="prettyprint">
+      <su-checkbox check="true">
+        Active
+      </su-checkbox>
+    </code></pre>
+  </div>
+
+  <!-- ====================================================== -->
+  <!--                                              Disabled -->
+  <!--                                              ========= -->
+  <h3 class="ui header">Disabled</h3>
+  <p>A checkbox can be read-only and unable to change states</p>
+  <div class="ui segment secondary top attached example">
+    Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 13) }"></i>
+  </div>
+  <div class="ui segment { bottom: !example[1] } attached">
+    <su-checkbox class="disabled">
+      Disabled
+    </su-checkbox>
+  </div>
+  <div class="ui segment bottom attached inverted transition { hidden: !example[13] } ">
+    <pre><code class="prettyprint">
+      <su-checkbox class="disabled">
+        Disabled
+      </su-checkbox>
+    </code></pre>
+  </div>
+
+  <!-- =================================================================================== -->
+  <!--                                                                        Update label -->
+  <!-- =================================================================================== -->
   <h2 class="ui dividing header">Update label<a class="anchor" id="label"></a></h2>
 
+  <!-- ====================================================== -->
+  <!--                                               Checkbox -->
+  <!--                                               ======== -->
   <h3 class="ui header">Checkbox</h3>
   <div class="ui segment secondary top attached example">
     Example
@@ -159,6 +270,9 @@
     </code></pre>
   </div>
 
+  <!-- ====================================================== -->
+  <!--                                                  Radio -->
+  <!--                                                  ===== -->
   <h3 class="ui header">Radio</h3>
   <div class="ui segment secondary top attached example">
     Example
@@ -185,8 +299,14 @@
     </code></pre>
   </div>
 
+  <!-- =================================================================================== -->
+  <!--                                                                     Access elements -->
+  <!-- =================================================================================== -->
   <h2 class="ui dividing header">Access elements<a class="anchor" id="access"></a></h2>
 
+  <!-- ====================================================== -->
+  <!--                                               Checkbox -->
+  <!--                                               ======== -->
   <h3 class="ui header">Checkbox</h3>
   <p>Access to checkbox with ref attribute</p>
   <div class="ui segment secondary top attached example">
@@ -219,7 +339,7 @@
         <div class="header">
           Checked
         </div>
-        <p>{ refs.checkbox1.check() ? 'on' : 'off' }</p>
+        <p>{ refs.checkbox1.checked ? 'on' : 'off' }</p>
       </div>
 
       <button type="button" click="{ setRefValue.bind(this, true) }" class="ui button">Check on</button>
@@ -264,18 +384,13 @@
         <div class="header">
           Checked
         </div>
-        <p>{ refs.checkbox2.check ? 'on' : 'off' }</p>
+        <p>{ refs.checkbox2.checked ? 'on' : 'off' }</p>
       </div>
 
       <button type="button" click="{ setCheckboxValue.bind(this, true) }" class="ui button">Check on</button>
       <button type="button" click="{ setCheckboxValue.bind(this, false) }" class="ui button">Check off</button>
 
       <script>
-        this.on('mount', () => {
-          this.refs.checkbox2.on('click', value => {
-            this.setCheckboxValue(value)
-          })
-        })
         this.setCheckboxValue = value => {
           this.checkbox2 = value
         }
@@ -283,6 +398,9 @@
     </code></pre>
   </div>
 
+  <!-- ====================================================== -->
+  <!--                                                  Radio -->
+  <!--                                                  ===== -->
   <h3 class="ui header">Radio</h3>
   <p>Access to radio with ref attribute</p>
   <div class="ui segment secondary top attached example">
@@ -347,44 +465,41 @@
   </div>
 
   <script>
-        this.example = []
-        this.toggleExample = index => {
-          this.example[index] = !this.example[index]
-        }
+    this.example = []
+    this.toggleExample = index => {
+      this.example[index] = !this.example[index]
+    }
 
-        this.radio1 = 1
-        this.setRadioValue = value => {
-          this.radio1 = value
-        }
+    this.radio1 = 1
+    this.setRadioValue = value => {
+      this.radio1 = value
+    }
 
-        this.setCheckboxValue = value => {
-          this.checkbox2 = value
-        }
+    this.setCheckboxValue = value => {
+      this.checkbox2 = value
+    }
 
-        this.setRefValue = value => {
-          this.refs.checkbox1.checked = value
-        }
+    this.setRefValue = value => {
+      this.refs.checkbox1.checked = value
+    }
 
-        this.checkbox_label = 'change'
-        this.radio_label = 'change'
-        this.changeCheckboxLabel = () => {
-          this.checkbox_label = (this.checkbox_label === 'change') ? 'changed' : 'change'
-        }
-        this.changeRadioLabel = () => {
-          this.radio_label = (this.radio_label === 'change') ? 'changed' : 'change'
-        }
+    this.checkbox_label = 'change'
+    this.radio_label = 'change'
+    this.changeCheckboxLabel = () => {
+      this.checkbox_label = (this.checkbox_label === 'change') ? 'changed' : 'change'
+    }
+    this.changeRadioLabel = () => {
+      this.radio_label = (this.radio_label === 'change') ? 'changed' : 'change'
+    }
 
-        this.on('mount', () => {
-          this.refs.checkbox2.on('click', value => {
-            this.setCheckboxValue(value)
-          })
-          this.refs.radio1_1.on('click', value => {
-            this.setRadioValue(value)
-          })
-          this.refs.radio1_2.on('click', value => {
-            this.setRadioValue(value)
-          })
-          PR.prettyPrint(false)
-        })
+    this.on('mount', () => {
+      this.refs.radio1_1.on('click', value => {
+        this.setRadioValue(value)
+      })
+      this.refs.radio1_2.on('click', value => {
+        this.setRadioValue(value)
+      })
+      PR.prettyPrint(false)
+    })
   </script>
 </demo-checkbox>
