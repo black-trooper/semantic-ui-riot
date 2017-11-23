@@ -1,42 +1,39 @@
-riot.tag2('su-checkbox', '<input type="checkbox" checked="{checked}" onclick="{click}" ref="target"> <label onclick="{labelClick}" if="{!opts.label}"><yield></yield></label> <label onclick="{labelClick}" if="{opts.label}">{opts.label}</label>', '', 'class="ui checkbox {opts.class}"', function(opts) {
+riot.tag2('su-checkbox', '<input type="checkbox" checked="{checked}" onclick="{click}" ref="target" disabled="{isDisabled()}" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', '', 'class="ui checkbox {opts.class}"', function(opts) {
 'use strict';
 
 var _this = this;
 
 this.checked = false;
+var lastChecked = void 0;
+var lastOptsCheck = void 0;
 
 this.on('mount', function () {
-  if (opts.check) {
-    _this.checked = opts.check;
-  }
+  _this.checked = opts.check === true || opts.check === 'true';
+  lastChecked = _this.checked;
+  lastOptsCheck = opts.check;
 });
 
 this.on('update', function () {
-  if (typeof opts.check === 'undefined') {
-    return;
-  }
-  if (!_this.clicked) {
+  if (lastChecked != _this.checked) {
+    opts.check = _this.checked;
+    lastChecked = _this.checked;
+    _this.parentUpdate();
+  } else if (lastOptsCheck != opts.check) {
     _this.checked = opts.check;
+    lastOptsCheck = opts.check;
+    _this.parentUpdate();
   }
-  _this.clicked = false;
 });
 
 // ===================================================================================
 //                                                                               Event
 //                                                                               =====
 this.click = function () {
-  _this._click();
-};
-
-this.labelClick = function () {
-  _this._click();
-};
-
-// ===================================================================================
-//                                                                               Logic
-//                                                                               =====
-this._click = function () {
-  _this.clicked = true;
+  if (_this.isReadOnly() || _this.isDisabled()) {
+    _this.refs.target.checked = _this.checked;
+    _this.update();
+    return;
+  }
   _this.checked = !_this.checked;
   _this.parentUpdate();
   _this.trigger('click', _this.checked);
@@ -45,6 +42,18 @@ this._click = function () {
 // ===================================================================================
 //                                                                              Helper
 //                                                                              ======
+this.getId = function () {
+  return 'su-checkbox-' + _this._riot_id;
+};
+
+this.isReadOnly = function () {
+  return _this.root.classList.contains('read-only');
+};
+
+this.isDisabled = function () {
+  return _this.root.classList.contains('disabled');
+};
+
 this.parentUpdate = function () {
   if (_this.parent) {
     _this.parent.update();
@@ -65,7 +74,7 @@ this.on('mount', function () {
 });
 
 this.on('update', function () {
-  _this.checked = opts.checked;
+  _this.checked = opts.checked === true;
   _this.name = opts.name;
   _this.value = opts.value;
 });
@@ -104,6 +113,7 @@ var _this = this;
 this.visibleFlg = false;
 this.selectedFlg = false;
 this.filtered = false;
+this.transitionStatus = 'hidden';
 this.value = '';
 this.label = '';
 this.keys = {
