@@ -39,6 +39,7 @@ describe('su-checkbox-options', function () {
     tag.checked.should.equal(true)
   })
 
+  /*
   it('click label', function () {
     tag.checked.should.equal(true)
 
@@ -50,6 +51,7 @@ describe('su-checkbox-options', function () {
     spyOnClick.should.have.been.calledTwice
     tag.checked.should.equal(true)
   })
+  */
 
   it('update checked', function () {
     tag.checked.should.equal(true)
