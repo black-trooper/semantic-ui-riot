@@ -3,31 +3,27 @@ const fireEvent = require("../../test/helpers").fireEvent
 describe('su-checkbox-options', function () {
   let tag
   let spyOnClick = sinon.spy()
+  let mount = opts => {
+    tag = riot.mount('su-checkbox', opts)[0]
+    tag.on('click', spyOnClick)
+  }
 
   beforeEach(function () {
     $('body').append('<su-checkbox>Make my profile visible</su-checkbox>')
-    tag = riot.mount('su-checkbox', {
-      check: true
-    })[0]
-    tag.on('click', spyOnClick)
-    this.clock = sinon.useFakeTimers()
   })
 
   afterEach(function () {
     spyOnClick.reset()
-    this.clock.restore()
     tag.unmount()
   })
 
   it('is mounted', function () {
+    mount()
     tag.isMounted.should.be.true
   })
 
-  it('default checked', function () {
-    tag.checked.should.equal(true)
-  })
-
   it('click checkbox', function () {
+    mount({ check: true })
     tag.checked.should.equal(true)
 
     $('su-checkbox input').click()
@@ -39,21 +35,26 @@ describe('su-checkbox-options', function () {
     tag.checked.should.equal(true)
   })
 
-  /*
-  it('click label', function () {
-    tag.checked.should.equal(true)
-
-    fireEvent($('su-checkbox label')[0], 'click')
-    spyOnClick.should.have.been.calledOnce
+  it('readonly', function () {
+    mount({ class: 'read-only' })
     tag.checked.should.equal(false)
 
-    fireEvent($('su-checkbox label')[0], 'click')
-    spyOnClick.should.have.been.calledTwice
-    tag.checked.should.equal(true)
+    $('su-checkbox input').click()
+    tag.checked.should.equal(false)
+    spyOnClick.should.have.been.callCount(0)
   })
-  */
+
+  it('disabled', function () {
+    mount({ class: 'disabled' })
+    tag.checked.should.equal(false)
+
+    $('su-checkbox input').click()
+    tag.checked.should.equal(false)
+    spyOnClick.should.have.been.callCount(0)
+  })
 
   it('update checked', function () {
+    mount({ check: true })
     tag.checked.should.equal(true)
 
     tag.checked = false
