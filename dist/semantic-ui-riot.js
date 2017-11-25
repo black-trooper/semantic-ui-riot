@@ -8,19 +8,21 @@ var lastChecked = void 0;
 var lastOptsCheck = void 0;
 
 this.on('mount', function () {
-  _this.checked = opts.check === true || opts.check === 'true';
+  _this.supportTraditionalOptions();
+  _this.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true';
   lastChecked = _this.checked;
-  lastOptsCheck = opts.check;
+  lastOptsCheck = opts.checked;
 });
 
 this.on('update', function () {
+  _this.supportTraditionalOptions();
   if (lastChecked != _this.checked) {
-    opts.check = _this.checked;
+    opts.checked = _this.checked;
     lastChecked = _this.checked;
     _this.parentUpdate();
-  } else if (lastOptsCheck != opts.check) {
-    _this.checked = opts.check;
-    lastOptsCheck = opts.check;
+  } else if (lastOptsCheck != opts.checked) {
+    _this.checked = opts.checked;
+    lastOptsCheck = opts.checked;
     _this.parentUpdate();
   }
 });
@@ -57,6 +59,15 @@ this.isDisabled = function () {
 this.parentUpdate = function () {
   if (_this.parent) {
     _this.parent.update();
+  }
+};
+
+this.supportTraditionalOptions = function () {
+  if (typeof opts.check !== 'undefined' && !_this.shownMessage) {
+    console.warn('\'check\' attribute is deprecated. Please use \'checked\'.');
+    opts.checked = opts.check;
+    opts.check = undefined;
+    _this.shownMessage = true;
   }
 };
 });

@@ -186,7 +186,7 @@
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[11] } ">
     <pre><code class="prettyprint">
-      <su-checkbox class="read-only" check="true">
+      <su-checkbox class="read-only" checked="true">
         Read Only
       </su-checkbox>
     </code></pre>
@@ -202,13 +202,13 @@
     <i class="icon code" onclick="{ toggleExample.bind(this, 12) }"></i>
   </div>
   <div class="ui segment { bottom: !example[1] } attached">
-    <su-checkbox check="true">
+    <su-checkbox checked="true">
       Active
     </su-checkbox>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[12] } ">
     <pre><code class="prettyprint">
-      <su-checkbox check="true">
+      <su-checkbox checked="true">
         Active
       </su-checkbox>
     </code></pre>
@@ -359,7 +359,7 @@
     <i class="icon code" onclick="{ toggleExample.bind(this, 7) }"></i>
   </div>
   <div class="ui segment { bottom: !example[7] } attached">
-    <su-checkbox ref="checkbox2" check="{ checkbox2 }">
+    <su-checkbox ref="checkbox2" checked="{ checkbox2 }">
       Make my profile visible
     </su-checkbox>
 
@@ -376,7 +376,7 @@
 
   <div class="ui segment bottom attached inverted transition { hidden: !example[7] } ">
     <pre><code class="prettyprint">
-      <su-checkbox ref="checkbox2" check="{ checkbox2 }">
+      <su-checkbox ref="checkbox2" checked="{ checkbox2 }">
         Make my profile visible
       </su-checkbox>
 

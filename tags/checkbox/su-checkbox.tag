@@ -10,19 +10,21 @@
     let lastOptsCheck
 
     this.on('mount', () => {
-      this.checked = opts.check === true || opts.check === 'true'
+      this.supportTraditionalOptions()
+      this.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
       lastChecked = this.checked
-      lastOptsCheck = opts.check
+      lastOptsCheck = opts.checked
     })
 
     this.on('update', () => {
+      this.supportTraditionalOptions()
       if (lastChecked != this.checked) {
-        opts.check = this.checked
+        opts.checked = this.checked
         lastChecked = this.checked
         this.parentUpdate()
-      } else if (lastOptsCheck != opts.check) {
-        this.checked = opts.check
-        lastOptsCheck = opts.check
+      } else if (lastOptsCheck != opts.checked) {
+        this.checked = opts.checked
+        lastOptsCheck = opts.checked
         this.parentUpdate()
       }
     })
@@ -59,6 +61,15 @@
     this.parentUpdate = () => {
       if (this.parent) {
         this.parent.update()
+      }
+    }
+
+    this.supportTraditionalOptions = () => {
+      if (typeof opts.check !== 'undefined' && !this.shownMessage) {
+        console.warn('\'check\' attribute is deprecated. Please use \'checked\'.')
+        opts.checked = opts.check
+        opts.check = undefined
+        this.shownMessage = true
       }
     }
   </script>

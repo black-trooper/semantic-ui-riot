@@ -23,6 +23,19 @@ describe('su-checkbox-options', function () {
   })
 
   it('click checkbox', function () {
+    mount({ checked: true })
+    tag.checked.should.equal(true)
+
+    $('su-checkbox input').click()
+    spyOnClick.should.have.been.calledOnce
+    tag.checked.should.equal(false)
+
+    $('su-checkbox input').click()
+    spyOnClick.should.have.been.calledTwice
+    tag.checked.should.equal(true)
+  })
+
+  it('click checkbox traditional', function () {
     mount({ check: true })
     tag.checked.should.equal(true)
 
@@ -54,6 +67,19 @@ describe('su-checkbox-options', function () {
   })
 
   it('update checked', function () {
+    mount({ checked: true })
+    tag.checked.should.equal(true)
+
+    tag.checked = false
+    tag.checked.should.equal(false)
+
+    tag.checked = true
+    tag.checked.should.equal(true)
+
+    spyOnClick.should.have.been.callCount(0)
+  })
+
+  it('update checked traditional', function () {
     mount({ check: true })
     tag.checked.should.equal(true)
 
