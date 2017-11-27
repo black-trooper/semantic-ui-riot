@@ -23,6 +23,7 @@
         <a class="item" href="#demo-checkbox">Checkbox</a>
         <a class="item" href="#demo-dropdown">Dropdown</a>
         <a class="item" href="#demo-modal">Modal</a>
+        <a class="item" href="#demo-radio">Radio</a>
       </div>
     </div>
   </div>
