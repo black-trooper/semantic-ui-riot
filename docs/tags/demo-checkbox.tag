@@ -137,9 +137,6 @@
     <su-checkbox class="disabled">
       Disabled
     </su-checkbox>
-    <su-checkbox disabled="disabled">
-      Disabled
-    </su-checkbox>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[13] } ">
     <pre><code class="prettyprint">
