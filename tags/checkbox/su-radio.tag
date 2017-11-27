@@ -35,6 +35,11 @@
     //                                                                               Event
     //                                                                               =====
     this.click = event => {
+      if (this.isReadOnly() || this.isDisabled()) {
+        this.refs.target.checked = this.checked
+        this.update()
+        return
+      }
       this.checked = event.target.checked
       this.trigger('click', event.target.value)
       this.parentUpdate()
@@ -45,6 +50,14 @@
     //                                                                              ======
     this.getId = () => {
       return `su-radio-${this._riot_id}`
+    }
+
+    this.isReadOnly = () => {
+      return this.root.classList.contains('read-only')
+    }
+
+    this.isDisabled = () => {
+      return this.root.classList.contains('disabled')
     }
 
     this.isRadio = () => {
