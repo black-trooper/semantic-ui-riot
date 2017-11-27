@@ -12,6 +12,7 @@ this.on('mount', function () {
   _this.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true';
   lastChecked = _this.checked;
   lastOptsCheck = opts.checked;
+  _this.update();
 });
 
 this.on('update', function () {
@@ -71,41 +72,66 @@ this.supportTraditionalOptions = function () {
   }
 };
 });
-riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target"> <label onclick="{labelClick}" if="{!opts.label}"><yield></yield></label> <label onclick="{labelClick}" if="{opts.label}">{opts.label}</label>', '', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
+riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', '', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
 'use strict';
 
 var _this = this;
 
 this.checked = false;
+var lastChecked = void 0;
+var lastOptsCheck = void 0;
 this.name = '';
 
 this.on('mount', function () {
+  _this.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true';
+  lastChecked = _this.checked;
+  lastOptsCheck = opts.checked;
   _this.update();
-  _this.parentUpdate();
 });
 
 this.on('update', function () {
-  _this.checked = opts.checked === true;
   _this.name = opts.name;
   _this.value = opts.value;
+  if (lastChecked != _this.checked) {
+    opts.checked = _this.checked;
+    lastChecked = _this.checked;
+    _this.parentUpdate();
+  } else if (lastOptsCheck != opts.checked) {
+    _this.checked = opts.checked;
+    lastOptsCheck = opts.checked;
+    _this.parentUpdate();
+  }
 });
 
 // ===================================================================================
 //                                                                               Event
 //                                                                               =====
 this.click = function (event) {
+  if (_this.isReadOnly() || _this.isDisabled()) {
+    _this.refs.target.checked = _this.checked;
+    _this.update();
+    return;
+  }
   _this.checked = event.target.checked;
   _this.trigger('click', event.target.value);
   _this.parentUpdate();
 };
 
-this.labelClick = function () {
-  _this.refs.target.click();
-};
-
 // ===================================================================================
 //                                                                              Helper
 //                                                                              ======
+this.getId = function () {
+  return 'su-radio-' + _this._riot_id;
+};
+
+this.isReadOnly = function () {
+  return _this.root.classList.contains('read-only');
+};
+
+this.isDisabled = function () {
+  return _this.root.classList.contains('disabled');
+};
+
 this.isRadio = function () {
   return !_this.root.classList.contains('slider');
 };
