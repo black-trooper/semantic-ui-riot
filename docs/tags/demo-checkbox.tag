@@ -151,7 +151,6 @@
   <!-- =================================================================================== -->
   <h2 class="ui dividing header">Update label<a class="anchor" id="label"></a></h2>
 
-  <h3 class="ui header">Checkbox</h3>
   <div class="ui segment secondary top attached example">
     Example
     <i class="icon code" onclick="{ toggleExample.bind(this, 8) }"></i>
@@ -185,7 +184,6 @@
   <!-- ====================================================== -->
   <!--                                          Ref attribute -->
   <!--                                          ============= -->
-  <h3 class="ui header">Checkbox</h3>
   <p>Access to checkbox with ref attribute</p>
   <div class="ui segment secondary top attached example">
     Example

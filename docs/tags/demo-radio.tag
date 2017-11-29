@@ -185,10 +185,6 @@
   <!-- =================================================================================== -->
   <h2 class="ui dividing header">Update label<a class="anchor" id="label"></a></h2>
 
-  <!-- ====================================================== -->
-  <!--                                                  Radio -->
-  <!--                                                  ===== -->
-  <h3 class="ui header">Radio</h3>
   <div class="ui segment secondary top attached example">
     Example
     <i class="icon code" onclick="{ toggleExample.bind(this, 9) }"></i>
@@ -219,10 +215,6 @@
   <!-- =================================================================================== -->
   <h2 class="ui dividing header">Access elements<a class="anchor" id="access"></a></h2>
 
-  <!-- ====================================================== -->
-  <!--                                                  Radio -->
-  <!--                                                  ===== -->
-  <h3 class="ui header">Radio</h3>
   <p>Access to radio with ref attribute</p>
   <div class="ui segment secondary top attached example">
     Example
