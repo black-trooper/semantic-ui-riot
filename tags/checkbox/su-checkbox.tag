@@ -35,8 +35,7 @@
     //                                                                               =====
     this.click = () => {
       if (this.isReadOnly() || this.isDisabled()) {
-        this.refs.target.checked = this.checked
-        this.update()
+        event.preventDefault()
         return
       }
       this.checked = !this.checked
