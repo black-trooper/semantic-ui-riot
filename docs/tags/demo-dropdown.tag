@@ -539,7 +539,7 @@
     </div>
 
     <button type="button" click="{ setMultiRefValue.bind(this, null) }" class="ui button">Select Default</button>
-    <button type="button" click="{ setMultiRefValue.bind(this, ['angular', 'css']) }" class="ui button">Select Male</button>
+    <button type="button" click="{ setMultiRefValue.bind(this, ['angular', 'css']) }" class="ui button">Select Angular &amp; CSS</button>
   </div>
   <div class="ui segment bottom attached inverted transition { hidden: !example[10] } ">
     <pre><code class="prettyprint">
@@ -553,7 +553,7 @@
       </div>
 
       <button type="button" click="{ setMultiRefValue.bind(this, null) }" class="ui button">Select Default</button>
-      <button type="button" click="{ setMultiRefValue.bind(this, []) }" class="ui button">Select Male</button>
+      <button type="button" click="{ setMultiRefValue.bind(this, ['angular', 'css']) }" class="ui button">Select Angular &amp; CSS</button>
 
       <script>
         this.dropdownItems = [
