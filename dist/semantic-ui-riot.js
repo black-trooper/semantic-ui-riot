@@ -5,13 +5,13 @@ var _this = this;
 
 this.checked = false;
 var lastChecked = void 0;
-var lastOptsCheck = void 0;
+var lastOptsChecked = void 0;
 
 this.on('mount', function () {
   _this.supportTraditionalOptions();
   _this.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true';
   lastChecked = _this.checked;
-  lastOptsCheck = opts.checked;
+  lastOptsChecked = opts.checked;
   _this.update();
 });
 
@@ -21,9 +21,9 @@ this.on('update', function () {
     opts.checked = _this.checked;
     lastChecked = _this.checked;
     _this.parentUpdate();
-  } else if (lastOptsCheck != opts.checked) {
+  } else if (lastOptsChecked != opts.checked) {
     _this.checked = opts.checked;
-    lastOptsCheck = opts.checked;
+    lastOptsChecked = opts.checked;
     _this.parentUpdate();
   }
 });
@@ -33,8 +33,7 @@ this.on('update', function () {
 //                                                                               =====
 this.click = function () {
   if (_this.isReadOnly() || _this.isDisabled()) {
-    _this.refs.target.checked = _this.checked;
-    _this.update();
+    event.preventDefault();
     return;
   }
   _this.checked = !_this.checked;
@@ -95,11 +94,9 @@ this.on('update', function () {
   if (lastChecked != _this.checked) {
     opts.checked = _this.checked;
     lastChecked = _this.checked;
-    _this.parentUpdate();
   } else if (lastOptsCheck != opts.checked) {
     _this.checked = opts.checked;
     lastOptsCheck = opts.checked;
-    _this.parentUpdate();
   }
 });
 
@@ -108,13 +105,11 @@ this.on('update', function () {
 //                                                                               =====
 this.click = function (event) {
   if (_this.isReadOnly() || _this.isDisabled()) {
-    _this.refs.target.checked = _this.checked;
-    _this.update();
+    event.preventDefault();
     return;
   }
   _this.checked = event.target.checked;
   _this.trigger('click', event.target.value);
-  _this.parentUpdate();
 };
 
 // ===================================================================================
@@ -135,11 +130,119 @@ this.isDisabled = function () {
 this.isRadio = function () {
   return !_this.root.classList.contains('slider');
 };
+});
+riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
+'use strict';
 
-this.parentUpdate = function () {
-  if (_this.parent) {
-    _this.parent.update();
+var _this = this;
+
+this.label = '';
+this.value = '';
+var lastValue = void 0;
+var lastOptsValue = void 0;
+
+this.on('mount', function () {
+  if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
+    opts.riotValue = opts.value;
   }
+  _this.value = opts.riotValue;
+  lastValue = _this.value;
+  lastOptsValue = _this.value;
+
+  var radios = _this.tags['su-radio'];
+  if (Array.isArray(radios)) {
+    for (var _iterator = radios, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+      var _ref;
+
+      if (_isArray) {
+        if (_i >= _iterator.length) break;
+        _ref = _iterator[_i++];
+      } else {
+        _i = _iterator.next();
+        if (_i.done) break;
+        _ref = _i.value;
+      }
+
+      var radio = _ref;
+
+      initializeChild(radio);
+    }
+  } else {
+    initializeChild(radios);
+  }
+
+  _this.update();
+});
+
+this.on('update', function () {
+  var changed = false;
+  if (lastValue != _this.value) {
+    opts.riotValue = _this.value;
+    lastOptsValue = _this.value;
+    lastValue = _this.value;
+    changed = true;
+  } else if (lastOptsValue != opts.riotValue) {
+    _this.value = opts.riotValue;
+    lastOptsValue = opts.riotValue;
+    lastValue = opts.riotValue;
+    changed = true;
+  }
+
+  var radios = _this.tags['su-radio'];
+  if (Array.isArray(radios)) {
+    for (var _iterator2 = radios, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
+      var _ref2;
+
+      if (_isArray2) {
+        if (_i2 >= _iterator2.length) break;
+        _ref2 = _iterator2[_i2++];
+      } else {
+        _i2 = _iterator2.next();
+        if (_i2.done) break;
+        _ref2 = _i2.value;
+      }
+
+      var radio = _ref2;
+
+      if (typeof radio.opts.value !== 'undefined') {
+        updateState(radio);
+      }
+    }
+  } else {
+    updateState(radios);
+  }
+
+  if (changed) {
+    _this.trigger('change', _this.value);
+  }
+});
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+var updateState = function updateState(radio) {
+  if (typeof radio.opts.value === 'undefined') {
+    return;
+  }
+  radio.checked = _this.value == radio.opts.value;
+  if (radio.checked) {
+    _this.label = radio.root.getElementsByTagName('label')[0].innerText;
+  }
+};
+
+var initializeChild = function initializeChild(radio) {
+  radio.opts.name = getId();
+  radio.on('click', function (value) {
+    _this.value = value;
+    _this.update();
+  });
+};
+
+// ===================================================================================
+//                                                                              Helper
+//                                                                              ======
+var getId = function getId() {
+  return 'su-radio-group-' + _this._riot_id;
 };
 });
 riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="{getTabindex()}" ref="condition" if="{opts.search}" oninput="{input}" onclick="{clickSearch}" onfocus="{open}" onblur="{blur}"> <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!opts.multiple || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="-1"> <virtual each="{item in opts.items}"> <div class="item {default: item.default} {active: item.active} {selected: item.active}" if="{isVisible(item)}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}" onmousedown="{mousedown}" onmouseup="{mouseup}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="header" if="{item.header && !filtered}"> <i class="{item.icon} icon" if="{item.icon}"></i> {item.label} </div> <div class="divider" if="{item.divider && !filtered}"></div> </virtual> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div>', 'su-dropdown.ui.dropdown .menu>.item.default,[data-is="su-dropdown"].ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', 'class="ui selection {opts.class} {search: opts.search} {multiple: opts.multiple} dropdown {active: isActive()} {visible: isActive()}" onclick="{toggle}" onfocus="{open}" onblur="{blur}" onkeydown="{keydown}" onkeyup="{keyup}" tabindex="{opts.search ? -1 : getTabindex()}"', function(opts) {
