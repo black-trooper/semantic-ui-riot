@@ -7,13 +7,13 @@
   <script>
     this.checked = false
     let lastChecked
-    let lastOptsCheck
+    let lastOptsChecked
 
     this.on('mount', () => {
       this.supportTraditionalOptions()
       this.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
       lastChecked = this.checked
-      lastOptsCheck = opts.checked
+      lastOptsChecked = opts.checked
       this.update()
     })
 
@@ -23,9 +23,9 @@
         opts.checked = this.checked
         lastChecked = this.checked
         this.parentUpdate()
-      } else if (lastOptsCheck != opts.checked) {
+      } else if (lastOptsChecked != opts.checked) {
         this.checked = opts.checked
-        lastOptsCheck = opts.checked
+        lastOptsChecked = opts.checked
         this.parentUpdate()
       }
     })
