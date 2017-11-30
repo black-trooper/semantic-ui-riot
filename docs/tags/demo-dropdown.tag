@@ -459,6 +459,47 @@
     </code></pre>
   </div>
 
+  <!-- =================================================================================== -->
+  <!--                                                                              States -->
+  <!-- =================================================================================== -->
+  <h2 class="ui dividing header">States<a class="anchor" id="states"></a></h2>
+
+  <!-- ====================================================== -->
+  <!--                                              Read-only -->
+  <!--                                              ========= -->
+  <!-- <h3 class="ui header">Read-only</h3>
+  <p>A dropdown can be read-only and unable to change states</p>
+  <div class="ui segment secondary top attached example">
+    Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 11) }"></i>
+  </div>
+  <div class="ui segment { bottom: !example[11] } attached">
+    <su-dropdown items="{ dropdownItems12 }" class="read-only"></su-dropdown>
+  </div>
+  <div class="ui segment bottom attached inverted transition { hidden: !example[11] } ">
+    <pre><code class="prettyprint">
+        <su-dropdown class="read-only"></su-dropdown>
+      </code></pre>
+  </div> -->
+
+  <!-- ====================================================== -->
+  <!--                                              Disabled -->
+  <!--                                              ========= -->
+  <h3 class="ui header">Disabled</h3>
+  <p>A dropdown can be disavbled</p>
+  <div class="ui segment secondary top attached example">
+    Example
+    <i class="icon code" onclick="{ toggleExample.bind(this, 12) }"></i>
+  </div>
+  <div class="ui segment { bottom: !example[12] } attached">
+    <su-dropdown items="{ dropdownItems12 }" class="disabled"></su-dropdown>
+  </div>
+  <div class="ui segment bottom attached inverted transition { hidden: !example[12] } ">
+    <pre><code class="prettyprint">
+        <su-dropdown class="disabled"></su-dropdown>
+      </code></pre>
+  </div>
+
   <h2 class="ui dividing header">Named elements<a class="anchor" id="event"></a></h2>
 
   <h3 class="ui header">Single Selection</h3>
@@ -590,359 +631,374 @@
   </div>
 
   <script>
-        this.example = []
-        this.toggleExample = index => {
-          this.example[index] = !this.example[index]
-        }
-        this.dropdownItems = [
-          {
-            label: 'Gender',
-            value: null,
-            default: true
-          },
-          {
-            label: 'Male',
-            value: 1
-          },
-          {
-            label: 'Female',
-            value: 2
-          }
-        ]
-        this.dropdownItems2 = [
-          {
-            label: 'State',
-            value: null,
-            default: true
-          },
-          { value: 'AL', label: 'Alabama' },
-          { value: 'AK', label: 'Alaska' },
-          { value: 'AZ', label: 'Arizona' },
-          { value: 'AR', label: 'Arkansas' },
-          { value: 'CA', label: 'California' },
-          { value: 'CO', label: 'Colorado' },
-          { value: 'CT', label: 'Connecticut' },
-          { value: 'DE', label: 'Delaware' },
-          { value: 'DC', label: 'District Of Columbia' },
-          { value: 'FL', label: 'Florida' },
-          { value: 'GA', label: 'Georgia' },
-          { value: 'HI', label: 'Hawaii' },
-          { value: 'ID', label: 'Idaho' },
-          { value: 'IL', label: 'Illinois' },
-          { value: 'IN', label: 'Indiana' },
-          { value: 'IA', label: 'Iowa' },
-          { value: 'KS', label: 'Kansas' },
-          { value: 'KY', label: 'Kentucky' },
-          { value: 'LA', label: 'Louisiana' },
-          { value: 'ME', label: 'Maine' },
-          { value: 'MD', label: 'Maryland' },
-          { value: 'MA', label: 'Massachusetts' },
-          { value: 'MI', label: 'Michigan' },
-          { value: 'MN', label: 'Minnesota' },
-          { value: 'MS', label: 'Mississippi' },
-          { value: 'MO', label: 'Missouri' },
-          { value: 'MT', label: 'Montana' },
-          { value: 'NE', label: 'Nebraska' },
-          { value: 'NV', label: 'Nevada' },
-          { value: 'NH', label: 'New Hampshire' },
-          { value: 'NJ', label: 'New Jersey' },
-          { value: 'NM', label: 'New Mexico' },
-          { value: 'NY', label: 'New York' },
-          { value: 'NC', label: 'North Carolina' },
-          { value: 'ND', label: 'North Dakota' },
-          { value: 'OH', label: 'Ohio' },
-          { value: 'OK', label: 'Oklahoma' },
-          { value: 'OR', label: 'Oregon' },
-          { value: 'PA', label: 'Pennsylvania' },
-          { value: 'RI', label: 'Rhode Island' },
-          { value: 'SC', label: 'South Carolina' },
-          { value: 'SD', label: 'South Dakota' },
-          { value: 'TN', label: 'Tennessee' },
-          { value: 'TX', label: 'Texas' },
-          { value: 'UT', label: 'Utah' },
-          { value: 'VT', label: 'Vermont' },
-          { value: 'VA', label: 'Virginia' },
-          { value: 'WA', label: 'Washington' },
-          { value: 'WV', label: 'West Virginia' },
-          { value: 'WI', label: 'Wisconsin' },
-          { value: 'WY', label: 'Wyoming' }
-        ]
-        this.dropdownItems3 = [
-          {
-            label: 'Filter',
-            value: null,
-            default: true
-          },
-          {
-            label: 'Filter by tag',
-            icon: 'tags',
-            header: true
-          },
-          {
-            label: 'Important',
-            value: 1
-          },
-          {
-            label: 'Announcement',
-            value: 2
-          },
-          {
-            label: 'Discussion',
-            value: 3
-          }
-        ]
+    this.example = []
+    this.toggleExample = index => {
+      this.example[index] = !this.example[index]
+    }
+    this.dropdownItems = [
+      {
+        label: 'Gender',
+        value: null,
+        default: true
+      },
+      {
+        label: 'Male',
+        value: 1
+      },
+      {
+        label: 'Female',
+        value: 2
+      }
+    ]
+    this.dropdownItems2 = [
+      {
+        label: 'State',
+        value: null,
+        default: true
+      },
+      { value: 'AL', label: 'Alabama' },
+      { value: 'AK', label: 'Alaska' },
+      { value: 'AZ', label: 'Arizona' },
+      { value: 'AR', label: 'Arkansas' },
+      { value: 'CA', label: 'California' },
+      { value: 'CO', label: 'Colorado' },
+      { value: 'CT', label: 'Connecticut' },
+      { value: 'DE', label: 'Delaware' },
+      { value: 'DC', label: 'District Of Columbia' },
+      { value: 'FL', label: 'Florida' },
+      { value: 'GA', label: 'Georgia' },
+      { value: 'HI', label: 'Hawaii' },
+      { value: 'ID', label: 'Idaho' },
+      { value: 'IL', label: 'Illinois' },
+      { value: 'IN', label: 'Indiana' },
+      { value: 'IA', label: 'Iowa' },
+      { value: 'KS', label: 'Kansas' },
+      { value: 'KY', label: 'Kentucky' },
+      { value: 'LA', label: 'Louisiana' },
+      { value: 'ME', label: 'Maine' },
+      { value: 'MD', label: 'Maryland' },
+      { value: 'MA', label: 'Massachusetts' },
+      { value: 'MI', label: 'Michigan' },
+      { value: 'MN', label: 'Minnesota' },
+      { value: 'MS', label: 'Mississippi' },
+      { value: 'MO', label: 'Missouri' },
+      { value: 'MT', label: 'Montana' },
+      { value: 'NE', label: 'Nebraska' },
+      { value: 'NV', label: 'Nevada' },
+      { value: 'NH', label: 'New Hampshire' },
+      { value: 'NJ', label: 'New Jersey' },
+      { value: 'NM', label: 'New Mexico' },
+      { value: 'NY', label: 'New York' },
+      { value: 'NC', label: 'North Carolina' },
+      { value: 'ND', label: 'North Dakota' },
+      { value: 'OH', label: 'Ohio' },
+      { value: 'OK', label: 'Oklahoma' },
+      { value: 'OR', label: 'Oregon' },
+      { value: 'PA', label: 'Pennsylvania' },
+      { value: 'RI', label: 'Rhode Island' },
+      { value: 'SC', label: 'South Carolina' },
+      { value: 'SD', label: 'South Dakota' },
+      { value: 'TN', label: 'Tennessee' },
+      { value: 'TX', label: 'Texas' },
+      { value: 'UT', label: 'Utah' },
+      { value: 'VT', label: 'Vermont' },
+      { value: 'VA', label: 'Virginia' },
+      { value: 'WA', label: 'Washington' },
+      { value: 'WV', label: 'West Virginia' },
+      { value: 'WI', label: 'Wisconsin' },
+      { value: 'WY', label: 'Wyoming' }
+    ]
+    this.dropdownItems3 = [
+      {
+        label: 'Filter',
+        value: null,
+        default: true
+      },
+      {
+        label: 'Filter by tag',
+        icon: 'tags',
+        header: true
+      },
+      {
+        label: 'Important',
+        value: 1
+      },
+      {
+        label: 'Announcement',
+        value: 2
+      },
+      {
+        label: 'Discussion',
+        value: 3
+      }
+    ]
 
-        this.dropdownItems4 = [
-          {
-            label: 'Filter',
-            value: null,
-            default: true
-          },
-          {
-            label: 'Filter by tag',
-            icon: 'tags',
-            header: true
-          },
-          {
-            divider: true
-          },
-          {
-            label: 'Important',
-            value: 1
-          },
-          {
-            label: 'Announcement',
-            value: 2
-          },
-          {
-            label: 'Discussion',
-            value: 3
-          }
-        ]
+    this.dropdownItems4 = [
+      {
+        label: 'Filter',
+        value: null,
+        default: true
+      },
+      {
+        label: 'Filter by tag',
+        icon: 'tags',
+        header: true
+      },
+      {
+        divider: true
+      },
+      {
+        label: 'Important',
+        value: 1
+      },
+      {
+        label: 'Announcement',
+        value: 2
+      },
+      {
+        label: 'Discussion',
+        value: 3
+      }
+    ]
 
-        this.dropdownItems5 = [
-          {
-            label: 'Filter',
-            value: null,
-            default: true
-          },
-          {
-            label: 'Filter by tag',
-            icon: 'tags',
-            header: true
-          },
-          {
-            divider: true
-          },
-          {
-            label: 'Important',
-            icon: 'attention',
-            value: 1
-          },
-          {
-            label: 'Announcement',
-            icon: 'comment',
-            value: 2
-          },
-          {
-            label: 'Discussion',
-            icon: 'conversation',
-            value: 3
-          }
-        ]
+    this.dropdownItems5 = [
+      {
+        label: 'Filter',
+        value: null,
+        default: true
+      },
+      {
+        label: 'Filter by tag',
+        icon: 'tags',
+        header: true
+      },
+      {
+        divider: true
+      },
+      {
+        label: 'Important',
+        icon: 'attention',
+        value: 1
+      },
+      {
+        label: 'Announcement',
+        icon: 'comment',
+        value: 2
+      },
+      {
+        label: 'Discussion',
+        icon: 'conversation',
+        value: 3
+      }
+    ]
 
-        this.dropdownItems6 = [
-          {
-            label: 'Filter Tags',
-            value: null,
-            default: true
-          },
-          {
-            label: 'Filter by tag',
-            header: true
-          },
-          {
-            divider: true
-          },
-          {
-            label: 'Important',
-            description: '2 new',
-            value: 1
-          },
-          {
-            label: 'Hopper',
-            description: '10 new',
-            value: 2
-          },
-          {
-            label: 'Discussion',
-            description: '5 new',
-            value: 3
-          }
-        ]
+    this.dropdownItems6 = [
+      {
+        label: 'Filter Tags',
+        value: null,
+        default: true
+      },
+      {
+        label: 'Filter by tag',
+        header: true
+      },
+      {
+        divider: true
+      },
+      {
+        label: 'Important',
+        description: '2 new',
+        value: 1
+      },
+      {
+        label: 'Hopper',
+        description: '10 new',
+        value: 2
+      },
+      {
+        label: 'Discussion',
+        description: '5 new',
+        value: 3
+      }
+    ]
 
-        this.dropdownItems7 = [
-          {
-            label: 'Add User',
-            value: null,
-            default: true
-          },
-          {
-            label: 'People You Might Know',
-            header: true
-          },
-          {
-            label: 'Jenny Hess',
-            image: './images/avatar/small/jenny.jpg',
-            value: 'jenny'
-          },
-          {
-            label: 'Elliot Fu',
-            image: './images/avatar/small/elliot.jpg',
-            value: 'elliot'
-          },
-          {
-            label: 'Stevie Feliciano',
-            image: './images/avatar/small/stevie.jpg',
-            value: 'stevie'
-          },
-          {
-            label: 'Your Friends\' Friends',
-            header: true
-          },
-          {
-            label: 'Christian',
-            image: './images/avatar/small/christian.jpg',
-            value: 'christian'
-          },
-          {
-            label: 'Matt',
-            image: './images/avatar/small/matt.jpg',
-            value: 'matt'
-          },
-          {
-            label: 'Justen Kitsune',
-            image: './images/avatar/small/justen.jpg',
-            value: 'justen'
-          }
-        ]
+    this.dropdownItems7 = [
+      {
+        label: 'Add User',
+        value: null,
+        default: true
+      },
+      {
+        label: 'People You Might Know',
+        header: true
+      },
+      {
+        label: 'Jenny Hess',
+        image: './images/avatar/small/jenny.jpg',
+        value: 'jenny'
+      },
+      {
+        label: 'Elliot Fu',
+        image: './images/avatar/small/elliot.jpg',
+        value: 'elliot'
+      },
+      {
+        label: 'Stevie Feliciano',
+        image: './images/avatar/small/stevie.jpg',
+        value: 'stevie'
+      },
+      {
+        label: 'Your Friends\' Friends',
+        header: true
+      },
+      {
+        label: 'Christian',
+        image: './images/avatar/small/christian.jpg',
+        value: 'christian'
+      },
+      {
+        label: 'Matt',
+        image: './images/avatar/small/matt.jpg',
+        value: 'matt'
+      },
+      {
+        label: 'Justen Kitsune',
+        image: './images/avatar/small/justen.jpg',
+        value: 'justen'
+      }
+    ]
 
-        this.dropdownItems8 = [
-          {
-            label: 'Skills',
-            value: null,
-            default: true
-          },
-          { value: 'angular', label: 'Angular' },
-          { value: 'css', label: 'CSS' },
-          { value: 'design', label: 'Graphic Design' },
-          { value: 'ember', label: 'Ember' },
-          { value: 'html', label: 'HTML' },
-          { value: 'ia', label: 'Information Architecture' },
-          { value: 'javascript', label: 'Javascript' },
-          { value: 'mech', label: 'Mechanical Engineering' },
-          { value: 'meteor', label: 'Meteor' },
-          { value: 'node', label: 'NodeJS' },
-          { value: 'plumbing', label: 'Plumbing' },
-          { value: 'python', label: 'Python' },
-          { value: 'rails', label: 'Rails' },
-          { value: 'react', label: 'React' },
-          { value: 'repair', label: 'Kitchen Repair' },
-          { value: 'ruby', label: 'Ruby' },
-          { value: 'ui', label: 'UI Design' },
-          { value: 'ux', label: 'User Experience' }
-        ]
+    this.dropdownItems8 = [
+      {
+        label: 'Skills',
+        value: null,
+        default: true
+      },
+      { value: 'angular', label: 'Angular' },
+      { value: 'css', label: 'CSS' },
+      { value: 'design', label: 'Graphic Design' },
+      { value: 'ember', label: 'Ember' },
+      { value: 'html', label: 'HTML' },
+      { value: 'ia', label: 'Information Architecture' },
+      { value: 'javascript', label: 'Javascript' },
+      { value: 'mech', label: 'Mechanical Engineering' },
+      { value: 'meteor', label: 'Meteor' },
+      { value: 'node', label: 'NodeJS' },
+      { value: 'plumbing', label: 'Plumbing' },
+      { value: 'python', label: 'Python' },
+      { value: 'rails', label: 'Rails' },
+      { value: 'react', label: 'React' },
+      { value: 'repair', label: 'Kitchen Repair' },
+      { value: 'ruby', label: 'Ruby' },
+      { value: 'ui', label: 'UI Design' },
+      { value: 'ux', label: 'User Experience' }
+    ]
 
-        this.dropdownItems9 = [
-          {
-            label: 'Select Friend',
-            value: null,
-            default: true
-          },
-          {
-            label: 'Jenny Hess',
-            image: './images/avatar/small/jenny.jpg',
-            value: 'jenny'
-          },
-          {
-            label: 'Elliot Fu',
-            image: './images/avatar/small/elliot.jpg',
-            value: 'elliot'
-          },
-          {
-            label: 'Stevie Feliciano',
-            image: './images/avatar/small/stevie.jpg',
-            value: 'stevie'
-          },
-          {
-            label: 'Christian',
-            image: './images/avatar/small/christian.jpg',
-            value: 'christian'
-          },
-          {
-            label: 'Matt',
-            image: './images/avatar/small/matt.jpg',
-            value: 'matt'
-          },
-          {
-            label: 'Justen Kitsune',
-            image: './images/avatar/small/justen.jpg',
-            value: 'justen'
-          }
-        ]
+    this.dropdownItems9 = [
+      {
+        label: 'Select Friend',
+        value: null,
+        default: true
+      },
+      {
+        label: 'Jenny Hess',
+        image: './images/avatar/small/jenny.jpg',
+        value: 'jenny'
+      },
+      {
+        label: 'Elliot Fu',
+        image: './images/avatar/small/elliot.jpg',
+        value: 'elliot'
+      },
+      {
+        label: 'Stevie Feliciano',
+        image: './images/avatar/small/stevie.jpg',
+        value: 'stevie'
+      },
+      {
+        label: 'Christian',
+        image: './images/avatar/small/christian.jpg',
+        value: 'christian'
+      },
+      {
+        label: 'Matt',
+        image: './images/avatar/small/matt.jpg',
+        value: 'matt'
+      },
+      {
+        label: 'Justen Kitsune',
+        image: './images/avatar/small/justen.jpg',
+        value: 'justen'
+      }
+    ]
 
-        this.dropdownItems10 = [
-          {
-            label: 'Gender',
-            value: null,
-            default: true
-          },
-          {
-            label: 'Male',
-            value: 1
-          },
-          {
-            label: 'Female',
-            value: 2
-          }
-        ]
+    this.dropdownItems10 = [
+      {
+        label: 'Gender',
+        value: null,
+        default: true
+      },
+      {
+        label: 'Male',
+        value: 1
+      },
+      {
+        label: 'Female',
+        value: 2
+      }
+    ]
 
-        this.dropdownItems11 = [
-          {
-            label: 'Skills',
-            value: null,
-            default: true
-          },
-          { value: 'angular', label: 'Angular' },
-          { value: 'css', label: 'CSS' },
-          { value: 'design', label: 'Graphic Design' },
-          { value: 'ember', label: 'Ember' },
-          { value: 'html', label: 'HTML' },
-          { value: 'ia', label: 'Information Architecture' },
-          { value: 'javascript', label: 'Javascript' },
-          { value: 'mech', label: 'Mechanical Engineering' },
-          { value: 'meteor', label: 'Meteor' },
-          { value: 'node', label: 'NodeJS' },
-          { value: 'plumbing', label: 'Plumbing' },
-          { value: 'python', label: 'Python' },
-          { value: 'rails', label: 'Rails' },
-          { value: 'react', label: 'React' },
-          { value: 'repair', label: 'Kitchen Repair' },
-          { value: 'ruby', label: 'Ruby' },
-          { value: 'ui', label: 'UI Design' },
-          { value: 'ux', label: 'User Experience' }
-        ]
+    this.dropdownItems11 = [
+      {
+        label: 'Skills',
+        value: null,
+        default: true
+      },
+      { value: 'angular', label: 'Angular' },
+      { value: 'css', label: 'CSS' },
+      { value: 'design', label: 'Graphic Design' },
+      { value: 'ember', label: 'Ember' },
+      { value: 'html', label: 'HTML' },
+      { value: 'ia', label: 'Information Architecture' },
+      { value: 'javascript', label: 'Javascript' },
+      { value: 'mech', label: 'Mechanical Engineering' },
+      { value: 'meteor', label: 'Meteor' },
+      { value: 'node', label: 'NodeJS' },
+      { value: 'plumbing', label: 'Plumbing' },
+      { value: 'python', label: 'Python' },
+      { value: 'rails', label: 'Rails' },
+      { value: 'react', label: 'React' },
+      { value: 'repair', label: 'Kitchen Repair' },
+      { value: 'ruby', label: 'Ruby' },
+      { value: 'ui', label: 'UI Design' },
+      { value: 'ux', label: 'User Experience' }
+    ]
+    this.dropdownItems12 = [
+      {
+        label: 'Gender',
+        value: null,
+        default: true
+      },
+      {
+        label: 'Male',
+        value: 1
+      },
+      {
+        label: 'Female',
+        value: 2
+      }
+    ]
 
-        this.setRefValue = value => {
-          this.refs.dropdown1.value = value
-        }
-        this.setMultiRefValue = values => {
-          this.refs.dropdown2.value = values
-          this.update()
-        }
+    this.setRefValue = value => {
+      this.refs.dropdown1.value = value
+    }
+    this.setMultiRefValue = values => {
+      this.refs.dropdown2.value = values
+      this.update()
+    }
 
-        this.on('mount', () => {
-          PR.prettyPrint(false)
-        })
+    this.on('mount', () => {
+      PR.prettyPrint(false)
+    })
   </script>
 </demo-dropdown>
