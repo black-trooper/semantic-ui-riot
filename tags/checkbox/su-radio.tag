@@ -23,11 +23,9 @@
       if (lastChecked != this.checked) {
         opts.checked = this.checked
         lastChecked = this.checked
-        this.parentUpdate()
       } else if (lastOptsCheck != opts.checked) {
         this.checked = opts.checked
         lastOptsCheck = opts.checked
-        this.parentUpdate()
       }
     })
 
@@ -41,7 +39,6 @@
       }
       this.checked = event.target.checked
       this.trigger('click', event.target.value)
-      this.parentUpdate()
     }
 
     // ===================================================================================
@@ -61,12 +58,6 @@
 
     this.isRadio = () => {
       return !this.root.classList.contains('slider')
-    }
-
-    this.parentUpdate = () => {
-      if (this.parent) {
-        this.parent.update()
-      }
     }
   </script>
 </su-radio>
