@@ -2,7 +2,7 @@ const fireEvent = require("../../test/helpers").fireEvent
 
 describe('su-radio-group', function () {
   let tag
-  let spyOnClick = sinon.spy()
+  let spyOnChange = sinon.spy()
 
   beforeEach(function () {
     const group = $('<su-radio-group></su-radio-group')
@@ -10,11 +10,11 @@ describe('su-radio-group', function () {
       .append('<su-radio value="2">Radio choice2</su-radio>')
     $('body').append(group)
     tag = riot.mount('su-radio-group')[0]
-    tag.on('click', spyOnClick)
+    tag.on('change', spyOnChange)
   })
 
   afterEach(function () {
-    spyOnClick.reset()
+    spyOnChange.reset()
     tag.unmount()
   })
 
@@ -30,11 +30,13 @@ describe('su-radio-group', function () {
     tag.update()
     tag.tags['su-radio'][0].checked.should.equal(true)
     tag.tags['su-radio'][1].checked.should.equal(false)
+    spyOnChange.should.have.been.calledOnce
 
     tag.value = '2'
     tag.update()
     tag.tags['su-radio'][0].checked.should.equal(false)
     tag.tags['su-radio'][1].checked.should.equal(true)
+    spyOnChange.should.have.been.calledTwice
   })
 
   it('update option', function () {
@@ -45,10 +47,27 @@ describe('su-radio-group', function () {
     tag.update()
     tag.tags['su-radio'][0].checked.should.equal(true)
     tag.tags['su-radio'][1].checked.should.equal(false)
+    spyOnChange.should.have.been.calledOnce
 
     tag.opts.riotValue = '2'
     tag.update()
     tag.tags['su-radio'][0].checked.should.equal(false)
     tag.tags['su-radio'][1].checked.should.equal(true)
+    spyOnChange.should.have.been.calledTwice
+  })
+
+  it('click checkbox', function () {
+    tag.tags['su-radio'][0].checked.should.equal(false)
+    tag.tags['su-radio'][1].checked.should.equal(false)
+
+    $('su-radio:eq(0) input').click()
+    tag.tags['su-radio'][0].checked.should.equal(true)
+    tag.tags['su-radio'][1].checked.should.equal(false)
+    spyOnChange.should.have.been.calledOnce
+
+    $('su-radio:eq(1) input').click()
+    tag.tags['su-radio'][0].checked.should.equal(false)
+    tag.tags['su-radio'][1].checked.should.equal(true)
+    spyOnChange.should.have.been.calledTwice
   })
 })
