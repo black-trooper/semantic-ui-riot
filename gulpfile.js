@@ -89,7 +89,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('eslint', function () {
-  return gulp.src(['**/*.tag', 'spec/**/*.js', '!node_modules/**'])
+  return gulp.src(['**/*.tag', 'test/spec/**/*.js', '!node_modules/**'])
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failAfterError());
