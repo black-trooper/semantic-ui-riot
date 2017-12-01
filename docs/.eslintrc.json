@@ -38,6 +38,8 @@
     ]
   },
   "globals": {
-    "opts": true
+    "riot": true,
+    "route": true,
+    "PR": true
   }
 }

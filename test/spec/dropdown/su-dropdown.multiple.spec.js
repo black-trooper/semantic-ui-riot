@@ -1,8 +1,7 @@
-const fireEvent = require("../../test/helpers").fireEvent
-const fireKeyEvent = require("../../test/helpers").fireKeyEvent
+const fireKeyEvent = require('../../helpers').fireKeyEvent
 
 describe('su-dropdown-multiple', function () {
-  let tag, select
+  let tag
   let spyOnOpen = sinon.spy()
   let spyOnClose = sinon.spy()
   let spyOnSelect = sinon.spy()

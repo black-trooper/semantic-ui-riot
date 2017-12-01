@@ -1,8 +1,8 @@
-const fireEvent = require("../../test/helpers").fireEvent
-const fireKeyEvent = require("../../test/helpers").fireKeyEvent
+const fireEvent = require('../../helpers').fireEvent
+const fireKeyEvent = require('../../helpers').fireKeyEvent
 
 describe('su-dropdown-search', function () {
-  let tag, select
+  let tag
   let spyOnOpen = sinon.spy()
   let spyOnClose = sinon.spy()
   let spyOnSearch = sinon.spy()

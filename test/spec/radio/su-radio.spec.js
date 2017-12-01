@@ -1,5 +1,3 @@
-const fireEvent = require("../../test/helpers").fireEvent
-
 describe('su-radio', function () {
   let tag1, tag2
   let spyOnClick = sinon.spy()

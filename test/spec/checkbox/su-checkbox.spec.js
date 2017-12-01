@@ -1,5 +1,3 @@
-const fireEvent = require("../../test/helpers").fireEvent
-
 describe('su-checkbox', function () {
   let tag
   let spyOnClick = sinon.spy()

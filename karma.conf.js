@@ -5,10 +5,11 @@ module.exports = function (config) {
     files: [
       'node_modules/jquery/dist/jquery.min.js',
       'test/css/index.css',
-      'tags/**/*'
+      'tags/**/*',
+      'test/spec/**/*'
     ],
     preprocessors: {
-      'tags/**/*.js': ['browserify'],
+      'test/spec/**/*.js': ['browserify'],
       'tags/**/*.tag': ['riot', 'coverage']
     },
     browserify: {
