@@ -44,9 +44,7 @@
       const radios = this.tags['su-radio']
       if (Array.isArray(radios)) {
         for (const radio of radios) {
-          if (typeof radio.opts.value !== 'undefined') {
-            updateState(radio)
-          }
+          updateState(radio)
         }
       } else {
         updateState(radios)
