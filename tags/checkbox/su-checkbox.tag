@@ -10,7 +10,7 @@
     let lastOptsChecked
 
     this.on('mount', () => {
-      this.supportTraditionalOptions()
+      supportTraditionalOptions()
       this.checked = normalizeOptChecked()
       lastChecked = this.checked
       lastOptsChecked = this.checked
@@ -18,17 +18,17 @@
     })
 
     this.on('update', () => {
-      this.supportTraditionalOptions()
+      supportTraditionalOptions()
       if (lastChecked != this.checked) {
         opts.checked = this.checked
         lastChecked = this.checked
         lastOptsChecked = this.checked
-        this.parentUpdate()
+        parentUpdate()
       } else if (lastOptsChecked != normalizeOptChecked()) {
         this.checked = normalizeOptChecked()
         lastChecked = this.checked
         lastOptsChecked = this.checked
-        this.parentUpdate()
+        parentUpdate()
       }
     })
 
@@ -36,12 +36,12 @@
     //                                                                               Event
     //                                                                               =====
     this.click = () => {
-      if (this.isReadOnly() || this.isDisabled()) {
+      if (isReadOnly() || this.isDisabled()) {
         event.preventDefault()
         return
       }
       this.checked = !this.checked
-      this.parentUpdate()
+      parentUpdate()
       this.trigger('click', this.checked)
     }
 
@@ -52,21 +52,24 @@
       return `su-checkbox-${this._riot_id}`
     }
 
-    this.isReadOnly = () => {
-      return this.root.classList.contains('read-only')
-    }
-
     this.isDisabled = () => {
       return this.root.classList.contains('disabled')
     }
 
-    this.parentUpdate = () => {
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
+    let isReadOnly = () => {
+      return this.root.classList.contains('read-only')
+    }
+
+    let parentUpdate = () => {
       if (this.parent) {
         this.parent.update()
       }
     }
 
-    this.supportTraditionalOptions = () => {
+    let supportTraditionalOptions = () => {
       if (typeof opts.check !== 'undefined' && !this.shownMessage) {
         console.warn('\'check\' attribute is deprecated. Please use \'checked\'.')
         opts.checked = opts.check

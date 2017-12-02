@@ -58,13 +58,13 @@
       if (opts.multiple) {
         opts.items.forEach(item => item.selected = false)
         opts.items.filter(item => this.value && this.value.indexOf(item.value) >= 0).forEach(item => item.selected = true)
-        this.selectMultiTarget(true)
+        selectMultiTarget(true)
       } else if (opts.items) {
         const selected = opts.items.filter(item => item.value === this.value)
         if (selected && selected.length > 0) {
           const target = selected[0]
           if (this.label !== target.label) {
-            this.selectTarget(target, true)
+            selectTarget(target, true)
           }
         } else if (opts.items && opts.items.length > 0) {
           if (this.value != opts.items[0].value) {
@@ -83,9 +83,9 @@
     //                                                                               =====
     this.toggle = () => {
       if (!this.visibleFlg) {
-        this.open()
+        open()
       } else {
-        this.close()
+        close()
       }
     }
 
@@ -99,7 +99,7 @@
 
     this.blur = () => {
       if (!this.itemActivated) {
-        this.close()
+        close()
       }
     }
 
@@ -109,20 +109,20 @@
         if (!event.item.item.default) {
           event.item.item.selected = true
         }
-        this.selectMultiTarget()
+        selectMultiTarget()
         return
       }
-      this.selectTarget(event.item.item)
-      this.close()
+      selectTarget(event.item.item)
+      close()
     }
 
     this.keydown = event => {
       const keyCode = event.keyCode
       if (keyCode == this.keys.escape) {
-        this.close()
+        close()
       }
       if (keyCode == this.keys.downArrow) {
-        this.open()
+        open()
       }
       if (keyCode != this.keys.upArrow && keyCode != this.keys.downArrow) {
         return true
@@ -163,7 +163,7 @@
         }
       }
       this.update()
-      this.scrollPosition()
+      scrollPosition()
     }
 
     this.keyup = event => {
@@ -186,11 +186,11 @@
         } else if (index > 0) {
           searchedItems[index - 1].active = true
         }
-        this.selectMultiTarget()
+        selectMultiTarget()
       } else {
         activeItem.active = false
-        this.selectTarget(activeItem)
-        this.close()
+        selectTarget(activeItem)
+        close()
       }
     }
 
@@ -204,7 +204,7 @@
     this.input = event => {
       const value = event.target.value.toLowerCase()
       this.filtered = value.length > 0
-      this.search(value)
+      search(value)
     }
 
     // -----------------------------------------------------
@@ -215,18 +215,18 @@
       event.item.item.selected = false
       this.value = opts.items.filter(item => item.selected).map(item => item.value)
       this.selectedFlg = opts.items.some(item => item.selected)
-      this.parentUpdate()
+      parentUpdate()
     }
 
     // ===================================================================================
     //                                                                               Logic
     //                                                                               =====
-    this.open = () => {
+    let open = () => {
       if (this.openning || this.closing || this.visibleFlg) {
         return
       }
       this.openning = true
-      this.search('')
+      search('')
       this.transitionStatus = 'visible animating in slide down'
       opts.items.forEach(item => item.active = false)
       setTimeout(() => {
@@ -240,11 +240,11 @@
         this.refs.condition.focus()
       }
       this.update()
-      this.scrollPosition()
+      scrollPosition()
       this.trigger('open')
     }
 
-    this.close = () => {
+    let close = () => {
       if (this.closing || !this.visibleFlg) {
         return
       }
@@ -260,7 +260,7 @@
       if (opts.search) {
         this.refs.condition.blur()
         if (this.filtered && this.filteredItems.length > 0) {
-          this.selectTarget(this.filteredItems[0])
+          selectTarget(this.filteredItems[0])
         } else {
           this.refs.condition.value = ''
           this.filtered = false
@@ -270,7 +270,7 @@
       this.trigger('close')
     }
 
-    this.selectTarget = (target, updating) => {
+    let selectTarget = (target, updating) => {
       this.value = target.value
       this.label = target.label
       this.default = target.default
@@ -281,21 +281,21 @@
       if (!updating) {
         this.update()
       }
-      this.parentUpdate()
+      parentUpdate()
       this.trigger('select', target)
     }
 
-    this.selectMultiTarget = (updating) => {
+    let selectMultiTarget = (updating) => {
       this.value = opts.items.filter(item => item.selected).map(item => item.value)
       this.selectedFlg = opts.items.some(item => item.selected)
       if (!updating) {
         this.update()
-        this.parentUpdate()
+        parentUpdate()
       }
       this.trigger('select', opts.items.filter(item => item.selected))
     }
 
-    this.search = target => {
+    let search = target => {
       opts.items.forEach(item => {
         item.searched = item.label && item.label.toLowerCase().indexOf(target) >= 0
       })
@@ -306,7 +306,7 @@
       this.trigger('search')
     }
 
-    this.scrollPosition = () => {
+    let scrollPosition = () => {
       const menu = this.root.querySelector('.menu')
       const item = this.root.querySelector('.item.active')
 
@@ -323,7 +323,7 @@
       }
     }
 
-    this.parentUpdate = () => {
+    let parentUpdate = () => {
       if (this.parent) {
         this.parent.update()
       }

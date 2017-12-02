@@ -5,10 +5,10 @@
   <label if="{ opts.label }" for="{ getId() }">{ opts.label }</label>
 
   <script>
+    this.name = ''
     this.checked = false
     let lastChecked
     let lastOptsCheck
-    this.name = ''
 
     this.on('mount', () => {
       this.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
@@ -33,7 +33,7 @@
     //                                                                               Event
     //                                                                               =====
     this.click = event => {
-      if (this.isReadOnly() || this.isDisabled()) {
+      if (isReadOnly() || this.isDisabled()) {
         event.preventDefault()
         return
       }
@@ -42,14 +42,17 @@
     }
 
     // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
+    let isReadOnly = () => {
+      return this.root.classList.contains('read-only')
+    }
+
+    // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
     this.getId = () => {
       return `su-radio-${this._riot_id}`
-    }
-
-    this.isReadOnly = () => {
-      return this.root.classList.contains('read-only')
     }
 
     this.isDisabled = () => {
