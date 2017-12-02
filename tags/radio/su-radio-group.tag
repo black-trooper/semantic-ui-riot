@@ -69,7 +69,7 @@
     }
 
     let initializeChild = radio => {
-      radio.opts.name = getId()
+      radio.opts.name = getRadioName()
       radio.on('click', value => {
         this.value = value
         this.update()
@@ -79,8 +79,8 @@
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
-    let getId = () => {
-      return `su-radio-group-${this._riot_id}`
+    let getRadioName = () => {
+      return `su-radio-name-${this._riot_id}`
     }
   </script>
 </su-radio-group>
