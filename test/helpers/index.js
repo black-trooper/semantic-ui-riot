@@ -10,3 +10,10 @@ export function fireKeyEvent(el, name, keyCode) {
   eventObj.keyCode = keyCode
   el.dispatchEvent(eventObj)
 }
+
+export const keys = {
+  enter: 13,
+  escape: 27,
+  upArrow: 38,
+  downArrow: 40
+}

@@ -1,4 +1,5 @@
 const fireKeyEvent = require('../../helpers').fireKeyEvent
+const keys = require('../../helpers').keys
 
 describe('su-dropdown-multiple', function () {
   let tag
@@ -31,13 +32,6 @@ describe('su-dropdown-multiple', function () {
     { value: 'ui', label: 'UI Design' },
     { value: 'ux', label: 'User Experience' }
   ]
-
-  let keys = {
-    enter: 13,
-    escape: 27,
-    upArrow: 38,
-    downArrow: 40
-  }
 
   beforeEach(function () {
     $('body').append('<su-dropdown multiple="true"></su-dropdown>')

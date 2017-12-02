@@ -1,5 +1,6 @@
 const fireEvent = require('../../helpers').fireEvent
 const fireKeyEvent = require('../../helpers').fireKeyEvent
+const keys = require('../../helpers').keys
 
 describe('su-dropdown', function () {
   let tag
@@ -22,13 +23,6 @@ describe('su-dropdown', function () {
       value: 2
     },
   ]
-
-  let keys = {
-    enter: 13,
-    escape: 27,
-    upArrow: 38,
-    downArrow: 40
-  }
 
   beforeEach(function () {
     $('body').append('<su-dropdown></su-dropdown>')
