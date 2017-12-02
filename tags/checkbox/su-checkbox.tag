@@ -11,9 +11,9 @@
 
     this.on('mount', () => {
       this.supportTraditionalOptions()
-      this.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
+      this.checked = normalizeOptChecked()
       lastChecked = this.checked
-      lastOptsChecked = opts.checked
+      lastOptsChecked = this.checked
       this.update()
     })
 
@@ -22,10 +22,12 @@
       if (lastChecked != this.checked) {
         opts.checked = this.checked
         lastChecked = this.checked
+        lastOptsChecked = this.checked
         this.parentUpdate()
-      } else if (lastOptsChecked != opts.checked) {
-        this.checked = opts.checked
-        lastOptsChecked = opts.checked
+      } else if (lastOptsChecked != normalizeOptChecked()) {
+        this.checked = normalizeOptChecked()
+        lastChecked = this.checked
+        lastOptsChecked = this.checked
         this.parentUpdate()
       }
     })
@@ -71,6 +73,10 @@
         opts.check = undefined
         this.shownMessage = true
       }
+    }
+
+    let normalizeOptChecked = () => {
+      return opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
     }
   </script>
 </su-checkbox>

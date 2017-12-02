@@ -56,4 +56,30 @@ describe('su-checkbox', function () {
 
     spyOnClick.should.have.been.callCount(0)
   })
+
+  it('update option', function () {
+    tag.checked.should.equal(false)
+
+    tag.opts.checked = 'true'
+    tag.update()
+    tag.checked.should.equal(true)
+
+    tag.opts.checked = 'false'
+    tag.update()
+    tag.checked.should.equal(false)
+
+    tag.opts.checked = true
+    tag.update()
+    tag.checked.should.equal(true)
+
+    tag.opts.checked = false
+    tag.update()
+    tag.checked.should.equal(false)
+
+    tag.opts.checked = undefined
+    tag.update()
+    tag.checked.should.equal(false)
+
+    spyOnClick.should.have.been.callCount(0)
+  })
 })
