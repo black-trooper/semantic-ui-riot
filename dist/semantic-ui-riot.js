@@ -8,23 +8,25 @@ var lastChecked = void 0;
 var lastOptsChecked = void 0;
 
 this.on('mount', function () {
-  _this.supportTraditionalOptions();
-  _this.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true';
+  supportTraditionalOptions();
+  _this.checked = normalizeOptChecked();
   lastChecked = _this.checked;
-  lastOptsChecked = opts.checked;
+  lastOptsChecked = _this.checked;
   _this.update();
 });
 
 this.on('update', function () {
-  _this.supportTraditionalOptions();
+  supportTraditionalOptions();
   if (lastChecked != _this.checked) {
     opts.checked = _this.checked;
     lastChecked = _this.checked;
-    _this.parentUpdate();
-  } else if (lastOptsChecked != opts.checked) {
-    _this.checked = opts.checked;
-    lastOptsChecked = opts.checked;
-    _this.parentUpdate();
+    lastOptsChecked = _this.checked;
+    parentUpdate();
+  } else if (lastOptsChecked != normalizeOptChecked()) {
+    _this.checked = normalizeOptChecked();
+    lastChecked = _this.checked;
+    lastOptsChecked = _this.checked;
+    parentUpdate();
   }
 });
 
@@ -32,12 +34,12 @@ this.on('update', function () {
 //                                                                               Event
 //                                                                               =====
 this.click = function () {
-  if (_this.isReadOnly() || _this.isDisabled()) {
+  if (isReadOnly() || _this.isDisabled()) {
     event.preventDefault();
     return;
   }
   _this.checked = !_this.checked;
-  _this.parentUpdate();
+  parentUpdate();
   _this.trigger('click', _this.checked);
 };
 
@@ -48,21 +50,24 @@ this.getId = function () {
   return 'su-checkbox-' + _this._riot_id;
 };
 
-this.isReadOnly = function () {
-  return _this.root.classList.contains('read-only');
-};
-
 this.isDisabled = function () {
   return _this.root.classList.contains('disabled');
 };
 
-this.parentUpdate = function () {
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+var isReadOnly = function isReadOnly() {
+  return _this.root.classList.contains('read-only');
+};
+
+var parentUpdate = function parentUpdate() {
   if (_this.parent) {
     _this.parent.update();
   }
 };
 
-this.supportTraditionalOptions = function () {
+var supportTraditionalOptions = function supportTraditionalOptions() {
   if (typeof opts.check !== 'undefined' && !_this.shownMessage) {
     console.warn('\'check\' attribute is deprecated. Please use \'checked\'.');
     opts.checked = opts.check;
@@ -70,179 +75,9 @@ this.supportTraditionalOptions = function () {
     _this.shownMessage = true;
   }
 };
-});
-riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', '', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
-'use strict';
 
-var _this = this;
-
-this.checked = false;
-var lastChecked = void 0;
-var lastOptsCheck = void 0;
-this.name = '';
-
-this.on('mount', function () {
-  _this.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true';
-  lastChecked = _this.checked;
-  lastOptsCheck = opts.checked;
-  _this.update();
-});
-
-this.on('update', function () {
-  _this.name = opts.name;
-  _this.value = opts.value;
-  if (lastChecked != _this.checked) {
-    opts.checked = _this.checked;
-    lastChecked = _this.checked;
-  } else if (lastOptsCheck != opts.checked) {
-    _this.checked = opts.checked;
-    lastOptsCheck = opts.checked;
-  }
-});
-
-// ===================================================================================
-//                                                                               Event
-//                                                                               =====
-this.click = function (event) {
-  if (_this.isReadOnly() || _this.isDisabled()) {
-    event.preventDefault();
-    return;
-  }
-  _this.checked = event.target.checked;
-  _this.trigger('click', event.target.value);
-};
-
-// ===================================================================================
-//                                                                              Helper
-//                                                                              ======
-this.getId = function () {
-  return 'su-radio-' + _this._riot_id;
-};
-
-this.isReadOnly = function () {
-  return _this.root.classList.contains('read-only');
-};
-
-this.isDisabled = function () {
-  return _this.root.classList.contains('disabled');
-};
-
-this.isRadio = function () {
-  return !_this.root.classList.contains('slider');
-};
-});
-riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
-'use strict';
-
-var _this = this;
-
-this.label = '';
-this.value = '';
-var lastValue = void 0;
-var lastOptsValue = void 0;
-
-this.on('mount', function () {
-  if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
-    opts.riotValue = opts.value;
-  }
-  _this.value = opts.riotValue;
-  lastValue = _this.value;
-  lastOptsValue = _this.value;
-
-  var radios = _this.tags['su-radio'];
-  if (Array.isArray(radios)) {
-    for (var _iterator = radios, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
-      var _ref;
-
-      if (_isArray) {
-        if (_i >= _iterator.length) break;
-        _ref = _iterator[_i++];
-      } else {
-        _i = _iterator.next();
-        if (_i.done) break;
-        _ref = _i.value;
-      }
-
-      var radio = _ref;
-
-      initializeChild(radio);
-    }
-  } else {
-    initializeChild(radios);
-  }
-
-  _this.update();
-});
-
-this.on('update', function () {
-  var changed = false;
-  if (lastValue != _this.value) {
-    opts.riotValue = _this.value;
-    lastOptsValue = _this.value;
-    lastValue = _this.value;
-    changed = true;
-  } else if (lastOptsValue != opts.riotValue) {
-    _this.value = opts.riotValue;
-    lastOptsValue = opts.riotValue;
-    lastValue = opts.riotValue;
-    changed = true;
-  }
-
-  var radios = _this.tags['su-radio'];
-  if (Array.isArray(radios)) {
-    for (var _iterator2 = radios, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
-      var _ref2;
-
-      if (_isArray2) {
-        if (_i2 >= _iterator2.length) break;
-        _ref2 = _iterator2[_i2++];
-      } else {
-        _i2 = _iterator2.next();
-        if (_i2.done) break;
-        _ref2 = _i2.value;
-      }
-
-      var radio = _ref2;
-
-      if (typeof radio.opts.value !== 'undefined') {
-        updateState(radio);
-      }
-    }
-  } else {
-    updateState(radios);
-  }
-
-  if (changed) {
-    _this.trigger('change', _this.value);
-  }
-});
-
-// ===================================================================================
-//                                                                               Logic
-//                                                                               =====
-var updateState = function updateState(radio) {
-  if (typeof radio.opts.value === 'undefined') {
-    return;
-  }
-  radio.checked = _this.value == radio.opts.value;
-  if (radio.checked) {
-    _this.label = radio.root.getElementsByTagName('label')[0].innerText;
-  }
-};
-
-var initializeChild = function initializeChild(radio) {
-  radio.opts.name = getId();
-  radio.on('click', function (value) {
-    _this.value = value;
-    _this.update();
-  });
-};
-
-// ===================================================================================
-//                                                                              Helper
-//                                                                              ======
-var getId = function getId() {
-  return 'su-radio-group-' + _this._riot_id;
+var normalizeOptChecked = function normalizeOptChecked() {
+  return opts.checked === true || opts.checked === 'checked' || opts.checked === 'true';
 };
 });
 riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="{getTabindex()}" ref="condition" if="{opts.search}" oninput="{input}" onclick="{clickSearch}" onfocus="{open}" onblur="{blur}"> <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!opts.multiple || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="-1"> <virtual each="{item in opts.items}"> <div class="item {default: item.default} {active: item.active} {selected: item.active}" if="{isVisible(item)}" riot-value="{item.value}" default="{item.default}" onclick="{itemClick}" onmousedown="{mousedown}" onmouseup="{mouseup}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="header" if="{item.header && !filtered}"> <i class="{item.icon} icon" if="{item.icon}"></i> {item.label} </div> <div class="divider" if="{item.divider && !filtered}"></div> </virtual> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div>', 'su-dropdown.ui.dropdown .menu>.item.default,[data-is="su-dropdown"].ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', 'class="ui selection {opts.class} {search: opts.search} {multiple: opts.multiple} dropdown {active: isActive()} {visible: isActive()}" onclick="{toggle}" onfocus="{open}" onblur="{blur}" onkeydown="{keydown}" onkeyup="{keyup}" tabindex="{opts.search ? -1 : getTabindex()}"', function(opts) {
@@ -279,7 +114,7 @@ this.on('update', function () {
     }).forEach(function (item) {
       return item.selected = true;
     });
-    _this.selectMultiTarget(true);
+    selectMultiTarget(true);
   } else if (opts.items) {
     var selected = opts.items.filter(function (item) {
       return item.value === _this.value;
@@ -287,7 +122,7 @@ this.on('update', function () {
     if (selected && selected.length > 0) {
       var target = selected[0];
       if (_this.label !== target.label) {
-        _this.selectTarget(target, true);
+        selectTarget(target, true);
       }
     } else if (opts.items && opts.items.length > 0) {
       if (_this.value != opts.items[0].value) {
@@ -306,9 +141,9 @@ this.on('update', function () {
 //                                                                               =====
 this.toggle = function () {
   if (!_this.visibleFlg) {
-    _this.open();
+    open();
   } else {
-    _this.close();
+    close();
   }
 };
 
@@ -322,7 +157,7 @@ this.mouseup = function () {
 
 this.blur = function () {
   if (!_this.itemActivated) {
-    _this.close();
+    close();
   }
 };
 
@@ -332,20 +167,20 @@ this.itemClick = function (event) {
     if (!event.item.item.default) {
       event.item.item.selected = true;
     }
-    _this.selectMultiTarget();
+    selectMultiTarget();
     return;
   }
-  _this.selectTarget(event.item.item);
-  _this.close();
+  selectTarget(event.item.item);
+  close();
 };
 
 this.keydown = function (event) {
   var keyCode = event.keyCode;
   if (keyCode == _this.keys.escape) {
-    _this.close();
+    close();
   }
   if (keyCode == _this.keys.downArrow) {
-    _this.open();
+    open();
   }
   if (keyCode != _this.keys.upArrow && keyCode != _this.keys.downArrow) {
     return true;
@@ -395,7 +230,7 @@ this.keydown = function (event) {
     }
   }
   _this.update();
-  _this.scrollPosition();
+  scrollPosition();
 };
 
 this.keyup = function (event) {
@@ -424,11 +259,11 @@ this.keyup = function (event) {
     } else if (index > 0) {
       searchedItems[index - 1].active = true;
     }
-    _this.selectMultiTarget();
+    selectMultiTarget();
   } else {
     activeItem.active = false;
-    _this.selectTarget(activeItem);
-    _this.close();
+    selectTarget(activeItem);
+    close();
   }
 };
 
@@ -442,7 +277,7 @@ this.clickSearch = function (event) {
 this.input = function (event) {
   var value = event.target.value.toLowerCase();
   _this.filtered = value.length > 0;
-  _this.search(value);
+  search(value);
 };
 
 // -----------------------------------------------------
@@ -459,18 +294,18 @@ this.unselect = function (event) {
   _this.selectedFlg = opts.items.some(function (item) {
     return item.selected;
   });
-  _this.parentUpdate();
+  parentUpdate();
 };
 
 // ===================================================================================
 //                                                                               Logic
 //                                                                               =====
-this.open = function () {
+var open = function open() {
   if (_this.openning || _this.closing || _this.visibleFlg) {
     return;
   }
   _this.openning = true;
-  _this.search('');
+  search('');
   _this.transitionStatus = 'visible animating in slide down';
   opts.items.forEach(function (item) {
     return item.active = false;
@@ -486,11 +321,11 @@ this.open = function () {
     _this.refs.condition.focus();
   }
   _this.update();
-  _this.scrollPosition();
+  scrollPosition();
   _this.trigger('open');
 };
 
-this.close = function () {
+var close = function close() {
   if (_this.closing || !_this.visibleFlg) {
     return;
   }
@@ -506,7 +341,7 @@ this.close = function () {
   if (opts.search) {
     _this.refs.condition.blur();
     if (_this.filtered && _this.filteredItems.length > 0) {
-      _this.selectTarget(_this.filteredItems[0]);
+      selectTarget(_this.filteredItems[0]);
     } else {
       _this.refs.condition.value = '';
       _this.filtered = false;
@@ -516,7 +351,7 @@ this.close = function () {
   _this.trigger('close');
 };
 
-this.selectTarget = function (target, updating) {
+var selectTarget = function selectTarget(target, updating) {
   _this.value = target.value;
   _this.label = target.label;
   _this.default = target.default;
@@ -527,11 +362,11 @@ this.selectTarget = function (target, updating) {
   if (!updating) {
     _this.update();
   }
-  _this.parentUpdate();
+  parentUpdate();
   _this.trigger('select', target);
 };
 
-this.selectMultiTarget = function (updating) {
+var selectMultiTarget = function selectMultiTarget(updating) {
   _this.value = opts.items.filter(function (item) {
     return item.selected;
   }).map(function (item) {
@@ -542,14 +377,14 @@ this.selectMultiTarget = function (updating) {
   });
   if (!updating) {
     _this.update();
-    _this.parentUpdate();
+    parentUpdate();
   }
   _this.trigger('select', opts.items.filter(function (item) {
     return item.selected;
   }));
 };
 
-this.search = function (target) {
+var search = function search(target) {
   opts.items.forEach(function (item) {
     item.searched = item.label && item.label.toLowerCase().indexOf(target) >= 0;
   });
@@ -560,7 +395,7 @@ this.search = function (target) {
   _this.trigger('search');
 };
 
-this.scrollPosition = function () {
+var scrollPosition = function scrollPosition() {
   var menu = _this.root.querySelector('.menu');
   var item = _this.root.querySelector('.item.active');
 
@@ -577,7 +412,7 @@ this.scrollPosition = function () {
   }
 };
 
-this.parentUpdate = function () {
+var parentUpdate = function parentUpdate() {
   if (_this.parent) {
     _this.parent.update();
   }
@@ -667,5 +502,177 @@ this.isFullscreen = function () {
 
 this.isBasic = function () {
   return _this.root.classList.contains('basic');
+};
+});
+riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', '', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
+'use strict';
+
+var _this = this;
+
+this.name = '';
+this.checked = false;
+var lastChecked = void 0;
+var lastOptsCheck = void 0;
+
+this.on('mount', function () {
+  _this.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true';
+  lastChecked = _this.checked;
+  lastOptsCheck = opts.checked;
+  _this.update();
+});
+
+this.on('update', function () {
+  _this.name = opts.name;
+  _this.value = opts.value;
+  if (lastChecked != _this.checked) {
+    opts.checked = _this.checked;
+    lastChecked = _this.checked;
+  } else if (lastOptsCheck != opts.checked) {
+    _this.checked = opts.checked;
+    lastOptsCheck = opts.checked;
+  }
+});
+
+// ===================================================================================
+//                                                                               Event
+//                                                                               =====
+this.click = function (event) {
+  if (isReadOnly() || _this.isDisabled()) {
+    event.preventDefault();
+    return;
+  }
+  _this.checked = event.target.checked;
+  _this.trigger('click', event.target.value);
+};
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+var isReadOnly = function isReadOnly() {
+  return _this.root.classList.contains('read-only');
+};
+
+// ===================================================================================
+//                                                                              Helper
+//                                                                              ======
+this.getId = function () {
+  return 'su-radio-' + _this._riot_id;
+};
+
+this.isDisabled = function () {
+  return _this.root.classList.contains('disabled');
+};
+
+this.isRadio = function () {
+  return !_this.root.classList.contains('slider');
+};
+});
+riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
+'use strict';
+
+var _this = this;
+
+this.label = '';
+this.value = '';
+var lastValue = void 0;
+var lastOptsValue = void 0;
+
+this.on('mount', function () {
+  if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
+    opts.riotValue = opts.value;
+  }
+  _this.value = opts.riotValue;
+  lastValue = _this.value;
+  lastOptsValue = _this.value;
+
+  var radios = _this.tags['su-radio'];
+  if (Array.isArray(radios)) {
+    for (var _iterator = radios, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+      var _ref;
+
+      if (_isArray) {
+        if (_i >= _iterator.length) break;
+        _ref = _iterator[_i++];
+      } else {
+        _i = _iterator.next();
+        if (_i.done) break;
+        _ref = _i.value;
+      }
+
+      var radio = _ref;
+
+      initializeChild(radio);
+    }
+  } else {
+    initializeChild(radios);
+  }
+
+  _this.update();
+});
+
+this.on('update', function () {
+  var changed = false;
+  if (lastValue != _this.value) {
+    opts.riotValue = _this.value;
+    lastOptsValue = _this.value;
+    lastValue = _this.value;
+    changed = true;
+  } else if (lastOptsValue != opts.riotValue) {
+    _this.value = opts.riotValue;
+    lastOptsValue = opts.riotValue;
+    lastValue = opts.riotValue;
+    changed = true;
+  }
+
+  var radios = _this.tags['su-radio'];
+  if (Array.isArray(radios)) {
+    for (var _iterator2 = radios, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
+      var _ref2;
+
+      if (_isArray2) {
+        if (_i2 >= _iterator2.length) break;
+        _ref2 = _iterator2[_i2++];
+      } else {
+        _i2 = _iterator2.next();
+        if (_i2.done) break;
+        _ref2 = _i2.value;
+      }
+
+      var radio = _ref2;
+
+      updateState(radio);
+    }
+  } else {
+    updateState(radios);
+  }
+
+  if (changed) {
+    _this.trigger('change', _this.value);
+  }
+});
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+var updateState = function updateState(radio) {
+  if (typeof radio.opts.value === 'undefined') {
+    return;
+  }
+  radio.checked = _this.value == radio.opts.value;
+  if (radio.checked) {
+    _this.label = radio.root.getElementsByTagName('label')[0].innerText;
+  }
+};
+
+var initializeChild = function initializeChild(radio) {
+  radio.opts.name = getRadioName();
+  radio.on('click', function (value) {
+    _this.value = value;
+    _this.update();
+  });
+};
+
+var getRadioName = function getRadioName() {
+  return 'su-radio-name-' + _this._riot_id;
 };
 });
