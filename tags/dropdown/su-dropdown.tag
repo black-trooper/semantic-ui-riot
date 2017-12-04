@@ -1,8 +1,8 @@
 <su-dropdown class="ui selection {opts.class} { search: opts.search } { multiple: opts.multiple} dropdown { active: isActive() } { visible: isActive() }"
-  onclick="{ toggle }" onfocus="{ open }" onblur="{ blur }" onkeydown="{ keydown }" onkeyup="{ keyup }" tabindex="{ opts.search ? -1 : getTabindex() }">
+  onclick="{ toggle }" onfocus="{ focus }" onblur="{ blur }" onkeydown="{ keydown }" onkeyup="{ keyup }" tabindex="{ opts.search ? -1 : getTabindex() }">
   <i class="dropdown icon"></i>
   <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ opts.search }" oninput="{ input }"
-    onclick="{ clickSearch }" onfocus="{ open }" onblur="{ blur }" />
+    onclick="{ clickSearch }" onfocus="{ focus }" onblur="{ blur }" />
   <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }">
     { item.label }
     <i class="delete icon" onclick="{ unselect }"></i>
@@ -87,6 +87,10 @@
       } else {
         close()
       }
+    }
+
+    this.focus = () => {
+      open()
     }
 
     this.mousedown = () => {
