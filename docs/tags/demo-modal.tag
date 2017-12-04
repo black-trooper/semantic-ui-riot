@@ -4,8 +4,14 @@
     <div class="sub header">A modal displays content that temporarily blocks interactions with the main view of a site</div>
   </h1>
 
+  <!-- =================================================================================== -->
+  <!--                                                                               Types -->
+  <!-- =================================================================================== -->
   <h2 class="ui dividing header">Types<a class="anchor" id="types"></a></h2>
 
+  <!-- ====================================================== -->
+  <!--                                               Standard -->
+  <!--                                               ======== -->
   <h3 class="ui header">Modal</h3>
   <p>A standard modal</p>
   <section>
@@ -64,6 +70,9 @@
     </div>
   </section>
 
+  <!-- ====================================================== -->
+  <!--                                                  Basic -->
+  <!--                                                  ===== -->
   <h3 class="ui header">Basic</h3>
   <p>A modal can reduce its complexity</p>
   <section>

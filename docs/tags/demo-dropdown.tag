@@ -4,8 +4,14 @@
     <div class="sub header">A dropdown allows a user to select a value from a series of options</div>
   </h1>
 
+  <!-- =================================================================================== -->
+  <!--                                                                               Types -->
+  <!-- =================================================================================== -->
   <h2 class="ui dividing header">Types<a class="anchor" id="types"></a></h2>
 
+  <!-- ====================================================== -->
+  <!--                                              Selection -->
+  <!--                                              ========= -->
   <h3 class="ui header">Selection</h3>
   <p>A dropdown can be used to select between choices in a form</p>
 
@@ -97,6 +103,9 @@
     </div>
   </section>
 
+  <!-- ====================================================== -->
+  <!--                                                 Search -->
+  <!--                                                 ====== -->
   <h3 class="ui header">Search Selection</h3>
   <p>A selection dropdown can allow a user to search through a large list of choices.</p>
   <section>
@@ -175,6 +184,9 @@
     </div>
   </section>
 
+  <!-- ====================================================== -->
+  <!--                                               Multiple -->
+  <!--                                               ======== -->
   <h3 class="ui header">Multiple Selection</h3>
   <p>A selection dropdown can allow multiple selections</p>
   <section>
@@ -220,8 +232,14 @@
     </div>
   </section>
 
+  <!-- =================================================================================== -->
+  <!--                                                                             Content -->
+  <!-- =================================================================================== -->
   <h2 class="ui dividing header">Content<a class="anchor" id="content"></a></h2>
 
+  <!-- ====================================================== -->
+  <!--                                                 Header -->
+  <!--                                                 ====== -->
   <h3 class="ui header">Header</h3>
   <p>A dropdown menu can contain a header</p>
   <section>
@@ -266,6 +284,9 @@
     </div>
   </section>
 
+  <!-- ====================================================== -->
+  <!--                                                Divider -->
+  <!--                                                ======= -->
   <h3 class="ui header">Divider</h3>
   <p>A dropdown menu can contain dividers to separate related content</p>
   <section>
@@ -313,6 +334,9 @@
     </div>
   </section>
 
+  <!-- ====================================================== -->
+  <!--                                                   Icon -->
+  <!--                                                   ==== -->
   <h3 class="ui header">Icon</h3>
   <p>A dropdown menu can contain an <a href="https://semantic-ui.com/elements/icon.html">icon</a>.</p>
   <section>
@@ -363,6 +387,9 @@
     </div>
   </section>
 
+  <!-- ====================================================== -->
+  <!--                                            Description -->
+  <!--                                            =========== -->
   <h3 class="ui header">Description</h3>
   <p>A dropdown menu can contain a description.</p>
   <section>
@@ -412,6 +439,9 @@
     </div>
   </section>
 
+  <!-- ====================================================== -->
+  <!--                                                  Image -->
+  <!--                                                  ===== -->
   <h3 class="ui header">Image</h3>
   <p>A dropdown menu can contain an image.</p>
   <section>
@@ -504,8 +534,8 @@
   -->
 
   <!-- ====================================================== -->
-  <!--                                              Disabled -->
-  <!--                                              ========= -->
+  <!--                                               Disabled -->
+  <!--                                               ======== -->
   <h3 class="ui header">Disabled</h3>
   <p>A dropdown can be disavbled</p>
   <section>
@@ -523,8 +553,14 @@
     </div>
   </section>
 
+  <!-- =================================================================================== -->
+  <!--                                                                      Named elements -->
+  <!-- =================================================================================== -->
   <h2 class="ui dividing header">Named elements<a class="anchor" id="event"></a></h2>
 
+  <!-- ====================================================== -->
+  <!--                                                 Single -->
+  <!--                                                 ====== -->
   <h3 class="ui header">Single Selection</h3>
   <p>Access to single selection with ref attribute</p>
   <section>
@@ -588,6 +624,9 @@
     </div>
   </section>
 
+  <!-- ====================================================== -->
+  <!--                                                  Multi -->
+  <!--                                                  ===== -->
   <h3 class="ui header">Multi Selection</h3>
   <p>Access to multi selection with ref attribute</p>
   <section>
