@@ -68,7 +68,7 @@ riot.tag2("app", '<navigation></navigation> <div style="margin-left:15.5rem"> <d
 },{"../package.json":2}],2:[function(require,module,exports){
 module.exports={
   "name": "semantic-ui-riot",
-  "version": "0.0.27",
+  "version": "0.0.28",
   "description": "Semantic UI for Riot",
   "main": "dist/semantic-ui-riot.min.js",
   "files": [
