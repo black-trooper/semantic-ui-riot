@@ -4,27 +4,21 @@
   <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ opts.search }" oninput="{ input }"
     onclick="{ clickSearch }" onfocus="{ focus }" onblur="{ blur }" />
   <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }">
-    { item.label }
-    <i class="delete icon" onclick="{ unselect }"></i>
-  </a>
+  { item.label }
+  <i class="delete icon" onclick="{ unselect }"></i>
+</a>
   <div class="{ default: default} text { filtered: filtered }" if="{ !opts.multiple || !selectedFlg }">
     { label }
   </div>
   <div class="menu transition { transitionStatus }" onmousedown="{ mousedown }" onmouseup="{ mouseup }" onblur="{ blur }" tabindex="-1">
-    <virtual each="{item in opts.items}">
-      <div class="item { default: item.default } { active: item.active } { selected: item.active }" if="{ isVisible(item) }" value="{ item.value }"
-        default="{ item.default }" onclick="{ itemClick }" onmousedown="{ mousedown }" onmouseup="{ mouseup }">
-        <i class="{ item.icon } icon" if="{ item.icon }"></i>
-        <img class="ui avatar image" src="{ item.image }" if="{ item.image }" />
-        <span class="description" if="{ item.description }">{ item.description }</span>
-        <span class="text">{ item.label }</span>
-      </div>
-      <div class="header" if="{ item.header && !filtered}">
-        <i class="{ item.icon } icon" if="{ item.icon }"></i>
-        { item.label }
-      </div>
-      <div class="divider" if="{ item.divider && !filtered}"></div>
-    </virtual>
+    <div each="{item in opts.items}" value="{ item.value }" default="{ item.default }" onmousedown="{ mousedown }" onmouseup="{ mouseup }"
+      class="{ item: isItem(item) } { header: item.header && !filtered} { divider: item.divider && !filtered} { default: item.default } { active: item.active } { selected: item.active }"
+      onclick="{ itemClick }">
+      <i class="{ item.icon } icon" if="{ item.icon }"></i>
+      <img class="ui avatar image" src="{ item.image }" if="{ item.image }" />
+      <span class="description" if="{ item.description }">{ item.description }</span>
+      <span class="text">{ item.label }</span>
+    </div>
     <div class="message" if="{ filtered && filteredItems.length == 0 }">No results found.</div>
   </div>
 
@@ -109,6 +103,9 @@
 
     this.itemClick = event => {
       event.stopPropagation()
+      if (!this.isItem(event.item.item)) {
+        return
+      }
       if (opts.multiple) {
         if (!event.item.item.default) {
           event.item.item.selected = true
@@ -336,7 +333,7 @@
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
-    this.isVisible = item => {
+    this.isItem = item => {
       if (opts.multiple && (item.default || item.selected)) {
         return false
       }

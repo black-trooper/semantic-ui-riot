@@ -183,11 +183,38 @@ describe('su-dropdown', function () {
     tag.label.should.deep.equal(items[1].label)
   })
 
-  it('update items', function () {
+  it('update item value', function () {
     $('su-dropdown .item:eq(1)').click()
-    // expect(tag.value).to.be.null
     items[1].value = 'M'
     tag.update()
     expect(tag.value).to.be.null
+  })
+
+  it('update items', function () {
+    $('su-dropdown .menu .item').length.should.equal(3)
+
+    tag.opts.items = [
+      {
+        label: 'Alphabet',
+        value: null,
+        default: true
+      },
+      {
+        label: 'a',
+        value: 'a'
+      },
+      {
+        label: 'b',
+        value: 'b'
+      },
+      {
+        label: 'c',
+        value: 'c'
+      },
+    ]
+    $('su-dropdown').focus()
+    this.clock.tick(310)
+
+    $('su-dropdown .menu .item').length.should.equal(4)
   })
 })
