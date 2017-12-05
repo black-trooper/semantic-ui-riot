@@ -5,7 +5,7 @@
       <i class="icon { opts.modal.heading.icon }" if="{ opts.modal.heading.icon }"></i>
       { (opts.modal.heading.text) ? opts.modal.heading.text : opts.modal.heading }
     </div>
-    <div class="content {opts.modal.content_class}">
+    <div class="content { image: isImageContent() }" ref="content">
       <yield />
     </div>
     <div class="actions">
@@ -32,6 +32,8 @@
   </style>
 
   <script>
+    let image_content = false
+
     this.on('mount', () => {
       if (!opts.modal) {
         opts.modal = {}
@@ -48,6 +50,9 @@
           this.transitionStatus = 'visible'
           this.update()
         }, 500)
+      }
+      if (this.refs.content.getElementsByTagName('img').length > 0) {
+        image_content = true
       }
     })
 
@@ -87,6 +92,10 @@
 
     this.isBasic = () => {
       return this.root.classList.contains('basic')
+    }
+
+    this.isImageContent = () => {
+      return image_content
     }
   </script>
 </su-modal>
