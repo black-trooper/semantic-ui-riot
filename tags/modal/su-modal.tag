@@ -1,5 +1,5 @@
 <su-modal class="ui dimmer modals page transition { transitionStatus }" onclick="{ dimmerClose }">
-  <div class="ui modal transition visible active {opts.class}">
+  <div class="ui modal transition visible active {opts.class}" onclick="{ clickModal }">
     <i class="close icon" if="{ isFullscreen() }" onclick="{ close }"></i>
     <div class="ui header { icon: opts.modal.heading.icon }">
       <i class="icon { opts.modal.heading.icon }" if="{ opts.modal.heading.icon }"></i>
@@ -67,6 +67,10 @@
       if (opts.modal.closable) {
         this.close(action)
       }
+    }
+
+    this.clickModal = event => {
+      event.stopPropagation()
     }
 
     this.close = action => {
