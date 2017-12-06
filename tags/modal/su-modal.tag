@@ -44,13 +44,6 @@
     })
 
     this.on('update', () => {
-      if (opts.modal.visible) {
-        this.transitionStatus = 'animating fade in visible'
-        setTimeout(() => {
-          this.transitionStatus = 'visible'
-          this.update()
-        }, 500)
-      }
       if (this.refs.content.getElementsByTagName('img').length > 0) {
         image_content = true
       }
@@ -59,6 +52,15 @@
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
+    this.show = () => {
+      this.transitionStatus = 'animating fade in visible'
+      this.update()
+      setTimeout(() => {
+        this.transitionStatus = 'visible active'
+        this.update()
+      }, 500)
+    }
+
     this.click = action => {
       if (action && toString.call(action).slice(8, -1).toLowerCase() === 'function') {
         action()
@@ -85,7 +87,6 @@
     //                                                                               Logic
     //                                                                               =====
     let close = () => {
-      opts.modal.visible = false
       this.transitionStatus = 'animating fade out visible active'
       this.update()
 
