@@ -55,6 +55,8 @@
     this.show = () => {
       this.transitionStatus = 'animating fade in visible'
       this.update()
+      this.trigger('show')
+
       setTimeout(() => {
         this.transitionStatus = 'visible active'
         this.update()
@@ -62,14 +64,13 @@
     }
 
     this.click = action => {
-      if (action && toString.call(action).slice(8, -1).toLowerCase() === 'function') {
-        action()
-      }
+      this.trigger('hide', action)
       close()
     }
 
     this.dimmerClose = () => {
       if (opts.modal.closable && !this.isBasic()) {
+        this.trigger('hide')
         close()
       }
     }
