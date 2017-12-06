@@ -67,7 +67,7 @@
     }
 
     this.dimmerClose = () => {
-      if (opts.modal.closable) {
+      if (opts.modal.closable && !this.isBasic()) {
         close()
       }
     }
