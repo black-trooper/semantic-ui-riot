@@ -90,7 +90,7 @@
       this.update()
 
       setTimeout(() => {
-        this.transitionStatus = 'hidden'
+        this.transitionStatus = ''
         this.update()
       }, 300)
     }
