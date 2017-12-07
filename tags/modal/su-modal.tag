@@ -1,7 +1,7 @@
 <su-modal class="ui dimmer modals page transition { transitionStatus }" onclick="{ dimmerClose }">
   <div class="ui modal transition visible active {opts.class}" onclick="{ clickModal }">
     <i class="close icon" if="{ isFullscreen() }" onclick="{ hide }"></i>
-    <div class="ui header { icon: opts.modal.heading.icon }">
+    <div class="ui header { icon: opts.modal.heading.icon }" if="{ opts.modal.heading }">
       <i class="icon { opts.modal.heading.icon }" if="{ opts.modal.heading.icon }"></i>
       { (opts.modal.heading.text) ? opts.modal.heading.text : opts.modal.heading }
     </div>
@@ -10,7 +10,7 @@
     </div>
     <div class="actions">
       <div each="{ opts.modal.buttons }" class="ui button { type } { labeled: icon && text } { icon: icon } { inverted: isBasic() }"
-        onclick="{ parent.click.bind(this, action) }">
+        onclick="{ parent.click.bind(this, text, action) }">
         { text }
         <i class="icon { icon }" if="{ icon }"></i>
       </div>
@@ -33,11 +33,11 @@
 
   <script>
     let image_content = false
+    if (!opts.modal) {
+      opts.modal = {}
+    }
 
     this.on('mount', () => {
-      if (!opts.modal) {
-        opts.modal = {}
-      }
       if (typeof opts.modal.closable === 'undefined') {
         opts.modal.closable = true
       }
@@ -63,8 +63,8 @@
       }, 500)
     }
 
-    this.click = action => {
-      this.trigger('hide', action)
+    this.click = (text, action) => {
+      this.trigger('hide', action || text)
       close()
     }
 
