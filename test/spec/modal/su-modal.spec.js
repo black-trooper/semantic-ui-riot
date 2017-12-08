@@ -9,7 +9,6 @@ describe('su-modal', function () {
   }
 
   beforeEach(function () {
-    $('body').append('<su-modal>modal</su-modal>')
     this.clock = sinon.useFakeTimers()
   })
 
@@ -21,11 +20,13 @@ describe('su-modal', function () {
   })
 
   it('is mounted', function () {
+    $('body').append('<su-modal>modal</su-modal>')
     mount()
     tag.isMounted.should.be.true
   })
 
   it('opens/closes modal and triggers open/close event', function () {
+    $('body').append('<su-modal>modal</su-modal>')
     mount({
       modal: {
         buttons: [{
@@ -47,6 +48,7 @@ describe('su-modal', function () {
   })
 
   it('dimmer close', function () {
+    $('body').append('<su-modal>modal</su-modal>')
     mount()
     $('su-modal').is(':visible').should.equal(false)
 
@@ -61,9 +63,9 @@ describe('su-modal', function () {
     $('su-modal').is(':visible').should.equal(false)
   })
 
-  it('component', function () {
+  it('buttons', function () {
+    $('body').append('<su-modal>modal</su-modal>')
     const modal = {
-      heading: 'modal header',
       buttons: [{
         text: 'Ok',
         type: 'primary',
@@ -76,10 +78,6 @@ describe('su-modal', function () {
     tag.show()
     this.clock.tick(310)
     $('su-modal').is(':visible').should.equal(true)
-
-    const header = $('su-modal .ui.header')
-    header.hasClass('icon').should.equal(false)
-    header.text().trim(modal.heading)
 
     const btn_ok = $('su-modal .ui.button:first')
     btn_ok.hasClass('labeled').should.equal(true)
@@ -94,5 +92,73 @@ describe('su-modal', function () {
     btn_cancel.hasClass('icon').should.equal(false)
     btn_cancel.find('.icon').length.should.equal(0)
     btn_cancel.text().trim().should.equal(modal.buttons[1].text)
+  })
+
+  it('header', function () {
+    $('body').append('<su-modal>modal</su-modal>')
+    const modal = {
+      heading: 'modal header'
+    }
+    mount({ modal: modal })
+    tag.show()
+    this.clock.tick(310)
+    $('su-modal').is(':visible').should.equal(true)
+
+    const header = $('su-modal .ui.header')
+    header.hasClass('icon').should.equal(false)
+    header.text().trim(modal.heading)
+  })
+
+  it('icon header', function () {
+    $('body').append('<su-modal>modal</su-modal>')
+    const modal = {
+      heading: {
+        icon: 'archive',
+        text: 'modal header'
+      }
+    }
+    mount({ modal: modal })
+    tag.show()
+    this.clock.tick(310)
+    $('su-modal').is(':visible').should.equal(true)
+
+    const header = $('su-modal .ui.header')
+    header.hasClass('icon').should.equal(true)
+    header.text().trim(modal.heading.text)
+  })
+
+  it('image content', function () {
+    $('body').append(`
+      <su-modal>
+        <div class="ui medium image">
+          <img src="./images/avatar2/large/rachel.png" />
+        </div>
+        <div class="description">
+          <div class="ui header">Default Profile Image</div>
+          <p>We've found the following <a href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with
+            your e-mail address.</p>
+          <p>Is it okay to use this photo?</p>
+        </div>
+      </su-modal>
+    `)
+    const modal = {
+    }
+    mount({ modal: modal })
+    tag.show()
+    this.clock.tick(310)
+    $('su-modal').is(':visible').should.equal(true)
+
+    const content = $('su-modal .content')
+    content.hasClass('image').should.equal(true)
+  })
+
+  it('full screen', function () {
+    $('body').append('<su-modal>modal</su-modal>')
+    mount({ class: 'fullscreen' })
+    tag.show()
+    this.clock.tick(310)
+    $('su-modal').is(':visible').should.equal(true)
+
+    $('su-modal i.close.icon').length.should.equal(1)
   })
 })
