@@ -1,5 +1,5 @@
 <su-modal class="ui dimmer modals page transition { transitionStatus }" onclick="{ dimmerClose }">
-  <div class="ui modal transition visible active {opts.class}" onclick="{ clickModal }">
+  <div class="ui modal transition visible active {opts.class}" onclick="{ clickModal }" id="{ getId() }">
     <i class="close icon" if="{ isFullscreen() }" onclick="{ hide }"></i>
     <div class="ui header { icon: opts.modal.heading.icon }" if="{ opts.modal.heading }">
       <i class="icon { opts.modal.heading.icon }" if="{ opts.modal.heading.icon }"></i>
@@ -97,15 +97,27 @@
       }, 300)
     }
 
+    let isContainsClassName = className => {
+      const modalElement = document.getElementById(this.getId())
+      if (!modalElement) {
+        return false
+      }
+      return modalElement.classList.contains(className)
+    }
+
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
+    this.getId = () => {
+      return `su-modal-${this._riot_id}`
+    }
+
     this.isFullscreen = () => {
-      return this.root.classList.contains('fullscreen')
+      return isContainsClassName('fullscreen')
     }
 
     this.isBasic = () => {
-      return this.root.classList.contains('basic')
+      return isContainsClassName('basic')
     }
 
     this.isImageContent = () => {
