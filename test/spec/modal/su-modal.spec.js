@@ -160,5 +160,10 @@ describe('su-modal', function () {
     $('su-modal').is(':visible').should.equal(true)
 
     $('su-modal i.close.icon').length.should.equal(1)
+
+    $('su-modal i.close.icon').click()
+    spyOnHide.should.have.been.calledOnce
+    this.clock.tick(310)
+    $('su-modal').is(':visible').should.equal(false)
   })
 })
