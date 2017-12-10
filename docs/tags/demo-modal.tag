@@ -50,7 +50,7 @@
 
       <script>
         this.modal = {
-          heading: 'Select a Photo',
+          header: 'Select a Photo',
           buttons: [{
             text: 'Ok',
             type: 'primary',
@@ -93,7 +93,7 @@
 
       <script>
         this.modal = {
-          heading: {
+          header: {
             text: 'Archive Old Messages',
             icon: 'archive'
           },
@@ -120,7 +120,7 @@
     }
 
     this.modal = {
-      heading: 'Select a Photo',
+      header: 'Select a Photo',
       buttons: [{
         text: 'Ok',
         type: 'primary',
@@ -135,7 +135,7 @@
     }
 
     this.modal_basic = {
-      heading: {
+      header: {
         text: 'Archive Old Messages',
         icon: 'archive'
       },

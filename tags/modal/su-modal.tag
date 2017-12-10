@@ -1,9 +1,9 @@
 <su-modal class="ui dimmer modals page transition { transitionStatus }" onclick="{ dimmerClose }">
   <div class="ui modal transition visible active {opts.class}" onclick="{ clickModal }" id="{ getId() }">
     <i class="close icon" if="{ isFullscreen() }" onclick="{ hide }"></i>
-    <div class="ui header { icon: opts.modal.heading.icon }" if="{ opts.modal.heading }">
-      <i class="icon { opts.modal.heading.icon }" if="{ opts.modal.heading.icon }"></i>
-      { (opts.modal.heading.text) ? opts.modal.heading.text : opts.modal.heading }
+    <div class="ui header { icon: opts.modal.header.icon }" if="{ opts.modal.header }">
+      <i class="icon { opts.modal.header.icon }" if="{ opts.modal.header.icon }"></i>
+      { (opts.modal.header.text) ? opts.modal.header.text : opts.modal.header }
     </div>
     <div class="content { image: isImageContent() }" ref="content">
       <yield />

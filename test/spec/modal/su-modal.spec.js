@@ -97,7 +97,7 @@ describe('su-modal', function () {
   it('header', function () {
     $('body').append('<su-modal>modal</su-modal>')
     const modal = {
-      heading: 'modal header'
+      header: 'modal header'
     }
     mount({ modal: modal })
     tag.show()
@@ -106,13 +106,13 @@ describe('su-modal', function () {
 
     const header = $('su-modal .ui.header')
     header.hasClass('icon').should.equal(false)
-    header.text().trim(modal.heading)
+    header.text().trim(modal.header)
   })
 
   it('icon header', function () {
     $('body').append('<su-modal>modal</su-modal>')
     const modal = {
-      heading: {
+      header: {
         icon: 'archive',
         text: 'modal header'
       }
@@ -124,7 +124,7 @@ describe('su-modal', function () {
 
     const header = $('su-modal .ui.header')
     header.hasClass('icon').should.equal(true)
-    header.text().trim(modal.heading.text)
+    header.text().trim(modal.header.text)
   })
 
   it('image content', function () {
