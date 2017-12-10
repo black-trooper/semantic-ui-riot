@@ -20,7 +20,7 @@
       <i class="icon code" onclick="{ toggleExample }"></i>
     </div>
     <div class="ui segment bottom attached">
-      <su-modal modal="{ modal }" class="large">
+      <su-modal modal="{ modal }" class="large" ref="modal">
         <div class="ui medium image">
           <img src="./images/avatar2/large/rachel.png" />
         </div>
@@ -35,7 +35,7 @@
     </div>
     <div class="ui segment bottom attached inverted transition hidden">
       <pre><code class="prettyprint">
-      <su-modal modal="{ modal }" class="large">
+      <su-modal modal="{ modal }" class="large" ref="modal">
         <div class="ui medium image">
           <img src="./images/avatar2/large/rachel.png" />
         </div>
@@ -50,20 +50,18 @@
 
       <script>
         this.modal = {
-          visible: false,
           heading: 'Select a Photo',
-          content_class: 'image',
           buttons: [{
             text: 'Ok',
             type: 'primary',
             icon: 'checkmark'
           }, {
-            text: 'Canel'
+            text: 'Cancel'
           }]
         }
 
         this.showModal = () => {
-          this.modal.visible = true
+          this.refs.modal.show()
         }
       </script>
     </code></pre>
@@ -81,21 +79,20 @@
       <i class="icon code" onclick="{ toggleExample }"></i>
     </div>
     <div class="ui segment bottom attached">
-      <su-modal modal="{ modal_basic }" class="basic">
+      <su-modal modal="{ modal_basic }" class="basic" ref="modal_basic">
         Your inbox is getting full, would you like us to enable automatic archiving of old messages?
       </su-modal>
       <button class="ui button" onclick="{ showModalBasic }">Show modal</button>
     </div>
     <div class="ui segment bottom attached inverted transition hidden">
       <pre><code class="prettyprint">
-      <su-modal modal="{ modal }" class="basic">
+      <su-modal modal="{ modal }" class="basic" ref="modal_basic">
         Your inbox is getting full, would you like us to enable automatic archiving of old messages?
       </su-modal>
       <button class="ui button" onclick="{ showModalBasic }">Show modal</button>
 
       <script>
         this.modal = {
-          visible: false,
           heading: {
             text: 'Archive Old Messages',
             icon: 'archive'
@@ -110,7 +107,7 @@
         }
 
         this.showModalBasic = () => {
-          this.modal.visible = true
+          this.refs.modal_basic.show()
         }
       </script>
     </code></pre>
@@ -123,25 +120,21 @@
     }
 
     this.modal = {
-      visible: false,
       heading: 'Select a Photo',
-      size: 'large',
-      content_class: 'image',
       buttons: [{
         text: 'Ok',
         type: 'primary',
         icon: 'checkmark'
       }, {
-        text: 'Canel'
+        text: 'Cancel'
       }]
     }
 
     this.showModal = () => {
-      this.modal.visible = true
+      this.refs.modal.show()
     }
 
     this.modal_basic = {
-      visible: false,
       heading: {
         text: 'Archive Old Messages',
         icon: 'archive'
@@ -156,7 +149,7 @@
     }
 
     this.showModalBasic = () => {
-      this.modal_basic.visible = true
+      this.refs.modal_basic.show()
     }
 
     this.on('mount', () => {
