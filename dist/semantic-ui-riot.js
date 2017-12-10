@@ -449,66 +449,101 @@ this.getTabindex = function () {
   return 0;
 };
 });
-riot.tag2('su-modal', '<div class="ui modal transition visible active {opts.class}"> <i class="close icon" if="{isFullscreen()}" onclick="{close}"></i> <div class="ui header {icon: opts.modal.heading.icon}"> <i class="icon {opts.modal.heading.icon}" if="{opts.modal.heading.icon}"></i> {(opts.modal.heading.text) ? opts.modal.heading.text : opts.modal.heading} </div> <div class="content {opts.modal.content_class}"> <yield></yield> </div> <div class="actions"> <div each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: isBasic()}" onclick="{parent.click.bind(this, action)}"> {text} <i class="icon {icon}" if="{icon}"></i> </div> </div> </div>', 'su-modal.ui.dimmer.visible.transition,[data-is="su-modal"].ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; }', 'class="ui dimmer modals page transition {transitionStatus}" onclick="{dimmerClose}"', function(opts) {
+riot.tag2('su-modal', '<div class="ui modal transition visible active {opts.class}" onclick="{clickModal}" id="{getId()}"> <i class="close icon" if="{isFullscreen()}" onclick="{hide}"></i> <div class="ui header {icon: opts.modal.heading.icon}" if="{opts.modal.heading}"> <i class="icon {opts.modal.heading.icon}" if="{opts.modal.heading.icon}"></i> {(opts.modal.heading.text) ? opts.modal.heading.text : opts.modal.heading} </div> <div class="content {image: isImageContent()}" ref="content"> <yield></yield> </div> <div class="actions"> <div each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: isBasic()}" onclick="{parent.click.bind(this, text, action)}"> {text} <i class="icon {icon}" if="{icon}"></i> </div> </div> </div>', 'su-modal.ui.dimmer.visible.transition,[data-is="su-modal"].ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; }', 'class="ui dimmer modals page transition {transitionStatus}" onclick="{dimmerClose}"', function(opts) {
 'use strict';
 
 var _this = this;
 
+var image_content = false;
+if (!opts.modal) {
+  opts.modal = {};
+}
+
 this.on('mount', function () {
-  if (!opts.modal) {
-    opts.modal = {};
-  }
   if (typeof opts.modal.closable === 'undefined') {
     opts.modal.closable = true;
   }
 });
 
 this.on('update', function () {
-  if (opts.modal.visible) {
-    _this.transitionStatus = 'animating fade in visible';
-    setTimeout(function () {
-      _this.transitionStatus = 'visible';
-      _this.update();
-    }, 500);
+  if (_this.refs.content.getElementsByTagName('img').length > 0) {
+    image_content = true;
   }
 });
 
 // ===================================================================================
 //                                                                               Event
 //                                                                               =====
-this.click = function (action) {
-  _this.close(action);
+this.show = function () {
+  _this.transitionStatus = 'animating fade in visible';
+  _this.update();
+  _this.trigger('show');
+
+  setTimeout(function () {
+    _this.transitionStatus = 'visible active';
+    _this.update();
+  }, 500);
 };
 
-this.dimmerClose = function (action) {
-  if (opts.modal.closable) {
-    _this.close(action);
+this.click = function (text, action) {
+  _this.trigger('hide', action || text);
+  close();
+};
+
+this.dimmerClose = function () {
+  if (opts.modal.closable && !_this.isBasic()) {
+    _this.trigger('hide');
+    close();
   }
 };
 
-this.close = function (action) {
-  if (action && toString.call(action).slice(8, -1).toLowerCase() === 'function') {
-    action();
-  }
-  opts.modal.visible = false;
+this.clickModal = function (event) {
+  event.stopPropagation();
+};
+
+this.hide = function () {
+  _this.trigger('hide');
+  close();
+};
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+var close = function close() {
   _this.transitionStatus = 'animating fade out visible active';
   _this.update();
 
   setTimeout(function () {
-    _this.transitionStatus = 'hidden';
+    _this.transitionStatus = '';
     _this.update();
   }, 300);
+};
+
+var isContainsClassName = function isContainsClassName(className) {
+  var modalElement = document.getElementById(_this.getId());
+  if (!modalElement) {
+    return false;
+  }
+  return modalElement.classList.contains(className);
 };
 
 // ===================================================================================
 //                                                                              Helper
 //                                                                              ======
+this.getId = function () {
+  return 'su-modal-' + _this._riot_id;
+};
+
 this.isFullscreen = function () {
-  return _this.root.classList.contains('fullscreen');
+  return isContainsClassName('fullscreen');
 };
 
 this.isBasic = function () {
-  return _this.root.classList.contains('basic');
+  return isContainsClassName('basic');
+};
+
+this.isImageContent = function () {
+  return image_content;
 };
 });
 riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', '', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
