@@ -20,7 +20,8 @@
     route.start(true)
 
     global.toggleExample = target => {
-      const segments = target.parentElement.parentElement.getElementsByClassName('segment')
+      const childs = target.parentElement.parentElement.childNodes
+      const segments = Array.from(childs).filter(element => element.classList && element.classList.contains('segment'))
       if (segments[2].classList.contains('hidden')) {
         segments[1].classList.remove('bottom')
         segments[2].classList.remove('hidden')
