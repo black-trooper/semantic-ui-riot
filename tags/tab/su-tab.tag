@@ -1,4 +1,4 @@
-<su-tab class="ui segment bottom attached { active: active() } tab">
+<su-tab class="ui segment bottom attached { active: opts.active } tab">
   <yield />
 
   <style>
@@ -6,16 +6,4 @@
       margin-bottom: 0
     }
   </style>
-
-  <script>
-    // ===================================================================================
-    //                                                                              Helper
-    //                                                                              ======
-    this.active = () => {
-      if (typeof opts.active === 'undefined' || typeof opts.index === 'undefined') {
-        return false
-      }
-      return opts.active[opts.index]
-    }
-  </script>
 </su-tab>
