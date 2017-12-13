@@ -67,12 +67,15 @@ var parentUpdate = function parentUpdate() {
   }
 };
 
+var shownMessage = false;
 var supportTraditionalOptions = function supportTraditionalOptions() {
-  if (typeof opts.check !== 'undefined' && !_this.shownMessage) {
-    console.warn('\'check\' attribute is deprecated. Please use \'checked\'.');
+  if (typeof opts.check !== 'undefined') {
+    if (!shownMessage) {
+      console.warn('\'check\' attribute is deprecated. Please use \'checked\'.');
+    }
+    shownMessage = true;
     opts.checked = opts.check;
     opts.check = undefined;
-    _this.shownMessage = true;
   }
 };
 
