@@ -1,7 +1,16 @@
-<su-tab class="ui segment bottom attached { active: opts.active } tab">
+<su-tab class="ui { opts.class } { active: opts.active } tab">
   <yield />
 
   <style>
+    :scope.ui.segment {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    :scope.ui.segment.top.attached {
+      margin-top: 0
+    }
+
     :scope.ui.segment.bottom.attached {
       margin-bottom: 0
     }
