@@ -1,4 +1,4 @@
-<su-tab class="ui { opts.class } { active: opts.active } tab">
+<su-tab class="ui { opts.class } { active: active } tab">
   <yield />
 
   <style>
@@ -15,4 +15,8 @@
       margin-bottom: 0
     }
   </style>
+
+  <script>
+    this.active = false
+  </script>
 </su-tab>

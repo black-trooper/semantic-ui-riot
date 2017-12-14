@@ -1,10 +1,10 @@
 <su-tabset>
   <div class="ui { opts.class } { getClass() } menu" if="{ !isBottom() }">
-    <a each="{ tab, i in tabs }" class="{active: tab.opts.active} item" onclick="{ click }">{ tab.opts.title }</a>
+    <a each="{ tab, i in tabs }" class="{tab.opts.class} {active: tab.active} item" onclick="{ click }">{ tab.opts.title }</a>
   </div>
   <yield />
   <div class="ui { opts.class } { getClass() } menu" if="{ isBottom() }">
-    <a each="{ tab, i in tabs }" class="{active: tab.opts.active} item" onclick="{ click }">{ tab.opts.title }</a>
+    <a each="{ tab, i in tabs }" class="{active: tab.active} item" onclick="{ click }">{ tab.opts.title }</a>
   </div>
 
   <script>
@@ -19,10 +19,11 @@
           initializeChild(tab)
           if (tab.opts.active) {
             defaultActive = true
+            tab.active = true
           }
         }
         if (!defaultActive) {
-          this.tabs[0].opts.active = true
+          this.tabs[0].active = true
         }
       } else {
         initializeChild(this.tabs)
@@ -38,9 +39,9 @@
       const index = event.item.i
 
       for (const tab of this.tabs) {
-        tab.opts.active = false
+        tab.active = false
       }
-      this.tabs[index].opts.active = true
+      this.tabs[index].active = true
       this.update()
     }
 
