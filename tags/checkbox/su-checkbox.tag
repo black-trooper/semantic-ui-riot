@@ -69,12 +69,15 @@
       }
     }
 
+    let shownMessage = false
     let supportTraditionalOptions = () => {
-      if (typeof opts.check !== 'undefined' && !this.shownMessage) {
-        console.warn('\'check\' attribute is deprecated. Please use \'checked\'.')
+      if (typeof opts.check !== 'undefined') {
+        if (!shownMessage) {
+          console.warn('\'check\' attribute is deprecated. Please use \'checked\'.')
+        }
+        shownMessage = true
         opts.checked = opts.check
         opts.check = undefined
-        this.shownMessage = true
       }
     }
 

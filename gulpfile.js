@@ -20,9 +20,11 @@ const rimraf = require('rimraf');
 
 const watch_target = [
   'tags/**/*',
-  'docs/tags/**/*.tag',
   'index.js'
 ];
+const demo_watch_target = [
+  'docs/tags/**/*.tag'
+]
 
 // TASK
 // ============================================
@@ -34,14 +36,14 @@ gulp.task('default', function () {
     'clean',
     'build',
     'demo_build',
-    'watch'
+    'watch',
+    'demo_watch'
   );
 });
 
 gulp.task('clean', function () {
   return del([
-    'dist/**/*',
-    'docs/dist/**/*'
+    'dist/**/*'
   ]);
 });
 
@@ -49,7 +51,8 @@ gulp.task('build', function () {
   return sequence(
     'compile',
     'concat',
-    'compress'
+    'compress',
+    'demo_copy'
   );
 });
 
@@ -82,8 +85,7 @@ gulp.task('watch', function () {
       'htmlhint',
       'eslint',
       'clean',
-      'build',
-      'demo_build'
+      'build'
     );
   });
 });
@@ -103,6 +105,14 @@ gulp.task('htmlhint', function () {
 })
 
 // for demo
+gulp.task('demo_watch', function () {
+  gulp.watch(demo_watch_target, function () {
+    sequence(
+      'demo_build'
+    );
+  });
+});
+
 gulp.task('demo_build', function () {
   return sequence(
     'demo_escape',
@@ -111,8 +121,7 @@ gulp.task('demo_build', function () {
     'demo_clean',
     'demo_concat',
     'demo_browserify',
-    'demo_compress',
-    'demo_copy'
+    'demo_compress'
   );
 });
 
@@ -130,6 +139,9 @@ gulp.task('demo_htmlhint', function () {
 })
 
 gulp.task('demo_compile', function () {
+  del([
+    'docs/dist/**/*'
+  ]);
   return gulp.src('docs/temp/**/*.tag')
     .pipe(riot({
       type: 'es6'
@@ -171,10 +183,20 @@ gulp.task('demo_copy', function () {
 })
 
 gulp.task('webserver', function () {
+  const target = [
+    'index.html',
+    'build.js',
+    'semantic-ui-riot.min.js'
+  ]
   return gulp.src('./docs')
     .pipe(webserver({
       port: 3000,
-      livereload: true,
+      livereload: {
+        enable: true,
+        filter: function (fileName) {
+          return target.indexOf(fileName) >= 0
+        }
+      },
       directoryListening: true,
       open: true
     }));
