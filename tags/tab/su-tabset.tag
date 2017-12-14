@@ -1,9 +1,9 @@
 <su-tabset>
-  <div class="ui { opts.class } { getClass() } menu" if="{ !isBottomTabular() }">
+  <div class="ui { opts.class } { getClass() } menu" if="{ !isBottom() }">
     <a each="{ tab, i in tabs }" class="{active: tab.opts.active} item" onclick="{ click }">{ tab.opts.title }</a>
   </div>
   <yield />
-  <div class="ui { opts.class } { getClass() } menu" if="{ isBottomTabular() }">
+  <div class="ui { opts.class } { getClass() } menu" if="{ isBottom() }">
     <a each="{ tab, i in tabs }" class="{active: tab.opts.active} item" onclick="{ click }">{ tab.opts.title }</a>
   </div>
 
@@ -48,14 +48,13 @@
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
-    this.isBottomTabular = () => {
-      const classList = this.root.classList
-      return classList.contains('tabular') && classList.contains('bottom')
+    this.isBottom = () => {
+      return hasClass('bottom')
     }
 
     this.getClass = () => {
-      if (isTabular()) {
-        return this.isBottomTabular() ? 'tabular attached' : 'top tabular attached'
+      if (hasClass('tabular') && !hasClass('attached')) {
+        return 'attached'
       }
     }
 
@@ -66,22 +65,23 @@
       if (tab.opts.class) {
         return
       }
-      if (isTabular()) {
-        if (this.isBottomTabular()) {
-          tab.opts.class = 'segment top attached'
-        } else {
-          tab.opts.class = 'segment bottom attached'
-        }
-      } else {
-        tab.opts.class = 'segment'
+      let classList = ['segment']
+      if (hasClass('tabular')) {
+        classList.push('tabular')
       }
+      if (hasClass('attached') || hasClass('tabular')) {
+        if (hasClass('bottom')) {
+          classList.push('top')
+        } else {
+          classList.push('bottom')
+        }
+        classList.push('attached')
+      }
+      tab.opts.class = classList.join(' ')
     }
 
-    let isTabular = () => {
-      if (typeof opts.class === 'undefined') {
-        return true
-      }
-      return this.root.classList.contains('tabular')
+    let hasClass = className => {
+      return this.root.classList.contains(className)
     }
 
   </script>
