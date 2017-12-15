@@ -118,10 +118,10 @@ gulp.task('demo_build', function () {
     'demo_escape',
     'demo_htmlhint',
     'demo_compile',
-    'demo_clean',
     'demo_concat',
     'demo_browserify',
-    'demo_compress'
+    'demo_compress',
+    'demo_clean'
   );
 });
 
@@ -139,30 +139,23 @@ gulp.task('demo_htmlhint', function () {
 })
 
 gulp.task('demo_compile', function () {
-  del([
-    'docs/dist/**/*'
-  ]);
   return gulp.src('docs/temp/**/*.tag')
     .pipe(riot({
       type: 'es6'
     }))
-    .pipe(gulp.dest('docs/dist/'));
-});
-
-gulp.task('demo_clean', function (cb) {
-  return rimraf('docs/temp', cb);
+    .pipe(gulp.dest('docs/temp/'));
 });
 
 gulp.task('demo_concat', function () {
-  return gulp.src(['docs/dist/**/*.js', '!docs/dist/build.js'])
+  return gulp.src('docs/temp/**/*.js')
     .pipe(sort())
-    .pipe(concat('build.js'))
+    .pipe(concat('temp.js'))
     .pipe(gulp.dest('docs/'));
 });
 
 gulp.task('demo_browserify', function () {
   browserify({
-    entries: 'docs/build.js'
+    entries: 'docs/temp.js'
   })
     .transform(babelify)
     .bundle()
@@ -175,6 +168,13 @@ gulp.task('demo_compress', function (cb) {
     .pipe(plumber())
     .pipe(uglify())
     .pipe(gulp.dest('docs/'));
+});
+
+gulp.task('demo_clean', function (cb) {
+  del([
+    '**/temp.js'
+    , 'docs/temp'
+  ], cb);
 });
 
 gulp.task('demo_copy', function () {
