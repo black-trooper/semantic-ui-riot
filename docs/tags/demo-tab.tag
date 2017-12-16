@@ -344,12 +344,12 @@
     </div>
     <div class="ui segment bottom attached inverted transition hidden">
       <pre><code class="prettyprint">
-          <su-tabset class="red">
-            <su-tab title="Home">Home content</su-tab>
-            <su-tab title="Messages">Messages content</su-tab>
-            <su-tab title="Friends">Friends content</su-tab>
-          </su-tabset>
-          </code></pre>
+        <su-tabset class="red">
+          <su-tab title="Home">Home content</su-tab>
+          <su-tab title="Messages">Messages content</su-tab>
+          <su-tab title="Friends">Friends content</su-tab>
+        </su-tabset>
+      </code></pre>
     </div>
   </section>
 
@@ -367,6 +367,11 @@
     </div>
     <div class="ui segment bottom attached inverted transition hidden">
       <pre><code class="prettyprint">
+        <su-tabset class="red">
+          <su-tab title="Home">Home content</su-tab>
+          <su-tab title="Messages">Messages content</su-tab>
+          <su-tab title="Friends">Friends content</su-tab>
+        </su-tabset>
       </code></pre>
     </div>
   </section>
@@ -427,7 +432,12 @@
     </div>
     <div class="ui segment bottom attached inverted transition hidden">
       <pre><code class="prettyprint">
-        </code></pre>
+        <su-tabset class="red inverted">
+          <su-tab title="Home">Home content</su-tab>
+          <su-tab title="Messages">Messages content</su-tab>
+          <su-tab title="Friends">Friends content</su-tab>
+        </su-tabset>
+      </code></pre>
     </div>
   </section>
 
