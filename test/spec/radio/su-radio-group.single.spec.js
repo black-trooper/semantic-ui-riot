@@ -2,7 +2,7 @@ describe('su-radio-group-single', function () {
   let tag
 
   beforeEach(function () {
-    const group = $('<su-radio-group></su-radio-group')
+    const group = $('<su-radio-group></su-radio-group>')
     group.append('<su-radio value="1">Radio choice1</su-radio>')
     $('body').append(group)
     tag = riot.mount('su-radio-group')[0]

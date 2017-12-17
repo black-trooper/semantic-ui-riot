@@ -2,7 +2,7 @@ describe('su-radio-group-undefined', function () {
   let tag
 
   beforeEach(function () {
-    const group = $('<su-radio-group value="1"></su-radio-group')
+    const group = $('<su-radio-group value="1"></su-radio-group>')
     group.append('<su-radio>Radio choice1</su-radio>')
       .append('<su-radio>Radio choice2</su-radio>')
     $('body').append(group)

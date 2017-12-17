@@ -3,7 +3,7 @@ describe('su-radio-group', function () {
   let spyOnChange = sinon.spy()
 
   beforeEach(function () {
-    const group = $('<su-radio-group></su-radio-group')
+    const group = $('<su-radio-group></su-radio-group>')
     group.append('<su-radio value="1">Radio choice1</su-radio>')
       .append('<su-radio value="2">Radio choice2</su-radio>')
     $('body').append(group)
