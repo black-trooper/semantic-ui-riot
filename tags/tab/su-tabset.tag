@@ -43,6 +43,7 @@
       }
       this.tabs[index].active = true
       this.update()
+      this.trigger('click', this.tabs[index])
     }
 
 
