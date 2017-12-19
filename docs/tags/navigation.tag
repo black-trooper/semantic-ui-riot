@@ -24,13 +24,13 @@
         <a class="item" href="#demo-dropdown">Dropdown</a>
         <a class="item" href="#demo-modal">Modal</a>
         <a class="item" href="#demo-radio">Radio</a>
+        <a class="item" href="#demo-tab">Tab</a>
       </div>
     </div>
 
     <div class="item">
       <div class="header">Module(Unimplemented)</div>
       <div class="menu">
-        <a class="item" href="#demo-tab">Tab</a>
         <span class="item">Popup</span>
         <span class="item">Datepicker</span>
       </div>
