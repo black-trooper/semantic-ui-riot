@@ -721,3 +721,115 @@ var getRadioName = function getRadioName() {
   return 'su-radio-name-' + _this._riot_id;
 };
 });
+riot.tag2('su-tab', '<yield></yield>', 'su-tab.ui.segment,[data-is="su-tab"].ui.segment{ margin-top: 0; margin-bottom: 0; } su-tab.ui.segment.top.attached,[data-is="su-tab"].ui.segment.top.attached{ margin-top: 0 } su-tab.ui.segment.bottom.attached,[data-is="su-tab"].ui.segment.bottom.attached{ margin-bottom: 0 }', 'class="ui {opts.class} {active: active} tab"', function(opts) {
+"use strict";
+
+this.active = false;
+});
+riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isBottom()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.title}</a> </div> <yield></yield> <div class="ui {opts.class} {getClass()} menu" if="{isBottom()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.title}</a> </div>', '', '', function(opts) {
+'use strict';
+
+var _this = this;
+
+this.tabs = [];
+
+this.on('mount', function () {
+  _this.tabs = _this.tags['su-tab'];
+
+  if (!Array.isArray(_this.tabs)) {
+    _this.tabs = [_this.tabs];
+  }
+  var defaultActive = false;
+  for (var _iterator = _this.tabs, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+    var _ref;
+
+    if (_isArray) {
+      if (_i >= _iterator.length) break;
+      _ref = _iterator[_i++];
+    } else {
+      _i = _iterator.next();
+      if (_i.done) break;
+      _ref = _i.value;
+    }
+
+    var tab = _ref;
+
+    initializeChild(tab);
+    if (tab.opts.active) {
+      defaultActive = true;
+      tab.active = true;
+    }
+  }
+  if (!defaultActive) {
+    _this.tabs[0].active = true;
+  }
+
+  _this.update();
+});
+
+// ===================================================================================
+//                                                                               Event
+//                                                                               =====
+this.click = function (event) {
+  var index = event.item.i;
+
+  for (var _iterator2 = _this.tabs, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
+    var _ref2;
+
+    if (_isArray2) {
+      if (_i2 >= _iterator2.length) break;
+      _ref2 = _iterator2[_i2++];
+    } else {
+      _i2 = _iterator2.next();
+      if (_i2.done) break;
+      _ref2 = _i2.value;
+    }
+
+    var tab = _ref2;
+
+    tab.active = false;
+  }
+  _this.tabs[index].active = true;
+  _this.update();
+  _this.trigger('click', _this.tabs[index]);
+};
+
+// ===================================================================================
+//                                                                              Helper
+//                                                                              ======
+this.isBottom = function () {
+  return hasClass('bottom');
+};
+
+this.getClass = function () {
+  if (hasClass('tabular') && !hasClass('attached')) {
+    return 'attached';
+  }
+};
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+var initializeChild = function initializeChild(tab) {
+  if (tab.opts.class) {
+    return;
+  }
+  var classList = ['segment'];
+  if (hasClass('tabular')) {
+    classList.push('tabular');
+  }
+  if (hasClass('attached') || hasClass('tabular')) {
+    if (hasClass('bottom')) {
+      classList.push('top');
+    } else {
+      classList.push('bottom');
+    }
+    classList.push('attached');
+  }
+  tab.opts.class = classList.join(' ');
+};
+
+var hasClass = function hasClass(className) {
+  return _this.root.classList.contains(className);
+};
+});
