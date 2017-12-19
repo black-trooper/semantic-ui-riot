@@ -13,20 +13,19 @@
     this.on('mount', () => {
       this.tabs = this.tags['su-tab']
 
-      if (Array.isArray(this.tabs)) {
-        let defaultActive = false
-        for (const tab of this.tabs) {
-          initializeChild(tab)
-          if (tab.opts.active) {
-            defaultActive = true
-            tab.active = true
-          }
+      if (!Array.isArray(this.tabs)) {
+        this.tabs = [this.tabs]
+      }
+      let defaultActive = false
+      for (const tab of this.tabs) {
+        initializeChild(tab)
+        if (tab.opts.active) {
+          defaultActive = true
+          tab.active = true
         }
-        if (!defaultActive) {
-          this.tabs[0].active = true
-        }
-      } else {
-        initializeChild(this.tabs)
+      }
+      if (!defaultActive) {
+        this.tabs[0].active = true
       }
 
       this.update()

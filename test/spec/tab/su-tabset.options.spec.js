@@ -1,5 +1,3 @@
-const fireEvent = require('../../helpers').fireEvent
-
 describe('su-tabset-options', function () {
   let tag
   let mount = group => {
@@ -32,8 +30,10 @@ describe('su-tabset-options', function () {
       </su-tabset>`)
 
     tag.tags['su-tab'][0].root.classList.contains('tabular').should.equal(true)
+    tag.tags['su-tab'][0].root.classList.contains('attached').should.equal(true)
     tag.tags['su-tab'][0].root.classList.contains('bottom').should.equal(true)
     tag.tags['su-tab'][1].root.classList.contains('tabular').should.equal(true)
+    tag.tags['su-tab'][1].root.classList.contains('attached').should.equal(true)
     tag.tags['su-tab'][1].root.classList.contains('bottom').should.equal(true)
     $('.ui.menu').hasClass('top').should.equal(true)
   })
@@ -46,9 +46,60 @@ describe('su-tabset-options', function () {
       </su-tabset>`)
 
     tag.tags['su-tab'][0].root.classList.contains('tabular').should.equal(true)
+    tag.tags['su-tab'][0].root.classList.contains('attached').should.equal(true)
     tag.tags['su-tab'][0].root.classList.contains('top').should.equal(true)
     tag.tags['su-tab'][1].root.classList.contains('tabular').should.equal(true)
+    tag.tags['su-tab'][1].root.classList.contains('attached').should.equal(true)
     tag.tags['su-tab'][1].root.classList.contains('top').should.equal(true)
     $('.ui.menu').hasClass('bottom').should.equal(true)
+  })
+
+  it('top attached', function () {
+    mount(`
+      <su-tabset class="top attached">
+        <su-tab title="Home">Home content</su-tab>
+        <su-tab title="Message">Messages content</su-tab>
+      </su-tabset>`)
+
+    tag.tags['su-tab'][0].root.classList.contains('attached').should.equal(true)
+    tag.tags['su-tab'][0].root.classList.contains('bottom').should.equal(true)
+    tag.tags['su-tab'][1].root.classList.contains('attached').should.equal(true)
+    tag.tags['su-tab'][1].root.classList.contains('bottom').should.equal(true)
+    $('.ui.menu').hasClass('top').should.equal(true)
+  })
+
+  it('bottom attached', function () {
+    mount(`
+      <su-tabset class="bottom attached">
+        <su-tab title="Home">Home content</su-tab>
+        <su-tab title="Message">Messages content</su-tab>
+      </su-tabset>`)
+
+    tag.tags['su-tab'][0].root.classList.contains('attached').should.equal(true)
+    tag.tags['su-tab'][0].root.classList.contains('top').should.equal(true)
+    tag.tags['su-tab'][1].root.classList.contains('attached').should.equal(true)
+    tag.tags['su-tab'][1].root.classList.contains('top').should.equal(true)
+    $('.ui.menu').hasClass('bottom').should.equal(true)
+  })
+
+  it('single tab', function () {
+    mount(`
+      <su-tabset>
+        <su-tab title="Home">Home content</su-tab>
+        <su-tab title="Message" active="true">Messages content</su-tab>
+      </su-tabset>`)
+
+    tag.tags['su-tab'][0].active.should.equal(false)
+    tag.tags['su-tab'][1].active.should.equal(true)
+  })
+
+  it('default active', function () {
+    mount(`
+      <su-tabset>
+        <su-tab title="Home">Home content</su-tab>
+      </su-tabset>`)
+
+    tag.tags['su-tab'].root.classList.contains('segment').should.equal(true)
+    tag.tags['su-tab'].active.should.equal(true)
   })
 })
