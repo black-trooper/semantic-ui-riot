@@ -556,7 +556,7 @@
   <!-- =================================================================================== -->
   <!--                                                                      Named elements -->
   <!-- =================================================================================== -->
-  <h2 class="ui dividing header">Named elements<a class="anchor" id="event"></a></h2>
+  <h2 class="ui dividing header">Named elements<a class="anchor" id="named"></a></h2>
 
   <!-- ====================================================== -->
   <!--                                                 Single -->
@@ -693,6 +693,63 @@
         }
       </script>
     </code></pre>
+    </div>
+  </section>
+
+  <!-- =================================================================================== -->
+  <!--                                                                       Event trigger -->
+  <!-- =================================================================================== -->
+  <h2 class="ui dividing header">Event trigger<a class="anchor" id="event"></a></h2>
+
+  <!-- ====================================================== -->
+  <!--                                       Single Selection -->
+  <!--                                       ================ -->
+  <h3 class="ui header">Single Selection</h3>
+  <section>
+    <div class="ui segment secondary top attached example">
+      Example
+      <i class="icon code" onclick="{ toggleExample }"></i>
+    </div>
+    <div class="ui segment bottom attached">
+      <su-dropdown items="{ dropdownItems13 }" ref="dropdown3"></su-dropdown>
+      <div class="ui message">
+        <ul>
+          <li each="{ item in selectMessage }">{ item }</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ui segment bottom attached inverted transition hidden">
+      <pre><code class="prettyprint">
+        <su-dropdown items="{ dropdownItems }" ref="dropdown"></su-dropdown>
+        <div class="ui message">
+          <ul>
+            <li each="{ item in selectMessage }">{ item }</li>
+          </ul>
+        </div>
+
+        <script>
+          this.dropdownItems = [
+            {
+              label: 'Gender',
+              value: null,
+              default: true
+            },
+            {
+              label: 'Male',
+              value: 1
+            },
+            {
+              label: 'Female',
+              value: 2
+            },
+          ]
+
+          this.refs.dropdown.on('select', target => {
+            this.selectMessage.push(`Selected! label: ${target.label}, value: ${target.value}`)
+            this.update()
+          })
+        </script>
+      </code></pre>
     </div>
   </section>
 
@@ -1054,6 +1111,21 @@
         value: 2
       }
     ]
+    this.dropdownItems13 = [
+      {
+        label: 'Gender',
+        value: null,
+        default: true
+      },
+      {
+        label: 'Male',
+        value: 1
+      },
+      {
+        label: 'Female',
+        value: 2
+      }
+    ]
 
     this.setRefValue = value => {
       this.refs.dropdown1.value = value
@@ -1063,7 +1135,13 @@
       this.update()
     }
 
+    this.selectMessage = []
     this.on('mount', () => {
+      this.refs.dropdown3.on('select', target => {
+        this.selectMessage.push(`label: ${target.label}, value: ${target.value}`)
+        this.update()
+      })
+
       PR.prettyPrint(false)
     })
   </script>
