@@ -7,6 +7,7 @@ describe('su-dropdown', function () {
   let spyOnOpen = sinon.spy()
   let spyOnClose = sinon.spy()
   let spyOnSelect = sinon.spy()
+  let spyOnChange = sinon.spy()
 
   let items = [
     {
@@ -32,6 +33,7 @@ describe('su-dropdown', function () {
     tag.on('open', spyOnOpen)
       .on('close', spyOnClose)
       .on('select', spyOnSelect)
+      .on('change', spyOnChange)
     this.clock = sinon.useFakeTimers()
   })
 
@@ -39,6 +41,7 @@ describe('su-dropdown', function () {
     spyOnOpen.reset()
     spyOnClose.reset()
     spyOnSelect.reset()
+    spyOnChange.reset()
     this.clock.restore()
     tag.unmount()
   })
@@ -87,6 +90,7 @@ describe('su-dropdown', function () {
     $('su-dropdown > .text').text().trim().should.equal(items[0].label)
     $('su-dropdown > .text').hasClass('default').should.equal(true)
     spyOnSelect.should.have.been.calledOnce
+    spyOnChange.should.have.been.callCount(0)
 
     this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(false)
@@ -106,6 +110,7 @@ describe('su-dropdown', function () {
     $('su-dropdown > .text').text().trim().should.equal(items[1].label)
     $('su-dropdown > .text').hasClass('default').should.equal(false)
     spyOnSelect.should.have.been.calledOnce
+    spyOnChange.should.have.been.calledOnce
 
     this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(false)
@@ -128,6 +133,7 @@ describe('su-dropdown', function () {
     $('su-dropdown > .text').text().trim().should.equal(items[1].label)
     $('su-dropdown > .text').hasClass('default').should.equal(false)
     spyOnSelect.should.have.been.calledOnce
+    spyOnChange.should.have.been.calledOnce
 
     this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(false)
@@ -200,6 +206,10 @@ describe('su-dropdown', function () {
         default: true
       },
       {
+        label: 'A to C',
+        header: true
+      },
+      {
         label: 'a',
         value: 'a'
       },
@@ -216,5 +226,8 @@ describe('su-dropdown', function () {
     this.clock.tick(310)
 
     $('su-dropdown .menu .item').length.should.equal(4)
+    $('su-dropdown .header').click()
+    spyOnSelect.should.have.been.callCount(0)
+    spyOnChange.should.have.been.callCount(0)
   })
 })

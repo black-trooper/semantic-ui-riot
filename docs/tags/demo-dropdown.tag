@@ -714,7 +714,7 @@
       <su-dropdown items="{ dropdownItems13 }" ref="dropdown3"></su-dropdown>
       <div class="ui message">
         <ul>
-          <li each="{ item in selectMessage }">{ item }</li>
+          <li each="{ item in singleMessage }">{ item }</li>
         </ul>
       </div>
     </div>
@@ -723,7 +723,7 @@
         <su-dropdown items="{ dropdownItems }" ref="dropdown"></su-dropdown>
         <div class="ui message">
           <ul>
-            <li each="{ item in selectMessage }">{ item }</li>
+            <li each="{ item in singleMessage }">{ item }</li>
           </ul>
         </div>
 
@@ -744,9 +744,17 @@
             },
           ]
 
-          this.refs.dropdown.on('select', target => {
-            this.selectMessage.push(`Selected! label: ${target.label}, value: ${target.value}`)
-            this.update()
+          this.on('mount', () => {
+            this.refs.dropdown.on('select', target => {
+              this.singleMessage.push(`Selected. label: ${target.label}, value: ${target.value}`)
+              this.update()
+            })
+            this.refs.dropdown.on('change', target => {
+              this.singleMessage.push(`Changed. label: ${target.label}, value: ${target.value}`)
+              this.update()
+            })
+
+            PR.prettyPrint(false)
           })
         </script>
       </code></pre>
@@ -1135,10 +1143,14 @@
       this.update()
     }
 
-    this.selectMessage = []
+    this.singleMessage = []
     this.on('mount', () => {
       this.refs.dropdown3.on('select', target => {
-        this.selectMessage.push(`label: ${target.label}, value: ${target.value}`)
+        this.singleMessage.push(`Selected. label: ${target.label}, value: ${target.value}`)
+        this.update()
+      })
+      this.refs.dropdown3.on('change', target => {
+        this.singleMessage.push(`Changed. label: ${target.label}, value: ${target.value}`)
         this.update()
       })
 

@@ -291,6 +291,7 @@
         this.update()
         parentUpdate()
         this.trigger('select', target)
+        this.trigger('change', target)
       }
     }
 
@@ -308,6 +309,7 @@
         this.update()
         parentUpdate()
         this.trigger('select', opts.items.filter(item => item.selected))
+        this.trigger('change', opts.items.filter(item => item.selected))
       }
     }
 

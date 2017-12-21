@@ -6,6 +6,7 @@ describe('su-dropdown-multiple', function () {
   let spyOnOpen = sinon.spy()
   let spyOnClose = sinon.spy()
   let spyOnSelect = sinon.spy()
+  let spyOnChange = sinon.spy()
 
   let items = [
     {
@@ -41,6 +42,7 @@ describe('su-dropdown-multiple', function () {
     tag.on('open', spyOnOpen)
       .on('close', spyOnClose)
       .on('select', spyOnSelect)
+      .on('change', spyOnChange)
     this.clock = sinon.useFakeTimers()
   })
 
@@ -48,6 +50,7 @@ describe('su-dropdown-multiple', function () {
     spyOnOpen.reset()
     spyOnClose.reset()
     spyOnSelect.reset()
+    spyOnChange.reset()
     this.clock.restore()
     tag.unmount()
   })
@@ -63,6 +66,7 @@ describe('su-dropdown-multiple', function () {
     $('su-dropdown .item:eq(0)').click()
     $('su-dropdown > .label').text().trim().should.equal(items[1].label)
     spyOnSelect.should.have.been.calledOnce
+    spyOnChange.should.have.been.calledOnce
 
     this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(true)
@@ -81,6 +85,7 @@ describe('su-dropdown-multiple', function () {
     $('su-dropdown > .label:eq(1)').text().trim().should.equal(items[2].label)
     tag.value.should.deep.equal(['angular', 'css'])
     spyOnSelect.should.have.been.calledTwice
+    spyOnChange.should.have.been.calledTwice
 
     this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(true)
@@ -99,6 +104,7 @@ describe('su-dropdown-multiple', function () {
     $('su-dropdown > .label:first').text().trim().should.equal(items[2].label)
     tag.value.should.deep.equal(['css'])
     spyOnSelect.should.have.been.calledTwice
+    spyOnChange.should.have.been.calledTwice
 
     this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(true)
@@ -118,6 +124,7 @@ describe('su-dropdown-multiple', function () {
     $('su-dropdown > .label').text().trim().should.equal(items[1].label)
     $('su-dropdown .active .text').text().should.equal(items[2].label)
     spyOnSelect.should.have.been.calledOnce
+    spyOnChange.should.have.been.calledOnce
 
     this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(true)
@@ -140,6 +147,7 @@ describe('su-dropdown-multiple', function () {
     $('su-dropdown > .label').text().trim().should.equal(items[length - 1].label)
     $('su-dropdown .active .text').text().should.equal(items[length - 2].label)
     spyOnSelect.should.have.been.calledOnce
+    spyOnChange.should.have.been.calledOnce
 
     this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(true)
