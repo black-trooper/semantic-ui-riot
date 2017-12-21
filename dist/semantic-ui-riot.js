@@ -362,6 +362,12 @@ var close = function close() {
 };
 
 var selectTarget = function selectTarget(target, updating) {
+  if (_this.value === target.value && _this.label === target.label && _this.default === target.default) {
+    if (!updating) {
+      _this.trigger('select', target);
+    }
+    return;
+  }
   _this.value = target.value;
   _this.label = target.label;
   _this.default = target.default;
@@ -371,12 +377,27 @@ var selectTarget = function selectTarget(target, updating) {
   }
   if (!updating) {
     _this.update();
+    parentUpdate();
+    _this.trigger('select', target);
+    _this.trigger('change', target);
   }
-  parentUpdate();
-  _this.trigger('select', target);
 };
 
 var selectMultiTarget = function selectMultiTarget(updating) {
+  if (JSON.stringify(_this.value) == JSON.stringify(opts.items.filter(function (item) {
+    return item.selected;
+  }).map(function (item) {
+    return item.value;
+  })) && _this.selectedFlg == opts.items.some(function (item) {
+    return item.selected;
+  })) {
+    if (!updating) {
+      _this.trigger('select', opts.items.filter(function (item) {
+        return item.selected;
+      }));
+    }
+    return;
+  }
   _this.value = opts.items.filter(function (item) {
     return item.selected;
   }).map(function (item) {
@@ -388,10 +409,13 @@ var selectMultiTarget = function selectMultiTarget(updating) {
   if (!updating) {
     _this.update();
     parentUpdate();
+    _this.trigger('select', opts.items.filter(function (item) {
+      return item.selected;
+    }));
+    _this.trigger('change', opts.items.filter(function (item) {
+      return item.selected;
+    }));
   }
-  _this.trigger('select', opts.items.filter(function (item) {
-    return item.selected;
-  }));
 };
 
 var search = function search(target) {
