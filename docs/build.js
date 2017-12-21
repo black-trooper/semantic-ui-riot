@@ -397,7 +397,7 @@ riot.tag2('navigation', '<div class="ui inverted vertical left fixed menu"> <div
 },{"../package.json":2}],2:[function(require,module,exports){
 module.exports={
   "name": "semantic-ui-riot",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Semantic UI for Riot",
   "main": "dist/semantic-ui-riot.min.js",
   "files": [
