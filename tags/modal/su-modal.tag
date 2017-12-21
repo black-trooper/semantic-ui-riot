@@ -10,7 +10,7 @@
     </div>
     <div class="actions">
       <div each="{ opts.modal.buttons }" class="ui button { type } { labeled: icon && text } { icon: icon } { inverted: isBasic() }"
-        onclick="{ parent.click.bind(this, text, action) }">
+        onclick="{ parent.click }">
         { text }
         <i class="icon { icon }" if="{ icon }"></i>
       </div>
@@ -71,14 +71,15 @@
       }, 500)
     }
 
-    this.click = (text, action) => {
-      this.trigger('hide', action || text)
-      close()
+    this.click = event => {
+      this.trigger(event.item.action || event.item.text)
+      if (typeof event.item.closable === 'undefined' || event.item.closable) {
+        close()
+      }
     }
 
     this.dimmerClose = () => {
       if (opts.modal.closable && !this.isBasic()) {
-        this.trigger('hide')
         close()
       }
     }
@@ -88,7 +89,6 @@
     }
 
     this.hide = () => {
-      this.trigger('hide')
       close()
     }
 
@@ -102,6 +102,7 @@
       closing = true
       this.transitionStatus = 'animating fade out visible active'
       this.update()
+      this.trigger('hide')
 
       setTimeout(() => {
         closing = false
