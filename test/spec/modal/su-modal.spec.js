@@ -38,7 +38,7 @@ describe('su-modal', function () {
 
     tag.show()
     spyOnShow.should.have.been.calledOnce
-    this.clock.tick(310)
+    this.clock.tick(510)
     $('su-modal').is(':visible').should.equal(true)
 
     $('su-modal .ui.button:first').click()
@@ -54,7 +54,7 @@ describe('su-modal', function () {
 
     tag.show()
     spyOnShow.should.have.been.calledOnce
-    this.clock.tick(310)
+    this.clock.tick(510)
     $('su-modal').is(':visible').should.equal(true)
 
     $('su-modal').click()
@@ -76,7 +76,7 @@ describe('su-modal', function () {
     }
     mount({ modal: modal })
     tag.show()
-    this.clock.tick(310)
+    this.clock.tick(510)
     $('su-modal').is(':visible').should.equal(true)
 
     const btn_ok = $('su-modal .ui.button:first')
@@ -101,7 +101,7 @@ describe('su-modal', function () {
     }
     mount({ modal: modal })
     tag.show()
-    this.clock.tick(310)
+    this.clock.tick(510)
     $('su-modal').is(':visible').should.equal(true)
 
     const header = $('su-modal .ui.header')
@@ -119,7 +119,7 @@ describe('su-modal', function () {
     }
     mount({ modal: modal })
     tag.show()
-    this.clock.tick(310)
+    this.clock.tick(510)
     $('su-modal').is(':visible').should.equal(true)
 
     const header = $('su-modal .ui.header')
@@ -145,7 +145,7 @@ describe('su-modal', function () {
     }
     mount({ modal: modal })
     tag.show()
-    this.clock.tick(310)
+    this.clock.tick(510)
     $('su-modal').is(':visible').should.equal(true)
 
     const content = $('su-modal .content')
@@ -156,7 +156,7 @@ describe('su-modal', function () {
     $('body').append('<su-modal>modal</su-modal>')
     mount({ class: 'fullscreen' })
     tag.show()
-    this.clock.tick(310)
+    this.clock.tick(510)
     $('su-modal').is(':visible').should.equal(true)
 
     $('su-modal i.close.icon').length.should.equal(1)

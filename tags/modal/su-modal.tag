@@ -33,6 +33,8 @@
 
   <script>
     let image_content = false
+    let openning, closing, visible
+
     if (!opts.modal) {
       opts.modal = {}
     }
@@ -53,11 +55,17 @@
     //                                                                               Event
     //                                                                               =====
     this.show = () => {
+      if (openning || closing || visible) {
+        return
+      }
+      openning = true
       this.transitionStatus = 'animating fade in visible'
       this.update()
       this.trigger('show')
 
       setTimeout(() => {
+        openning = false
+        visible = true
         this.transitionStatus = 'visible active'
         this.update()
       }, 500)
@@ -88,10 +96,16 @@
     //                                                                               Logic
     //                                                                               =====
     let close = () => {
+      if (openning || closing || !visible) {
+        return
+      }
+      closing = true
       this.transitionStatus = 'animating fade out visible active'
       this.update()
 
       setTimeout(() => {
+        closing = false
+        visible = false
         this.transitionStatus = ''
         this.update()
       }, 300)
