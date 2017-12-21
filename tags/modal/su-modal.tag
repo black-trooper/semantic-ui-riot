@@ -74,13 +74,13 @@
     this.click = event => {
       this.trigger(event.item.action || event.item.text)
       if (typeof event.item.closable === 'undefined' || event.item.closable) {
-        close()
+        this.hide()
       }
     }
 
     this.dimmerClose = () => {
       if (opts.modal.closable && !this.isBasic()) {
-        close()
+        this.hide()
       }
     }
 
@@ -89,13 +89,6 @@
     }
 
     this.hide = () => {
-      close()
-    }
-
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
-    let close = () => {
       if (openning || closing || !visible) {
         return
       }
@@ -112,7 +105,10 @@
       }, 300)
     }
 
-    let isContainsClassName = className => {
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
+    const isContainsClassName = className => {
       const modalElement = document.getElementById(this.getId())
       if (!modalElement) {
         return false
