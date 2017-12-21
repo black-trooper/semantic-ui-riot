@@ -272,6 +272,14 @@
     }
 
     let selectTarget = (target, updating) => {
+      if (this.value === target.value &&
+        this.label === target.label &&
+        this.default === target.default) {
+        if (!updating) {
+          this.trigger('select', target)
+        }
+        return
+      }
       this.value = target.value
       this.label = target.label
       this.default = target.default
@@ -281,19 +289,26 @@
       }
       if (!updating) {
         this.update()
+        parentUpdate()
+        this.trigger('select', target)
       }
-      parentUpdate()
-      this.trigger('select', target)
     }
 
     let selectMultiTarget = (updating) => {
+      if (JSON.stringify(this.value) == JSON.stringify(opts.items.filter(item => item.selected).map(item => item.value))
+        && this.selectedFlg == opts.items.some(item => item.selected)) {
+        if (!updating) {
+          this.trigger('select', opts.items.filter(item => item.selected))
+        }
+        return
+      }
       this.value = opts.items.filter(item => item.selected).map(item => item.value)
       this.selectedFlg = opts.items.some(item => item.selected)
       if (!updating) {
         this.update()
         parentUpdate()
+        this.trigger('select', opts.items.filter(item => item.selected))
       }
-      this.trigger('select', opts.items.filter(item => item.selected))
     }
 
     let search = target => {

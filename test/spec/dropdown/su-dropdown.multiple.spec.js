@@ -40,7 +40,7 @@ describe('su-dropdown-multiple', function () {
     })[0]
     tag.on('open', spyOnOpen)
       .on('close', spyOnClose)
-      .on('search', spyOnSelect)
+      .on('select', spyOnSelect)
     this.clock = sinon.useFakeTimers()
   })
 
@@ -80,7 +80,7 @@ describe('su-dropdown-multiple', function () {
     $('su-dropdown > .label:first').text().trim().should.equal(items[1].label)
     $('su-dropdown > .label:eq(1)').text().trim().should.equal(items[2].label)
     tag.value.should.deep.equal(['angular', 'css'])
-    spyOnSelect.should.have.been.calledOnce
+    spyOnSelect.should.have.been.calledTwice
 
     this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(true)
@@ -98,7 +98,7 @@ describe('su-dropdown-multiple', function () {
     $('su-dropdown > .label:first .delete').click()
     $('su-dropdown > .label:first').text().trim().should.equal(items[2].label)
     tag.value.should.deep.equal(['css'])
-    spyOnSelect.should.have.been.calledOnce
+    spyOnSelect.should.have.been.calledTwice
 
     this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(true)
