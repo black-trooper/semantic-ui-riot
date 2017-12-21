@@ -476,12 +476,16 @@ this.getTabindex = function () {
   return 0;
 };
 });
-riot.tag2('su-modal', '<div class="ui modal transition visible active {opts.class}" onclick="{clickModal}" id="{getId()}"> <i class="close icon" if="{isFullscreen()}" onclick="{hide}"></i> <div class="ui header {icon: opts.modal.header.icon}" if="{opts.modal.header}"> <i class="icon {opts.modal.header.icon}" if="{opts.modal.header.icon}"></i> {(opts.modal.header.text) ? opts.modal.header.text : opts.modal.header} </div> <div class="content {image: isImageContent()}" ref="content"> <yield></yield> </div> <div class="actions"> <div each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: isBasic()}" onclick="{parent.click.bind(this, text, action)}"> {text} <i class="icon {icon}" if="{icon}"></i> </div> </div> </div>', 'su-modal.ui.dimmer.visible.transition,[data-is="su-modal"].ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; }', 'class="ui dimmer modals page transition {transitionStatus}" onclick="{dimmerClose}"', function(opts) {
+riot.tag2('su-modal', '<div class="ui modal transition visible active {opts.class}" onclick="{clickModal}" id="{getId()}"> <i class="close icon" if="{isFullscreen()}" onclick="{hide}"></i> <div class="ui header {icon: opts.modal.header.icon}" if="{opts.modal.header}"> <i class="icon {opts.modal.header.icon}" if="{opts.modal.header.icon}"></i> {(opts.modal.header.text) ? opts.modal.header.text : opts.modal.header} </div> <div class="content {image: isImageContent()}" ref="content"> <yield></yield> </div> <div class="actions"> <div each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: isBasic()}" onclick="{parent.click}"> {text} <i class="icon {icon}" if="{icon}"></i> </div> </div> </div>', 'su-modal.ui.dimmer.visible.transition,[data-is="su-modal"].ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; }', 'class="ui dimmer modals page transition {transitionStatus}" onclick="{dimmerClose}"', function(opts) {
 'use strict';
 
 var _this = this;
 
 var image_content = false;
+var openning = void 0,
+    closing = void 0,
+    visible = void 0;
+
 if (!opts.modal) {
   opts.modal = {};
 }
@@ -502,25 +506,32 @@ this.on('update', function () {
 //                                                                               Event
 //                                                                               =====
 this.show = function () {
+  if (openning || closing || visible) {
+    return;
+  }
+  openning = true;
   _this.transitionStatus = 'animating fade in visible';
   _this.update();
   _this.trigger('show');
 
   setTimeout(function () {
+    openning = false;
+    visible = true;
     _this.transitionStatus = 'visible active';
     _this.update();
   }, 500);
 };
 
-this.click = function (text, action) {
-  _this.trigger('hide', action || text);
-  close();
+this.click = function (event) {
+  _this.trigger(event.item.action || event.item.text);
+  if (typeof event.item.closable === 'undefined' || event.item.closable) {
+    _this.hide();
+  }
 };
 
 this.dimmerClose = function () {
   if (opts.modal.closable && !_this.isBasic()) {
-    _this.trigger('hide');
-    close();
+    _this.hide();
   }
 };
 
@@ -529,23 +540,25 @@ this.clickModal = function (event) {
 };
 
 this.hide = function () {
-  _this.trigger('hide');
-  close();
-};
-
-// ===================================================================================
-//                                                                               Logic
-//                                                                               =====
-var close = function close() {
+  if (openning || closing || !visible) {
+    return;
+  }
+  closing = true;
   _this.transitionStatus = 'animating fade out visible active';
   _this.update();
+  _this.trigger('hide');
 
   setTimeout(function () {
+    closing = false;
+    visible = false;
     _this.transitionStatus = '';
     _this.update();
   }, 300);
 };
 
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
 var isContainsClassName = function isContainsClassName(className) {
   var modalElement = document.getElementById(_this.getId());
   if (!modalElement) {
