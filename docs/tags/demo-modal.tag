@@ -284,6 +284,9 @@
         closable: false,
       }, {
         text: 'Closable',
+      }, {
+        text: 'Disabled',
+        disabled: true
       }]
     }
 
