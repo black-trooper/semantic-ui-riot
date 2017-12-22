@@ -171,7 +171,7 @@ gulp.task('demo_compress', function (cb) {
 });
 
 gulp.task('demo_clean', function (cb) {
-  del([
+  return del([
     '**/temp.js'
     , 'docs/temp'
   ], cb);
