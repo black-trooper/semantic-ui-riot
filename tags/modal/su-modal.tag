@@ -9,7 +9,7 @@
       <yield />
     </div>
     <div class="actions">
-      <div each="{ opts.modal.buttons }" class="ui button { type } { labeled: icon && text } { icon: icon } { inverted: isBasic() }"
+      <div each="{ opts.modal.buttons }" class="ui button { type } { labeled: icon && text } { icon: icon } { inverted: isBasic() } { disabled: disabled }"
         onclick="{ parent.click }">
         { text }
         <i class="icon { icon }" if="{ icon }"></i>
