@@ -303,7 +303,7 @@ riot.tag2('demo-dropdown', '<h1 class="ui header"> Dropdown <div class="sub head
     PR.prettyPrint(false);
   });
 });
-riot.tag2('demo-modal', '<h1 class="ui header"> Modal <div class="sub header">A modal displays content that temporarily blocks interactions with the main view of a site</div> </h1> <h2 class="ui dividing header">Types<a class="anchor" id="types"></a></h2> <h3 class="ui header">Modal</h3> <p>A standard modal</p> <section> <div class="ui segment secondary top attached example"> Example <i class="icon code" onclick="{toggleExample}"></i> </div> <div class="ui segment bottom attached"> <su-modal modal="{modal}" class="large" ref="modal"> <div class="ui medium image"> <img src="./images/avatar2/large/rachel.png"> </div> <div class="description"> <div class="ui header">Default Profile Image</div> <p>We\'ve found the following <a href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with your e-mail address.</p> <p>Is it okay to use this photo?</p> </div> </su-modal> <button class="ui button" onclick="{showModal}">Show modal</button> </div> <div class="ui segment bottom attached inverted transition hidden"> <pre><code class="prettyprint">&lt;su-modal modal=&quot;\\{ modal \\}&quot; class=&quot;large&quot; ref=&quot;modal&quot;&gt;\n  &lt;div class=&quot;ui medium image&quot;&gt;\n    &lt;img src=&quot;./images/avatar2/large/rachel.png&quot; /&gt;\n  &lt;/div&gt;\n  &lt;div class=&quot;description&quot;&gt;\n    &lt;div class=&quot;ui header&quot;&gt;Default Profile Image&lt;/div&gt;\n    &lt;p&gt;We&apos;ve found the following &lt;a href=&quot;https://www.gravatar.com&quot; target=&quot;_blank&quot;&gt;gravatar&lt;/a&gt; image associated with your\n      e-mail address.&lt;/p&gt;\n    &lt;p&gt;Is it okay to use this photo?&lt;/p&gt;\n  &lt;/div&gt;\n&lt;/su-modal&gt;\n&lt;button class=&quot;ui button&quot; onclick=&quot;\\{ showModal \\}&quot;&gt;Show modal&lt;/button&gt;\n\n&lt;script&gt;\n  this.modal = \\{\n    header: &apos;Select a Photo&apos;,\n    buttons: [\\{\n      text: &apos;Ok&apos;,\n      type: &apos;primary&apos;,\n      icon: &apos;checkmark&apos;\n    \\}, \\{\n      text: &apos;Cancel&apos;\n    \\}]\n  \\}\n\n  this.showModal = () =&gt; \\{\n    this.refs.modal.show()\n  \\}\n&lt;/script&gt;\n</code></pre> </div> </section> <h3 class="ui header">Basic</h3> <p>A modal can reduce its complexity</p> <section> <div class="ui segment secondary top attached example"> Example <i class="icon code" onclick="{toggleExample}"></i> </div> <div class="ui segment bottom attached"> <su-modal modal="{modal_basic}" class="basic" ref="modal_basic"> Your inbox is getting full, would you like us to enable automatic archiving of old messages? </su-modal> <button class="ui button" onclick="{showModalBasic}">Show modal</button> </div> <div class="ui segment bottom attached inverted transition hidden"> <pre><code class="prettyprint">&lt;su-modal modal=&quot;\\{ modal \\}&quot; class=&quot;basic&quot; ref=&quot;modal_basic&quot;&gt;\n  Your inbox is getting full, would you like us to enable automatic archiving of old messages?\n&lt;/su-modal&gt;\n&lt;button class=&quot;ui button&quot; onclick=&quot;\\{ showModalBasic \\}&quot;&gt;Show modal&lt;/button&gt;\n\n&lt;script&gt;\n  this.modal = \\{\n    header: \\{\n      text: &apos;Archive Old Messages&apos;,\n      icon: &apos;archive&apos;\n    \\},\n    buttons: [\\{\n      text: &apos;No&apos;\n    \\}, \\{\n      text: &apos;Yes&apos;,\n      type: &apos;green&apos;,\n      icon: &apos;checkmark&apos;\n    \\}]\n  \\}\n\n  this.showModalBasic = () =&gt; \\{\n    this.refs.modal_basic.show()\n  \\}\n&lt;/script&gt;\n</code></pre> </div> </section>', '', '', function (opts) {
+riot.tag2('demo-modal', '<h1 class="ui header"> Modal <div class="sub header">A modal displays content that temporarily blocks interactions with the main view of a site</div> </h1> <h2 class="ui dividing header">Types<a class="anchor" id="types"></a></h2> <h3 class="ui header">Modal</h3> <p>A standard modal</p> <section> <div class="ui segment secondary top attached example"> Example <i class="icon code" onclick="{toggleExample}"></i> </div> <div class="ui segment bottom attached"> <su-modal modal="{modal}" class="large" ref="modal"> <div class="ui medium image"> <img src="./images/avatar2/large/rachel.png"> </div> <div class="description"> <div class="ui header">Default Profile Image</div> <p>We\'ve found the following <a href="https://www.gravatar.com" target="_blank">gravatar</a> image associated with your e-mail address.</p> <p>Is it okay to use this photo?</p> </div> </su-modal> <button class="ui button" onclick="{showModal.bind(this, this.refs.modal)}">Show modal</button> </div> <div class="ui segment bottom attached inverted transition hidden"> <pre><code class="prettyprint">&lt;su-modal modal=&quot;\\{ modal \\}&quot; class=&quot;large&quot; ref=&quot;modal&quot;&gt;\n  &lt;div class=&quot;ui medium image&quot;&gt;\n    &lt;img src=&quot;./images/avatar2/large/rachel.png&quot; /&gt;\n  &lt;/div&gt;\n  &lt;div class=&quot;description&quot;&gt;\n    &lt;div class=&quot;ui header&quot;&gt;Default Profile Image&lt;/div&gt;\n    &lt;p&gt;We&apos;ve found the following &lt;a href=&quot;https://www.gravatar.com&quot; target=&quot;_blank&quot;&gt;gravatar&lt;/a&gt; image associated with your\n      e-mail address.&lt;/p&gt;\n    &lt;p&gt;Is it okay to use this photo?&lt;/p&gt;\n  &lt;/div&gt;\n&lt;/su-modal&gt;\n&lt;button class=&quot;ui button&quot; onclick=&quot;\\{ showModal \\}&quot;&gt;Show modal&lt;/button&gt;\n\n&lt;script&gt;\n  this.modal = \\{\n    header: &apos;Select a Photo&apos;,\n    buttons: [\\{\n      text: &apos;Ok&apos;,\n      type: &apos;primary&apos;,\n      icon: &apos;checkmark&apos;\n    \\}, \\{\n      text: &apos;Cancel&apos;\n    \\}]\n  \\}\n\n  this.showModal = () =&gt; \\{\n    this.refs.modal.show()\n  \\}\n&lt;/script&gt;\n</code></pre> </div> </section> <h3 class="ui header">Basic</h3> <p>A modal can reduce its complexity</p> <section> <div class="ui segment secondary top attached example"> Example <i class="icon code" onclick="{toggleExample}"></i> </div> <div class="ui segment bottom attached"> <su-modal modal="{modal_basic}" class="basic" ref="modal_basic"> Your inbox is getting full, would you like us to enable automatic archiving of old messages? </su-modal> <button class="ui button" onclick="{showModal.bind(this, this.refs.modal_basic)}">Show modal</button> </div> <div class="ui segment bottom attached inverted transition hidden"> <pre><code class="prettyprint">&lt;su-modal modal=&quot;\\{ modal \\}&quot; class=&quot;basic&quot; ref=&quot;modal_basic&quot;&gt;\n  Your inbox is getting full, would you like us to enable automatic archiving of old messages?\n&lt;/su-modal&gt;\n&lt;button class=&quot;ui button&quot; onclick=&quot;\\{ showModalBasic \\}&quot;&gt;Show modal&lt;/button&gt;\n\n&lt;script&gt;\n  this.modal = \\{\n    header: \\{\n      text: &apos;Archive Old Messages&apos;,\n      icon: &apos;archive&apos;\n    \\},\n    buttons: [\\{\n      text: &apos;No&apos;\n    \\}, \\{\n      text: &apos;Yes&apos;,\n      type: &apos;green&apos;,\n      icon: &apos;checkmark&apos;\n    \\}]\n  \\}\n\n  this.showModalBasic = () =&gt; \\{\n    this.refs.modal_basic.show()\n  \\}\n&lt;/script&gt;\n</code></pre> </div> </section> <h2 class="ui dividing header">Settings<a class="anchor" id="settings"></a></h2> <h3 class="ui header">Not closable</h3> <p>Clicking on the dimmer does not close modal</p> <section> <div class="ui segment secondary top attached example"> Example <i class="icon code" onclick="{toggleExample}"></i> </div> <div class="ui segment bottom attached"> <su-modal modal="{modal2}" ref="modal2"> And not closable button </su-modal> <button class="ui button" onclick="{showModal.bind(this, this.refs.modal2)}">Show modal</button> </div> <div class="ui segment bottom attached inverted transition hidden"> <pre><code class="prettyprint">&lt;su-modal modal=&quot;\\{ modal \\}&quot; ref=&quot;modal&quot;&gt;\n  And not closable button\n&lt;/su-modal&gt;\n&lt;button class=&quot;ui button&quot; onclick=&quot;\\{ showModal \\}&quot;&gt;Show modal&lt;/button&gt;\n\n&lt;script&gt;\n  this.modal = \\{\n    header: &apos;Clicking on the dimmer does not close modal&apos;,\n    closable: false,\n    buttons: [\\{\n      text: &apos;Not closable&apos;,\n      type: &apos;red&apos;,\n      closable: false,\n    \\}, \\{\n      text: &apos;Closable&apos;,\n    \\}]\n  \\}\n\n  this.showModal = () =&gt; \\{\n    this.refs.modal.show()\n  \\}\n&lt;/script&gt;\n</code></pre> </div> </section> <h3 class="ui header">Callback</h3> <section> <div class="ui segment secondary top attached example"> Example <i class="icon code" onclick="{toggleExample}"></i> </div> <div class="ui segment bottom attached"> <su-modal modal="{modal3}" ref="modal3"> </su-modal> <div class="ui message" if="{callbackMessage.length > 0}"> <ul> <li each="{item in callbackMessage}">{item}</li> </ul> </div> <button class="ui button" onclick="{showModal.bind(this, this.refs.modal3)}">Show modal</button> </div> <div class="ui segment bottom attached inverted transition hidden"> <pre><code class="prettyprint">&lt;su-modal modal=&quot;\\{ modal \\}&quot; ref=&quot;modal&quot;&gt;\n&lt;/su-modal&gt;\n&lt;div class=&quot;ui message&quot; if=&quot;\\{ callbackMessage.length &gt; 0 \\}&quot;&gt;\n  &lt;ul&gt;\n    &lt;li each=&quot;\\{ item in callbackMessage \\}&quot;&gt;\\{ item \\}&lt;/li&gt;\n  &lt;/ul&gt;\n&lt;/div&gt;\n&lt;button class=&quot;ui button&quot; onclick=&quot;\\{ showModal \\}&quot;&gt;Show modal&lt;/button&gt;\n\n&lt;script&gt;\n  this.modal = \\{\n    headers: &apos;Button actions&apos;,\n    buttons: [\\{\n      text: &apos;Text access&apos;\n    \\}, \\{\n      text: &apos;Action access&apos;,\n      action: &apos;clickAction&apos;\n    \\}, \\{\n      text: &apos;Confirm close&apos;,\n      closable: false,\n    \\}]\n  \\}\n\n  this.showModal = () =&gt; \\{\n    this.refs.modal.show()\n  \\}\n\n  this.on(&apos;mount&apos;, () =&gt; \\{\n    // trigger by buttons[n].text\n    this.refs.modal.on(&apos;Text access&apos;, () =&gt; \\{\n      this.callbackMessage.push(&apos;Text access button is clicked.&apos;)\n      this.update()\n    \\})\n\n    // trigger by buttons[n].action\n    this.refs.modal.on(&apos;clickAction&apos;, () =&gt; \\{\n      this.callbackMessage.push(&apos;Action access button is clicked.&apos;)\n      this.update()\n    \\})\n    this.refs.modal.on(&apos;Confirm close&apos;, () =&gt; \\{\n      if (confirm(&apos;Are you ok ?&apos;)) \\{\n        this.refs.modal3.hide()\n        this.callbackMessage.push(&apos;Confirm close button is clicked and confirm ok.&apos;)\n        this.update()\n      \\}\n    \\})\n\n    this.refs.modal.on(&apos;show&apos;, () =&gt; \\{\n      this.callbackMessage.push(&apos;Modal show&apos;)\n      this.update()\n    \\})\n    this.refs.modal.on(&apos;hide&apos;, () =&gt; \\{\n      this.callbackMessage.push(&apos;Modal hide&apos;)\n      this.update()\n    \\})\n  \\})\n&lt;/script&gt;\n</code></pre> </div> </section>', '', '', function (opts) {
   'use strict';
 
   var _this = this;
@@ -323,10 +323,6 @@ riot.tag2('demo-modal', '<h1 class="ui header"> Modal <div class="sub header">A 
     }]
   };
 
-  this.showModal = function () {
-    _this.refs.modal.show();
-  };
-
   this.modal_basic = {
     header: {
       text: 'Archive Old Messages',
@@ -341,11 +337,65 @@ riot.tag2('demo-modal', '<h1 class="ui header"> Modal <div class="sub header">A 
     }]
   };
 
-  this.showModalBasic = function () {
-    _this.refs.modal_basic.show();
+  this.modal2 = {
+    header: 'Clicking on the dimmer does not close modal',
+    closable: false,
+    buttons: [{
+      text: 'Not closable',
+      type: 'red',
+      closable: false
+    }, {
+      text: 'Closable'
+    }]
   };
 
+  this.modal3 = {
+    headers: 'Button actions',
+    buttons: [{
+      text: 'Text access'
+    }, {
+      text: 'Action access',
+      action: 'clickAction'
+    }, {
+      text: 'Confirm close',
+      closable: false
+    }]
+  };
+
+  this.showModal = function (target) {
+    target.show();
+  };
+  this.callbackMessage = [];
+
   this.on('mount', function () {
+    // trigger by buttons[n].text
+    _this.refs.modal3.on('Text access', function () {
+      _this.callbackMessage.push('Text access button is clicked.');
+      _this.update();
+    });
+
+    // trigger by buttons[n].action
+    _this.refs.modal3.on('clickAction', function () {
+      _this.callbackMessage.push('Action access button is clicked.');
+      _this.update();
+    });
+    _this.refs.modal3.on('Confirm close', function () {
+      _this.callbackMessage.push('Confirm close button is clicked.');
+      _this.update();
+      if (confirm('Are you ok ?')) {
+        _this.refs.modal3.hide();
+      }
+    });
+
+    _this.refs.modal3.on('show', function () {
+      _this.callbackMessage.push('Modal show');
+      _this.update();
+    });
+    _this.refs.modal3.on('hide', function () {
+      _this.callbackMessage.push('Modal hide');
+      _this.update();
+    });
+
     PR.prettyPrint(false);
   });
 });
