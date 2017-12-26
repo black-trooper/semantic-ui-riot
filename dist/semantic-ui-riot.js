@@ -763,7 +763,64 @@ riot.tag2('su-tab', '<yield></yield>', 'su-tab.ui.segment,[data-is="su-tab"].ui.
 
 this.active = false;
 });
-riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isBottom()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.title}</a> </div> <yield></yield> <div class="ui {opts.class} {getClass()} menu" if="{isBottom()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.title}</a> </div>', '', '', function(opts) {
+riot.tag2('su-tab-header', '<yield></yield>', '', 'class="ui {opts.class} menu"', function(opts) {
+});
+riot.tag2('su-tab-title', '<a class="{opts.class} {active: active} item" onclick="{click}"> <yield></yield> </a>', '', '', function(opts) {
+'use strict';
+
+var _this = this;
+
+this.active = false;
+var index = 0;
+var tabs = void 0;
+this.on('mount', function () {
+  tabs = _this.parent.tags['su-tab-title'];
+  for (var _iterator = tabs, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
+    var _ref;
+
+    if (_isArray) {
+      if (_i >= _iterator.length) break;
+      _ref = _iterator[_i++];
+    } else {
+      _i = _iterator.next();
+      if (_i.done) break;
+      _ref = _i.value;
+    }
+
+    var tab = _ref;
+
+    if (tab._riot_id == _this._riot_id) {
+      break;
+    } else {
+      index++;
+    }
+  }
+});
+
+this.click = function () {
+  for (var _iterator2 = tabs, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
+    var _ref2;
+
+    if (_isArray2) {
+      if (_i2 >= _iterator2.length) break;
+      _ref2 = _iterator2[_i2++];
+    } else {
+      _i2 = _iterator2.next();
+      if (_i2.done) break;
+      _ref2 = _i2.value;
+    }
+
+    var tab = _ref2;
+
+    tab.active = false;
+  }
+  _this.parent.parent.click(index);
+  tabs[index].active = true;
+  _this.update();
+  _this.trigger('click', _this.parent.parent.tabs[index]);
+};
+});
+riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click.bind(this, i)}">{tab.opts.title}</a> </div> <yield></yield> <div class="ui {opts.class} {getClass()} menu" if="{isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click.bind(this, i)}">{tab.opts.title}</a> </div>', '', '', function(opts) {
 'use strict';
 
 var _this = this;
@@ -771,6 +828,10 @@ var _this = this;
 this.tabs = [];
 
 this.on('mount', function () {
+  if (_this.tags['su-tab-header']) {
+    _this.tags['su-tab-header'].opts.class = getTitleClass();
+  }
+
   _this.tabs = _this.tags['su-tab'];
 
   if (!Array.isArray(_this.tabs)) {
@@ -798,6 +859,10 @@ this.on('mount', function () {
     }
   }
   if (!defaultActive) {
+    var titles = _this.hasTitle();
+    if (titles) {
+      titles[0].active = true;
+    }
     _this.tabs[0].active = true;
   }
 
@@ -807,9 +872,7 @@ this.on('mount', function () {
 // ===================================================================================
 //                                                                               Event
 //                                                                               =====
-this.click = function (event) {
-  var index = event.item.i;
-
+this.click = function (index) {
   for (var _iterator2 = _this.tabs, _isArray2 = Array.isArray(_iterator2), _i2 = 0, _iterator2 = _isArray2 ? _iterator2 : _iterator2[Symbol.iterator]();;) {
     var _ref2;
 
@@ -838,6 +901,13 @@ this.isBottom = function () {
   return hasClass('bottom');
 };
 
+this.hasTitle = function () {
+  if (!_this.tags['su-tab-header']) {
+    return false;
+  }
+  return _this.tags['su-tab-header'].tags['su-tab-title'];
+};
+
 this.getClass = function () {
   if (hasClass('tabular') && !hasClass('attached')) {
     return 'attached';
@@ -855,7 +925,7 @@ var initializeChild = function initializeChild(tab) {
   if (hasClass('tabular')) {
     classList.push('tabular');
   }
-  if (hasClass('attached') || hasClass('tabular')) {
+  if ((hasClass('attached') || hasClass('tabular')) && !hasClass('left') && !hasClass('right')) {
     if (hasClass('bottom')) {
       classList.push('top');
     } else {
@@ -864,6 +934,24 @@ var initializeChild = function initializeChild(tab) {
     classList.push('attached');
   }
   tab.opts.class = classList.join(' ');
+};
+
+var getTitleClass = function getTitleClass() {
+  var classList = [];
+  if (hasClass('left') || hasClass('right')) {
+    classList.push('vertical');
+    classList.push('fluid');
+  }
+  if (hasClass('left')) {
+    classList.push('left');
+  }
+  if (hasClass('right')) {
+    classList.push('right');
+  }
+  if (hasClass('tabular')) {
+    classList.push('tabular');
+  }
+  return classList.join(' ');
 };
 
 var hasClass = function hasClass(className) {
