@@ -10,17 +10,11 @@
   <script>
     this.tabs = []
 
-    // this.on('before-mount', () => {
-    //   console.log(this.root.innerHTML)
-    //   console.log(this.root.querySelector('su-tab-title'))
-    //   if (this.root.querySelector('su-tab-title')) {
-    //     const parentElement = this.root.querySelector('su-tab-title').parentElement
-    //     parentElement.innerHTML
-    //       = '<div class="ui { opts.class } { getClass() } menu">' + parentElement.innerHTML + '</div>'
-    //   }
-    // })
-
     this.on('mount', () => {
+      if (this.tags['su-tab-header']) {
+        this.tags['su-tab-header'].opts.class = getTitleClass()
+      }
+
       this.tabs = this.tags['su-tab']
 
       if (!Array.isArray(this.tabs)) {
@@ -66,7 +60,10 @@
     }
 
     this.hasTitle = () => {
-      return this.tags['su-tab-title']
+      if (!this.tags['su-tab-header']) {
+        return false
+      }
+      return this.tags['su-tab-header'].tags['su-tab-title']
     }
 
     this.getClass = () => {
@@ -95,6 +92,18 @@
         classList.push('attached')
       }
       tab.opts.class = classList.join(' ')
+    }
+
+    const getTitleClass = () => {
+      const classList = []
+      if (hasClass('left') || hasClass('right')) {
+        classList.push('vertical')
+        classList.push('fluid')
+      }
+      if (hasClass('tabular')) {
+        classList.push('tabular')
+      }
+      return classList.join(' ')
     }
 
     let hasClass = className => {

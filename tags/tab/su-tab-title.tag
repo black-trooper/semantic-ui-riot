@@ -22,10 +22,10 @@
       for (const tab of tabs) {
         tab.active = false
       }
-      this.parent.click(index)
+      this.parent.parent.click(index)
       tabs[index].active = true
       this.update()
-      this.trigger('click', this.parent.tabs[index])
+      this.trigger('click', this.parent.parent.tabs[index])
     }
   </script>
 </su-tab-title>
