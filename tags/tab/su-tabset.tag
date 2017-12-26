@@ -100,6 +100,12 @@
         classList.push('vertical')
         classList.push('fluid')
       }
+      if (hasClass('left')) {
+        classList.push('left')
+      }
+      if (hasClass('right')) {
+        classList.push('right')
+      }
       if (hasClass('tabular')) {
         classList.push('tabular')
       }
