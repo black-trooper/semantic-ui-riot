@@ -31,7 +31,6 @@
     <div class="item">
       <div class="header">Module(Unimplemented)</div>
       <div class="menu">
-        <span class="item">Popup</span>
         <span class="item">Datepicker</span>
       </div>
     </div>
