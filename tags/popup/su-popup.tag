@@ -1,5 +1,5 @@
 <su-popup onmouseover="{ mouseover }" onmouseout="{ mouseout }">
-  <div id="{ getId() }" class="ui popup top left transition { transitionStatus }"></div>
+  <div id="{ getId() }" class="ui flowing popup top left transition { transitionStatus } { tooltip: isTooltip() }"></div>
   <yield />
 
   <style>
@@ -8,8 +8,12 @@
     }
 
     .ui.popup {
-      width: 300px;
+      /* width: 300px; */
       position: absolute;
+    }
+
+    .ui.popup.tooltip {
+      white-space: nowrap;
     }
 
     .ui.popup.top {
@@ -36,11 +40,20 @@
   <script>
     this.content = ''
     this.on('mount', () => {
-      this.content = this.tags['su-popup-content'].root.innerHTML
+      if (this.isTooltip()) {
+        this.content = this.isTooltip()
+      }
+      else if (this.tags['su-popup-content']) {
+        this.content = this.tags['su-popup-content'].root.innerHTML
+        this.tags['su-popup-content'].unmount()
+      }
       document.getElementById(this.getId()).innerHTML = this.content
-      this.tags['su-popup-content'].unmount()
       this.update()
     })
+
+    this.isTooltip = () => {
+      return this.opts.tooltip
+    }
 
     this.mouseover = () => {
       this.transitionStatus = 'visible'
