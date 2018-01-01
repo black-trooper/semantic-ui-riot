@@ -8,7 +8,6 @@
     }
 
     .ui.popup {
-      /* width: 300px; */
       position: absolute;
     }
 
@@ -112,15 +111,23 @@
       this.update()
     })
 
-    this.isTooltip = () => {
-      return this.opts.tooltip
-    }
+    // ===================================================================================
+    //                                                                               Event
+    //                                                                               =====
 
     this.mouseover = () => {
       this.transitionStatus = 'visible'
     }
+
     this.mouseout = () => {
       this.transitionStatus = 'hidden'
+    }
+
+    // ===================================================================================
+    //                                                                              Helper
+    //                                                                              ======
+    this.isTooltip = () => {
+      return this.opts.tooltip
     }
 
     this.isNowrap = () => {
