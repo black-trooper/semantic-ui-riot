@@ -1,5 +1,5 @@
 <su-popup onmouseover="{ mouseover }" onmouseout="{ mouseout }">
-  <div id="{ getId() }" class="ui flowing popup { opts.position } transition { transitionStatus } { tooltip: isTooltip() }"></div>
+  <div id="{ getId() }" class="ui popup { opts.position } { opts.dataVariation } transition { transitionStatus } { nowrap: isNowrap() }"></div>
   <yield />
 
   <style>
@@ -12,8 +12,16 @@
       position: absolute;
     }
 
-    .ui.popup.tooltip {
+    .ui.popup.nowrap {
       white-space: nowrap;
+    }
+
+    .ui.popup.wide {
+      width: 350px;
+    }
+
+    .ui.popup.very.wide {
+      width: 550px;
     }
 
     .ui.popup.top.left {
@@ -113,6 +121,13 @@
     }
     this.mouseout = () => {
       this.transitionStatus = 'hidden'
+    }
+
+    this.isNowrap = () => {
+      if (this.opts.dataVariation && this.opts.dataVariation.indexOf('wide') >= 0) {
+        return false
+      }
+      return true
     }
 
     this.getId = () => {
