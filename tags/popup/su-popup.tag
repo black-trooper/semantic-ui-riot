@@ -90,7 +90,11 @@
         this.opts.position = 'top left'
       }
       if (this.isTooltip()) {
-        this.content = this.isTooltip()
+        if (opts.dataTitle) {
+          this.content = `<div class="header">${opts.dataTitle}</div><div class="content">${this.isTooltip()}</div>`
+        } else {
+          this.content = this.isTooltip()
+        }
       }
       else if (this.tags['su-popup-content']) {
         this.content = this.tags['su-popup-content'].root.innerHTML
@@ -118,5 +122,4 @@
 </su-popup>
 
 <su-popup-content>
-
 </su-popup-content>
