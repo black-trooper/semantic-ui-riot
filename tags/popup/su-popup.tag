@@ -1,5 +1,5 @@
 <su-popup onmouseover="{ mouseover }" onmouseout="{ mouseout }">
-  <div id="{ getId() }" class="ui flowing popup top left transition { transitionStatus } { tooltip: isTooltip() }"></div>
+  <div id="{ getId() }" class="ui flowing popup { opts.position } transition { transitionStatus } { tooltip: isTooltip() }"></div>
   <yield />
 
   <style>
@@ -16,30 +16,79 @@
       white-space: nowrap;
     }
 
-    .ui.popup.top {
+    .ui.popup.top.left {
       top: auto;
       bottom: 100%;
-    }
-
-    .ui.popup.bottom {
-      top: 100%;
-      bottom: auto;
-    }
-
-    .ui.popup.left {
       left: 1em;
       right: auto;
+      margin-left: -1rem;
     }
 
-    .ui.popup.right {
+    .ui.popup.bottom.left {
+      top: 100%;
+      bottom: auto;
+      left: 1em;
+      right: auto;
+      margin-left: -1rem;
+    }
+
+    .ui.popup.top.center {
+      top: auto;
+      bottom: 100%;
+      left: 50%;
+      right: auto;
+      -webkit-transform: translateX(-50%) !important;
+      transform: translateX(-50%) !important;
+    }
+
+    .ui.popup.bottom.center {
+      top: 100%;
+      bottom: auto;
+      left: 50%;
+      right: auto;
+      -webkit-transform: translateX(-50%) !important;
+      transform: translateX(-50%) !important;
+    }
+
+    .ui.popup.top.right {
+      top: auto;
+      bottom: 100%;
       left: auto;
       right: 1em;
+      margin-right: -1rem;
+    }
+
+    .ui.popup.bottom.right {
+      top: 100%;
+      bottom: auto;
+      left: auto;
+      right: 1em;
+      margin-right: -1rem;
+    }
+
+    .ui.popup.left.center {
+      left: auto;
+      right: 100%;
+      top: 50%;
+      -webkit-transform: translateY(-50%) !important;
+      transform: translateY(-50%) !important;
+    }
+
+    .ui.popup.right.center {
+      left: 100%;
+      right: auto;
+      top: 50%;
+      -webkit-transform: translateY(-50%) !important;
+      transform: translateY(-50%) !important;
     }
   </style>
 
   <script>
     this.content = ''
     this.on('mount', () => {
+      if (!this.opts.position) {
+        this.opts.position = 'top left'
+      }
       if (this.isTooltip()) {
         this.content = this.isTooltip()
       }
