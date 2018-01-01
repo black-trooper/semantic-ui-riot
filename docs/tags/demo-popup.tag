@@ -308,7 +308,7 @@
     }
 
     this.on('mount', () => {
-      // PR.prettyPrint(false)
+      PR.prettyPrint(false)
     })
   </script>
 </demo-popup>
