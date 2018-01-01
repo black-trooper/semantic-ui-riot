@@ -112,7 +112,7 @@
     }
 
     this.getId = () => {
-      return `su-checkbox-${this._riot_id}`
+      return `su-popup-${this._riot_id}`
     }
   </script>
 </su-popup>
