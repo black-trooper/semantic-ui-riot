@@ -586,6 +586,63 @@ this.isImageContent = function () {
   return image_content;
 };
 });
+riot.tag2('su-popup', '<div id="{getId()}" class="ui popup {opts.position} {opts.dataVariation} transition {transitionStatus} {nowrap: isNowrap()}"></div> <yield></yield>', 'su-popup,[data-is="su-popup"]{ position: relative; } su-popup .ui.popup,[data-is="su-popup"] .ui.popup{ position: absolute; } su-popup .ui.popup.nowrap,[data-is="su-popup"] .ui.popup.nowrap{ white-space: nowrap; } su-popup .ui.popup.wide,[data-is="su-popup"] .ui.popup.wide{ width: 350px; } su-popup .ui.popup.very.wide,[data-is="su-popup"] .ui.popup.very.wide{ width: 550px; } su-popup .ui.popup.top.left,[data-is="su-popup"] .ui.popup.top.left{ top: auto; bottom: 100%; left: 1em; right: auto; margin-left: -1rem; } su-popup .ui.popup.bottom.left,[data-is="su-popup"] .ui.popup.bottom.left{ top: 100%; bottom: auto; left: 1em; right: auto; margin-left: -1rem; } su-popup .ui.popup.top.center,[data-is="su-popup"] .ui.popup.top.center{ top: auto; bottom: 100%; left: 50%; right: auto; -webkit-transform: translateX(-50%) !important; transform: translateX(-50%) !important; } su-popup .ui.popup.bottom.center,[data-is="su-popup"] .ui.popup.bottom.center{ top: 100%; bottom: auto; left: 50%; right: auto; -webkit-transform: translateX(-50%) !important; transform: translateX(-50%) !important; } su-popup .ui.popup.top.right,[data-is="su-popup"] .ui.popup.top.right{ top: auto; bottom: 100%; left: auto; right: 1em; margin-right: -1rem; } su-popup .ui.popup.bottom.right,[data-is="su-popup"] .ui.popup.bottom.right{ top: 100%; bottom: auto; left: auto; right: 1em; margin-right: -1rem; } su-popup .ui.popup.left.center,[data-is="su-popup"] .ui.popup.left.center{ left: auto; right: 100%; top: 50%; -webkit-transform: translateY(-50%) !important; transform: translateY(-50%) !important; } su-popup .ui.popup.right.center,[data-is="su-popup"] .ui.popup.right.center{ left: 100%; right: auto; top: 50%; -webkit-transform: translateY(-50%) !important; transform: translateY(-50%) !important; }', 'onmouseover="{mouseover}" onmouseout="{mouseout}"', function(opts) {
+'use strict';
+
+var _this = this;
+
+this.content = '';
+this.on('mount', function () {
+  if (!_this.opts.position) {
+    _this.opts.position = 'top left';
+  }
+  if (_this.isTooltip()) {
+    if (opts.dataTitle) {
+      _this.content = '<div class="header">' + opts.dataTitle + '</div><div class="content">' + _this.isTooltip() + '</div>';
+    } else {
+      _this.content = _this.isTooltip();
+    }
+  } else if (_this.tags['su-popup-content']) {
+    _this.content = _this.tags['su-popup-content'].root.innerHTML;
+    _this.tags['su-popup-content'].unmount();
+  }
+  document.getElementById(_this.getId()).innerHTML = _this.content;
+  _this.update();
+});
+
+// ===================================================================================
+//                                                                               Event
+//                                                                               =====
+
+this.mouseover = function () {
+  _this.transitionStatus = 'visible';
+};
+
+this.mouseout = function () {
+  _this.transitionStatus = 'hidden';
+};
+
+// ===================================================================================
+//                                                                              Helper
+//                                                                              ======
+this.isTooltip = function () {
+  return _this.opts.tooltip;
+};
+
+this.isNowrap = function () {
+  if (_this.opts.dataVariation && _this.opts.dataVariation.indexOf('wide') >= 0) {
+    return false;
+  }
+  return true;
+};
+
+this.getId = function () {
+  return 'su-popup-' + _this._riot_id;
+};
+});
+
+riot.tag2('su-popup-content', '', '', '', function(opts) {
+});
 riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', '', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
 'use strict';
 
