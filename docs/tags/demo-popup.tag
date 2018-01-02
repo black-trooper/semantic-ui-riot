@@ -238,16 +238,16 @@
       <su-popup tooltip="Hello. This is a mini popup" data-variation="mini">
         <i class="circular heart icon link"></i>
       </su-popup>
-      <su-popup tooltip="Hello. This is a mini popup" data-variation="tiny">
+      <su-popup tooltip="Hello. This is a tiny popup" data-variation="tiny">
         <i class="circular heart icon link"></i>
       </su-popup>
-      <su-popup tooltip="Hello. This is a mini popup" data-variation="small">
+      <su-popup tooltip="Hello. This is a small popup" data-variation="small">
         <i class="circular heart icon link"></i>
       </su-popup>
-      <su-popup tooltip="Hello. This is a mini popup" data-variation="large">
+      <su-popup tooltip="Hello. This is a large popup" data-variation="large">
         <i class="circular heart icon link"></i>
       </su-popup>
-      <su-popup tooltip="Hello. This is a mini popup" data-variation="huge">
+      <su-popup tooltip="Hello. This is a huge popup" data-variation="huge">
         <i class="circular heart icon link"></i>
       </su-popup>
     </div>
@@ -256,16 +256,16 @@
         <su-popup tooltip="Hello. This is a mini popup" data-variation="mini">
           <i class="circular heart icon link"></i>
         </su-popup>
-        <su-popup tooltip="Hello. This is a mini popup" data-variation="tiny">
+        <su-popup tooltip="Hello. This is a tiny popup" data-variation="tiny">
           <i class="circular heart icon link"></i>
         </su-popup>
-        <su-popup tooltip="Hello. This is a mini popup" data-variation="small">
+        <su-popup tooltip="Hello. This is a small popup" data-variation="small">
           <i class="circular heart icon link"></i>
         </su-popup>
-        <su-popup tooltip="Hello. This is a mini popup" data-variation="large">
+        <su-popup tooltip="Hello. This is a large popup" data-variation="large">
           <i class="circular heart icon link"></i>
         </su-popup>
-        <su-popup tooltip="Hello. This is a mini popup" data-variation="huge">
+        <su-popup tooltip="Hello. This is a huge popup" data-variation="huge">
           <i class="circular heart icon link"></i>
         </su-popup>
       </code></pre>
