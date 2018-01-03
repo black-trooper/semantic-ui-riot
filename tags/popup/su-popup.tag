@@ -117,10 +117,12 @@
 
     this.mouseover = () => {
       this.transitionStatus = 'visible'
+      this.trigger('mouseover')
     }
 
     this.mouseout = () => {
       this.transitionStatus = 'hidden'
+      this.trigger('mouseout')
     }
 
     // ===================================================================================
