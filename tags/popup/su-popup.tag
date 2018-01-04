@@ -93,14 +93,14 @@
   <script>
     this.content = ''
     this.on('mount', () => {
-      if (!this.opts.position) {
-        this.opts.position = 'top left'
+      if (!opts.position) {
+        opts.position = 'top left'
       }
-      if (this.isTooltip()) {
+      if (opts.tooltip) {
         if (opts.dataTitle) {
-          this.content = `<div class="header">${opts.dataTitle}</div><div class="content">${this.isTooltip()}</div>`
+          this.content = `<div class="header">${opts.dataTitle}</div><div class="content">${opts.tooltip}</div>`
         } else {
-          this.content = this.isTooltip()
+          this.content = opts.tooltip
         }
       }
       else if (this.tags['su-popup-content']) {
@@ -114,7 +114,6 @@
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
-
     this.mouseover = () => {
       this.transitionStatus = 'visible'
       this.trigger('mouseover')
@@ -128,12 +127,8 @@
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
-    this.isTooltip = () => {
-      return this.opts.tooltip
-    }
-
     this.isNowrap = () => {
-      if (this.opts.dataVariation && this.opts.dataVariation.indexOf('wide') >= 0) {
+      if (opts.dataVariation && opts.dataVariation.indexOf('wide') >= 0) {
         return false
       }
       return true
