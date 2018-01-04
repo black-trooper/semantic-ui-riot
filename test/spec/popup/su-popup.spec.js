@@ -49,8 +49,8 @@ describe('su-popup', function () {
     })
 
     const div = $(`<div>${tag.content}</div>`)
-    div.find('.header').html().should.equal("Title")
-    div.find('.content').html().should.equal("Add users to your feed")
+    div.find('.header').html().should.equal('Title')
+    div.find('.content').html().should.equal('Add users to your feed')
   })
 
   it('wide', function () {
@@ -59,6 +59,6 @@ describe('su-popup', function () {
       dataVariation: 'wide'
     })
 
-    $(tag.root).find(".popup").hasClass("wide").should.equal(true)
+    $(tag.root).find('.popup').hasClass('wide').should.equal(true)
   })
 })
