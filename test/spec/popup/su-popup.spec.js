@@ -32,6 +32,7 @@ describe('su-popup', function () {
       tooltip: 'Add users to your feed'
     })
     tag.content.should.equal('Add users to your feed')
+    tag.isNowrap().should.equal(true)
 
     fireEvent($('su-popup')[0], 'mouseover')
     spyOnMouseover.should.have.been.calledOnce
@@ -60,5 +61,6 @@ describe('su-popup', function () {
     })
 
     $(tag.root).find('.popup').hasClass('wide').should.equal(true)
+    tag.isNowrap().should.equal(false)
   })
 })
