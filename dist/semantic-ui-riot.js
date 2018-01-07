@@ -593,14 +593,14 @@ var _this = this;
 
 this.content = '';
 this.on('mount', function () {
-  if (!_this.opts.position) {
-    _this.opts.position = 'top left';
+  if (!opts.position) {
+    opts.position = 'top left';
   }
-  if (_this.isTooltip()) {
+  if (opts.tooltip) {
     if (opts.dataTitle) {
-      _this.content = '<div class="header">' + opts.dataTitle + '</div><div class="content">' + _this.isTooltip() + '</div>';
+      _this.content = '<div class="header">' + opts.dataTitle + '</div><div class="content">' + opts.tooltip + '</div>';
     } else {
-      _this.content = _this.isTooltip();
+      _this.content = opts.tooltip;
     }
   } else if (_this.tags['su-popup-content']) {
     _this.content = _this.tags['su-popup-content'].root.innerHTML;
@@ -613,24 +613,21 @@ this.on('mount', function () {
 // ===================================================================================
 //                                                                               Event
 //                                                                               =====
-
 this.mouseover = function () {
   _this.transitionStatus = 'visible';
+  _this.trigger('mouseover');
 };
 
 this.mouseout = function () {
   _this.transitionStatus = 'hidden';
+  _this.trigger('mouseout');
 };
 
 // ===================================================================================
 //                                                                              Helper
 //                                                                              ======
-this.isTooltip = function () {
-  return _this.opts.tooltip;
-};
-
 this.isNowrap = function () {
-  if (_this.opts.dataVariation && _this.opts.dataVariation.indexOf('wide') >= 0) {
+  if (opts.dataVariation && opts.dataVariation.indexOf('wide') >= 0) {
     return false;
   }
   return true;
