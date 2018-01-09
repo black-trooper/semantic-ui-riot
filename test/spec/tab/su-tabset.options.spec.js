@@ -1,3 +1,5 @@
+const fireEvent = require('../../helpers').fireEvent
+
 describe('su-tabset-options', function () {
   let tag
   let mount = group => {
@@ -81,6 +83,38 @@ describe('su-tabset-options', function () {
     tag.tags['su-tab'][1].root.classList.contains('top').should.equal(true)
     $('.ui.menu').hasClass('bottom').should.equal(true)
   })
+
+  it('tab-header', function () {
+    mount(`
+      <su-tabset class="left tabular">
+      <div class="ui grid">
+        <div class="four wide column">
+          <su-tab-header>
+            <su-tab-title>Home</su-tab-title>
+            <su-tab-title>Messages</su-tab-title>
+            <su-tab-title>Friends</su-tab-title>
+          </su-tab-header>
+        </div>
+        <div class="twelve wide stretched column">
+          <su-tab>Home content</su-tab>
+          <su-tab>Messages content</su-tab>
+          <su-tab>Friends content</su-tab>
+        </div>
+      </div>
+    </su-tabset>`)
+
+    tag.tags['su-tab'][0].active.should.equal(true)
+    tag.tags['su-tab'][1].active.should.equal(false)
+    tag.tags['su-tab-header'].tags['su-tab-title'][0].active.should.equal(true)
+    tag.tags['su-tab-header'].tags['su-tab-title'][1].active.should.equal(false)
+
+    fireEvent($('a.item:eq(1)')[0], 'click')
+    tag.tags['su-tab'][0].active.should.equal(false)
+    tag.tags['su-tab'][1].active.should.equal(true)
+    tag.tags['su-tab-header'].tags['su-tab-title'][0].active.should.equal(false)
+    tag.tags['su-tab-header'].tags['su-tab-title'][1].active.should.equal(true)
+  })
+
 
   it('single tab', function () {
     mount(`
