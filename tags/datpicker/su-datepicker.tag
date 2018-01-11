@@ -19,60 +19,38 @@
       </tr>
     </thead>
     <tbody>
-      <tr each="{}">
-        <td class="link adjacent disabled">31</td>
-        <td class="link">1</td>
-        <td class="link">2</td>
-        <td class="link">3</td>
-        <td class="link">4</td>
-        <td class="link">5</td>
-        <td class="link">6</td>
+      <tr each="{week in weeks}">
+        <td each="{day in week.days}" class="link {disabled : day.getMonth() != month}">{day.getDate()}</td>
       </tr>
-      <tr>
-        <td class="link">7</td>
-        <td class="link">8</td>
-        <td class="link">9</td>
-        <td class="link today focus">10</td>
-        <td class="link">11</td>
-        <td class="link">12</td>
-        <td class="link">13</td>
-      </tr>
-      <tr>
-        <td class="link">14</td>
-        <td class="link">15</td>
-        <td class="link">16</td>
-        <td class="link">17</td>
-        <td class="link">18</td>
-        <td class="link">19</td>
-        <td class="link">20</td>
-      </tr>
-      <tr>
-        <td class="link">21</td>
-        <td class="link">22</td>
-        <td class="link">23</td>
-        <td class="link">24</td>
-        <td class="link">25</td>
-        <td class="link">26</td>
-        <td class="link">27</td>
-      </tr>
-      <tr>
-        <td class="link">28</td>
-        <td class="link">29</td>
-        <td class="link">30</td>
-        <td class="link">31</td>
-        <td class="link adjacent disabled">1</td>
-        <td class="link adjacent disabled">2</td>
-        <td class="link adjacent disabled">3</td>
-      </tr>
-      <tr>
-        <td class="link adjacent disabled">4</td>
-        <td class="link adjacent disabled">5</td>
-        <td class="link adjacent disabled">6</td>
-        <td class="link adjacent disabled">7</td>
-        <td class="link adjacent disabled">8</td>
-        <td class="link adjacent disabled">9</td>
-        <td class="link adjacent disabled">10</td>
-      </tr>
+      <!-- <td class="link today focus">10</td>
+        <td class="link adjacent disabled">1</td> -->
     </tbody>
   </table>
+
+  <script>
+    this.weeks = []
+    this.year = 2018
+    this.month = 0
+
+    this.on('mount', () => {
+      generate(this.year, this.month)
+      this.update()
+    })
+
+    const generate = (year, month) => {
+      const firstMonthDay = new Date(this.year, this.month, 1).getDay()
+      let i = 1 - firstMonthDay
+      for (let r = 0; r < 6; r++) {
+        const days = []
+        for (let c = 0; c < 7; c++) {
+          days.push(new Date(this.year, this.month, i++))
+        }
+        if (days[0].getMonth() > this.month && days[6].getMonth() > this.month) {
+          break
+        }
+        this.weeks.push({ days })
+      }
+    }
+
+  </script>
 </su-datepicker>
