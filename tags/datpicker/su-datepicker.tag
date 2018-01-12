@@ -3,9 +3,9 @@
     <thead>
       <tr>
         <th colspan="7">
-          <span class="link">January 2018</span>
-          <span class="prev link"><i class="chevron left icon"></i></span>
-          <span class="next link"><i class="chevron right icon"></i></span>
+          <span class="link">{ getCurrentYearMonthView() }</span>
+          <span class="prev link" click="{ previousMonth }"><i class="chevron left icon"></i></span>
+          <span class="next link" click="{ nextMonth }"><i class="chevron right icon"></i></span>
         </th>
       </tr>
       <tr>
@@ -20,7 +20,7 @@
     </thead>
     <tbody>
       <tr each="{week in weeks}">
-        <td each="{day in week.days}" class="link {disabled : day.getMonth() != month}">{day.getDate()}</td>
+        <td each="{day in week.days}" class="link { active: isToday(day) } { disabled: day.getMonth() != getCurrentMonth() }" click="{ clickDay }">{day.getDate()}</td>
       </tr>
       <!-- <td class="link today focus">10</td>
         <td class="link adjacent disabled">1</td> -->
@@ -29,28 +29,71 @@
 
   <script>
     this.weeks = []
-    this.year = 2018
-    this.month = 0
+    this.date = null
 
     this.on('mount', () => {
-      generate(this.year, this.month)
+      if (!opts.currentDate) {
+        opts.currentDate = new Date()
+      }
+      generate(opts.currentDate)
       this.update()
     })
 
-    const generate = (year, month) => {
-      const firstMonthDay = new Date(this.year, this.month, 1).getDay()
+    // ===================================================================================
+    //                                                                               Event
+    //                                                                               =====
+    this.clickDay = event => {
+      this.date = event.item.day
+    }
+
+    this.previousMonth = () => {
+      opts.currentDate = new Date(2017, 11, 1)
+      generate(opts.currentDate)
+    }
+
+    this.nextMonth = () => {
+      opts.currentDate = new Date(2018, 1, 1)
+      generate(opts.currentDate)
+    }
+
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
+    const generate = date => {
+      const year = date.getFullYear()
+      const month = date.getMonth()
+      const firstMonthDay = new Date(year, month, 1).getDay()
       let i = 1 - firstMonthDay
+
+      this.weeks = []
       for (let r = 0; r < 6; r++) {
         const days = []
         for (let c = 0; c < 7; c++) {
-          days.push(new Date(this.year, this.month, i++))
+          days.push(new Date(year, month, i++))
         }
-        if (days[0].getMonth() > this.month && days[6].getMonth() > this.month) {
-          break
-        }
+        // if (days[0].getMonth() > month && days[6].getMonth() > month) {
+        //   break
+        // }
         this.weeks.push({ days })
       }
     }
 
+    // ===================================================================================
+    //                                                                              Helper
+    //                                                                              ======
+    this.getCurrentYearMonthView = () => {
+      if (opts.currentDate) {
+        return `${opts.currentDate.getMonth()} ${opts.currentDate.getFullYear()}`
+      }
+    }
+
+    this.getCurrentMonth = () => {
+      return opts.currentDate.getMonth()
+    }
+
+    this.isToday = date => {
+      console.log(date)
+      return date.getTime() == new Date(2018, 0, 12).getTime()
+    }
   </script>
 </su-datepicker>
