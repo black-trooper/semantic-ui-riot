@@ -47,12 +47,12 @@
     }
 
     this.previousMonth = () => {
-      opts.currentDate = new Date(2017, 11, 1)
+      addMonth(opts.currentDate, -1)
       generate(opts.currentDate)
     }
 
     this.nextMonth = () => {
-      opts.currentDate = new Date(2018, 1, 1)
+      addMonth(opts.currentDate, 1)
       generate(opts.currentDate)
     }
 
@@ -78,6 +78,10 @@
       }
     }
 
+    const addMonth = (date, month) => {
+      date.setMonth(date.getMonth() + month)
+    }
+
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
@@ -92,7 +96,6 @@
     }
 
     this.isToday = date => {
-      console.log(date)
       return date.getTime() == new Date(2018, 0, 12).getTime()
     }
   </script>
