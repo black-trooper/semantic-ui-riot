@@ -9,13 +9,7 @@
         </th>
       </tr>
       <tr>
-        <th>S</th>
-        <th>M</th>
-        <th>T</th>
-        <th>W</th>
-        <th>T</th>
-        <th>F</th>
-        <th>S</th>
+        <th each="{week in getWeekNames()}">{ week }</th>
       </tr>
     </thead>
     <tbody>
@@ -31,6 +25,7 @@
     this.weeks = []
     this.date = null
     let monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    let weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
     this.on('mount', () => {
       if (!opts.currentDate) {
@@ -94,6 +89,10 @@
 
     this.getCurrentMonth = () => {
       return opts.currentDate.getMonth()
+    }
+
+    this.getWeekNames = () => {
+      return weekNames
     }
 
     this.isToday = date => {
