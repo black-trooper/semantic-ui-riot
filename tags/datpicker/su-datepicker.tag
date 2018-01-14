@@ -30,6 +30,7 @@
   <script>
     this.weeks = []
     this.date = null
+    let monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
     this.on('mount', () => {
       if (!opts.currentDate) {
@@ -87,7 +88,7 @@
     //                                                                              ======
     this.getCurrentYearMonthView = () => {
       if (opts.currentDate) {
-        return `${opts.currentDate.getMonth()} ${opts.currentDate.getFullYear()}`
+        return `${monthNames[opts.currentDate.getMonth()]} ${opts.currentDate.getFullYear()}`
       }
     }
 
