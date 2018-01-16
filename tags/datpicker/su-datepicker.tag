@@ -14,7 +14,7 @@
     </thead>
     <tbody>
       <tr each="{week in weeks}">
-        <td each="{day in week.days}" class="link { today: isToday(day) } { active: isActive(day) } { disabled: day.getMonth() != getCurrentMonth() }"
+        <td each="{day in week.days}" class="link selectable { today: isToday(day) } { active: isActive(day) } { disabled: day.getMonth() != getCurrentMonth() }"
           click="{ clickDay }"><a>{day.getDate()}</a></td>
       </tr>
       <!-- <td class="link today focus">10</td>
@@ -23,6 +23,17 @@
   </table>
 
   <style>
+    .ui.table tr td.disabled,
+    .ui.table tr.disabled td,
+    .ui.table tr.disabled:hover,
+    .ui.table tr:hover td.disabled {
+      pointer-events: all;
+    }
+
+    .selectable {
+      cursor: pointer;
+    }
+
     .today {
       font-weight: 700;
     }
