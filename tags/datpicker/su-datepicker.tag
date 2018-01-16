@@ -14,12 +14,19 @@
     </thead>
     <tbody>
       <tr each="{week in weeks}">
-        <td each="{day in week.days}" class="link { active: isToday(day) } { disabled: day.getMonth() != getCurrentMonth() }" click="{ clickDay }">{day.getDate()}</td>
+        <td each="{day in week.days}" class="link { today: isToday(day) } { active: isActive(day) } { disabled: day.getMonth() != getCurrentMonth() }"
+          click="{ clickDay }"><a>{day.getDate()}</a></td>
       </tr>
       <!-- <td class="link today focus">10</td>
         <td class="link adjacent disabled">1</td> -->
     </tbody>
   </table>
+
+  <style>
+    .today {
+      font-weight: 700;
+    }
+  </style>
 
   <script>
     this.weeks = []
@@ -93,6 +100,10 @@
 
     this.getWeekNames = () => {
       return weekNames
+    }
+
+    this.isActive = date => {
+      return this.date == date
     }
 
     this.isToday = date => {
