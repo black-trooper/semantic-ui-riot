@@ -115,6 +115,95 @@
   </section>
 
   <!-- =================================================================================== -->
+  <!--                                                                             Content -->
+  <!-- =================================================================================== -->
+  <h2 class="ui dividing header">Types<a class="anchor" id="content"></a></h2>
+
+  <!-- ====================================================== -->
+  <!--                                                 Header -->
+  <!--                                                 ====== -->
+  <h3 class="ui header">Header</h3>
+  <p>A modal can have a header</p>
+  <section>
+    <div class="ui segment inverted">
+      <pre><code class="prettyprint">
+        <su-modal modal="{ modal }" />
+
+        <script>
+          this.modal = {
+            header: 'Header'
+          }
+        </script>
+      </code></pre>
+    </div>
+  </section>
+
+  <!-- ====================================================== -->
+  <!--                                                Content -->
+  <!--                                                ======= -->
+  <h3 class="ui header">Content</h3>
+  <p>A modal can contain content</p>
+  <section>
+    <div class="ui segment inverted">
+      <pre><code class="prettyprint">
+        <su-modal>
+          <p></p>
+          <p></p>
+          <p></p>
+        </su-modal>
+      </code></pre>
+    </div>
+  </section>
+
+  <!-- ====================================================== -->
+  <!--                                          Image Content -->
+  <!--                                          ============= -->
+  <h3 class="ui header">Image Content</h3>
+  <p>A modal can contain image content</p>
+  <section>
+    <div class="ui segment inverted">
+      <pre><code class="prettyprint">
+        <su-modal>
+          <div class="ui image">
+            <img />
+          </div>
+          <div class="description">
+            <p></p>
+          </div>
+        </su-modal>
+    </code></pre>
+    </div>
+  </section>
+
+  <!-- ====================================================== -->
+  <!--                                                Actions -->
+  <!--                                                ======= -->
+  <h3 class="ui header">Actions</h3>
+  <p>A modal can contain a row of actions</p>
+  <section>
+    <div class="ui segment inverted">
+      <pre><code class="prettyprint">
+        <su-modal modal="{ modal }" />
+
+        <script>
+          this.modal = {
+            buttons: [{
+              text: 'Approve',
+              type: 'positive',
+              icon: 'checkmark'
+            }, {
+              text: 'Neutral'
+            }, {
+              text: 'Cancel',
+              type: 'negative'
+            }]
+          }
+        </script>
+      </code></pre>
+    </div>
+  </section>
+
+  <!-- =================================================================================== -->
   <!--                                                                            Settings -->
   <!-- =================================================================================== -->
   <h2 class="ui dividing header">Settings<a class="anchor" id="settings"></a></h2>
@@ -195,7 +284,7 @@
 
         <script>
           this.modal = {
-            headers: 'Button actions',
+            header: 'Button actions',
             buttons: [{
               text: 'Text access'
             }, {
@@ -291,7 +380,7 @@
     }
 
     this.modal3 = {
-      headers: 'Button actions',
+      header: 'Button actions',
       buttons: [{
         text: 'Text access'
       }, {

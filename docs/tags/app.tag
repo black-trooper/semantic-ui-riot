@@ -8,6 +8,12 @@
     </div>
   </div>
 
+  <style>
+    pre {
+      margin: 0;
+    }
+  </style>
+
   <script>
     route('', () => {
       riot.mount('content', 'root')
