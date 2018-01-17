@@ -203,6 +203,102 @@
     </div>
   </section>
 
+  Run Code $('.fullscreen.modal') .modal('show') ;
+
+  <!-- =================================================================================== -->
+  <!--                                                                          Variations -->
+  <!-- =================================================================================== -->
+  <h2 class="ui dividing header">Variations<a class="anchor" id="variations"></a></h2>
+
+  <!-- ====================================================== -->
+  <!--                                            Full Screen -->
+  <!--                                            =========== -->
+  <h3 class="ui header">Full Screen</h3>
+  <p>A modal can use the entire size of the screen</p>
+  <section>
+    <div class="ui segment secondary top attached example">
+      Example
+      <i class="icon code" onclick="{ toggleExample }"></i>
+    </div>
+    <div class="ui segment bottom attached">
+      <su-modal class="fullscreen" ref="modal4">
+        Full screen modal
+      </su-modal>
+      <button class="ui button" onclick="{ showModal.bind(this, this.refs.modal4) }">Show full screen modal</button>
+    </div>
+    <div class="ui segment bottom attached inverted transition hidden">
+      <pre><code class="prettyprint">
+        <su-modal ref="modal">
+          Full screen modal
+        </su-modal>
+        <button class="ui button" onclick="{ showModal }">Show full screen modal</button>
+
+        <script>
+          this.showModal = () => {
+            this.refs.modal.show()
+          }
+        </script>
+      </code></pre>
+    </div>
+  </section>
+
+  <!-- ====================================================== -->
+  <!--                                                   Size -->
+  <!--                                                   ==== -->
+  <h3 class="ui header">Size</h3>
+  <p>A modal can vary in size</p>
+  <section>
+    <div class="ui segment secondary top attached example">
+      Example
+      <i class="icon code" onclick="{ toggleExample }"></i>
+    </div>
+    <div class="ui segment bottom attached">
+      <su-modal class="mini" ref="modal_mini">
+        Mini size modal
+      </su-modal>
+      <su-modal class="tiny" ref="modal_tiny">
+        Tiny size modal
+      </su-modal>
+      <su-modal class="small" ref="modal_small">
+        Small size modal
+      </su-modal>
+      <su-modal class="large" ref="modal_large">
+        Large size modal
+      </su-modal>
+      <button class="ui button" onclick="{ showModal.bind(this, this.refs.modal_mini) }">Show mini size modal</button>
+      <button class="ui button" onclick="{ showModal.bind(this, this.refs.modal_tiny) }">Show tiny size modal</button>
+      <button class="ui button" onclick="{ showModal.bind(this, this.refs.modal_small) }">Show small size modal</button>
+      <button class="ui button" onclick="{ showModal.bind(this, this.refs.modal_large) }">Show large size modal</button>
+    </div>
+    <div class="ui segment bottom attached inverted transition hidden">
+      <pre><code class="prettyprint">
+        <su-modal class="mini" ref="modal_mini">
+          Mini size modal
+        </su-modal>
+        <su-modal class="tiny" ref="modal_tiny">
+          Tiny size modal
+        </su-modal>
+        <su-modal class="small" ref="modal_small">
+          Small size modal
+        </su-modal>
+        <su-modal class="large" ref="modal_large">
+          Large size modal
+        </su-modal>
+        
+        <button class="ui button" onclick="{ showModal.bind(this, this.refs.modal_mini) }">Show mini size modal</button>
+        <button class="ui button" onclick="{ showModal.bind(this, this.refs.modal_tiny) }">Show tiny size modal</button>
+        <button class="ui button" onclick="{ showModal.bind(this, this.refs.modal_small) }">Show small size modal</button>
+        <button class="ui button" onclick="{ showModal.bind(this, this.refs.modal_large) }">Show large size modal</button>
+
+        <script>
+          this.showModal = target => {
+            target.show()
+          }
+        </script>
+      </code></pre>
+    </div>
+  </section>
+
   <!-- =================================================================================== -->
   <!--                                                                            Settings -->
   <!-- =================================================================================== -->
