@@ -29,6 +29,10 @@
       position: relative;
       margin: 0 !important;
     }
+
+    .ui.fullscreen.modal {
+      left: 0!important;
+    }
   </style>
 
   <script>
