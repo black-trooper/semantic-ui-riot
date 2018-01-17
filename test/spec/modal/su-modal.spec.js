@@ -63,6 +63,31 @@ describe('su-modal', function () {
     $('su-modal').is(':visible').should.equal(false)
   })
 
+  it('opens/closes event duplicate', function () {
+    $('body').append('<su-modal>modal</su-modal>')
+    mount({
+      modal: {
+        buttons: [{
+          text: 'Ok',
+          closable: true
+        }]
+      }
+    })
+    $('su-modal').is(':visible').should.equal(false)
+
+    tag.show()
+    tag.show()
+    spyOnShow.should.have.been.calledOnce
+    this.clock.tick(510)
+    $('su-modal').is(':visible').should.equal(true)
+
+    $('su-modal .ui.button:first').click()
+    $('su-modal .ui.button:first').click()
+    spyOnHide.should.have.been.calledOnce
+    this.clock.tick(310)
+    $('su-modal').is(':visible').should.equal(false)
+  })
+
   it('buttons', function () {
     $('body').append('<su-modal>modal</su-modal>')
     const modal = {
