@@ -115,8 +115,7 @@ describe('su-tabset-options', function () {
     tag.tags['su-tab-header'].tags['su-tab-title'][1].active.should.equal(true)
   })
 
-
-  it('single tab', function () {
+  it('default active', function () {
     mount(`
       <su-tabset>
         <su-tab title="Home">Home content</su-tab>
@@ -127,7 +126,7 @@ describe('su-tabset-options', function () {
     tag.tags['su-tab'][1].active.should.equal(true)
   })
 
-  it('default active', function () {
+  it('single tab', function () {
     mount(`
       <su-tabset>
         <su-tab title="Home">Home content</su-tab>
@@ -135,5 +134,24 @@ describe('su-tabset-options', function () {
 
     tag.tags['su-tab'].root.classList.contains('segment').should.equal(true)
     tag.tags['su-tab'].active.should.equal(true)
+  })
+
+  it('single tab-header', function () {
+    mount(`
+      <su-tabset class="right tabular">
+      <div class="ui grid">
+        <div class="four wide column">
+          <su-tab-header>
+            <su-tab-title>Home</su-tab-title>
+          </su-tab-header>
+        </div>
+        <div class="twelve wide stretched column">
+          <su-tab>Home content</su-tab>
+        </div>
+      </div>
+    </su-tabset>`)
+
+    tag.tags['su-tab'].active.should.equal(true)
+    tag.tags['su-tab-header'].tags['su-tab-title'].active.should.equal(true)
   })
 })

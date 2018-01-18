@@ -63,7 +63,15 @@
       if (!this.tags['su-tab-header']) {
         return false
       }
-      return this.tags['su-tab-header'].tags['su-tab-title']
+      const titles = this.tags['su-tab-header'].tags['su-tab-title']
+      if (!titles) {
+        return false
+      }
+
+      if (!Array.isArray(titles)) {
+        return [titles]
+      }
+      return titles
     }
 
     this.getClass = () => {

@@ -9,6 +9,10 @@
     let tabs
     this.on('mount', () => {
       tabs = this.parent.tags['su-tab-title']
+
+      if (!Array.isArray(tabs)) {
+        tabs = [tabs]
+      }
       for (const tab of tabs) {
         if (tab._riot_id == this._riot_id) {
           break

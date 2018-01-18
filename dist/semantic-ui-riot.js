@@ -829,6 +829,10 @@ var index = 0;
 var tabs = void 0;
 this.on('mount', function () {
   tabs = _this.parent.tags['su-tab-title'];
+
+  if (!Array.isArray(tabs)) {
+    tabs = [tabs];
+  }
   for (var _iterator = tabs, _isArray = Array.isArray(_iterator), _i = 0, _iterator = _isArray ? _iterator : _iterator[Symbol.iterator]();;) {
     var _ref;
 
@@ -959,7 +963,15 @@ this.hasTitle = function () {
   if (!_this.tags['su-tab-header']) {
     return false;
   }
-  return _this.tags['su-tab-header'].tags['su-tab-title'];
+  var titles = _this.tags['su-tab-header'].tags['su-tab-title'];
+  if (!titles) {
+    return false;
+  }
+
+  if (!Array.isArray(titles)) {
+    return [titles];
+  }
+  return titles;
 };
 
 this.getClass = function () {
