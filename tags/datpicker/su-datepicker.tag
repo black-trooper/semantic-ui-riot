@@ -58,6 +58,7 @@
     //                                                                               =====
     this.clickDay = event => {
       this.date = event.item.day
+      this.trigger('click', this.date)
     }
 
     this.previousMonth = () => {
@@ -118,7 +119,8 @@
     }
 
     this.isToday = date => {
-      return date.getTime() == new Date(2018, 0, 12).getTime()
+      const today = new Date()
+      return date.getTime() == new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime()
     }
   </script>
 </su-datepicker>
