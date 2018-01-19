@@ -17,8 +17,6 @@
         <td each="{day in week.days}" class="link selectable { today: isToday(day) } { active: isActive(day) } { disabled: day.getMonth() != getCurrentMonth() }"
           click="{ clickDay }"><a>{day.getDate()}</a></td>
       </tr>
-      <!-- <td class="link today focus">10</td>
-        <td class="link adjacent disabled">1</td> -->
     </tbody>
   </table>
 
