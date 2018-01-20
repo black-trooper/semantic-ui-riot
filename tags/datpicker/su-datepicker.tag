@@ -1,39 +1,74 @@
 <su-datepicker>
-  <table class="ui celled center aligned unstackable table seven column day">
-    <thead>
-      <tr>
-        <th colspan="7">
-          <span class="link">{ getCurrentYearMonthView() }</span>
-          <span class="prev link" click="{ previousMonth }"><i class="chevron left icon"></i></span>
-          <span class="next link" click="{ nextMonth }"><i class="chevron right icon"></i></span>
-        </th>
-      </tr>
-      <tr>
-        <th each="{week in getWeekNames()}">{ week }</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr each="{week in weeks}">
-        <td each="{day in week.days}" class="link selectable { today: isToday(day) } { active: isActive(day) } { disabled: day.getMonth() != getCurrentMonth() }"
-          click="{ clickDay }"><a>{day.getDate()}</a></td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="ui compact segments">
+    <div class="ui center aligned secondary segment">
+      <div class="dp-navigation">
+        <span>{ getCurrentYearMonthView() }</span>
+        <span class="prev link" click="{ previousMonth }"><i class="chevron left icon"></i></span>
+        <span class="next link" click="{ nextMonth }"><i class="chevron right icon"></i></span>
+      </div>
+      <div class="dp-week">
+        <div each="{week in getWeekNames()}" class="dp-weekday">{ week }</div>
+      </div>
+    </div>
+    <div class="dp-month ui center aligned segment">
+      <div each="{week in weeks}" class="dp-week">
+        <div each="{day in week.days}" class="dp-day">
+          <button class="ui button { today: isToday(day) } { primary: isActive(day) } { non-active: !isActive(day) } { disabled: day.getMonth() != getCurrentMonth() }"
+            click="{ clickDay }">{day.getDate()}</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <style>
-    .ui.table tr td.disabled,
-    .ui.table tr.disabled td,
-    .ui.table tr.disabled:hover,
-    .ui.table tr:hover td.disabled {
-      pointer-events: all;
-    }
-
-    .selectable {
+    .link {
       cursor: pointer;
     }
 
-    .today {
+    .ui.segment {
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .dp-navigation {
+      margin-bottom: 0.5rem;
+    }
+
+    .dp-day {
+      cursor: pointer;
+    }
+
+    .dp-week {
+      border-radius: 0.25rem;
+      display: flex;
+    }
+
+    .dp-day,
+    .dp-weekday {
+      width: 2.5rem;
+    }
+
+    .dp-day .ui.button {
+      padding: 0;
+      width: 2.5rem;
+      height: 2.5rem;
+      font-weight: normal
+    }
+
+    .dp-day .ui.button.today {
       font-weight: 700;
+    }
+
+    .dp-day .ui.button.non-active {
+      background-color: transparent;
+    }
+
+    .dp-day .ui.button.non-active:hover {
+      background-color: #e0e1e2;
+    }
+
+    .dp-day .ui.button.disabled {
+      pointer-events: all !important;
     }
   </style>
 
