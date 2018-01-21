@@ -1,10 +1,15 @@
 <su-datepicker>
   <div class="ui compact segments">
     <div class="ui center aligned secondary segment">
-      <div class="dp-navigation">
-        <span>{ getCurrentYearMonthView() }</span>
-        <span class="prev link" click="{ previousMonth }"><i class="chevron left icon"></i></span>
-        <span class="next link" click="{ nextMonth }"><i class="chevron right icon"></i></span>
+      <div class="dp-navigation ui four column grid">
+        <div class="column link" click="{ previousMonth }">
+          <i class="chevron left icon"></i>
+        </div>
+        <div class="column">{ getCurrentMonthView() }</div>
+        <div class="column">{ opts.currentDate.getFullYear() }</div>
+        <div class="column link" click="{ nextMonth }">
+          <i class="chevron right icon"></i>
+        </div>
       </div>
       <div class="dp-week">
         <div each="{week in getWeekNames()}" class="dp-weekday">{ week }</div>
@@ -30,8 +35,9 @@
       padding-bottom: 0.5rem;
     }
 
-    .dp-navigation {
-      margin-bottom: 0.5rem;
+    .ui.grid.dp-navigation {
+      margin-top: -0.5rem;
+      margin-bottom: 0;
     }
 
     .dp-day {
@@ -133,9 +139,9 @@
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
-    this.getCurrentYearMonthView = () => {
+    this.getCurrentMonthView = () => {
       if (opts.currentDate) {
-        return `${monthNames[opts.currentDate.getMonth()]} ${opts.currentDate.getFullYear()}`
+        return `${monthNames[opts.currentDate.getMonth()]}`
       }
     }
 
