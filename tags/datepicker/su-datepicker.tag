@@ -5,22 +5,32 @@
         <div class="column link" click="{ previousMonth }">
           <i class="chevron left icon"></i>
         </div>
-        <div class="column">{ getCurrentMonthView() }</div>
-        <div class="column">{ opts.currentDate.getFullYear() }</div>
+        <div class="column link" click="{ selectMonth }">{ getCurrentMonthView() }</div>
+        <div class="column link" click="{ selectYear }">{ opts.currentDate.getFullYear() }</div>
         <div class="column link" click="{ nextMonth }">
           <i class="chevron right icon"></i>
         </div>
       </div>
-      <div class="dp-week">
+      <div class="dp-wrapper">
         <div each="{week in getWeekNames()}" class="dp-weekday">{ week }</div>
       </div>
     </div>
-    <div class="dp-month ui center aligned segment">
-      <div each="{week in weeks}" class="dp-week">
+    <div class="ui center aligned segment" if="{ !yearSelecting && !monthSelecting }">
+      <div each="{week in weeks}" class="dp-wrapper">
         <div each="{day in week.days}" class="dp-day">
           <button class="ui button { today: isToday(day) } { primary: isActive(day) } { non-active: !isActive(day) } { disabled: day.getMonth() != getCurrentMonth() }"
             click="{ clickDay }">{day.getDate()}</button>
         </div>
+      </div>
+    </div>
+    <div class="ui center aligned segment" if="{ monthSelecting }">
+      <div each="{ element in monthes }" class="dp-wrapper">
+        <div each="{ month in element}" class="dp-month"><button class="ui button" click="{ clickMonth }">{month.label}</button></div>
+      </div>
+    </div>
+    <div class="ui center aligned segment" if="{ yearSelecting }">
+      <div each="{ element in years }" class="dp-wrapper">
+        <div each="{ year in element}" class="dp-month"><button class="ui button" click="{ clickYear }">{year}</button></div>
       </div>
     </div>
   </div>
@@ -40,23 +50,29 @@
       margin-bottom: 0;
     }
 
-    .dp-day {
-      cursor: pointer;
-    }
-
-    .dp-week {
-      border-radius: 0.25rem;
+    .dp-wrapper {
       display: flex;
     }
 
     .dp-day,
-    .dp-weekday {
+    .dp-month {
+      cursor: pointer;
+    }
+
+    .dp-weekday,
+    .dp-day,
+    .dp-day .ui.button {
       width: 2.5rem;
     }
 
-    .dp-day .ui.button {
+    .dp-month,
+    .dp-month .ui.button {
+      width: 4.375rem;
+    }
+
+    .dp-day .ui.button,
+    .dp-month .ui.button {
       padding: 0;
-      width: 2.5rem;
       height: 2.5rem;
       font-weight: normal
     }
@@ -65,10 +81,12 @@
       font-weight: 700;
     }
 
+    .dp-month .ui.button,
     .dp-day .ui.button.non-active {
       background-color: transparent;
     }
 
+    .dp-month .ui.button:hover,
     .dp-day .ui.button.non-active:hover {
       background-color: #e0e1e2;
     }
@@ -88,6 +106,8 @@
       if (!opts.currentDate) {
         opts.currentDate = new Date()
       }
+      this.years = getYears()
+      this.monthes = getMonthes()
       generate(opts.currentDate)
       this.update()
     })
@@ -95,9 +115,30 @@
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
+    this.selectMonth = () => {
+      this.yearSelecting = false
+      this.monthSelecting = !this.monthSelecting
+    }
+
+    this.selectYear = () => {
+      this.monthSelecting = false
+      this.yearSelecting = !this.yearSelecting
+    }
+
     this.clickDay = event => {
       this.date = event.item.day
       this.trigger('click', this.date)
+    }
+
+    this.clickMonth = event => {
+      opts.currentDate.setMonth(event.item.month.value)
+      generate(opts.currentDate)
+      this.monthSelecting = false
+    }
+
+    this.clickYear = event => {
+      opts.currentDate.setYear(event.item.year)
+      this.selectMonth()
     }
 
     this.previousMonth = () => {
@@ -134,6 +175,25 @@
 
     const addMonth = (date, month) => {
       date.setMonth(date.getMonth() + month)
+    }
+
+    const getYears = () => {
+      const years = [[], [], [], [], []]
+      for (let index = 0; index < 20; index++) {
+        years[(index - index % 4) / 4][index % 4] = opts.currentDate.getFullYear() + index - 9
+      }
+      return years
+    }
+
+    const getMonthes = () => {
+      const monthes = [[], [], []]
+      monthNames.forEach((month, index) => {
+        monthes[(index - index % 4) / 4][index % 4] = {
+          label: month,
+          value: index
+        }
+      })
+      return monthes
     }
 
     // ===================================================================================
