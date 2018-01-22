@@ -2,12 +2,12 @@
   <div class="ui compact segments">
     <div class="ui center aligned secondary segment">
       <div class="dp-navigation ui four column grid">
-        <div class="column link" click="{ previousMonth }">
+        <div class="column link" click="{ clickPrevious }">
           <i class="chevron left icon"></i>
         </div>
         <div class="column link" click="{ selectMonth }">{ getCurrentMonthView() }</div>
         <div class="column link" click="{ selectYear }">{ opts.currentDate.getFullYear() }</div>
-        <div class="column link" click="{ nextMonth }">
+        <div class="column link" click="{ clickNext }">
           <i class="chevron right icon"></i>
         </div>
       </div>
@@ -101,12 +101,12 @@
     this.date = null
     let monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     let weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    const yearRange = 20
 
     this.on('mount', () => {
       if (!opts.currentDate) {
         opts.currentDate = new Date()
       }
-      this.years = getYears()
       this.monthes = getMonthes()
       generate(opts.currentDate)
       this.update()
@@ -121,6 +121,7 @@
     }
 
     this.selectYear = () => {
+      this.years = getYears()
       this.monthSelecting = false
       this.yearSelecting = !this.yearSelecting
     }
@@ -141,14 +142,24 @@
       this.selectMonth()
     }
 
-    this.previousMonth = () => {
-      addMonth(opts.currentDate, -1)
-      generate(opts.currentDate)
+    this.clickPrevious = () => {
+      if (this.yearSelecting) {
+        addYear(-yearRange)
+      } else {
+        this.monthSelecting = false
+        addMonth(opts.currentDate, -1)
+        generate(opts.currentDate)
+      }
     }
 
-    this.nextMonth = () => {
-      addMonth(opts.currentDate, 1)
-      generate(opts.currentDate)
+    this.clickNext = () => {
+      if (this.yearSelecting) {
+        addYear(yearRange)
+      } else {
+        this.monthSelecting = false
+        addMonth(opts.currentDate, 1)
+        generate(opts.currentDate)
+      }
     }
 
     // ===================================================================================
@@ -173,13 +184,22 @@
       }
     }
 
+    const addYear = year => {
+      this.years = this.years.map(values => {
+        values = values.map(value => {
+          return value + year
+        })
+        return values
+      })
+    }
+
     const addMonth = (date, month) => {
       date.setMonth(date.getMonth() + month)
     }
 
     const getYears = () => {
       const years = [[], [], [], [], []]
-      for (let index = 0; index < 20; index++) {
+      for (let index = 0; index < yearRange; index++) {
         years[(index - index % 4) / 4][index % 4] = opts.currentDate.getFullYear() + index - 9
       }
       return years
