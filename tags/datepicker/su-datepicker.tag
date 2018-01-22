@@ -104,6 +104,7 @@
     const yearRange = 20
 
     this.on('mount', () => {
+      opts.currentDate = this.date
       if (!opts.currentDate) {
         opts.currentDate = new Date()
       }
