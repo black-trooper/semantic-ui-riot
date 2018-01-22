@@ -6,7 +6,7 @@
           <i class="chevron left icon"></i>
         </div>
         <div class="column link" click="{ selectMonth }">{ getCurrentMonthView() }</div>
-        <div class="column link" click="{ selectYear }">{ opts.currentDate.getFullYear() }</div>
+        <div class="column link" click="{ selectYear }">{ getCurrentYear() }</div>
         <div class="column link" click="{ clickNext }">
           <i class="chevron right icon"></i>
         </div>
@@ -219,6 +219,12 @@
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
+    this.getCurrentYear = () => {
+      if (opts.currentDate) {
+        return opts.currentDate.getFullYear()
+      }
+    }
+
     this.getCurrentMonthView = () => {
       if (opts.currentDate) {
         return `${monthNames[opts.currentDate.getMonth()]}`
@@ -234,7 +240,7 @@
     }
 
     this.isActive = date => {
-      return this.date == date
+      return this.date && this.date.getTime() == date.getTime()
     }
 
     this.isToday = date => {
