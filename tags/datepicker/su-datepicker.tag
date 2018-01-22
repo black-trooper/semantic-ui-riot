@@ -1,36 +1,46 @@
 <su-datepicker>
-  <div class="ui compact segments">
-    <div class="ui center aligned secondary segment">
-      <div class="dp-navigation ui four column grid">
-        <div class="column link" click="{ clickPrevious }">
-          <i class="chevron left icon"></i>
-        </div>
-        <div class="column link" click="{ selectMonth }">{ getCurrentMonthView() }</div>
-        <div class="column link" click="{ selectYear }">{ getCurrentYear() }</div>
-        <div class="column link" click="{ clickNext }">
-          <i class="chevron right icon"></i>
-        </div>
-      </div>
-      <div class="dp-wrapper">
-        <div each="{week in getWeekNames()}" class="dp-weekday">{ week }</div>
-      </div>
+  <div class="ui { dropdown:opts.popup }">
+    <div class="ui action input" if="{ opts.popup }">
+      <input type="text" placeholder="YYYY-MM-DD" ref="input" />
+      <button class="ui icon button" click="{ toggle }" onblur="{ blur }">
+        <i class="calendar icon"></i>
+      </button>
     </div>
-    <div class="ui center aligned segment" if="{ !yearSelecting && !monthSelecting }">
-      <div each="{week in weeks}" class="dp-wrapper">
-        <div each="{day in week.days}" class="dp-day">
-          <button class="ui button { today: isToday(day) } { primary: isActive(day) } { non-active: !isActive(day) } { disabled: day.getMonth() != getCurrentMonth() }"
-            click="{ clickDay }">{day.getDate()}</button>
+    <div class="menu transition { transitionStatus }" onmousedown="{ mousedown }" onmouseup="{ mouseup }" onblur="{ blur }" tabindex="{ getTabindex() }">
+      <div class="ui compact segments">
+        <div class="ui center aligned secondary segment">
+          <div class="dp-navigation ui four column grid">
+            <div class="column link" click="{ clickPrevious }">
+              <i class="chevron left icon"></i>
+            </div>
+            <div class="column link" click="{ selectMonth }">{ getCurrentMonthView() }</div>
+            <div class="column link" click="{ selectYear }">{ getCurrentYear() }</div>
+            <div class="column link" click="{ clickNext }">
+              <i class="chevron right icon"></i>
+            </div>
+          </div>
+          <div class="dp-wrapper">
+            <div each="{week in getWeekNames()}" class="dp-weekday">{ week }</div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="ui center aligned segment" if="{ monthSelecting }">
-      <div each="{ element in monthes }" class="dp-wrapper">
-        <div each="{ month in element}" class="dp-month"><button class="ui button" click="{ clickMonth }">{month.label}</button></div>
-      </div>
-    </div>
-    <div class="ui center aligned segment" if="{ yearSelecting }">
-      <div each="{ element in years }" class="dp-wrapper">
-        <div each="{ year in element}" class="dp-month"><button class="ui button" click="{ clickYear }">{year}</button></div>
+        <div class="ui center aligned segment" if="{ !yearSelecting && !monthSelecting }">
+          <div each="{week in weeks}" class="dp-wrapper">
+            <div each="{day in week.days}" class="dp-day">
+              <button class="ui button { today: isToday(day) } { primary: isActive(day) } { non-active: !isActive(day) } { disabled: day.getMonth() != getCurrentMonth() }"
+                click="{ clickDay }">{day.getDate()}</button>
+            </div>
+          </div>
+        </div>
+        <div class="ui center aligned segment" if="{ monthSelecting }">
+          <div each="{ element in monthes }" class="dp-wrapper">
+            <div each="{ month in element}" class="dp-month"><button class="ui button" click="{ clickMonth }">{month.label}</button></div>
+          </div>
+        </div>
+        <div class="ui center aligned segment" if="{ yearSelecting }">
+          <div each="{ element in years }" class="dp-wrapper">
+            <div each="{ year in element}" class="dp-month"><button class="ui button" click="{ clickYear }">{year}</button></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -101,6 +111,8 @@
     this.date = null
     let monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     let weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    let visibleFlg = false
+    let itemActivated = false
     const yearRange = 20
 
     this.on('mount', () => {
@@ -129,6 +141,10 @@
 
     this.clickDay = event => {
       this.date = event.item.day
+      if (this.refs.input) {
+        this.refs.input.value = format(this.date)
+        close()
+      }
       this.trigger('click', this.date)
     }
 
@@ -160,6 +176,28 @@
         this.monthSelecting = false
         addMonth(opts.currentDate, 1)
         generate(opts.currentDate)
+      }
+    }
+
+    this.toggle = () => {
+      if (!visibleFlg) {
+        open()
+      } else {
+        close()
+      }
+    }
+
+    this.mousedown = () => {
+      itemActivated = true
+    }
+
+    this.mouseup = () => {
+      itemActivated = false
+    }
+
+    this.blur = () => {
+      if (opts.popup && !itemActivated) {
+        close()
       }
     }
 
@@ -217,6 +255,42 @@
       return monthes
     }
 
+    const open = () => {
+      this.transitionStatus = 'visible'
+      visibleFlg = true
+      opts.currentDate = this.date
+      if (!opts.currentDate) {
+        opts.currentDate = new Date()
+      }
+      generate(opts.currentDate)
+    }
+
+    const close = () => {
+      this.transitionStatus = 'hidden'
+      visibleFlg = false
+    }
+
+    const format = (date, pattern) => {
+      if (!pattern) {
+        pattern = 'yyyy-MM-dd'
+      }
+      pattern = pattern.replace(/yyyy/g, date.getFullYear().toString())
+      pattern = pattern.replace(/yy/g, date.getFullYear().toString().slice(-2))
+      pattern = pattern.replace(/MM/g, pad(date.getMonth() + 1, 2))
+      pattern = pattern.replace(/M/g, (date.getMonth() + 1).toString())
+      pattern = pattern.replace(/dd/g, pad(date.getDate(), 2))
+      pattern = pattern.replace(/d/g, date.getDate().toString())
+      return pattern
+    }
+
+    const pad = (n, digit) => {
+      const str = n.toString()
+      if (str.length >= digit) {
+        return str
+      }
+      return new Array(digit - str.length + 1).join('0') + str
+    }
+
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
@@ -247,6 +321,16 @@
     this.isToday = date => {
       const today = new Date()
       return date.getTime() == new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime()
+    }
+
+    this.getTabindex = () => {
+      if (!opts.popup) {
+        return false
+      }
+      if (opts.tabindex) {
+        return opts.tabindex
+      }
+      return 0
     }
   </script>
 </su-datepicker>
