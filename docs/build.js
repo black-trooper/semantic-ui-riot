@@ -57,7 +57,7 @@ riot.tag2('demo-checkbox', '<h1 class="ui header"> Checkbox <div class="sub head
     PR.prettyPrint(false);
   });
 });
-riot.tag2('demo-datepicker', '<h1 class="ui header"> Datepicker <div class="sub header"></div> </h1> <h2 class="ui dividing header">Types<a class="anchor" id="types"></a></h2> <h3 class="ui header">Basic</h3> <p>A simple datepicker.</p> <section> <div class="ui segment secondary top attached example"> Example <i class="icon code link" onclick="{toggleExample}"></i> </div> <div class="ui segment bottom attached"> <su-datepicker ref="datepicker"></su-datepicker> <div> {refs.datepicker.date}</div> <div>{refs.datepicker.date}</div> </div> <div class="ui segment bottom attached inverted transition hidden"> <pre><code class="prettyprint">&lt;su-datepicker ref=&quot;datepicker&quot; /&gt;\n</code></pre> </div> </section>', '', '', function (opts) {
+riot.tag2('demo-datepicker', '<h1 class="ui header"> Datepicker <div class="sub header"></div> </h1> <h2 class="ui dividing header">Types<a class="anchor" id="types"></a></h2> <h3 class="ui header">Basic</h3> <p>A simple datepicker.</p> <section> <div class="ui segment secondary top attached example"> Example <i class="icon code link" onclick="{toggleExample}"></i> </div> <div class="ui segment bottom attached"> <su-datepicker ref="datepicker"></su-datepicker> <div> {refs.datepicker.date}</div> </div> <div class="ui segment bottom attached inverted transition hidden"> <pre><code class="prettyprint">&lt;su-datepicker ref=&quot;datepicker&quot; /&gt;\n</code></pre> </div> </section> <h3 class="ui header">Popup</h3> <p>A datepicker in a popup.</p> <section> <div class="ui segment secondary top attached example"> Example <i class="icon code link" onclick="{toggleExample}"></i> </div> <div class="ui segment bottom attached"> <su-datepicker popup="true"></su-datepicker> </div> <div class="ui segment bottom attached inverted transition hidden"> <pre><code class="prettyprint">&lt;su-datepicker popup=&quot;true&quot; /&gt;\n</code></pre> </div> </section>', '', '', function (opts) {
   'use strict';
 
   var _this = this;
@@ -67,7 +67,7 @@ riot.tag2('demo-datepicker', '<h1 class="ui header"> Datepicker <div class="sub 
   };
 
   this.on('mount', function () {
-    // PR.prettyPrint(false)
+    PR.prettyPrint(false);
 
     _this.refs.datepicker.on('click', function () {
       _this.update();
@@ -468,7 +468,7 @@ riot.tag2('demo-tab', '<h1 class="ui header"> Tab <div class="sub header">A tab 
   });
 });
 riot.tag2('root', '<h1 class="ui header"> Semantic UI Riot <div class="sub header">Semantic-UI-Riot integration.</div> </h1> <h2 class="ui dividing header" id="introduction">Introduction</h2> <p> Semantic UI Riot is Riot integration for <a href="https://semantic-ui.com/">Semantic UI</a>. </p>', '', '', function (opts) {});
-riot.tag2('navigation', '<div class="ui inverted vertical left fixed menu"> <div class="item"> <strong>Semantic UI Riot <small><em>{version}</em></small> </strong> </div> <div class="item"> <div class="header">Getting Started</div> <div class="menu"> <a class="item" href="#">Introduction</a> <a href="https://github.com/black-trooper/semantic-ui-riot" class="item"> <i aria-hidden="true" class="github icon"></i> GitHub </a> </div> </div> <div class="item"> <div class="header">Module</div> <div class="menu"> <a class="item" href="#demo-checkbox">Checkbox</a> <a class="item" href="#demo-dropdown">Dropdown</a> <a class="item" href="#demo-modal">Modal</a> <a class="item" href="#demo-popup">Popup</a> <a class="item" href="#demo-radio">Radio</a> <a class="item" href="#demo-tab">Tab</a> </div> </div> <div class="item"> <div class="header">Module(Unimplemented)</div> <div class="menu"> <span class="item">Datepicker</span> </div> </div> </div>', '', '', function (opts) {
+riot.tag2('navigation', '<div class="ui inverted vertical left fixed menu"> <div class="item"> <strong>Semantic UI Riot <small><em>{version}</em></small> </strong> </div> <div class="item"> <div class="header">Getting Started</div> <div class="menu"> <a class="item" href="#">Introduction</a> <a href="https://github.com/black-trooper/semantic-ui-riot" class="item"> <i aria-hidden="true" class="github icon"></i> GitHub </a> </div> </div> <div class="item"> <div class="header">Module</div> <div class="menu"> <a class="item" href="#demo-checkbox">Checkbox</a> <a class="item" href="#demo-datepicker">Datepicker</a> <a class="item" href="#demo-dropdown">Dropdown</a> <a class="item" href="#demo-modal">Modal</a> <a class="item" href="#demo-popup">Popup</a> <a class="item" href="#demo-radio">Radio</a> <a class="item" href="#demo-tab">Tab</a> </div> </div> </div>', '', '', function (opts) {
   'use strict';
 
   this.version = require('../package.json').version;

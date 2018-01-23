@@ -83,6 +83,237 @@ var normalizeOptChecked = function normalizeOptChecked() {
   return opts.checked === true || opts.checked === 'checked' || opts.checked === 'true';
 };
 });
+riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup}"> <div class="ui action input" if="{opts.popup}"> <input type="text" placeholder="{opts.placeholder}" ref="input"> <button class="ui icon button" click="{toggle}" onblur="{blur}"> <i class="calendar icon"></i> </button> </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="{getTabindex()}"> <div class="ui compact segments"> <div class="ui center aligned secondary segment"> <div class="dp-navigation ui four column grid"> <div class="column link" click="{clickPrevious}"> <i class="chevron left icon"></i> </div> <div class="column link" click="{selectMonth}">{getCurrentMonthView()}</div> <div class="column link" click="{selectYear}">{getCurrentYear()}</div> <div class="column link" click="{clickNext}"> <i class="chevron right icon"></i> </div> </div> <div class="dp-wrapper"> <div each="{week in getWeekNames()}" class="dp-weekday">{week}</div> </div> </div> <div class="ui center aligned segment" if="{!yearSelecting && !monthSelecting}"> <div each="{week in weeks}" class="dp-wrapper"> <div each="{day in week.days}" class="dp-day"> <button class="ui button {today: isToday(day)} {primary: isActive(day)} {non-active: !isActive(day)} {disabled: day.getMonth() != getCurrentMonth()}" click="{clickDay}">{day.getDate()}</button> </div> </div> </div> <div class="ui center aligned segment" if="{monthSelecting}"> <div each="{element in months}" class="dp-wrapper"> <div each="{month in element}" class="dp-month"><button class="ui button" click="{clickMonth}">{month.label}</button></div> </div> </div> <div class="ui center aligned segment" if="{yearSelecting}"> <div each="{element in years}" class="dp-wrapper"> <div each="{year in element}" class="dp-month"><button class="ui button" click="{clickYear}">{year}</button></div> </div> </div> </div> </div> </div>', 'su-datepicker .link,[data-is="su-datepicker"] .link{ cursor: pointer; } su-datepicker .ui.segment,[data-is="su-datepicker"] .ui.segment{ padding-top: 0.5rem; padding-bottom: 0.5rem; } su-datepicker .ui.grid.dp-navigation,[data-is="su-datepicker"] .ui.grid.dp-navigation{ margin-top: -0.5rem; margin-bottom: 0; } su-datepicker .dp-wrapper,[data-is="su-datepicker"] .dp-wrapper{ display: flex; } su-datepicker .dp-day,[data-is="su-datepicker"] .dp-day,su-datepicker .dp-month,[data-is="su-datepicker"] .dp-month{ cursor: pointer; } su-datepicker .dp-weekday,[data-is="su-datepicker"] .dp-weekday,su-datepicker .dp-day,[data-is="su-datepicker"] .dp-day,su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button{ width: 2.5rem; } su-datepicker .dp-month,[data-is="su-datepicker"] .dp-month,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ width: 4.375rem; } su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ padding: 0; height: 2.5rem; font-weight: normal } su-datepicker .dp-day .ui.button.today,[data-is="su-datepicker"] .dp-day .ui.button.today{ font-weight: 700; } su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button,su-datepicker .dp-day .ui.button.non-active,[data-is="su-datepicker"] .dp-day .ui.button.non-active{ background-color: transparent; } su-datepicker .dp-month .ui.button:hover,[data-is="su-datepicker"] .dp-month .ui.button:hover,su-datepicker .dp-day .ui.button.non-active:hover,[data-is="su-datepicker"] .dp-day .ui.button.non-active:hover{ background-color: #e0e1e2; } su-datepicker .dp-day .ui.button.disabled,[data-is="su-datepicker"] .dp-day .ui.button.disabled{ pointer-events: all !important; }', '', function(opts) {
+'use strict';
+
+var _this = this;
+
+this.weeks = [];
+this.date = null;
+var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+var weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+var visibleFlg = false;
+var itemActivated = false;
+var yearRange = 20;
+
+this.on('mount', function () {
+  opts.currentDate = _this.date;
+  if (!opts.currentDate) {
+    opts.currentDate = new Date();
+  }
+  _this.months = getMonthes();
+  generate(opts.currentDate);
+  _this.update();
+});
+
+// ===================================================================================
+//                                                                               Event
+//                                                                               =====
+this.selectMonth = function () {
+  _this.yearSelecting = false;
+  _this.monthSelecting = !_this.monthSelecting;
+};
+
+this.selectYear = function () {
+  _this.years = getYears();
+  _this.monthSelecting = false;
+  _this.yearSelecting = !_this.yearSelecting;
+};
+
+this.clickDay = function (event) {
+  _this.date = event.item.day;
+  if (_this.refs.input) {
+    _this.refs.input.value = format(_this.date);
+    close();
+  }
+  _this.trigger('click', _this.date);
+};
+
+this.clickMonth = function (event) {
+  opts.currentDate.setMonth(event.item.month.value);
+  generate(opts.currentDate);
+  _this.monthSelecting = false;
+};
+
+this.clickYear = function (event) {
+  opts.currentDate.setYear(event.item.year);
+  _this.selectMonth();
+};
+
+this.clickPrevious = function () {
+  if (_this.yearSelecting) {
+    addYear(-yearRange);
+  } else {
+    _this.monthSelecting = false;
+    addMonth(opts.currentDate, -1);
+    generate(opts.currentDate);
+  }
+};
+
+this.clickNext = function () {
+  if (_this.yearSelecting) {
+    addYear(yearRange);
+  } else {
+    _this.monthSelecting = false;
+    addMonth(opts.currentDate, 1);
+    generate(opts.currentDate);
+  }
+};
+
+this.toggle = function () {
+  if (!visibleFlg) {
+    open();
+  } else {
+    close();
+  }
+};
+
+this.mousedown = function () {
+  itemActivated = true;
+};
+
+this.mouseup = function () {
+  itemActivated = false;
+};
+
+this.blur = function () {
+  if (opts.popup && !itemActivated) {
+    close();
+  }
+};
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+var generate = function generate(date) {
+  var year = date.getFullYear();
+  var month = date.getMonth();
+  var firstMonthDay = new Date(year, month, 1).getDay();
+  var i = 1 - firstMonthDay;
+
+  _this.weeks = [];
+  for (var r = 0; r < 6; r++) {
+    var days = [];
+    for (var c = 0; c < 7; c++) {
+      days.push(new Date(year, month, i++));
+    }
+    // if (days[0].getMonth() > month && days[6].getMonth() > month) {
+    //   break
+    // }
+    _this.weeks.push({ days: days });
+  }
+};
+
+var addYear = function addYear(year) {
+  _this.years = _this.years.map(function (values) {
+    values = values.map(function (value) {
+      return value + year;
+    });
+    return values;
+  });
+};
+
+var addMonth = function addMonth(date, month) {
+  date.setMonth(date.getMonth() + month);
+};
+
+var getYears = function getYears() {
+  var years = [[], [], [], [], []];
+  for (var index = 0; index < yearRange; index++) {
+    years[(index - index % 4) / 4][index % 4] = opts.currentDate.getFullYear() + index - 9;
+  }
+  return years;
+};
+
+var getMonthes = function getMonthes() {
+  var months = [[], [], []];
+  monthNames.forEach(function (month, index) {
+    months[(index - index % 4) / 4][index % 4] = {
+      label: month,
+      value: index
+    };
+  });
+  return months;
+};
+
+var open = function open() {
+  _this.transitionStatus = 'visible';
+  visibleFlg = true;
+  opts.currentDate = _this.date;
+  if (!opts.currentDate) {
+    opts.currentDate = new Date();
+  }
+  generate(opts.currentDate);
+};
+
+var close = function close() {
+  _this.transitionStatus = 'hidden';
+  visibleFlg = false;
+};
+
+var format = function format(date, pattern) {
+  if (!pattern) {
+    pattern = 'yyyy-MM-dd';
+  }
+  pattern = pattern.replace(/yyyy/g, date.getFullYear().toString());
+  pattern = pattern.replace(/yy/g, date.getFullYear().toString().slice(-2));
+  pattern = pattern.replace(/MM/g, pad(date.getMonth() + 1, 2));
+  pattern = pattern.replace(/M/g, (date.getMonth() + 1).toString());
+  pattern = pattern.replace(/dd/g, pad(date.getDate(), 2));
+  pattern = pattern.replace(/d/g, date.getDate().toString());
+  return pattern;
+};
+
+var pad = function pad(n, digit) {
+  var str = n.toString();
+  if (str.length >= digit) {
+    return str;
+  }
+  return new Array(digit - str.length + 1).join('0') + str;
+};
+
+// ===================================================================================
+//                                                                              Helper
+//                                                                              ======
+this.getCurrentYear = function () {
+  if (opts.currentDate) {
+    return opts.currentDate.getFullYear();
+  }
+};
+
+this.getCurrentMonthView = function () {
+  if (opts.currentDate) {
+    return '' + monthNames[opts.currentDate.getMonth()];
+  }
+};
+
+this.getCurrentMonth = function () {
+  return opts.currentDate.getMonth();
+};
+
+this.getWeekNames = function () {
+  return weekNames;
+};
+
+this.isActive = function (date) {
+  return _this.date && _this.date.getTime() == date.getTime();
+};
+
+this.isToday = function (date) {
+  var today = new Date();
+  return date.getTime() == new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+};
+
+this.getTabindex = function () {
+  if (!opts.popup) {
+    return false;
+  }
+  if (opts.tabindex) {
+    return opts.tabindex;
+  }
+  return 0;
+};
+});
 riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="{getTabindex()}" ref="condition" if="{opts.search}" oninput="{input}" onclick="{clickSearch}" onfocus="{focus}" onblur="{blur}"> <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!opts.multiple || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="-1"> <div each="{item in opts.items}" riot-value="{item.value}" default="{item.default}" onmousedown="{mousedown}" onmouseup="{mouseup}" class="{item: isItem(item)} {header: item.header && !filtered} {divider: item.divider && !filtered} {default: item.default} {active: item.active} {selected: item.active}" onclick="{itemClick}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div>', 'su-dropdown.ui.dropdown .menu>.item.default,[data-is="su-dropdown"].ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) }', 'class="ui selection {opts.class} {search: opts.search} {multiple: opts.multiple} dropdown {active: isActive()} {visible: isActive()}" onclick="{toggle}" onfocus="{focus}" onblur="{blur}" onkeydown="{keydown}" onkeyup="{keyup}" tabindex="{opts.search ? -1 : getTabindex()}"', function(opts) {
 'use strict';
 
