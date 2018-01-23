@@ -146,7 +146,7 @@
     this.clickDay = event => {
       this.date = event.item.day
       if (this.refs.input) {
-        this.refs.input.value = format(this.date)
+        this.refs.input.value = format(this.date, opts.pattern)
         close()
       }
       this.trigger('click', this.date)
