@@ -21,18 +21,12 @@
       <div class="header">Module</div>
       <div class="menu">
         <a class="item" href="#demo-checkbox">Checkbox</a>
+        <a class="item" href="#demo-datepicker">Datepicker</a>
         <a class="item" href="#demo-dropdown">Dropdown</a>
         <a class="item" href="#demo-modal">Modal</a>
         <a class="item" href="#demo-popup">Popup</a>
         <a class="item" href="#demo-radio">Radio</a>
         <a class="item" href="#demo-tab">Tab</a>
-      </div>
-    </div>
-
-    <div class="item">
-      <div class="header">Module(Unimplemented)</div>
-      <div class="menu">
-        <span class="item">Datepicker</span>
       </div>
     </div>
   </div>
