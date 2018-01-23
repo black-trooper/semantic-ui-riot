@@ -120,7 +120,9 @@
     const yearRange = 20
 
     this.on('mount', () => {
-      opts.currentDate = this.date
+      if (this.date) {
+        opts.currentDate = new Date(this.date.getTime())
+      }
       if (!opts.currentDate) {
         opts.currentDate = new Date()
       }
@@ -262,7 +264,9 @@
     const open = () => {
       this.transitionStatus = 'visible'
       visibleFlg = true
-      opts.currentDate = this.date
+      if (this.date) {
+        opts.currentDate = new Date(this.date.getTime())
+      }
       if (!opts.currentDate) {
         opts.currentDate = new Date()
       }
