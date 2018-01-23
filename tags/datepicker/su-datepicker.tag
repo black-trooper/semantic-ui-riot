@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="ui center aligned segment" if="{ monthSelecting }">
-          <div each="{ element in monthes }" class="dp-wrapper">
+          <div each="{ element in months }" class="dp-wrapper">
             <div each="{ month in element}" class="dp-month"><button class="ui button" click="{ clickMonth }">{month.label}</button></div>
           </div>
         </div>
@@ -120,7 +120,7 @@
       if (!opts.currentDate) {
         opts.currentDate = new Date()
       }
-      this.monthes = getMonthes()
+      this.months = getMonthes()
       generate(opts.currentDate)
       this.update()
     })
@@ -245,14 +245,14 @@
     }
 
     const getMonthes = () => {
-      const monthes = [[], [], []]
+      const months = [[], [], []]
       monthNames.forEach((month, index) => {
-        monthes[(index - index % 4) / 4][index % 4] = {
+        months[(index - index % 4) / 4][index % 4] = {
           label: month,
           value: index
         }
       })
-      return monthes
+      return months
     }
 
     const open = () => {
