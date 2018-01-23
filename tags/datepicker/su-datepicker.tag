@@ -1,7 +1,7 @@
 <su-datepicker>
   <div class="ui { dropdown:opts.popup }">
     <div class="ui action input" if="{ opts.popup }">
-      <input type="text" placeholder="YYYY-MM-DD" ref="input" />
+      <input type="text" placeholder="{ opts.placeholder }" ref="input" />
       <button class="ui icon button" click="{ toggle }" onblur="{ blur }">
         <i class="calendar icon"></i>
       </button>
