@@ -60,6 +60,10 @@
       margin-bottom: 0;
     }
 
+    .ui.dropdown {
+      display: block;
+    }
+
     .dp-wrapper {
       display: flex;
     }
