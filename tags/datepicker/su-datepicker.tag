@@ -113,6 +113,7 @@
   <script>
     this.weeks = []
     this.date = null
+    this.transitionStatus = opts.popup ? 'hidden' : 'visible'
     let monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     let weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
     let visibleFlg = false
@@ -271,11 +272,13 @@
         opts.currentDate = new Date()
       }
       generate(opts.currentDate)
+      this.trigger('open', this.date)
     }
 
     const close = () => {
       this.transitionStatus = 'hidden'
       visibleFlg = false
+      this.trigger('close', this.date)
     }
 
     const format = (date, pattern) => {
