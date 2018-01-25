@@ -11,7 +11,11 @@
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
-      this.value = opts.riotValue
+      if (this.value) {
+        opts.riotValue = this.value
+      } else {
+        this.value = opts.riotValue
+      }
       lastValue = this.value
       lastOptsValue = this.value
 

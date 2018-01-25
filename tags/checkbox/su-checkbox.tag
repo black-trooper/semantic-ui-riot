@@ -11,7 +11,11 @@
 
     this.on('mount', () => {
       supportTraditionalOptions()
-      this.checked = normalizeOptChecked()
+      if (this.checked) {
+        opts.checked = this.checked
+      } else {
+        this.checked = normalizeOptChecked()
+      }
       lastChecked = this.checked
       lastOptsChecked = this.checked
       this.update()

@@ -11,7 +11,11 @@
     let lastOptsCheck
 
     this.on('mount', () => {
-      this.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
+      if (this.checked) {
+        opts.checked = this.checked
+      } else {
+        this.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
+      }
       lastChecked = this.checked
       lastOptsCheck = opts.checked
       this.update()
