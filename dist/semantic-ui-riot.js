@@ -93,7 +93,7 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup}"> <div class="u
 var _this = this;
 
 this.weeks = [];
-this.date = null;
+this.value = null;
 this.transitionStatus = opts.popup ? 'hidden' : 'visible';
 var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 var weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -102,8 +102,8 @@ var itemActivated = false;
 var yearRange = 20;
 
 this.on('mount', function () {
-  if (_this.date) {
-    opts.currentDate = new Date(_this.date.getTime());
+  if (_this.value) {
+    opts.currentDate = _this.value;
   }
   if (!opts.currentDate) {
     opts.currentDate = new Date();
@@ -128,12 +128,12 @@ this.selectYear = function () {
 };
 
 this.clickDay = function (event) {
-  _this.date = event.item.day;
+  _this.value = event.item.day;
   if (_this.refs.input) {
-    _this.refs.input.value = format(_this.date, opts.pattern);
+    _this.refs.input.value = format(_this.value, opts.pattern);
     close();
   }
-  _this.trigger('click', _this.date);
+  _this.trigger('click', _this.value);
 };
 
 this.clickMonth = function (event) {
@@ -246,20 +246,20 @@ var getMonthes = function getMonthes() {
 var open = function open() {
   _this.transitionStatus = 'visible';
   visibleFlg = true;
-  if (_this.date) {
-    opts.currentDate = new Date(_this.date.getTime());
+  if (_this.value) {
+    opts.currentDate = new Date(_this.value.getTime());
   }
   if (!opts.currentDate) {
     opts.currentDate = new Date();
   }
   generate(opts.currentDate);
-  _this.trigger('open', _this.date);
+  _this.trigger('open', _this.value);
 };
 
 var close = function close() {
   _this.transitionStatus = 'hidden';
   visibleFlg = false;
-  _this.trigger('close', _this.date);
+  _this.trigger('close', _this.value);
 };
 
 var format = function format(date, pattern) {
@@ -307,7 +307,7 @@ this.getWeekNames = function () {
 };
 
 this.isActive = function (date) {
-  return _this.date && _this.date.getTime() == date.getTime();
+  return _this.value && _this.value.getTime() == date.getTime();
 };
 
 this.isToday = function (date) {

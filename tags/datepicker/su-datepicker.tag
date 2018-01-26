@@ -112,7 +112,7 @@
 
   <script>
     this.weeks = []
-    this.date = null
+    this.value = null
     this.transitionStatus = opts.popup ? 'hidden' : 'visible'
     let monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     let weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -121,8 +121,8 @@
     const yearRange = 20
 
     this.on('mount', () => {
-      if (this.date) {
-        opts.currentDate = new Date(this.date.getTime())
+      if (this.value) {
+        opts.currentDate = this.value
       }
       if (!opts.currentDate) {
         opts.currentDate = new Date()
@@ -147,12 +147,12 @@
     }
 
     this.clickDay = event => {
-      this.date = event.item.day
+      this.value = event.item.day
       if (this.refs.input) {
-        this.refs.input.value = format(this.date, opts.pattern)
+        this.refs.input.value = format(this.value, opts.pattern)
         close()
       }
-      this.trigger('click', this.date)
+      this.trigger('click', this.value)
     }
 
     this.clickMonth = event => {
@@ -265,20 +265,20 @@
     const open = () => {
       this.transitionStatus = 'visible'
       visibleFlg = true
-      if (this.date) {
-        opts.currentDate = new Date(this.date.getTime())
+      if (this.value) {
+        opts.currentDate = new Date(this.value.getTime())
       }
       if (!opts.currentDate) {
         opts.currentDate = new Date()
       }
       generate(opts.currentDate)
-      this.trigger('open', this.date)
+      this.trigger('open', this.value)
     }
 
     const close = () => {
       this.transitionStatus = 'hidden'
       visibleFlg = false
-      this.trigger('close', this.date)
+      this.trigger('close', this.value)
     }
 
     const format = (date, pattern) => {
@@ -326,7 +326,7 @@
     }
 
     this.isActive = date => {
-      return this.date && this.date.getTime() == date.getTime()
+      return this.value && this.value.getTime() == date.getTime()
     }
 
     this.isToday = date => {

@@ -21,7 +21,7 @@
     </div>
     <div class="ui segment bottom attached">
       <su-datepicker ref="datepicker" />
-      <div> { refs.datepicker.date }</div>
+      <div> { refs.datepicker.value }</div>
     </div>
     <div class="ui segment bottom attached inverted transition hidden">
       <pre><code class="prettyprint">
