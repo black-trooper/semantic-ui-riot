@@ -302,6 +302,16 @@
       return new Array(digit - str.length + 1).join('0') + str
     }
 
+    const dateEqual = (d1, d2) => {
+      if (d1 == d2) {
+        return true
+      }
+      if (typeof d1 === 'undefined' || typeof d2 === 'undefined') {
+        return false
+      }
+      return d1.getTime() == d2.getTime()
+    }
+
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
@@ -326,12 +336,12 @@
     }
 
     this.isActive = date => {
-      return this.value && this.value.getTime() == date.getTime()
+      return dateEqual(this.value, date)
     }
 
     this.isToday = date => {
       const today = new Date()
-      return date.getTime() == new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime()
+      return dateEqual(date, new Date(today.getFullYear(), today.getMonth(), today.getDate()))
     }
 
     this.getTabindex = () => {
