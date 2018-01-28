@@ -118,9 +118,20 @@
     let weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
     let visibleFlg = false
     let itemActivated = false
+    let lastValue = null
+    let lastOptsValue = null
     const yearRange = 20
 
     this.on('mount', () => {
+      if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
+        opts.riotValue = opts.value
+      }
+      if (!this.value) {
+        this.value = opts.riotValue
+      }
+      lastValue = this.value
+      lastOptsValue = opts.riotValue
+
       if (this.value) {
         opts.currentDate = this.value
       }
@@ -130,6 +141,24 @@
       this.months = getMonthes()
       generate(opts.currentDate)
       this.update()
+    })
+
+    this.on('update', () => {
+      let changed = false
+      if (!dateEqual(lastValue, this.value)) {
+        lastValue = this.value
+        changed = true
+      } else if (!dateEqual(lastOptsValue, opts.riotValue)) {
+        this.value = opts.riotValue
+        lastOptsValue = opts.riotValue
+        lastValue = opts.riotValue
+        changed = true
+      }
+
+      if (changed && this.value) {
+        opts.currentDate = this.value
+        generate(opts.currentDate)
+      }
     })
 
     // ===================================================================================
