@@ -127,13 +127,13 @@
         opts.riotValue = opts.value
       }
       if (!this.value) {
-        this.value = opts.riotValue
+        this.value = copyDate(opts.riotValue)
       }
-      lastValue = this.value
-      lastOptsValue = opts.riotValue
+      lastValue = copyDate(this.value)
+      lastOptsValue = copyDate(opts.riotValue)
 
       if (this.value) {
-        opts.currentDate = this.value
+        opts.currentDate = copyDate(this.value)
       }
       if (!opts.currentDate) {
         opts.currentDate = new Date()
@@ -146,17 +146,17 @@
     this.on('update', () => {
       let changed = false
       if (!dateEqual(lastValue, this.value)) {
-        lastValue = this.value
+        lastValue = copyDate(this.value)
         changed = true
       } else if (!dateEqual(lastOptsValue, opts.riotValue)) {
-        this.value = opts.riotValue
-        lastOptsValue = opts.riotValue
-        lastValue = opts.riotValue
+        this.value = copyDate(opts.riotValue)
+        lastOptsValue = copyDate(opts.riotValue)
+        lastValue = copyDate(opts.riotValue)
         changed = true
       }
 
       if (changed && this.value) {
-        opts.currentDate = this.value
+        opts.currentDate = copyDate(this.value)
         generate(opts.currentDate)
       }
     })
@@ -295,7 +295,7 @@
       this.transitionStatus = 'visible'
       visibleFlg = true
       if (this.value) {
-        opts.currentDate = new Date(this.value.getTime())
+        opts.currentDate = copyDate(this.value)
       }
       if (!opts.currentDate) {
         opts.currentDate = new Date()
@@ -339,6 +339,13 @@
         return false
       }
       return d1.getTime() == d2.getTime()
+    }
+
+    const copyDate = date => {
+      if (!date) {
+        return date
+      }
+      return new Date(date.getTime())
     }
 
     // ===================================================================================
