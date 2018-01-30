@@ -120,6 +120,7 @@
     let itemActivated = false
     let lastValue = null
     let lastOptsValue = null
+    let lastOptsCurrentDate = null
     const yearRange = 20
 
     this.on('mount', () => {
@@ -139,7 +140,6 @@
         opts.currentDate = new Date()
       }
       this.months = getMonthes()
-      generate(opts.currentDate)
       this.update()
     })
 
@@ -157,7 +157,10 @@
 
       if (changed && this.value) {
         opts.currentDate = copyDate(this.value)
-        generate(opts.currentDate)
+      }
+      if (!dateEqual(lastOptsCurrentDate, opts.currentDate)) {
+        lastOptsCurrentDate = copyDate(opts.currentDate)
+        generate()
       }
     })
 
@@ -186,7 +189,6 @@
 
     this.clickMonth = event => {
       opts.currentDate.setMonth(event.item.month.value)
-      generate(opts.currentDate)
       this.monthSelecting = false
     }
 
@@ -201,7 +203,6 @@
       } else {
         this.monthSelecting = false
         addMonth(opts.currentDate, -1)
-        generate(opts.currentDate)
       }
     }
 
@@ -211,7 +212,6 @@
       } else {
         this.monthSelecting = false
         addMonth(opts.currentDate, 1)
-        generate(opts.currentDate)
       }
     }
 
@@ -240,9 +240,9 @@
     // ===================================================================================
     //                                                                               Logic
     //                                                                               =====
-    const generate = date => {
-      const year = date.getFullYear()
-      const month = date.getMonth()
+    const generate = () => {
+      const year = opts.currentDate.getFullYear()
+      const month = opts.currentDate.getMonth()
       const firstMonthDay = new Date(year, month, 1).getDay()
       let i = 1 - firstMonthDay
 
@@ -300,7 +300,6 @@
       if (!opts.currentDate) {
         opts.currentDate = new Date()
       }
-      generate(opts.currentDate)
       this.trigger('open', this.value)
     }
 
@@ -335,7 +334,7 @@
       if (d1 == d2) {
         return true
       }
-      if (typeof d1 === 'undefined' || typeof d2 === 'undefined') {
+      if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
         return false
       }
       return d1.getTime() == d2.getTime()
