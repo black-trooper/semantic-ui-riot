@@ -48,8 +48,22 @@ describe('su-datepicker', function () {
     $('su-datepicker .menu').is(':visible').should.equal(true)
 
     fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
-    spyOnOpen.should.have.been.calledTwice
+    spyOnClose.should.have.been.calledTwice
     $('su-datepicker .menu').is(':visible').should.equal(false)
+
+    fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
+    spyOnOpen.should.have.been.callCount(3)
+    $('su-datepicker .menu').is(':visible').should.equal(true)
+
+    fireEvent($('su-datepicker .menu')[0], 'mousedown')
+    fireEvent($('su-datepicker button.ui.icon.button')[0], 'blur')
+    fireEvent($('su-datepicker .menu')[0], 'mouseup')
+    $('su-datepicker .menu').is(':visible').should.equal(true)
+    spyOnClose.should.have.been.calledTwice
+
+    fireEvent($('su-datepicker .menu')[0], 'blur')
+    $('su-datepicker .menu').is(':visible').should.equal(false)
+    spyOnClose.should.have.been.callCount(3)
   })
 
   it('select month event', function () {
@@ -149,5 +163,20 @@ describe('su-datepicker', function () {
     spyOnClose.should.have.been.calledOnce
     $('su-datepicker .menu').is(':visible').should.equal(false)
     tag.refs.input.value.should.equal('2017/12/01')
+  })
+
+  it('update option value', function () {
+    $('body').append('<su-datepicker />')
+    mount({
+      value: new Date(2017, 11, 1)
+    })
+
+    $('su-datepicker .dp-navigation .column:eq(1)').text().trim().should.equal('Dec')
+    $('su-datepicker .dp-navigation .column:eq(2)').text().trim().should.equal('2017')
+
+    tag.opts.riotValue = new Date(2018, 0, 1)
+    tag.update()
+    $('su-datepicker .dp-navigation .column:eq(1)').text().trim().should.equal('Jan')
+    $('su-datepicker .dp-navigation .column:eq(2)').text().trim().should.equal('2018')
   })
 })
