@@ -21,11 +21,20 @@
     </div>
     <div class="ui segment bottom attached">
       <su-datepicker ref="datepicker" />
-      <div> { refs.datepicker.value }</div>
+      <div class="ui message">
+        <b>value</b> : { refs.datepicker.value }
+      </div>
+      <button type="button" class="ui button" click="{ setDate.bind(this, new Date(2010, 1, 1)) }">Set Feb 1 2010</button>
+      <button type="button" class="ui button" click="{ navigateTo.bind(this, new Date(2010, 2, 1)) }">To Mar 2010</button>
     </div>
     <div class="ui segment bottom attached inverted transition hidden">
       <pre><code class="prettyprint">
         <su-datepicker ref="datepicker" />
+        <div class="ui message">
+          <b>value</b> : { refs.datepicker.value }
+        </div>
+        <button type="button" class="ui button" click="{ setDate.bind(this, new Date(2010, 1, 1)) }">Set Feb 1 2010</button>
+        <button type="button" class="ui button" click="{ navigateTo.bind(this, new Date(2010, 2, 1)) }">To Mar 2010</button>
       </code></pre>
     </div>
   </section>
@@ -50,15 +59,58 @@
     </div>
   </section>
 
+  <!-- =================================================================================== -->
+  <!--                                                                              States -->
+  <!-- =================================================================================== -->
+  <h2 class="ui dividing header">States<a class="anchor" id="states"></a></h2>
+
+  <!-- ====================================================== -->
+  <!--                                          Default value -->
+  <!--                                          ============= -->
+  <h3 class="ui header">Default value</h3>
+  <p>A datepicker can set default value.</p>
+  <section>
+    <div class="ui segment secondary top attached example">
+      Example
+      <i class="icon code link" onclick="{ toggleExample }"></i>
+    </div>
+    <div class="ui segment bottom attached">
+      <su-datepicker value="{ new Date(2017,0,25) }" ref="datepicker2" />
+      <div class="ui message">
+        <b>value</b> : { refs.datepicker2.value }
+      </div>
+    </div>
+    <div class="ui segment bottom attached inverted transition hidden">
+      <pre><code class="prettyprint">
+        <su-datepicker value="{ new Date(2017,0,25) }" ref="datepicker2" />
+        <div class="ui message">
+          <b>value</b> : { refs.datepicker2.value }
+        </div>
+      </code></pre>
+    </div>
+  </section>
+
   <script>
     this.toggleExample = event => {
       global.toggleExample(event.target)
     }
 
+    this.setDate = date => {
+      this.refs.datepicker.value = date
+    }
+
+    this.navigateTo = date => {
+      this.refs.datepicker.opts.currentDate = date
+    }
+
     this.on('mount', () => {
       PR.prettyPrint(false)
+      this.update()
 
       this.refs.datepicker.on('click', () => {
+        this.update()
+      })
+      this.refs.datepicker2.on('click', () => {
         this.update()
       })
     })

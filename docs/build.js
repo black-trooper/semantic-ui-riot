@@ -57,7 +57,7 @@ riot.tag2('demo-checkbox', '<h1 class="ui header"> Checkbox <div class="sub head
     PR.prettyPrint(false);
   });
 });
-riot.tag2('demo-datepicker', '<h1 class="ui header"> Datepicker <div class="sub header"></div> </h1> <h2 class="ui dividing header">Types<a class="anchor" id="types"></a></h2> <h3 class="ui header">Basic</h3> <p>A simple datepicker.</p> <section> <div class="ui segment secondary top attached example"> Example <i class="icon code link" onclick="{toggleExample}"></i> </div> <div class="ui segment bottom attached"> <su-datepicker ref="datepicker"></su-datepicker> <div> {refs.datepicker.value}</div> </div> <div class="ui segment bottom attached inverted transition hidden"> <pre><code class="prettyprint">&lt;su-datepicker ref=&quot;datepicker&quot; /&gt;\n</code></pre> </div> </section> <h3 class="ui header">Popup</h3> <p>A datepicker in a popup.</p> <section> <div class="ui segment secondary top attached example"> Example <i class="icon code link" onclick="{toggleExample}"></i> </div> <div class="ui segment bottom attached"> <su-datepicker popup="true"></su-datepicker> </div> <div class="ui segment bottom attached inverted transition hidden"> <pre><code class="prettyprint">&lt;su-datepicker popup=&quot;true&quot; /&gt;\n</code></pre> </div> </section>', '', '', function (opts) {
+riot.tag2('demo-datepicker', '<h1 class="ui header"> Datepicker <div class="sub header"></div> </h1> <h2 class="ui dividing header">Types<a class="anchor" id="types"></a></h2> <h3 class="ui header">Basic</h3> <p>A simple datepicker.</p> <section> <div class="ui segment secondary top attached example"> Example <i class="icon code link" onclick="{toggleExample}"></i> </div> <div class="ui segment bottom attached"> <su-datepicker ref="datepicker"></su-datepicker> <div class="ui message"> <b>value</b> : {refs.datepicker.value} </div> <button type="button" class="ui button" click="{setDate.bind(this, new Date(2010, 1, 1))}">Set Feb 1 2010</button> <button type="button" class="ui button" click="{navigateTo.bind(this, new Date(2010, 2, 1))}">To Mar 2010</button> </div> <div class="ui segment bottom attached inverted transition hidden"> <pre><code class="prettyprint">&lt;su-datepicker ref=&quot;datepicker&quot; /&gt;\n&lt;div class=&quot;ui message&quot;&gt;\n  &lt;b&gt;value&lt;/b&gt; : \\{ refs.datepicker.value \\}\n&lt;/div&gt;\n&lt;button type=&quot;button&quot; class=&quot;ui button&quot; click=&quot;\\{ setDate.bind(this, new Date(2010, 1, 1)) \\}&quot;&gt;Set Feb 1 2010&lt;/button&gt;\n&lt;button type=&quot;button&quot; class=&quot;ui button&quot; click=&quot;\\{ navigateTo.bind(this, new Date(2010, 2, 1)) \\}&quot;&gt;To Mar 2010&lt;/button&gt;\n</code></pre> </div> </section> <h3 class="ui header">Popup</h3> <p>A datepicker in a popup.</p> <section> <div class="ui segment secondary top attached example"> Example <i class="icon code link" onclick="{toggleExample}"></i> </div> <div class="ui segment bottom attached"> <su-datepicker popup="true"></su-datepicker> </div> <div class="ui segment bottom attached inverted transition hidden"> <pre><code class="prettyprint">&lt;su-datepicker popup=&quot;true&quot; /&gt;\n</code></pre> </div> </section> <h2 class="ui dividing header">States<a class="anchor" id="states"></a></h2> <h3 class="ui header">Default value</h3> <p>A datepicker can set default value.</p> <section> <div class="ui segment secondary top attached example"> Example <i class="icon code link" onclick="{toggleExample}"></i> </div> <div class="ui segment bottom attached"> <su-datepicker riot-value="{new Date(2017,0,25)}" ref="datepicker2"></su-datepicker> <div class="ui message"> <b>value</b> : {refs.datepicker2.value} </div> </div> <div class="ui segment bottom attached inverted transition hidden"> <pre><code class="prettyprint">&lt;su-datepicker value=&quot;\\{ new Date(2017,0,25) \\}&quot; ref=&quot;datepicker2&quot; /&gt;\n&lt;div class=&quot;ui message&quot;&gt;\n  &lt;b&gt;value&lt;/b&gt; : \\{ refs.datepicker2.value \\}\n&lt;/div&gt;\n</code></pre> </div> </section>', '', '', function (opts) {
   'use strict';
 
   var _this = this;
@@ -66,10 +66,22 @@ riot.tag2('demo-datepicker', '<h1 class="ui header"> Datepicker <div class="sub 
     global.toggleExample(event.target);
   };
 
+  this.setDate = function (date) {
+    _this.refs.datepicker.value = date;
+  };
+
+  this.navigateTo = function (date) {
+    _this.refs.datepicker.opts.currentDate = date;
+  };
+
   this.on('mount', function () {
     PR.prettyPrint(false);
+    _this.update();
 
     _this.refs.datepicker.on('click', function () {
+      _this.update();
+    });
+    _this.refs.datepicker2.on('click', function () {
       _this.update();
     });
   });
@@ -478,7 +490,7 @@ riot.tag2('navigation', '<div class="ui inverted vertical left fixed menu"> <div
 },{"../package.json":2}],2:[function(require,module,exports){
 module.exports={
   "name": "semantic-ui-riot",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "Semantic UI for Riot",
   "main": "dist/semantic-ui-riot.min.js",
   "files": [
