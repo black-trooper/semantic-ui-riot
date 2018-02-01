@@ -99,18 +99,50 @@ var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
 var weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 var visibleFlg = false;
 var itemActivated = false;
+var lastValue = null;
+var lastOptsValue = null;
+var lastOptsCurrentDate = null;
 var yearRange = 20;
 
 this.on('mount', function () {
+  if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
+    opts.riotValue = opts.value;
+  }
+  if (!_this.value) {
+    _this.value = copyDate(opts.riotValue);
+  }
+  lastValue = copyDate(_this.value);
+  lastOptsValue = copyDate(opts.riotValue);
+
   if (_this.value) {
-    opts.currentDate = _this.value;
+    opts.currentDate = copyDate(_this.value);
   }
   if (!opts.currentDate) {
     opts.currentDate = new Date();
   }
   _this.months = getMonthes();
-  generate(opts.currentDate);
   _this.update();
+});
+
+this.on('update', function () {
+  var changed = false;
+  if (!dateEqual(lastValue, _this.value)) {
+    lastValue = copyDate(_this.value);
+    changed = true;
+  } else if (!dateEqual(lastOptsValue, opts.riotValue)) {
+    _this.value = copyDate(opts.riotValue);
+    lastOptsValue = copyDate(opts.riotValue);
+    lastValue = copyDate(opts.riotValue);
+    changed = true;
+  }
+
+  if (changed && _this.value) {
+    opts.currentDate = copyDate(_this.value);
+  }
+  if (!dateEqual(lastOptsCurrentDate, opts.currentDate)) {
+    lastOptsCurrentDate = copyDate(opts.currentDate);
+    generate();
+  }
 });
 
 // ===================================================================================
@@ -138,7 +170,6 @@ this.clickDay = function (event) {
 
 this.clickMonth = function (event) {
   opts.currentDate.setMonth(event.item.month.value);
-  generate(opts.currentDate);
   _this.monthSelecting = false;
 };
 
@@ -153,7 +184,6 @@ this.clickPrevious = function () {
   } else {
     _this.monthSelecting = false;
     addMonth(opts.currentDate, -1);
-    generate(opts.currentDate);
   }
 };
 
@@ -163,7 +193,6 @@ this.clickNext = function () {
   } else {
     _this.monthSelecting = false;
     addMonth(opts.currentDate, 1);
-    generate(opts.currentDate);
   }
 };
 
@@ -192,9 +221,9 @@ this.blur = function () {
 // ===================================================================================
 //                                                                               Logic
 //                                                                               =====
-var generate = function generate(date) {
-  var year = date.getFullYear();
-  var month = date.getMonth();
+var generate = function generate() {
+  var year = opts.currentDate.getFullYear();
+  var month = opts.currentDate.getMonth();
   var firstMonthDay = new Date(year, month, 1).getDay();
   var i = 1 - firstMonthDay;
 
@@ -247,12 +276,11 @@ var open = function open() {
   _this.transitionStatus = 'visible';
   visibleFlg = true;
   if (_this.value) {
-    opts.currentDate = new Date(_this.value.getTime());
+    opts.currentDate = copyDate(_this.value);
   }
   if (!opts.currentDate) {
     opts.currentDate = new Date();
   }
-  generate(opts.currentDate);
   _this.trigger('open', _this.value);
 };
 
@@ -283,6 +311,23 @@ var pad = function pad(n, digit) {
   return new Array(digit - str.length + 1).join('0') + str;
 };
 
+var dateEqual = function dateEqual(d1, d2) {
+  if (d1 == d2) {
+    return true;
+  }
+  if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
+    return false;
+  }
+  return d1.getTime() == d2.getTime();
+};
+
+var copyDate = function copyDate(date) {
+  if (!date) {
+    return date;
+  }
+  return new Date(date.getTime());
+};
+
 // ===================================================================================
 //                                                                              Helper
 //                                                                              ======
@@ -307,12 +352,12 @@ this.getWeekNames = function () {
 };
 
 this.isActive = function (date) {
-  return _this.value && _this.value.getTime() == date.getTime();
+  return dateEqual(_this.value, date);
 };
 
 this.isToday = function (date) {
   var today = new Date();
-  return date.getTime() == new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+  return dateEqual(date, new Date(today.getFullYear(), today.getMonth(), today.getDate()));
 };
 
 this.getTabindex = function () {
