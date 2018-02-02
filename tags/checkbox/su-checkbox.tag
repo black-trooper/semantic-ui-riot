@@ -4,6 +4,17 @@
   <label if="{ !opts.label }" for="{ getId() }"><yield /></label>
   <label if="{ opts.label }" for="{ getId() }">{ opts.label }</label>
 
+  <style>
+    :scope.ui.checkbox label {
+      cursor: pointer;
+    }
+
+    :scope.ui.read-only input[type="checkbox"],
+    :scope.ui.disabled input[type="checkbox"] {
+      cursor: default!important;
+    }
+  </style>
+
   <script>
     this.checked = false
     let lastChecked
