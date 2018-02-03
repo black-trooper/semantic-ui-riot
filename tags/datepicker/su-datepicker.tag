@@ -9,15 +9,15 @@
     <div class="menu transition { transitionStatus }" onmousedown="{ mousedown }" onmouseup="{ mouseup }" onblur="{ blur }" tabindex="{ getTabindex() }">
       <div class="ui compact segments">
         <div class="ui center aligned secondary segment">
-          <div class="dp-navigation ui four column grid">
-            <div class="column link" click="{ clickPrevious }">
-              <i class="chevron left icon"></i>
-            </div>
-            <div class="column link" click="{ selectMonth }">{ getCurrentMonthView() }</div>
-            <div class="column link" click="{ selectYear }">{ getCurrentYear() }</div>
-            <div class="column link" click="{ clickNext }">
-              <i class="chevron right icon"></i>
-            </div>
+          <div class="ui buttons dp-navigation">
+            <button class="icon tiny ui button prev" click="{ clickPrevious }">
+                <i class="chevron left icon"></i>
+              </button>
+            <button class="ui button month" click="{ selectMonth }">{ getCurrentMonthView() }</button>
+            <button class="ui button year" click="{ selectYear }">{ getCurrentYear() }</button>
+            <button class="icon tiny ui button next" click="{ clickNext }">
+                  <i class="chevron right icon"></i>
+                </button>
           </div>
           <div class="dp-wrapper">
             <div each="{week in getWeekNames()}" class="dp-weekday">{ week }</div>
@@ -29,6 +29,14 @@
               <button class="ui button { today: isToday(day) } { primary: isActive(day) } { non-active: !isActive(day) } { disabled: day.getMonth() != getCurrentMonth() }"
                 click="{ clickDay }">{day.getDate()}</button>
             </div>
+          </div>
+        </div>
+        <div class="ui center aligned segment" if="{ !yearSelecting && !monthSelecting }">
+          <div class="ui two column grid">
+            <div class="column">
+              <button type="button" class="ui button" click="{ clear }">Clear</button></div>
+            <div class="column">
+              <button type="button" class="ui button" click="{ today }">Today</button></div>
           </div>
         </div>
         <div class="ui center aligned segment" if="{ monthSelecting }">
@@ -46,18 +54,13 @@
   </div>
 
   <style>
-    .link {
-      cursor: pointer;
-    }
-
     .ui.segment {
       padding-top: 0.5rem;
       padding-bottom: 0.5rem;
     }
 
-    .ui.grid.dp-navigation {
-      margin-top: -0.5rem;
-      margin-bottom: 0;
+    .ui.buttons.dp-navigation {
+      margin-bottom: 0.4rem;
     }
 
     .ui.dropdown {
@@ -95,11 +98,13 @@
       font-weight: 700;
     }
 
+    .dp-navigation .ui.button,
     .dp-month .ui.button,
     .dp-day .ui.button.non-active {
       background-color: transparent;
     }
 
+    .dp-navigation .ui.button:hover,
     .dp-month .ui.button:hover,
     .dp-day .ui.button.non-active:hover {
       background-color: #e0e1e2;
@@ -107,6 +112,19 @@
 
     .dp-day .ui.button.disabled {
       pointer-events: all !important;
+    }
+
+    .dp-navigation {
+      width: 100%;
+    }
+
+    .dp-navigation .ui.button {
+      width: 20%;
+    }
+
+    .dp-navigation .ui.button.year,
+    .dp-navigation .ui.button.month {
+      width: 30%;
     }
   </style>
 
