@@ -1,5 +1,4 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-(function (global){
 'use strict';
 
 riot.tag2('app', '<navigation></navigation> <div style="margin-left:15.5rem"> <div class="ui padded one column grid"> <div class="column"> <content></content> </div> </div> </div>', 'app pre,[data-is="app"] pre{ margin: 0; }', '', function (opts) {
@@ -14,22 +13,6 @@ riot.tag2('app', '<navigation></navigation> <div style="margin-left:15.5rem"> <d
   });
 
   route.start(true);
-
-  global.toggleExample = function (target) {
-    var childs = target.parentElement.parentElement.childNodes;
-    var segments = Array.from(childs).filter(function (element) {
-      return element.classList && element.classList.contains('segment');
-    });
-    if (segments[2].classList.contains('hidden')) {
-      segments[1].classList.remove('bottom');
-      segments[2].classList.remove('hidden');
-    } else {
-      segments[1].classList.remove('attached');
-      segments[1].classList.add('bottom');
-      segments[1].classList.add('attached');
-      segments[2].classList.add('hidden');
-    }
-  };
 
   riot.mixin({
     init: function init() {
@@ -460,7 +443,6 @@ riot.tag2('navigation', '<div class="ui inverted vertical left fixed menu"> <div
   this.version = require('../package.json').version;
 });
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"../package.json":2}],2:[function(require,module,exports){
 module.exports={
   "name": "semantic-ui-riot",
