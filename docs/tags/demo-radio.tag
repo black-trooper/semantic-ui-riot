@@ -263,10 +263,6 @@
   </section>
 
   <script>
-    this.toggleExample = event => {
-      global.toggleExample(event.target)
-    }
-
     this.radio1 = 1
     this.setValue = value => {
       this.radio1 = value
@@ -281,7 +277,6 @@
       this.refs.radio1.on('change', value => {
         this.update({ radio1: value })
       })
-      PR.prettyPrint(false)
     })
   </script>
 </demo-radio>

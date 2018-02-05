@@ -600,14 +600,4 @@
       </code></pre>
     </div>
   </section>
-
-  <script>
-    this.toggleExample = event => {
-      global.toggleExample(event.target)
-    }
-
-    this.on('mount', () => {
-      PR.prettyPrint(false)
-    })
-  </script>
 </demo-tab>

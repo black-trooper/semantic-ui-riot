@@ -296,10 +296,6 @@
   </section>
 
   <script>
-    this.toggleExample = event => {
-      global.toggleExample(event.target)
-    }
-
     this.setCheckboxValue = value => {
       this.checkbox2 = value
     }
@@ -312,9 +308,5 @@
     this.changeCheckboxLabel = () => {
       this.checkbox_label = (this.checkbox_label === 'change') ? 'changed' : 'change'
     }
-
-    this.on('mount', () => {
-      PR.prettyPrint(false)
-    })
   </script>
 </demo-checkbox>

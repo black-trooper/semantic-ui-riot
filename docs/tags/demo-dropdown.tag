@@ -762,10 +762,6 @@
   </section>
 
   <script>
-    this.toggleExample = event => {
-      global.toggleExample(event.target)
-    }
-
     this.dropdownItems = [
       {
         label: 'Gender',
@@ -1153,8 +1149,6 @@
         this.singleMessage.push(`Changed. label: ${target.label}, value: ${target.value}`)
         this.update()
       })
-
-      PR.prettyPrint(false)
     })
   </script>
 </demo-dropdown>

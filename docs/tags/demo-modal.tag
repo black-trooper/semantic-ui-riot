@@ -431,10 +431,6 @@
   </section>
 
   <script>
-    this.toggleExample = event => {
-      global.toggleExample(event.target)
-    }
-
     this.modal = {
       header: 'Select a Photo',
       buttons: [{
@@ -521,8 +517,6 @@
         this.callbackMessage.push('Modal hide')
         this.update()
       })
-
-      PR.prettyPrint(false)
     })
   </script>
 </demo-modal>

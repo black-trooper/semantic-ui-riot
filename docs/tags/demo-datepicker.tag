@@ -91,10 +91,6 @@
   </section>
 
   <script>
-    this.toggleExample = event => {
-      global.toggleExample(event.target)
-    }
-
     this.setDate = date => {
       this.refs.datepicker.value = date
     }
@@ -104,7 +100,6 @@
     }
 
     this.on('mount', () => {
-      PR.prettyPrint(false)
       this.update()
 
       this.refs.datepicker.on('click', () => {
