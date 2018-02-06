@@ -59,7 +59,7 @@
     // ===================================================================================
     //                                                                               Logic
     //                                                                               =====
-    let isReadOnly = () => {
+    const isReadOnly = () => {
       return this.root.classList.contains('read-only')
     }
 

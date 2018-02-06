@@ -62,7 +62,7 @@
     // ===================================================================================
     //                                                                               Logic
     //                                                                               =====
-    let updateState = radio => {
+    const updateState = radio => {
       if (typeof radio.opts.value === 'undefined') {
         return
       }
@@ -72,7 +72,7 @@
       }
     }
 
-    let initializeChild = radio => {
+    const initializeChild = radio => {
       radio.opts.name = getRadioName()
       radio.on('click', value => {
         this.value = value
@@ -80,7 +80,7 @@
       })
     }
 
-    let getRadioName = () => {
+    const getRadioName = () => {
       return `su-radio-name-${this._riot_id}`
     }
   </script>

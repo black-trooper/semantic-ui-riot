@@ -83,7 +83,7 @@
     // ===================================================================================
     //                                                                               Logic
     //                                                                               =====
-    let initializeChild = tab => {
+    const initializeChild = tab => {
       if (tab.opts.class) {
         return
       }
@@ -120,7 +120,7 @@
       return classList.join(' ')
     }
 
-    let hasClass = className => {
+    const hasClass = className => {
       return this.root.classList.contains(className)
     }
 

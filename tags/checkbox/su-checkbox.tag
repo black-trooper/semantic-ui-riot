@@ -74,18 +74,18 @@
     // ===================================================================================
     //                                                                               Logic
     //                                                                               =====
-    let isReadOnly = () => {
+    const isReadOnly = () => {
       return this.root.classList.contains('read-only')
     }
 
-    let parentUpdate = () => {
+    const parentUpdate = () => {
       if (this.parent) {
         this.parent.update()
       }
     }
 
     let shownMessage = false
-    let supportTraditionalOptions = () => {
+    const supportTraditionalOptions = () => {
       if (typeof opts.check !== 'undefined') {
         if (!shownMessage) {
           console.warn('\'check\' attribute is deprecated. Please use \'checked\'.')
@@ -96,7 +96,7 @@
       }
     }
 
-    let normalizeOptChecked = () => {
+    const normalizeOptChecked = () => {
       return opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
     }
   </script>

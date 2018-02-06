@@ -4,9 +4,9 @@
   <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ opts.search }" oninput="{ input }"
     onclick="{ clickSearch }" onfocus="{ focus }" onblur="{ blur }" />
   <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }">
-  { item.label }
-  <i class="delete icon" onclick="{ unselect }"></i>
-</a>
+    { item.label }
+    <i class="delete icon" onclick="{ unselect }"></i>
+  </a>
   <div class="{ default: default} text { filtered: filtered }" if="{ !opts.multiple || !selectedFlg }">
     { label }
   </div>
@@ -222,7 +222,7 @@
     // ===================================================================================
     //                                                                               Logic
     //                                                                               =====
-    let open = () => {
+    const open = () => {
       if (this.openning || this.closing || this.visibleFlg) {
         return
       }
@@ -245,7 +245,7 @@
       this.trigger('open')
     }
 
-    let close = () => {
+    const close = () => {
       if (this.closing || !this.visibleFlg) {
         return
       }
@@ -271,7 +271,7 @@
       this.trigger('close')
     }
 
-    let selectTarget = (target, updating) => {
+    const selectTarget = (target, updating) => {
       if (this.value === target.value &&
         this.label === target.label &&
         this.default === target.default) {
@@ -295,7 +295,7 @@
       }
     }
 
-    let selectMultiTarget = (updating) => {
+    const selectMultiTarget = (updating) => {
       if (JSON.stringify(this.value) == JSON.stringify(opts.items.filter(item => item.selected).map(item => item.value))
         && this.selectedFlg == opts.items.some(item => item.selected)) {
         if (!updating) {
@@ -313,7 +313,7 @@
       }
     }
 
-    let search = target => {
+    const search = target => {
       opts.items.forEach(item => {
         item.searched = item.label && item.label.toLowerCase().indexOf(target) >= 0
       })
@@ -324,7 +324,7 @@
       this.trigger('search')
     }
 
-    let scrollPosition = () => {
+    const scrollPosition = () => {
       const menu = this.root.querySelector('.menu')
       const item = this.root.querySelector('.item.active')
 
@@ -341,7 +341,7 @@
       }
     }
 
-    let parentUpdate = () => {
+    const parentUpdate = () => {
       if (this.parent) {
         this.parent.update()
       }

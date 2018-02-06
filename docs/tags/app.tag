@@ -45,6 +45,6 @@
           segments[2].classList.add('hidden')
         }
       }
-    });
+    })
   </script>
 </app>
