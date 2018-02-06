@@ -29,13 +29,13 @@
   </style>
 
   <script>
-    this.visibleFlg = false
     this.selectedFlg = false
     this.filtered = false
     this.transitionStatus = 'hidden'
     this.value = ''
     this.label = ''
-    this.keys = {
+    let visibleFlg = false
+    const keys = {
       enter: 13,
       escape: 27,
       upArrow: 38,
@@ -76,7 +76,7 @@
     //                                                                               Event
     //                                                                               =====
     this.toggle = () => {
-      if (!this.visibleFlg) {
+      if (!visibleFlg) {
         open()
       } else {
         close()
@@ -119,13 +119,13 @@
 
     this.keydown = event => {
       const keyCode = event.keyCode
-      if (keyCode == this.keys.escape) {
+      if (keyCode == keys.escape) {
         close()
       }
-      if (keyCode == this.keys.downArrow) {
+      if (keyCode == keys.downArrow) {
         open()
       }
-      if (keyCode != this.keys.upArrow && keyCode != this.keys.downArrow) {
+      if (keyCode != keys.upArrow && keyCode != keys.downArrow) {
         return true
       }
 
@@ -148,14 +148,14 @@
       }
 
       const activeIndex = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0))
-      if (keyCode == this.keys.upArrow) {
+      if (keyCode == keys.upArrow) {
         const nextActiveItem = searchedItems.filter((item, index) => index < activeIndex && !item.header && !item.divider)
         if (nextActiveItem.length > 0) {
           searchedItems[activeIndex].active = false
           nextActiveItem[nextActiveItem.length - 1].active = true
         }
       }
-      else if (keyCode == this.keys.downArrow) {
+      else if (keyCode == keys.downArrow) {
         const nextActiveItem = searchedItems.filter((item, index) => index > activeIndex && !item.header && !item.divider)
 
         if (nextActiveItem.length > 0) {
@@ -169,7 +169,7 @@
 
     this.keyup = event => {
       const keyCode = event.keyCode
-      if (keyCode != this.keys.enter) {
+      if (keyCode != keys.enter) {
         return
       }
       const searchedItems = opts.items.filter(item => item.searched && !item.selected)
@@ -223,7 +223,7 @@
     //                                                                               Logic
     //                                                                               =====
     const open = () => {
-      if (this.openning || this.closing || this.visibleFlg) {
+      if (this.openning || this.closing || visibleFlg) {
         return
       }
       this.openning = true
@@ -232,7 +232,7 @@
       opts.items.forEach(item => item.active = false)
       setTimeout(() => {
         this.openning = false
-        this.visibleFlg = true
+        visibleFlg = true
         this.transitionStatus = 'visible'
         this.update()
       }, 300)
@@ -246,14 +246,14 @@
     }
 
     const close = () => {
-      if (this.closing || !this.visibleFlg) {
+      if (this.closing || !visibleFlg) {
         return
       }
       this.closing = true
       this.transitionStatus = 'visible animating out slide down'
       setTimeout(() => {
         this.closing = false
-        this.visibleFlg = false
+        visibleFlg = false
         this.transitionStatus = 'hidden'
         this.update()
       }, 300)
@@ -361,7 +361,7 @@
       if (this.closing) {
         return false
       }
-      return this.openning || this.visibleFlg
+      return this.openning || visibleFlg
     }
 
     this.getTabindex = () => {
