@@ -31,6 +31,8 @@ const demo_watch_target = [
 //                                                                             =======
 gulp.task('default', function () {
   return sequence(
+    'build',
+    'demo_build',
     'webserver',
     'watch',
     'demo_watch'
