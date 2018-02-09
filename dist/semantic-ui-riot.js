@@ -1,4 +1,4 @@
-riot.tag2('su-checkbox', '<input type="checkbox" checked="{checked}" onclick="{click}" ref="target" disabled="{isDisabled()}" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', '', 'class="ui checkbox {opts.class}"', function(opts) {
+riot.tag2('su-checkbox', '<input type="checkbox" checked="{checked}" onclick="{click}" ref="target" disabled="{isDisabled()}" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', 'su-checkbox.ui.checkbox label,[data-is="su-checkbox"].ui.checkbox label{ cursor: pointer; } su-checkbox.ui.read-only input[type="checkbox"],[data-is="su-checkbox"].ui.read-only input[type="checkbox"],su-checkbox.ui.disabled input[type="checkbox"],[data-is="su-checkbox"].ui.disabled input[type="checkbox"]{ cursor: default!important; }', 'class="ui checkbox {opts.class}"', function(opts) {
 'use strict';
 
 var _this = this;
@@ -87,7 +87,7 @@ var normalizeOptChecked = function normalizeOptChecked() {
   return opts.checked === true || opts.checked === 'checked' || opts.checked === 'true';
 };
 });
-riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup}"> <div class="ui action input" if="{opts.popup}"> <input type="text" placeholder="{opts.placeholder}" ref="input" tabindex="{getTabindex()}"> <button class="ui icon button" click="{toggle}" onblur="{blur}"> <i class="calendar icon"></i> </button> </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="{getTabindex()}"> <div class="ui compact segments"> <div class="ui center aligned secondary segment"> <div class="dp-navigation ui four column grid"> <div class="column link" click="{clickPrevious}"> <i class="chevron left icon"></i> </div> <div class="column link" click="{selectMonth}">{getCurrentMonthView()}</div> <div class="column link" click="{selectYear}">{getCurrentYear()}</div> <div class="column link" click="{clickNext}"> <i class="chevron right icon"></i> </div> </div> <div class="dp-wrapper"> <div each="{week in getWeekNames()}" class="dp-weekday">{week}</div> </div> </div> <div class="ui center aligned segment" if="{!yearSelecting && !monthSelecting}"> <div each="{week in weeks}" class="dp-wrapper"> <div each="{day in week.days}" class="dp-day"> <button class="ui button {today: isToday(day)} {primary: isActive(day)} {non-active: !isActive(day)} {disabled: day.getMonth() != getCurrentMonth()}" click="{clickDay}">{day.getDate()}</button> </div> </div> </div> <div class="ui center aligned segment" if="{monthSelecting}"> <div each="{element in months}" class="dp-wrapper"> <div each="{month in element}" class="dp-month"><button class="ui button" click="{clickMonth}">{month.label}</button></div> </div> </div> <div class="ui center aligned segment" if="{yearSelecting}"> <div each="{element in years}" class="dp-wrapper"> <div each="{year in element}" class="dp-month"><button class="ui button" click="{clickYear}">{year}</button></div> </div> </div> </div> </div> </div>', 'su-datepicker .link,[data-is="su-datepicker"] .link{ cursor: pointer; } su-datepicker .ui.segment,[data-is="su-datepicker"] .ui.segment{ padding-top: 0.5rem; padding-bottom: 0.5rem; } su-datepicker .ui.grid.dp-navigation,[data-is="su-datepicker"] .ui.grid.dp-navigation{ margin-top: -0.5rem; margin-bottom: 0; } su-datepicker .ui.dropdown,[data-is="su-datepicker"] .ui.dropdown{ display: block; } su-datepicker .dp-wrapper,[data-is="su-datepicker"] .dp-wrapper{ display: flex; } su-datepicker .dp-day,[data-is="su-datepicker"] .dp-day,su-datepicker .dp-month,[data-is="su-datepicker"] .dp-month{ cursor: pointer; } su-datepicker .dp-weekday,[data-is="su-datepicker"] .dp-weekday,su-datepicker .dp-day,[data-is="su-datepicker"] .dp-day,su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button{ width: 2.5rem; } su-datepicker .dp-month,[data-is="su-datepicker"] .dp-month,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ width: 4.375rem; } su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ padding: 0; height: 2.5rem; font-weight: normal } su-datepicker .dp-day .ui.button.today,[data-is="su-datepicker"] .dp-day .ui.button.today{ font-weight: 700; } su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button,su-datepicker .dp-day .ui.button.non-active,[data-is="su-datepicker"] .dp-day .ui.button.non-active{ background-color: transparent; } su-datepicker .dp-month .ui.button:hover,[data-is="su-datepicker"] .dp-month .ui.button:hover,su-datepicker .dp-day .ui.button.non-active:hover,[data-is="su-datepicker"] .dp-day .ui.button.non-active:hover{ background-color: #e0e1e2; } su-datepicker .dp-day .ui.button.disabled,[data-is="su-datepicker"] .dp-day .ui.button.disabled{ pointer-events: all !important; }', '', function(opts) {
+riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup}"> <div class="ui action input" if="{opts.popup}"> <input type="text" placeholder="{opts.placeholder}" ref="input" tabindex="{getTabindex()}"> <button class="ui icon button" click="{toggle}" onblur="{blur}"> <i class="calendar icon"></i> </button> </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="{getTabindex()}"> <div class="ui compact segments"> <div class="ui center aligned secondary segment"> <div class="ui buttons dp-navigation"> <button class="icon tiny ui button prev" click="{clickPrevious}"> <i class="chevron left icon"></i> </button> <button class="ui button month" click="{selectMonth}">{getCurrentMonthView()}</button> <button class="ui button year" click="{selectYear}">{getCurrentYear()}</button> <button class="icon tiny ui button next" click="{clickNext}"> <i class="chevron right icon"></i> </button> </div> <div class="dp-wrapper"> <div each="{week in getWeekNames()}" class="dp-weekday">{week}</div> </div> </div> <div class="ui center aligned segment" if="{!yearSelecting && !monthSelecting}"> <div each="{week in weeks}" class="dp-wrapper"> <div each="{day in week.days}" class="dp-day"> <button class="ui button {today: isToday(day)} {primary: isActive(day)} {non-active: !isActive(day)} {disabled: day.getMonth() != getCurrentMonth()}" click="{clickDay}">{day.getDate()}</button> </div> </div> </div> <div class="ui center aligned segment" if="{!yearSelecting && !monthSelecting}"> <div class="ui two column grid"> <div class="column"> <button type="button" class="ui button" click="{clear}">Clear</button></div> <div class="column"> <button type="button" class="ui button" click="{today}">Today</button></div> </div> </div> <div class="ui center aligned segment" if="{monthSelecting}"> <div each="{element in months}" class="dp-wrapper"> <div each="{month in element}" class="dp-month"><button class="ui button" click="{clickMonth}">{month.label}</button></div> </div> </div> <div class="ui center aligned segment" if="{yearSelecting}"> <div each="{element in years}" class="dp-wrapper"> <div each="{year in element}" class="dp-month"><button class="ui button" click="{clickYear}">{year}</button></div> </div> </div> </div> </div> </div>', 'su-datepicker .ui.segment,[data-is="su-datepicker"] .ui.segment{ padding-top: 0.5rem; padding-bottom: 0.5rem; } su-datepicker .ui.buttons.dp-navigation,[data-is="su-datepicker"] .ui.buttons.dp-navigation{ margin-bottom: 0.4rem; } su-datepicker .ui.dropdown,[data-is="su-datepicker"] .ui.dropdown{ display: block; } su-datepicker .dp-wrapper,[data-is="su-datepicker"] .dp-wrapper{ display: flex; } su-datepicker .dp-day,[data-is="su-datepicker"] .dp-day,su-datepicker .dp-month,[data-is="su-datepicker"] .dp-month{ cursor: pointer; } su-datepicker .dp-weekday,[data-is="su-datepicker"] .dp-weekday,su-datepicker .dp-day,[data-is="su-datepicker"] .dp-day,su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button{ width: 2.5rem; } su-datepicker .dp-month,[data-is="su-datepicker"] .dp-month,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ width: 4.375rem; } su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ padding: 0; height: 2.5rem; font-weight: normal } su-datepicker .dp-day .ui.button.today,[data-is="su-datepicker"] .dp-day .ui.button.today{ font-weight: 700; } su-datepicker .dp-navigation .ui.button,[data-is="su-datepicker"] .dp-navigation .ui.button,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button,su-datepicker .dp-day .ui.button.non-active,[data-is="su-datepicker"] .dp-day .ui.button.non-active{ background-color: transparent; } su-datepicker .dp-navigation .ui.button:hover,[data-is="su-datepicker"] .dp-navigation .ui.button:hover,su-datepicker .dp-month .ui.button:hover,[data-is="su-datepicker"] .dp-month .ui.button:hover,su-datepicker .dp-day .ui.button.non-active:hover,[data-is="su-datepicker"] .dp-day .ui.button.non-active:hover{ background-color: #e0e1e2; } su-datepicker .dp-day .ui.button.disabled,[data-is="su-datepicker"] .dp-day .ui.button.disabled{ pointer-events: all !important; } su-datepicker .dp-navigation,[data-is="su-datepicker"] .dp-navigation{ width: 100%; } su-datepicker .dp-navigation .ui.button,[data-is="su-datepicker"] .dp-navigation .ui.button{ width: 20%; } su-datepicker .dp-navigation .ui.button.year,[data-is="su-datepicker"] .dp-navigation .ui.button.year,su-datepicker .dp-navigation .ui.button.month,[data-is="su-datepicker"] .dp-navigation .ui.button.month{ width: 30%; }', '', function(opts) {
 'use strict';
 
 var _this = this;
@@ -375,13 +375,13 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
 
 var _this = this;
 
-this.visibleFlg = false;
 this.selectedFlg = false;
 this.filtered = false;
 this.transitionStatus = 'hidden';
 this.value = '';
 this.label = '';
-this.keys = {
+var visibleFlg = false;
+var keys = {
   enter: 13,
   escape: 27,
   upArrow: 38,
@@ -430,7 +430,7 @@ this.on('update', function () {
 //                                                                               Event
 //                                                                               =====
 this.toggle = function () {
-  if (!_this.visibleFlg) {
+  if (!visibleFlg) {
     open();
   } else {
     close();
@@ -473,13 +473,13 @@ this.itemClick = function (event) {
 
 this.keydown = function (event) {
   var keyCode = event.keyCode;
-  if (keyCode == _this.keys.escape) {
+  if (keyCode == keys.escape) {
     close();
   }
-  if (keyCode == _this.keys.downArrow) {
+  if (keyCode == keys.downArrow) {
     open();
   }
-  if (keyCode != _this.keys.upArrow && keyCode != _this.keys.downArrow) {
+  if (keyCode != keys.upArrow && keyCode != keys.downArrow) {
     return true;
   }
 
@@ -508,7 +508,7 @@ this.keydown = function (event) {
   }).filter(function (index) {
     return index >= 0;
   }));
-  if (keyCode == _this.keys.upArrow) {
+  if (keyCode == keys.upArrow) {
     var nextActiveItem = searchedItems.filter(function (item, index) {
       return index < activeIndex && !item.header && !item.divider;
     });
@@ -516,7 +516,7 @@ this.keydown = function (event) {
       searchedItems[activeIndex].active = false;
       nextActiveItem[nextActiveItem.length - 1].active = true;
     }
-  } else if (keyCode == _this.keys.downArrow) {
+  } else if (keyCode == keys.downArrow) {
     var _nextActiveItem = searchedItems.filter(function (item, index) {
       return index > activeIndex && !item.header && !item.divider;
     });
@@ -532,7 +532,7 @@ this.keydown = function (event) {
 
 this.keyup = function (event) {
   var keyCode = event.keyCode;
-  if (keyCode != _this.keys.enter) {
+  if (keyCode != keys.enter) {
     return;
   }
   var searchedItems = opts.items.filter(function (item) {
@@ -598,7 +598,7 @@ this.unselect = function (event) {
 //                                                                               Logic
 //                                                                               =====
 var open = function open() {
-  if (_this.openning || _this.closing || _this.visibleFlg) {
+  if (_this.openning || _this.closing || visibleFlg) {
     return;
   }
   _this.openning = true;
@@ -609,7 +609,7 @@ var open = function open() {
   });
   setTimeout(function () {
     _this.openning = false;
-    _this.visibleFlg = true;
+    visibleFlg = true;
     _this.transitionStatus = 'visible';
     _this.update();
   }, 300);
@@ -623,14 +623,14 @@ var open = function open() {
 };
 
 var close = function close() {
-  if (_this.closing || !_this.visibleFlg) {
+  if (_this.closing || !visibleFlg) {
     return;
   }
   _this.closing = true;
   _this.transitionStatus = 'visible animating out slide down';
   setTimeout(function () {
     _this.closing = false;
-    _this.visibleFlg = false;
+    visibleFlg = false;
     _this.transitionStatus = 'hidden';
     _this.update();
   }, 300);
@@ -753,7 +753,7 @@ this.isActive = function () {
   if (_this.closing) {
     return false;
   }
-  return _this.openning || _this.visibleFlg;
+  return _this.openning || visibleFlg;
 };
 
 this.getTabindex = function () {
@@ -927,7 +927,7 @@ this.getId = function () {
 
 riot.tag2('su-popup-content', '', '', '', function(opts) {
 });
-riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', '', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
+riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', 'su-radio.ui.checkbox label,[data-is="su-radio"].ui.checkbox label{ cursor: pointer; } su-radio.ui.read-only input[type="radio"],[data-is="su-radio"].ui.read-only input[type="radio"],su-radio.ui.disabled input[type="radio"],[data-is="su-radio"].ui.disabled input[type="radio"]{ cursor: default!important; }', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
 'use strict';
 
 var _this = this;
