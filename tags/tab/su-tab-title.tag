@@ -13,19 +13,17 @@
       if (!Array.isArray(tabs)) {
         tabs = [tabs]
       }
-      for (const tab of tabs) {
+      tabs.forEach((tab, i) => {
         if (tab._riot_id == this._riot_id) {
-          break
-        } else {
-          index++
+          index = i
         }
-      }
+      })
     })
 
     this.click = () => {
-      for (const tab of tabs) {
+      tabs.forEach(tab => {
         tab.active = false
-      }
+      })
       this.parent.parent.click(index)
       tabs[index].active = true
       this.update()

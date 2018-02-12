@@ -21,13 +21,13 @@
         this.tabs = [this.tabs]
       }
       let defaultActive = false
-      for (const tab of this.tabs) {
+      this.tabs.forEach(tab => {
         initializeChild(tab)
         if (tab.opts.active) {
           defaultActive = true
           tab.active = true
         }
-      }
+      })
       if (!defaultActive) {
         const titles = this.hasTitle()
         if (titles) {
@@ -43,14 +43,13 @@
     //                                                                               Event
     //                                                                               =====
     this.click = index => {
-      for (const tab of this.tabs) {
+      this.tabs.forEach(tab => {
         tab.active = false
-      }
+      })
       this.tabs[index].active = true
       this.update()
       this.trigger('click', this.tabs[index])
     }
-
 
     // ===================================================================================
     //                                                                              Helper

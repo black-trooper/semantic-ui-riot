@@ -19,14 +19,13 @@
       lastValue = this.value
       lastOptsValue = this.value
 
-      const radios = this.tags['su-radio']
-      if (Array.isArray(radios)) {
-        for (const radio of radios) {
-          initializeChild(radio)
-        }
-      } else {
-        initializeChild(radios)
+      let radios = this.tags['su-radio']
+      if (!Array.isArray(radios)) {
+        radios = [radios]
       }
+      radios.forEach(radio => {
+        initializeChild(radio)
+      })
 
       this.update()
     })
@@ -45,14 +44,14 @@
         changed = true
       }
 
-      const radios = this.tags['su-radio']
-      if (Array.isArray(radios)) {
-        for (const radio of radios) {
-          updateState(radio)
-        }
-      } else {
-        updateState(radios)
+      let radios = this.tags['su-radio']
+
+      if (!Array.isArray(radios)) {
+        radios = [radios]
       }
+      radios.forEach(radio => {
+        updateState(radio)
+      })
 
       if (changed) {
         this.trigger('change', this.value)
