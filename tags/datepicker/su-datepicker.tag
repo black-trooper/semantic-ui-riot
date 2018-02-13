@@ -1,7 +1,8 @@
 <su-datepicker>
   <div class="ui { dropdown:opts.popup }">
     <div class="ui action input" if="{ opts.popup }">
-      <input type="text" placeholder="{ opts.placeholder }" ref="input" tabindex="{ getTabindex() }" />
+      <input type="text" placeholder="{ opts.placeholder }" ref="input" tabindex="{ getTabindex() }" readonly="{ isReadOnly() }"
+      />
       <button class="ui icon button" click="{ toggle }" onblur="{ blur }">
         <i class="calendar icon"></i>
       </button>
@@ -197,6 +198,9 @@
     }
 
     this.clickDay = event => {
+      if (this.isReadOnly()) {
+        return
+      }
       this.value = event.item.day
       if (this.refs.input) {
         this.refs.input.value = format(this.value, opts.pattern)
@@ -233,7 +237,13 @@
       }
     }
 
+    // -----------------------------------------------------
+    //                                          popup option
+    //                                          ------------
     this.toggle = () => {
+      if (this.isReadOnly()) {
+        return
+      }
       if (!visibleFlg) {
         open()
       } else {
@@ -405,6 +415,10 @@
         return opts.tabindex
       }
       return 0
+    }
+
+    this.isReadOnly = () => {
+      return this.root.classList.contains('read-only')
     }
   </script>
 </su-datepicker>
