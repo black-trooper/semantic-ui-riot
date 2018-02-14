@@ -1,9 +1,9 @@
 <su-datepicker>
   <div class="ui { dropdown:opts.popup }">
-    <div class="ui action input" if="{ opts.popup }">
+    <div class="ui action input { disabled: isDisabled() }" if="{ opts.popup }">
       <input type="text" placeholder="{ opts.placeholder }" ref="input" tabindex="{ getTabindex() }" readonly="{ isReadOnly() }"
       />
-      <button class="ui icon button" click="{ toggle }" onblur="{ blur }">
+      <button class="ui icon button { disabled: isDisabled() }" click="{ toggle }" onblur="{ blur }">
         <i class="calendar icon"></i>
       </button>
     </div>
@@ -11,12 +11,12 @@
       <div class="ui compact segments">
         <div class="ui center aligned secondary segment">
           <div class="ui buttons dp-navigation">
-            <button class="icon tiny ui button prev" click="{ clickPrevious }">
+            <button class="icon tiny ui button { disabled: isDisabled() } prev" click="{ clickPrevious }">
                 <i class="chevron left icon"></i>
               </button>
-            <button class="ui button month" click="{ selectMonth }">{ getCurrentMonthView() }</button>
-            <button class="ui button year" click="{ selectYear }">{ getCurrentYear() }</button>
-            <button class="icon tiny ui button next" click="{ clickNext }">
+            <button class="ui button { disabled: isDisabled() } month" click="{ selectMonth }">{ getCurrentMonthView() }</button>
+            <button class="ui button { disabled: isDisabled() } year" click="{ selectYear }">{ getCurrentYear() }</button>
+            <button class="icon tiny ui button { disabled: isDisabled() } next" click="{ clickNext }">
                   <i class="chevron right icon"></i>
                 </button>
           </div>
@@ -27,7 +27,7 @@
         <div class="ui center aligned segment" if="{ !yearSelecting && !monthSelecting }">
           <div each="{week in weeks}" class="dp-wrapper">
             <div each="{day in week.days}" class="dp-day">
-              <button class="ui button { today: isToday(day) } { primary: isActive(day) } { non-active: !isActive(day) } { disabled: day.getMonth() != getCurrentMonth() }"
+              <button class="ui button { today: isToday(day) } { primary: isActive(day) } { non-active: !isActive(day) } { disabled: day.getMonth() != getCurrentMonth() || isDisabled() }"
                 click="{ clickDay }">{day.getDate()}</button>
             </div>
           </div>
@@ -35,19 +35,19 @@
         <div class="ui center aligned segment" if="{ !yearSelecting && !monthSelecting }">
           <div class="ui two column grid">
             <div class="column">
-              <button type="button" class="ui button" click="{ clear }">Clear</button></div>
+              <button type="button" class="ui button {disabled : isDisabled()}" click="{ clear }">Clear</button></div>
             <div class="column">
-              <button type="button" class="ui button" click="{ today }">Today</button></div>
+              <button type="button" class="ui button {disabled : isDisabled()}" click="{ today }">Today</button></div>
           </div>
         </div>
         <div class="ui center aligned segment" if="{ monthSelecting }">
           <div each="{ element in months }" class="dp-wrapper">
-            <div each="{ month in element}" class="dp-month"><button class="ui button" click="{ clickMonth }">{month.label}</button></div>
+            <div each="{ month in element}" class="dp-month"><button class="ui button {disabled : isDisabled()}" click="{ clickMonth }">{month.label}</button></div>
           </div>
         </div>
         <div class="ui center aligned segment" if="{ yearSelecting }">
           <div each="{ element in years }" class="dp-wrapper">
-            <div each="{ year in element}" class="dp-month"><button class="ui button" click="{ clickYear }">{year}</button></div>
+            <div each="{ year in element}" class="dp-month"><button class="ui button {disabled : isDisabled()}" click="{ clickYear }">{year}</button></div>
           </div>
         </div>
       </div>
@@ -198,7 +198,7 @@
     }
 
     this.clickDay = event => {
-      if (this.isReadOnly()) {
+      if (this.isReadOnly() || this.isDisabled()) {
         return
       }
       this.value = event.item.day
@@ -241,7 +241,7 @@
     //                                          popup option
     //                                          ------------
     this.toggle = () => {
-      if (this.isReadOnly()) {
+      if (this.isReadOnly() || this.isDisabled()) {
         return
       }
       if (!visibleFlg) {
@@ -419,6 +419,9 @@
 
     this.isReadOnly = () => {
       return this.root.classList.contains('read-only')
+    }
+    this.isDisabled = () => {
+      return this.root.classList.contains('disabled')
     }
   </script>
 </su-datepicker>
