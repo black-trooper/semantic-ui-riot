@@ -2,7 +2,7 @@
   onclick="{ toggle }" onfocus="{ focus }" onblur="{ blur }" onkeydown="{ keydown }" onkeyup="{ keyup }" tabindex="{ opts.search ? -1 : getTabindex() }">
   <i class="dropdown icon"></i>
   <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ opts.search }" oninput="{ input }"
-    onclick="{ clickSearch }" onfocus="{ focus }" onblur="{ blur }" />
+    onclick="{ clickSearch }" onfocus="{ focus }" onblur="{ blur }" readonly="{ isReadOnly() }" />
   <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }">
     { item.label }
     <i class="delete icon" onclick="{ unselect }"></i>
@@ -223,7 +223,7 @@
     //                                                                               Logic
     //                                                                               =====
     const open = () => {
-      if (this.openning || this.closing || visibleFlg) {
+      if (this.openning || this.closing || visibleFlg || this.isReadOnly() || this.isDisabled()) {
         return
       }
       this.openning = true
@@ -369,6 +369,14 @@
         return opts.tabindex
       }
       return 0
+    }
+
+    this.isReadOnly = () => {
+      return this.root.classList.contains('read-only')
+    }
+
+    this.isDisabled = () => {
+      return this.root.classList.contains('disabled')
     }
   </script>
 </su-dropdown>
