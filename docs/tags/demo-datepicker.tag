@@ -90,6 +90,74 @@
     </div>
   </section>
 
+  <!-- ====================================================== -->
+  <!--                                              Read-only -->
+  <!--                                              ========= -->
+  <h3 class="ui header">Read-only</h3>
+  <p>A datepicker can be read-only and unable to change states</p>
+  <section>
+    <div class="ui segment secondary top attached example">
+      Example
+      <i class="icon code" onclick="{ toggleExample }"></i>
+    </div>
+    <div class="ui segment bottom attached">
+      <su-datepicker class="read-only" />
+    </div>
+    <div class="ui segment bottom attached inverted transition hidden">
+      <pre><code class="prettyprint">
+        <su-datepicker class="read-only" />
+    </code></pre>
+    </div>
+  </section>
+  <section>
+    <div class="ui segment secondary top attached example">
+      Example
+      <i class="icon code" onclick="{ toggleExample }"></i>
+    </div>
+    <div class="ui segment bottom attached">
+      <su-datepicker popup="true" class="read-only" />
+    </div>
+    <div class="ui segment bottom attached inverted transition hidden">
+      <pre><code class="prettyprint">
+        <su-datepicker popup="true" class="read-only" />
+      </code></pre>
+    </div>
+  </section>
+
+  <!-- ====================================================== -->
+  <!--                                              Disabled -->
+  <!--                                              ========= -->
+  <h3 class="ui header">Disabled</h3>
+  <p>A datepicker can be read-only and unable to change states</p>
+  <section>
+    <div class="ui segment secondary top attached example">
+      Example
+      <i class="icon code" onclick="{ toggleExample }"></i>
+    </div>
+    <div class="ui segment bottom attached">
+      <su-datepicker class="disabled" />
+    </div>
+    <div class="ui segment bottom attached inverted transition hidden">
+      <pre><code class="prettyprint">
+        <su-datepicker class="disabled" />
+      </code></pre>
+    </div>
+  </section>
+  <section>
+    <div class="ui segment secondary top attached example">
+      Example
+      <i class="icon code" onclick="{ toggleExample }"></i>
+    </div>
+    <div class="ui segment bottom attached">
+      <su-datepicker popup="true" class="disabled" />
+    </div>
+    <div class="ui segment bottom attached inverted transition hidden">
+      <pre><code class="prettyprint">
+        <su-datepicker popup="true" class="disabled" />
+      </code></pre>
+    </div>
+  </section>
+
   <script>
     this.setDate = date => {
       this.refs.datepicker.value = date
