@@ -4,10 +4,12 @@ describe('su-datepicker', function () {
   let tag
   let spyOnOpen = sinon.spy()
   let spyOnClose = sinon.spy()
+  let spyOnClick = sinon.spy()
   let mount = opts => {
     tag = riot.mount('su-datepicker', opts)[0]
     tag.on('open', spyOnOpen)
       .on('close', spyOnClose)
+      .on('click', spyOnClick)
   }
 
   beforeEach(function () {
@@ -16,6 +18,7 @@ describe('su-datepicker', function () {
   afterEach(function () {
     spyOnOpen.reset()
     spyOnClose.reset()
+    spyOnClick.reset()
     tag.unmount()
   })
 
@@ -178,5 +181,24 @@ describe('su-datepicker', function () {
     tag.update()
     $('su-datepicker .dp-navigation .month').text().trim().should.equal('Jan')
     $('su-datepicker .dp-navigation .year').text().trim().should.equal('2018')
+  })
+
+  it('read-only option', function () {
+    $('body').append('<su-datepicker class="read-only" />')
+    mount()
+    fireEvent($('su-datepicker .dp-day .ui.button:first')[0], 'click')
+    spyOnClick.should.have.been.callCount(0)
+  })
+
+  it('popup datepicker read-only option', function () {
+    $('body').append('<su-datepicker class="read-only" />')
+    mount({
+      popup: true
+    })
+    $('su-datepicker .menu').is(':visible').should.equal(false)
+
+    fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
+    spyOnOpen.should.have.been.callCount(0)
+    $('su-datepicker .menu').is(':visible').should.equal(false)
   })
 })
