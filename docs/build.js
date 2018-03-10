@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
 'use strict';
 
 riot.tag2('app', '<navigation></navigation> <div style="margin-left:15.5rem"> <div class="ui padded one column grid"> <div class="column"> <content></content> </div> </div> </div>', 'app pre,[data-is="app"] pre{ margin: 0; }', '', function (opts) {
@@ -471,7 +471,7 @@ module.exports={
     "url": "https://github.com/black-trooper/semantic-ui-riot/issues"
   },
   "dependencies": {
-    "riot": "^3.6.1"
+    "riot": "^3.9.0"
   },
   "devDependencies": {
     "babel": "^6.23.0",
@@ -492,7 +492,7 @@ module.exports={
     "gulp-riot": "^1.1.1",
     "gulp-uglify": "^3.0.0",
     "gulp-webserver-fast": "^0.9.1",
-    "jquery": "2.2.2",
+    "jquery": "^3.3.1",
     "karma": "^1.7.1",
     "karma-babel-preprocessor": "^7.0.0",
     "karma-browserify": "^5.1.2",
