@@ -25,7 +25,7 @@
     "url": "https://github.com/black-trooper/semantic-ui-riot/issues"
   },
   "dependencies": {
-    "riot": "^3.6.1"
+    "riot": "^3.9.0"
   },
   "devDependencies": {
     "babel": "^6.23.0",
