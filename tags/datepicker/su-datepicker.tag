@@ -365,7 +365,9 @@
       if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
         return false
       }
-      return d1.getTime() == d2.getTime()
+      return d1.getFullYear() === d2.getFullYear() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getDate() === d2.getDate()
     }
 
     const copyDate = date => {
@@ -403,8 +405,7 @@
     }
 
     this.isToday = date => {
-      const today = new Date()
-      return dateEqual(date, new Date(today.getFullYear(), today.getMonth(), today.getDate()))
+      return dateEqual(date, new Date())
     }
 
     this.getTabindex = () => {
