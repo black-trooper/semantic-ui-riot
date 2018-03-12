@@ -35,9 +35,9 @@
         <div class="ui center aligned segment" if="{ !yearSelecting && !monthSelecting }">
           <div class="ui two column grid">
             <div class="column">
-              <button type="button" class="ui button {disabled : isDisabled()}" click="{ clear }">Clear</button></div>
+              <button type="button" class="ui button {disabled : isDisabled()}" click="{ clickClear }">Clear</button></div>
             <div class="column">
-              <button type="button" class="ui button {disabled : isDisabled()}" click="{ today }">Today</button></div>
+              <button type="button" class="ui button {disabled : isDisabled()}" click="{ clickToday }">Today</button></div>
           </div>
         </div>
         <div class="ui center aligned segment" if="{ monthSelecting }">
@@ -201,11 +201,7 @@
       if (this.isReadOnly() || this.isDisabled()) {
         return
       }
-      this.value = event.item.day
-      if (this.refs.input) {
-        this.refs.input.value = format(this.value, opts.pattern)
-        close()
-      }
+      setDate(event.item.day)
       this.trigger('click', this.value)
     }
 
@@ -235,6 +231,16 @@
         this.monthSelecting = false
         addMonth(opts.currentDate, 1)
       }
+    }
+
+    this.clickClear = () => {
+      setDate(null)
+      this.trigger('clear', this.value)
+    }
+
+    this.clickToday = () => {
+      setDate(new Date())
+      this.trigger('today', this.value)
     }
 
     // -----------------------------------------------------
@@ -335,6 +341,15 @@
       this.transitionStatus = 'hidden'
       visibleFlg = false
       this.trigger('close', this.value)
+    }
+
+    const setDate = date => {
+      this.value = date
+      if (this.refs.input) {
+        this.refs.input.value = this.value ? format(this.value, opts.pattern) : null
+        close()
+      }
+      this.trigger('change', this.value)
     }
 
     const format = (date, pattern) => {
