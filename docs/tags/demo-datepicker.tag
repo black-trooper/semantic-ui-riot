@@ -170,10 +170,10 @@
     this.on('mount', () => {
       this.update()
 
-      this.refs.datepicker.on('click', () => {
+      this.refs.datepicker.on('change', () => {
         this.update()
       })
-      this.refs.datepicker2.on('click', () => {
+      this.refs.datepicker2.on('change', () => {
         this.update()
       })
     })

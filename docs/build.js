@@ -72,10 +72,10 @@ riot.tag2('demo-datepicker', '<h1 class="ui header"> Datepicker <div class="sub 
   this.on('mount', function () {
     _this.update();
 
-    _this.refs.datepicker.on('click', function () {
+    _this.refs.datepicker.on('change', function () {
       _this.update();
     });
-    _this.refs.datepicker2.on('click', function () {
+    _this.refs.datepicker2.on('change', function () {
       _this.update();
     });
   });
