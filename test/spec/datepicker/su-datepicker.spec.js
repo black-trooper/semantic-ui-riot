@@ -5,11 +5,13 @@ describe('su-datepicker', function () {
   let spyOnOpen = sinon.spy()
   let spyOnClose = sinon.spy()
   let spyOnClick = sinon.spy()
+  let spyOnChange = sinon.spy()
   let mount = opts => {
     tag = riot.mount('su-datepicker', opts)[0]
     tag.on('open', spyOnOpen)
       .on('close', spyOnClose)
       .on('click', spyOnClick)
+      .on('change', spyOnChange)
   }
 
   beforeEach(function () {
@@ -19,6 +21,7 @@ describe('su-datepicker', function () {
     spyOnOpen.reset()
     spyOnClose.reset()
     spyOnClick.reset()
+    spyOnChange.reset()
     tag.unmount()
   })
 
@@ -42,6 +45,8 @@ describe('su-datepicker', function () {
     $('su-datepicker .menu').is(':visible').should.equal(true)
 
     fireEvent($('su-datepicker .dp-day .ui.button:first')[0], 'click')
+    spyOnClick.should.have.been.calledOnce
+    spyOnChange.should.have.been.calledOnce
     spyOnClose.should.have.been.calledOnce
     $('su-datepicker .menu').is(':visible').should.equal(false)
 
@@ -188,6 +193,7 @@ describe('su-datepicker', function () {
     mount()
     fireEvent($('su-datepicker .dp-day .ui.button:first')[0], 'click')
     spyOnClick.should.have.been.callCount(0)
+    spyOnChange.should.have.been.callCount(0)
   })
 
   it('popup datepicker read-only option', function () {
@@ -200,5 +206,32 @@ describe('su-datepicker', function () {
     fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
     spyOnOpen.should.have.been.callCount(0)
     $('su-datepicker .menu').is(':visible').should.equal(false)
+  })
+
+  it('today and clear event', function () {
+    $('body').append('<su-datepicker />')
+    mount({
+      popup: true
+    })
+    fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
+    spyOnOpen.should.have.been.calledOnce
+
+    fireEvent($('su-datepicker .dp-today .button')[0], 'click')
+    const today = new Date()
+    tag.value.getFullYear().should.equal(today.getFullYear())
+    tag.value.getMonth().should.equal(today.getMonth())
+    tag.value.getDate().should.equal(today.getDate())
+    spyOnClick.should.have.been.callCount(0)
+    spyOnChange.should.have.been.calledOnce
+    spyOnClose.should.have.been.calledOnce
+
+    fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
+    spyOnOpen.should.have.been.calledTwice
+
+    fireEvent($('su-datepicker .dp-clear .button')[0], 'click')
+    expect(tag.value).to.be.null
+    spyOnClick.should.have.been.callCount(0)
+    spyOnChange.should.have.been.calledTwice
+    spyOnClose.should.have.been.calledTwice
   })
 })

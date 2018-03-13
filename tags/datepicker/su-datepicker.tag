@@ -34,9 +34,9 @@
         </div>
         <div class="ui center aligned segment" if="{ !yearSelecting && !monthSelecting }">
           <div class="ui two column grid">
-            <div class="column">
+            <div class="column dp-clear">
               <button type="button" class="ui button {disabled : isDisabled()}" click="{ clickClear }">Clear</button></div>
-            <div class="column">
+            <div class="column dp-today">
               <button type="button" class="ui button {disabled : isDisabled()}" click="{ clickToday }">Today</button></div>
           </div>
         </div>
