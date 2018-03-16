@@ -14,3 +14,9 @@ Install using npm:
 ```
 npm install --save semantic-ui-riot
 ```
+
+Install using yarn:
+
+```
+yarn add semantic-ui-riot
+```
