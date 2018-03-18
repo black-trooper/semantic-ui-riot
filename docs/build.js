@@ -446,7 +446,7 @@ riot.tag2('navigation', '<div class="ui inverted vertical left fixed menu"> <div
 },{"../package.json":2}],2:[function(require,module,exports){
 module.exports={
   "name": "semantic-ui-riot",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "Semantic UI for Riot",
   "main": "dist/semantic-ui-riot.min.js",
   "files": [
@@ -489,7 +489,7 @@ module.exports={
     "gulp-natural-sort": "^0.1.1",
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
-    "gulp-riot": "^1.1.1",
+    "gulp-riot": "1.1.2",
     "gulp-uglify": "^3.0.0",
     "gulp-webserver-fast": "^0.9.1",
     "jquery": "^3.3.1",
