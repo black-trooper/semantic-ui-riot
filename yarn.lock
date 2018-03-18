@@ -2572,9 +2572,9 @@ gulp-rename@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/gulp-rename/-/gulp-rename-1.2.2.tgz#3ad4428763f05e2764dec1c67d868db275687817"
 
-gulp-riot@^1.1.1:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/gulp-riot/-/gulp-riot-1.1.4.tgz#b94bbe86bcb722be8a2b1dd55c1a58a4fce73898"
+gulp-riot@1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/gulp-riot/-/gulp-riot-1.1.2.tgz#926925ef37d0446e2f55b5fe89724f08ad950a77"
   dependencies:
     plugin-error "^1.0.1"
     riot "3.x"

@@ -43,7 +43,7 @@
     "gulp-natural-sort": "^0.1.1",
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
-    "gulp-riot": "^1.1.1",
+    "gulp-riot": "1.1.2",
     "gulp-uglify": "^3.0.0",
     "gulp-webserver-fast": "^0.9.1",
     "jquery": "^3.3.1",
