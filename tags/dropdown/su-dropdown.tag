@@ -48,6 +48,16 @@
       this.default = opts.items[0].default
     }
 
+    this.on('mount', () => {
+      if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
+        opts.riotValue = opts.value
+      }
+      if (typeof opts.riotValue !== 'undefined') {
+        this.value = opts.riotValue
+        this.update()
+      }
+    })
+
     this.on('update', () => {
       if (opts.multiple) {
         opts.items.forEach(item => item.selected = false)
