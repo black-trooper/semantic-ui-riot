@@ -7,6 +7,7 @@ describe('su-dropdown-multiple', function () {
   let spyOnClose = sinon.spy()
   let spyOnSelect = sinon.spy()
   let spyOnChange = sinon.spy()
+  let spyOnBlur = sinon.spy()
 
   let items = [
     {
@@ -43,6 +44,7 @@ describe('su-dropdown-multiple', function () {
       .on('close', spyOnClose)
       .on('select', spyOnSelect)
       .on('change', spyOnChange)
+      .on('blur', spyOnBlur)
     this.clock = sinon.useFakeTimers()
   })
 
@@ -51,6 +53,7 @@ describe('su-dropdown-multiple', function () {
     spyOnClose.reset()
     spyOnSelect.reset()
     spyOnChange.reset()
+    spyOnBlur.reset()
     this.clock.restore()
     tag.unmount()
   })
@@ -131,6 +134,7 @@ describe('su-dropdown-multiple', function () {
     spyOnClose.should.have.been.callCount(0)
 
     $('su-dropdown').blur()
+    spyOnBlur.should.have.been.calledOnce
   })
 
   it('pressing enter key on last item', function () {
@@ -154,5 +158,6 @@ describe('su-dropdown-multiple', function () {
     spyOnClose.should.have.been.callCount(0)
 
     $('su-dropdown').blur()
+    spyOnBlur.should.have.been.calledOnce
   })
 })

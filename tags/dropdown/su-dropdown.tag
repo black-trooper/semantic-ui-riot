@@ -97,6 +97,9 @@
 
     this.blur = () => {
       if (!this.itemActivated) {
+        if (!this.closing && visibleFlg) {
+          this.trigger('blur')
+        }
         close()
       }
     }

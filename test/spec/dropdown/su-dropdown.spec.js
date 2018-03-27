@@ -8,6 +8,7 @@ describe('su-dropdown', function () {
   let spyOnClose = sinon.spy()
   let spyOnSelect = sinon.spy()
   let spyOnChange = sinon.spy()
+  let spyOnBlur = sinon.spy()
 
   let items = [
     {
@@ -34,6 +35,7 @@ describe('su-dropdown', function () {
       .on('close', spyOnClose)
       .on('select', spyOnSelect)
       .on('change', spyOnChange)
+      .on('blur', spyOnBlur)
     this.clock = sinon.useFakeTimers()
   })
 
@@ -42,6 +44,7 @@ describe('su-dropdown', function () {
     spyOnClose.reset()
     spyOnSelect.reset()
     spyOnChange.reset()
+    spyOnBlur.reset()
     this.clock.restore()
     tag.unmount()
   })
@@ -80,6 +83,7 @@ describe('su-dropdown', function () {
     this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(false)
     spyOnClose.should.have.been.calledOnce
+    spyOnBlur.should.have.been.calledOnce
   })
 
   it('clicking default item', function () {
