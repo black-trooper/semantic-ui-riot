@@ -13,7 +13,7 @@
   <div class="menu transition { transitionStatus }" onmousedown="{ mousedown }" onmouseup="{ mouseup }" onblur="{ blur }" tabindex="-1">
     <div each="{item in opts.items}" value="{ item.value }" default="{ item.default }" onmousedown="{ mousedown }" onmouseup="{ mouseup }"
       class="{ item: isItem(item) } { header: item.header && !filtered} { divider: item.divider && !filtered} { default: item.default } { active: item.active } { selected: item.active }"
-      onclick="{ itemClick }">
+      onclick="{ itemClick }" if="{ !(opts.multiple && item.default) && !item.selected }">
       <i class="{ item.icon } icon" if="{ item.icon }"></i>
       <img class="ui avatar image" src="{ item.image }" if="{ item.image }" />
       <span class="description" if="{ item.description }">{ item.description }</span>
@@ -351,9 +351,6 @@
     //                                                                              Helper
     //                                                                              ======
     this.isItem = item => {
-      if (opts.multiple && (item.default || item.selected)) {
-        return false
-      }
       return item.searched && !item.header && !item.divider
     }
 
