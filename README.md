@@ -5,7 +5,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/black-trooper/semantic-ui-riot/badge.svg)](https://coveralls.io/github/black-trooper/semantic-ui-riot)
 [![GitHub license](https://img.shields.io/github/license/black-trooper/semantic-ui-riot.svg)](https://github.com/black-trooper/semantic-ui-riot/blob/master/LICENSE)
 
-Semantic UI module for Riot. See https://black-trooper.github.io/semantic-ui-riot/ for example usage.
+Semantic UI module for Riot. See https://black-trooper.github.io/semantic-ui-riot-docs/ for example usage.
 
 ## Installation
 
