@@ -31,8 +31,6 @@
     "babel": "^6.23.0",
     "babel-core": "^6.25.0",
     "babel-preset-es2015-riot": "^1.1.0",
-    "babelify": "^7.3.0",
-    "browserify": "^14.4.0",
     "chai": "^4.1.2",
     "eslint-plugin-html": "^3.1.1",
     "gulp": "^3.9.1",
@@ -45,7 +43,6 @@
     "gulp-rename": "^1.2.2",
     "gulp-riot": "1.1.2",
     "gulp-uglify": "^3.0.0",
-    "gulp-webserver-fast": "^0.9.1",
     "jquery": "^3.3.1",
     "karma": "^1.7.1",
     "karma-babel-preprocessor": "^7.0.0",
@@ -63,7 +60,6 @@
     "run-sequence": "^2.0.0",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.13.0",
-    "uglify-js": "^3.0.25",
-    "vinyl-source-stream": "^1.1.0"
+    "uglify-js": "^3.0.25"
   }
 }

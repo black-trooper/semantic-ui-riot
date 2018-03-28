@@ -1,7 +1,0 @@
-{
-  "globals": {
-    "riot": true,
-    "route": true,
-    "PR": true
-  }
-}
