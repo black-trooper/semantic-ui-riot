@@ -618,6 +618,11 @@ this.reset = function () {
 };
 
 this.changed = function () {
+  if (opts.multiple) {
+    var value = _this.value ? _this.value : [];
+    var defaultValue = _this.defaultValue ? _this.defaultValue : [];
+    return value.toString() !== defaultValue.toString();
+  }
   return _this.value !== _this.defaultValue;
 };
 

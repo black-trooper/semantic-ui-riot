@@ -219,6 +219,11 @@
     }
 
     this.changed = () => {
+      if (opts.multiple) {
+        const value = this.value ? this.value : []
+        const defaultValue = this.defaultValue ? this.defaultValue : []
+        return value.toString() !== defaultValue.toString()
+      }
       return this.value !== this.defaultValue
     }
 
