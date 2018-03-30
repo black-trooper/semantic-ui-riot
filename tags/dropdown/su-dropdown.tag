@@ -55,7 +55,9 @@
       if (typeof opts.riotValue !== 'undefined') {
         this.value = opts.riotValue
         this.update()
+        parentUpdate()
       }
+      this.defaultValue = this.value
     })
 
     this.on('update', () => {
@@ -210,6 +212,14 @@
 
     this.clickSearch = event => {
       event.stopPropagation()
+    }
+
+    this.reset = () => {
+      this.value = this.defaultValue
+    }
+
+    this.changed = () => {
+      return this.value !== this.defaultValue
     }
 
     // -----------------------------------------------------

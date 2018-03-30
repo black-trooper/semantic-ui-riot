@@ -431,7 +431,9 @@ this.on('mount', function () {
   if (typeof opts.riotValue !== 'undefined') {
     _this.value = opts.riotValue;
     _this.update();
+    parentUpdate();
   }
+  _this.defaultValue = _this.value;
 });
 
 this.on('update', function () {
@@ -609,6 +611,14 @@ this.keyup = function (event) {
 
 this.clickSearch = function (event) {
   event.stopPropagation();
+};
+
+this.reset = function () {
+  _this.value = _this.defaultValue;
+};
+
+this.changed = function () {
+  return _this.value !== _this.defaultValue;
 };
 
 // -----------------------------------------------------

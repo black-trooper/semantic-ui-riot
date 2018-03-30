@@ -160,4 +160,26 @@ describe('su-dropdown-multiple', function () {
     $('su-dropdown').blur()
     spyOnBlur.should.have.been.calledOnce
   })
+
+  it('reset value', function () {
+    expect(tag.value).to.be.null
+    expect(tag.defaultValue).to.be.null
+    tag.changed().should.deep.equal(false)
+    $('su-dropdown').click()
+    this.clock.tick(310)
+
+    $('su-dropdown .item:first').click()
+    $('su-dropdown .item:first').click()
+
+    tag.value.should.deep.equal(['angular', 'css'])
+    expect(tag.defaultValue).to.be.null
+    tag.changed().should.deep.equal(true)
+
+    tag.reset()
+    expect(tag.value).to.be.null
+    expect(tag.defaultValue).to.be.null
+    tag.changed().should.deep.equal(false)
+
+    $('su-dropdown').blur()
+  })
 })

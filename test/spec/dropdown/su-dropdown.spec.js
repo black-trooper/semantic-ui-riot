@@ -234,4 +234,23 @@ describe('su-dropdown', function () {
     spyOnSelect.should.have.been.callCount(0)
     spyOnChange.should.have.been.callCount(0)
   })
+
+  it('reset value', function () {
+    expect(tag.value).to.be.null
+    expect(tag.defaultValue).to.be.null
+    tag.changed().should.deep.equal(false)
+    $('su-dropdown').click()
+    this.clock.tick(310)
+
+    $('su-dropdown .item:eq(1)').click()
+
+    tag.value.should.deep.equal(items[1].value)
+    tag.changed().should.deep.equal(true)
+    expect(tag.defaultValue).to.be.null
+
+    tag.reset()
+    expect(tag.value).to.be.null
+    expect(tag.defaultValue).to.be.null
+    tag.changed().should.deep.equal(false)
+  })
 })

@@ -63,4 +63,25 @@ describe('su-dropdown-multiple-option', function () {
     $('su-dropdown > .label:first').text().trim().should.equal(items[1].label)
     $('su-dropdown > .label:eq(1)').text().trim().should.equal(items[2].label)
   })
+
+  it('reset value', function () {
+    mount('<su-dropdown multiple="true" value="{[\'angular\', \'css\']}"></su-dropdown>')
+    tag.value.should.deep.equal(['angular', 'css'])
+    tag.defaultValue.should.deep.equal(['angular', 'css'])
+    tag.changed().should.deep.equal(false)
+    $('su-dropdown').click()
+
+    $('su-dropdown > .label:first .delete').click()
+    $('su-dropdown > .label:first').text().trim().should.equal(items[2].label)
+    tag.value.should.deep.equal(['css'])
+    tag.defaultValue.should.deep.equal(['angular', 'css'])
+    tag.changed().should.deep.equal(true)
+
+    tag.reset()
+    tag.value.should.deep.equal(['angular', 'css'])
+    tag.defaultValue.should.deep.equal(['angular', 'css'])
+    tag.changed().should.deep.equal(false)
+
+    $('su-dropdown').blur()
+  })
 })
