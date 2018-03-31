@@ -110,7 +110,8 @@
     this.blur = () => {
       if (!this.itemActivated) {
         if (!this.closing && visibleFlg) {
-          this.trigger('blur')
+          const target = opts.multiple ? opts.items.filter(item => item.selected) : { value: this.value, label: this.label, default: this.default }
+          this.trigger('blur', target)
         }
         close()
       }
