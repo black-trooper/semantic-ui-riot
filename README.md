@@ -12,7 +12,7 @@ https://black-trooper.github.io/semantic-ui-riot-docs/
 
 ## Getting started
 
-### 1) Use directly in HTML file
+### 1) Use in tag file
 
 index.html
 ```html
