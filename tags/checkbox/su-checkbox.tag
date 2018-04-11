@@ -29,6 +29,7 @@
       }
       lastChecked = this.checked
       lastOptsChecked = this.checked
+      this.defaultChecked = this.checked
       this.update()
     })
 
@@ -46,6 +47,17 @@
         parentUpdate()
       }
     })
+
+    // ===================================================================================
+    //                                                                               State
+    //                                                                               =====
+    this.reset = () => {
+      this.checked = this.defaultChecked
+    }
+
+    this.changed = () => {
+      return this.checked !== this.defaultChecked
+    }
 
     // ===================================================================================
     //                                                                               Event
