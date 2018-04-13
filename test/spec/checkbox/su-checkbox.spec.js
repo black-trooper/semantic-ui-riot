@@ -82,4 +82,20 @@ describe('su-checkbox', function () {
 
     spyOnClick.should.have.been.callCount(0)
   })
+
+  it('reset value', function () {
+    tag.checked.should.equal(false)
+    tag.defaultChecked.should.equal(false)
+    tag.changed().should.deep.equal(false)
+
+    $('su-checkbox input').click()
+    tag.checked.should.equal(true)
+    tag.defaultChecked.should.equal(false)
+    tag.changed().should.deep.equal(true)
+
+    tag.reset()
+    tag.checked.should.equal(false)
+    tag.defaultChecked.should.equal(false)
+    tag.changed().should.deep.equal(false)
+  })
 })
