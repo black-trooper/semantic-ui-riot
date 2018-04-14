@@ -16,6 +16,7 @@ this.on('mount', function () {
   }
   lastChecked = _this.checked;
   lastOptsChecked = _this.checked;
+  _this.defaultChecked = _this.checked;
   _this.update();
 });
 
@@ -33,6 +34,17 @@ this.on('update', function () {
     parentUpdate();
   }
 });
+
+// ===================================================================================
+//                                                                               State
+//                                                                               =====
+this.reset = function () {
+  _this.checked = _this.defaultChecked;
+};
+
+this.changed = function () {
+  return _this.checked !== _this.defaultChecked;
+};
 
 // ===================================================================================
 //                                                                               Event
@@ -469,6 +481,22 @@ this.on('update', function () {
 });
 
 // ===================================================================================
+//                                                                               State
+//                                                                               =====
+this.reset = function () {
+  _this.value = _this.defaultValue;
+};
+
+this.changed = function () {
+  if (opts.multiple) {
+    var value = _this.value ? _this.value : [];
+    var defaultValue = _this.defaultValue ? _this.defaultValue : [];
+    return value.toString() !== defaultValue.toString();
+  }
+  return _this.value !== _this.defaultValue;
+};
+
+// ===================================================================================
 //                                                                               Event
 //                                                                               =====
 this.toggle = function () {
@@ -614,19 +642,6 @@ this.keyup = function (event) {
 
 this.stopPropagation = function (event) {
   event.stopPropagation();
-};
-
-this.reset = function () {
-  _this.value = _this.defaultValue;
-};
-
-this.changed = function () {
-  if (opts.multiple) {
-    var value = _this.value ? _this.value : [];
-    var defaultValue = _this.defaultValue ? _this.defaultValue : [];
-    return value.toString() !== defaultValue.toString();
-  }
-  return _this.value !== _this.defaultValue;
 };
 
 // -----------------------------------------------------
