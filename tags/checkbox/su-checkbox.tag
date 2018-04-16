@@ -17,6 +17,7 @@
 
   <script>
     this.checked = false
+    this.defaultChecked = false
     let lastChecked
     let lastOptsChecked
 

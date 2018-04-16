@@ -36,6 +36,7 @@
     this.transitionStatus = 'hidden'
     this.value = ''
     this.label = ''
+    this.defaultValue = ''
     let visibleFlg = false
     const keys = {
       enter: 13,
