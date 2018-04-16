@@ -4,6 +4,7 @@
   <script>
     this.label = ''
     this.value = ''
+    this.defaultValue = ''
     let lastValue
     let lastOptsValue
 
@@ -27,6 +28,7 @@
         initializeChild(radio)
       })
 
+      this.defaultValue = this.value
       this.update()
     })
 
@@ -57,6 +59,17 @@
         this.trigger('change', this.value)
       }
     })
+
+    // ===================================================================================
+    //                                                                               State
+    //                                                                               =====
+    this.reset = () => {
+      this.value = this.defaultValue
+    }
+
+    this.changed = () => {
+      return this.value !== this.defaultValue
+    }
 
     // ===================================================================================
     //                                                                               Logic

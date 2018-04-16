@@ -68,4 +68,20 @@ describe('su-radio-group', function () {
     tag.tags['su-radio'][1].checked.should.equal(true)
     spyOnChange.should.have.been.calledTwice
   })
+
+  it('reset value', function () {
+    expect(tag.value).to.be.undefined
+    expect(tag.defaultValue).to.be.undefined
+    tag.changed().should.equal(false)
+
+    $('su-radio:eq(0) input').click()
+    expect(tag.defaultValue).to.be.undefined
+    tag.value.should.equal(tag.tags['su-radio'][0].value)
+    tag.changed().should.equal(true)
+
+    tag.reset()
+    expect(tag.value).to.be.undefined
+    expect(tag.defaultValue).to.be.undefined
+    tag.changed().should.equal(false)
+  })
 })
