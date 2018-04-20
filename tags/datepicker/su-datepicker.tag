@@ -132,6 +132,7 @@
   <script>
     this.weeks = []
     this.value = null
+    this.defaultValue = null
     this.transitionStatus = opts.popup ? 'hidden' : 'visible'
     let monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     let weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -160,6 +161,7 @@
       }
       this.months = getMonthes()
       this.update()
+      this.defaultValue = this.value
     })
 
     this.on('update', () => {
@@ -182,6 +184,17 @@
         generate()
       }
     })
+
+    // ===================================================================================
+    //                                                                               State
+    //                                                                               =====
+    this.reset = () => {
+      this.value = this.defaultValue
+    }
+
+    this.changed = () => {
+      return !dateEqual(this.value, this.defaultValue)
+    }
 
     // ===================================================================================
     //                                                                               Event

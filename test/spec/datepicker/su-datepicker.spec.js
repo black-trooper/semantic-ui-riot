@@ -234,4 +234,42 @@ describe('su-datepicker', function () {
     spyOnChange.should.have.been.calledTwice
     spyOnClose.should.have.been.calledTwice
   })
+
+  it('reset value', function () {
+    $('body').append('<su-datepicker />')
+    mount()
+    expect(tag.value).to.be.undefined
+    expect(tag.defaultValue).to.be.undefined
+
+    fireEvent($('su-datepicker .dp-today .button')[0], 'click')
+    const today = new Date()
+    tag.value.getFullYear().should.equal(today.getFullYear())
+    tag.value.getMonth().should.equal(today.getMonth())
+    tag.value.getDate().should.equal(today.getDate())
+    expect(tag.defaultValue).to.be.undefined
+
+    tag.reset()
+    expect(tag.value).to.be.undefined
+    expect(tag.defaultValue).to.be.undefined
+  })
+
+  it('reset default value', function () {
+    $('body').append('<su-datepicker />')
+    const date = new Date(2017, 0, 1)
+    mount({ value: date })
+
+    tag.value.getTime().should.equal(date.getTime())
+    tag.defaultValue.getTime().should.equal(date.getTime())
+
+    fireEvent($('su-datepicker .dp-today .button')[0], 'click')
+    const today = new Date()
+    tag.value.getFullYear().should.equal(today.getFullYear())
+    tag.value.getMonth().should.equal(today.getMonth())
+    tag.value.getDate().should.equal(today.getDate())
+    tag.defaultValue.getTime().should.equal(date.getTime())
+
+    tag.reset()
+    tag.value.getTime().should.equal(date.getTime())
+    tag.defaultValue.getTime().should.equal(date.getTime())
+  })
 })
