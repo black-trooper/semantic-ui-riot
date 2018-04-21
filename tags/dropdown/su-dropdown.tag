@@ -57,10 +57,12 @@
       }
       if (typeof opts.riotValue !== 'undefined') {
         this.value = opts.riotValue
+        this.defaultValue = this.value
         this.update()
         parentUpdate()
+      } else {
+        this.defaultValue = this.value
       }
-      this.defaultValue = this.value
     })
 
     this.on('update', () => {
