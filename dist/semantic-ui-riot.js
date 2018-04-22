@@ -4,6 +4,7 @@ riot.tag2('su-checkbox', '<input type="checkbox" checked="{checked}" onclick="{c
 var _this = this;
 
 this.checked = false;
+this.defaultChecked = false;
 var lastChecked = void 0;
 var lastOptsChecked = void 0;
 
@@ -106,6 +107,7 @@ var _this = this;
 
 this.weeks = [];
 this.value = null;
+this.defaultValue = null;
 this.transitionStatus = opts.popup ? 'hidden' : 'visible';
 var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 var weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -134,6 +136,7 @@ this.on('mount', function () {
   }
   _this.months = getMonthes();
   _this.update();
+  _this.defaultValue = _this.value;
 });
 
 this.on('update', function () {
@@ -156,6 +159,17 @@ this.on('update', function () {
     generate();
   }
 });
+
+// ===================================================================================
+//                                                                               State
+//                                                                               =====
+this.reset = function () {
+  _this.value = _this.defaultValue;
+};
+
+this.changed = function () {
+  return !dateEqual(_this.value, _this.defaultValue);
+};
 
 // ===================================================================================
 //                                                                               Event
@@ -422,6 +436,7 @@ this.filtered = false;
 this.transitionStatus = 'hidden';
 this.value = '';
 this.label = '';
+this.defaultValue = '';
 var visibleFlg = false;
 var keys = {
   enter: 13,
@@ -442,10 +457,12 @@ this.on('mount', function () {
   }
   if (typeof opts.riotValue !== 'undefined') {
     _this.value = opts.riotValue;
+    _this.defaultValue = _this.value;
     _this.update();
     parentUpdate();
+  } else {
+    _this.defaultValue = _this.value;
   }
-  _this.defaultValue = _this.value;
 });
 
 this.on('update', function () {
@@ -1082,6 +1099,7 @@ var _this = this;
 
 this.label = '';
 this.value = '';
+this.defaultValue = '';
 var lastValue = void 0;
 var lastOptsValue = void 0;
 
@@ -1105,6 +1123,7 @@ this.on('mount', function () {
     initializeChild(radio);
   });
 
+  _this.defaultValue = _this.value;
   _this.update();
 });
 
@@ -1135,6 +1154,17 @@ this.on('update', function () {
     _this.trigger('change', _this.value);
   }
 });
+
+// ===================================================================================
+//                                                                               State
+//                                                                               =====
+this.reset = function () {
+  _this.value = _this.defaultValue;
+};
+
+this.changed = function () {
+  return _this.value !== _this.defaultValue;
+};
 
 // ===================================================================================
 //                                                                               Logic
