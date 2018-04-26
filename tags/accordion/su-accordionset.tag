@@ -2,6 +2,12 @@
 
   <yield />
 
+  <style>
+    :scope {
+      display: block;
+    }
+  </style>
+
   <script>
     this.accordions = []
 
