@@ -14,7 +14,7 @@
   </div>
   <div class="menu transition { transitionStatus }" onmousedown="{ mousedown }" onmouseup="{ mouseup }" onblur="{ blur }" tabindex="-1">
     <div each="{item in opts.items}" value="{ item.value }" default="{ item.default }" onmousedown="{ mousedown }" onmouseup="{ mouseup }"
-      class="{ item: isItem(item) } { header: item.header && !filtered} { divider: item.divider && !filtered} { default: item.default } { active: item.active } { selected: item.active }"
+      class="{ item: isItem(item) } { header: item.header && !filtered} { divider: item.divider && !filtered} { default: item.default } { hover: item.active } { active: item.value == value } { selected: item.value == value }"
       onclick="{ itemClick }" if="{ !(opts.multiple && item.default) && !item.selected }">
       <i class="{ item.icon } icon" if="{ item.icon }"></i>
       <img class="ui avatar image" src="{ item.image }" if="{ item.image }" />
@@ -27,6 +27,11 @@
   <style>
     :scope.ui.dropdown .menu>.item.default {
       color: rgba(0, 0, 0, 0.4)
+    }
+
+    :scope.ui.dropdown .menu>.item.hover {
+      background: rgba(0, 0, 0, .05);
+      color: rgba(0, 0, 0, .95);
     }
   </style>
 
@@ -363,7 +368,7 @@
 
     const scrollPosition = () => {
       const menu = this.root.querySelector('.menu')
-      const item = this.root.querySelector('.item.active')
+      const item = this.root.querySelector('.item.hover')
 
       if (menu && item) {
         const menuScroll = menu.scrollTop
