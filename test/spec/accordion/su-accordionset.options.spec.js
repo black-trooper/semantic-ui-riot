@@ -1,5 +1,3 @@
-const fireEvent = require('../../helpers').fireEvent
-
 describe('su-accordionset-options', function () {
   let tag
   let mount = group => {
