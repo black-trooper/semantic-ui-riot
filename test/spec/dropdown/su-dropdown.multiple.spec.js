@@ -125,7 +125,7 @@ describe('su-dropdown-multiple', function () {
     fireKeyEvent(dropdown, 'keyup', keys.enter)
 
     $('su-dropdown > .label').text().trim().should.equal(items[1].label)
-    $('su-dropdown .active .text').text().should.equal(items[2].label)
+    $('su-dropdown .hover .text').text().should.equal(items[2].label)
     spyOnSelect.should.have.been.calledOnce
     spyOnChange.should.have.been.calledOnce
 
@@ -149,7 +149,7 @@ describe('su-dropdown-multiple', function () {
     fireKeyEvent(dropdown, 'keyup', keys.enter)
 
     $('su-dropdown > .label').text().trim().should.equal(items[length - 1].label)
-    $('su-dropdown .active .text').text().should.equal(items[length - 2].label)
+    $('su-dropdown .hover .text').text().should.equal(items[length - 2].label)
     spyOnSelect.should.have.been.calledOnce
     spyOnChange.should.have.been.calledOnce
 

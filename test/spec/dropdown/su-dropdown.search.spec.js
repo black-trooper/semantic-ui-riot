@@ -129,13 +129,13 @@ describe('su-dropdown-search', function () {
 
     let dropdown = $('su-dropdown')[0]
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
-    $('su-dropdown .active .text').text().should.equal(items[1].label)
+    $('su-dropdown .hover .text').text().should.equal(items[1].label)
 
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
-    $('su-dropdown .active .text').text().should.equal(items[9].label)
+    $('su-dropdown .hover .text').text().should.equal(items[9].label)
 
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
-    $('su-dropdown .active .text').text().should.equal(items[20].label)
+    $('su-dropdown .hover .text').text().should.equal(items[20].label)
 
     fireEvent($('su-dropdown')[0], 'blur')
   })
@@ -148,7 +148,7 @@ describe('su-dropdown-search', function () {
 
     let dropdown = $('su-dropdown')[0]
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
-    $('su-dropdown .active .text').length.should.equal(0)
+    $('su-dropdown .hover .text').length.should.equal(0)
 
     fireKeyEvent(dropdown, 'keyup', keys.enter)
   })

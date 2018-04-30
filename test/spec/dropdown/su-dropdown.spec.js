@@ -151,25 +151,25 @@ describe('su-dropdown', function () {
 
     let dropdown = $('su-dropdown')[0]
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
-    $('su-dropdown .active .text').text().should.equal(items[0].label)
+    $('su-dropdown .hover .text').text().should.equal(items[0].label)
 
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
-    $('su-dropdown .active .text').text().should.equal(items[1].label)
+    $('su-dropdown .hover .text').text().should.equal(items[1].label)
 
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
-    $('su-dropdown .active .text').text().should.equal(items[2].label)
+    $('su-dropdown .hover .text').text().should.equal(items[2].label)
 
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
-    $('su-dropdown .active .text').text().should.equal(items[2].label)
+    $('su-dropdown .hover .text').text().should.equal(items[2].label)
 
     fireKeyEvent(dropdown, 'keydown', keys.upArrow)
-    $('su-dropdown .active .text').text().should.equal(items[1].label)
+    $('su-dropdown .hover .text').text().should.equal(items[1].label)
 
     fireKeyEvent(dropdown, 'keydown', keys.upArrow)
-    $('su-dropdown .active .text').text().should.equal(items[0].label)
+    $('su-dropdown .hover .text').text().should.equal(items[0].label)
 
     fireKeyEvent(dropdown, 'keydown', keys.upArrow)
-    $('su-dropdown .active .text').text().should.equal(items[0].label)
+    $('su-dropdown .hover .text').text().should.equal(items[0].label)
 
     $('su-dropdown').blur()
   })
