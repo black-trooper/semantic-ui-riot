@@ -20,6 +20,10 @@
     "name": "black-trooper",
     "url": "https://github.com/black-trooper/semantic-ui-riot/"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/black-trooper/semantic-ui-riot.git"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/black-trooper/semantic-ui-riot/issues"
