@@ -1,3 +1,57 @@
+riot.tag2('su-accordion', '<div class="title {active: active}" click="{click}"> <i class="dropdown icon"></i> {opts.title} </div> <div class="content {active: active}"> <yield></yield> </div>', '', '', function(opts) {
+'use strict';
+
+var _this = this;
+
+this.active = false;
+
+this.click = function () {
+  _this.trigger('click', _this);
+};
+});
+riot.tag2('su-accordionset', '<yield></yield>', 'su-accordionset,[data-is="su-accordionset"]{ display: block; }', 'class="ui accordion {opts.class}"', function(opts) {
+'use strict';
+
+var _this = this;
+
+this.accordions = [];
+
+this.on('mount', function () {
+  _this.accordions = _this.tags['su-accordion'];
+
+  if (!Array.isArray(_this.accordions)) {
+    _this.accordions = [_this.accordions];
+  }
+  var defaultActive = false;
+  _this.accordions.forEach(function (accordion) {
+
+    initializeChild(accordion);
+    if (accordion.opts.active) {
+      defaultActive = true;
+      accordion.active = true;
+    }
+  });
+  if (!defaultActive) {
+    _this.accordions[0].active = true;
+  }
+
+  _this.update();
+});
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+var initializeChild = function initializeChild(child) {
+  child.on('click', function (target) {
+    _this.accordions.forEach(function (accordion) {
+      accordion.active = false;
+    });
+    target.active = true;
+    _this.update();
+    _this.trigger('click', target);
+  });
+};
+});
 riot.tag2('su-checkbox', '<input type="checkbox" checked="{checked}" onclick="{click}" ref="target" disabled="{isDisabled()}" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', 'su-checkbox.ui.checkbox label,[data-is="su-checkbox"].ui.checkbox label{ cursor: pointer; } su-checkbox.ui.read-only input[type="checkbox"],[data-is="su-checkbox"].ui.read-only input[type="checkbox"],su-checkbox.ui.disabled input[type="checkbox"],[data-is="su-checkbox"].ui.disabled input[type="checkbox"]{ cursor: default!important; }', 'class="ui checkbox {opts.class}"', function(opts) {
 'use strict';
 
