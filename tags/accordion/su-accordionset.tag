@@ -38,10 +38,11 @@
     //                                                                               =====
     const initializeChild = child => {
       child.on('click', target => {
+        const active = target.active
         this.accordions.forEach(accordion => {
           accordion.active = false
         })
-        target.active = true
+        target.active = !active
         this.update()
         this.trigger('click', target)
       })
