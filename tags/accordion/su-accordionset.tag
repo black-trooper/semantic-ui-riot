@@ -6,6 +6,20 @@
     :scope {
       display: block;
     }
+
+    .close * {
+      line-height: 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 300ms 0s ease;
+    }
+
+    .open * {
+      line-height: 1.5;
+      opacity: 1;
+      visibility: visible;
+      transition: all 300ms 0s ease;
+    }
   </style>
 
   <script>

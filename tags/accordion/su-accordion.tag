@@ -3,7 +3,7 @@
     <i class="dropdown icon"></i>
     { opts.title }
   </div>
-  <div class="content { active: active }">
+  <div class="content active {open : active} {close : !active}">
     <yield />
   </div>
 
