@@ -7,18 +7,27 @@
       display: block;
     }
 
-    .close * {
+    :scope.ui.accordion .title~.content:not(.ui).close {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .content.close * {
       line-height: 0;
       opacity: 0;
       visibility: hidden;
-      transition: all 300ms 0s ease;
+      transition: line-height 300ms 0s ease,
+      opacity 200ms 0s ease,
+      visibility 200ms 0s ease;
     }
 
-    .open * {
-      line-height: 1.5;
+    .content.open * {
+      line-height: 1.4285;
       opacity: 1;
       visibility: visible;
-      transition: all 300ms 0s ease;
+      transition: line-height 300ms 0s ease,
+      opacity 200ms 0s ease,
+      visibility 200ms 0s ease;
     }
   </style>
 
@@ -54,7 +63,9 @@
       child.on('click', target => {
         const active = target.active
         this.accordions.forEach(accordion => {
-          accordion.active = false
+          if (accordion.active) {
+            accordion.active = false
+          }
         })
         target.active = !active
         this.update()
