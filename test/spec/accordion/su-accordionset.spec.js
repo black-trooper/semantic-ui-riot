@@ -35,5 +35,10 @@ describe('su-accordionset', function () {
     tag.tags['su-accordion'][0].active.should.equal(true)
     tag.tags['su-accordion'][1].active.should.equal(false)
     spyOnClick.should.have.been.calledTwice
+
+    fireEvent($('div.title:eq(0)')[0], 'click')
+    tag.tags['su-accordion'][0].active.should.equal(false)
+    tag.tags['su-accordion'][1].active.should.equal(false)
+    spyOnClick.should.have.been.callCount(3)
   })
 })
