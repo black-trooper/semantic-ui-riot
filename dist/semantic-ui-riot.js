@@ -1,4 +1,4 @@
-riot.tag2('su-accordion', '<div class="title {active: active}" click="{click}"> <i class="dropdown icon"></i> {opts.title} </div> <div class="content {active: active}"> <yield></yield> </div>', '', '', function(opts) {
+riot.tag2('su-accordion', '<div class="title {active: active}" click="{click}"> <i class="dropdown icon"></i> {opts.title} </div> <div class="content active {open : active} {close : !active}"> <yield></yield> </div>', '', '', function(opts) {
 'use strict';
 
 var _this = this;
@@ -9,7 +9,7 @@ this.click = function () {
   _this.trigger('click', _this);
 };
 });
-riot.tag2('su-accordionset', '<yield></yield>', 'su-accordionset,[data-is="su-accordionset"]{ display: block; }', 'class="ui accordion {opts.class}"', function(opts) {
+riot.tag2('su-accordionset', '<yield></yield>', 'su-accordionset,[data-is="su-accordionset"]{ display: block; } su-accordionset.ui.accordion .title~.content:not(.ui).close,[data-is="su-accordionset"].ui.accordion .title~.content:not(.ui).close{ padding-top: 0; padding-bottom: 0; } su-accordionset .content.close *,[data-is="su-accordionset"] .content.close *{ line-height: 0; opacity: 0; visibility: hidden; transition: line-height 300ms 0s ease, opacity 200ms 0s ease, visibility 200ms 0s ease; } su-accordionset .content.open *,[data-is="su-accordionset"] .content.open *{ line-height: 1.4285; opacity: 1; visibility: visible; transition: line-height 300ms 0s ease, opacity 200ms 0s ease, visibility 200ms 0s ease; }', 'class="ui accordion {opts.class}"', function(opts) {
 'use strict';
 
 var _this = this;
@@ -43,10 +43,13 @@ this.on('mount', function () {
 //                                                                               =====
 var initializeChild = function initializeChild(child) {
   child.on('click', function (target) {
+    var active = target.active;
     _this.accordions.forEach(function (accordion) {
-      accordion.active = false;
+      if (accordion.active) {
+        accordion.active = false;
+      }
     });
-    target.active = true;
+    target.active = !active;
     _this.update();
     _this.trigger('click', target);
   });
