@@ -13,21 +13,31 @@
     }
 
     .content.close * {
-      line-height: 0;
-      opacity: 0;
-      visibility: hidden;
-      transition: line-height 300ms 0s ease,
-      opacity 200ms 0s ease,
-      visibility 200ms 0s ease;
+      line-height: 0 !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      padding-top:0 !important;
+      padding-bottom:0 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      transition: all 300ms 0s linear !important;
+    }
+
+    .content.close .dropdown.icon {
+      height: 0 !important;
+      transition: height 300ms 0s linear !important;
     }
 
     .content.open * {
       line-height: 1.4285;
       opacity: 1;
       visibility: visible;
-      transition: line-height 300ms 0s ease,
-      opacity 200ms 0s ease,
-      visibility 200ms 0s ease;
+      transition: all 300ms 0s linear !important;
+    }
+
+    .content.open .dropdown.icon {
+      height: 1.4285 !important;
+      transition: height 300ms 0s linear !important;
     }
   </style>
 
