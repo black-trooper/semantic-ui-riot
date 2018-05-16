@@ -20,6 +20,7 @@
       padding-bottom:0 !important;
       margin-top: 0 !important;
       margin-bottom: 0 !important;
+      min-height: 0!important;
       transition: all 300ms 0s linear !important;
     }
 
