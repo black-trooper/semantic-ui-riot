@@ -27,7 +27,21 @@ module.exports = (env, argv) => {
                 emitWarning: true,
               }
             },
-            // TODO HTML hint-loader
+            'htmlhint-loader'
+          ]
+        },
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          enforce: 'pre',
+          use: [
+            {
+              loader: 'eslint-loader',
+              options: {
+                fix: true,
+                emitWarning: true,
+              },
+            }
           ]
         },
         {
@@ -35,7 +49,6 @@ module.exports = (env, argv) => {
           exclude: /node_modules/,
           use: ['babel-loader']
         }
-        // TODO .spec.js eslint-loeader
       ]
     },
     devtool: false,
