@@ -11,7 +11,7 @@
 
     :scope.ui.read-only input[type="checkbox"],
     :scope.ui.disabled input[type="checkbox"] {
-      cursor: default!important;
+      cursor: default !important;
     }
   </style>
 
