@@ -31,7 +31,8 @@
     "url": "https://github.com/black-trooper/semantic-ui-riot/issues"
   },
   "dependencies": {
-    "riot": "^3.9.0"
+    "riot": "^3.9.0",
+    "date-fns": "^1.29.0"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -40,7 +41,6 @@
     "babelify": "^8.0.0",
     "browserify": "^16.1.1",
     "chai": "^4.1.2",
-    "date-fns": "^1.29.0",
     "eslint": "^4.19.1",
     "eslint-loader": "^2.0.0",
     "eslint-plugin-html": "^3.1.1",

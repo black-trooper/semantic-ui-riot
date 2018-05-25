@@ -386,7 +386,6 @@
       return new Array(digit - str.length + 1).join('0') + str
     }
 
-    const isSameDay = require('date-fns/is_same_day')
 
     const dateEqual = (d1, d2) => {
       if (d1 == d2) {
@@ -395,7 +394,7 @@
       if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
         return false
       }
-      return isSameDay(d1, d2)
+      return dateFns.isSameDay(d1, d2)
     }
 
     const copyDate = date => {

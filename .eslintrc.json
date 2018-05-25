@@ -38,6 +38,7 @@
     ]
   },
   "globals": {
-    "opts": true
+    "opts": true,
+    "dateFns": true
   }
 }
