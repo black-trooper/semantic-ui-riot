@@ -156,7 +156,7 @@ describe('su-datepicker', function () {
       popup: true,
       currentDate: new Date(2017, 11, 1),
       placeholder: 'YYYY/MM/DD',
-      pattern: 'yyyy/MM/dd',
+      pattern: 'YYYY/MM/DD',
       tabindex: 10
     })
     $('su-datepicker .menu').is(':visible').should.equal(false)
