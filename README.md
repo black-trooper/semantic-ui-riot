@@ -25,6 +25,7 @@ index.html
   <sample></sample>
   <script type="riot/tag" src="sample.tag"></script>
   <script src="https://cdn.jsdelivr.net/npm/riot@3.9/riot+compiler.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.29.0/date_fns.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/semantic-ui-riot/dist/semantic-ui-riot.min.js"></script>
   <script>
     riot.mount('sample');
@@ -66,6 +67,7 @@ module.exports = {
     new webpack.LoaderOptionsPlugin({ options: {} }),
     new webpack.ProvidePlugin({
       riot: 'riot',
+      dateFns: 'date-fns',
     })
   ]
 };
