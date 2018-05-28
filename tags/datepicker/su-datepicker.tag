@@ -166,10 +166,10 @@
 
     this.on('update', () => {
       let changed = false
-      if (!dateEqual(lastValue, this.value)) {
+      if (!isSameDay(lastValue, this.value)) {
         lastValue = copyDate(this.value)
         changed = true
-      } else if (!dateEqual(lastOptsValue, opts.riotValue)) {
+      } else if (!isSameDay(lastOptsValue, opts.riotValue)) {
         this.value = copyDate(opts.riotValue)
         lastOptsValue = copyDate(opts.riotValue)
         lastValue = copyDate(opts.riotValue)
@@ -179,7 +179,7 @@
       if (changed && this.value) {
         opts.currentDate = copyDate(this.value)
       }
-      if (!dateEqual(lastOptsCurrentDate, opts.currentDate)) {
+      if (!isSameDay(lastOptsCurrentDate, opts.currentDate)) {
         lastOptsCurrentDate = copyDate(opts.currentDate)
         generate()
       }
@@ -193,7 +193,7 @@
     }
 
     this.changed = () => {
-      return !dateEqual(this.value, this.defaultValue)
+      return !isSameDay(this.value, this.defaultValue)
     }
 
     // ===================================================================================
@@ -233,7 +233,7 @@
         addYear(-yearRange)
       } else {
         this.monthSelecting = false
-        addMonth(opts.currentDate, -1)
+        opts.currentDate = dateFns.addMonths(opts.currentDate, -1)
       }
     }
 
@@ -242,7 +242,7 @@
         addYear(yearRange)
       } else {
         this.monthSelecting = false
-        addMonth(opts.currentDate, 1)
+        opts.currentDate = dateFns.addMonths(opts.currentDate, 1)
       }
     }
 
@@ -288,20 +288,16 @@
     //                                                                               Logic
     //                                                                               =====
     const generate = () => {
-      const year = opts.currentDate.getFullYear()
-      const month = opts.currentDate.getMonth()
-      const firstMonthDay = new Date(year, month, 1).getDay()
-      let i = 1 - firstMonthDay
-
+      const startOfMonth = dateFns.startOfMonth(opts.currentDate)
+      const baseDate = dateFns.addDays(startOfMonth, - startOfMonth.getDay())
+      let i = 0
       this.weeks = []
+
       for (let r = 0; r < 6; r++) {
         const days = []
         for (let c = 0; c < 7; c++) {
-          days.push(new Date(year, month, i++))
+          days.push(dateFns.addDays(baseDate, i++))
         }
-        // if (days[0].getMonth() > month && days[6].getMonth() > month) {
-        //   break
-        // }
         this.weeks.push({ days })
       }
     }
@@ -313,10 +309,6 @@
         })
         return values
       })
-    }
-
-    const addMonth = (date, month) => {
-      date.setMonth(date.getMonth() + month)
     }
 
     const getYears = () => {
@@ -367,27 +359,12 @@
 
     const format = (date, pattern) => {
       if (!pattern) {
-        pattern = 'yyyy-MM-dd'
+        pattern = 'YYYY-MM-DD'
       }
-      pattern = pattern.replace(/yyyy/g, date.getFullYear().toString())
-      pattern = pattern.replace(/yy/g, date.getFullYear().toString().slice(-2))
-      pattern = pattern.replace(/MM/g, pad(date.getMonth() + 1, 2))
-      pattern = pattern.replace(/M/g, (date.getMonth() + 1).toString())
-      pattern = pattern.replace(/dd/g, pad(date.getDate(), 2))
-      pattern = pattern.replace(/d/g, date.getDate().toString())
-      return pattern
+      return dateFns.format(date, pattern)
     }
 
-    const pad = (n, digit) => {
-      const str = n.toString()
-      if (str.length >= digit) {
-        return str
-      }
-      return new Array(digit - str.length + 1).join('0') + str
-    }
-
-
-    const dateEqual = (d1, d2) => {
+    const isSameDay = (d1, d2) => {
       if (d1 == d2) {
         return true
       }
@@ -428,11 +405,11 @@
     }
 
     this.isActive = date => {
-      return dateEqual(this.value, date)
+      return isSameDay(this.value, date)
     }
 
     this.isToday = date => {
-      return dateEqual(date, new Date())
+      return dateFns.isToday(date)
     }
 
     this.getTabindex = () => {
