@@ -1,6 +1,6 @@
 {
   "name": "semantic-ui-riot",
-  "version": "0.6.3",
+  "version": "0.7.0",
   "description": "Semantic UI for Riot",
   "main": "dist/semantic-ui-riot.min.js",
   "files": [
