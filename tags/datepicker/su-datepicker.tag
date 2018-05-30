@@ -134,8 +134,6 @@
     this.value = null
     this.defaultValue = null
     this.transitionStatus = opts.popup ? 'hidden' : 'visible'
-    let monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    let weekNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
     let visibleFlg = false
     let itemActivated = false
     let lastValue = null
@@ -321,6 +319,7 @@
 
     const getMonthes = () => {
       const months = [[], [], []]
+      const monthNames = range(12).map(month => dateFns.format(new Date(2018, month, 1), 'MMM', { locale: getLocale() }))
       monthNames.forEach((month, index) => {
         months[(index - index % 4) / 4][index % 4] = {
           label: month,
@@ -392,7 +391,7 @@
 
     this.getCurrentMonthView = () => {
       if (opts.currentDate) {
-        return `${monthNames[opts.currentDate.getMonth()]}`
+        return dateFns.format(opts.currentDate, 'MMM', { locale: getLocale() })
       }
     }
 
@@ -401,7 +400,7 @@
     }
 
     this.getWeekNames = () => {
-      return weekNames
+      return range(7, 1).map(day => dateFns.format(new Date(2018, 6, day), 'dd', { locale: getLocale() }))
     }
 
     this.isActive = date => {
@@ -427,6 +426,19 @@
     }
     this.isDisabled = () => {
       return this.root.classList.contains('disabled')
+    }
+
+    const getLocale = () => {
+      if (opts.locale) {
+        return opts.locale
+      }
+      if (global.__locale__) {
+        return global.__locale__
+      }
+    }
+
+    const range = (size, startAt = 0) => {
+      return Array.from(Array(size).keys()).map(i => i + startAt)
     }
   </script>
 </su-datepicker>
