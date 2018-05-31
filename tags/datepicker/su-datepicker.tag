@@ -350,17 +350,10 @@
     const setDate = date => {
       this.value = date
       if (this.refs.input) {
-        this.refs.input.value = this.value ? format(this.value, opts.pattern) : null
+        this.refs.input.value = this.value ? dateFns.format(this.value, getPattern(), { locale: getLocale() }) : null
         close()
       }
       this.trigger('change', this.value)
-    }
-
-    const format = (date, pattern) => {
-      if (!pattern) {
-        pattern = 'YYYY-MM-DD'
-      }
-      return dateFns.format(date, pattern)
     }
 
     const isSameDay = (d1, d2) => {
@@ -426,6 +419,16 @@
     }
     this.isDisabled = () => {
       return this.root.classList.contains('disabled')
+    }
+
+    const getPattern = () => {
+      if (opts.pattern) {
+        return opts.pattern
+      }
+      if (global.__pattern__) {
+        return global.__pattern__
+      }
+      return 'YYYY-MM-DD'
     }
 
     const getLocale = () => {
