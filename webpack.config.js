@@ -5,7 +5,9 @@ module.exports = (env, argv) => {
   return {
     output: {
       path: __dirname + '/dist/',
-      filename: argv.mode === 'production' ? 'semantic-ui-riot.min.js' : 'semantic-ui-riot.js'
+      filename: argv.mode === 'production' ? 'semantic-ui-riot.min.js' : 'semantic-ui-riot.js',
+      library: 'SemanticUiRiot',
+      libraryTarget: 'umd'
     },
     module: {
       rules: [

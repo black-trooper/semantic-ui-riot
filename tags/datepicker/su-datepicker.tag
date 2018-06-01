@@ -425,8 +425,8 @@
       if (opts.pattern) {
         return opts.pattern
       }
-      if (global.__pattern__) {
-        return global.__pattern__
+      if (this.defaultOptions.pattern) {
+        return this.defaultOptions.pattern
       }
       return 'YYYY-MM-DD'
     }
@@ -435,8 +435,8 @@
       if (opts.locale) {
         return opts.locale
       }
-      if (global.__locale__) {
-        return global.__locale__
+      if (this.defaultOptions.locale) {
+        return this.defaultOptions.locale
       }
     }
 

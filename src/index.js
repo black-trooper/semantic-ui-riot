@@ -11,3 +11,14 @@ import '../tags/tab/su-tab-header.tag'
 import '../tags/tab/su-tab-title.tag'
 import '../tags/tab/su-tab.tag'
 import '../tags/tab/su-tabset.tag'
+
+export default function (_options) {
+  options.locale = _options.locale
+  options.pattern = _options.pattern
+}
+
+const options = {}
+
+riot.mixin({
+  defaultOptions: options
+})
