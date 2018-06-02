@@ -435,7 +435,7 @@
       if (opts.locale) {
         return opts.locale
       }
-      if (this.defaultOptions.locale) {
+      if (this.defaultOptions && this.defaultOptions.locale) {
         return this.defaultOptions.locale
       }
     }
