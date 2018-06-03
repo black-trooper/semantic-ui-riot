@@ -157,9 +157,12 @@ describe('su-datepicker', function () {
       currentDate: new Date(2017, 11, 1),
       placeholder: 'YYYY/MM/DD',
       pattern: 'YYYY/MM/DD',
+      locale: require('date-fns/locale/ja'),
       tabindex: 10
     })
     $('su-datepicker .menu').is(':visible').should.equal(false)
+    $('su-datepicker .dp-weekday:first').text().should.equal('日')
+    $('su-datepicker .dp-navigation .month').text().trim().should.equal('12月')
 
     fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
     spyOnOpen.should.have.been.calledOnce
