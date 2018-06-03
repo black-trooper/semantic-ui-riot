@@ -108,7 +108,7 @@
     }
 
     .dp-today .ui.button:hover,
-    .dp-clear .ui.button,
+    .dp-clear .ui.button:hover,
     .dp-navigation .ui.button:hover,
     .dp-month .ui.button:hover,
     .dp-day .ui.button.non-active:hover {
