@@ -425,7 +425,7 @@
       if (opts.pattern) {
         return opts.pattern
       }
-      if (this.defaultOptions.pattern) {
+      if (this.defaultOptions && this.defaultOptions.pattern) {
         return this.defaultOptions.pattern
       }
       return 'YYYY-MM-DD'
