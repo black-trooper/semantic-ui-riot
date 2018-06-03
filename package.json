@@ -8,9 +8,10 @@
   ],
   "scripts": {
     "start": "webpack --mode development --watch --hot",
-    "build": "webpack --mode production",
+    "dev": "webpack --mode development",
+    "prod": "webpack --mode production",
     "test": "karma start",
-    "prod": "npm run test && npm run build"
+    "build": "npm run test && npm run dev && npm run prod"
   },
   "keywords": [
     "riotjs",
