@@ -35,9 +35,9 @@
         <div class="ui center aligned segment" if="{ !yearSelecting && !monthSelecting }">
           <div class="ui two column grid">
             <div class="column dp-clear">
-              <button type="button" class="ui button {disabled : isDisabled()}" click="{ clickClear }">Clear</button></div>
+              <button type="button" class="ui icon fluid button {disabled : isDisabled()}" click="{ clickClear }"><i class="times icon"></i></button></div>
             <div class="column dp-today">
-              <button type="button" class="ui button {disabled : isDisabled()}" click="{ clickToday }">Today</button></div>
+              <button type="button" class="ui icon fluid button {disabled : isDisabled()}" click="{ clickToday }"><i class="calendar check icon"></i></button></div>
           </div>
         </div>
         <div class="ui center aligned segment" if="{ monthSelecting }">
@@ -99,12 +99,16 @@
       font-weight: 700;
     }
 
+    .dp-today .ui.button,
+    .dp-clear .ui.button,
     .dp-navigation .ui.button,
     .dp-month .ui.button,
     .dp-day .ui.button.non-active {
       background-color: transparent;
     }
 
+    .dp-today .ui.button:hover,
+    .dp-clear .ui.button,
     .dp-navigation .ui.button:hover,
     .dp-month .ui.button:hover,
     .dp-day .ui.button.non-active:hover {
