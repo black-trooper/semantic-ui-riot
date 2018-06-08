@@ -83,6 +83,7 @@
     //                                                                               Logic
     //                                                                               =====
     const initializeChild = tab => {
+      tab.mounted = !opts.lazyMount
       if (tab.opts.class) {
         return
       }

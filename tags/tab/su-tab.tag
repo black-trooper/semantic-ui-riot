@@ -1,5 +1,7 @@
 <su-tab class="ui { opts.class } { active: active } tab">
-  <yield />
+  <virtual if="{ mounted }">
+    <yield />
+  </virtual>
 
   <style>
     :scope.ui.segment {
@@ -18,5 +20,14 @@
 
   <script>
     this.active = false
+    this.mounted = false
+    this.on('mount', () => {
+      this.update()
+    })
+    this.on('update', () => {
+      if (this.active && !this.mounted) {
+        this.mounted = true
+      }
+    })
   </script>
 </su-tab>
