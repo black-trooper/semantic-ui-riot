@@ -22,7 +22,7 @@ describe('su-tabset', function () {
     tag.isMounted.should.be.true
   })
 
-  it('click checkbox', function () {
+  it('change active', function () {
     tag.tags['su-tab'][0].active.should.equal(true)
     tag.tags['su-tab'][1].active.should.equal(false)
 
