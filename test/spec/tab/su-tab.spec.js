@@ -18,13 +18,14 @@ describe('su-tab', function () {
 
   it('change active', function () {
     tag.active.should.equal(false)
-    tag.root.innerHTML.should.equal('tab content')
+    tag.root.innerText.should.equal('')
     tag.root.classList.contains('active').should.equal(false)
     tag.root.classList.contains('orange').should.equal(true)
 
     tag.active = true
     tag.update()
     tag.active.should.equal(true)
+    tag.root.innerText.should.equal('tab content')
     tag.root.classList.contains('active').should.equal(true)
   })
 })

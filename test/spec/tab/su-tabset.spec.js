@@ -25,6 +25,8 @@ describe('su-tabset', function () {
   it('change active', function () {
     tag.tags['su-tab'][0].active.should.equal(true)
     tag.tags['su-tab'][1].active.should.equal(false)
+    tag.tags['su-tab'][0].root.innerText.should.equal('Home content')
+    tag.tags['su-tab'][1].root.innerText.should.equal('Messages content')
 
     fireEvent($('a.item:eq(1)')[0], 'click')
     tag.tags['su-tab'][0].active.should.equal(false)

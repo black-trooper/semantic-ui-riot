@@ -1,7 +1,5 @@
 <su-tab class="ui { opts.class } { active: active } tab">
-  <virtual if="{ mounted }">
-    <yield />
-  </virtual>
+  <virtual if="{ mounted }"><yield /></virtual>
 
   <style>
     :scope.ui.segment {

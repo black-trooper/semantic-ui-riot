@@ -154,4 +154,29 @@ describe('su-tabset-options', function () {
     tag.tags['su-tab'].active.should.equal(true)
     tag.tags['su-tab-header'].tags['su-tab-title'].active.should.equal(true)
   })
+
+  it('lazy mount', function () {
+    mount(`
+      <su-tabset lazy-mount="true">
+        <su-tab title="Home" class="none">Home content</su-tab>
+        <su-tab title="Message" class="none">Messages content</su-tab>
+      </su-tabset>`)
+
+    tag.tags['su-tab'][0].active.should.equal(true)
+    tag.tags['su-tab'][1].active.should.equal(false)
+    tag.tags['su-tab'][0].root.innerText.should.equal('Home content')
+    tag.tags['su-tab'][1].root.innerText.should.equal('')
+
+    fireEvent($('a.item:eq(1)')[0], 'click')
+    tag.tags['su-tab'][0].active.should.equal(false)
+    tag.tags['su-tab'][1].active.should.equal(true)
+    tag.tags['su-tab'][0].root.innerText.should.equal('Home content')
+    tag.tags['su-tab'][1].root.innerText.should.equal('Messages content')
+
+    fireEvent($('a.item:eq(0)')[0], 'click')
+    tag.tags['su-tab'][0].active.should.equal(true)
+    tag.tags['su-tab'][1].active.should.equal(false)
+    tag.tags['su-tab'][0].root.innerText.should.equal('Home content')
+    tag.tags['su-tab'][1].root.innerText.should.equal('Messages content')
+  })
 })
