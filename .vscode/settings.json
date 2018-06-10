@@ -6,5 +6,5 @@
   "editor.tabSize": 2,
   "files.eol": "\n",
   "html.format.extraLiners": "",
-  "html.format.unformatted": "a, abbr, acronym, b, bdo, big, br, button, cite, code, dfn, em,  img, input, kbd, label, map, object, q, samp, select, small, span, strong, sub, sup, textarea, tt, var"
+  "html.format.unformatted": "a, abbr, acronym, b, bdo, big, br, button, cite, code, dfn, em,  img, input, kbd, label, map, object, q, samp, select, small, span, strong, sub, sup, textarea, tt, var, virtual"
 }
