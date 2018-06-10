@@ -1535,10 +1535,21 @@ this.click = function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-tab', '<yield></yield>', 'su-tab.ui.segment,[data-is="su-tab"].ui.segment{ margin-top: 0; margin-bottom: 0; } su-tab.ui.segment.top.attached,[data-is="su-tab"].ui.segment.top.attached{ margin-top: 0 } su-tab.ui.segment.bottom.attached,[data-is="su-tab"].ui.segment.bottom.attached{ margin-bottom: 0 }', 'class="ui {opts.class} {active: active} tab"', function(opts) {
-"use strict";
+riot.tag2('su-tab', '<virtual if="{mounted}"><yield></yield></virtual>', 'su-tab.ui.segment,[data-is="su-tab"].ui.segment{ margin-top: 0; margin-bottom: 0; } su-tab.ui.segment.top.attached,[data-is="su-tab"].ui.segment.top.attached{ margin-top: 0 } su-tab.ui.segment.bottom.attached,[data-is="su-tab"].ui.segment.bottom.attached{ margin-bottom: 0 }', 'class="ui {opts.class} {active: active} tab"', function(opts) {
+'use strict';
+
+var _this = this;
 
 this.active = false;
+this.mounted = false;
+this.on('mount', function () {
+  _this.update();
+});
+this.on('update', function () {
+  if (_this.active && !_this.mounted) {
+    _this.mounted = true;
+  }
+});
 });
 
 /***/ }),
@@ -1630,6 +1641,7 @@ this.getClass = function () {
 //                                                                               Logic
 //                                                                               =====
 var initializeChild = function initializeChild(tab) {
+  tab.mounted = !opts.lazyMount;
   if (tab.opts.class) {
     return;
   }
