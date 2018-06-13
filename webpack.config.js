@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = (env, argv) => {
   return {
     output: {
-      path: __dirname + '/dist/',
+      path: __dirname + (argv.hot ? '/../semantic-ui-riot-docs/src/' : '/dist/'),
       filename: argv.mode === 'production' ? 'semantic-ui-riot.min.js' : 'semantic-ui-riot.js',
       library: 'SemanticUiRiot',
       libraryTarget: 'umd'
