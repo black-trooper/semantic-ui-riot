@@ -1,8 +1,13 @@
 <su-select class="ui selection dropdown">
-  <select>
-    <option each="{ item in opts.items }" value="{ item.value }">
+  <select onchange="{ changed }">
+    <option each="{ item in opts.items }" value="{ item.value }" if="{ !item.items }">
       { item.label }
     </option>
+    <optgroup label="{ item.label }" each="{ item in opts.items }" if="{ item.items }">
+      <option each="{ child in item.items }" value="{ child.value }">
+        { child.label }
+      </option>
+    </optgroup>
   </select>
   <i class="dropdown icon"></i>
 
