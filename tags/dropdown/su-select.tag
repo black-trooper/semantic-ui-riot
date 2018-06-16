@@ -43,4 +43,28 @@
       z-index: 1;
     }
   </style>
+
+  <script>
+    this.value = ''
+    this.label = ''
+
+    this.changed = target => {
+      this.value = target.target.value
+      if (opts.items.some(item => item.value == this.value)) {
+        this.label = opts.items.filter(item => item.value == this.value)[0].label
+        return
+      }
+
+      const childItems = flatMap(opts.items.filter(item => item.items), item => item.items)
+      if (childItems.some(item => item.value == this.value)) {
+        this.label = childItems.filter(item => item.value == this.value)[0].label
+      }
+    }
+
+    const flatMap = (xs, f) => {
+      return xs.reduce(function (ys, x) {
+        return ys.concat(f(x))
+      }, [])
+    }
+  </script>
 </su-select>
