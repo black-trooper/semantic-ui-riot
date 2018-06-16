@@ -1,5 +1,5 @@
 <su-select class="ui selection dropdown">
-  <select onchange="{ changed }">
+  <select onchange="{ changed }" class="{ default: default } text">
     <option each="{ item in opts.items }" value="{ item.value }" if="{ !item.items }">
       { item.label }
     </option>
@@ -48,16 +48,26 @@
     this.value = ''
     this.label = ''
 
+    if (opts.items && opts.items.length > 0) {
+      this.label = opts.items[0].label
+      this.value = opts.items[0].value
+      this.default = opts.items[0].default
+    }
+
     this.changed = target => {
       this.value = target.target.value
-      if (opts.items.some(item => item.value == this.value)) {
-        this.label = opts.items.filter(item => item.value == this.value)[0].label
+      if (opts.items.some(item => item.value == this.value || item.label == this.value)) {
+        const item = opts.items.filter(item => item.value == this.value || item.label == this.value)[0]
+        this.label = item.label
+        this.default = item.default
         return
       }
 
       const childItems = flatMap(opts.items.filter(item => item.items), item => item.items)
-      if (childItems.some(item => item.value == this.value)) {
-        this.label = childItems.filter(item => item.value == this.value)[0].label
+      if (childItems.some(item => item.value == this.value || item.label == this.value)) {
+        const item = childItems.filter(item => item.value == this.value || item.label == this.value)[0]
+        this.label = item.label
+        this.default = item.default
       }
     }
 
