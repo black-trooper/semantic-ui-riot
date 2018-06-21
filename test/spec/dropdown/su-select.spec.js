@@ -1,12 +1,7 @@
 const fireEvent = require('../../helpers').fireEvent
-const fireKeyEvent = require('../../helpers').fireKeyEvent
-const keys = require('../../helpers').keys
 
 describe('su-select', function () {
   let tag
-  let spyOnOpen = sinon.spy()
-  let spyOnClose = sinon.spy()
-  let spyOnSelect = sinon.spy()
   let spyOnChange = sinon.spy()
   let spyOnBlur = sinon.spy()
 
@@ -31,21 +26,14 @@ describe('su-select', function () {
     tag = riot.mount('su-select', {
       items
     })[0]
-    tag.on('open', spyOnOpen)
-      .on('close', spyOnClose)
-      .on('select', spyOnSelect)
+    tag
       .on('change', spyOnChange)
       .on('blur', spyOnBlur)
-    this.clock = sinon.useFakeTimers()
   })
 
   afterEach(function () {
-    spyOnOpen.reset()
-    spyOnClose.reset()
-    spyOnSelect.reset()
     spyOnChange.reset()
     spyOnBlur.reset()
-    this.clock.restore()
     tag.unmount()
   })
 
@@ -75,6 +63,9 @@ describe('su-select', function () {
 
     tag.value.should.deep.equal(items[1].value)
     tag.label.should.deep.equal(items[1].label)
+
+    fireEvent($('su-select select')[0], 'blur')
+    spyOnBlur.should.have.been.calledOnce
   })
 
   it('update value', function () {

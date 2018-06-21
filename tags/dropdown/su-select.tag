@@ -1,5 +1,5 @@
 <su-select class="ui selection dropdown">
-  <select onchange="{ change }" class="{ default: default } text">
+  <select onchange="{ change }" onblur="{ blur }" class="{ default: default } text">
     <option each="{ item in opts.items }" value="{ item.value }" if="{ !item.items }">
       { item.label }
     </option>
@@ -62,6 +62,7 @@
       if (typeof opts.riotValue !== 'undefined') {
         this.value = opts.riotValue
         this.defaultValue = this.value
+        this.update()
       } else {
         this.defaultValue = this.value
       }
@@ -106,6 +107,10 @@
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
+    this.blur = () => {
+      this.trigger('blur')
+    }
+
     this.change = target => {
       this.changeValues(target.target.value)
     }
