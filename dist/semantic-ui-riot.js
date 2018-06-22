@@ -110,6 +110,8 @@ __webpack_require__(/*! ../tags/datepicker/su-datepicker.tag */ "./tags/datepick
 
 __webpack_require__(/*! ../tags/dropdown/su-dropdown.tag */ "./tags/dropdown/su-dropdown.tag");
 
+__webpack_require__(/*! ../tags/dropdown/su-select.tag */ "./tags/dropdown/su-select.tag");
+
 __webpack_require__(/*! ../tags/modal/su-modal.tag */ "./tags/modal/su-modal.tag");
 
 __webpack_require__(/*! ../tags/popup/su-popup.tag */ "./tags/popup/su-popup.tag");
@@ -1100,6 +1102,143 @@ this.isReadOnly = function () {
 
 this.isDisabled = function () {
   return _this.root.classList.contains('disabled');
+};
+});
+
+/***/ }),
+
+/***/ "./tags/dropdown/su-select.tag":
+/*!*************************************!*\
+  !*** ./tags/dropdown/su-select.tag ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+riot.tag2('su-select', '<select onchange="{change}" onblur="{blur}" class="{default: default} text"> <option each="{item in opts.items}" riot-value="{item.value}" if="{!item.items}"> {item.label} </option> <optgroup label="{item.label}" each="{item in opts.items}" if="{item.items}"> <option each="{child in item.items}" riot-value="{child.value}"> {child.label} </option> </optgroup> </select> <i class="dropdown icon"></i>', 'su-select.ui.selection.dropdown,[data-is="su-select"].ui.selection.dropdown{ padding: 0; } su-select.ui.selection.dropdown>select:focus,[data-is="su-select"].ui.selection.dropdown>select:focus{ outline: 0; border-color: #96c8da; } su-select.ui.selection.dropdown>select,[data-is="su-select"].ui.selection.dropdown>select{ display: block !important; padding: .78571429em 2.1em .78571429em 1em; background: 0 0 !important; position: relative; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; -webkit-appearance: none; -moz-appearance: none; -webkit-box-sizing: border-box; box-sizing: border-box; border: none; width: 100%; z-index: 2; font-family: Lato, \'Helvetica Neue\', Arial, Helvetica, sans-serif; } su-select.ui.selection.dropdown>.dropdown.icon,[data-is="su-select"].ui.selection.dropdown>.dropdown.icon{ z-index: 1; }', 'class="ui selection dropdown"', function(opts) {
+'use strict';
+
+var _this = this;
+
+this.defaultValue = '';
+this.value = '';
+this.label = '';
+
+if (opts.items && opts.items.length > 0) {
+  this.label = opts.items[0].label;
+  this.value = opts.items[0].value;
+  this.default = opts.items[0].default;
+}
+
+this.on('mount', function () {
+  if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
+    opts.riotValue = opts.value;
+  }
+  if (typeof opts.riotValue !== 'undefined') {
+    _this.value = opts.riotValue;
+    _this.defaultValue = _this.value;
+    _this.update();
+  } else {
+    _this.defaultValue = _this.value;
+  }
+});
+
+this.on('update', function () {
+  if (opts.items) {
+    var selected = opts.items.filter(function (item) {
+      return item.value === _this.value;
+    });
+    if (!selected || selected.length == 0) {
+      var childItems = flatMap(opts.items.filter(function (item) {
+        return item.items;
+      }), function (item) {
+        return item.items;
+      });
+      selected = childItems.filter(function (item) {
+        return item.value == _this.value;
+      });
+    }
+
+    if (selected && selected.length > 0) {
+      var target = selected[0];
+      if (_this.label !== target.label) {
+        _this.changeValues(_this.value, true);
+      }
+    } else if (opts.items && opts.items.length > 0) {
+      if (_this.value != opts.items[0].value) {
+        _this.value = opts.items[0].value;
+      }
+      if (_this.label != opts.items[0].label) {
+        _this.label = opts.items[0].label;
+        _this.default = opts.items[0].default;
+      }
+    }
+  }
+});
+
+// ===================================================================================
+//                                                                               State
+//                                                                               =====
+this.reset = function () {
+  _this.value = _this.defaultValue;
+};
+
+this.changed = function () {
+  return _this.value !== _this.defaultValue;
+};
+
+// ===================================================================================
+//                                                                               Event
+//                                                                               =====
+this.blur = function () {
+  _this.trigger('blur');
+};
+
+this.change = function (target) {
+  _this.changeValues(target.target.value);
+};
+
+this.changeValues = function (value, updating) {
+  var item = void 0;
+  if (opts.items.some(function (item) {
+    return item.value == value || item.label == value;
+  })) {
+    item = opts.items.filter(function (item) {
+      return item.value == value || item.label == value;
+    })[0];
+    _this.label = item.label;
+    _this.value = item.value;
+    _this.default = item.default;
+  } else {
+    var childItems = flatMap(opts.items.filter(function (item) {
+      return item.items;
+    }), function (item) {
+      return item.items;
+    });
+    if (childItems.some(function (item) {
+      return item.value == value || item.label == value;
+    })) {
+      item = childItems.filter(function (item) {
+        return item.value == value || item.label == value;
+      })[0];
+      _this.label = item.label;
+      _this.value = item.value;
+      _this.default = item.default;
+    }
+  }
+
+  if (!updating) {
+    _this.update();
+    _this.trigger('change', item);
+  }
+};
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+var flatMap = function flatMap(xs, f) {
+  return xs.reduce(function (ys, x) {
+    return ys.concat(f(x));
+  }, []);
 };
 });
 
