@@ -111,12 +111,45 @@ describe('su-modal', function () {
     btn_ok.text().trim().should.equal(modal.buttons[0].text)
     btn_ok.hasClass(modal.buttons[0].type).should.equal(true)
     btn_ok.find(`.${modal.buttons[0].icon}`).length.should.equal(1)
+    btn_ok.is(':focus').should.equal(false)
 
     const btn_cancel = $('su-modal .ui.button:last')
     btn_cancel.hasClass('labeled').should.equal(false)
     btn_cancel.hasClass('icon').should.equal(false)
     btn_cancel.find('.icon').length.should.equal(0)
     btn_cancel.text().trim().should.equal(modal.buttons[1].text)
+    btn_cancel.is(':focus').should.equal(false)
+  })
+
+  it('default button', function () {
+    $('body').append('<su-modal>modal</su-modal>')
+    const modal = {
+      buttons: [{
+        text: 'one',
+        default: true,
+      }, {
+        text: 'two',
+        default: true,
+      }, {
+        text: 'three'
+      }]
+    }
+    mount({ modal: modal })
+    tag.show()
+    this.clock.tick(510)
+    $('su-modal').is(':visible').should.equal(true)
+
+    const btn_one = $('su-modal .ui.button:first')
+    btn_one.text().trim().should.equal(modal.buttons[0].text)
+    btn_one.is(':focus').should.equal(true)
+
+    const btn_two = $('su-modal .ui.button:eq(1)')
+    btn_two.text().trim().should.equal(modal.buttons[1].text)
+    btn_two.is(':focus').should.equal(false)
+
+    const btn_three = $('su-modal .ui.button:last')
+    btn_three.text().trim().should.equal(modal.buttons[2].text)
+    btn_three.is(':focus').should.equal(false)
   })
 
   it('header', function () {
