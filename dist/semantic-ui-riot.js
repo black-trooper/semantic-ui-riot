@@ -1251,7 +1251,7 @@ var flatMap = function flatMap(xs, f) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-modal', '<div class="ui modal transition visible active {opts.class}" onclick="{clickModal}" id="{getId()}"> <i class="close icon" if="{isFullscreen()}" onclick="{hide}"></i> <div class="ui header {icon: opts.modal.header.icon}" if="{opts.modal.header}"> <i class="icon {opts.modal.header.icon}" if="{opts.modal.header.icon}"></i> {(opts.modal.header.text) ? opts.modal.header.text : opts.modal.header} </div> <div class="content {image: isImageContent()}" ref="content"> <yield></yield> </div> <div class="actions"> <div each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: isBasic()} {disabled: disabled}" onclick="{parent.click}"> {text} <i class="icon {icon}" if="{icon}"></i> </div> </div> </div>', 'su-modal.ui.dimmer.visible.transition,[data-is="su-modal"].ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; } su-modal .ui.fullscreen.modal,[data-is="su-modal"] .ui.fullscreen.modal{ left: 0!important; }', 'class="ui dimmer modals page transition {transitionStatus}" onclick="{dimmerClose}"', function(opts) {
+riot.tag2('su-modal', '<div class="ui modal transition visible active {opts.class}" onclick="{clickModal}" id="{getId()}"> <i class="close icon" if="{isFullscreen()}" onclick="{hide}"></i> <div class="ui header {icon: opts.modal.header.icon}" if="{opts.modal.header}"> <i class="icon {opts.modal.header.icon}" if="{opts.modal.header.icon}"></i> {(opts.modal.header.text) ? opts.modal.header.text : opts.modal.header} </div> <div class="content {image: isImageContent()}" ref="content"> <yield></yield> </div> <div class="actions"> <button each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: isBasic()} {disabled: disabled}" onclick="{parent.click}" ref="button_{text}"> {text} <i class="icon {icon}" if="{icon}"></i> </button> </div> </div>', 'su-modal.ui.dimmer.visible.transition,[data-is="su-modal"].ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; } su-modal .ui.fullscreen.modal,[data-is="su-modal"] .ui.fullscreen.modal{ left: 0 !important; }', 'class="ui dimmer modals page transition {transitionStatus}" onclick="{dimmerClose}"', function(opts) {
 'use strict';
 
 var _this = this;
@@ -1287,6 +1287,7 @@ this.show = function () {
   openning = true;
   _this.transitionStatus = 'animating fade in visible';
   _this.update();
+  setDefaultFocus();
   _this.trigger('show');
 
   setTimeout(function () {
@@ -1340,6 +1341,20 @@ var isContainsClassName = function isContainsClassName(className) {
     return false;
   }
   return modalElement.classList.contains(className);
+};
+
+var setDefaultFocus = function setDefaultFocus() {
+  if (!opts.modal || !opts.modal.buttons || opts.modal.buttons.length == 0) {
+    return;
+  }
+  if (opts.modal.buttons.some(function (button) {
+    return button.default;
+  })) {
+    var text = opts.modal.buttons.filter(function (button) {
+      return button.default;
+    })[0].text;
+    _this.refs['button_' + text].focus();
+  }
 };
 
 // ===================================================================================
