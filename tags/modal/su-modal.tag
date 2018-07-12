@@ -9,11 +9,11 @@
       <yield />
     </div>
     <div class="actions">
-      <div each="{ opts.modal.buttons }" class="ui button { type } { labeled: icon && text } { icon: icon } { inverted: isBasic() } { disabled: disabled }"
-        onclick="{ parent.click }">
+      <button each="{ opts.modal.buttons }" class="ui button { type } { labeled: icon && text } { icon: icon } { inverted: isBasic() } { disabled: disabled }"
+        onclick="{ parent.click }" ref="button_{ text }">
         { text }
         <i class="icon { icon }" if="{ icon }"></i>
-      </div>
+      </button>
     </div>
   </div>
   <style>
@@ -31,7 +31,7 @@
     }
 
     .ui.fullscreen.modal {
-      left: 0!important;
+      left: 0 !important;
     }
   </style>
 
@@ -65,6 +65,7 @@
       openning = true
       this.transitionStatus = 'animating fade in visible'
       this.update()
+      setDefaultFocus()
       this.trigger('show')
 
       setTimeout(() => {
@@ -118,6 +119,16 @@
         return false
       }
       return modalElement.classList.contains(className)
+    }
+
+    const setDefaultFocus = () => {
+      if (!opts.modal || !opts.modal.buttons || opts.modal.buttons.length == 0) {
+        return
+      }
+      if (opts.modal.buttons.some(button => button.default)) {
+        const text = opts.modal.buttons.filter(button => button.default)[0].text
+        this.refs[`button_${text}`].focus()
+      }
     }
 
     // ===================================================================================
