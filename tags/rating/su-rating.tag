@@ -9,30 +9,35 @@
       init(opts.max, opts.value)
     })
 
+    this.on('update', () => {
+      updateView()
+    })
+
     // ===================================================================================
     //                                                                               State
     //                                                                               =====
     this.reset = () => {
-      this.checked = this.defaultChecked
+      this.value = this.defaultValue
     }
 
     this.changed = () => {
-      return this.checked !== this.defaultChecked
+      return this.value !== this.defaultValue
     }
 
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
     this.click = event => {
-      if (isReadOnly) {
+      if (isReadOnly()) {
         return
       }
       this.value = event.item.value
       updateView()
+      parentUpdate()
     }
 
     this.mouseover = event => {
-      if (isReadOnly) {
+      if (isReadOnly()) {
         return
       }
       this.items.forEach(item => {
@@ -60,13 +65,22 @@
         this.items[i] = { value: i + 1, active: false, selected: false }
       }
       updateView()
-      this.update()
+      parentUpdate()
     }
 
     const updateView = () => {
+      if (!this.changed()) {
+        return
+      }
       this.items.forEach(item => {
         item.active = item.value <= this.value
       })
+    }
+
+    const parentUpdate = () => {
+      if (this.parent) {
+        this.parent.update()
+      }
     }
   </script>
 </su-rating>
