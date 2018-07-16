@@ -21,7 +21,7 @@
     }
 
     this.changed = () => {
-      return this.value !== this.defaultValue
+      return this.value != this.defaultValue
     }
 
     // ===================================================================================
@@ -60,6 +60,7 @@
 
     const init = (max = 5, value = 0) => {
       this.value = value
+      this.defaultValue = value
       this.items.length = 0
       for (let i = 0; i < max; i++) {
         this.items[i] = { value: i + 1, active: false, selected: false }
@@ -69,9 +70,6 @@
     }
 
     const updateView = () => {
-      if (!this.changed()) {
-        return
-      }
       this.items.forEach(item => {
         item.active = item.value <= this.value
       })
