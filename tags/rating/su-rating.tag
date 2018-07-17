@@ -31,9 +31,17 @@
       if (isReadOnly()) {
         return
       }
+      let valueChanged = false
+      if (this.value != event.item.value) {
+        valueChanged = true
+      }
       this.value = event.item.value
       updateView()
       parentUpdate()
+      this.trigger('click', event.item.value)
+      if (valueChanged) {
+        this.trigger('change', { value: this.value, beforeValue: event.item.value })
+      }
     }
 
     this.mouseover = event => {
