@@ -32,7 +32,9 @@
         return
       }
       let valueChanged = false
+      let beforeValue
       if (this.value != event.item.value) {
+        beforeValue = this.value
         valueChanged = true
       }
       this.value = event.item.value
@@ -40,7 +42,7 @@
       parentUpdate()
       this.trigger('click', event.item.value)
       if (valueChanged) {
-        this.trigger('change', { value: this.value, beforeValue: event.item.value })
+        this.trigger('change', { value: this.value, beforeValue: beforeValue })
       }
     }
 
