@@ -27,14 +27,19 @@
   </style>
 
   <script>
+    const self = this
+    this.mixin('semantic-ui')
+
     this.modal = {
       closable: false,
       buttons: [{
-        text: '閉じる'
+        default: true,
+        text: opts.close ||
+          (this.defaultOptions && this.defaultOptions.alert && this.defaultOptions.alert.close) ||
+          'close'
       }]
     }
 
-    this.mixin('semantic-ui')
     // ===================================================================================
     //                                                                          Observable
     //                                                                          ==========
@@ -43,6 +48,27 @@
       this.messages = Array.isArray(option.message) ? option.message : [option.message]
       this.update()
       this.refs.modal.show()
+    })
+
+    riot.mixin({
+      alert(param) {
+        const option = {
+          title: null,
+          message: null,
+        }
+
+        if (typeof param === 'string') {
+          option.message = param
+        } else if (param) {
+          if (param.title) {
+            option.title = param.title
+          } if (param.message) {
+            option.message = param.message
+          }
+        }
+
+        self.observable.trigger('showAlert', option)
+      }
     })
   </script>
 </su-alert>

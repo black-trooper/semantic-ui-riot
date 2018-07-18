@@ -27,15 +27,24 @@
   </style>
 
   <script>
+    import Q from 'q'
+    const self = this
+    this.mixin('semantic-ui')
+
     this.modal = {
       closable: false,
       buttons: [{
-        text: 'はい',
+        default: true,
+        text: opts.ok ||
+          (this.defaultOptions && this.defaultOptions.confirm && this.defaultOptions.confirm.ok) ||
+          'OK',
         action: 'positiveAction',
         type: 'primary',
         icon: 'checkmark'
       }, {
-        text: 'いいえ',
+        text: opts.cancel ||
+          (this.defaultOptions && this.defaultOptions.confirm && this.defaultOptions.confirm.cancel) ||
+          'Cancel',
         action: 'negativeAction',
       }]
     }
@@ -49,7 +58,6 @@
       })
     })
 
-    this.mixin('semantic-ui')
     // ===================================================================================
     //                                                                          Observable
     //                                                                          ==========
@@ -58,6 +66,28 @@
       this.messages = Array.isArray(option.message) ? option.message : [option.message]
       this.update()
       this.refs.modal.show()
+    })
+
+    riot.mixin({
+      confirm(param) {
+        const option = {
+          title: null,
+          message: null,
+        }
+        if (typeof param === 'string') {
+          option.message = param
+        } else {
+          option.title = param.title
+          option.message = param.message
+        }
+
+        return Q.Promise((resolve, reject) => {
+          self.observable.trigger('showConfirm', option)
+          self.observable.on('callbackConfirm', result => {
+            return result ? resolve() : reject()
+          })
+        })
+      }
     })
   </script>
 </su-confirm>
