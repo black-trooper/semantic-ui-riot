@@ -33,21 +33,25 @@
 
     this.modal = {
       closable: false,
-      buttons: [{
-        default: true,
-        text: opts.ok ||
-          (this.defaultOptions && this.defaultOptions.confirm && this.defaultOptions.confirm.ok) ||
-          'OK',
-        action: 'positiveAction',
-        type: 'primary',
-        icon: 'checkmark'
-      }, {
-        text: opts.cancel ||
-          (this.defaultOptions && this.defaultOptions.confirm && this.defaultOptions.confirm.cancel) ||
-          'Cancel',
-        action: 'negativeAction',
-      }]
+      buttons: []
     }
+    const cancelButton = {
+      text: opts.cancel ||
+        (this.defaultOptions && this.defaultOptions.confirm && this.defaultOptions.confirm.cancel) ||
+        'Cancel',
+      action: 'negativeAction',
+    }
+    const okButton = {
+      default: true,
+      text: opts.ok ||
+        (this.defaultOptions && this.defaultOptions.confirm && this.defaultOptions.confirm.ok) ||
+        'OK',
+      action: 'positiveAction',
+      type: 'primary',
+      icon: 'checkmark'
+    }
+    this.modal.buttons.push(cancelButton)
+    this.modal.buttons.push(okButton)
 
     this.on('mount', () => {
       this.refs.modal.on('positiveAction', () => {
@@ -76,9 +80,12 @@
         }
         if (typeof param === 'string') {
           option.message = param
-        } else {
-          option.title = param.title
-          option.message = param.message
+        } else if (param) {
+          if (param.title) {
+            option.title = param.title
+          } if (param.message) {
+            option.message = param.message
+          }
         }
 
         return Q.Promise((resolve, reject) => {
