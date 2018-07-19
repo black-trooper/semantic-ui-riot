@@ -145,6 +145,8 @@
     let lastOptsCurrentDate = null
     const yearRange = 20
 
+    this.mixin('semantic-ui')
+
     this.on('mount', () => {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
