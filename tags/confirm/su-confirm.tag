@@ -123,54 +123,56 @@
     })
 
     riot.mixin({
-      confirm(param) {
-        const option = {
-          title: null,
-          message: null,
-          reverse: null,
-          buttons: {
-            ok: {
-              text: null,
-              default: null,
-              type: null,
-              icon: null,
+      su_riot: {
+        confirm(param) {
+          const option = {
+            title: null,
+            message: null,
+            reverse: null,
+            buttons: {
+              ok: {
+                text: null,
+                default: null,
+                type: null,
+                icon: null,
+              },
+              cancel: {
+                text: null,
+                default: null,
+                type: null,
+                icon: null,
+              },
             },
-            cancel: {
-              text: null,
-              default: null,
-              type: null,
-              icon: null,
-            },
-          },
-        }
-        if (typeof param === 'string') {
-          option.message = param
-        } else if (param) {
-          if (param.title) {
-            option.title = param.title
           }
-          if (param.message) {
-            option.message = param.message
-          }
-          if (param.reverse) {
-            option.reverse = param.reverse
-          }
-          if (param.buttons) {
-            if (param.buttons.ok) {
-              option.buttons.ok = param.buttons.ok
+          if (typeof param === 'string') {
+            option.message = param
+          } else if (param) {
+            if (param.title) {
+              option.title = param.title
             }
-            if (param.buttons.cancel) {
-              option.buttons.cancel = param.buttons.cancel
+            if (param.message) {
+              option.message = param.message
+            }
+            if (param.reverse) {
+              option.reverse = param.reverse
+            }
+            if (param.buttons) {
+              if (param.buttons.ok) {
+                option.buttons.ok = param.buttons.ok
+              }
+              if (param.buttons.cancel) {
+                option.buttons.cancel = param.buttons.cancel
+              }
             }
           }
-        }
 
-        return self.Q.Promise((resolve, reject) => {
-          self.observable.trigger('showConfirm', option)
-          self.observable.on('callbackConfirm', result => {
-            return result ? resolve() : reject()
+          return self.Q.Promise((resolve, reject) => {
+            self.observable.trigger('showConfirm', option)
+            self.observable.on('callbackConfirm', result => {
+              return result ? resolve() : reject()
+            })
           })
-        })
+        }
       }
     })
   </script>

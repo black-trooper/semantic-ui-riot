@@ -38,7 +38,7 @@ describe('su-confirm', function () {
     mount()
     $('su-confirm su-modal').is(':visible').should.equal(false)
 
-    app.confirm('hello')
+    app.su_riot.confirm('hello')
     tag.messages[0].should.equal('hello')
     this.clock.tick(510)
     $('su-confirm').is(':visible').should.equal(true)
@@ -62,7 +62,7 @@ describe('su-confirm', function () {
     mount()
     $('su-confirm su-modal').is(':visible').should.equal(false)
 
-    app.confirm('hello')
+    app.su_riot.confirm('hello')
     tag.messages[0].should.equal('hello')
     this.clock.tick(510)
     $('su-confirm').is(':visible').should.equal(true)
@@ -85,7 +85,7 @@ describe('su-confirm', function () {
 
   it('title and messages', function () {
     mount()
-    app.confirm({ title: 'riot', message: ['hello!', 'hello!!'] })
+    app.su_riot.confirm({ title: 'riot', message: ['hello!', 'hello!!'] })
     tag.title.should.equal('riot')
     tag.messages[0].should.equal('hello!')
     tag.messages[1].should.equal('hello!!')
@@ -93,14 +93,14 @@ describe('su-confirm', function () {
 
   it('title only', function () {
     mount()
-    app.confirm({ title: 'riot' })
+    app.su_riot.confirm({ title: 'riot' })
     tag.title.should.equal('riot')
     expect(tag.messages[0]).to.be.null
   })
 
   it('messages only', function () {
     mount()
-    app.confirm({ message: ['hello!', 'hello!!'] })
+    app.su_riot.confirm({ message: ['hello!', 'hello!!'] })
     expect(tag.title).to.be.null
     tag.messages[0].should.equal('hello!')
     tag.messages[1].should.equal('hello!!')
@@ -108,14 +108,14 @@ describe('su-confirm', function () {
 
   it('none message', function () {
     mount()
-    app.confirm()
+    app.su_riot.confirm()
     expect(tag.title).to.be.null
     expect(tag.messages[0]).to.be.null
   })
 
   it('button name by opts', function () {
     mount()
-    app.confirm({
+    app.su_riot.confirm({
       reverse: true,
       buttons: {
         ok: {
@@ -166,7 +166,7 @@ describe('su-confirm', function () {
       }
     })
     mount()
-    app.confirm()
+    app.su_riot.confirm()
     const btn_cancel = $('su-confirm su-modal .ui.button:last')
     btn_cancel.text().trim().should.equal('Not delete')
     btn_cancel.find(`.undo`).length.should.equal(1)
@@ -198,7 +198,7 @@ describe('su-confirm', function () {
       }
     })
     mount()
-    app.confirm({
+    app.su_riot.confirm({
       reverse: true,
       buttons: {
         ok: {
