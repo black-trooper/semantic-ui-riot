@@ -69,32 +69,34 @@
     })
 
     riot.mixin({
-      alert(param) {
-        const option = {
-          title: null,
-          message: null,
-          button: {
-            text: null,
-            default: null,
-            type: null,
-            icon: null,
-          },
-        }
+      su_riot: {
+        alert(param) {
+          const option = {
+            title: null,
+            message: null,
+            button: {
+              text: null,
+              default: null,
+              type: null,
+              icon: null,
+            },
+          }
 
-        if (typeof param === 'string') {
-          option.message = param
-        } else if (param) {
-          if (param.title) {
-            option.title = param.title
+          if (typeof param === 'string') {
+            option.message = param
+          } else if (param) {
+            if (param.title) {
+              option.title = param.title
+            }
+            if (param.message) {
+              option.message = param.message
+            }
+            if (param.button) {
+              option.button = param.button
+            }
           }
-          if (param.message) {
-            option.message = param.message
-          }
-          if (param.button) {
-            option.button = param.button
-          }
+          self.observable.trigger('showAlert', option)
         }
-        self.observable.trigger('showAlert', option)
       }
     })
   </script>
