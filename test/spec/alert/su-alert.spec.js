@@ -1,8 +1,9 @@
 describe('su-alert', function () {
   let tag
   let app
-  let mount = opts => {
-    tag = riot.mount('su-alert', opts)[0]
+  let mount = () => {
+    tag = riot.mount('su-alert')[0]
+    app = riot.mount('app')[0]
   }
 
   beforeEach(function () {
@@ -13,13 +14,12 @@ describe('su-alert', function () {
       <su-alert></su-alert>
       <app></app>
     `)
-    tag = riot.mount('su-alert')[0]
-    app = riot.mount('app')[0]
   })
 
   afterEach(function () {
     this.clock.restore()
     tag.unmount()
+    app.unmount()
   })
 
   it('is mounted', function () {
@@ -37,7 +37,7 @@ describe('su-alert', function () {
     $('su-alert').is(':visible').should.equal(true)
 
     const btn_one = $('su-alert su-modal .ui.button:first')
-    btn_one.text().trim().should.equal('close')
+    btn_one.text().trim().should.equal('Close')
     btn_one.is(':focus').should.equal(true)
 
     $('su-modal').click()
@@ -80,8 +80,11 @@ describe('su-alert', function () {
   })
 
   it('button name by opts', function () {
-    mount({
-      close: 'ok'
+    mount()
+    app.alert({
+      button: {
+        text: 'ok'
+      }
     })
     const btn_one = $('su-alert su-modal .ui.button:first')
     btn_one.text().trim().should.equal('ok')
@@ -91,11 +94,14 @@ describe('su-alert', function () {
     riot.mixin('semantic-ui', {
       defaultOptions: {
         alert: {
-          close: 'Yes'
+          button: {
+            text: 'Yes',
+          }
         }
       }
     })
     mount()
+    app.alert()
     const btn_one = $('su-alert su-modal .ui.button:first')
     btn_one.text().trim().should.equal('Yes')
   })
