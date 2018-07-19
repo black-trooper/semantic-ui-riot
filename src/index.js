@@ -14,6 +14,7 @@ import '../tags/tab/su-tab-header.tag'
 import '../tags/tab/su-tab-title.tag'
 import '../tags/tab/su-tab.tag'
 import '../tags/tab/su-tabset.tag'
+import Q from 'q'
 
 export default function (_options) {
   options.locale = _options.locale
@@ -28,4 +29,7 @@ const obs = riot.observable()
 riot.mixin('semantic-ui', {
   defaultOptions: options,
   observable: obs,
+  Q: {
+    Promise: Q.Promise,
+  }
 })

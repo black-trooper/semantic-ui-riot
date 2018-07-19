@@ -27,7 +27,6 @@
   </style>
 
   <script>
-    import Q from 'q'
     const self = this
     this.mixin('semantic-ui')
 
@@ -88,7 +87,7 @@
           }
         }
 
-        return Q.Promise((resolve, reject) => {
+        return self.Q.Promise((resolve, reject) => {
           self.observable.trigger('showConfirm', option)
           self.observable.on('callbackConfirm', result => {
             return result ? resolve() : reject()
