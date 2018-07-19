@@ -2840,32 +2840,34 @@ this.observable.on('showAlert', function (option) {
 });
 
 riot.mixin({
-  alert: function alert(param) {
-    var option = {
-      title: null,
-      message: null,
-      button: {
-        text: null,
-        default: null,
-        type: null,
-        icon: null
-      }
-    };
+  su_riot: {
+    alert: function alert(param) {
+      var option = {
+        title: null,
+        message: null,
+        button: {
+          text: null,
+          default: null,
+          type: null,
+          icon: null
+        }
+      };
 
-    if (typeof param === 'string') {
-      option.message = param;
-    } else if (param) {
-      if (param.title) {
-        option.title = param.title;
+      if (typeof param === 'string') {
+        option.message = param;
+      } else if (param) {
+        if (param.title) {
+          option.title = param.title;
+        }
+        if (param.message) {
+          option.message = param.message;
+        }
+        if (param.button) {
+          option.button = param.button;
+        }
       }
-      if (param.message) {
-        option.message = param.message;
-      }
-      if (param.button) {
-        option.button = param.button;
-      }
+      self.observable.trigger('showAlert', option);
     }
-    self.observable.trigger('showAlert', option);
   }
 });
 });
@@ -3092,54 +3094,56 @@ this.observable.on('showConfirm', function (option) {
 });
 
 riot.mixin({
-  confirm: function confirm(param) {
-    var option = {
-      title: null,
-      message: null,
-      reverse: null,
-      buttons: {
-        ok: {
-          text: null,
-          default: null,
-          type: null,
-          icon: null
-        },
-        cancel: {
-          text: null,
-          default: null,
-          type: null,
-          icon: null
+  su_riot: {
+    confirm: function confirm(param) {
+      var option = {
+        title: null,
+        message: null,
+        reverse: null,
+        buttons: {
+          ok: {
+            text: null,
+            default: null,
+            type: null,
+            icon: null
+          },
+          cancel: {
+            text: null,
+            default: null,
+            type: null,
+            icon: null
+          }
+        }
+      };
+      if (typeof param === 'string') {
+        option.message = param;
+      } else if (param) {
+        if (param.title) {
+          option.title = param.title;
+        }
+        if (param.message) {
+          option.message = param.message;
+        }
+        if (param.reverse) {
+          option.reverse = param.reverse;
+        }
+        if (param.buttons) {
+          if (param.buttons.ok) {
+            option.buttons.ok = param.buttons.ok;
+          }
+          if (param.buttons.cancel) {
+            option.buttons.cancel = param.buttons.cancel;
+          }
         }
       }
-    };
-    if (typeof param === 'string') {
-      option.message = param;
-    } else if (param) {
-      if (param.title) {
-        option.title = param.title;
-      }
-      if (param.message) {
-        option.message = param.message;
-      }
-      if (param.reverse) {
-        option.reverse = param.reverse;
-      }
-      if (param.buttons) {
-        if (param.buttons.ok) {
-          option.buttons.ok = param.buttons.ok;
-        }
-        if (param.buttons.cancel) {
-          option.buttons.cancel = param.buttons.cancel;
-        }
-      }
-    }
 
-    return self.Q.Promise(function (resolve, reject) {
-      self.observable.trigger('showConfirm', option);
-      self.observable.on('callbackConfirm', function (result) {
-        return result ? resolve() : reject();
+      return self.Q.Promise(function (resolve, reject) {
+        self.observable.trigger('showConfirm', option);
+        self.observable.on('callbackConfirm', function (result) {
+          return result ? resolve() : reject();
+        });
       });
-    });
+    }
   }
 });
 });
