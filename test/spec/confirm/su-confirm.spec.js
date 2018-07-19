@@ -2,8 +2,9 @@ describe('su-confirm', function () {
   const Q = require('q')
   let tag
   let app
-  let mount = opts => {
-    tag = riot.mount('su-confirm', opts)[0]
+  let mount = () => {
+    tag = riot.mount('su-confirm')[0]
+    app = riot.mount('app')[0]
   }
 
   beforeEach(function () {
@@ -20,13 +21,12 @@ describe('su-confirm', function () {
       <su-confirm></su-confirm>
       <app></app>
     `)
-    tag = riot.mount('su-confirm')[0]
-    app = riot.mount('app')[0]
   })
 
   afterEach(function () {
     this.clock.restore()
     tag.unmount()
+    app.unmount()
   })
 
   it('is mounted', function () {
@@ -114,30 +114,116 @@ describe('su-confirm', function () {
   })
 
   it('button name by opts', function () {
-    mount({
-      ok: 'YES',
-      cancel: 'NO'
+    mount()
+    app.confirm({
+      reverse: true,
+      buttons: {
+        ok: {
+          text: 'Delete',
+          type: 'negative',
+          icon: 'trash',
+        },
+        cancel: {
+          default: true,
+          text: 'Not delete',
+          type: 'positive',
+          icon: 'undo',
+        }
+      }
     })
-    const btn_cancel = $('su-confirm su-modal .ui.button:first')
-    btn_cancel.text().trim().should.equal('NO')
-    const btn_ok = $('su-confirm su-modal .ui.button:last')
-    btn_ok.text().trim().should.equal('YES')
+
+    const btn_cancel = $('su-confirm su-modal .ui.button:last')
+    btn_cancel.text().trim().should.equal('Not delete')
+    btn_cancel.find(`.undo`).length.should.equal(1)
+    btn_cancel.hasClass('positive').should.equal(true)
+    btn_cancel.is(':focus').should.equal(true)
+    const btn_ok = $('su-confirm su-modal .ui.button:first')
+    btn_ok.text().trim().should.equal('Delete')
+    btn_ok.find(`.trash`).length.should.equal(1)
+    btn_ok.hasClass('negative').should.equal(true)
+    btn_ok.is(':focus').should.equal(false)
   })
 
   it('button name by defaultOptions', function () {
     riot.mixin('semantic-ui', {
       defaultOptions: {
         confirm: {
-          ok: 'Yes',
-          cancel: 'No'
+          reverse: true,
+          buttons: {
+            ok: {
+              text: 'Delete',
+              type: 'negative',
+              icon: 'trash',
+            },
+            cancel: {
+              default: true,
+              text: 'Not delete',
+              type: 'positive',
+              icon: 'undo',
+            }
+          }
         }
       }
     })
     mount()
-    const btn_cancel = $('su-confirm su-modal .ui.button:first')
-    btn_cancel.text().trim().should.equal('No')
-    const btn_ok = $('su-confirm su-modal .ui.button:last')
-    btn_ok.text().trim().should.equal('Yes')
+    app.confirm()
+    const btn_cancel = $('su-confirm su-modal .ui.button:last')
+    btn_cancel.text().trim().should.equal('Not delete')
+    btn_cancel.find(`.undo`).length.should.equal(1)
+    btn_cancel.hasClass('positive').should.equal(true)
+    btn_cancel.is(':focus').should.equal(true)
+    const btn_ok = $('su-confirm su-modal .ui.button:first')
+    btn_ok.text().trim().should.equal('Delete')
+    btn_ok.find(`.trash`).length.should.equal(1)
+    btn_ok.hasClass('negative').should.equal(true)
+    btn_ok.is(':focus').should.equal(false)
   })
 
+  it('button name by opts and defaultOptions', function () {
+    riot.mixin('semantic-ui', {
+      defaultOptions: {
+        confirm: {
+          buttons: {
+            ok: {
+              default: true,
+              text: 'はい',
+              type: 'positive',
+              icon: 'check',
+            },
+            cancel: {
+              text: 'いいえ',
+            }
+          }
+        }
+      }
+    })
+    mount()
+    app.confirm({
+      reverse: true,
+      buttons: {
+        ok: {
+          default: true,
+          text: 'Delete',
+          type: 'negative',
+          icon: 'trash',
+        },
+        cancel: {
+          text: 'Not delete',
+          type: 'positive',
+          icon: 'undo',
+        }
+      }
+    })
+
+    const btn_cancel = $('su-confirm su-modal .ui.button:last')
+    btn_cancel.text().trim().should.equal('Not delete')
+    btn_cancel.find(`.undo`).length.should.equal(1)
+    btn_cancel.hasClass('positive').should.equal(true)
+    btn_cancel.is(':focus').should.equal(false)
+    const btn_ok = $('su-confirm su-modal .ui.button:first')
+    btn_ok.text().trim().should.equal('Delete')
+    btn_ok.find(`.trash`).length.should.equal(1)
+    btn_ok.hasClass('negative').should.equal(true)
+    btn_ok.is(':focus').should.equal(true)
+  })
 })
