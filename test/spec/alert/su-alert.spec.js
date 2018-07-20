@@ -31,7 +31,7 @@ describe('su-alert', function () {
     mount()
     $('su-alert su-modal').is(':visible').should.equal(false)
 
-    app.su_riot.alert('hello')
+    app.suAlert('hello')
     tag.messages[0].should.equal('hello')
     this.clock.tick(510)
     $('su-alert').is(':visible').should.equal(true)
@@ -51,7 +51,7 @@ describe('su-alert', function () {
 
   it('title and messages', function () {
     mount()
-    app.su_riot.alert({ title: 'riot', message: ['hello!', 'hello!!'] })
+    app.suAlert({ title: 'riot', message: ['hello!', 'hello!!'] })
     tag.title.should.equal('riot')
     tag.messages[0].should.equal('hello!')
     tag.messages[1].should.equal('hello!!')
@@ -59,14 +59,14 @@ describe('su-alert', function () {
 
   it('title only', function () {
     mount()
-    app.su_riot.alert({ title: 'riot' })
+    app.suAlert({ title: 'riot' })
     tag.title.should.equal('riot')
     expect(tag.messages[0]).to.be.null
   })
 
   it('messages only', function () {
     mount()
-    app.su_riot.alert({ message: ['hello!', 'hello!!'] })
+    app.suAlert({ message: ['hello!', 'hello!!'] })
     expect(tag.title).to.be.null
     tag.messages[0].should.equal('hello!')
     tag.messages[1].should.equal('hello!!')
@@ -74,14 +74,14 @@ describe('su-alert', function () {
 
   it('none message', function () {
     mount()
-    app.su_riot.alert()
+    app.suAlert()
     expect(tag.title).to.be.null
     expect(tag.messages[0]).to.be.null
   })
 
   it('button name by opts', function () {
     mount()
-    app.su_riot.alert({
+    app.suAlert({
       button: {
         text: 'ok'
       }
@@ -101,7 +101,7 @@ describe('su-alert', function () {
       }
     })
     mount()
-    app.su_riot.alert()
+    app.suAlert()
     const btn_one = $('su-alert su-modal .ui.button:first')
     btn_one.text().trim().should.equal('Yes')
   })
