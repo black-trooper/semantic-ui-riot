@@ -2812,20 +2812,28 @@ this.on('mount', function () {
   if (_this.defaultOptions && _this.defaultOptions.alert && _this.defaultOptions.alert.button) {
     defaultButton = _this.defaultOptions.alert.button;
   }
-  button.default = defaultButton.default || true;
+  if (defaultButton.default) {
+    button.default = true;
+  }
   button.text = defaultButton.text || 'Close';
   button.type = defaultButton.type || '';
   button.icon = defaultButton.icon || '';
 });
 
 var setButton = function setButton(option) {
-  _this.modal.buttons.length = 0;
-  _this.modal.buttons.push({
-    default: option.button.default || button.default,
+  var btn = {
     text: option.button.text || button.text,
     type: option.button.type || button.type,
     icon: option.button.icon || button.icon
-  });
+  };
+  if (option.button.default) {
+    btn.default = true;
+  } else if (option.button.default === null) {
+    btn.default = button.default;
+  }
+
+  _this.modal.buttons.length = 0;
+  _this.modal.buttons.push(btn);
 };
 
 // ===================================================================================

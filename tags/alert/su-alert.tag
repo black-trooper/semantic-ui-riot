@@ -41,20 +41,28 @@
       if (this.defaultOptions && this.defaultOptions.alert && this.defaultOptions.alert.button) {
         defaultButton = this.defaultOptions.alert.button
       }
-      button.default = defaultButton.default || true
+      if (defaultButton.default) {
+        button.default = true
+      }
       button.text = defaultButton.text || 'Close'
       button.type = defaultButton.type || ''
       button.icon = defaultButton.icon || ''
     })
 
     const setButton = option => {
-      this.modal.buttons.length = 0
-      this.modal.buttons.push({
-        default: option.button.default || button.default,
+      const btn = {
         text: option.button.text || button.text,
         type: option.button.type || button.type,
         icon: option.button.icon || button.icon,
-      })
+      }
+      if (option.button.default) {
+        btn.default = true
+      } else if (option.button.default === null) {
+        btn.default = button.default
+      }
+
+      this.modal.buttons.length = 0
+      this.modal.buttons.push(btn)
     }
 
     // ===================================================================================

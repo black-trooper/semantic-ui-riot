@@ -38,7 +38,7 @@ describe('su-alert', function () {
 
     const btn_one = $('su-alert su-modal .ui.button:first')
     btn_one.text().trim().should.equal('Close')
-    btn_one.is(':focus').should.equal(true)
+    btn_one.is(':focus').should.equal(false)
 
     $('su-modal').click()
     this.clock.tick(310)
@@ -83,11 +83,13 @@ describe('su-alert', function () {
     mount()
     app.suAlert({
       button: {
-        text: 'ok'
+        text: 'ok',
+        default: true,
       }
     })
     const btn_one = $('su-alert su-modal .ui.button:first')
     btn_one.text().trim().should.equal('ok')
+    btn_one.is(':focus').should.equal(true)
   })
 
   it('button name by defaultOptions', function () {
@@ -96,6 +98,7 @@ describe('su-alert', function () {
         alert: {
           button: {
             text: 'Yes',
+            default: true,
           }
         }
       }
@@ -104,6 +107,7 @@ describe('su-alert', function () {
     app.suAlert()
     const btn_one = $('su-alert su-modal .ui.button:first')
     btn_one.text().trim().should.equal('Yes')
+    btn_one.is(':focus').should.equal(true)
   })
 
 })
