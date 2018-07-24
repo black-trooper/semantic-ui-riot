@@ -61,8 +61,8 @@
       }
 
       okButton.text = defaultOkButton.text || 'OK'
-      okButton.type = defaultOkButton.type || 'primary'
-      okButton.icon = defaultOkButton.icon || 'check'
+      okButton.type = typeof defaultOkButton.type !== 'undefined' ? defaultOkButton.type : 'primary'
+      okButton.icon = typeof defaultOkButton.icon !== 'undefined' ? defaultOkButton.icon : 'check'
       cancelButton.text = defaultCancelButton.text || 'Cancel'
       cancelButton.type = defaultCancelButton.type || ''
       cancelButton.icon = defaultCancelButton.icon || ''
@@ -86,14 +86,14 @@
     const setButtons = option => {
       const cancel = {
         text: option.buttons.cancel.text || cancelButton.text,
-        type: option.buttons.cancel.type || cancelButton.type,
-        icon: option.buttons.cancel.icon || cancelButton.icon,
+        type: option.buttons.cancel.type !== null ? option.buttons.cancel.type : cancelButton.type,
+        icon: option.buttons.cancel.icon !== null ? option.buttons.cancel.icon : cancelButton.icon,
         action: cancelButton.action,
       }
       const ok = {
         text: option.buttons.ok.text || okButton.text,
-        type: option.buttons.ok.type || okButton.type,
-        icon: option.buttons.ok.icon || okButton.icon,
+        type: option.buttons.ok.type !== null ? option.buttons.ok.type : okButton.type,
+        icon: option.buttons.ok.icon !== null ? option.buttons.ok.icon : okButton.icon,
         action: okButton.action,
       }
 
