@@ -144,6 +144,25 @@ describe('su-confirm', function () {
     btn_ok.is(':focus').should.equal(false)
   })
 
+  it('button name by empty opts', function () {
+    mount()
+    app.suConfirm({
+      reverse: true,
+      buttons: {
+        ok: {
+          text: 'empty',
+          type: '',
+          icon: '',
+        },
+      }
+    })
+
+    const btn_ok = $('su-confirm su-modal .ui.button:first')
+    btn_ok.text().trim().should.equal('empty')
+    btn_ok.find(`.check`).length.should.equal(0)
+    btn_ok.hasClass('primary').should.equal(false)
+  })
+
   it('button name by defaultOptions', function () {
     riot.mixin('semantic-ui', {
       defaultOptions: {
@@ -177,6 +196,29 @@ describe('su-confirm', function () {
     btn_ok.find(`.trash`).length.should.equal(1)
     btn_ok.hasClass('negative').should.equal(true)
     btn_ok.is(':focus').should.equal(false)
+  })
+
+  it('button name by empty defaultOptions', function () {
+    riot.mixin('semantic-ui', {
+      defaultOptions: {
+        confirm: {
+          reverse: true,
+          buttons: {
+            ok: {
+              text: 'empty',
+              type: '',
+              icon: '',
+            },
+          }
+        }
+      }
+    })
+    mount()
+    app.suConfirm()
+    const btn_ok = $('su-confirm su-modal .ui.button:first')
+    btn_ok.text().trim().should.equal('empty')
+    btn_ok.find(`.check`).length.should.equal(0)
+    btn_ok.hasClass('primary').should.equal(false)
   })
 
   it('button name by opts and defaultOptions', function () {
