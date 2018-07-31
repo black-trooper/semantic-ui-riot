@@ -88,6 +88,8 @@
     const parentUpdate = () => {
       if (this.parent) {
         this.parent.update()
+      } else {
+        this.update()
       }
     }
   </script>
