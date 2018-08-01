@@ -51,6 +51,39 @@ describe('su-rating', function () {
     $('su-rating i:eq(3)').hasClass('active').should.equal(false)
   })
 
+  it('read only', function () {
+    mount({
+      class: 'read-only',
+      value: 2,
+      max: 4
+    })
+    $('su-rating i').length.should.equal(4)
+    tag.value.should.equal(2)
+    $('su-rating i:eq(0)').hasClass('active').should.equal(true)
+    $('su-rating i:eq(1)').hasClass('active').should.equal(true)
+    $('su-rating i:eq(2)').hasClass('active').should.equal(false)
+    $('su-rating i:eq(3)').hasClass('active').should.equal(false)
+
+    $('su-rating i:eq(0)').hasClass('selected').should.equal(false)
+    $('su-rating i:eq(1)').hasClass('selected').should.equal(false)
+    $('su-rating i:eq(2)').hasClass('selected').should.equal(false)
+    $('su-rating i:eq(3)').hasClass('selected').should.equal(false)
+
+    fireEvent($('su-rating i:eq(2)')[0], 'click')
+    tag.value.should.equal(2)
+    $('su-rating i:eq(0)').hasClass('active').should.equal(true)
+    $('su-rating i:eq(1)').hasClass('active').should.equal(true)
+    $('su-rating i:eq(2)').hasClass('active').should.equal(false)
+    $('su-rating i:eq(3)').hasClass('active').should.equal(false)
+
+    fireEvent($('su-rating i:eq(2)')[0], 'mouseover')
+    tag.value.should.equal(2)
+    $('su-rating i:eq(0)').hasClass('selected').should.equal(false)
+    $('su-rating i:eq(1)').hasClass('selected').should.equal(false)
+    $('su-rating i:eq(2)').hasClass('selected').should.equal(false)
+    $('su-rating i:eq(3)').hasClass('selected').should.equal(false)
+  })
+
   it('reset value', function () {
     mount({
       value: 2,

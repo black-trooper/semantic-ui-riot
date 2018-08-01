@@ -55,6 +55,11 @@ describe('su-rating', function () {
     mount()
     $('su-rating i').length.should.equal(5)
     tag.value.should.equal(0)
+    $('su-rating i:eq(0)').hasClass('selected').should.equal(false)
+    $('su-rating i:eq(1)').hasClass('selected').should.equal(false)
+    $('su-rating i:eq(2)').hasClass('selected').should.equal(false)
+    $('su-rating i:eq(3)').hasClass('selected').should.equal(false)
+    $('su-rating i:eq(4)').hasClass('selected').should.equal(false)
 
     fireEvent($('su-rating i:eq(2)')[0], 'mouseover')
     tag.value.should.equal(0)
