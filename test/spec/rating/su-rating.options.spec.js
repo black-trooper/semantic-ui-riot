@@ -3,10 +3,12 @@ const fireEvent = require('../../helpers').fireEvent
 describe('su-rating', function () {
   let tag
   const spyOnClick = sinon.spy()
+  const spyOnChange = sinon.spy()
 
   const mount = opts => {
     tag = riot.mount('su-rating', opts)[0]
     tag.on('click', spyOnClick)
+    tag.on('change', spyOnChange)
   }
 
 
@@ -16,6 +18,7 @@ describe('su-rating', function () {
 
   afterEach(function () {
     spyOnClick.reset()
+    spyOnChange.reset()
     tag.unmount()
   })
 
@@ -63,7 +66,6 @@ describe('su-rating', function () {
     $('su-rating i:eq(1)').hasClass('active').should.equal(true)
     $('su-rating i:eq(2)').hasClass('active').should.equal(false)
     $('su-rating i:eq(3)').hasClass('active').should.equal(false)
-
     $('su-rating i:eq(0)').hasClass('selected').should.equal(false)
     $('su-rating i:eq(1)').hasClass('selected').should.equal(false)
     $('su-rating i:eq(2)').hasClass('selected').should.equal(false)
@@ -82,6 +84,9 @@ describe('su-rating', function () {
     $('su-rating i:eq(1)').hasClass('selected').should.equal(false)
     $('su-rating i:eq(2)').hasClass('selected').should.equal(false)
     $('su-rating i:eq(3)').hasClass('selected').should.equal(false)
+
+    spyOnClick.should.have.been.callCount(0)
+    spyOnChange.should.have.been.callCount(0)
   })
 
   it('reset value', function () {
