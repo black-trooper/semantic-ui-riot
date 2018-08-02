@@ -2682,6 +2682,8 @@ __webpack_require__(/*! ../tags/radio/su-radio-group.tag */ "./tags/radio/su-rad
 
 __webpack_require__(/*! ../tags/radio/su-radio.tag */ "./tags/radio/su-radio.tag");
 
+__webpack_require__(/*! ../tags/rating/su-rating.tag */ "./tags/rating/su-rating.tag");
+
 __webpack_require__(/*! ../tags/tab/su-tab-header.tag */ "./tags/tab/su-tab-header.tag");
 
 __webpack_require__(/*! ../tags/tab/su-tab-title.tag */ "./tags/tab/su-tab-title.tag");
@@ -4455,6 +4457,114 @@ this.isDisabled = function () {
 
 this.isRadio = function () {
   return !_this.root.classList.contains('slider');
+};
+});
+
+/***/ }),
+
+/***/ "./tags/rating/su-rating.tag":
+/*!***********************************!*\
+  !*** ./tags/rating/su-rating.tag ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+riot.tag2('su-rating', '<i class="icon {active: active} {selected: selected}" each="{items}" onclick="{click}" onmouseover="{mouseover}" onmouseout="{mouseout}"></i>', '', 'class="ui rating {opts.class}"', function(opts) {
+'use strict';
+
+var _this = this;
+
+this.items = [];
+
+this.on('mount', function () {
+  init(opts.max, opts.value);
+});
+
+this.on('update', function () {
+  updateView();
+});
+
+// ===================================================================================
+//                                                                               State
+//                                                                               =====
+this.reset = function () {
+  _this.value = _this.defaultValue;
+};
+
+this.changed = function () {
+  return _this.value != _this.defaultValue;
+};
+
+// ===================================================================================
+//                                                                               Event
+//                                                                               =====
+this.click = function (event) {
+  if (isReadOnly()) {
+    return;
+  }
+  var valueChanged = false;
+  var beforeValue = void 0;
+  if (_this.value != event.item.value) {
+    beforeValue = _this.value;
+    valueChanged = true;
+  }
+  _this.value = event.item.value;
+  updateView();
+  parentUpdate();
+  _this.trigger('click', event.item.value);
+  if (valueChanged) {
+    _this.trigger('change', { value: _this.value, beforeValue: beforeValue });
+  }
+};
+
+this.mouseover = function (event) {
+  if (isReadOnly()) {
+    return;
+  }
+  _this.items.forEach(function (item) {
+    item.selected = item.value <= event.item.value;
+  });
+};
+
+this.mouseout = function () {
+  _this.items.forEach(function (item) {
+    item.selected = false;
+  });
+};
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+var isReadOnly = function isReadOnly() {
+  return _this.root.classList.contains('read-only');
+};
+
+var init = function init() {
+  var max = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 5;
+  var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+  _this.value = value;
+  _this.defaultValue = value;
+  _this.items.length = 0;
+  for (var i = 0; i < max; i++) {
+    _this.items[i] = { value: i + 1, active: false, selected: false };
+  }
+  updateView();
+  parentUpdate();
+};
+
+var updateView = function updateView() {
+  _this.items.forEach(function (item) {
+    item.active = item.value <= _this.value;
+  });
+};
+
+var parentUpdate = function parentUpdate() {
+  if (_this.parent) {
+    _this.parent.update();
+  } else {
+    _this.update();
+  }
 };
 });
 
