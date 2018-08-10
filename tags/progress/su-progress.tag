@@ -56,7 +56,7 @@
     }
 
     this.isSuccess = () => {
-      return this.percent == 100
+      return this.percent == 100 || hasClass('success')
     }
 
     this.isProgress = () => {
