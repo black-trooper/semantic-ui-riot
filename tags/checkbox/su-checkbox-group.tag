@@ -26,21 +26,21 @@
       }
       checkboxes.forEach(radio => {
         initializeChild(radio)
+        updateState(radio)
       })
 
-      this.value = checkboxes.filter(checkbox => checkbox.checked).map(checkbox => checkbox.value)
       this.defaultValue = this.value
-      this.update()
+      parentUpdate()
     })
 
     this.on('update', () => {
       let changed = false
-      if (lastValue.toString() != this.value.toString()) {
+      if (normalizeValue(lastValue) != normalizeValue(this.value)) {
         opts.riotValue = this.value
         lastOptsValue = this.value
         lastValue = this.value
         changed = true
-      } else if (lastOptsValue.toString() != opts.riotValue.toString()) {
+      } else if (normalizeValue(lastOptsValue) != normalizeValue(opts.riotValue)) {
         this.value = opts.riotValue
         lastOptsValue = opts.riotValue
         lastValue = opts.riotValue
@@ -90,9 +90,27 @@
         if (!Array.isArray(checkboxes)) {
           checkboxes = [checkboxes]
         }
-        this.value = checkboxes.filter(checkbox => checkbox.checked).map(checkbox => checkbox.opts.value)
+        this.value = checkboxes.filter(_checkbox => _checkbox.checked).map(_checkbox => _checkbox.opts.value)
         this.update()
       })
+    }
+
+    const parentUpdate = () => {
+      if (this.parent) {
+        this.parent.update()
+      } else {
+        this.update()
+      }
+    }
+
+    const normalizeValue = value => {
+      if (typeof value === 'undefined') {
+        return value
+      }
+      if (!Array.isArray(value)) {
+        return [value].toString()
+      }
+      return value.toString()
     }
 
     const getCheckboxName = () => {
