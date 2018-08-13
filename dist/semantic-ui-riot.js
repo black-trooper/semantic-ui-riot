@@ -2911,6 +2911,9 @@ this.on('mount', function () {
   } else {
     _this.value = opts.riotValue;
   }
+  if (typeof _this.value !== 'undefined' && !Array.isArray(_this.value)) {
+    _this.value = _this.value.toString().split(/\s+/).join('').split(',');
+  }
   lastValue = _this.value;
   lastOptsValue = _this.value;
 
@@ -2918,9 +2921,9 @@ this.on('mount', function () {
   if (!Array.isArray(checkboxes)) {
     checkboxes = [checkboxes];
   }
-  checkboxes.forEach(function (radio) {
-    initializeChild(radio);
-    updateState(radio);
+  checkboxes.forEach(function (checkbox) {
+    initializeChild(checkbox);
+    updateState(checkbox);
   });
 
   _this.defaultValue = _this.value;
@@ -2940,14 +2943,17 @@ this.on('update', function () {
     lastValue = opts.riotValue;
     changed = true;
   }
+  if (typeof _this.value !== 'undefined' && !Array.isArray(_this.value)) {
+    _this.value = _this.value.toString().split(/\s+/).join('').split(',');
+  }
 
   if (changed) {
     var checkboxes = _this.tags['su-checkbox'];
     if (!Array.isArray(checkboxes)) {
       checkboxes = [checkboxes];
     }
-    checkboxes.forEach(function (radio) {
-      updateState(radio);
+    checkboxes.forEach(function (checkbox) {
+      updateState(checkbox);
     });
     _this.trigger('change', _this.value);
   }
@@ -2968,12 +2974,12 @@ this.changed = function () {
 //                                                                               Logic
 //                                                                               =====
 var updateState = function updateState(checkbox) {
-  if (typeof checkbox.opts.value === 'undefined') {
+  if (typeof checkbox.opts.value === 'undefined' || typeof _this.value === 'undefined') {
     return;
   }
-  checkbox.checked = Array.isArray(_this.value) ? _this.value.some(function (v) {
+  checkbox.checked = _this.value.some(function (v) {
     return v == checkbox.opts.value;
-  }) : _this.value == checkbox.opts.value;
+  });
   if (checkbox.checked) {
     _this.label = checkbox.root.getElementsByTagName('label')[0].innerText;
   }
@@ -2981,7 +2987,7 @@ var updateState = function updateState(checkbox) {
 
 var initializeChild = function initializeChild(checkbox) {
   checkbox.opts.name = getCheckboxName();
-  checkbox.on('click', function (value) {
+  checkbox.on('click', function () {
     var checkboxes = _this.tags['su-checkbox'];
     if (!Array.isArray(checkboxes)) {
       checkboxes = [checkboxes];
