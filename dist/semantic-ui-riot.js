@@ -2666,6 +2666,8 @@ __webpack_require__(/*! ../tags/alert/su-alert.tag */ "./tags/alert/su-alert.tag
 
 __webpack_require__(/*! ../tags/checkbox/su-checkbox.tag */ "./tags/checkbox/su-checkbox.tag");
 
+__webpack_require__(/*! ../tags/checkbox/su-checkbox-group.tag */ "./tags/checkbox/su-checkbox-group.tag");
+
 __webpack_require__(/*! ../tags/confirm/su-confirm.tag */ "./tags/confirm/su-confirm.tag");
 
 __webpack_require__(/*! ../tags/datepicker/su-datepicker.tag */ "./tags/datepicker/su-datepicker.tag");
@@ -2878,6 +2880,142 @@ riot.mixin({
     self.observable.trigger('showAlert', option);
   }
 });
+});
+
+/***/ }),
+
+/***/ "./tags/checkbox/su-checkbox-group.tag":
+/*!*********************************************!*\
+  !*** ./tags/checkbox/su-checkbox-group.tag ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+riot.tag2('su-checkbox-group', '<yield></yield>', '', '', function(opts) {
+'use strict';
+
+var _this = this;
+
+this.label = '';
+this.value = '';
+this.defaultValue = '';
+var lastValue = void 0;
+var lastOptsValue = void 0;
+
+this.on('mount', function () {
+  if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
+    opts.riotValue = opts.value;
+  }
+  if (_this.value) {
+    opts.riotValue = _this.value;
+  } else {
+    _this.value = opts.riotValue;
+  }
+  lastValue = _this.value;
+  lastOptsValue = _this.value;
+
+  var checkboxes = _this.tags['su-checkbox'];
+  if (!Array.isArray(checkboxes)) {
+    checkboxes = [checkboxes];
+  }
+  checkboxes.forEach(function (radio) {
+    initializeChild(radio);
+    updateState(radio);
+  });
+
+  _this.defaultValue = _this.value;
+  parentUpdate();
+});
+
+this.on('update', function () {
+  var changed = false;
+  if (normalizeValue(lastValue) != normalizeValue(_this.value)) {
+    opts.riotValue = _this.value;
+    lastOptsValue = _this.value;
+    lastValue = _this.value;
+    changed = true;
+  } else if (normalizeValue(lastOptsValue) != normalizeValue(opts.riotValue)) {
+    _this.value = opts.riotValue;
+    lastOptsValue = opts.riotValue;
+    lastValue = opts.riotValue;
+    changed = true;
+  }
+
+  if (changed) {
+    var checkboxes = _this.tags['su-checkbox'];
+    if (!Array.isArray(checkboxes)) {
+      checkboxes = [checkboxes];
+    }
+    checkboxes.forEach(function (radio) {
+      updateState(radio);
+    });
+    _this.trigger('change', _this.value);
+  }
+});
+
+// ===================================================================================
+//                                                                               State
+//                                                                               =====
+this.reset = function () {
+  _this.value = _this.defaultValue;
+};
+
+this.changed = function () {
+  return _this.value !== _this.defaultValue;
+};
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+var updateState = function updateState(checkbox) {
+  if (typeof checkbox.opts.value === 'undefined') {
+    return;
+  }
+  checkbox.checked = Array.isArray(_this.value) ? _this.value.some(function (v) {
+    return v == checkbox.opts.value;
+  }) : _this.value == checkbox.opts.value;
+  if (checkbox.checked) {
+    _this.label = checkbox.root.getElementsByTagName('label')[0].innerText;
+  }
+};
+
+var initializeChild = function initializeChild(checkbox) {
+  checkbox.opts.name = getCheckboxName();
+  checkbox.on('click', function (value) {
+    var checkboxes = _this.tags['su-checkbox'];
+    if (!Array.isArray(checkboxes)) {
+      checkboxes = [checkboxes];
+    }
+    _this.value = checkboxes.filter(function (_checkbox) {
+      return _checkbox.checked;
+    }).map(function (_checkbox) {
+      return _checkbox.opts.value;
+    });
+    _this.update();
+  });
+};
+
+var parentUpdate = function parentUpdate() {
+  if (_this.parent) {
+    _this.parent.update();
+  } else {
+    _this.update();
+  }
+};
+
+var normalizeValue = function normalizeValue(value) {
+  if (typeof value === 'undefined') {
+    return value;
+  }
+  if (!Array.isArray(value)) {
+    return [value].toString();
+  }
+  return value.toString();
+};
+
+var getCheckboxName = function getCheckboxName() {
+  return 'su-checkbox-name-' + _this._riot_id;
+};
 });
 
 /***/ }),
