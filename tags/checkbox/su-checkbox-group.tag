@@ -17,6 +17,9 @@
       } else {
         this.value = opts.riotValue
       }
+      if (typeof this.value !== 'undefined' && !Array.isArray(this.value)) {
+        this.value = this.value.toString().split(/\s+/).join('').split(',')
+      }
       lastValue = this.value
       lastOptsValue = this.value
 
@@ -46,6 +49,9 @@
         lastValue = opts.riotValue
         changed = true
       }
+      if (typeof this.value !== 'undefined' && !Array.isArray(this.value)) {
+        this.value = this.value.toString().split(/\s+/).join('').split(',')
+      }
 
       if (changed) {
         let checkboxes = this.tags['su-checkbox']
@@ -74,10 +80,10 @@
     //                                                                               Logic
     //                                                                               =====
     const updateState = checkbox => {
-      if (typeof checkbox.opts.value === 'undefined') {
+      if (typeof checkbox.opts.value === 'undefined' || typeof this.value === 'undefined') {
         return
       }
-      checkbox.checked = Array.isArray(this.value) ? this.value.some(v => v == checkbox.opts.value) : this.value == checkbox.opts.value
+      checkbox.checked = this.value.some(v => v == checkbox.opts.value)
       if (checkbox.checked) {
         this.label = checkbox.root.getElementsByTagName('label')[0].innerText
       }
