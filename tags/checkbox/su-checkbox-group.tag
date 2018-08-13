@@ -27,9 +27,9 @@
       if (!Array.isArray(checkboxes)) {
         checkboxes = [checkboxes]
       }
-      checkboxes.forEach(radio => {
-        initializeChild(radio)
-        updateState(radio)
+      checkboxes.forEach(checkbox => {
+        initializeChild(checkbox)
+        updateState(checkbox)
       })
 
       this.defaultValue = this.value
@@ -58,8 +58,8 @@
         if (!Array.isArray(checkboxes)) {
           checkboxes = [checkboxes]
         }
-        checkboxes.forEach(radio => {
-          updateState(radio)
+        checkboxes.forEach(checkbox => {
+          updateState(checkbox)
         })
         this.trigger('change', this.value)
       }
