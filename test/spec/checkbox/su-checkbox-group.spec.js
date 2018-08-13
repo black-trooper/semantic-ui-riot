@@ -52,6 +52,26 @@ describe('su-checkbox-group', function () {
     tag.tags['su-checkbox'][0].checked.should.equal(false)
     tag.tags['su-checkbox'][1].checked.should.equal(true)
     spyOnChange.should.have.been.calledTwice
+
+    tag.opts.riotValue = 1
+    tag.update()
+    tag.tags['su-checkbox'][0].checked.should.equal(true)
+    tag.tags['su-checkbox'][1].checked.should.equal(false)
+
+    tag.opts.riotValue = 2
+    tag.update()
+    tag.tags['su-checkbox'][0].checked.should.equal(false)
+    tag.tags['su-checkbox'][1].checked.should.equal(true)
+
+    tag.opts.riotValue = '1, 2'
+    tag.update()
+    tag.tags['su-checkbox'][0].checked.should.equal(true)
+    tag.tags['su-checkbox'][1].checked.should.equal(true)
+
+    tag.opts.riotValue = [1, 2]
+    tag.update()
+    tag.tags['su-checkbox'][0].checked.should.equal(true)
+    tag.tags['su-checkbox'][1].checked.should.equal(true)
   })
 
   it('click checkbox', function () {
