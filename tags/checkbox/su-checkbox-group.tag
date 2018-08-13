@@ -91,7 +91,7 @@
 
     const initializeChild = checkbox => {
       checkbox.opts.name = getCheckboxName()
-      checkbox.on('click', value => {
+      checkbox.on('click', () => {
         let checkboxes = this.tags['su-checkbox']
         if (!Array.isArray(checkboxes)) {
           checkboxes = [checkboxes]
