@@ -1,5 +1,5 @@
 <su-progress class="{ opts.class }">
-  <div class="ui { indicating : isIndicating() } progress { active: isActive() } { success: isSuccess() }" data-percent="{ percent }">
+  <div class="ui { indicating : isIndicating() } progress { getStates() }" data-percent="{ percent }">
     <div class="bar" style="transition-duration: 300ms; width: { percent }%;">
       <div if="{ isProgress() }" class="progress">{ percent }%</div>
     </div>
@@ -51,12 +51,16 @@
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
-    this.isActive = () => {
-      return hasClass('active') && this.percent > 0 && this.percent < 100
-    }
-
-    this.isSuccess = () => {
-      return this.percent == 100 || hasClass('success')
+    this.getStates = () => {
+      if (isWarning()) {
+        return 'warning'
+      }
+      if (isSuccess()) {
+        return 'success'
+      }
+      if (isActive()) {
+        return 'active'
+      }
     }
 
     this.isProgress = () => {
@@ -84,6 +88,18 @@
 
     const getPercent = () => {
       return parseInt(this.value / total * 100)
+    }
+
+    const isActive = () => {
+      return hasClass('active') && this.percent > 0 && this.percent < 100
+    }
+
+    const isSuccess = () => {
+      return this.percent == 100 || hasClass('success')
+    }
+
+    const isWarning = () => {
+      return hasClass('warning')
     }
 
     const hasClass = className => {
