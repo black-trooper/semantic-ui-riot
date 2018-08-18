@@ -52,6 +52,9 @@
     //                                                                              Helper
     //                                                                              ======
     this.getStates = () => {
+      if (isError()) {
+        return 'error'
+      }
       if (isWarning()) {
         return 'warning'
       }
@@ -100,6 +103,10 @@
 
     const isWarning = () => {
       return hasClass('warning')
+    }
+
+    const isError = () => {
+      return hasClass('error')
     }
 
     const hasClass = className => {
