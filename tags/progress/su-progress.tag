@@ -52,6 +52,9 @@
     //                                                                              Helper
     //                                                                              ======
     this.getStates = () => {
+      if (isDisabled()) {
+        return 'disabled'
+      }
       if (isError()) {
         return 'error'
       }
@@ -107,6 +110,10 @@
 
     const isError = () => {
       return hasClass('error')
+    }
+
+    const isDisabled = () => {
+      return hasClass('disabled')
     }
 
     const hasClass = className => {
