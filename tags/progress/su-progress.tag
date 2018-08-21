@@ -1,5 +1,5 @@
 <su-progress class="{ opts.class }">
-  <div class="ui { indicating : isIndicating() } progress { getStates() }" data-percent="{ percent }">
+  <div class="ui progress { getClass() } { getStates() }" data-percent="{ percent }">
     <div class="bar" style="transition-duration: 300ms; width: { percent }%;">
       <div if="{ isProgress() }" class="progress">{ percent }%</div>
     </div>
@@ -51,16 +51,14 @@
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
+    this.getClass = () => {
+      const excludeClasses = ['progress', 'active']
+      return Array.apply(null, this.root.classList).filter(clazz => {
+        return !excludeClasses.some(excludeClass => excludeClass == clazz)
+      }).join(' ')
+    }
+
     this.getStates = () => {
-      if (isDisabled()) {
-        return 'disabled'
-      }
-      if (isError()) {
-        return 'error'
-      }
-      if (isWarning()) {
-        return 'warning'
-      }
       if (isSuccess()) {
         return 'success'
       }
@@ -71,10 +69,6 @@
 
     this.isProgress = () => {
       return hasClass('progress')
-    }
-
-    this.isIndicating = () => {
-      return hasClass('indicating')
     }
 
     // ===================================================================================
@@ -101,19 +95,7 @@
     }
 
     const isSuccess = () => {
-      return this.percent == 100 || hasClass('success')
-    }
-
-    const isWarning = () => {
-      return hasClass('warning')
-    }
-
-    const isError = () => {
-      return hasClass('error')
-    }
-
-    const isDisabled = () => {
-      return hasClass('disabled')
+      return this.percent == 100
     }
 
     const hasClass = className => {
