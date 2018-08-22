@@ -8,6 +8,12 @@
     </div>
   </div>
 
+  <style>
+    .ui.progress:last-child {
+      margin: 0 0 2.5em;
+    }
+  </style>
+
   <script>
     this.value = null
     this.defaultValue = null
