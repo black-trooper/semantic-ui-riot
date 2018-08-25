@@ -12,6 +12,28 @@
     .ui.progress:last-child {
       margin: 0 0 2.5em;
     }
+
+    :scope.attached {
+      display: block;
+      height: 0.2rem;
+      padding: 0px;
+      overflow: hidden;
+      border-radius: 0em 0em 0.28571429rem 0.28571429rem;
+      position: absolute;
+      left: 0;
+      width: 100%;
+    }
+
+    :scope.top.attached {
+      top: 0px;
+      bottom: 100%;
+      border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+    }
+
+    :scope.bottom.attached {
+      top: 100%;
+      bottom: auto;
+    }
   </style>
 
   <script>
