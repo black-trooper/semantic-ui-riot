@@ -113,7 +113,7 @@
       if (tab.opts.class) {
         return
       }
-      let classList = ['segment']
+      let classList = hasClass('no-segment') ? [] : ['segment']
       if (hasClass('tabular')) {
         classList.push('tabular')
       }
