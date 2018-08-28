@@ -117,9 +117,9 @@ describe('su-tabset-options', function () {
 
   it('default active', function () {
     mount(`
-      <su-tabset>
+      <su-tabset active="Message">
         <su-tab title="Home">Home content</su-tab>
-        <su-tab title="Message" active="true">Messages content</su-tab>
+        <su-tab title="Message">Messages content</su-tab>
       </su-tabset>`)
 
     tag.tags['su-tab'][0].active.should.equal(false)

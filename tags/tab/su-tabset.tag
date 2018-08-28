@@ -1,14 +1,15 @@
 <su-tabset>
   <div class="ui { opts.class } { getClass() } menu" if="{ !isBottom() && !hasTitle() }">
-    <a each="{ tab, i in tabs }" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{ click.bind(this, i) }">{ tab.opts.title }</a>
+    <a each="{ tab, i in tabs }" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{ click }">{ tab.opts.title }</a>
   </div>
   <yield />
   <div class="ui { opts.class } { getClass() } menu" if="{ isBottom() && !hasTitle() }">
-    <a each="{ tab, i in tabs }" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{ click.bind(this, i) }">{ tab.opts.title }</a>
+    <a each="{ tab, i in tabs }" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{ click }">{ tab.opts.title }</a>
   </div>
 
   <script>
     this.tabs = []
+    let lastActive
 
     this.on('mount', () => {
       if (this.tags['su-tab-header']) {
@@ -20,35 +21,60 @@
       if (!Array.isArray(this.tabs)) {
         this.tabs = [this.tabs]
       }
-      let defaultActive = false
-      this.tabs.forEach(tab => {
-        initializeChild(tab)
-        if (tab.opts.active) {
-          defaultActive = true
-          tab.active = true
-        }
-      })
-      if (!defaultActive) {
+      if (typeof opts.active === 'undefined') {
         const titles = this.hasTitle()
         if (titles) {
-          titles[0].active = true
+          opts.active = titles[0].root.innerText.trim()
+        } else {
+          opts.active = this.tabs[0].opts.title
         }
-        this.tabs[0].active = true
       }
 
+      this.tabs.forEach(tab => {
+        initializeChild(tab)
+      })
+
       this.update()
+    })
+
+    this.on('update', () => {
+      if (lastActive != opts.active) {
+        lastActive = opts.active
+
+        const titles = this.hasTitle()
+        if (titles) {
+          let index
+          titles.forEach((title, i) => {
+            title.active = false
+            if (title.root.innerText.trim() === opts.active.trim()) {
+              title.active = true
+              index = i
+            }
+          })
+          this.tabs.forEach((tab, i) => {
+            tab.active = index == i
+          })
+        } else {
+          this.tabs.forEach(tab => {
+            tab.active = tab.opts.title == opts.active
+          })
+        }
+      }
     })
 
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
-    this.click = index => {
-      this.tabs.forEach(tab => {
-        tab.active = false
-      })
-      this.tabs[index].active = true
+    this.click = event => {
+      this.opts.active = event.item.tab.opts.title
       this.update()
-      this.trigger('click', this.tabs[index])
+      this.trigger('click', this.opts.active)
+    }
+
+    this.clickForTitle = title => {
+      this.opts.active = title
+      this.update()
+      this.trigger('click', this.opts.active)
     }
 
     // ===================================================================================
