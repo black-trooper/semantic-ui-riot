@@ -4733,35 +4733,15 @@ riot.tag2('su-tab-header', '<yield></yield>', '', 'class="ui {opts.class} menu"'
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-tab-title', '<a class="{opts.class} {active: active} item" onclick="{click}"> <yield></yield> </a>', '', '', function(opts) {
-'use strict';
+riot.tag2('su-tab-title', '<a class="{opts.class} {active: active} item" onclick="{click}" ref="item"> <yield></yield> </a>', '', '', function(opts) {
+"use strict";
 
 var _this = this;
 
 this.active = false;
-var index = 0;
-var tabs = void 0;
-this.on('mount', function () {
-  tabs = _this.parent.tags['su-tab-title'];
-
-  if (!Array.isArray(tabs)) {
-    tabs = [tabs];
-  }
-  tabs.forEach(function (tab, i) {
-    if (tab._riot_id == _this._riot_id) {
-      index = i;
-    }
-  });
-});
 
 this.click = function () {
-  tabs.forEach(function (tab) {
-    tab.active = false;
-  });
-  _this.parent.parent.click(index);
-  tabs[index].active = true;
-  _this.update();
-  _this.trigger('click', _this.parent.parent.tabs[index]);
+  _this.parent.parent.clickForTitle(_this.refs.item.innerText);
 };
 });
 
@@ -4800,12 +4780,13 @@ this.on('update', function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click.bind(this, i)}">{tab.opts.title}</a> </div> <yield></yield> <div class="ui {opts.class} {getClass()} menu" if="{isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click.bind(this, i)}">{tab.opts.title}</a> </div>', '', '', function(opts) {
+riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.title}</a> </div> <yield></yield> <div class="ui {opts.class} {getClass()} menu" if="{isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.title}</a> </div>', '', '', function(opts) {
 'use strict';
 
 var _this = this;
 
 this.tabs = [];
+var lastActive = void 0;
 
 this.on('mount', function () {
   if (_this.tags['su-tab-header']) {
@@ -4817,35 +4798,60 @@ this.on('mount', function () {
   if (!Array.isArray(_this.tabs)) {
     _this.tabs = [_this.tabs];
   }
-  var defaultActive = false;
-  _this.tabs.forEach(function (tab) {
-    initializeChild(tab);
-    if (tab.opts.active) {
-      defaultActive = true;
-      tab.active = true;
-    }
-  });
-  if (!defaultActive) {
+  if (typeof opts.active === 'undefined') {
     var titles = _this.hasTitle();
     if (titles) {
-      titles[0].active = true;
+      opts.active = titles[0].root.innerText.trim();
+    } else {
+      opts.active = _this.tabs[0].opts.title;
     }
-    _this.tabs[0].active = true;
   }
 
+  _this.tabs.forEach(function (tab) {
+    initializeChild(tab);
+  });
+
   _this.update();
+});
+
+this.on('update', function () {
+  if (lastActive != opts.active) {
+    lastActive = opts.active;
+
+    var titles = _this.hasTitle();
+    if (titles) {
+      var index = void 0;
+      titles.forEach(function (title, i) {
+        title.active = false;
+        if (title.root.innerText.trim() === opts.active.trim()) {
+          title.active = true;
+          index = i;
+        }
+      });
+      _this.tabs.forEach(function (tab, i) {
+        tab.active = index == i;
+      });
+    } else {
+      _this.tabs.forEach(function (tab) {
+        tab.active = tab.opts.title == opts.active;
+      });
+    }
+  }
 });
 
 // ===================================================================================
 //                                                                               Event
 //                                                                               =====
-this.click = function (index) {
-  _this.tabs.forEach(function (tab) {
-    tab.active = false;
-  });
-  _this.tabs[index].active = true;
+this.click = function (event) {
+  _this.opts.active = event.item.tab.opts.title;
   _this.update();
-  _this.trigger('click', _this.tabs[index]);
+  _this.trigger('click', _this.opts.active);
+};
+
+this.clickForTitle = function (title) {
+  _this.opts.active = title;
+  _this.update();
+  _this.trigger('click', _this.opts.active);
 };
 
 // ===================================================================================
@@ -4884,7 +4890,7 @@ var initializeChild = function initializeChild(tab) {
   if (tab.opts.class) {
     return;
   }
-  var classList = ['segment'];
+  var classList = hasClass('no-segment') ? [] : ['segment'];
   if (hasClass('tabular')) {
     classList.push('tabular');
   }
