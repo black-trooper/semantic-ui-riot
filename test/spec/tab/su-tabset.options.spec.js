@@ -24,6 +24,17 @@ describe('su-tabset-options', function () {
     tag.tags['su-tab'][1].root.classList.contains('segment').should.equal(false)
   })
 
+  it('no segment', function () {
+    mount(`
+      <su-tabset class="no-segment">
+        <su-tab title="Home">Home content</su-tab>
+        <su-tab title="Message">Messages content</su-tab>
+      </su-tabset>`)
+
+    tag.tags['su-tab'][0].root.classList.contains('segment').should.equal(false)
+    tag.tags['su-tab'][1].root.classList.contains('segment').should.equal(false)
+  })
+
   it('top tabular', function () {
     mount(`
       <su-tabset class="top tabular">
