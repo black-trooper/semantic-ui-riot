@@ -9,7 +9,8 @@
 
   <script>
     this.tabs = []
-    let lastActive
+    let lastOptsActive, lastActive, active
+
 
     this.on('mount', () => {
       if (this.tags['su-tab-header']) {
@@ -38,15 +39,24 @@
     })
 
     this.on('update', () => {
-      if (lastActive != opts.active) {
-        lastActive = opts.active
+      let changed = false
+      if (lastOptsActive != opts.active) {
+        lastOptsActive = opts.active
+        active = opts.active
+        changed = true
+      }
+      if (lastActive != active) {
+        lastActive = active
+        changed = true
+      }
 
+      if (changed) {
         const titles = this.hasTitle()
         if (titles) {
           let index
           titles.forEach((title, i) => {
             title.active = false
-            if (title.root.innerText.trim() === opts.active.trim()) {
+            if (title.root.innerText.trim() === active.trim()) {
               title.active = true
               index = i
             }
@@ -56,7 +66,7 @@
           })
         } else {
           this.tabs.forEach(tab => {
-            tab.active = tab.opts.title == opts.active
+            tab.active = tab.opts.title == active
           })
         }
       }
@@ -66,15 +76,15 @@
     //                                                                               Event
     //                                                                               =====
     this.click = event => {
-      this.opts.active = event.item.tab.opts.title
+      active = event.item.tab.opts.title
       this.update()
-      this.trigger('click', this.opts.active)
+      this.trigger('click', active)
     }
 
     this.clickForTitle = title => {
-      this.opts.active = title
+      active = title
       this.update()
-      this.trigger('click', this.opts.active)
+      this.trigger('click', active)
     }
 
     // ===================================================================================

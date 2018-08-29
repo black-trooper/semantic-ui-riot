@@ -4786,7 +4786,9 @@ riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isB
 var _this = this;
 
 this.tabs = [];
-var lastActive = void 0;
+var lastOptsActive = void 0,
+    lastActive = void 0,
+    active = void 0;
 
 this.on('mount', function () {
   if (_this.tags['su-tab-header']) {
@@ -4815,15 +4817,24 @@ this.on('mount', function () {
 });
 
 this.on('update', function () {
-  if (lastActive != opts.active) {
-    lastActive = opts.active;
+  var changed = false;
+  if (lastOptsActive != opts.active) {
+    lastOptsActive = opts.active;
+    active = opts.active;
+    changed = true;
+  }
+  if (lastActive != active) {
+    lastActive = active;
+    changed = true;
+  }
 
+  if (changed) {
     var titles = _this.hasTitle();
     if (titles) {
       var index = void 0;
       titles.forEach(function (title, i) {
         title.active = false;
-        if (title.root.innerText.trim() === opts.active.trim()) {
+        if (title.root.innerText.trim() === active.trim()) {
           title.active = true;
           index = i;
         }
@@ -4833,7 +4844,7 @@ this.on('update', function () {
       });
     } else {
       _this.tabs.forEach(function (tab) {
-        tab.active = tab.opts.title == opts.active;
+        tab.active = tab.opts.title == active;
       });
     }
   }
@@ -4843,15 +4854,15 @@ this.on('update', function () {
 //                                                                               Event
 //                                                                               =====
 this.click = function (event) {
-  _this.opts.active = event.item.tab.opts.title;
+  active = event.item.tab.opts.title;
   _this.update();
-  _this.trigger('click', _this.opts.active);
+  _this.trigger('click', active);
 };
 
 this.clickForTitle = function (title) {
-  _this.opts.active = title;
+  active = title;
   _this.update();
-  _this.trigger('click', _this.opts.active);
+  _this.trigger('click', active);
 };
 
 // ===================================================================================
