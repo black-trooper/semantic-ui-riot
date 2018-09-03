@@ -1,7 +1,7 @@
 <su-toast class="{ opts.position }">
   <div class="ui list">
-    <div class="item" each="{ item in items }">
-      <div class="ui { icon: item.icon } { item.class } floating compact message right floated" if="{ !item.hide }">
+    <div class="item" each="{ item in items }" if="{ !item.hide }">
+      <div class="ui { icon: item.icon } { item.class } floating compact message { right: isRight() } floated">
         <i class="close icon" onclick="{ close }"></i>
         <i class="{ item.icon } icon" if="{ item.icon }"></i>
         <div class="content">
@@ -26,7 +26,7 @@
     }
 
     :scope.left {
-      left: 300px;
+      left: 0;
     }
 
     :scope.top {
@@ -56,28 +56,6 @@
     .ui.icon.message {
       width: auto !important;
     }
-
-    .ui.warning.message {
-      -webkit-box-shadow: 0 0 0 1px #c9ba9b inset, 0 2px 4px 0 rgba(34, 36, 38, .12), 0 2px 10px 0 rgba(34, 36, 38, .15);
-      box-shadow: 0 0 0 1px #c9ba9b inset, 0 2px 4px 0 rgba(34, 36, 38, .12), 0 2px 10px 0 rgba(34, 36, 38, .15);
-    }
-
-    .ui.info.message {
-      -webkit-box-shadow: 0 0 0 1px #a9d5de inset, 0 2px 4px 0 rgba(34, 36, 38, .12), 0 2px 10px 0 rgba(34, 36, 38, .15);
-      box-shadow: 0 0 0 1px #a9d5de inset, 0 2px 4px 0 rgba(34, 36, 38, .12), 0 2px 10px 0 rgba(34, 36, 38, .15);
-    }
-
-    .ui.positive.message,
-    .ui.success.message {
-      -webkit-box-shadow: 0 0 0 1px #a3c293 inset, 0 2px 4px 0 rgba(34, 36, 38, .12), 0 2px 10px 0 rgba(34, 36, 38, .15);
-      box-shadow: 0 0 0 1px #a3c293 inset, 0 2px 4px 0 rgba(34, 36, 38, .12), 0 2px 10px 0 rgba(34, 36, 38, .15);
-    }
-
-    .ui.negative.message,
-    .ui.error.message {
-      -webkit-box-shadow: 0 0 0 1px #e0b4b4 inset, 0 2px 4px 0 rgba(34, 36, 38, .12), 0 2px 10px 0 rgba(34, 36, 38, .15);
-      box-shadow: 0 0 0 1px #e0b4b4 inset, 0 2px 4px 0 rgba(34, 36, 38, .12), 0 2px 10px 0 rgba(34, 36, 38, .15);
-    }
   </style>
 
   <script>
@@ -95,6 +73,10 @@
     this.close = target => {
       target.item.item.hide = true
       this.update()
+    }
+
+    this.isRight = () => {
+      return opts.position.indexOf('right') >= 0
     }
 
     // ===================================================================================
