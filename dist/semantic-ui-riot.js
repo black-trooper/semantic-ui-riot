@@ -2694,6 +2694,8 @@ __webpack_require__(/*! ../tags/tab/su-tab.tag */ "./tags/tab/su-tab.tag");
 
 __webpack_require__(/*! ../tags/tab/su-tabset.tag */ "./tags/tab/su-tabset.tag");
 
+__webpack_require__(/*! ../tags/toast/su-toast.tag */ "./tags/toast/su-toast.tag");
+
 var _q = __webpack_require__(/*! q */ "./node_modules/q/q.js");
 
 var _q2 = _interopRequireDefault(_q);
@@ -4937,6 +4939,88 @@ var getTitleClass = function getTitleClass() {
 var hasClass = function hasClass(className) {
   return _this.root.classList.contains(className);
 };
+});
+
+/***/ }),
+
+/***/ "./tags/toast/su-toast.tag":
+/*!*********************************!*\
+  !*** ./tags/toast/su-toast.tag ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+riot.tag2('su-toast', '<div class="ui list"> <div class="item" each="{item in items}" if="{!item.hide}"> <div class="ui {icon: item.icon} {item.class} floating compact message {right: isRight()} floated"> <i class="close icon" onclick="{close}"></i> <i class="{item.icon} icon" if="{item.icon}"></i> <div class="content"> <div class="header" if="{item.title}"> {item.title} </div> <p each="{message in item.messages}">{message}</p> </div> </div> </div> </div>', 'su-toast,[data-is="su-toast"]{ position: fixed; padding: 1rem; z-index: 3000; } su-toast.right,[data-is="su-toast"].right{ right: 0; } su-toast.left,[data-is="su-toast"].left{ left: 0; } su-toast.top,[data-is="su-toast"].top{ top: 0; } su-toast.bottom,[data-is="su-toast"].bottom{ bottom: 0; } su-toast.middle,[data-is="su-toast"].middle{ top: 50%; margin-top: -35px; } su-toast.center,[data-is="su-toast"].center{ left: 50%; margin-left: 150px; } su-toast .ui.message,[data-is="su-toast"] .ui.message{ min-width: 20rem; position: relative; padding-right: 2.5rem; } su-toast .ui.icon.message,[data-is="su-toast"] .ui.icon.message{ width: auto !important; }', 'class="{opts.position}"', function(opts) {
+'use strict';
+
+var _this = this;
+
+var self = this;
+this.mixin('semantic-ui');
+this.items = [];
+
+this.on('mount', function () {
+  if (!opts.position) {
+    opts.position = 'bottom right';
+  }
+  _this.update();
+});
+
+this.close = function (target) {
+  target.item.item.hide = true;
+  _this.update();
+};
+
+this.isRight = function () {
+  return opts.position.indexOf('right') >= 0;
+};
+
+// ===================================================================================
+//                                                                          Observable
+//                                                                          ==========
+this.observable.on('showToast', function (option) {
+  _this.items.push({
+    title: option.title,
+    messages: Array.isArray(option.message) ? option.message : [option.message],
+    icon: option.icon,
+    class: option.class
+  });
+  _this.update();
+
+  setTimeout(function () {
+    _this.items.shift();
+    _this.update();
+  }, 3000);
+});
+
+riot.mixin({
+  suToast: function suToast(param) {
+    var option = {
+      title: null,
+      message: null,
+      icon: null,
+      class: null
+    };
+
+    if (typeof param === 'string') {
+      option.message = param;
+    } else if (param) {
+      if (param.title) {
+        option.title = param.title;
+      }
+      if (param.message) {
+        option.message = param.message;
+      }
+      if (param.icon) {
+        option.icon = param.icon;
+      }
+      if (param.class) {
+        option.class = param.class;
+      }
+    }
+    self.observable.trigger('showToast', option);
+  }
+});
 });
 
 /***/ })
