@@ -2696,6 +2696,8 @@ __webpack_require__(/*! ../tags/tab/su-tabset.tag */ "./tags/tab/su-tabset.tag")
 
 __webpack_require__(/*! ../tags/toast/su-toast.tag */ "./tags/toast/su-toast.tag");
 
+__webpack_require__(/*! ../tags/toast/su-toast-item.tag */ "./tags/toast/su-toast-item.tag");
+
 var _q = __webpack_require__(/*! q */ "./node_modules/q/q.js");
 
 var _q2 = _interopRequireDefault(_q);
@@ -4943,6 +4945,58 @@ var hasClass = function hasClass(className) {
 
 /***/ }),
 
+/***/ "./tags/toast/su-toast-item.tag":
+/*!**************************************!*\
+  !*** ./tags/toast/su-toast-item.tag ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+riot.tag2('su-toast-item', '<div class="ui {icon: icon} {class} floating compact message {position} floated" if="{!hide}"> <i class="close icon" onclick="{close}"></i> <i class="{icon} icon" if="{icon}"></i> <div class="content"> <div class="header" if="{title}"> {title} </div> <p each="{message in messages}">{message}</p> </div> </div>', '', 'class="item {transition}"', function(opts) {
+'use strict';
+
+var _this = this;
+
+this.on('mount', function () {
+  _this.position = _this.isRight() ? 'right' : 'left';
+  var direction = _this.isRight() ? 'left' : 'right';
+  _this.icon = opts.item.icon;
+  _this.class = opts.item.class;
+  _this.transition = 'transition animating in fade ' + direction;
+  _this.title = opts.item.title;
+  _this.messages = opts.item.messages;
+  _this.update();
+
+  setTimeout(function () {
+    _this.transition = '';
+    _this.update();
+  }, 300);
+
+  setTimeout(function () {
+    _this.transition = 'transition animating out fade ' + direction;
+    _this.update();
+  }, 3000);
+
+  setTimeout(function () {
+    _this.transition = 'transition hidden';
+    _this.hide = true;
+    _this.update();
+  }, 3500);
+});
+
+this.close = function () {
+  console.log('close');
+  _this.hide = true;
+  _this.update();
+};
+
+this.isRight = function () {
+  return opts.position.indexOf('right') >= 0;
+};
+});
+
+/***/ }),
+
 /***/ "./tags/toast/su-toast.tag":
 /*!*********************************!*\
   !*** ./tags/toast/su-toast.tag ***!
@@ -4950,7 +5004,7 @@ var hasClass = function hasClass(className) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-toast', '<div class="ui list"> <div class="item" each="{item in items}" if="{!item.hide}"> <div class="ui {icon: item.icon} {item.class} floating compact message {right: isRight()} floated"> <i class="close icon" onclick="{close}"></i> <i class="{item.icon} icon" if="{item.icon}"></i> <div class="content"> <div class="header" if="{item.title}"> {item.title} </div> <p each="{message in item.messages}">{message}</p> </div> </div> </div> </div>', 'su-toast,[data-is="su-toast"]{ position: fixed; padding: 1rem; z-index: 3000; } su-toast.right,[data-is="su-toast"].right{ right: 0; } su-toast.left,[data-is="su-toast"].left{ left: 0; } su-toast.top,[data-is="su-toast"].top{ top: 0; } su-toast.bottom,[data-is="su-toast"].bottom{ bottom: 0; } su-toast.middle,[data-is="su-toast"].middle{ top: 50%; margin-top: -35px; } su-toast.center,[data-is="su-toast"].center{ left: 50%; margin-left: 150px; } su-toast .ui.message,[data-is="su-toast"] .ui.message{ min-width: 20rem; position: relative; padding-right: 2.5rem; } su-toast .ui.icon.message,[data-is="su-toast"] .ui.icon.message{ width: auto !important; }', 'class="{opts.position}"', function(opts) {
+riot.tag2('su-toast', '<div class="ui list"> <su-toast-item each="{item in items}" item="{item}" position="{parent.opts.position}"></su-toast-item> </div>', 'su-toast,[data-is="su-toast"]{ position: fixed; padding: 1rem; z-index: 3000; } su-toast.right,[data-is="su-toast"].right{ right: 0; } su-toast.left,[data-is="su-toast"].left{ left: 0; } su-toast.top,[data-is="su-toast"].top{ top: 0; } su-toast.bottom,[data-is="su-toast"].bottom{ bottom: 0; } su-toast.middle,[data-is="su-toast"].middle{ top: 50%; margin-top: -35px; } su-toast.center,[data-is="su-toast"].center{ left: 50%; margin-left: 150px; } su-toast .ui.message,[data-is="su-toast"] .ui.message{ min-width: 20rem; position: relative; padding-right: 2.5rem; } su-toast .ui.icon.message,[data-is="su-toast"] .ui.icon.message{ width: auto !important; }', 'class="{opts.position}"', function(opts) {
 'use strict';
 
 var _this = this;
@@ -4966,31 +5020,23 @@ this.on('mount', function () {
   _this.update();
 });
 
-this.close = function (target) {
-  target.item.item.hide = true;
-  _this.update();
-};
-
-this.isRight = function () {
-  return opts.position.indexOf('right') >= 0;
-};
-
 // ===================================================================================
 //                                                                          Observable
 //                                                                          ==========
 this.observable.on('showToast', function (option) {
-  _this.items.push({
+  var item = {
     title: option.title,
     messages: Array.isArray(option.message) ? option.message : [option.message],
     icon: option.icon,
     class: option.class
-  });
+  };
+  _this.items.push(item);
   _this.update();
 
   setTimeout(function () {
     _this.items.shift();
     _this.update();
-  }, 3000);
+  }, 5000);
 });
 
 riot.mixin({
