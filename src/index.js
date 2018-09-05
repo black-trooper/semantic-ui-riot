@@ -17,6 +17,7 @@ import '../tags/tab/su-tab-title.tag'
 import '../tags/tab/su-tab.tag'
 import '../tags/tab/su-tabset.tag'
 import '../tags/toast/su-toast.tag'
+import '../tags/toast/su-toast-item.tag'
 import Q from 'q'
 
 export default function (_options) {

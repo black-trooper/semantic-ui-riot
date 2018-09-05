@@ -35,7 +35,7 @@ describe('su-toast', function () {
     tag.items[0].messages[0].should.equal('hello')
     $('su-toast .item').length.should.equal(1)
 
-    this.clock.tick(3010)
+    this.clock.tick(5010)
     $('su-toast .item').length.should.equal(0)
   })
 
@@ -46,9 +46,11 @@ describe('su-toast', function () {
     app.suToast('hello')
     tag.items[0].messages[0].should.equal('hello')
     $('su-toast .item').length.should.equal(1)
+    $('su-toast .ui.message').length.should.equal(1)
 
     $('su-toast .item:first .icon.close').click()
-    $('su-toast .item').length.should.equal(0)
+    $('su-toast .item').length.should.equal(1)
+    $('su-toast .ui.message').length.should.equal(0)
   })
 
   it('all option', function () {

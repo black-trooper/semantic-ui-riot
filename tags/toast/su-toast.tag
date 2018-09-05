@@ -1,17 +1,6 @@
 <su-toast class="{ opts.position }">
   <div class="ui list">
-    <div class="item" each="{ item in items }" if="{ !item.hide }">
-      <div class="ui { icon: item.icon } { item.class } floating compact message { right: isRight() } floated">
-        <i class="close icon" onclick="{ close }"></i>
-        <i class="{ item.icon } icon" if="{ item.icon }"></i>
-        <div class="content">
-          <div class="header" if="{ item.title }">
-            { item.title }
-          </div>
-          <p each="{ message in item.messages }">{ message }</p>
-        </div>
-      </div>
-    </div>
+    <su-toast-item each="{ item in items }" item="{ item }" position="{ parent.opts.position }"></su-toast-item>
   </div>
 
   <style>
@@ -70,31 +59,23 @@
       this.update()
     })
 
-    this.close = target => {
-      target.item.item.hide = true
-      this.update()
-    }
-
-    this.isRight = () => {
-      return opts.position.indexOf('right') >= 0
-    }
-
     // ===================================================================================
     //                                                                          Observable
     //                                                                          ==========
     this.observable.on('showToast', option => {
-      this.items.push({
+      const item = {
         title: option.title,
         messages: Array.isArray(option.message) ? option.message : [option.message],
         icon: option.icon,
-        class: option.class,
-      })
+        class: option.class
+      }
+      this.items.push(item)
       this.update()
 
       setTimeout(() => {
         this.items.shift()
         this.update()
-      }, 3000)
+      }, 5000)
     })
 
     riot.mixin({

@@ -1,4 +1,4 @@
-describe('su-toast', function () {
+describe('su-toast-options', function () {
   let tag
   let app
   let mount = opts => {
