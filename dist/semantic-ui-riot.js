@@ -4985,7 +4985,6 @@ this.on('mount', function () {
 });
 
 this.close = function () {
-  console.log('close');
   _this.hide = true;
   _this.update();
 };

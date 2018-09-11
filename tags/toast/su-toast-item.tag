@@ -39,7 +39,6 @@
     })
 
     this.close = () => {
-      console.log('close')
       this.hide = true
       this.update()
     }
