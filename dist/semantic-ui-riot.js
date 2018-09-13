@@ -2680,6 +2680,8 @@ __webpack_require__(/*! ../tags/modal/su-modal.tag */ "./tags/modal/su-modal.tag
 
 __webpack_require__(/*! ../tags/popup/su-popup.tag */ "./tags/popup/su-popup.tag");
 
+__webpack_require__(/*! ../tags/progress/su-progress.tag */ "./tags/progress/su-progress.tag");
+
 __webpack_require__(/*! ../tags/radio/su-radio-group.tag */ "./tags/radio/su-radio-group.tag");
 
 __webpack_require__(/*! ../tags/radio/su-radio.tag */ "./tags/radio/su-radio.tag");
@@ -4420,6 +4422,116 @@ this.getId = function () {
 });
 
 riot.tag2('su-popup-content', '', '', '', function(opts) {
+});
+
+/***/ }),
+
+/***/ "./tags/progress/su-progress.tag":
+/*!***************************************!*\
+  !*** ./tags/progress/su-progress.tag ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+riot.tag2('su-progress', '<div class="ui progress {getClass()} {getStates()}" data-percent="{percent}"> <div class="bar" riot-style="transition-duration: 300ms; width: {percent}%;"> <div if="{isProgress()}" class="progress">{percent}%</div> </div> <div class="label"> <yield></yield> </div> </div>', 'su-progress .ui.progress:last-child,[data-is="su-progress"] .ui.progress:last-child{ margin: 0 0 2.5em; } su-progress.attached,[data-is="su-progress"].attached{ display: block; height: 0.2rem; padding: 0px; overflow: hidden; border-radius: 0em 0em 0.28571429rem 0.28571429rem; position: absolute; left: 0; width: 100%; } su-progress.top.attached,[data-is="su-progress"].top.attached{ top: 0px; bottom: 100%; border-radius: 0.28571429rem 0.28571429rem 0em 0em; } su-progress.bottom.attached,[data-is="su-progress"].bottom.attached{ top: 100%; bottom: auto; }', 'class="{opts.class}"', function(opts) {
+'use strict';
+
+var _this = this;
+
+this.value = null;
+this.defaultValue = null;
+var total = 100;
+var lastValue = null;
+var lastOptsValue = null;
+
+this.on('mount', function () {
+  if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
+    opts.riotValue = opts.value;
+  }
+  init(opts.riotValue, opts.total);
+
+  _this.update();
+  _this.defaultValue = _this.value;
+});
+
+this.on('update', function () {
+  var changed = false;
+  if (_this.value >= total) {
+    _this.value = total;
+  }
+  if (_this.value <= 0) {
+    _this.value = 0;
+  }
+  if (lastValue != _this.value) {
+    lastValue = _this.value;
+    changed = true;
+  } else if (lastOptsValue != opts.riotValue) {
+    _this.value = opts.riotValue;
+    lastOptsValue = opts.riotValue;
+    lastValue = opts.riotValue;
+    changed = true;
+  }
+
+  if (changed) {
+    _this.percent = getPercent();
+  }
+});
+
+// ===================================================================================
+//                                                                              Helper
+//                                                                              ======
+this.getClass = function () {
+  var excludeClasses = ['progress', 'active'];
+  return Array.apply(null, _this.root.classList).filter(function (clazz) {
+    return !excludeClasses.some(function (excludeClass) {
+      return excludeClass == clazz;
+    });
+  }).join(' ');
+};
+
+this.getStates = function () {
+  if (isSuccess()) {
+    return 'success';
+  }
+  if (isActive()) {
+    return 'active';
+  }
+};
+
+this.isProgress = function () {
+  return hasClass('progress');
+};
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+var init = function init(optsValue, optsTotal) {
+  if (_this.value == null) {
+    _this.value = optsValue || 0;
+  }
+  if (optsTotal > 0) {
+    total = optsTotal;
+  }
+  _this.percent = getPercent();
+  lastValue = _this.value;
+  lastOptsValue = optsValue;
+};
+
+var getPercent = function getPercent() {
+  return parseInt(_this.value / total * 100);
+};
+
+var isActive = function isActive() {
+  return hasClass('active') && _this.percent > 0 && _this.percent < 100;
+};
+
+var isSuccess = function isSuccess() {
+  return _this.percent == 100;
+};
+
+var hasClass = function hasClass(className) {
+  return _this.root.classList.contains(className);
+};
 });
 
 /***/ }),
