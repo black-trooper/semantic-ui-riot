@@ -67,7 +67,7 @@ describe('su-progress', function () {
     $('su-progress .ui.progress').hasClass('active').should.equal(false)
   })
 
-  it('active', function () {
+  it('active option', function () {
     mount('<su-progress>Uploading Files</su-progress>', {
       class: 'progress active'
     })
@@ -90,5 +90,26 @@ describe('su-progress', function () {
     $('su-progress .ui.progress').hasClass('active').should.equal(false)
   })
 
+  it('total option', function () {
+    mount('<su-progress>Uploading Files</su-progress>', {
+      total: '200'
+    })
+    $('su-progress .ui.progress > .label').text().trim().should.equal('Uploading Files')
+    $('su-progress .ui.progress').hasClass('success').should.equal(false)
+    $('su-progress .ui.progress').hasClass('active').should.equal(false)
+    tag.percent.should.equal(0)
+
+    tag.value = 100
+    tag.update()
+    tag.percent.should.equal(50)
+    $('su-progress .ui.progress').hasClass('success').should.equal(false)
+    $('su-progress .ui.progress').hasClass('active').should.equal(false)
+
+    tag.value = 200
+    tag.update()
+    tag.percent.should.equal(100)
+    $('su-progress .ui.progress').hasClass('success').should.equal(true)
+    $('su-progress .ui.progress').hasClass('active').should.equal(false)
+  })
 
 })
