@@ -1,5 +1,5 @@
 <su-accordion>
-  <div class="title { active: active }" click="{ click }">
+  <div class="title { active: active }" onclick="{ click }">
     <i class="dropdown icon"></i>
     { opts.title }
   </div>

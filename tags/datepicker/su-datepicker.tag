@@ -3,7 +3,7 @@
     <div class="ui action input { disabled: isDisabled() }" if="{ opts.popup }">
       <input type="text" placeholder="{ opts.placeholder }" ref="input" tabindex="{ getTabindex() }" readonly="{ isReadOnly() }"
       />
-      <button class="ui icon button { disabled: isDisabled() }" click="{ toggle }" onblur="{ blur }">
+      <button class="ui icon button { disabled: isDisabled() }" onclick="{ toggle }" onblur="{ blur }">
         <i class="calendar icon"></i>
       </button>
     </div>
@@ -11,12 +11,12 @@
       <div class="ui compact segments">
         <div class="ui center aligned secondary segment">
           <div class="ui buttons dp-navigation">
-            <button class="icon tiny ui button { disabled: isDisabled() } prev" click="{ clickPrevious }">
+            <button class="icon tiny ui button { disabled: isDisabled() } prev" onclick="{ clickPrevious }">
                 <i class="chevron left icon"></i>
               </button>
-            <button class="ui button { disabled: isDisabled() } month" click="{ selectMonth }">{ getCurrentMonthView() }</button>
-            <button class="ui button { disabled: isDisabled() } year" click="{ selectYear }">{ getCurrentYear() }</button>
-            <button class="icon tiny ui button { disabled: isDisabled() } next" click="{ clickNext }">
+            <button class="ui button { disabled: isDisabled() } month" onclick="{ selectMonth }">{ getCurrentMonthView() }</button>
+            <button class="ui button { disabled: isDisabled() } year" onclick="{ selectYear }">{ getCurrentYear() }</button>
+            <button class="icon tiny ui button { disabled: isDisabled() } next" onclick="{ clickNext }">
                   <i class="chevron right icon"></i>
                 </button>
           </div>
@@ -28,26 +28,26 @@
           <div each="{week in weeks}" class="dp-wrapper">
             <div each="{day in week.days}" class="dp-day">
               <button class="ui button { today: isToday(day) } { primary: isActive(day) } { non-active: !isActive(day) } { disabled: day.getMonth() != getCurrentMonth() || isDisabled() }"
-                click="{ clickDay }">{day.getDate()}</button>
+                onclick="{ clickDay }">{day.getDate()}</button>
             </div>
           </div>
         </div>
         <div class="ui center aligned segment" if="{ !yearSelecting && !monthSelecting }">
           <div class="ui two column grid">
             <div class="column dp-clear">
-              <button type="button" class="ui icon fluid button {disabled : isDisabled()}" click="{ clickClear }"><i class="times icon"></i></button></div>
+              <button type="button" class="ui icon fluid button {disabled : isDisabled()}" onclick="{ clickClear }"><i class="times icon"></i></button></div>
             <div class="column dp-today">
-              <button type="button" class="ui icon fluid button {disabled : isDisabled()}" click="{ clickToday }"><i class="calendar check icon"></i></button></div>
+              <button type="button" class="ui icon fluid button {disabled : isDisabled()}" onclick="{ clickToday }"><i class="calendar check icon"></i></button></div>
           </div>
         </div>
         <div class="ui center aligned segment" if="{ monthSelecting }">
           <div each="{ element in months }" class="dp-wrapper">
-            <div each="{ month in element}" class="dp-month"><button class="ui button {disabled : isDisabled()}" click="{ clickMonth }">{month.label}</button></div>
+            <div each="{ month in element}" class="dp-month"><button class="ui button {disabled : isDisabled()}" onclick="{ clickMonth }">{month.label}</button></div>
           </div>
         </div>
         <div class="ui center aligned segment" if="{ yearSelecting }">
           <div each="{ element in years }" class="dp-wrapper">
-            <div each="{ year in element}" class="dp-month"><button class="ui button {disabled : isDisabled()}" click="{ clickYear }">{year}</button></div>
+            <div each="{ year in element}" class="dp-month"><button class="ui button {disabled : isDisabled()}" onclick="{ clickYear }">{year}</button></div>
           </div>
         </div>
       </div>
