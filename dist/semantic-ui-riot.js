@@ -3320,6 +3320,7 @@ var _this = this;
 
 this.weeks = [];
 this.value = null;
+this.valueAsDate = null;
 this.defaultValue = null;
 this.transitionStatus = opts.popup ? 'hidden' : 'visible';
 var visibleFlg = false;
@@ -3335,37 +3336,43 @@ this.on('mount', function () {
   if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
     opts.riotValue = opts.value;
   }
-  if (!_this.value) {
-    _this.value = copyDate(opts.riotValue);
+  if (!_this.valueAsDate) {
+    _this.valueAsDate = copyDate(_this.value || opts.riotValue);
   }
-  lastValue = copyDate(_this.value);
+  setValueFromValueAsDate();
+  lastValue = copyDate(_this.valueAsDate);
   lastOptsValue = copyDate(opts.riotValue);
 
-  if (_this.value) {
-    opts.currentDate = copyDate(_this.value);
+  if (_this.valueAsDate) {
+    opts.currentDate = copyDate(_this.valueAsDate);
   }
   if (!opts.currentDate) {
     opts.currentDate = new Date();
   }
   _this.months = getMonthes();
   _this.update();
-  _this.defaultValue = _this.value;
+  _this.defaultValue = _this.valueAsDate;
 });
 
 this.on('update', function () {
   var changed = false;
   if (!isSameDay(lastValue, _this.value)) {
+    _this.valueAsDate = copyDate(_this.value);
     lastValue = copyDate(_this.value);
     changed = true;
+  } else if (!isSameDay(lastValue, _this.valueAsDate)) {
+    lastValue = copyDate(_this.valueAsDate);
+    changed = true;
   } else if (!isSameDay(lastOptsValue, opts.riotValue)) {
-    _this.value = copyDate(opts.riotValue);
+    _this.valueAsDate = copyDate(opts.riotValue);
     lastOptsValue = copyDate(opts.riotValue);
     lastValue = copyDate(opts.riotValue);
     changed = true;
   }
+  setValueFromValueAsDate();
 
-  if (changed && _this.value) {
-    opts.currentDate = copyDate(_this.value);
+  if (changed && _this.valueAsDate) {
+    opts.currentDate = copyDate(_this.valueAsDate);
   }
   if (!isSameDay(lastOptsCurrentDate, opts.currentDate)) {
     lastOptsCurrentDate = copyDate(opts.currentDate);
@@ -3377,11 +3384,12 @@ this.on('update', function () {
 //                                                                               State
 //                                                                               =====
 this.reset = function () {
-  _this.value = _this.defaultValue;
+  _this.valueAsDate = _this.defaultValue;
+  setValueFromValueAsDate();
 };
 
 this.changed = function () {
-  return !isSameDay(_this.value, _this.defaultValue);
+  return !isSameDay(_this.valueAsDate, _this.defaultValue);
 };
 
 // ===================================================================================
@@ -3403,7 +3411,7 @@ this.clickDay = function (event) {
     return;
   }
   setDate(event.item.day);
-  _this.trigger('click', _this.value);
+  _this.trigger('click', _this.valueAsDate);
 };
 
 this.clickMonth = function (event) {
@@ -3436,12 +3444,12 @@ this.clickNext = function () {
 
 this.clickClear = function () {
   setDate(null);
-  _this.trigger('clear', _this.value);
+  _this.trigger('clear', _this.valueAsDate);
 };
 
 this.clickToday = function () {
   setDate(new Date());
-  _this.trigger('today', _this.value);
+  _this.trigger('today', _this.valueAsDate);
 };
 
 // -----------------------------------------------------
@@ -3524,28 +3532,33 @@ var getMonthes = function getMonthes() {
 var open = function open() {
   _this.transitionStatus = 'visible';
   visibleFlg = true;
-  if (_this.value) {
-    opts.currentDate = copyDate(_this.value);
+  if (_this.valueAsDate) {
+    opts.currentDate = copyDate(_this.valueAsDate);
   }
   if (!opts.currentDate) {
     opts.currentDate = new Date();
   }
-  _this.trigger('open', _this.value);
+  _this.trigger('open', _this.valueAsDate);
 };
 
 var close = function close() {
   _this.transitionStatus = 'hidden';
   visibleFlg = false;
-  _this.trigger('close', _this.value);
+  _this.trigger('close', _this.valueAsDate);
 };
 
 var setDate = function setDate(date) {
-  _this.value = date;
+  _this.valueAsDate = date;
+  setValueFromValueAsDate();
   if (_this.refs.input) {
-    _this.refs.input.value = _this.value ? dateFns.format(_this.value, getPattern(), { locale: getLocale() }) : null;
+    _this.refs.input.value = _this.value;
     close();
   }
-  _this.trigger('change', _this.value);
+  _this.trigger('change', _this.valueAsDate);
+};
+
+var setValueFromValueAsDate = function setValueFromValueAsDate() {
+  _this.value = _this.valueAsDate ? dateFns.format(_this.valueAsDate, getPattern(), { locale: getLocale() }) : null;
 };
 
 var isSameDay = function isSameDay(d1, d2) {
@@ -3562,7 +3575,8 @@ var copyDate = function copyDate(date) {
   if (!date) {
     return date;
   }
-  return new Date(date.getTime());
+  return dateFns.parse(date);
+  // return new Date(date.getTime())
 };
 
 // ===================================================================================
@@ -3591,7 +3605,7 @@ this.getWeekNames = function () {
 };
 
 this.isActive = function (date) {
-  return isSameDay(_this.value, date);
+  return isSameDay(_this.valueAsDate, date);
 };
 
 this.isToday = function (date) {
