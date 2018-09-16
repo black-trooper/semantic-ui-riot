@@ -136,6 +136,7 @@
   <script>
     this.weeks = []
     this.value = null
+    this.valueAsDate = null
     this.defaultValue = null
     this.transitionStatus = opts.popup ? 'hidden' : 'visible'
     let visibleFlg = false
@@ -151,37 +152,43 @@
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
-      if (!this.value) {
-        this.value = copyDate(opts.riotValue)
+      if (!this.valueAsDate) {
+        this.valueAsDate = copyDate(this.value || opts.riotValue)
       }
-      lastValue = copyDate(this.value)
+      setValueFromValueAsDate()
+      lastValue = copyDate(this.valueAsDate)
       lastOptsValue = copyDate(opts.riotValue)
 
-      if (this.value) {
-        opts.currentDate = copyDate(this.value)
+      if (this.valueAsDate) {
+        opts.currentDate = copyDate(this.valueAsDate)
       }
       if (!opts.currentDate) {
         opts.currentDate = new Date()
       }
       this.months = getMonthes()
       this.update()
-      this.defaultValue = this.value
+      this.defaultValue = this.valueAsDate
     })
 
     this.on('update', () => {
       let changed = false
       if (!isSameDay(lastValue, this.value)) {
+        this.valueAsDate = copyDate(this.value)
         lastValue = copyDate(this.value)
         changed = true
+      } else if (!isSameDay(lastValue, this.valueAsDate)) {
+        lastValue = copyDate(this.valueAsDate)
+        changed = true
       } else if (!isSameDay(lastOptsValue, opts.riotValue)) {
-        this.value = copyDate(opts.riotValue)
+        this.valueAsDate = copyDate(opts.riotValue)
         lastOptsValue = copyDate(opts.riotValue)
         lastValue = copyDate(opts.riotValue)
         changed = true
       }
+      setValueFromValueAsDate()
 
-      if (changed && this.value) {
-        opts.currentDate = copyDate(this.value)
+      if (changed && this.valueAsDate) {
+        opts.currentDate = copyDate(this.valueAsDate)
       }
       if (!isSameDay(lastOptsCurrentDate, opts.currentDate)) {
         lastOptsCurrentDate = copyDate(opts.currentDate)
@@ -193,11 +200,12 @@
     //                                                                               State
     //                                                                               =====
     this.reset = () => {
-      this.value = this.defaultValue
+      this.valueAsDate = this.defaultValue
+      setValueFromValueAsDate()
     }
 
     this.changed = () => {
-      return !isSameDay(this.value, this.defaultValue)
+      return !isSameDay(this.valueAsDate, this.defaultValue)
     }
 
     // ===================================================================================
@@ -219,7 +227,7 @@
         return
       }
       setDate(event.item.day)
-      this.trigger('click', this.value)
+      this.trigger('click', this.valueAsDate)
     }
 
     this.clickMonth = event => {
@@ -252,12 +260,12 @@
 
     this.clickClear = () => {
       setDate(null)
-      this.trigger('clear', this.value)
+      this.trigger('clear', this.valueAsDate)
     }
 
     this.clickToday = () => {
       setDate(new Date())
-      this.trigger('today', this.value)
+      this.trigger('today', this.valueAsDate)
     }
 
     // -----------------------------------------------------
@@ -338,28 +346,33 @@
     const open = () => {
       this.transitionStatus = 'visible'
       visibleFlg = true
-      if (this.value) {
-        opts.currentDate = copyDate(this.value)
+      if (this.valueAsDate) {
+        opts.currentDate = copyDate(this.valueAsDate)
       }
       if (!opts.currentDate) {
         opts.currentDate = new Date()
       }
-      this.trigger('open', this.value)
+      this.trigger('open', this.valueAsDate)
     }
 
     const close = () => {
       this.transitionStatus = 'hidden'
       visibleFlg = false
-      this.trigger('close', this.value)
+      this.trigger('close', this.valueAsDate)
     }
 
     const setDate = date => {
-      this.value = date
+      this.valueAsDate = date
+      setValueFromValueAsDate()
       if (this.refs.input) {
-        this.refs.input.value = this.value ? dateFns.format(this.value, getPattern(), { locale: getLocale() }) : null
+        this.refs.input.value = this.value
         close()
       }
-      this.trigger('change', this.value)
+      this.trigger('change', this.valueAsDate)
+    }
+
+    const setValueFromValueAsDate = () => {
+      this.value = this.valueAsDate ? dateFns.format(this.valueAsDate, getPattern(), { locale: getLocale() }) : null
     }
 
     const isSameDay = (d1, d2) => {
@@ -376,7 +389,8 @@
       if (!date) {
         return date
       }
-      return new Date(date.getTime())
+      return dateFns.parse(date)
+      // return new Date(date.getTime())
     }
 
     // ===================================================================================
@@ -403,7 +417,7 @@
     }
 
     this.isActive = date => {
-      return isSameDay(this.value, date)
+      return isSameDay(this.valueAsDate, date)
     }
 
     this.isToday = date => {

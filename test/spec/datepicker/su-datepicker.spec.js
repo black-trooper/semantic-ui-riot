@@ -13,6 +13,9 @@ describe('su-datepicker', function () {
       .on('click', spyOnClick)
       .on('change', spyOnChange)
   }
+  const addZero = num => {
+    return ('0' + num).slice(-2);
+  }
 
   beforeEach(function () {
   })
@@ -176,6 +179,96 @@ describe('su-datepicker', function () {
     tag.refs.input.value.should.equal('2017/12/01')
   })
 
+  it('update value', function () {
+    $('body').append('<su-datepicker />')
+    mount({
+      pattern: 'YYYY/MM/DD',
+      value: new Date(2017, 11, 1)
+    })
+
+    $('su-datepicker .dp-navigation .month').text().trim().should.equal('Dec')
+    $('su-datepicker .dp-navigation .year').text().trim().should.equal('2017')
+    tag.value.should.equal('2017/12/01')
+
+    tag.value = "2018/01/01"
+    tag.update()
+    $('su-datepicker .dp-navigation .month').text().trim().should.equal('Jan')
+    $('su-datepicker .dp-navigation .year').text().trim().should.equal('2018')
+    tag.value.should.equal('2018/01/01')
+
+    tag.value = new Date(2018, 0, 2)
+    tag.update()
+    $('su-datepicker .dp-navigation .month').text().trim().should.equal('Jan')
+    $('su-datepicker .dp-navigation .year').text().trim().should.equal('2018')
+    tag.value.should.equal('2018/01/02')
+
+    tag.valueAsDate = new Date(2018, 0, 3)
+    tag.update()
+    $('su-datepicker .dp-navigation .month').text().trim().should.equal('Jan')
+    $('su-datepicker .dp-navigation .year').text().trim().should.equal('2018')
+    tag.value.should.equal('2018/01/03')
+  })
+
+  it('update value same day', function () {
+    $('body').append('<su-datepicker />')
+    mount({
+      pattern: 'YYYY/MM/DD',
+      value: new Date(2018, 0, 1)
+    })
+
+    $('su-datepicker .dp-navigation .month').text().trim().should.equal('Jan')
+    $('su-datepicker .dp-navigation .year').text().trim().should.equal('2018')
+    tag.value.should.equal('2018/01/01')
+
+    tag.value = "2018/01/01"
+    tag.update()
+    $('su-datepicker .dp-navigation .month').text().trim().should.equal('Jan')
+    $('su-datepicker .dp-navigation .year').text().trim().should.equal('2018')
+    tag.value.should.equal('2018/01/01')
+
+    tag.value = new Date(2018, 0, 1)
+    tag.update()
+    $('su-datepicker .dp-navigation .month').text().trim().should.equal('Jan')
+    $('su-datepicker .dp-navigation .year').text().trim().should.equal('2018')
+    tag.value.should.equal('2018/01/01')
+
+    tag.valueAsDate = new Date(2018, 0, 1)
+    tag.update()
+    $('su-datepicker .dp-navigation .month').text().trim().should.equal('Jan')
+    $('su-datepicker .dp-navigation .year').text().trim().should.equal('2018')
+    tag.value.should.equal('2018/01/01')
+  })
+
+  it('update value with pattern', function () {
+    $('body').append('<su-datepicker />')
+    mount({
+      pattern: 'MMMM D, YYYY',
+      value: new Date(2017, 11, 1)
+    })
+
+    $('su-datepicker .dp-navigation .month').text().trim().should.equal('Dec')
+    $('su-datepicker .dp-navigation .year').text().trim().should.equal('2017')
+    tag.value.should.equal('December 1, 2017')
+
+    tag.value = "January 1, 2018"
+    tag.update()
+    $('su-datepicker .dp-navigation .month').text().trim().should.equal('Jan')
+    $('su-datepicker .dp-navigation .year').text().trim().should.equal('2018')
+    tag.value.should.equal('January 1, 2018')
+
+    tag.value = new Date(2018, 0, 2)
+    tag.update()
+    $('su-datepicker .dp-navigation .month').text().trim().should.equal('Jan')
+    $('su-datepicker .dp-navigation .year').text().trim().should.equal('2018')
+    tag.value.should.equal('January 2, 2018')
+
+    tag.valueAsDate = new Date(2018, 0, 3)
+    tag.update()
+    $('su-datepicker .dp-navigation .month').text().trim().should.equal('Jan')
+    $('su-datepicker .dp-navigation .year').text().trim().should.equal('2018')
+    tag.value.should.equal('January 3, 2018')
+  })
+
   it('update option value', function () {
     $('body').append('<su-datepicker />')
     mount({
@@ -221,9 +314,10 @@ describe('su-datepicker', function () {
 
     fireEvent($('su-datepicker .dp-today .button')[0], 'click')
     const today = new Date()
-    tag.value.getFullYear().should.equal(today.getFullYear())
-    tag.value.getMonth().should.equal(today.getMonth())
-    tag.value.getDate().should.equal(today.getDate())
+    tag.value.should.equal(`${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())}`)
+    tag.valueAsDate.getFullYear().should.equal(today.getFullYear())
+    tag.valueAsDate.getMonth().should.equal(today.getMonth())
+    tag.valueAsDate.getDate().should.equal(today.getDate())
     spyOnClick.should.have.been.callCount(0)
     spyOnChange.should.have.been.calledOnce
     spyOnClose.should.have.been.calledOnce
@@ -241,18 +335,21 @@ describe('su-datepicker', function () {
   it('reset value', function () {
     $('body').append('<su-datepicker />')
     mount()
-    expect(tag.value).to.be.undefined
+    expect(tag.value).to.be.null
+    expect(tag.valueAsDate).to.be.undefined
     expect(tag.defaultValue).to.be.undefined
 
     fireEvent($('su-datepicker .dp-today .button')[0], 'click')
     const today = new Date()
-    tag.value.getFullYear().should.equal(today.getFullYear())
-    tag.value.getMonth().should.equal(today.getMonth())
-    tag.value.getDate().should.equal(today.getDate())
+    tag.value.should.equal(`${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())}`)
+    tag.valueAsDate.getFullYear().should.equal(today.getFullYear())
+    tag.valueAsDate.getMonth().should.equal(today.getMonth())
+    tag.valueAsDate.getDate().should.equal(today.getDate())
     expect(tag.defaultValue).to.be.undefined
 
     tag.reset()
-    expect(tag.value).to.be.undefined
+    expect(tag.value).to.be.null
+    expect(tag.valueAsDate).to.be.undefined
     expect(tag.defaultValue).to.be.undefined
   })
 
@@ -261,18 +358,19 @@ describe('su-datepicker', function () {
     const date = new Date(2017, 0, 1)
     mount({ value: date })
 
-    tag.value.getTime().should.equal(date.getTime())
+    tag.valueAsDate.getTime().should.equal(date.getTime())
     tag.defaultValue.getTime().should.equal(date.getTime())
 
     fireEvent($('su-datepicker .dp-today .button')[0], 'click')
     const today = new Date()
-    tag.value.getFullYear().should.equal(today.getFullYear())
-    tag.value.getMonth().should.equal(today.getMonth())
-    tag.value.getDate().should.equal(today.getDate())
+    tag.value.should.equal(`${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())}`)
+    tag.valueAsDate.getFullYear().should.equal(today.getFullYear())
+    tag.valueAsDate.getMonth().should.equal(today.getMonth())
+    tag.valueAsDate.getDate().should.equal(today.getDate())
     tag.defaultValue.getTime().should.equal(date.getTime())
 
     tag.reset()
-    tag.value.getTime().should.equal(date.getTime())
+    tag.valueAsDate.getTime().should.equal(date.getTime())
     tag.defaultValue.getTime().should.equal(date.getTime())
   })
 })
