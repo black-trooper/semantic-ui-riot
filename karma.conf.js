@@ -11,7 +11,7 @@ module.exports = function (config) {
     ],
     preprocessors: {
       'test/spec/**/*.js': ['browserify'],
-      'tags/**/*.tag': ['riot', 'coverage']
+      'tags/**/*.tag': ['webpack', 'coverage']
     },
     browserify: {
       debug: true,
@@ -21,6 +21,32 @@ module.exports = function (config) {
       options: {
         type: 'es6'
       }
+    },
+    webpack: {
+      mode: 'development',
+      module: {
+        rules: [
+          {
+            test: /\.tag$/,
+            exclude: /node_modules/,
+            use: [
+              {
+                loader: 'riotjs-loader',
+                options: {
+                  type: 'es6', // transpile the riot tags using babel
+                  hot: true
+                }
+              }
+            ]
+          },
+          {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            use: ['babel-loader']
+          }
+        ]
+      },
+
     },
     logLevel: config.LOG_ERROR,
     reporters: ['mocha', 'coverage'],
