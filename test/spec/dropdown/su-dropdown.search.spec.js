@@ -1,6 +1,7 @@
 const fireEvent = require('../../helpers').fireEvent
 const fireKeyEvent = require('../../helpers').fireKeyEvent
 const keys = require('../../helpers').keys
+require('../../../tags/dropdown/su-dropdown.tag')
 
 describe('su-dropdown-search', function () {
   let tag

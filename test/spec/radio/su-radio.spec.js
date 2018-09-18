@@ -1,3 +1,6 @@
+require('../../../tags/radio/su-radio.tag')
+require('../../../tags/radio/su-radio-group.tag')
+
 describe('su-radio', function () {
   let tag1, tag2
   let spyOnClick = sinon.spy()

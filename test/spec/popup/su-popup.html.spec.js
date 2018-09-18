@@ -1,3 +1,5 @@
+require('../../../tags/popup/su-popup.tag')
+
 describe('su-popup.html', function () {
   let tag
   const spyOnMouseover = sinon.spy()

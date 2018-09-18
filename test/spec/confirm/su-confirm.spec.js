@@ -1,3 +1,5 @@
+require('../../../tags/confirm/su-confirm.tag')
+
 describe('su-confirm', function () {
   const Q = require('q')
   let tag

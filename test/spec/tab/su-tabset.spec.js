@@ -1,4 +1,8 @@
 const fireEvent = require('../../helpers').fireEvent
+require('../../../tags/tab/su-tab.tag')
+require('../../../tags/tab/su-tab-header.tag')
+require('../../../tags/tab/su-tab-title.tag')
+require('../../../tags/tab/su-tabset.tag')
 
 describe('su-tabset', function () {
   let tag

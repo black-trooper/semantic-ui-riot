@@ -4,14 +4,11 @@ module.exports = function (config) {
     frameworks: ['browserify', 'mocha', 'sinon-chai', 'riot'],
     files: [
       'node_modules/jquery/dist/jquery.min.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.29.0/date_fns.min.js',
       'test/css/index.css',
-      'tags/**/*',
       'test/spec/**/*'
     ],
     preprocessors: {
-      'test/spec/**/*.js': ['browserify'],
-      'tags/**/*.tag': ['webpack', 'coverage']
+      'test/spec/**/*.js': ['webpack', 'sourcemap'],
     },
     browserify: {
       debug: true,
@@ -23,6 +20,7 @@ module.exports = function (config) {
       }
     },
     webpack: {
+      devtool: 'inline-source-map',
       mode: 'development',
       module: {
         rules: [

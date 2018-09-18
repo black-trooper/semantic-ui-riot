@@ -1,3 +1,6 @@
+require('../../../tags/checkbox/su-checkbox-group.tag')
+require('../../../tags/checkbox/su-checkbox.tag')
+
 describe('su-checkbox-group-undefined', function () {
   let tag
 

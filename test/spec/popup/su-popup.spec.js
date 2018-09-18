@@ -1,4 +1,5 @@
 const fireEvent = require('../../helpers').fireEvent
+require('../../../tags/popup/su-popup.tag')
 
 describe('su-popup', function () {
   let tag

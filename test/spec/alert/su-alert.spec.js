@@ -1,3 +1,5 @@
+require('../../../tags/alert/su-alert.tag')
+
 describe('su-alert', function () {
   let tag
   let app

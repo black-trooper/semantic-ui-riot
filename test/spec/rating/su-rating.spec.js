@@ -1,4 +1,5 @@
 const fireEvent = require('../../helpers').fireEvent
+require('../../../tags/rating/su-rating.tag')
 
 describe('su-rating', function () {
   let tag

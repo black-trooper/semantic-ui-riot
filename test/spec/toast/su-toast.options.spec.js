@@ -1,3 +1,6 @@
+require('../../../tags/toast/su-toast.tag')
+require('../../../tags/toast/su-toast-item.tag')
+
 describe('su-toast-options', function () {
   let tag
   let app

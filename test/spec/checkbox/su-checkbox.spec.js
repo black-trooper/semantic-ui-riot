@@ -1,3 +1,5 @@
+require('../../../tags/checkbox/su-checkbox.tag')
+
 describe('su-checkbox', function () {
   let tag
   let spyOnClick = sinon.spy()

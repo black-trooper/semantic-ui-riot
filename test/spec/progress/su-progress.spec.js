@@ -1,4 +1,5 @@
 const fireEvent = require('../../helpers').fireEvent
+require('../../../tags/progress/su-progress.tag')
 
 describe('su-progress', function () {
   let tag

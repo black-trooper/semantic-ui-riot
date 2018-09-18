@@ -1,4 +1,5 @@
 const fireEvent = require('../../helpers').fireEvent
+require('../../../tags/datepicker/su-datepicker.tag')
 
 describe('su-datepicker', function () {
   let tag
