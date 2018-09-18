@@ -1,5 +1,4 @@
-const webpack = require('webpack');
-const path = require('path');
+const webpackDateFnsExternals = require('webpack-date-fns-externals');
 
 module.exports = (env, argv) => {
   return {
@@ -9,6 +8,9 @@ module.exports = (env, argv) => {
       library: 'SemanticUiRiot',
       libraryTarget: 'umd'
     },
+    externals: [
+      webpackDateFnsExternals()
+    ],
     module: {
       rules: [
         {
