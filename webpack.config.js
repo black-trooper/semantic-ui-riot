@@ -9,6 +9,7 @@ module.exports = (env, argv) => {
       libraryTarget: 'umd'
     },
     externals: [
+      { riot: 'riot' },
       webpackDateFnsExternals()
     ],
     module: {
