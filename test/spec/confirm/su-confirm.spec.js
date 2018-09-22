@@ -36,7 +36,7 @@ describe('su-confirm', function () {
 
   it('opens/closes confirm ok', function () {
     mount()
-    $('su-confirm su-modal').is(':visible').should.equal(false)
+    $('su-confirm su-modal > .dimmer').is(':visible').should.equal(false)
 
     app.suConfirm('hello')
     tag.messages[0].should.equal('hello')
@@ -56,11 +56,11 @@ describe('su-confirm', function () {
 
     btn_ok.click()
     this.clock.tick(310)
-    $('su-confirm su-modal').is(':visible').should.equal(false)
+    $('su-confirm su-modal > .dimmer').is(':visible').should.equal(false)
   })
   it('opens/closes confirm cancel', function () {
     mount()
-    $('su-confirm su-modal').is(':visible').should.equal(false)
+    $('su-confirm su-modal > .dimmer').is(':visible').should.equal(false)
 
     app.suConfirm('hello')
     tag.messages[0].should.equal('hello')
@@ -80,7 +80,7 @@ describe('su-confirm', function () {
 
     btn_cancel.click()
     this.clock.tick(310)
-    $('su-confirm su-modal').is(':visible').should.equal(false)
+    $('su-confirm su-modal > .dimmer').is(':visible').should.equal(false)
   })
 
   it('title and messages', function () {

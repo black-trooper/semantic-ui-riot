@@ -1,23 +1,25 @@
-<su-modal class="ui dimmer modals page transition { transitionStatus }" onclick="{ dimmerClose }">
-  <div class="ui modal transition visible active {opts.class}" onclick="{ clickModal }" id="{ getId() }">
-    <i class="close icon" if="{ isFullscreen() }" onclick="{ hide }"></i>
-    <div class="ui header { icon: opts.modal.header.icon }" if="{ opts.modal.header }">
-      <i class="icon { opts.modal.header.icon }" if="{ opts.modal.header.icon }"></i>
-      { (opts.modal.header.text) ? opts.modal.header.text : opts.modal.header }
-    </div>
-    <div class="content { image: isImageContent() }" ref="content">
-      <yield />
-    </div>
-    <div class="actions">
-      <button each="{ opts.modal.buttons }" class="ui button { type } { labeled: icon && text } { icon: icon } { inverted: isBasic() } { disabled: disabled }"
-        onclick="{ parent.click }" ref="button_{ text }">
-        { text }
-        <i class="icon { icon }" if="{ icon }"></i>
-      </button>
+<su-modal onclick="{ dimmerClose }">
+  <div class="ui dimmer modals page transition { transitionStatus }">
+    <div class="ui modal transition visible active {opts.class}" onclick="{ clickModal }" id="{ getId() }">
+      <i class="close icon" if="{ isFullscreen() }" onclick="{ hide }"></i>
+      <div class="ui header { icon: opts.modal.header.icon }" if="{ opts.modal.header }">
+        <i class="icon { opts.modal.header.icon }" if="{ opts.modal.header.icon }"></i>
+        { (opts.modal.header.text) ? opts.modal.header.text : opts.modal.header }
+      </div>
+      <div class="content { image: isImageContent() }" ref="content">
+        <yield />
+      </div>
+      <div class="actions">
+        <button each="{ opts.modal.buttons }" class="ui button { type } { labeled: icon && text } { icon: icon } { inverted: isBasic() } { disabled: disabled }"
+          onclick="{ parent.click }" ref="button_{ text }">
+          { text }
+          <i class="icon { icon }" if="{ icon }"></i>
+        </button>
+      </div>
     </div>
   </div>
   <style>
-    :scope.ui.dimmer.visible.transition {
+    .ui.dimmer.visible.transition {
       display: flex !important;
       align-items: center;
       justify-content: center;

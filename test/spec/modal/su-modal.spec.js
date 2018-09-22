@@ -34,33 +34,33 @@ describe('su-modal', function () {
         }]
       }
     })
-    $('su-modal').is(':visible').should.equal(false)
+    $('su-modal > .dimmer').is(':visible').should.equal(false)
 
     tag.show()
     spyOnShow.should.have.been.calledOnce
     this.clock.tick(510)
-    $('su-modal').is(':visible').should.equal(true)
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
 
     $('su-modal .ui.button:first').click()
     spyOnHide.should.have.been.calledOnce
     this.clock.tick(310)
-    $('su-modal').is(':visible').should.equal(false)
+    $('su-modal > .dimmer').is(':visible').should.equal(false)
   })
 
   it('dimmer close', function () {
     $('body').append('<su-modal>modal</su-modal>')
     mount()
-    $('su-modal').is(':visible').should.equal(false)
+    $('su-modal > .dimmer').is(':visible').should.equal(false)
 
     tag.show()
     spyOnShow.should.have.been.calledOnce
     this.clock.tick(510)
-    $('su-modal').is(':visible').should.equal(true)
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
 
     $('su-modal').click()
     spyOnHide.should.have.been.calledOnce
     this.clock.tick(310)
-    $('su-modal').is(':visible').should.equal(false)
+    $('su-modal > .dimmer').is(':visible').should.equal(false)
   })
 
   it('opens/closes event duplicate', function () {
@@ -73,19 +73,19 @@ describe('su-modal', function () {
         }]
       }
     })
-    $('su-modal').is(':visible').should.equal(false)
+    $('su-modal > .dimmer').is(':visible').should.equal(false)
 
     tag.show()
     tag.show()
     spyOnShow.should.have.been.calledOnce
     this.clock.tick(510)
-    $('su-modal').is(':visible').should.equal(true)
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
 
     $('su-modal .ui.button:first').click()
     $('su-modal .ui.button:first').click()
     spyOnHide.should.have.been.calledOnce
     this.clock.tick(310)
-    $('su-modal').is(':visible').should.equal(false)
+    $('su-modal > .dimmer').is(':visible').should.equal(false)
   })
 
   it('buttons', function () {
@@ -102,7 +102,7 @@ describe('su-modal', function () {
     mount({ modal: modal })
     tag.show()
     this.clock.tick(510)
-    $('su-modal').is(':visible').should.equal(true)
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
 
     const btn_ok = $('su-modal .ui.button:first')
     btn_ok.hasClass('labeled').should.equal(true)
@@ -137,7 +137,7 @@ describe('su-modal', function () {
     mount({ modal: modal })
     tag.show()
     this.clock.tick(510)
-    $('su-modal').is(':visible').should.equal(true)
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
 
     const btn_one = $('su-modal .ui.button:first')
     btn_one.text().trim().should.equal(modal.buttons[0].text)
@@ -160,7 +160,7 @@ describe('su-modal', function () {
     mount({ modal: modal })
     tag.show()
     this.clock.tick(510)
-    $('su-modal').is(':visible').should.equal(true)
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
 
     const header = $('su-modal .ui.header')
     header.hasClass('icon').should.equal(false)
@@ -178,7 +178,7 @@ describe('su-modal', function () {
     mount({ modal: modal })
     tag.show()
     this.clock.tick(510)
-    $('su-modal').is(':visible').should.equal(true)
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
 
     const header = $('su-modal .ui.header')
     header.hasClass('icon').should.equal(true)
@@ -204,7 +204,7 @@ describe('su-modal', function () {
     mount({ modal: modal })
     tag.show()
     this.clock.tick(510)
-    $('su-modal').is(':visible').should.equal(true)
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
 
     const content = $('su-modal .content')
     content.hasClass('image').should.equal(true)
@@ -215,13 +215,13 @@ describe('su-modal', function () {
     mount({ class: 'fullscreen' })
     tag.show()
     this.clock.tick(510)
-    $('su-modal').is(':visible').should.equal(true)
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
 
     $('su-modal i.close.icon').length.should.equal(1)
 
     $('su-modal i.close.icon').click()
     spyOnHide.should.have.been.calledOnce
     this.clock.tick(310)
-    $('su-modal').is(':visible').should.equal(false)
+    $('su-modal > .dimmer').is(':visible').should.equal(false)
   })
 })

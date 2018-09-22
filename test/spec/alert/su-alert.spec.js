@@ -29,7 +29,7 @@ describe('su-alert', function () {
 
   it('opens/closes alert', function () {
     mount()
-    $('su-alert su-modal').is(':visible').should.equal(false)
+    $('su-alert su-modal > .dimmer').is(':visible').should.equal(false)
 
     app.suAlert('hello')
     tag.messages[0].should.equal('hello')
@@ -46,7 +46,7 @@ describe('su-alert', function () {
 
     btn_one.click()
     this.clock.tick(310)
-    $('su-alert su-modal').is(':visible').should.equal(false)
+    $('su-alert su-modal > .dimmer').is(':visible').should.equal(false)
   })
 
   it('title and messages', function () {
