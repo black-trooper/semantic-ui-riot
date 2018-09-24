@@ -1,5 +1,7 @@
 const fireEvent = require('../../helpers').fireEvent
-require('../../../tags/datepicker/su-datepicker.tag')
+require('../../../dist/tags/datepicker/su-datepicker.js')
+
+riot.mixin('semantic-ui', {})
 
 describe('su-datepicker', function () {
   let tag

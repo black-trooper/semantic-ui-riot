@@ -1,4 +1,4 @@
-require('../../../tags/modal/su-modal.tag')
+require('../../../dist/tags/modal/su-modal.js')
 
 describe('su-modal', function () {
   let tag

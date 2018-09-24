@@ -7,13 +7,14 @@ module.exports = function (config) {
     files: [
       'node_modules/jquery/dist/jquery.min.js',
       'test/css/index.css',
-      'test/spec/rating/*'
+      'test/spec/**/*'
     ],
     preprocessors: {
       'test/spec/**/*.js': ['webpack', 'sourcemap'],
     },
     webpack: {
       devtool: 'inline-source-map',
+      mode: 'development',
       module: {
         rules: [
           {

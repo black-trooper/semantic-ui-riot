@@ -1,4 +1,4 @@
-require('../../../tags/checkbox/su-checkbox.tag')
+require('../../../dist/tags/checkbox/su-checkbox.js')
 
 describe('su-checkbox-options', function () {
   let tag

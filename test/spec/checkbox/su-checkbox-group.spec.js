@@ -1,5 +1,5 @@
-require('../../../tags/checkbox/su-checkbox-group.tag')
-require('../../../tags/checkbox/su-checkbox.tag')
+require('../../../dist/tags/checkbox/su-checkbox-group.js')
+require('../../../dist/tags/checkbox/su-checkbox.js')
 
 describe('su-checkbox-group', function () {
   let tag

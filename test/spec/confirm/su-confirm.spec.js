@@ -1,4 +1,6 @@
-require('../../../tags/confirm/su-confirm.tag')
+require('../../../dist/tags/confirm/su-confirm.js')
+
+riot.mixin('semantic-ui', {})
 
 describe('su-confirm', function () {
   const Q = require('q')
