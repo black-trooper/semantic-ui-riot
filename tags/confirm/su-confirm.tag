@@ -123,7 +123,7 @@
     })
 
     riot.mixin({
-      suConfirm(param) {
+      suConfirm: param => {
         const option = {
           title: null,
           message: null,

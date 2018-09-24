@@ -1,3 +1,8 @@
+require('../../../dist/tags/toast/su-toast.js')
+require('../../../dist/tags/toast/su-toast-item.js')
+
+riot.mixin('semantic-ui', {})
+
 describe('su-toast', function () {
   let tag
   let app

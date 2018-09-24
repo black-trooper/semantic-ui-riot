@@ -1,3 +1,6 @@
+require('../../../dist/tags/checkbox/su-checkbox-group.js')
+require('../../../dist/tags/checkbox/su-checkbox.js')
+
 describe('su-checkbox-group-undefined', function () {
   let tag
 

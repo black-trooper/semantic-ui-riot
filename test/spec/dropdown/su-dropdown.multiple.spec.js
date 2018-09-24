@@ -1,5 +1,6 @@
 const fireKeyEvent = require('../../helpers').fireKeyEvent
 const keys = require('../../helpers').keys
+require('../../../dist/tags/dropdown/su-dropdown.js')
 
 describe('su-dropdown-multiple', function () {
   let tag

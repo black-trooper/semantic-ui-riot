@@ -77,7 +77,7 @@
     })
 
     riot.mixin({
-      suAlert(param) {
+      suAlert: param => {
         const option = {
           title: null,
           message: null,

@@ -1,3 +1,6 @@
+require('../../../dist/tags/accordion/su-accordion.js')
+require('../../../dist/tags/accordion/su-accordionset.js')
+
 describe('su-accordionset-options', function () {
   let tag
   let mount = group => {

@@ -134,6 +134,14 @@
   </style>
 
   <script>
+    import addDays from 'date-fns/add_days'
+    import addMonths from 'date-fns/add_months'
+    import format from 'date-fns/format'
+    import isSameDay from 'date-fns/is_same_day'
+    import isToday from 'date-fns/is_today'
+    import parse from 'date-fns/parse'
+    import startOfMonth from 'date-fns/start_of_month'
+
     this.weeks = []
     this.value = null
     this.valueAsDate = null
@@ -172,14 +180,14 @@
 
     this.on('update', () => {
       let changed = false
-      if (!isSameDay(lastValue, this.value)) {
+      if (!isEqualDay(lastValue, this.value)) {
         this.valueAsDate = copyDate(this.value)
         lastValue = copyDate(this.value)
         changed = true
-      } else if (!isSameDay(lastValue, this.valueAsDate)) {
+      } else if (!isEqualDay(lastValue, this.valueAsDate)) {
         lastValue = copyDate(this.valueAsDate)
         changed = true
-      } else if (!isSameDay(lastOptsValue, opts.riotValue)) {
+      } else if (!isEqualDay(lastOptsValue, opts.riotValue)) {
         this.valueAsDate = copyDate(opts.riotValue)
         lastOptsValue = copyDate(opts.riotValue)
         lastValue = copyDate(opts.riotValue)
@@ -190,7 +198,7 @@
       if (changed && this.valueAsDate) {
         opts.currentDate = copyDate(this.valueAsDate)
       }
-      if (!isSameDay(lastOptsCurrentDate, opts.currentDate)) {
+      if (!isEqualDay(lastOptsCurrentDate, opts.currentDate)) {
         lastOptsCurrentDate = copyDate(opts.currentDate)
         generate()
       }
@@ -205,7 +213,7 @@
     }
 
     this.changed = () => {
-      return !isSameDay(this.valueAsDate, this.defaultValue)
+      return !isEqualDay(this.valueAsDate, this.defaultValue)
     }
 
     // ===================================================================================
@@ -245,7 +253,7 @@
         addYear(-yearRange)
       } else {
         this.monthSelecting = false
-        opts.currentDate = dateFns.addMonths(opts.currentDate, -1)
+        opts.currentDate = addMonths(opts.currentDate, -1)
       }
     }
 
@@ -254,7 +262,7 @@
         addYear(yearRange)
       } else {
         this.monthSelecting = false
-        opts.currentDate = dateFns.addMonths(opts.currentDate, 1)
+        opts.currentDate = addMonths(opts.currentDate, 1)
       }
     }
 
@@ -300,15 +308,15 @@
     //                                                                               Logic
     //                                                                               =====
     const generate = () => {
-      const startOfMonth = dateFns.startOfMonth(opts.currentDate)
-      const baseDate = dateFns.addDays(startOfMonth, - startOfMonth.getDay())
+      const startDate = startOfMonth(opts.currentDate)
+      const baseDate = addDays(startDate, - startDate.getDay())
       let i = 0
       this.weeks = []
 
       for (let r = 0; r < 6; r++) {
         const days = []
         for (let c = 0; c < 7; c++) {
-          days.push(dateFns.addDays(baseDate, i++))
+          days.push(addDays(baseDate, i++))
         }
         this.weeks.push({ days })
       }
@@ -333,7 +341,7 @@
 
     const getMonthes = () => {
       const months = [[], [], []]
-      const monthNames = range(12).map(month => dateFns.format(new Date(2018, month, 1), 'MMM', { locale: getLocale() }))
+      const monthNames = range(12).map(month => format(new Date(2018, month, 1), 'MMM', { locale: getLocale() }))
       monthNames.forEach((month, index) => {
         months[(index - index % 4) / 4][index % 4] = {
           label: month,
@@ -372,24 +380,24 @@
     }
 
     const setValueFromValueAsDate = () => {
-      this.value = this.valueAsDate ? dateFns.format(this.valueAsDate, getPattern(), { locale: getLocale() }) : null
+      this.value = this.valueAsDate ? format(this.valueAsDate, getPattern(), { locale: getLocale() }) : null
     }
 
-    const isSameDay = (d1, d2) => {
+    const isEqualDay = (d1, d2) => {
       if (d1 == d2) {
         return true
       }
       if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
         return false
       }
-      return dateFns.isSameDay(d1, d2)
+      return isSameDay(d1, d2)
     }
 
     const copyDate = date => {
       if (!date) {
         return date
       }
-      return dateFns.parse(date)
+      return parse(date)
       // return new Date(date.getTime())
     }
 
@@ -404,7 +412,7 @@
 
     this.getCurrentMonthView = () => {
       if (opts.currentDate) {
-        return dateFns.format(opts.currentDate, 'MMM', { locale: getLocale() })
+        return format(opts.currentDate, 'MMM', { locale: getLocale() })
       }
     }
 
@@ -413,15 +421,15 @@
     }
 
     this.getWeekNames = () => {
-      return range(7, 1).map(day => dateFns.format(new Date(2018, 6, day), 'dd', { locale: getLocale() }))
+      return range(7, 1).map(day => format(new Date(2018, 6, day), 'dd', { locale: getLocale() }))
     }
 
     this.isActive = date => {
-      return isSameDay(this.valueAsDate, date)
+      return isEqualDay(this.valueAsDate, date)
     }
 
     this.isToday = date => {
-      return dateFns.isToday(date)
+      return isToday(date)
     }
 
     this.getTabindex = () => {

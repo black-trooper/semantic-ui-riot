@@ -39,7 +39,6 @@
   },
   "globals": {
     "opts": true,
-    "riot": true,
-    "dateFns": true
+    "riot": true
   }
 }
