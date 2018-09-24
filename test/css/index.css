@@ -9,3 +9,6 @@
 .ui.dimmer {
   display: none;
 }
+.ui.dimmer.active {
+  display:block;
+}
