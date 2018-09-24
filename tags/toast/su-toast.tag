@@ -79,7 +79,7 @@
     })
 
     riot.mixin({
-      suToast(param) {
+      suToast: param => {
         const option = {
           title: null,
           message: null,

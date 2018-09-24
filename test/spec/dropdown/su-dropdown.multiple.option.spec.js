@@ -1,3 +1,5 @@
+require('../../../dist/tags/dropdown/su-dropdown.js')
+
 describe('su-dropdown-multiple-option', function () {
   let tag
 

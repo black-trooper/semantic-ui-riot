@@ -1,3 +1,7 @@
+require('../../../dist/tags/alert/su-alert.js')
+
+riot.mixin('semantic-ui', {})
+
 describe('su-alert', function () {
   let tag
   let app

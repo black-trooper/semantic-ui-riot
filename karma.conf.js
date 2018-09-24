@@ -1,36 +1,41 @@
+const path = require('path')
+
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: ['browserify', 'mocha', 'sinon-chai', 'riot'],
+    frameworks: ['mocha', 'sinon-chai', 'riot'],
     files: [
       'node_modules/jquery/dist/jquery.min.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.29.0/date_fns.min.js',
       'test/css/index.css',
-      'tags/**/*',
       'test/spec/**/*'
     ],
     preprocessors: {
-      'test/spec/**/*.js': ['browserify'],
-      'tags/**/*.tag': ['riot', 'coverage']
+      'test/spec/**/*.js': ['webpack', 'sourcemap'],
     },
-    browserify: {
-      debug: true,
-      transform: ['babelify']
-    },
-    riotPreprocessor: {
-      options: {
-        type: 'es6'
-      }
+    webpack: {
+      devtool: 'inline-source-map',
+      mode: 'development',
+      module: {
+        rules: [
+          {
+            test: /\.js$/,
+            enforce: 'post',
+            include: path.resolve('dist/tags/'),
+            use: ['istanbul-instrumenter-loader']
+          },
+          {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            use: ['babel-loader']
+          }
+        ]
+      },
+
     },
     logLevel: config.LOG_ERROR,
-    reporters: ['mocha', 'coverage'],
-    coverageReporter: {
-      reporters: [{
-        type: 'html',
-        dir: 'coverage/'
-      }, {
-        type: 'text-summary'
-      }],
+    reporters: ['mocha', 'coverage-istanbul'],
+    coverageIstanbulReporter: {
+      reports: ['html', 'lcovonly', 'text-summary'],
     },
     browsers: ['ChromeHeadless'],
     singleRun: true
@@ -44,13 +49,10 @@ module.exports = function (config) {
         }
       },
       browsers: ['chromeTravisCi'],
-      reporters: ['coverage', 'coveralls'],
-      coverageReporter: {
-        reporters: [{
-          type: 'lcov', // lcov or lcovonly are required for generating lcov.info files
-          dir: 'coverage/'
-        }],
-      }
+      reporters: ['coverage-istanbul', 'coveralls'],
+      coverageIstanbulReporter: {
+        reports: ['lcov'],
+      },
     }
     config.set(configuration);
   }

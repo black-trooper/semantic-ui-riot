@@ -1,3 +1,5 @@
+require('../../../dist/tags/modal/su-modal.js')
+
 describe('su-modal', function () {
   let tag
   let spyOnShow = sinon.spy()

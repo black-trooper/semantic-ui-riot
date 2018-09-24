@@ -1,3 +1,5 @@
+require('../../../dist/tags/checkbox/su-checkbox.js')
+
 describe('su-checkbox-options', function () {
   let tag
   let spyOnClick = sinon.spy()

@@ -1,4 +1,6 @@
 const fireEvent = require('../../helpers').fireEvent
+require('../../../dist/tags/accordion/su-accordion.js')
+require('../../../dist/tags/accordion/su-accordionset.js')
 
 describe('su-accordionset', function () {
   let tag

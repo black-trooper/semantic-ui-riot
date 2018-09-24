@@ -1,3 +1,6 @@
+require('../../../dist/tags/radio/su-radio.js')
+require('../../../dist/tags/radio/su-radio-group.js')
+
 describe('su-radio-group-single', function () {
   let tag
 

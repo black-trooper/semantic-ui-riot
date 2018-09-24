@@ -1,4 +1,5 @@
 const fireEvent = require('../../helpers').fireEvent
+require('../../../dist/tags/dropdown/su-select.js')
 
 describe('su-select', function () {
   let tag
