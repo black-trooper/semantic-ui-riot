@@ -4,24 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
-### Added
-- zh-CN and zh-TW translations from @tianshuo.
-- de translation from @mpbzh.
-- it-IT translation from @roalz.
-- sv translation from @magol.
-- tr-TR translation from @karalamalar.
-- fr translation from @zapashcanon.
-
-### Changed
-- Start versioning based on the current English version at 0.3.0 to help
-translation authors keep things up-to-date.
-- Fix typos in zh-CN translation.
-- Fix typos in pt-BR translation.
-
 ## [0.14.0] - 2018-09-24
-### Added
-- dateFnsをglobal指定しなくても使えるように
+### Changed
+- Improved to use dateFns without global variables
 
 ## [0.13.1] - 2018-09-22
 ### Fixed
