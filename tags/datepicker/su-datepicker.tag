@@ -174,6 +174,9 @@
         opts.currentDate = new Date()
       }
       this.months = getMonthes()
+      if (opts.startMode === 'year') {
+        this.selectYear()
+      }
       this.update()
       this.defaultValue = this.valueAsDate
     })
