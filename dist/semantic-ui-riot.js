@@ -4999,6 +4999,12 @@ this.on('update', function () {
           index = i;
         }
       });
+      if (!titles.some(function (title) {
+        return title.active;
+      })) {
+        titles[0].active = true;
+        index = 0;
+      }
       _this.tabs.forEach(function (tab, i) {
         tab.active = index == i;
       });
@@ -5006,6 +5012,11 @@ this.on('update', function () {
       _this.tabs.forEach(function (tab) {
         tab.active = tab.opts.title == active;
       });
+      if (!_this.tabs.some(function (tab) {
+        return tab.active;
+      })) {
+        _this.tabs[0].active = true;
+      }
     }
   }
 });
