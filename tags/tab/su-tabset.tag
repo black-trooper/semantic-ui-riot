@@ -61,6 +61,10 @@
               index = i
             }
           })
+          if (!titles.some(title => title.active)) {
+            titles[0].active = true
+            index = 0
+          }
           this.tabs.forEach((tab, i) => {
             tab.active = index == i
           })
@@ -68,6 +72,9 @@
           this.tabs.forEach(tab => {
             tab.active = tab.opts.title == active
           })
+          if (!this.tabs.some(tab => tab.active)) {
+            this.tabs[0].active = true
+          }
         }
       }
     })

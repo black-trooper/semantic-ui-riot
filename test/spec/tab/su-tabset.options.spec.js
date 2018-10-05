@@ -137,6 +137,17 @@ describe('su-tabset-options', function () {
     tag.tags['su-tab'][1].active.should.equal(true)
   })
 
+  it('default active is not match', function () {
+    mount(`
+      <su-tabset active="Nothing">
+        <su-tab title="Home">Home content</su-tab>
+        <su-tab title="Message">Messages content</su-tab>
+      </su-tabset>`)
+
+    tag.tags['su-tab'][0].active.should.equal(true)
+    tag.tags['su-tab'][1].active.should.equal(false)
+  })
+
   it('single tab', function () {
     mount(`
       <su-tabset>
