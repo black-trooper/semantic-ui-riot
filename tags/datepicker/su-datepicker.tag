@@ -7,7 +7,8 @@
         <i class="calendar icon"></i>
       </button>
     </div>
-    <div class="menu transition { transitionStatus }" onmousedown="{ mousedown }" onmouseup="{ mouseup }" onblur="{ blur }" tabindex="{ getTabindex() }">
+    <div class="menu transition { transitionStatus }" onmousedown="{ mousedown }" onmouseup="{ mouseup }" onblur="{ blur }"
+      tabindex="{ getTabindex() }">
       <div class="ui compact segments">
         <div class="ui center aligned secondary segment">
           <div class="ui buttons dp-navigation">
@@ -152,7 +153,7 @@
     let lastValue = null
     let lastOptsValue = null
     let lastOptsCurrentDate = null
-    const yearRange = 20
+    let yearRange = 20
 
     this.mixin('semantic-ui')
 
@@ -174,6 +175,9 @@
         opts.currentDate = new Date()
       }
       this.months = getMonthes()
+      if (opts.yearRange && !isNaN(opts.yearRange) && opts.yearRange > 20) {
+        yearRange = opts.yearRange
+      }
       if (opts.startMode === 'year') {
         this.selectYear()
       }
@@ -328,16 +332,20 @@
     const addYear = year => {
       this.years = this.years.map(values => {
         values = values.map(value => {
-          return value + year
+          return value + parseInt(year)
         })
         return values
       })
     }
 
     const getYears = () => {
-      const years = [[], [], [], [], []]
+      const rowSize = ((yearRange - yearRange % 4) / 4) + ((yearRange % 4 != 0) ? 1 : 0)
+      const years = new Array()
+      for (let index = 0; index < rowSize; index++) {
+        years.push([])
+      }
       for (let index = 0; index < yearRange; index++) {
-        years[(index - index % 4) / 4][index % 4] = opts.currentDate.getFullYear() + index - 9
+        years[(index - index % 4) / 4][index % 4] = opts.currentDate.getFullYear() + index - ((yearRange - yearRange % 2) / 2 - 1)
       }
       return years
     }

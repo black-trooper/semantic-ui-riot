@@ -202,6 +202,28 @@ describe('su-datepicker', function () {
     $('su-datepicker .dp-month').length.should.equal(12)
   })
 
+  it('year range option', function () {
+    $('body').append('<su-datepicker />')
+    mount({ currentDate: new Date(2017, 11, 1), startMode: "year", yearRange: "40" })
+    tag.opts.currentDate.getTime().should.equal(new Date(2017, 11, 1).getTime())
+
+    $('su-datepicker .dp-day').length.should.equal(0)
+    $('su-datepicker .dp-month').length.should.equal(40)
+    $('su-datepicker .dp-month:first').text().should.equal('1998')
+
+    fireEvent($('su-datepicker .dp-navigation .next')[0], 'click')
+    $('su-datepicker .dp-month:first').text().should.equal('2038')
+
+    fireEvent($('su-datepicker .dp-navigation .prev')[0], 'click')
+    $('su-datepicker .dp-month:first').text().should.equal('1998')
+
+    fireEvent($('su-datepicker .dp-month:first .button')[0], 'click')
+    tag.opts.currentDate.getTime().should.equal(new Date(1998, 11, 1).getTime())
+
+    $('su-datepicker .dp-day').length.should.equal(0)
+    $('su-datepicker .dp-month').length.should.equal(12)
+  })
+
   it('update value', function () {
     $('body').append('<su-datepicker />')
     mount({
