@@ -200,6 +200,11 @@ describe('su-datepicker', function () {
 
     $('su-datepicker .dp-day').length.should.equal(0)
     $('su-datepicker .dp-month').length.should.equal(12)
+
+    fireEvent($('su-datepicker .dp-month .ui.button:eq(0)')[0], 'click')
+    fireEvent($('su-datepicker .dp-day .ui.button:eq(5)')[0], 'click')
+    fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
+    $('su-datepicker .dp-month:first').text().should.equal('1999')
   })
 
   it('year range option', function () {

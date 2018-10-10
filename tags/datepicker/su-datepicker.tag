@@ -291,6 +291,10 @@
         return
       }
       if (!visibleFlg) {
+        if (opts.startMode === 'year') {
+          this.selectYear()
+          this.yearSelecting = true
+        }
         open()
       } else {
         close()
