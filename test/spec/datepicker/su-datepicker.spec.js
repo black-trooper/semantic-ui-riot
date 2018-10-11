@@ -83,7 +83,7 @@ describe('su-datepicker', function () {
   it('select month event', function () {
     $('body').append('<su-datepicker />')
     mount({ currentDate: new Date(2017, 11, 1) })
-    tag.opts.currentDate.getTime().should.equal(new Date(2017, 11, 1).getTime())
+    tag.currentDate.getTime().should.equal(new Date(2017, 11, 1).getTime())
 
     fireEvent($('su-datepicker .dp-navigation .month')[0], 'click')
     $('su-datepicker .dp-day').length.should.equal(0)
@@ -91,7 +91,7 @@ describe('su-datepicker', function () {
     $('su-datepicker .dp-month:first').text().should.equal('Jan')
 
     fireEvent($('su-datepicker .dp-month:first .button')[0], 'click')
-    tag.opts.currentDate.getTime().should.equal(new Date(2017, 0, 1).getTime())
+    tag.currentDate.getTime().should.equal(new Date(2017, 0, 1).getTime())
 
     $('su-datepicker .dp-day').length.should.equal(7 * 6)
     $('su-datepicker .dp-month').length.should.equal(0)
@@ -100,23 +100,23 @@ describe('su-datepicker', function () {
   it('next/prev month event', function () {
     $('body').append('<su-datepicker />')
     mount({ currentDate: new Date(2017, 11, 1) })
-    tag.opts.currentDate.getTime().should.equal(new Date(2017, 11, 1).getTime())
+    tag.currentDate.getTime().should.equal(new Date(2017, 11, 1).getTime())
 
     fireEvent($('su-datepicker .dp-navigation .prev')[0], 'click')
     $('su-datepicker .dp-day').length.should.equal(7 * 6)
     $('su-datepicker .dp-month').length.should.equal(0)
     $('su-datepicker .dp-day:first').text().trim().should.equal('29')
-    tag.opts.currentDate.getTime().should.equal(new Date(2017, 10, 1).getTime())
+    tag.currentDate.getTime().should.equal(new Date(2017, 10, 1).getTime())
 
     fireEvent($('su-datepicker .dp-navigation .next')[0], 'click')
     $('su-datepicker .dp-day:first').text().trim().should.equal('26')
-    tag.opts.currentDate.getTime().should.equal(new Date(2017, 11, 1).getTime())
+    tag.currentDate.getTime().should.equal(new Date(2017, 11, 1).getTime())
   })
 
   it('select year event', function () {
     $('body').append('<su-datepicker />')
     mount({ currentDate: new Date(2017, 11, 1) })
-    tag.opts.currentDate.getTime().should.equal(new Date(2017, 11, 1).getTime())
+    tag.currentDate.getTime().should.equal(new Date(2017, 11, 1).getTime())
 
     fireEvent($('su-datepicker .dp-navigation .year')[0], 'click')
     $('su-datepicker .dp-day').length.should.equal(0)
@@ -130,7 +130,7 @@ describe('su-datepicker', function () {
     $('su-datepicker .dp-month:first').text().should.equal('2008')
 
     fireEvent($('su-datepicker .dp-month:first .button')[0], 'click')
-    tag.opts.currentDate.getTime().should.equal(new Date(2008, 11, 1).getTime())
+    tag.currentDate.getTime().should.equal(new Date(2008, 11, 1).getTime())
 
     $('su-datepicker .dp-day').length.should.equal(0)
     $('su-datepicker .dp-month').length.should.equal(12)
@@ -182,9 +182,10 @@ describe('su-datepicker', function () {
 
   it('year first option', function () {
     $('body').append('<su-datepicker />')
-    mount({ currentDate: new Date(2017, 11, 1), startMode: "year" })
-    tag.opts.currentDate.getTime().should.equal(new Date(2017, 11, 1).getTime())
+    mount({ currentDate: new Date(2017, 11, 1), popup: true, startMode: "year" })
+    tag.currentDate.getTime().should.equal(new Date(2017, 11, 1).getTime())
 
+    fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
     $('su-datepicker .dp-day').length.should.equal(0)
     $('su-datepicker .dp-month').length.should.equal(20)
     $('su-datepicker .dp-month:first').text().should.equal('2008')
@@ -196,7 +197,7 @@ describe('su-datepicker', function () {
     $('su-datepicker .dp-month:first').text().should.equal('2008')
 
     fireEvent($('su-datepicker .dp-month:first .button')[0], 'click')
-    tag.opts.currentDate.getTime().should.equal(new Date(2008, 11, 1).getTime())
+    tag.currentDate.getTime().should.equal(new Date(2008, 11, 1).getTime())
 
     $('su-datepicker .dp-day').length.should.equal(0)
     $('su-datepicker .dp-month').length.should.equal(12)
@@ -210,7 +211,7 @@ describe('su-datepicker', function () {
   it('year range option', function () {
     $('body').append('<su-datepicker />')
     mount({ currentDate: new Date(2017, 11, 1), startMode: "year", yearRange: "40" })
-    tag.opts.currentDate.getTime().should.equal(new Date(2017, 11, 1).getTime())
+    tag.currentDate.getTime().should.equal(new Date(2017, 11, 1).getTime())
 
     $('su-datepicker .dp-day').length.should.equal(0)
     $('su-datepicker .dp-month').length.should.equal(40)
@@ -223,7 +224,7 @@ describe('su-datepicker', function () {
     $('su-datepicker .dp-month:first').text().should.equal('1998')
 
     fireEvent($('su-datepicker .dp-month:first .button')[0], 'click')
-    tag.opts.currentDate.getTime().should.equal(new Date(1998, 11, 1).getTime())
+    tag.currentDate.getTime().should.equal(new Date(1998, 11, 1).getTime())
 
     $('su-datepicker .dp-day').length.should.equal(0)
     $('su-datepicker .dp-month').length.should.equal(12)

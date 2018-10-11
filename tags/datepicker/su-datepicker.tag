@@ -147,11 +147,13 @@
     this.value = null
     this.valueAsDate = null
     this.defaultValue = null
+    this.currentDate = null
     this.transitionStatus = opts.popup ? 'hidden' : 'visible'
     let visibleFlg = false
     let itemActivated = false
     let lastValue = null
     let lastOptsValue = null
+    let lastCurrentDate = null
     let lastOptsCurrentDate = null
     let yearRange = 20
 
@@ -168,11 +170,12 @@
       lastValue = copyDate(this.valueAsDate)
       lastOptsValue = copyDate(opts.riotValue)
 
+      this.currentDate = copyDate(opts.currentDate)
       if (this.valueAsDate) {
-        opts.currentDate = copyDate(this.valueAsDate)
+        this.currentDate = copyDate(this.valueAsDate)
       }
-      if (!opts.currentDate) {
-        opts.currentDate = new Date()
+      if (!this.currentDate) {
+        this.currentDate = new Date()
       }
       this.months = getMonthes()
       if (opts.yearRange && !isNaN(opts.yearRange) && opts.yearRange > 20) {
@@ -203,10 +206,14 @@
       setValueFromValueAsDate()
 
       if (changed && this.valueAsDate) {
-        opts.currentDate = copyDate(this.valueAsDate)
+        this.currentDate = copyDate(this.valueAsDate)
       }
       if (!isEqualDay(lastOptsCurrentDate, opts.currentDate)) {
+        this.currentDate = copyDate(opts.currentDate)
         lastOptsCurrentDate = copyDate(opts.currentDate)
+      }
+      if (!isEqualDay(lastCurrentDate, this.currentDate)) {
+        lastCurrentDate = copyDate(this.currentDate)
         generate()
       }
     })
@@ -246,12 +253,12 @@
     }
 
     this.clickMonth = event => {
-      opts.currentDate.setMonth(event.item.month.value)
+      this.currentDate.setMonth(event.item.month.value)
       this.monthSelecting = false
     }
 
     this.clickYear = event => {
-      opts.currentDate.setYear(event.item.year)
+      this.currentDate.setYear(event.item.year)
       this.selectMonth()
     }
 
@@ -260,7 +267,7 @@
         addYear(-yearRange)
       } else {
         this.monthSelecting = false
-        opts.currentDate = addMonths(opts.currentDate, -1)
+        this.currentDate = addMonths(this.currentDate, -1)
       }
     }
 
@@ -269,7 +276,7 @@
         addYear(yearRange)
       } else {
         this.monthSelecting = false
-        opts.currentDate = addMonths(opts.currentDate, 1)
+        this.currentDate = addMonths(this.currentDate, 1)
       }
     }
 
@@ -319,7 +326,7 @@
     //                                                                               Logic
     //                                                                               =====
     const generate = () => {
-      const startDate = startOfMonth(opts.currentDate)
+      const startDate = startOfMonth(this.currentDate)
       const baseDate = addDays(startDate, - startDate.getDay())
       let i = 0
       this.weeks = []
@@ -349,7 +356,7 @@
         years.push([])
       }
       for (let index = 0; index < yearRange; index++) {
-        years[(index - index % 4) / 4][index % 4] = opts.currentDate.getFullYear() + index - ((yearRange - yearRange % 2) / 2 - 1)
+        years[(index - index % 4) / 4][index % 4] = this.currentDate.getFullYear() + index - ((yearRange - yearRange % 2) / 2 - 1)
       }
       return years
     }
@@ -369,11 +376,12 @@
     const open = () => {
       this.transitionStatus = 'visible'
       visibleFlg = true
+      this.currentDate = copyDate(opts.currentDate)
       if (this.valueAsDate) {
-        opts.currentDate = copyDate(this.valueAsDate)
+        this.currentDate = copyDate(this.valueAsDate)
       }
-      if (!opts.currentDate) {
-        opts.currentDate = new Date()
+      if (!this.currentDate) {
+        this.currentDate = new Date()
       }
       this.trigger('open', this.valueAsDate)
     }
@@ -420,19 +428,19 @@
     //                                                                              Helper
     //                                                                              ======
     this.getCurrentYear = () => {
-      if (opts.currentDate) {
-        return opts.currentDate.getFullYear()
+      if (this.currentDate) {
+        return this.currentDate.getFullYear()
       }
     }
 
     this.getCurrentMonthView = () => {
-      if (opts.currentDate) {
-        return format(opts.currentDate, 'MMM', { locale: getLocale() })
+      if (this.currentDate) {
+        return format(this.currentDate, 'MMM', { locale: getLocale() })
       }
     }
 
     this.getCurrentMonth = () => {
-      return opts.currentDate.getMonth()
+      return this.currentDate.getMonth()
     }
 
     this.getWeekNames = () => {
