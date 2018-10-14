@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
+		module.exports = factory(require("date-fns/add_days/index"), require("date-fns/add_months/index"), require("date-fns/format/index"), require("date-fns/is_same_day/index"), require("date-fns/is_today/index"), require("date-fns/parse/index"), require("date-fns/start_of_month/index"));
 	else if(typeof define === 'function' && define.amd)
-		define([], factory);
+		define(["date-fns/add_days/index", "date-fns/add_months/index", "date-fns/format/index", "date-fns/is_same_day/index", "date-fns/is_today/index", "date-fns/parse/index", "date-fns/start_of_month/index"], factory);
 	else if(typeof exports === 'object')
-		exports["SemanticUiRiot"] = factory();
+		exports["SemanticUiRiot"] = factory(require("date-fns/add_days/index"), require("date-fns/add_months/index"), require("date-fns/format/index"), require("date-fns/is_same_day/index"), require("date-fns/is_today/index"), require("date-fns/parse/index"), require("date-fns/start_of_month/index"));
 	else
-		root["SemanticUiRiot"] = factory();
-})(window, function() {
+		root["SemanticUiRiot"] = factory(root["dateFns"]["addDays"], root["dateFns"]["addMonths"], root["dateFns"]["format"], root["dateFns"]["isSameDay"], root["dateFns"]["isToday"], root["dateFns"]["parse"], root["dateFns"]["startOfMonth"]);
+})(window, function(__WEBPACK_EXTERNAL_MODULE_date_fns_add_days__, __WEBPACK_EXTERNAL_MODULE_date_fns_add_months__, __WEBPACK_EXTERNAL_MODULE_date_fns_format__, __WEBPACK_EXTERNAL_MODULE_date_fns_is_same_day__, __WEBPACK_EXTERNAL_MODULE_date_fns_is_today__, __WEBPACK_EXTERNAL_MODULE_date_fns_parse__, __WEBPACK_EXTERNAL_MODULE_date_fns_start_of_month__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -3311,22 +3311,54 @@ riot.mixin({
   !*** ./tags/datepicker/su-datepicker.tag ***!
   \*******************************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
 riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup}"> <div class="ui action input {disabled: isDisabled()}" if="{opts.popup}"> <input type="text" placeholder="{opts.placeholder}" ref="input" tabindex="{getTabindex()}" readonly="{isReadOnly()}"> <button class="ui icon button {disabled: isDisabled()}" onclick="{toggle}" onblur="{blur}"> <i class="calendar icon"></i> </button> </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="{getTabindex()}"> <div class="ui compact segments"> <div class="ui center aligned secondary segment"> <div class="ui buttons dp-navigation"> <button class="icon tiny ui button {disabled: isDisabled()} prev" onclick="{clickPrevious}"> <i class="chevron left icon"></i> </button> <button class="ui button {disabled: isDisabled()} month" onclick="{selectMonth}">{getCurrentMonthView()}</button> <button class="ui button {disabled: isDisabled()} year" onclick="{selectYear}">{getCurrentYear()}</button> <button class="icon tiny ui button {disabled: isDisabled()} next" onclick="{clickNext}"> <i class="chevron right icon"></i> </button> </div> <div class="dp-wrapper"> <div each="{week in getWeekNames()}" class="dp-weekday">{week}</div> </div> </div> <div class="ui center aligned segment" if="{!yearSelecting && !monthSelecting}"> <div each="{week in weeks}" class="dp-wrapper"> <div each="{day in week.days}" class="dp-day"> <button class="ui button {today: isToday(day)} {primary: isActive(day)} {non-active: !isActive(day)} {disabled: day.getMonth() != getCurrentMonth() || isDisabled()}" onclick="{clickDay}">{day.getDate()}</button> </div> </div> </div> <div class="ui center aligned segment" if="{!yearSelecting && !monthSelecting}"> <div class="ui two column grid"> <div class="column dp-clear"> <button type="button" class="ui icon fluid button {disabled : isDisabled()}" onclick="{clickClear}"><i class="times icon"></i></button></div> <div class="column dp-today"> <button type="button" class="ui icon fluid button {disabled : isDisabled()}" onclick="{clickToday}"><i class="calendar check icon"></i></button></div> </div> </div> <div class="ui center aligned segment" if="{monthSelecting}"> <div each="{element in months}" class="dp-wrapper"> <div each="{month in element}" class="dp-month"><button class="ui button {disabled : isDisabled()}" onclick="{clickMonth}">{month.label}</button></div> </div> </div> <div class="ui center aligned segment" if="{yearSelecting}"> <div each="{element in years}" class="dp-wrapper"> <div each="{year in element}" class="dp-month"><button class="ui button {disabled : isDisabled()}" onclick="{clickYear}">{year}</button></div> </div> </div> </div> </div> </div>', 'su-datepicker .ui.segment,[data-is="su-datepicker"] .ui.segment{ padding-top: 0.5rem; padding-bottom: 0.5rem; } su-datepicker .ui.buttons.dp-navigation,[data-is="su-datepicker"] .ui.buttons.dp-navigation{ margin-bottom: 0.4rem; } su-datepicker .ui.dropdown,[data-is="su-datepicker"] .ui.dropdown{ display: block; } su-datepicker .dp-wrapper,[data-is="su-datepicker"] .dp-wrapper{ display: flex; } su-datepicker .dp-day,[data-is="su-datepicker"] .dp-day,su-datepicker .dp-month,[data-is="su-datepicker"] .dp-month{ cursor: pointer; } su-datepicker .dp-weekday,[data-is="su-datepicker"] .dp-weekday,su-datepicker .dp-day,[data-is="su-datepicker"] .dp-day,su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button{ width: 2.5rem; } su-datepicker .dp-month,[data-is="su-datepicker"] .dp-month,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ width: 4.375rem; } su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ padding: 0; height: 2.5rem; font-weight: normal } su-datepicker .dp-day .ui.button.today,[data-is="su-datepicker"] .dp-day .ui.button.today{ font-weight: 700; } su-datepicker .dp-today .ui.button,[data-is="su-datepicker"] .dp-today .ui.button,su-datepicker .dp-clear .ui.button,[data-is="su-datepicker"] .dp-clear .ui.button,su-datepicker .dp-navigation .ui.button,[data-is="su-datepicker"] .dp-navigation .ui.button,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button,su-datepicker .dp-day .ui.button.non-active,[data-is="su-datepicker"] .dp-day .ui.button.non-active{ background-color: transparent; } su-datepicker .dp-today .ui.button:hover,[data-is="su-datepicker"] .dp-today .ui.button:hover,su-datepicker .dp-clear .ui.button:hover,[data-is="su-datepicker"] .dp-clear .ui.button:hover,su-datepicker .dp-navigation .ui.button:hover,[data-is="su-datepicker"] .dp-navigation .ui.button:hover,su-datepicker .dp-month .ui.button:hover,[data-is="su-datepicker"] .dp-month .ui.button:hover,su-datepicker .dp-day .ui.button.non-active:hover,[data-is="su-datepicker"] .dp-day .ui.button.non-active:hover{ background-color: #e0e1e2; } su-datepicker .dp-day .ui.button.disabled,[data-is="su-datepicker"] .dp-day .ui.button.disabled{ pointer-events: all !important; } su-datepicker .dp-navigation,[data-is="su-datepicker"] .dp-navigation{ width: 100%; } su-datepicker .dp-navigation .ui.button,[data-is="su-datepicker"] .dp-navigation .ui.button{ width: 20%; } su-datepicker .dp-navigation .ui.button.year,[data-is="su-datepicker"] .dp-navigation .ui.button.year,su-datepicker .dp-navigation .ui.button.month,[data-is="su-datepicker"] .dp-navigation .ui.button.month{ width: 30%; }', '', function(opts) {
 'use strict';
 
 var _this = this;
 
+var _add_days = __webpack_require__(/*! date-fns/add_days */ "date-fns/add_days");
+
+var _add_days2 = _interopRequireDefault(_add_days);
+
+var _add_months = __webpack_require__(/*! date-fns/add_months */ "date-fns/add_months");
+
+var _add_months2 = _interopRequireDefault(_add_months);
+
+var _format = __webpack_require__(/*! date-fns/format */ "date-fns/format");
+
+var _format2 = _interopRequireDefault(_format);
+
+var _is_same_day = __webpack_require__(/*! date-fns/is_same_day */ "date-fns/is_same_day");
+
+var _is_same_day2 = _interopRequireDefault(_is_same_day);
+
+var _is_today = __webpack_require__(/*! date-fns/is_today */ "date-fns/is_today");
+
+var _is_today2 = _interopRequireDefault(_is_today);
+
+var _parse = __webpack_require__(/*! date-fns/parse */ "date-fns/parse");
+
+var _parse2 = _interopRequireDefault(_parse);
+
+var _start_of_month = __webpack_require__(/*! date-fns/start_of_month */ "date-fns/start_of_month");
+
+var _start_of_month2 = _interopRequireDefault(_start_of_month);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 this.weeks = [];
 this.value = null;
 this.valueAsDate = null;
 this.defaultValue = null;
+this.currentDate = null;
 this.transitionStatus = opts.popup ? 'hidden' : 'visible';
 var visibleFlg = false;
 var itemActivated = false;
 var lastValue = null;
 var lastOptsValue = null;
+var lastCurrentDate = null;
 var lastOptsCurrentDate = null;
 var yearRange = 20;
 
@@ -3343,27 +3375,34 @@ this.on('mount', function () {
   lastValue = copyDate(_this.valueAsDate);
   lastOptsValue = copyDate(opts.riotValue);
 
+  _this.currentDate = copyDate(opts.currentDate);
   if (_this.valueAsDate) {
-    opts.currentDate = copyDate(_this.valueAsDate);
+    _this.currentDate = copyDate(_this.valueAsDate);
   }
-  if (!opts.currentDate) {
-    opts.currentDate = new Date();
+  if (!_this.currentDate) {
+    _this.currentDate = new Date();
   }
   _this.months = getMonthes();
+  if (opts.yearRange && !isNaN(opts.yearRange) && opts.yearRange > 20) {
+    yearRange = opts.yearRange;
+  }
+  if (opts.startMode === 'year') {
+    _this.selectYear();
+  }
   _this.update();
   _this.defaultValue = _this.valueAsDate;
 });
 
 this.on('update', function () {
   var changed = false;
-  if (!isSameDay(lastValue, _this.value)) {
+  if (!isEqualDay(lastValue, _this.value)) {
     _this.valueAsDate = copyDate(_this.value);
     lastValue = copyDate(_this.value);
     changed = true;
-  } else if (!isSameDay(lastValue, _this.valueAsDate)) {
+  } else if (!isEqualDay(lastValue, _this.valueAsDate)) {
     lastValue = copyDate(_this.valueAsDate);
     changed = true;
-  } else if (!isSameDay(lastOptsValue, opts.riotValue)) {
+  } else if (!isEqualDay(lastOptsValue, opts.riotValue)) {
     _this.valueAsDate = copyDate(opts.riotValue);
     lastOptsValue = copyDate(opts.riotValue);
     lastValue = copyDate(opts.riotValue);
@@ -3372,10 +3411,14 @@ this.on('update', function () {
   setValueFromValueAsDate();
 
   if (changed && _this.valueAsDate) {
-    opts.currentDate = copyDate(_this.valueAsDate);
+    _this.currentDate = copyDate(_this.valueAsDate);
   }
-  if (!isSameDay(lastOptsCurrentDate, opts.currentDate)) {
+  if (!isEqualDay(lastOptsCurrentDate, opts.currentDate)) {
+    _this.currentDate = copyDate(opts.currentDate);
     lastOptsCurrentDate = copyDate(opts.currentDate);
+  }
+  if (!isEqualDay(lastCurrentDate, _this.currentDate)) {
+    lastCurrentDate = copyDate(_this.currentDate);
     generate();
   }
 });
@@ -3389,7 +3432,7 @@ this.reset = function () {
 };
 
 this.changed = function () {
-  return !isSameDay(_this.valueAsDate, _this.defaultValue);
+  return !isEqualDay(_this.valueAsDate, _this.defaultValue);
 };
 
 // ===================================================================================
@@ -3415,12 +3458,12 @@ this.clickDay = function (event) {
 };
 
 this.clickMonth = function (event) {
-  opts.currentDate.setMonth(event.item.month.value);
+  _this.currentDate.setMonth(event.item.month.value);
   _this.monthSelecting = false;
 };
 
 this.clickYear = function (event) {
-  opts.currentDate.setYear(event.item.year);
+  _this.currentDate.setYear(event.item.year);
   _this.selectMonth();
 };
 
@@ -3429,7 +3472,7 @@ this.clickPrevious = function () {
     addYear(-yearRange);
   } else {
     _this.monthSelecting = false;
-    opts.currentDate = dateFns.addMonths(opts.currentDate, -1);
+    _this.currentDate = (0, _add_months2.default)(_this.currentDate, -1);
   }
 };
 
@@ -3438,7 +3481,7 @@ this.clickNext = function () {
     addYear(yearRange);
   } else {
     _this.monthSelecting = false;
-    opts.currentDate = dateFns.addMonths(opts.currentDate, 1);
+    _this.currentDate = (0, _add_months2.default)(_this.currentDate, 1);
   }
 };
 
@@ -3460,6 +3503,10 @@ this.toggle = function () {
     return;
   }
   if (!visibleFlg) {
+    if (opts.startMode === 'year') {
+      _this.selectYear();
+      _this.yearSelecting = true;
+    }
     open();
   } else {
     close();
@@ -3484,15 +3531,15 @@ this.blur = function () {
 //                                                                               Logic
 //                                                                               =====
 var generate = function generate() {
-  var startOfMonth = dateFns.startOfMonth(opts.currentDate);
-  var baseDate = dateFns.addDays(startOfMonth, -startOfMonth.getDay());
+  var startDate = (0, _start_of_month2.default)(_this.currentDate);
+  var baseDate = (0, _add_days2.default)(startDate, -startDate.getDay());
   var i = 0;
   _this.weeks = [];
 
   for (var r = 0; r < 6; r++) {
     var days = [];
     for (var c = 0; c < 7; c++) {
-      days.push(dateFns.addDays(baseDate, i++));
+      days.push((0, _add_days2.default)(baseDate, i++));
     }
     _this.weeks.push({ days: days });
   }
@@ -3501,16 +3548,20 @@ var generate = function generate() {
 var addYear = function addYear(year) {
   _this.years = _this.years.map(function (values) {
     values = values.map(function (value) {
-      return value + year;
+      return value + parseInt(year);
     });
     return values;
   });
 };
 
 var getYears = function getYears() {
-  var years = [[], [], [], [], []];
-  for (var index = 0; index < yearRange; index++) {
-    years[(index - index % 4) / 4][index % 4] = opts.currentDate.getFullYear() + index - 9;
+  var rowSize = (yearRange - yearRange % 4) / 4 + (yearRange % 4 != 0 ? 1 : 0);
+  var years = new Array();
+  for (var index = 0; index < rowSize; index++) {
+    years.push([]);
+  }
+  for (var _index = 0; _index < yearRange; _index++) {
+    years[(_index - _index % 4) / 4][_index % 4] = _this.currentDate.getFullYear() + _index - ((yearRange - yearRange % 2) / 2 - 1);
   }
   return years;
 };
@@ -3518,7 +3569,7 @@ var getYears = function getYears() {
 var getMonthes = function getMonthes() {
   var months = [[], [], []];
   var monthNames = range(12).map(function (month) {
-    return dateFns.format(new Date(2018, month, 1), 'MMM', { locale: getLocale() });
+    return (0, _format2.default)(new Date(2018, month, 1), 'MMM', { locale: getLocale() });
   });
   monthNames.forEach(function (month, index) {
     months[(index - index % 4) / 4][index % 4] = {
@@ -3532,11 +3583,12 @@ var getMonthes = function getMonthes() {
 var open = function open() {
   _this.transitionStatus = 'visible';
   visibleFlg = true;
+  _this.currentDate = copyDate(opts.currentDate);
   if (_this.valueAsDate) {
-    opts.currentDate = copyDate(_this.valueAsDate);
+    _this.currentDate = copyDate(_this.valueAsDate);
   }
-  if (!opts.currentDate) {
-    opts.currentDate = new Date();
+  if (!_this.currentDate) {
+    _this.currentDate = new Date();
   }
   _this.trigger('open', _this.valueAsDate);
 };
@@ -3558,24 +3610,24 @@ var setDate = function setDate(date) {
 };
 
 var setValueFromValueAsDate = function setValueFromValueAsDate() {
-  _this.value = _this.valueAsDate ? dateFns.format(_this.valueAsDate, getPattern(), { locale: getLocale() }) : null;
+  _this.value = _this.valueAsDate ? (0, _format2.default)(_this.valueAsDate, getPattern(), { locale: getLocale() }) : null;
 };
 
-var isSameDay = function isSameDay(d1, d2) {
+var isEqualDay = function isEqualDay(d1, d2) {
   if (d1 == d2) {
     return true;
   }
   if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
     return false;
   }
-  return dateFns.isSameDay(d1, d2);
+  return (0, _is_same_day2.default)(d1, d2);
 };
 
 var copyDate = function copyDate(date) {
   if (!date) {
     return date;
   }
-  return dateFns.parse(date);
+  return (0, _parse2.default)(date);
   // return new Date(date.getTime())
 };
 
@@ -3583,33 +3635,33 @@ var copyDate = function copyDate(date) {
 //                                                                              Helper
 //                                                                              ======
 this.getCurrentYear = function () {
-  if (opts.currentDate) {
-    return opts.currentDate.getFullYear();
+  if (_this.currentDate) {
+    return _this.currentDate.getFullYear();
   }
 };
 
 this.getCurrentMonthView = function () {
-  if (opts.currentDate) {
-    return dateFns.format(opts.currentDate, 'MMM', { locale: getLocale() });
+  if (_this.currentDate) {
+    return (0, _format2.default)(_this.currentDate, 'MMM', { locale: getLocale() });
   }
 };
 
 this.getCurrentMonth = function () {
-  return opts.currentDate.getMonth();
+  return _this.currentDate.getMonth();
 };
 
 this.getWeekNames = function () {
   return range(7, 1).map(function (day) {
-    return dateFns.format(new Date(2018, 6, day), 'dd', { locale: getLocale() });
+    return (0, _format2.default)(new Date(2018, 6, day), 'dd', { locale: getLocale() });
   });
 };
 
 this.isActive = function (date) {
-  return isSameDay(_this.valueAsDate, date);
+  return isEqualDay(_this.valueAsDate, date);
 };
 
 this.isToday = function (date) {
-  return dateFns.isToday(date);
+  return (0, _is_today2.default)(date);
 };
 
 this.getTabindex = function () {
@@ -4248,7 +4300,7 @@ var flatMap = function flatMap(xs, f) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-modal', '<div class="ui modal transition visible active {opts.class}" onclick="{clickModal}" id="{getId()}"> <i class="close icon" if="{isFullscreen()}" onclick="{hide}"></i> <div class="ui header {icon: opts.modal.header.icon}" if="{opts.modal.header}"> <i class="icon {opts.modal.header.icon}" if="{opts.modal.header.icon}"></i> {(opts.modal.header.text) ? opts.modal.header.text : opts.modal.header} </div> <div class="content {image: isImageContent()}" ref="content"> <yield></yield> </div> <div class="actions"> <button each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: isBasic()} {disabled: disabled}" onclick="{parent.click}" ref="button_{text}"> {text} <i class="icon {icon}" if="{icon}"></i> </button> </div> </div>', 'su-modal.ui.dimmer.visible.transition,[data-is="su-modal"].ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; } su-modal .ui.fullscreen.modal,[data-is="su-modal"] .ui.fullscreen.modal{ left: 0 !important; }', 'class="ui dimmer modals page transition {transitionStatus}" onclick="{dimmerClose}"', function(opts) {
+riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionStatus}"> <div class="ui modal transition visible active {opts.class}" onclick="{clickModal}" id="{getId()}"> <i class="close icon" if="{isFullscreen()}" onclick="{hide}"></i> <div class="ui header {icon: opts.modal.header.icon}" if="{opts.modal.header}"> <i class="icon {opts.modal.header.icon}" if="{opts.modal.header.icon}"></i> {(opts.modal.header.text) ? opts.modal.header.text : opts.modal.header} </div> <div class="content {image: isImageContent()}" ref="content"> <yield></yield> </div> <div class="actions"> <button each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: isBasic()} {disabled: disabled}" onclick="{parent.click}" ref="button_{text}"> {text} <i class="icon {icon}" if="{icon}"></i> </button> </div> </div> </div>', 'su-modal .ui.dimmer.visible.transition,[data-is="su-modal"] .ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; } su-modal .ui.fullscreen.modal,[data-is="su-modal"] .ui.fullscreen.modal{ left: 0 !important; }', 'onclick="{dimmerClose}"', function(opts) {
 'use strict';
 
 var _this = this;
@@ -4969,6 +5021,12 @@ this.on('update', function () {
           index = i;
         }
       });
+      if (!titles.some(function (title) {
+        return title.active;
+      })) {
+        titles[0].active = true;
+        index = 0;
+      }
       _this.tabs.forEach(function (tab, i) {
         tab.active = index == i;
       });
@@ -4976,6 +5034,11 @@ this.on('update', function () {
       _this.tabs.forEach(function (tab) {
         tab.active = tab.opts.title == active;
       });
+      if (!_this.tabs.some(function (tab) {
+        return tab.active;
+      })) {
+        _this.tabs[0].active = true;
+      }
     }
   }
 });
@@ -5193,6 +5256,83 @@ riot.mixin({
   }
 });
 });
+
+/***/ }),
+
+/***/ "date-fns/add_days":
+/*!**********************************************************************************************************************************************************!*\
+  !*** external {"root":["dateFns","addDays"],"commonjs":"date-fns/add_days/index","commonjs2":"date-fns/add_days/index","amd":"date-fns/add_days/index"} ***!
+  \**********************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_date_fns_add_days__;
+
+/***/ }),
+
+/***/ "date-fns/add_months":
+/*!******************************************************************************************************************************************************************!*\
+  !*** external {"root":["dateFns","addMonths"],"commonjs":"date-fns/add_months/index","commonjs2":"date-fns/add_months/index","amd":"date-fns/add_months/index"} ***!
+  \******************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_date_fns_add_months__;
+
+/***/ }),
+
+/***/ "date-fns/format":
+/*!***************************************************************************************************************************************************!*\
+  !*** external {"root":["dateFns","format"],"commonjs":"date-fns/format/index","commonjs2":"date-fns/format/index","amd":"date-fns/format/index"} ***!
+  \***************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_date_fns_format__;
+
+/***/ }),
+
+/***/ "date-fns/is_same_day":
+/*!*********************************************************************************************************************************************************************!*\
+  !*** external {"root":["dateFns","isSameDay"],"commonjs":"date-fns/is_same_day/index","commonjs2":"date-fns/is_same_day/index","amd":"date-fns/is_same_day/index"} ***!
+  \*********************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_date_fns_is_same_day__;
+
+/***/ }),
+
+/***/ "date-fns/is_today":
+/*!**********************************************************************************************************************************************************!*\
+  !*** external {"root":["dateFns","isToday"],"commonjs":"date-fns/is_today/index","commonjs2":"date-fns/is_today/index","amd":"date-fns/is_today/index"} ***!
+  \**********************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_date_fns_is_today__;
+
+/***/ }),
+
+/***/ "date-fns/parse":
+/*!***********************************************************************************************************************************************!*\
+  !*** external {"root":["dateFns","parse"],"commonjs":"date-fns/parse/index","commonjs2":"date-fns/parse/index","amd":"date-fns/parse/index"} ***!
+  \***********************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_date_fns_parse__;
+
+/***/ }),
+
+/***/ "date-fns/start_of_month":
+/*!*********************************************************************************************************************************************************************************!*\
+  !*** external {"root":["dateFns","startOfMonth"],"commonjs":"date-fns/start_of_month/index","commonjs2":"date-fns/start_of_month/index","amd":"date-fns/start_of_month/index"} ***!
+  \*********************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_date_fns_start_of_month__;
 
 /***/ })
 
