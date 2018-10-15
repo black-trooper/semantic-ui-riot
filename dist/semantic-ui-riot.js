@@ -3352,11 +3352,13 @@ this.weeks = [];
 this.value = null;
 this.valueAsDate = null;
 this.defaultValue = null;
+this.currentDate = null;
 this.transitionStatus = opts.popup ? 'hidden' : 'visible';
 var visibleFlg = false;
 var itemActivated = false;
 var lastValue = null;
 var lastOptsValue = null;
+var lastCurrentDate = null;
 var lastOptsCurrentDate = null;
 var yearRange = 20;
 
@@ -3373,13 +3375,20 @@ this.on('mount', function () {
   lastValue = copyDate(_this.valueAsDate);
   lastOptsValue = copyDate(opts.riotValue);
 
+  _this.currentDate = copyDate(opts.currentDate);
   if (_this.valueAsDate) {
-    opts.currentDate = copyDate(_this.valueAsDate);
+    _this.currentDate = copyDate(_this.valueAsDate);
   }
-  if (!opts.currentDate) {
-    opts.currentDate = new Date();
+  if (!_this.currentDate) {
+    _this.currentDate = new Date();
   }
   _this.months = getMonthes();
+  if (opts.yearRange && !isNaN(opts.yearRange) && opts.yearRange > 20) {
+    yearRange = opts.yearRange;
+  }
+  if (opts.startMode === 'year') {
+    _this.selectYear();
+  }
   _this.update();
   _this.defaultValue = _this.valueAsDate;
 });
@@ -3402,10 +3411,14 @@ this.on('update', function () {
   setValueFromValueAsDate();
 
   if (changed && _this.valueAsDate) {
-    opts.currentDate = copyDate(_this.valueAsDate);
+    _this.currentDate = copyDate(_this.valueAsDate);
   }
   if (!isEqualDay(lastOptsCurrentDate, opts.currentDate)) {
+    _this.currentDate = copyDate(opts.currentDate);
     lastOptsCurrentDate = copyDate(opts.currentDate);
+  }
+  if (!isEqualDay(lastCurrentDate, _this.currentDate)) {
+    lastCurrentDate = copyDate(_this.currentDate);
     generate();
   }
 });
@@ -3445,12 +3458,12 @@ this.clickDay = function (event) {
 };
 
 this.clickMonth = function (event) {
-  opts.currentDate.setMonth(event.item.month.value);
+  _this.currentDate.setMonth(event.item.month.value);
   _this.monthSelecting = false;
 };
 
 this.clickYear = function (event) {
-  opts.currentDate.setYear(event.item.year);
+  _this.currentDate.setYear(event.item.year);
   _this.selectMonth();
 };
 
@@ -3459,7 +3472,7 @@ this.clickPrevious = function () {
     addYear(-yearRange);
   } else {
     _this.monthSelecting = false;
-    opts.currentDate = (0, _add_months2.default)(opts.currentDate, -1);
+    _this.currentDate = (0, _add_months2.default)(_this.currentDate, -1);
   }
 };
 
@@ -3468,7 +3481,7 @@ this.clickNext = function () {
     addYear(yearRange);
   } else {
     _this.monthSelecting = false;
-    opts.currentDate = (0, _add_months2.default)(opts.currentDate, 1);
+    _this.currentDate = (0, _add_months2.default)(_this.currentDate, 1);
   }
 };
 
@@ -3490,6 +3503,10 @@ this.toggle = function () {
     return;
   }
   if (!visibleFlg) {
+    if (opts.startMode === 'year') {
+      _this.selectYear();
+      _this.yearSelecting = true;
+    }
     open();
   } else {
     close();
@@ -3514,7 +3531,7 @@ this.blur = function () {
 //                                                                               Logic
 //                                                                               =====
 var generate = function generate() {
-  var startDate = (0, _start_of_month2.default)(opts.currentDate);
+  var startDate = (0, _start_of_month2.default)(_this.currentDate);
   var baseDate = (0, _add_days2.default)(startDate, -startDate.getDay());
   var i = 0;
   _this.weeks = [];
@@ -3531,16 +3548,20 @@ var generate = function generate() {
 var addYear = function addYear(year) {
   _this.years = _this.years.map(function (values) {
     values = values.map(function (value) {
-      return value + year;
+      return value + parseInt(year);
     });
     return values;
   });
 };
 
 var getYears = function getYears() {
-  var years = [[], [], [], [], []];
-  for (var index = 0; index < yearRange; index++) {
-    years[(index - index % 4) / 4][index % 4] = opts.currentDate.getFullYear() + index - 9;
+  var rowSize = (yearRange - yearRange % 4) / 4 + (yearRange % 4 != 0 ? 1 : 0);
+  var years = new Array();
+  for (var index = 0; index < rowSize; index++) {
+    years.push([]);
+  }
+  for (var _index = 0; _index < yearRange; _index++) {
+    years[(_index - _index % 4) / 4][_index % 4] = _this.currentDate.getFullYear() + _index - ((yearRange - yearRange % 2) / 2 - 1);
   }
   return years;
 };
@@ -3562,11 +3583,12 @@ var getMonthes = function getMonthes() {
 var open = function open() {
   _this.transitionStatus = 'visible';
   visibleFlg = true;
+  _this.currentDate = copyDate(opts.currentDate);
   if (_this.valueAsDate) {
-    opts.currentDate = copyDate(_this.valueAsDate);
+    _this.currentDate = copyDate(_this.valueAsDate);
   }
-  if (!opts.currentDate) {
-    opts.currentDate = new Date();
+  if (!_this.currentDate) {
+    _this.currentDate = new Date();
   }
   _this.trigger('open', _this.valueAsDate);
 };
@@ -3613,19 +3635,19 @@ var copyDate = function copyDate(date) {
 //                                                                              Helper
 //                                                                              ======
 this.getCurrentYear = function () {
-  if (opts.currentDate) {
-    return opts.currentDate.getFullYear();
+  if (_this.currentDate) {
+    return _this.currentDate.getFullYear();
   }
 };
 
 this.getCurrentMonthView = function () {
-  if (opts.currentDate) {
-    return (0, _format2.default)(opts.currentDate, 'MMM', { locale: getLocale() });
+  if (_this.currentDate) {
+    return (0, _format2.default)(_this.currentDate, 'MMM', { locale: getLocale() });
   }
 };
 
 this.getCurrentMonth = function () {
-  return opts.currentDate.getMonth();
+  return _this.currentDate.getMonth();
 };
 
 this.getWeekNames = function () {
