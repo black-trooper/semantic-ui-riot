@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.15.0] - 2018-10-15
+### Added
+- Add year first option to su-datepicker
+- Add year range option to su-datepicker
+
+### Fixed
+- Fix current-date option of su-datepicker
+
+## [0.14.1] - 2018-10-05
+### Fixed
+- Improve active option in su-tab
+
 ## [0.14.0] - 2018-09-24
 ### Changed
 - Improved to use dateFns without global variables
@@ -63,7 +75,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Add su-rating
 
-[Unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.14.0...HEAD
+[Unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.15.0...HEAD
+[0.15.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.14.1...v0.15.0
+[0.14.1]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.14.0...v0.14.1
 [0.14.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.13.1...v0.14.0
 [0.13.1]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.13.0...v0.13.1
 [0.13.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.12.1...v0.13.0
