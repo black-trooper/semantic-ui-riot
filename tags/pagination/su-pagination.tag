@@ -1,21 +1,34 @@
 <su-pagination>
   <div class="ui pagination menu">
-    <a class="item" onclick="{ clickPage.bind(this,currentPageNumber - 1) }">&lt;</a>
-    <a class="item" onclick="{ clickPage.bind(this,1) }" if="{ currentPageNumber > range() + 1 }">1</a>
-    <div class="disabled item" if="{ currentPageNumber > range() + 2 }">...</div>
-    <a class="item" onclick="{ clickPage.bind(this,pageNum) }" each="{ prevPages }">{ pageNum }</a>
-    <a class="active item">{ currentPageNumber }</a>
-    <a class="item" onclick="{ clickPage.bind(this,pageNum) }" each="{ nextPages }">{ pageNum }</a>
-    <div class="disabled item" if="{ currentPageNumber < allPageCount - (range() + 1) }">...</div>
-    <a class="item" onclick="{ clickPage.bind(this,allPageCount ) }" if="{ currentPageNumber < allPageCount - range() }">{ allPageCount }</a>
-    <a class="item" onclick="{ clickPage.bind(this,currentPageNumber + 1) }">&gt;</a>
+    <a class="icon item { disabled: currentPageNumber <= 1 }" onclick="{ clickPage.bind(this,1) }">
+      <i aria-hidden='true' class='angle double left icon' />
+    </a>
+    <a class="icon item { disabled: currentPageNumber <= 1 }" onclick="{ clickPage.bind(this,currentPageNumber - 1) }">
+      <i class='angle left icon' />
+    </a>
+
+    <virtual each="{ page in pages }">
+      <a class="item" onclick="{ clickPage.bind(this,page.number) }" if="{ !page.current && !page.disabled }">
+        { page.number }
+      </a>
+      <a class="active item" if="{ page.current }">{ page.number }</a>
+      <div class="disabled icon item" if="{ page.disabled }">
+        <i class='ellipsis horizontal icon' />
+      </div>
+    </virtual>
+
+    <a class="icon item { disabled: currentPageNumber >= allPageCount }" onclick="{ clickPage.bind(this,currentPageNumber + 1) }">
+      <i class='angle right icon' />
+    </a>
+    <a class="icon item { disabled: currentPageNumber >= allPageCount }" onclick="{ clickPage.bind(this,allPageCount ) }">
+      <i aria-hidden='true' class='angle double right icon' />
+    </a>
   </div>
 
   <script>
     this.currentPageNumber = 1
     this.allPageCount = 1
-    this.prevPages = []
-    this.nextPages = []
+    this.pages = []
 
     this.on('mount', () => {
       this.currentPageNumber = parseInt(opts.currentPageNumber || 1)
@@ -41,31 +54,38 @@
     //                                                                               Logic
     //                                                                               =====
     const generatePagination = () => {
-      this.prevPages = []
-      this.nextPages = []
+      this.pages = []
+      const pageSize = calcPageSize()
+      const index = calcIndex(pageSize)
 
-      // set prevPages
-      let prevStart = this.currentPageNumber - this.range()
-      prevStart = (prevStart <= 1) ? 1 : prevStart
-      for (let i = prevStart; i < this.currentPageNumber; i++) {
-        this.prevPages.push({ pageNum: i })
+      for (let i = 0; i < pageSize; i++) {
+        this.pages.push({
+          number: i + index,
+          current: i + index == this.currentPageNumber,
+        })
       }
-
-      // set nextPages
-      let nextEnd = this.currentPageNumber + this.range()
-      nextEnd = (nextEnd >= this.allPageCount) ? this.allPageCount : nextEnd
-      for (let i = this.currentPageNumber + 1; i <= nextEnd; i++) {
-        this.nextPages.push({ pageNum: i })
-      }
+      this.pages[0].number = 1
+      this.pages[pageSize - 1].number = this.allPageCount
+      this.pages[1].disabled = index != 1
+      this.pages[pageSize - 2].disabled = index != this.allPageCount - pageSize + 1
 
       this.update()
     }
 
-    // ===================================================================================
-    //                                                                              Helper
-    //                                                                              ======
-    this.range = () => {
-      return parseInt(opts.range || 1)
+    const calcPageSize = () => {
+      const pageSize = parseInt(opts.pageSize || 7)
+      return pageSize < this.allPageCount ? pageSize : this.allPageCount
+    }
+
+    const calcIndex = pageSize => {
+      const prevPageSize = (pageSize - pageSize % 2) / 2
+      if (this.currentPageNumber + prevPageSize > this.allPageCount) {
+        return this.allPageCount - pageSize + 1
+      }
+      if (this.currentPageNumber > prevPageSize) {
+        return this.currentPageNumber - prevPageSize
+      }
+      return 1
     }
   </script>
 </su-pagination>
