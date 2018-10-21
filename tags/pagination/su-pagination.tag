@@ -29,11 +29,29 @@
     this.currentPageNumber = 1
     this.allPageCount = 1
     this.pages = []
+    let lastAllPageCount = null
+    let lastCurrentPageNumber = null
 
     this.on('mount', () => {
-      this.currentPageNumber = parseInt(opts.currentPageNumber || 1)
-      this.allPageCount = parseInt(opts.allPageCount || 1)
-      generatePagination()
+      this.update()
+    })
+
+    this.on('update', () => {
+      let needsRegenerate = false
+      if (parseInt(opts.currentPageNumber || 1) != lastCurrentPageNumber) {
+        this.currentPageNumber = parseInt(opts.currentPageNumber || 1)
+        lastCurrentPageNumber = this.currentPageNumber
+        needsRegenerate = true
+      }
+      if (parseInt(opts.allPageCount || 1) != lastAllPageCount) {
+        this.allPageCount = parseInt(opts.allPageCount || 1)
+        lastAllPageCount = this.allPageCount
+        needsRegenerate = true
+      }
+
+      if (needsRegenerate) {
+        generatePagination()
+      }
     })
 
     // ===================================================================================
