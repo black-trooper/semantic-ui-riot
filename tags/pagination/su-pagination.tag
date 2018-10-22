@@ -1,5 +1,5 @@
 <su-pagination>
-  <div class="ui pagination menu">
+  <div class="ui pagination menu { opts.class }">
     <a class="icon item { disabled: currentPageNumber <= 1 }" onclick="{ clickPage.bind(this,1) }">
       <i aria-hidden='true' class='angle double left icon' />
     </a>
@@ -29,6 +29,8 @@
     this.currentPageNumber = 1
     this.allPageCount = 1
     this.pages = []
+    let lastOptsAllPageCount = null
+    let lastOptsCurrentPageNumber = null
     let lastAllPageCount = null
     let lastCurrentPageNumber = null
 
@@ -38,14 +40,26 @@
 
     this.on('update', () => {
       let needsRegenerate = false
-      if (parseInt(opts.currentPageNumber || 1) != lastCurrentPageNumber) {
-        this.currentPageNumber = parseInt(opts.currentPageNumber || 1)
+      if (opts.currentPageNumber != lastOptsCurrentPageNumber) {
+        lastOptsCurrentPageNumber = opts.currentPageNumber
+        this.currentPageNumber = opts.currentPageNumber
         lastCurrentPageNumber = this.currentPageNumber
         needsRegenerate = true
+      } else if (this.currentPageNumber != lastCurrentPageNumber) {
+        lastCurrentPageNumber = this.currentPageNumber
+        opts.currentPageNumber = this.currentPageNumber
+        lastOptsCurrentPageNumber = this.currentPageNumber
+        needsRegenerate = true
       }
-      if (parseInt(opts.allPageCount || 1) != lastAllPageCount) {
-        this.allPageCount = parseInt(opts.allPageCount || 1)
+      if (opts.allPageCount != lastOptsAllPageCount) {
+        lastOptsAllPageCount = opts.allPageCount
+        this.allPageCount = opts.allPageCount
         lastAllPageCount = this.allPageCount
+        needsRegenerate = true
+      } else if (this.allPageCount != lastAllPageCount) {
+        lastAllPageCount = this.allPageCount
+        opts.allPageCount = this.allPageCount
+        lastOptsAllPageCount = opts.allPageCount
         needsRegenerate = true
       }
 
@@ -59,7 +73,6 @@
     //                                                                               =====
     this.clickPage = (pageNum, e) => {
       e.preventDefault()
-      this.trigger('click', pageNum)
       if (pageNum < 1 || pageNum > this.allPageCount) {
         return
       }
@@ -73,19 +86,21 @@
     //                                                                               =====
     const generatePagination = () => {
       this.pages = []
+      const currentPageNumber = parseInt(this.currentPageNumber || 1)
+      const allPageCount = parseInt(this.allPageCount || 1)
       const pageSize = calcPageSize()
       const index = calcIndex(pageSize)
 
       for (let i = 0; i < pageSize; i++) {
         this.pages.push({
           number: i + index,
-          current: i + index == this.currentPageNumber,
+          current: i + index == currentPageNumber,
         })
       }
       this.pages[0].number = 1
-      this.pages[pageSize - 1].number = this.allPageCount
+      this.pages[pageSize - 1].number = allPageCount
       this.pages[1].disabled = index != 1
-      this.pages[pageSize - 2].disabled = index != this.allPageCount - pageSize + 1
+      this.pages[pageSize - 2].disabled = index != allPageCount - pageSize + 1
 
       this.update()
     }
