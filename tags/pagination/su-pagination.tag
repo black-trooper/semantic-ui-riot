@@ -99,8 +99,12 @@
       }
       this.pages[0].number = 1
       this.pages[pageSize - 1].number = allPageCount
-      this.pages[1].disabled = index != 1
-      this.pages[pageSize - 2].disabled = index != allPageCount - pageSize + 1
+      if (pageSize > 1) {
+        this.pages[1].disabled = index != 1
+      }
+      if (pageSize > 2) {
+        this.pages[pageSize - 2].disabled = index != allPageCount - pageSize + 1
+      }
 
       this.update()
     }
