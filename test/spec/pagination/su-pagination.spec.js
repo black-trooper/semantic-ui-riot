@@ -290,4 +290,37 @@ describe('su-pagination', function () {
     spyOnChange.should.have.been.calledWith(9)
   })
 
+  it('update options', function () {
+    mount({
+      allPageCount: 9
+    })
+
+    $('su-pagination .item:not(a.icon)').length.should.equal(7)
+    $('su-pagination .item:not(a.icon).disabled').length.should.equal(1)
+    $('su-pagination .item:not(a.icon):eq(5)').hasClass('disabled').should.equal(true)
+    $('su-pagination a.icon.item:eq(0)').hasClass('disabled').should.equal(true)
+    $('su-pagination a.icon.item:eq(1)').hasClass('disabled').should.equal(true)
+    $('su-pagination a.icon.item:eq(2)').hasClass('disabled').should.equal(false)
+    $('su-pagination a.icon.item:eq(3)').hasClass('disabled').should.equal(false)
+
+    tag.opts.allPageCount = 7
+    tag.update()
+    $('su-pagination .item:not(a.icon)').length.should.equal(7)
+    $('su-pagination .item:not(a.icon).disabled').length.should.equal(0)
+    $('su-pagination .item:not(a.icon):eq(1)').hasClass('disabled').should.equal(false)
+    $('su-pagination .item:not(a.icon):eq(5)').hasClass('disabled').should.equal(false)
+    $('su-pagination a.icon.item:eq(0)').hasClass('disabled').should.equal(true)
+    $('su-pagination a.icon.item:eq(1)').hasClass('disabled').should.equal(true)
+    $('su-pagination a.icon.item:eq(2)').hasClass('disabled').should.equal(false)
+    $('su-pagination a.icon.item:eq(3)').hasClass('disabled').should.equal(false)
+
+    tag.opts.currentPageNumber = 2
+    tag.update()
+    $('su-pagination .item:not(a.icon):eq(1)').hasClass('disabled').should.equal(false)
+    $('su-pagination .item:not(a.icon):eq(5)').hasClass('disabled').should.equal(false)
+    $('su-pagination a.icon.item:eq(0)').hasClass('disabled').should.equal(false)
+    $('su-pagination a.icon.item:eq(1)').hasClass('disabled').should.equal(false)
+    $('su-pagination a.icon.item:eq(2)').hasClass('disabled').should.equal(false)
+    $('su-pagination a.icon.item:eq(3)').hasClass('disabled').should.equal(false)
+  })
 })
