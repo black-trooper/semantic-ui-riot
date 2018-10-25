@@ -2678,6 +2678,8 @@ __webpack_require__(/*! ../tags/dropdown/su-select.tag */ "./tags/dropdown/su-se
 
 __webpack_require__(/*! ../tags/modal/su-modal.tag */ "./tags/modal/su-modal.tag");
 
+__webpack_require__(/*! ../tags/pagination/su-pagination.tag */ "./tags/pagination/su-pagination.tag");
+
 __webpack_require__(/*! ../tags/popup/su-popup.tag */ "./tags/popup/su-popup.tag");
 
 __webpack_require__(/*! ../tags/progress/su-progress.tag */ "./tags/progress/su-progress.tag");
@@ -2803,7 +2805,7 @@ var initializeChild = function initializeChild(child) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-alert', '<su-modal class="tiny" ref="modal" modal="{modal}"> <div class="ui icon message"> <i class="info circle icon"></i> <div class="content"> <div class="header" if="{parent.title}"> {parent.title} </div> <p each="{message in parent.messages}">{message}</p> </div> </div> </su-modal>', 'su-alert .ui.dimmer,[data-is="su-alert"] .ui.dimmer{ z-index: 1020; } su-alert .ui.modal,[data-is="su-alert"] .ui.modal{ z-index: 1021; } su-alert .ui.message,[data-is="su-alert"] .ui.message{ background: none; box-shadow: none; }', '', function(opts) {
+riot.tag2('su-alert', '<su-modal class="tiny" ref="modal" modal="{modal}"> <div class="ui icon message"> <i class="info circle icon"></i> <div class="scrolling content"> <div class="header" if="{parent.title}"> {parent.title} </div> <p each="{message in parent.messages}">{message}</p> </div> </div> </su-modal>', 'su-alert .ui.dimmer,[data-is="su-alert"] .ui.dimmer{ z-index: 1020; } su-alert .ui.modal,[data-is="su-alert"] .ui.modal{ z-index: 1021; } su-alert .ui.message,[data-is="su-alert"] .ui.message{ background: none; box-shadow: none; } su-alert .ui.message .header+p,[data-is="su-alert"] .ui.message .header+p{ margin-top: 1em; }', '', function(opts) {
 'use strict';
 
 var _this = this;
@@ -3151,7 +3153,7 @@ var normalizeOptChecked = function normalizeOptChecked() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-confirm', '<su-modal class="tiny" ref="modal" modal="{modal}"> <div class="ui icon message"> <i class="question circle outline icon"></i> <div class="content"> <div class="header" if="{parent.title}"> {parent.title} </div> <p each="{messsage in parent.messages}">{messsage}</p> </div> </div> </su-modal>', 'su-confirm .ui.dimmer,[data-is="su-confirm"] .ui.dimmer{ z-index: 1010; } su-confirm .ui.modal,[data-is="su-confirm"] .ui.modal{ z-index: 1011; } su-confirm .ui.message,[data-is="su-confirm"] .ui.message{ background: none; box-shadow: none; }', '', function(opts) {
+riot.tag2('su-confirm', '<su-modal class="tiny" ref="modal" modal="{modal}"> <div class="ui icon message"> <i class="question circle outline icon"></i> <div class="scrolling content"> <div class="header" if="{parent.title}"> {parent.title} </div> <p each="{messsage in parent.messages}">{messsage}</p> </div> </div> </su-modal>', 'su-confirm .ui.dimmer,[data-is="su-confirm"] .ui.dimmer{ z-index: 1010; } su-confirm .ui.modal,[data-is="su-confirm"] .ui.modal{ z-index: 1011; } su-confirm .ui.message,[data-is="su-confirm"] .ui.message{ background: none; box-shadow: none; }', '', function(opts) {
 'use strict';
 
 var _this = this;
@@ -4423,6 +4425,120 @@ this.isBasic = function () {
 
 this.isImageContent = function () {
   return image_content;
+};
+});
+
+/***/ }),
+
+/***/ "./tags/pagination/su-pagination.tag":
+/*!*******************************************!*\
+  !*** ./tags/pagination/su-pagination.tag ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+riot.tag2('su-pagination', '<div class="ui pagination menu {opts.class}"> <a class="icon item {disabled: currentPageNumber <= 1}" onclick="{clickPage.bind(this,1)}"> <i aria-hidden="true" class="angle double left icon"></i> </a> <a class="icon item {disabled: currentPageNumber <= 1}" onclick="{clickPage.bind(this,currentPageNumber - 1)}"> <i class="angle left icon"></i> </a> <virtual each="{page in pages}"> <a class="item" onclick="{clickPage.bind(this,page.number)}" if="{!page.current && !page.disabled}"> {page.number} </a> <a class="active item" if="{page.current}">{page.number}</a> <div class="disabled icon item" if="{page.disabled}"> <i class="ellipsis horizontal icon"></i> </div> </virtual> <a class="icon item {disabled: currentPageNumber >= allPageCount}" onclick="{clickPage.bind(this,currentPageNumber + 1)}"> <i class="angle right icon"></i> </a> <a class="icon item {disabled: currentPageNumber >= allPageCount}" onclick="{clickPage.bind(this,allPageCount )}"> <i aria-hidden="true" class="angle double right icon"></i> </a> </div>', '', '', function(opts) {
+'use strict';
+
+var _this = this;
+
+this.currentPageNumber = 1;
+this.allPageCount = 1;
+this.pages = [];
+var lastOptsAllPageCount = null;
+var lastOptsCurrentPageNumber = null;
+var lastAllPageCount = null;
+var lastCurrentPageNumber = null;
+
+this.on('mount', function () {
+  _this.update();
+});
+
+this.on('update', function () {
+  var needsRegenerate = false;
+  if (opts.currentPageNumber != lastOptsCurrentPageNumber) {
+    lastOptsCurrentPageNumber = opts.currentPageNumber;
+    _this.currentPageNumber = opts.currentPageNumber;
+    lastCurrentPageNumber = _this.currentPageNumber;
+    needsRegenerate = true;
+  } else if (_this.currentPageNumber != lastCurrentPageNumber) {
+    lastCurrentPageNumber = _this.currentPageNumber;
+    opts.currentPageNumber = _this.currentPageNumber;
+    lastOptsCurrentPageNumber = _this.currentPageNumber;
+    needsRegenerate = true;
+  }
+  if (opts.allPageCount != lastOptsAllPageCount) {
+    lastOptsAllPageCount = opts.allPageCount;
+    _this.allPageCount = opts.allPageCount;
+    lastAllPageCount = _this.allPageCount;
+    needsRegenerate = true;
+  } else if (_this.allPageCount != lastAllPageCount) {
+    lastAllPageCount = _this.allPageCount;
+    opts.allPageCount = _this.allPageCount;
+    lastOptsAllPageCount = opts.allPageCount;
+    needsRegenerate = true;
+  }
+
+  if (needsRegenerate) {
+    generatePagination();
+  }
+});
+
+// ===================================================================================
+//                                                                               Event
+//                                                                               =====
+this.clickPage = function (pageNum, e) {
+  e.preventDefault();
+  if (pageNum < 1 || pageNum > _this.allPageCount) {
+    return;
+  }
+  _this.currentPageNumber = pageNum;
+  generatePagination();
+  _this.trigger('change', pageNum);
+};
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+var generatePagination = function generatePagination() {
+  _this.pages = [];
+  var currentPageNumber = parseInt(_this.currentPageNumber || 1);
+  var allPageCount = parseInt(_this.allPageCount || 1);
+  var pageSize = calcPageSize();
+  var index = calcIndex(pageSize);
+
+  for (var i = 0; i < pageSize; i++) {
+    _this.pages.push({
+      number: i + index,
+      current: i + index == currentPageNumber
+    });
+  }
+  _this.pages[0].number = 1;
+  _this.pages[pageSize - 1].number = allPageCount;
+  if (pageSize > 1) {
+    _this.pages[1].disabled = index != 1;
+  }
+  if (pageSize > 2) {
+    _this.pages[pageSize - 2].disabled = index != allPageCount - pageSize + 1;
+  }
+
+  _this.update();
+};
+
+var calcPageSize = function calcPageSize() {
+  var pageSize = parseInt(opts.pageSize || 7);
+  return pageSize < _this.allPageCount ? pageSize : _this.allPageCount;
+};
+
+var calcIndex = function calcIndex(pageSize) {
+  var prevPageSize = (pageSize - pageSize % 2) / 2;
+  if (_this.currentPageNumber + prevPageSize > _this.allPageCount) {
+    return _this.allPageCount - pageSize + 1;
+  }
+  if (_this.currentPageNumber > prevPageSize) {
+    return _this.currentPageNumber - prevPageSize;
+  }
+  return 1;
 };
 });
 
