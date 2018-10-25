@@ -2,7 +2,7 @@
   <su-modal class="tiny" ref="modal" modal="{ modal }">
     <div class="ui icon message">
       <i class="question circle outline icon"></i>
-      <div class="content">
+      <div class="scrolling content">
         <div class="header" if="{ parent.title }">
           { parent.title }
         </div>

@@ -2,7 +2,7 @@
   <su-modal class="tiny" ref="modal" modal="{ modal }">
     <div class="ui icon message">
       <i class="info circle icon"></i>
-      <div class="content">
+      <div class="scrolling content">
         <div class="header" if="{ parent.title }">
           { parent.title }
         </div>
@@ -23,6 +23,10 @@
     .ui.message {
       background: none;
       box-shadow: none;
+    }
+
+    .ui.message .header+p {
+      margin-top: 1em;
     }
   </style>
 
