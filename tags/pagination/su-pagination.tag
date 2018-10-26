@@ -1,38 +1,38 @@
 <su-pagination>
   <div class="ui pagination menu { opts.class }">
-    <a class="icon item { disabled: currentPageNumber <= 1 }" onclick="{ clickPage.bind(this,1) }">
+    <a class="icon item { disabled: activePage <= 1 }" onclick="{ clickPage.bind(this,1) }">
       <i aria-hidden='true' class='angle double left icon' />
     </a>
-    <a class="icon item { disabled: currentPageNumber <= 1 }" onclick="{ clickPage.bind(this,currentPageNumber - 1) }">
+    <a class="icon item { disabled: activePage <= 1 }" onclick="{ clickPage.bind(this,activePage - 1) }">
       <i class='angle left icon' />
     </a>
 
     <virtual each="{ page in pages }">
-      <a class="item" onclick="{ clickPage.bind(this,page.number) }" if="{ !page.current && !page.disabled }">
+      <a class="item" onclick="{ clickPage.bind(this,page.number) }" if="{ !page.active && !page.disabled }">
         { page.number }
       </a>
-      <a class="active item" if="{ page.current }">{ page.number }</a>
+      <a class="active item" if="{ page.active }">{ page.number }</a>
       <div class="disabled icon item" if="{ page.disabled }">
         <i class='ellipsis horizontal icon' />
       </div>
     </virtual>
 
-    <a class="icon item { disabled: currentPageNumber >= allPageCount }" onclick="{ clickPage.bind(this,currentPageNumber + 1) }">
+    <a class="icon item { disabled: activePage >= totalPages }" onclick="{ clickPage.bind(this,activePage + 1) }">
       <i class='angle right icon' />
     </a>
-    <a class="icon item { disabled: currentPageNumber >= allPageCount }" onclick="{ clickPage.bind(this,allPageCount ) }">
+    <a class="icon item { disabled: activePage >= totalPages }" onclick="{ clickPage.bind(this,totalPages ) }">
       <i aria-hidden='true' class='angle double right icon' />
     </a>
   </div>
 
   <script>
-    this.currentPageNumber = 1
-    this.allPageCount = 1
+    this.activePage = 1
+    this.totalPages = 1
     this.pages = []
-    let lastOptsAllPageCount = null
-    let lastOptsCurrentPageNumber = null
-    let lastAllPageCount = null
-    let lastCurrentPageNumber = null
+    let lastOptsTotalPages = null
+    let lastOptsActivePage = null
+    let lastTotalPages = null
+    let lastActivePage = null
 
     this.on('mount', () => {
       this.update()
@@ -40,26 +40,26 @@
 
     this.on('update', () => {
       let needsRegenerate = false
-      if (opts.currentPageNumber != lastOptsCurrentPageNumber) {
-        lastOptsCurrentPageNumber = opts.currentPageNumber
-        this.currentPageNumber = opts.currentPageNumber
-        lastCurrentPageNumber = this.currentPageNumber
+      if (opts.activePage != lastOptsActivePage) {
+        lastOptsActivePage = opts.activePage
+        this.activePage = opts.activePage
+        lastActivePage = this.activePage
         needsRegenerate = true
-      } else if (this.currentPageNumber != lastCurrentPageNumber) {
-        lastCurrentPageNumber = this.currentPageNumber
-        opts.currentPageNumber = this.currentPageNumber
-        lastOptsCurrentPageNumber = this.currentPageNumber
+      } else if (this.activePage != lastActivePage) {
+        lastActivePage = this.activePage
+        opts.activePage = this.activePage
+        lastOptsActivePage = this.activePage
         needsRegenerate = true
       }
-      if (opts.allPageCount != lastOptsAllPageCount) {
-        lastOptsAllPageCount = opts.allPageCount
-        this.allPageCount = opts.allPageCount
-        lastAllPageCount = this.allPageCount
+      if (opts.totalPages != lastOptsTotalPages) {
+        lastOptsTotalPages = opts.totalPages
+        this.totalPages = opts.totalPages
+        lastTotalPages = this.totalPages
         needsRegenerate = true
-      } else if (this.allPageCount != lastAllPageCount) {
-        lastAllPageCount = this.allPageCount
-        opts.allPageCount = this.allPageCount
-        lastOptsAllPageCount = opts.allPageCount
+      } else if (this.totalPages != lastTotalPages) {
+        lastTotalPages = this.totalPages
+        opts.totalPages = this.totalPages
+        lastOptsTotalPages = opts.totalPages
         needsRegenerate = true
       }
 
@@ -73,10 +73,10 @@
     //                                                                               =====
     this.clickPage = (pageNum, e) => {
       e.preventDefault()
-      if (pageNum < 1 || pageNum > this.allPageCount) {
+      if (pageNum < 1 || pageNum > this.totalPages) {
         return
       }
-      this.currentPageNumber = pageNum
+      this.activePage = pageNum
       generatePagination()
       this.trigger('change', pageNum)
     }
@@ -86,24 +86,24 @@
     //                                                                               =====
     const generatePagination = () => {
       this.pages = []
-      const currentPageNumber = parseInt(this.currentPageNumber || 1)
-      const allPageCount = parseInt(this.allPageCount || 1)
+      const activePage = parseInt(this.activePage || 1)
+      const totalPages = parseInt(this.totalPages || 1)
       const pageSize = calcPageSize()
       const index = calcIndex(pageSize)
 
       for (let i = 0; i < pageSize; i++) {
         this.pages.push({
           number: i + index,
-          current: i + index == currentPageNumber,
+          active: i + index == activePage,
         })
       }
       this.pages[0].number = 1
-      this.pages[pageSize - 1].number = allPageCount
+      this.pages[pageSize - 1].number = totalPages
       if (pageSize > 1) {
         this.pages[1].disabled = index != 1
       }
       if (pageSize > 2) {
-        this.pages[pageSize - 2].disabled = index != allPageCount - pageSize + 1
+        this.pages[pageSize - 2].disabled = index != totalPages - pageSize + 1
       }
 
       this.update()
@@ -111,16 +111,16 @@
 
     const calcPageSize = () => {
       const pageSize = parseInt(opts.pageSize || 7)
-      return pageSize < this.allPageCount ? pageSize : this.allPageCount
+      return pageSize < this.totalPages ? pageSize : this.totalPages
     }
 
     const calcIndex = pageSize => {
       const prevPageSize = (pageSize - pageSize % 2) / 2
-      if (this.currentPageNumber + prevPageSize > this.allPageCount) {
-        return this.allPageCount - pageSize + 1
+      if (this.activePage + prevPageSize > this.totalPages) {
+        return this.totalPages - pageSize + 1
       }
-      if (this.currentPageNumber > prevPageSize) {
-        return this.currentPageNumber - prevPageSize
+      if (this.activePage > prevPageSize) {
+        return this.activePage - prevPageSize
       }
       return 1
     }

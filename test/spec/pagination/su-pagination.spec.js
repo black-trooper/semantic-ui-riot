@@ -27,7 +27,7 @@ describe('su-pagination', function () {
 
   it('page count is 1', function () {
     mount({
-      allPageCount: 1
+      totalPages: 1
     })
 
     $('su-pagination .item:not(a.icon)').length.should.equal(1)
@@ -51,7 +51,7 @@ describe('su-pagination', function () {
 
   it('page count is 7', function () {
     mount({
-      allPageCount: 7
+      totalPages: 7
     })
 
     $('su-pagination .item:not(a.icon)').length.should.equal(7)
@@ -123,7 +123,7 @@ describe('su-pagination', function () {
 
   it('page count is 8', function () {
     mount({
-      allPageCount: 8
+      totalPages: 8
     })
 
     $('su-pagination .item:not(a.icon)').length.should.equal(7)
@@ -203,7 +203,7 @@ describe('su-pagination', function () {
 
   it('page count is 9', function () {
     mount({
-      allPageCount: 9
+      totalPages: 9
     })
 
     $('su-pagination .item:not(a.icon)').length.should.equal(7)
@@ -292,7 +292,7 @@ describe('su-pagination', function () {
 
   it('update options', function () {
     mount({
-      allPageCount: 9
+      totalPages: 9
     })
 
     $('su-pagination .item:not(a.icon)').length.should.equal(7)
@@ -303,7 +303,7 @@ describe('su-pagination', function () {
     $('su-pagination a.icon.item:eq(2)').hasClass('disabled').should.equal(false)
     $('su-pagination a.icon.item:eq(3)').hasClass('disabled').should.equal(false)
 
-    tag.opts.allPageCount = 7
+    tag.opts.totalPages = 7
     tag.update()
     $('su-pagination .item:not(a.icon)').length.should.equal(7)
     $('su-pagination .item:not(a.icon).disabled').length.should.equal(0)
@@ -314,7 +314,7 @@ describe('su-pagination', function () {
     $('su-pagination a.icon.item:eq(2)').hasClass('disabled').should.equal(false)
     $('su-pagination a.icon.item:eq(3)').hasClass('disabled').should.equal(false)
 
-    tag.opts.currentPageNumber = 2
+    tag.opts.activePage = 2
     tag.update()
     $('su-pagination .item:not(a.icon):eq(1)').hasClass('disabled').should.equal(false)
     $('su-pagination .item:not(a.icon):eq(5)').hasClass('disabled').should.equal(false)

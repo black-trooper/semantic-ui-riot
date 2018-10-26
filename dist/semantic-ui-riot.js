@@ -4437,18 +4437,18 @@ this.isImageContent = function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-pagination', '<div class="ui pagination menu {opts.class}"> <a class="icon item {disabled: currentPageNumber <= 1}" onclick="{clickPage.bind(this,1)}"> <i aria-hidden="true" class="angle double left icon"></i> </a> <a class="icon item {disabled: currentPageNumber <= 1}" onclick="{clickPage.bind(this,currentPageNumber - 1)}"> <i class="angle left icon"></i> </a> <virtual each="{page in pages}"> <a class="item" onclick="{clickPage.bind(this,page.number)}" if="{!page.current && !page.disabled}"> {page.number} </a> <a class="active item" if="{page.current}">{page.number}</a> <div class="disabled icon item" if="{page.disabled}"> <i class="ellipsis horizontal icon"></i> </div> </virtual> <a class="icon item {disabled: currentPageNumber >= allPageCount}" onclick="{clickPage.bind(this,currentPageNumber + 1)}"> <i class="angle right icon"></i> </a> <a class="icon item {disabled: currentPageNumber >= allPageCount}" onclick="{clickPage.bind(this,allPageCount )}"> <i aria-hidden="true" class="angle double right icon"></i> </a> </div>', '', '', function(opts) {
+riot.tag2('su-pagination', '<div class="ui pagination menu {opts.class}"> <a class="icon item {disabled: activePage <= 1}" onclick="{clickPage.bind(this,1)}"> <i aria-hidden="true" class="angle double left icon"></i> </a> <a class="icon item {disabled: activePage <= 1}" onclick="{clickPage.bind(this,activePage - 1)}"> <i class="angle left icon"></i> </a> <virtual each="{page in pages}"> <a class="item" onclick="{clickPage.bind(this,page.number)}" if="{!page.active && !page.disabled}"> {page.number} </a> <a class="active item" if="{page.active}">{page.number}</a> <div class="disabled icon item" if="{page.disabled}"> <i class="ellipsis horizontal icon"></i> </div> </virtual> <a class="icon item {disabled: activePage >= totalPages}" onclick="{clickPage.bind(this,activePage + 1)}"> <i class="angle right icon"></i> </a> <a class="icon item {disabled: activePage >= totalPages}" onclick="{clickPage.bind(this,totalPages )}"> <i aria-hidden="true" class="angle double right icon"></i> </a> </div>', '', '', function(opts) {
 'use strict';
 
 var _this = this;
 
-this.currentPageNumber = 1;
-this.allPageCount = 1;
+this.activePage = 1;
+this.totalPages = 1;
 this.pages = [];
-var lastOptsAllPageCount = null;
-var lastOptsCurrentPageNumber = null;
-var lastAllPageCount = null;
-var lastCurrentPageNumber = null;
+var lastOptsTotalPages = null;
+var lastOptsActivePage = null;
+var lastTotalPages = null;
+var lastActivePage = null;
 
 this.on('mount', function () {
   _this.update();
@@ -4456,26 +4456,26 @@ this.on('mount', function () {
 
 this.on('update', function () {
   var needsRegenerate = false;
-  if (opts.currentPageNumber != lastOptsCurrentPageNumber) {
-    lastOptsCurrentPageNumber = opts.currentPageNumber;
-    _this.currentPageNumber = opts.currentPageNumber;
-    lastCurrentPageNumber = _this.currentPageNumber;
+  if (opts.activePage != lastOptsActivePage) {
+    lastOptsActivePage = opts.activePage;
+    _this.activePage = opts.activePage;
+    lastActivePage = _this.activePage;
     needsRegenerate = true;
-  } else if (_this.currentPageNumber != lastCurrentPageNumber) {
-    lastCurrentPageNumber = _this.currentPageNumber;
-    opts.currentPageNumber = _this.currentPageNumber;
-    lastOptsCurrentPageNumber = _this.currentPageNumber;
+  } else if (_this.activePage != lastActivePage) {
+    lastActivePage = _this.activePage;
+    opts.activePage = _this.activePage;
+    lastOptsActivePage = _this.activePage;
     needsRegenerate = true;
   }
-  if (opts.allPageCount != lastOptsAllPageCount) {
-    lastOptsAllPageCount = opts.allPageCount;
-    _this.allPageCount = opts.allPageCount;
-    lastAllPageCount = _this.allPageCount;
+  if (opts.totalPages != lastOptsTotalPages) {
+    lastOptsTotalPages = opts.totalPages;
+    _this.totalPages = opts.totalPages;
+    lastTotalPages = _this.totalPages;
     needsRegenerate = true;
-  } else if (_this.allPageCount != lastAllPageCount) {
-    lastAllPageCount = _this.allPageCount;
-    opts.allPageCount = _this.allPageCount;
-    lastOptsAllPageCount = opts.allPageCount;
+  } else if (_this.totalPages != lastTotalPages) {
+    lastTotalPages = _this.totalPages;
+    opts.totalPages = _this.totalPages;
+    lastOptsTotalPages = opts.totalPages;
     needsRegenerate = true;
   }
 
@@ -4489,10 +4489,10 @@ this.on('update', function () {
 //                                                                               =====
 this.clickPage = function (pageNum, e) {
   e.preventDefault();
-  if (pageNum < 1 || pageNum > _this.allPageCount) {
+  if (pageNum < 1 || pageNum > _this.totalPages) {
     return;
   }
-  _this.currentPageNumber = pageNum;
+  _this.activePage = pageNum;
   generatePagination();
   _this.trigger('change', pageNum);
 };
@@ -4502,24 +4502,24 @@ this.clickPage = function (pageNum, e) {
 //                                                                               =====
 var generatePagination = function generatePagination() {
   _this.pages = [];
-  var currentPageNumber = parseInt(_this.currentPageNumber || 1);
-  var allPageCount = parseInt(_this.allPageCount || 1);
+  var activePage = parseInt(_this.activePage || 1);
+  var totalPages = parseInt(_this.totalPages || 1);
   var pageSize = calcPageSize();
   var index = calcIndex(pageSize);
 
   for (var i = 0; i < pageSize; i++) {
     _this.pages.push({
       number: i + index,
-      current: i + index == currentPageNumber
+      active: i + index == activePage
     });
   }
   _this.pages[0].number = 1;
-  _this.pages[pageSize - 1].number = allPageCount;
+  _this.pages[pageSize - 1].number = totalPages;
   if (pageSize > 1) {
     _this.pages[1].disabled = index != 1;
   }
   if (pageSize > 2) {
-    _this.pages[pageSize - 2].disabled = index != allPageCount - pageSize + 1;
+    _this.pages[pageSize - 2].disabled = index != totalPages - pageSize + 1;
   }
 
   _this.update();
@@ -4527,16 +4527,16 @@ var generatePagination = function generatePagination() {
 
 var calcPageSize = function calcPageSize() {
   var pageSize = parseInt(opts.pageSize || 7);
-  return pageSize < _this.allPageCount ? pageSize : _this.allPageCount;
+  return pageSize < _this.totalPages ? pageSize : _this.totalPages;
 };
 
 var calcIndex = function calcIndex(pageSize) {
   var prevPageSize = (pageSize - pageSize % 2) / 2;
-  if (_this.currentPageNumber + prevPageSize > _this.allPageCount) {
-    return _this.allPageCount - pageSize + 1;
+  if (_this.activePage + prevPageSize > _this.totalPages) {
+    return _this.totalPages - pageSize + 1;
   }
-  if (_this.currentPageNumber > prevPageSize) {
-    return _this.currentPageNumber - prevPageSize;
+  if (_this.activePage > prevPageSize) {
+    return _this.activePage - prevPageSize;
   }
   return 1;
 };
