@@ -4463,8 +4463,6 @@ this.on('update', function () {
     needsRegenerate = true;
   } else if (_this.activePage != lastActivePage) {
     lastActivePage = _this.activePage;
-    opts.activePage = _this.activePage;
-    lastOptsActivePage = _this.activePage;
     needsRegenerate = true;
   }
   if (opts.totalPages != lastOptsTotalPages) {
@@ -4493,7 +4491,7 @@ this.clickPage = function (pageNum, e) {
     return;
   }
   _this.activePage = pageNum;
-  generatePagination();
+  _this.update();
   _this.trigger('change', pageNum);
 };
 
@@ -4531,12 +4529,14 @@ var calcPageSize = function calcPageSize() {
 };
 
 var calcIndex = function calcIndex(pageSize) {
+  var activePage = parseInt(_this.activePage || 1);
+  var totalPages = parseInt(_this.totalPages || 1);
   var prevPageSize = (pageSize - pageSize % 2) / 2;
-  if (_this.activePage + prevPageSize > _this.totalPages) {
-    return _this.totalPages - pageSize + 1;
+  if (activePage + prevPageSize > totalPages) {
+    return totalPages - pageSize + 1;
   }
-  if (_this.activePage > prevPageSize) {
-    return _this.activePage - prevPageSize;
+  if (activePage > prevPageSize) {
+    return activePage - prevPageSize;
   }
   return 1;
 };

@@ -47,8 +47,6 @@
         needsRegenerate = true
       } else if (this.activePage != lastActivePage) {
         lastActivePage = this.activePage
-        opts.activePage = this.activePage
-        lastOptsActivePage = this.activePage
         needsRegenerate = true
       }
       if (opts.totalPages != lastOptsTotalPages) {
@@ -77,7 +75,7 @@
         return
       }
       this.activePage = pageNum
-      generatePagination()
+      this.update()
       this.trigger('change', pageNum)
     }
 
@@ -115,12 +113,14 @@
     }
 
     const calcIndex = pageSize => {
+      const activePage = parseInt(this.activePage || 1)
+      const totalPages = parseInt(this.totalPages || 1)
       const prevPageSize = (pageSize - pageSize % 2) / 2
-      if (this.activePage + prevPageSize > this.totalPages) {
-        return this.totalPages - pageSize + 1
+      if (activePage + prevPageSize > totalPages) {
+        return totalPages - pageSize + 1
       }
-      if (this.activePage > prevPageSize) {
-        return this.activePage - prevPageSize
+      if (activePage > prevPageSize) {
+        return activePage - prevPageSize
       }
       return 1
     }
