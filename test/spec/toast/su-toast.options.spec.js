@@ -38,7 +38,7 @@ describe('su-toast-options', function () {
     $('su-toast').hasClass('right').should.equal(true)
 
     app.suToast('hello')
-    $('su-toast .ui.message').hasClass('right').should.equal(true)
+    $('su-toast-item > div').hasClass('right').should.equal(true)
   })
 
   it('option', function () {
@@ -49,6 +49,6 @@ describe('su-toast-options', function () {
     $('su-toast').hasClass('left').should.equal(true)
 
     app.suToast('hello')
-    $('su-toast .ui.message').hasClass('right').should.equal(false)
+    $('su-toast-item > div').hasClass('right').should.equal(false)
   })
 })
