@@ -39,6 +39,7 @@ describe('su-toast-options', function () {
 
     app.suToast('hello')
     $('su-toast-item > div').hasClass('right').should.equal(true)
+    $('su-toast .progress.top').length.should.equal(0)
   })
 
   it('option', function () {
@@ -48,7 +49,8 @@ describe('su-toast-options', function () {
     $('su-toast').hasClass('top').should.equal(true)
     $('su-toast').hasClass('left').should.equal(true)
 
-    app.suToast('hello')
+    app.suToast({ message: 'hello', progress: 'top' })
     $('su-toast-item > div').hasClass('right').should.equal(false)
+    $('su-toast .progress.top').length.should.equal(1)
   })
 })
