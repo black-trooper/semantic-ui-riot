@@ -15,6 +15,7 @@ riot.tag2('su-toast', '<div class="ui list"> <su-toast-item each="{item in items
         title: option.title,
         messages: Array.isArray(option.message) ? option.message : [option.message],
         icon: option.icon,
+        progress: option.progress,
         class: option.class
       }
       this.items.push(item)
@@ -32,6 +33,7 @@ riot.tag2('su-toast', '<div class="ui list"> <su-toast-item each="{item in items
           title: null,
           message: null,
           icon: null,
+          progress: null,
           class: null,
         }
 
@@ -46,6 +48,9 @@ riot.tag2('su-toast', '<div class="ui list"> <su-toast-item each="{item in items
           }
           if (param.icon) {
             option.icon = param.icon
+          }
+          if (param.progress) {
+            option.progress = param.progress
           }
           if (param.class) {
             option.class = param.class

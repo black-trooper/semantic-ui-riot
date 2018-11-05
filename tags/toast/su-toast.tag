@@ -67,6 +67,7 @@
         title: option.title,
         messages: Array.isArray(option.message) ? option.message : [option.message],
         icon: option.icon,
+        progress: option.progress,
         class: option.class
       }
       this.items.push(item)
@@ -84,6 +85,7 @@
           title: null,
           message: null,
           icon: null,
+          progress: null,
           class: null,
         }
 
@@ -98,6 +100,9 @@
           }
           if (param.icon) {
             option.icon = param.icon
+          }
+          if (param.progress) {
+            option.progress = param.progress
           }
           if (param.class) {
             option.class = param.class
