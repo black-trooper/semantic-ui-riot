@@ -4505,6 +4505,11 @@ var generatePagination = function generatePagination() {
   var pageSize = calcPageSize();
   var index = calcIndex(pageSize);
 
+  if (pageSize < 1) {
+    _this.update();
+    return;
+  }
+
   for (var i = 0; i < pageSize; i++) {
     _this.pages.push({
       number: i + index,
@@ -5257,7 +5262,7 @@ var hasClass = function hasClass(className) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-toast-item', '<div class="ui {icon: icon} {class} floating compact message {position} floated" if="{!hide}"> <i class="close icon" onclick="{close}"></i> <i class="{icon} icon" if="{icon}"></i> <div class="content"> <div class="header" if="{title}"> {title} </div> <p each="{message in messages}">{message}</p> </div> </div>', '', 'class="item {transition}"', function(opts) {
+riot.tag2('su-toast-item', '<div class=" {position} floated" if="{!hide}"> <div class="ui attached active progress {class} top" if="{progress == \'top\'}"> <div class="bar"></div> </div> <div class="ui {icon: icon} {class} floating compact message"> <i class="close icon" onclick="{close}"></i> <i class="{icon} icon" if="{icon}"></i> <div class="content"> <div class="header" if="{title}"> {title} </div> <p each="{message in messages}">{message}</p> </div> </div> <div class="ui attached active progress {class} bottom" if="{progress == \'bottom\'}"> <div class="bar"></div> </div> </div>', 'su-toast-item .ui.message,[data-is="su-toast-item"] .ui.message{ margin: 0 } @-webkit-keyframes progress-active { 0% { -webkit-transform: scale(0, 1); transform: scale(0, 1); } 100% { -webkit-transform: scale(1); transform: scale(1); } } @keyframes progress-active { 0% { -webkit-transform: scale(0, 1); transform: scale(0, 1); } 100% { -webkit-transform: scale(1); transform: scale(1); } } su-toast-item .attached.progress,[data-is="su-toast-item"] .attached.progress{ z-index: 1; } su-toast-item .attached.progress .bar,[data-is="su-toast-item"] .attached.progress .bar{ min-width: 0%; width: 100%; } su-toast-item .active.progress .bar:after,[data-is="su-toast-item"] .active.progress .bar:after,su-toast-item .ui.progress.success .bar:after,[data-is="su-toast-item"] .ui.progress.success .bar:after,su-toast-item .ui.progress.warning .bar:after,[data-is="su-toast-item"] .ui.progress.warning .bar:after,su-toast-item .ui.progress.error .bar:after,[data-is="su-toast-item"] .ui.progress.error .bar:after{ animation: progress-active 3.5s infinite !important; -webkit-transform-origin: left; transform-origin: left; opacity: 0.3 !important; } su-toast-item .bottom.attached.progress,[data-is="su-toast-item"] .bottom.attached.progress{ margin: -3px 0 6px; } su-toast-item .top.attached.progress,[data-is="su-toast-item"] .top.attached.progress{ margin: 6px 0 -3px; }', 'class="item {transition}"', function(opts) {
 'use strict';
 
 var _this = this;
@@ -5266,6 +5271,7 @@ this.on('mount', function () {
   _this.position = _this.isRight() ? 'right' : 'left';
   var direction = _this.isRight() ? 'left' : 'right';
   _this.icon = opts.item.icon;
+  _this.progress = opts.item.progress;
   _this.class = opts.item.class;
   _this.transition = 'transition animating in fade ' + direction;
   _this.title = opts.item.title;
@@ -5332,6 +5338,7 @@ this.observable.on('showToast', function (option) {
     title: option.title,
     messages: Array.isArray(option.message) ? option.message : [option.message],
     icon: option.icon,
+    progress: option.progress,
     class: option.class
   };
   _this.items.push(item);
@@ -5349,6 +5356,7 @@ riot.mixin({
       title: null,
       message: null,
       icon: null,
+      progress: null,
       class: null
     };
 
@@ -5363,6 +5371,9 @@ riot.mixin({
       }
       if (param.icon) {
         option.icon = param.icon;
+      }
+      if (param.progress) {
+        option.progress = param.progress;
       }
       if (param.class) {
         option.class = param.class;
