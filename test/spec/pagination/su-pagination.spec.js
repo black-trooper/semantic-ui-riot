@@ -290,6 +290,19 @@ describe('su-pagination', function () {
     spyOnChange.should.have.been.calledWith(9)
   })
 
+  it('page count is 0', function () {
+    mount({
+      totalPages: 0
+    })
+
+    $('su-pagination .item:not(a.icon)').length.should.equal(0)
+    $('su-pagination a.icon.item:eq(0)').hasClass('disabled').should.equal(true)
+    $('su-pagination a.icon.item:eq(1)').hasClass('disabled').should.equal(true)
+    $('su-pagination a.icon.item:eq(2)').hasClass('disabled').should.equal(true)
+    $('su-pagination a.icon.item:eq(3)').hasClass('disabled').should.equal(true)
+    spyOnChange.should.have.been.callCount(0)
+  })
+
   it('update options', function () {
     mount({
       totalPages: 9

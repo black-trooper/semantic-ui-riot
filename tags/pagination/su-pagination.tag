@@ -89,6 +89,11 @@
       const pageSize = calcPageSize()
       const index = calcIndex(pageSize)
 
+      if (pageSize < 1) {
+        this.update()
+        return
+      }
+
       for (let i = 0; i < pageSize; i++) {
         this.pages.push({
           number: i + index,
