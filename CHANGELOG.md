@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.18.3] - 2018-11-09
+### Fixed
+- Fix the problem when total-pages less than 1
+
 ## [0.18.2] - 2018-11-06
 ### Added
 - Add progress option to su-toast
@@ -95,7 +99,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Add su-rating
 
-[Unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.18.2...HEAD
+[Unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.18.3...HEAD
+[0.18.3]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.18.2...v0.18.3
 [0.18.2]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.18.1...v0.18.2
 [0.18.1]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.18.0...v0.18.1
 [0.18.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.17.0...v0.18.0
