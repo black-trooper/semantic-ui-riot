@@ -1,6 +1,4 @@
-import './su-th.tag'
 riot.tag2('su-table', '', '', '', function(opts) {
-    let lastData
     let lastCondition
     let headers
 
@@ -12,7 +10,7 @@ riot.tag2('su-table', '', '', '', function(opts) {
           this.sort(fieldName)
 
           headers.forEach(th => {
-            th.sorted = th.opts.name == lastCondition.field
+            th.sorted = th.opts.field == lastCondition.field
             th.reverse = lastCondition.reverse
           })
           this.update()

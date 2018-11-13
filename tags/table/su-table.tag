@@ -1,7 +1,5 @@
 <su-table>
   <script>
-    import './su-th.tag'
-    let lastData
     let lastCondition
     let headers
 
@@ -13,7 +11,7 @@
           this.sort(fieldName)
 
           headers.forEach(th => {
-            th.sorted = th.opts.name == lastCondition.field
+            th.sorted = th.opts.field == lastCondition.field
             th.reverse = lastCondition.reverse
           })
           this.update()
