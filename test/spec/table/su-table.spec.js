@@ -133,4 +133,29 @@ describe('su-table', function () {
     tag.opts.data[3]['su-table-index'].should.equal(3)
     tag.opts.data[4]['su-table-index'].should.equal(0)
   })
+
+
+  it('update data with default sort', function () {
+    mount({
+      data: [],
+      defaultSortField: 'age',
+      defaultSortReverse: true,
+    })
+
+    tag.opts.data = [
+      { name: 'John', age: 15, gender: 'Male' },
+      { name: 'Amber', age: 40, gender: 'Female' },
+      { name: 'Terry', age: 25, gender: 'Male' },
+      { name: 'Leslie', age: 25 },
+      { name: 'Ben', age: 70, gender: 'Male' },
+    ]
+    tag.update()
+
+    tag.opts.data[0].name.should.equal('Ben')
+    tag.opts.data[0]['su-table-index'].should.equal(4)
+    tag.opts.data[1]['su-table-index'].should.equal(1)
+    tag.opts.data[2]['su-table-index'].should.equal(2)
+    tag.opts.data[3]['su-table-index'].should.equal(3)
+    tag.opts.data[4]['su-table-index'].should.equal(0)
+  })
 })
