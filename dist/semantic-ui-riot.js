@@ -5271,30 +5271,13 @@ riot.tag2('su-table', '', '', '', function(opts) {
 
 var _this = this;
 
+var lastData = void 0;
 var lastCondition = {};
 var headers = void 0;
 var suTableIndex = 'su-table-index';
 
 this.on('mount', function () {
   headers = _this.tags['su-th'];
-
-  if (opts.defaultSortField) {
-    if (opts.defaultSortReverse) {
-      lastCondition.field = opts.defaultSortField;
-    }
-    sort(opts.defaultSortField);
-
-    headers.forEach(function (th) {
-      th.sorted = th.opts.field == lastCondition.field;
-      th.reverse = lastCondition.reverse;
-    });
-    _this.update();
-  } else {
-    lastCondition = {
-      field: suTableIndex,
-      reverse: false
-    };
-  }
 
   headers.forEach(function (th) {
     th.on('click', function (field) {
@@ -5308,6 +5291,30 @@ this.on('mount', function () {
     });
   });
   _this.update();
+});
+
+this.on('update', function () {
+  if (JSON.stringify(lastData) != JSON.stringify(opts.data)) {
+    lastData = opts.data;
+    lastCondition = {
+      field: suTableIndex,
+      reverse: false
+    };
+
+    if (opts.defaultSortField) {
+      if (opts.defaultSortReverse) {
+        lastCondition.field = opts.defaultSortField;
+        lastCondition.reverse = false;
+      }
+      sort(opts.defaultSortField);
+
+      headers.forEach(function (th) {
+        th.sorted = th.opts.field == lastCondition.field;
+        th.reverse = lastCondition.reverse;
+      });
+      _this.update();
+    }
+  }
 });
 
 var sort = function sort(field) {
