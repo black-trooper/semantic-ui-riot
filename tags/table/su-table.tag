@@ -5,15 +5,25 @@
     const suTableIndex = 'su-table-index'
 
     this.on('mount', () => {
+      headers = this.tags['su-th']
+
       if (opts.defaultSortField) {
+        if (opts.defaultSortReverse) {
+          lastCondition.field = opts.defaultSortField
+        }
         sort(opts.defaultSortField)
+
+        headers.forEach(th => {
+          th.sorted = th.opts.field == lastCondition.field
+          th.reverse = lastCondition.reverse
+        })
+        this.update()
       } else {
         lastCondition = {
           field: suTableIndex,
           reverse: false,
         }
       }
-      headers = this.tags['su-th']
 
       headers.forEach(th => {
         th.on('click', field => {

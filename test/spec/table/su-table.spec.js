@@ -122,14 +122,15 @@ describe('su-table', function () {
         { name: 'Leslie', age: 25 },
         { name: 'Ben', age: 70, gender: 'Male' },
       ],
-      defaultSortField: 'name'
+      defaultSortField: 'age',
+      defaultSortReverse: true,
     })
 
-    tag.opts.data[0].name.should.equal('Amber')
-    tag.opts.data[0]['su-table-index'].should.equal(1)
-    tag.opts.data[1]['su-table-index'].should.equal(4)
-    tag.opts.data[2]['su-table-index'].should.equal(0)
+    tag.opts.data[0].name.should.equal('Ben')
+    tag.opts.data[0]['su-table-index'].should.equal(4)
+    tag.opts.data[1]['su-table-index'].should.equal(1)
+    tag.opts.data[2]['su-table-index'].should.equal(2)
     tag.opts.data[3]['su-table-index'].should.equal(3)
-    tag.opts.data[4]['su-table-index'].should.equal(2)
+    tag.opts.data[4]['su-table-index'].should.equal(0)
   })
 })
