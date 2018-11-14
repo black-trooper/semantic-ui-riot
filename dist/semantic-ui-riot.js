@@ -5276,15 +5276,25 @@ var headers = void 0;
 var suTableIndex = 'su-table-index';
 
 this.on('mount', function () {
+  headers = _this.tags['su-th'];
+
   if (opts.defaultSortField) {
+    if (opts.defaultSortReverse) {
+      lastCondition.field = opts.defaultSortField;
+    }
     sort(opts.defaultSortField);
+
+    headers.forEach(function (th) {
+      th.sorted = th.opts.field == lastCondition.field;
+      th.reverse = lastCondition.reverse;
+    });
+    _this.update();
   } else {
     lastCondition = {
       field: suTableIndex,
       reverse: false
     };
   }
-  headers = _this.tags['su-th'];
 
   headers.forEach(function (th) {
     th.on('click', function (field) {
