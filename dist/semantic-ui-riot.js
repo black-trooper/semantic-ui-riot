@@ -2698,6 +2698,10 @@ __webpack_require__(/*! ../tags/tab/su-tab.tag */ "./tags/tab/su-tab.tag");
 
 __webpack_require__(/*! ../tags/tab/su-tabset.tag */ "./tags/tab/su-tabset.tag");
 
+__webpack_require__(/*! ../tags/table/su-table.tag */ "./tags/table/su-table.tag");
+
+__webpack_require__(/*! ../tags/table/su-th.tag */ "./tags/table/su-th.tag");
+
 __webpack_require__(/*! ../tags/toast/su-toast.tag */ "./tags/toast/su-toast.tag");
 
 __webpack_require__(/*! ../tags/toast/su-toast-item.tag */ "./tags/toast/su-toast-item.tag");
@@ -5250,6 +5254,125 @@ var getTitleClass = function getTitleClass() {
 
 var hasClass = function hasClass(className) {
   return _this.root.classList.contains(className);
+};
+});
+
+/***/ }),
+
+/***/ "./tags/table/su-table.tag":
+/*!*********************************!*\
+  !*** ./tags/table/su-table.tag ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+riot.tag2('su-table', '', '', '', function(opts) {
+'use strict';
+
+var _this = this;
+
+var lastCondition = {};
+var headers = void 0;
+var suTableIndex = 'su-table-index';
+
+this.on('mount', function () {
+  if (opts.defaultSortField) {
+    sort(opts.defaultSortField);
+  } else {
+    lastCondition = {
+      field: suTableIndex,
+      reverse: false
+    };
+  }
+  headers = _this.tags['su-th'];
+
+  headers.forEach(function (th) {
+    th.on('click', function (field) {
+      sort(field);
+
+      headers.forEach(function (th) {
+        th.sorted = th.opts.field == lastCondition.field;
+        th.reverse = lastCondition.reverse;
+      });
+      _this.update();
+    });
+  });
+  _this.update();
+});
+
+var sort = function sort(field) {
+  addIndexField(opts.data);
+  var condition = generateCondition(field, lastCondition);
+  opts.data.sort(sortBy(condition));
+  lastCondition = condition;
+};
+
+var generateCondition = function generateCondition(field, condition) {
+  if (condition.field === field) {
+    if (!condition.reverse) {
+      condition.reverse = true;
+    } else {
+      condition.reverse = false;
+      condition.field = suTableIndex;
+    }
+  } else {
+    condition.reverse = false;
+    condition.field = field;
+  }
+
+  return condition;
+};
+
+var sortBy = function sortBy(condition) {
+  var field = condition.field;
+  var reverse = condition.reverse ? -1 : 1;
+  var nullsFirst = opts.nullsFirst ? -1 : 1;
+  return function (ason, bson) {
+    var a = ason[field];
+    var b = bson[field];
+
+    if (a == null) {
+      return reverse * nullsFirst;
+    }
+    if (b == null) {
+      return reverse * nullsFirst * -1;
+    }
+    if (a < b) {
+      return reverse * -1;
+    }
+    if (a > b) {
+      return reverse;
+    }
+
+    return ason[suTableIndex] - bson[suTableIndex];
+  };
+};
+
+var addIndexField = function addIndexField(json) {
+  json.forEach(function (data, index) {
+    if (data[suTableIndex] === undefined) {
+      data[suTableIndex] = index;
+    }
+  });
+};
+});
+
+/***/ }),
+
+/***/ "./tags/table/su-th.tag":
+/*!******************************!*\
+  !*** ./tags/table/su-th.tag ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+riot.tag2('su-th', '', '', 'onclick="{click}" class="{sorted: sorted} {ascending: sorted && !reverse} {descending: sorted && reverse}"', function(opts) {
+'use strict';
+
+var _this = this;
+
+this.click = function () {
+  _this.trigger('click', opts.field);
 };
 });
 
