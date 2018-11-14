@@ -1,29 +1,12 @@
 <su-table>
   <script>
+    let lastData
     let lastCondition = {}
     let headers
     const suTableIndex = 'su-table-index'
 
     this.on('mount', () => {
       headers = this.tags['su-th']
-
-      if (opts.defaultSortField) {
-        if (opts.defaultSortReverse) {
-          lastCondition.field = opts.defaultSortField
-        }
-        sort(opts.defaultSortField)
-
-        headers.forEach(th => {
-          th.sorted = th.opts.field == lastCondition.field
-          th.reverse = lastCondition.reverse
-        })
-        this.update()
-      } else {
-        lastCondition = {
-          field: suTableIndex,
-          reverse: false,
-        }
-      }
 
       headers.forEach(th => {
         th.on('click', field => {
@@ -37,6 +20,30 @@
         })
       })
       this.update()
+    })
+
+    this.on('update', () => {
+      if (JSON.stringify(lastData) != JSON.stringify(opts.data)) {
+        lastData = opts.data
+        lastCondition = {
+          field: suTableIndex,
+          reverse: false,
+        }
+
+        if (opts.defaultSortField) {
+          if (opts.defaultSortReverse) {
+            lastCondition.field = opts.defaultSortField
+            lastCondition.reverse = false
+          }
+          sort(opts.defaultSortField)
+
+          headers.forEach(th => {
+            th.sorted = th.opts.field == lastCondition.field
+            th.reverse = lastCondition.reverse
+          })
+          this.update()
+        }
+      }
     })
 
     const sort = field => {
