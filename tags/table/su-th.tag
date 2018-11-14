@@ -1,4 +1,4 @@
-<su-th onclick="{ click }" class="{ sorted: sorted } { ascending: !reverse } { descending: reverse }">
+<su-th onclick="{ click }" class="{ sorted: sorted } { ascending: sorted && !reverse } { descending: sorted && reverse }">
   <script>
     this.click = () => {
       this.trigger('click', opts.field)
