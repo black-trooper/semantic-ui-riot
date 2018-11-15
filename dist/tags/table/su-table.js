@@ -6,6 +6,9 @@ riot.tag2('su-table', '', '', '', function(opts) {
 
     this.on('mount', () => {
       headers = this.tags['su-th']
+      if (!Array.isArray(headers)) {
+        headers = headers ? [headers] : []
+      }
 
       headers.forEach(th => {
         th.on('click', field => {
