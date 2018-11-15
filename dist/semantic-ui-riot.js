@@ -5278,6 +5278,9 @@ var suTableIndex = 'su-table-index';
 
 this.on('mount', function () {
   headers = _this.tags['su-th'];
+  if (!Array.isArray(headers)) {
+    headers = headers ? [headers] : [];
+  }
 
   headers.forEach(function (th) {
     th.on('click', function (field) {
