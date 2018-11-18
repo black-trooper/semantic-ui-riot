@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.19.3] - 2018-11-15
+### Fixed
+- Fix the problem when su-th is not plural
+
+## [0.19.2] - 2018-11-15
+### Fixed
+- Fix the problem where incorrect order when update data
+
+## [0.19.1] - 2018-11-14
+### Fixed
+- Add default sort reverse option to su-table
+
+## [0.19.0] - 2018-11-14
+### Added
+- Add su-table
+
 ## [0.18.3] - 2018-11-09
 ### Fixed
 - Fix the problem when total-pages less than 1
@@ -99,7 +115,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Add su-rating
 
-[Unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.18.3...HEAD
+[Unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.19.3...HEAD
+[0.19.3]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.19.2...v0.19.3
+[0.19.2]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.19.1...v0.19.2
+[0.19.1]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.19.0...v0.19.1
+[0.19.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.18.3...v0.19.0
 [0.18.3]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.18.2...v0.18.3
 [0.18.2]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.18.1...v0.18.2
 [0.18.1]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.18.0...v0.18.1
