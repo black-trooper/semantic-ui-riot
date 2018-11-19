@@ -51,6 +51,10 @@
       button.text = defaultButton.text || 'Close'
       button.type = defaultButton.type || ''
       button.icon = defaultButton.icon || ''
+
+      this.refs.modal.on('closeAction', () => {
+        this.observable.trigger('callbackConfirm')
+      })
     })
 
     const setButton = option => {
@@ -58,6 +62,8 @@
         text: option.button.text || button.text,
         type: option.button.type || button.type,
         icon: option.button.icon || button.icon,
+        action: 'closeAction',
+        closable: false,
       }
       if (option.button.default) {
         btn.default = true
@@ -106,7 +112,14 @@
             option.button = param.button
           }
         }
-        self.observable.trigger('showAlert', option)
+
+        return self.Q.Promise(resolve => {
+          self.observable.trigger('showAlert', option)
+          self.observable.on('callbackConfirm', () => {
+            this.refs.modal.hide()
+            return resolve()
+          })
+        })
       }
     })
   </script>
