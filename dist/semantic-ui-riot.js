@@ -2834,13 +2834,19 @@ this.on('mount', function () {
   button.text = defaultButton.text || 'Close';
   button.type = defaultButton.type || '';
   button.icon = defaultButton.icon || '';
+
+  _this.refs.modal.on('closeAction', function () {
+    _this.observable.trigger('callbackConfirm');
+  });
 });
 
 var setButton = function setButton(option) {
   var btn = {
     text: option.button.text || button.text,
     type: option.button.type || button.type,
-    icon: option.button.icon || button.icon
+    icon: option.button.icon || button.icon,
+    action: 'closeAction',
+    closable: false
   };
   if (option.button.default) {
     btn.default = true;
@@ -2889,7 +2895,14 @@ riot.mixin({
         option.button = param.button;
       }
     }
-    self.observable.trigger('showAlert', option);
+
+    return self.Q.Promise(function (resolve) {
+      self.observable.trigger('showAlert', option);
+      self.observable.on('callbackConfirm', function () {
+        _this.refs.modal.hide();
+        return resolve();
+      });
+    });
   }
 });
 });
