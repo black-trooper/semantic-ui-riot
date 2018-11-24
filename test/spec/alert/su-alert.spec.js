@@ -3,6 +3,7 @@ require('../../../dist/tags/alert/su-alert.js')
 riot.mixin('semantic-ui', {})
 
 describe('su-alert', function () {
+  const Q = require('q')
   let tag
   let app
   let mount = () => {
@@ -12,7 +13,13 @@ describe('su-alert', function () {
 
   beforeEach(function () {
     this.clock = sinon.useFakeTimers()
-    riot.mixin('semantic-ui', { observable: riot.observable() })
+    riot.mixin('semantic-ui',
+      {
+        observable: riot.observable(),
+        Q: {
+          Promise: Q.Promise
+        }
+      })
     riot.tag('app')
     $('body').append(`
       <su-alert></su-alert>
