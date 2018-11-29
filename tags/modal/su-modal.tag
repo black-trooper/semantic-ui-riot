@@ -1,7 +1,7 @@
 <su-modal onclick="{ dimmerClose }">
   <div class="ui dimmer modals page transition { transitionStatus }">
     <div class="ui modal transition visible active {opts.class}" onclick="{ clickModal }" id="{ getId() }">
-      <i class="close icon" if="{ isFullscreen() }" onclick="{ hide }"></i>
+      <i class="close icon" if="{ opts.modal.closable && !this.isBasic() }" onclick="{ hide }"></i>
       <div class="ui header { icon: opts.modal.header.icon }" if="{ opts.modal.header }">
         <i class="icon { opts.modal.header.icon }" if="{ opts.modal.header.icon }"></i>
         { (opts.modal.header.text) ? opts.modal.header.text : opts.modal.header }
@@ -34,6 +34,16 @@
 
     .ui.fullscreen.modal {
       left: 0 !important;
+    }
+
+    @media only screen and (min-width: 768px) {
+      .ui.modal>.close {
+        display: none;
+      }
+
+      .ui.fullscreen.modal>.close {
+        display: inline;
+      }
     }
   </style>
 
@@ -138,10 +148,6 @@
     //                                                                              ======
     this.getId = () => {
       return `su-modal-${this._riot_id}`
-    }
-
-    this.isFullscreen = () => {
-      return isContainsClassName('fullscreen')
     }
 
     this.isBasic = () => {
