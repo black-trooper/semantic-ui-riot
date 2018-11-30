@@ -11,7 +11,7 @@
       </div>
       <div class="actions">
         <button each="{ opts.modal.buttons }" class="ui button { type } { labeled: icon && text } { icon: icon } { inverted: isBasic() } { disabled: disabled }"
-          onclick="{ parent.click }" ref="button_{ text }">
+          onclick="{ parent.click }" ref="button_{ text }" type="button">
           { text }
           <i class="icon { icon }" if="{ icon }"></i>
         </button>
