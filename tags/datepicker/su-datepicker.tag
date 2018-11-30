@@ -3,7 +3,7 @@
     <div class="ui action input { disabled: isDisabled() }" if="{ opts.popup }">
       <input type="text" placeholder="{ opts.placeholder }" ref="input" tabindex="{ getTabindex() }" readonly="{ isReadOnly() }"
       />
-      <button class="ui icon button { disabled: isDisabled() }" onclick="{ toggle }" onblur="{ blur }">
+      <button class="ui icon button { disabled: isDisabled() }" onclick="{ toggle }" onblur="{ blur }" type="button">
         <i class="calendar icon"></i>
       </button>
     </div>
