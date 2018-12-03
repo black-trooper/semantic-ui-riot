@@ -415,6 +415,7 @@ describe('su-datepicker', function () {
 
     tag.valueAsDate.getTime().should.equal(date.getTime())
     tag.defaultValue.getTime().should.equal(date.getTime())
+    tag.changed().should.equal(false)
 
     fireEvent($('su-datepicker .dp-today .button')[0], 'click')
     const today = new Date()
@@ -423,9 +424,11 @@ describe('su-datepicker', function () {
     tag.valueAsDate.getMonth().should.equal(today.getMonth())
     tag.valueAsDate.getDate().should.equal(today.getDate())
     tag.defaultValue.getTime().should.equal(date.getTime())
+    tag.changed().should.equal(true)
 
     tag.reset()
     tag.valueAsDate.getTime().should.equal(date.getTime())
     tag.defaultValue.getTime().should.equal(date.getTime())
+    tag.changed().should.equal(false)
   })
 })
