@@ -152,6 +152,10 @@ describe('su-datepicker', function () {
     spyOnClose.should.have.been.calledOnce
     $('su-datepicker .menu').is(':visible').should.equal(false)
     tag.refs.input.value.should.equal('2017-12-01')
+
+    tag.value = new Date(2018, 11, 1)
+    tag.update()
+    tag.refs.input.value.should.equal('2018-12-01')
   })
 
   it('popup datepicker option', function () {
