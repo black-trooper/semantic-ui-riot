@@ -387,6 +387,31 @@ describe('su-datepicker', function () {
     spyOnClose.should.have.been.calledTwice
   })
 
+  it('upward', function () {
+    $('body').append('<su-datepicker />')
+    mount({
+      popup: true,
+      direction: 'upward'
+    })
+
+    $('su-datepicker').hasClass('upward').should.equal(false)
+
+    fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
+    $('su-datepicker .ui.dropdown').hasClass('upward').should.equal(true)
+  })
+
+  it('downward', function () {
+    $('body').append('<su-datepicker />')
+    mount({
+      popup: true,
+      direction: 'downward'
+    })
+    $('su-datepicker').hasClass('upward').should.equal(false)
+
+    fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
+    $('su-datepicker .ui.dropdown').hasClass('upward').should.equal(false)
+  })
+
   it('reset value', function () {
     $('body').append('<su-datepicker />')
     mount()
