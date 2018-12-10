@@ -1,4 +1,4 @@
-riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.title}</a> </div> <yield></yield> <div class="ui {opts.class} {getClass()} menu" if="{isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.title}</a> </div>', '', '', function(opts) {
+riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.label}</a> </div> <yield></yield> <div class="ui {opts.class} {getClass()} menu" if="{isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.label}</a> </div>', '', '', function(opts) {
     this.tabs = []
     let lastOptsActive, lastActive, active
 
@@ -8,16 +8,17 @@ riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isB
       }
 
       this.tabs = this.tags['su-tab']
-
       if (!Array.isArray(this.tabs)) {
         this.tabs = [this.tabs]
       }
+      supportTraditionalOptions()
+
       if (typeof opts.active === 'undefined') {
         const titles = this.hasTitle()
         if (titles) {
           opts.active = titles[0].root.innerText.trim()
         } else {
-          opts.active = this.tabs[0].opts.title
+          opts.active = this.tabs[0].opts.label
         }
       }
 
@@ -29,6 +30,7 @@ riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isB
     })
 
     this.on('update', () => {
+      supportTraditionalOptions()
       let changed = false
       if (lastOptsActive != opts.active) {
         lastOptsActive = opts.active
@@ -60,7 +62,7 @@ riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isB
           })
         } else {
           this.tabs.forEach(tab => {
-            tab.active = tab.opts.title == active
+            tab.active = tab.opts.label == active
           })
           if (!this.tabs.some(tab => tab.active)) {
             this.tabs[0].active = true
@@ -70,7 +72,7 @@ riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isB
     })
 
     this.click = event => {
-      active = event.item.tab.opts.title
+      active = event.item.tab.opts.label
       this.update()
       this.trigger('click', active)
     }
@@ -146,6 +148,20 @@ riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isB
 
     const hasClass = className => {
       return this.root.classList.contains(className)
+    }
+
+    let shownMessage = false
+    const supportTraditionalOptions = () => {
+      this.tabs.forEach(tab => {
+        if (typeof tab.opts.title !== 'undefined') {
+          if (!shownMessage) {
+            console.warn('\'title\' attribute is deprecated. Please use \'label\'.')
+          }
+          shownMessage = true
+          tab.opts.label = tab.opts.title
+          tab.opts.title = undefined
+        }
+      })
     }
 
 });

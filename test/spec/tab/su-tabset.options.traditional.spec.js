@@ -14,8 +14,8 @@ describe('su-tabset-options', function () {
   it('su-tab has class', function () {
     mount(`
       <su-tabset>
-        <su-tab label="Home" class="none">Home content</su-tab>
-        <su-tab label="Message" class="none">Messages content</su-tab>
+        <su-tab title="Home" class="none">Home content</su-tab>
+        <su-tab title="Message" class="none">Messages content</su-tab>
       </su-tabset>`)
 
     tag.tags['su-tab'][0].root.classList.contains('none').should.equal(true)
@@ -27,8 +27,8 @@ describe('su-tabset-options', function () {
   it('no segment', function () {
     mount(`
       <su-tabset class="no-segment">
-        <su-tab label="Home">Home content</su-tab>
-        <su-tab label="Message">Messages content</su-tab>
+        <su-tab title="Home">Home content</su-tab>
+        <su-tab title="Message">Messages content</su-tab>
       </su-tabset>`)
 
     tag.tags['su-tab'][0].root.classList.contains('segment').should.equal(false)
@@ -38,8 +38,8 @@ describe('su-tabset-options', function () {
   it('top tabular', function () {
     mount(`
       <su-tabset class="top tabular">
-        <su-tab label="Home">Home content</su-tab>
-        <su-tab label="Message">Messages content</su-tab>
+        <su-tab title="Home">Home content</su-tab>
+        <su-tab title="Message">Messages content</su-tab>
       </su-tabset>`)
 
     tag.tags['su-tab'][0].root.classList.contains('tabular').should.equal(true)
@@ -54,8 +54,8 @@ describe('su-tabset-options', function () {
   it('bottom tabular', function () {
     mount(`
       <su-tabset class="bottom tabular">
-        <su-tab label="Home">Home content</su-tab>
-        <su-tab label="Message">Messages content</su-tab>
+        <su-tab title="Home">Home content</su-tab>
+        <su-tab title="Message">Messages content</su-tab>
       </su-tabset>`)
 
     tag.tags['su-tab'][0].root.classList.contains('tabular').should.equal(true)
@@ -70,8 +70,8 @@ describe('su-tabset-options', function () {
   it('top attached', function () {
     mount(`
       <su-tabset class="top attached">
-        <su-tab label="Home">Home content</su-tab>
-        <su-tab label="Message">Messages content</su-tab>
+        <su-tab title="Home">Home content</su-tab>
+        <su-tab title="Message">Messages content</su-tab>
       </su-tabset>`)
 
     tag.tags['su-tab'][0].root.classList.contains('attached').should.equal(true)
@@ -84,8 +84,8 @@ describe('su-tabset-options', function () {
   it('bottom attached', function () {
     mount(`
       <su-tabset class="bottom attached">
-        <su-tab label="Home">Home content</su-tab>
-        <su-tab label="Message">Messages content</su-tab>
+        <su-tab title="Home">Home content</su-tab>
+        <su-tab title="Message">Messages content</su-tab>
       </su-tabset>`)
 
     tag.tags['su-tab'][0].root.classList.contains('attached').should.equal(true)
@@ -129,8 +129,8 @@ describe('su-tabset-options', function () {
   it('default active', function () {
     mount(`
       <su-tabset active="Message">
-        <su-tab label="Home">Home content</su-tab>
-        <su-tab label="Message">Messages content</su-tab>
+        <su-tab title="Home">Home content</su-tab>
+        <su-tab title="Message">Messages content</su-tab>
       </su-tabset>`)
 
     tag.tags['su-tab'][0].active.should.equal(false)
@@ -140,8 +140,8 @@ describe('su-tabset-options', function () {
   it('default active is not match', function () {
     mount(`
       <su-tabset active="Nothing">
-        <su-tab label="Home">Home content</su-tab>
-        <su-tab label="Message">Messages content</su-tab>
+        <su-tab title="Home">Home content</su-tab>
+        <su-tab title="Message">Messages content</su-tab>
       </su-tabset>`)
 
     tag.tags['su-tab'][0].active.should.equal(true)
@@ -151,7 +151,7 @@ describe('su-tabset-options', function () {
   it('single tab', function () {
     mount(`
       <su-tabset>
-        <su-tab label="Home">Home content</su-tab>
+        <su-tab title="Home">Home content</su-tab>
       </su-tabset>`)
 
     tag.tags['su-tab'].root.classList.contains('segment').should.equal(true)
@@ -180,8 +180,8 @@ describe('su-tabset-options', function () {
   it('lazy mount', function () {
     mount(`
       <su-tabset lazy-mount="true">
-        <su-tab label="Home" class="none">Home content</su-tab>
-        <su-tab label="Message" class="none">Messages content</su-tab>
+        <su-tab title="Home" class="none">Home content</su-tab>
+        <su-tab title="Message" class="none">Messages content</su-tab>
       </su-tabset>`)
 
     tag.tags['su-tab'][0].active.should.equal(true)
