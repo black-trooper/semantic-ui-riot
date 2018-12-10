@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.20.0] - 2018-12-10
+### Added
+- Add direction attribute to su-dropdown
+- Add direction attribute to su-datepicker
+
+### Changed
+- Change the title attribute of su-tab from 'title' to 'label'
+
+### Fixed
+- Fix the problem where value of input field is not update when value is changed
+
+## [0.19.7] - 2018-11-30
+### Added
+- Add type attribute to button
+
+## [0.19.5] - 2018-11-29
+### Fixed
+- Improve to display close icon when modal become full screen
+
+## [0.19.4] - 2018-11-25
+### Added
+- Add callback to su-alert
+
 ## [0.19.3] - 2018-11-15
 ### Fixed
 - Fix the problem when su-th is not plural
@@ -115,7 +138,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Add su-rating
 
-[Unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.19.3...HEAD
+[Unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.20.0...HEAD
+[0.20.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.19.7...v0.20.0
+[0.19.7]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.19.5...v0.19.7
+[0.19.5]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.19.4...v0.19.5
+[0.19.4]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.19.3...v0.19.4
 [0.19.3]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.19.2...v0.19.3
 [0.19.2]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.19.1...v0.19.2
 [0.19.1]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.19.0...v0.19.1
