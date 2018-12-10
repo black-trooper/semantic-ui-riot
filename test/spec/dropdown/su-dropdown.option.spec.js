@@ -1,6 +1,3 @@
-const fireEvent = require('../../helpers').fireEvent
-const fireKeyEvent = require('../../helpers').fireKeyEvent
-const keys = require('../../helpers').keys
 require('../../../dist/tags/dropdown/su-dropdown.js')
 
 describe('su-dropdown', function () {
@@ -73,7 +70,7 @@ describe('su-dropdown', function () {
     spyOnClose.should.have.been.calledOnce
   })
 
-  it('upward', function () {
+  it('downward', function () {
     mount({
       direction: 'downward'
     })
