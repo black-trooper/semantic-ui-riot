@@ -152,6 +152,10 @@ describe('su-datepicker', function () {
     spyOnClose.should.have.been.calledOnce
     $('su-datepicker .menu').is(':visible').should.equal(false)
     tag.refs.input.value.should.equal('2017-12-01')
+
+    tag.value = new Date(2018, 11, 1)
+    tag.update()
+    tag.refs.input.value.should.equal('2018-12-01')
   })
 
   it('popup datepicker option', function () {
@@ -411,6 +415,7 @@ describe('su-datepicker', function () {
 
     tag.valueAsDate.getTime().should.equal(date.getTime())
     tag.defaultValue.getTime().should.equal(date.getTime())
+    tag.changed().should.equal(false)
 
     fireEvent($('su-datepicker .dp-today .button')[0], 'click')
     const today = new Date()
@@ -419,9 +424,11 @@ describe('su-datepicker', function () {
     tag.valueAsDate.getMonth().should.equal(today.getMonth())
     tag.valueAsDate.getDate().should.equal(today.getDate())
     tag.defaultValue.getTime().should.equal(date.getTime())
+    tag.changed().should.equal(true)
 
     tag.reset()
     tag.valueAsDate.getTime().should.equal(date.getTime())
     tag.defaultValue.getTime().should.equal(date.getTime())
+    tag.changed().should.equal(false)
   })
 })

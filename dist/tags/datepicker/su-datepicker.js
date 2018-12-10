@@ -68,6 +68,9 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup}"> <div class="u
         changed = true
       }
       setValueFromValueAsDate()
+      if (changed && this.refs.input) {
+        this.refs.input.value = this.value
+      }
 
       if (changed && this.valueAsDate) {
         this.currentDate = copyDate(this.valueAsDate)
