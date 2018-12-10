@@ -1,5 +1,5 @@
 <su-datepicker>
-  <div class="ui { dropdown:opts.popup }">
+  <div class="ui { dropdown:opts.popup } { upward: upward }">
     <div class="ui action input { disabled: isDisabled() }" if="{ opts.popup }">
       <input type="text" placeholder="{ opts.placeholder }" ref="input" tabindex="{ getTabindex() }" readonly="{ isReadOnly() }"
       />
@@ -59,6 +59,10 @@
     .ui.segment {
       padding-top: 0.5rem;
       padding-bottom: 0.5rem;
+    }
+
+    .menu {
+      max-height: 25.5rem;
     }
 
     .ui.buttons.dp-navigation {
@@ -374,6 +378,7 @@
     }
 
     const open = () => {
+      this.upward = isUpward()
       this.transitionStatus = 'visible'
       visibleFlg = true
       this.currentDate = copyDate(opts.currentDate)
@@ -421,7 +426,30 @@
         return date
       }
       return parse(date)
-      // return new Date(date.getTime())
+    }
+
+    const isUpward = () => {
+      if (opts.direction == 'upward') {
+        return true
+      }
+      if (opts.direction == 'downward') {
+        return false
+      }
+      const currentMenu = this.root.querySelector('.menu')
+      const dropdown = this.root.getBoundingClientRect()
+      const windowHeight = document.documentElement.offsetHeight || document.body.offsetHeight
+      const menuHeight = parseInt(document.defaultView.getComputedStyle(currentMenu, null).getPropertyValue('max-height').replace('px', ''))
+      const above = menuHeight <= dropdown.top
+      const below = windowHeight >= dropdown.top + dropdown.height + menuHeight
+
+      console.log(windowHeight, menuHeight, above, below)
+      if (below) {
+        return false
+      }
+      if (!below && !above) {
+        return false
+      }
+      return true
     }
 
     // ===================================================================================
