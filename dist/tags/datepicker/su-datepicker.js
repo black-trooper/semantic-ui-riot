@@ -293,7 +293,6 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
       const above = menuHeight <= dropdown.top
       const below = windowHeight >= dropdown.top + dropdown.height + menuHeight
 
-      console.log(windowHeight, menuHeight, above, below)
       if (below) {
         return false
       }
