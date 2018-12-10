@@ -10,8 +10,8 @@ describe('su-tabset', function () {
 
   beforeEach(function () {
     const group = $('<su-tabset></su-tabset>')
-    group.append('<su-tab label="Home">Home content</su-tab>')
-      .append('<su-tab label="Message">Messages content</su-tab>')
+    group.append('<su-tab title="Home">Home content</su-tab>')
+      .append('<su-tab title="Message">Messages content</su-tab>')
     $('body').append(group)
     tag = riot.mount('su-tabset')[0]
     tag.on('click', spyOnClick)
