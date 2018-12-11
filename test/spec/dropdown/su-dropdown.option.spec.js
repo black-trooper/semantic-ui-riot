@@ -1,6 +1,6 @@
 require('../../../dist/tags/dropdown/su-dropdown.js')
 
-describe('su-dropdown', function () {
+describe('su-dropdown.option', function () {
   let tag
   let spyOnOpen = sinon.spy()
   let spyOnClose = sinon.spy()
@@ -54,18 +54,18 @@ describe('su-dropdown', function () {
       direction: 'upward'
     })
 
-    $('su-dropdown .menu').is(':visible').should.equal(false)
+    $('su-dropdown .menu').css('visibility').should.equal('hidden')
     $('su-dropdown').hasClass('upward').should.equal(false)
 
     $('su-dropdown').click()
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(true)
+    $('su-dropdown .menu').css('visibility').should.equal('visible')
     $('su-dropdown').hasClass('upward').should.equal(true)
     spyOnOpen.should.have.been.calledOnce
 
     $('su-dropdown').click()
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(false)
+    $('su-dropdown .menu').css('visibility').should.equal('hidden')
     $('su-dropdown').hasClass('upward').should.equal(true)
     spyOnClose.should.have.been.calledOnce
   })
@@ -75,18 +75,18 @@ describe('su-dropdown', function () {
       direction: 'downward'
     })
 
-    $('su-dropdown .menu').is(':visible').should.equal(false)
+    $('su-dropdown .menu').css('visibility').should.equal('hidden')
     $('su-dropdown').hasClass('upward').should.equal(false)
 
     $('su-dropdown').click()
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(true)
+    $('su-dropdown .menu').css('visibility').should.equal('visible')
     $('su-dropdown').hasClass('upward').should.equal(false)
     spyOnOpen.should.have.been.calledOnce
 
     $('su-dropdown').click()
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(false)
+    $('su-dropdown .menu').css('visibility').should.equal('hidden')
     $('su-dropdown').hasClass('upward').should.equal(false)
     spyOnClose.should.have.been.calledOnce
   })

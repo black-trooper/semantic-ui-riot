@@ -96,22 +96,22 @@ describe('su-dropdown-search', function () {
   })
 
   it('opens the menu on focus', function () {
-    $('su-dropdown .menu').is(':visible').should.equal(false)
+    $('su-dropdown .menu').css('visibility').should.equal('hidden')
 
     $('su-dropdown .search').click()
     $('su-dropdown .search').focus()
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(true)
+    $('su-dropdown .menu').css('visibility').should.equal('visible')
 
     fireEvent($('su-dropdown')[0], 'blur')
   })
 
   it('adding text to box filters the options list', function () {
-    $('su-dropdown .menu').is(':visible').should.equal(false)
+    $('su-dropdown .menu').css('visibility').should.equal('hidden')
 
     $('su-dropdown .search').focus()
     spyOnSearch.should.have.been.calledOnce
-    $('su-dropdown .menu').is(':visible').should.equal(true)
+    $('su-dropdown .menu').css('visibility').should.equal('visible')
     $('su-dropdown .item').length.should.equal(52)
     spyOnOpen.should.have.been.calledOnce
 
