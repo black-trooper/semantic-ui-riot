@@ -61,8 +61,8 @@
       padding-bottom: 0.5rem;
     }
 
-    .menu {
-      max-height: 25.5rem;
+    .ui.dropdown .menu {
+      display: block;
     }
 
     .ui.buttons.dp-navigation {
@@ -438,12 +438,11 @@
       if (opts.direction == 'downward') {
         return false
       }
-      const currentMenu = this.root.querySelector('.menu')
-      const dropdown = this.root.getBoundingClientRect()
+      const inputField = this.root.getBoundingClientRect()
       const windowHeight = document.documentElement.offsetHeight || document.body.offsetHeight
-      const menuHeight = parseInt(document.defaultView.getComputedStyle(currentMenu, null).getPropertyValue('max-height').replace('px', ''))
-      const above = menuHeight <= dropdown.top
-      const below = windowHeight >= dropdown.top + dropdown.height + menuHeight
+      const menuHeight = this.root.querySelector('.menu').getBoundingClientRect().height
+      const above = menuHeight <= inputField.top
+      const below = windowHeight >= inputField.top + inputField.height + menuHeight
 
       if (below) {
         return false
