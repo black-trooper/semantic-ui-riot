@@ -34,6 +34,10 @@
       background: rgba(0, 0, 0, .05);
       color: rgba(0, 0, 0, .95);
     }
+
+    :scope.ui.dropdown .menu {
+      display: block;
+    }
   </style>
 
   <script>
@@ -269,9 +273,9 @@
       if (this.openning || this.closing || visibleFlg || this.isReadOnly() || this.isDisabled()) {
         return
       }
-      this.upward = isUpward()
       this.openning = true
       search('')
+      this.upward = isUpward()
       this.transitionStatus = `visible animating in slide ${this.upward ? 'up' : 'down'}`
       opts.items.forEach(item => item.active = false)
       setTimeout(() => {
@@ -398,10 +402,9 @@
       if (opts.direction == 'downward') {
         return false
       }
-      const currentMenu = this.root.querySelector('.menu')
       const dropdown = this.root.getBoundingClientRect()
       const windowHeight = document.documentElement.offsetHeight || document.body.offsetHeight
-      const menuHeight = parseInt(document.defaultView.getComputedStyle(currentMenu, null).getPropertyValue('max-height').replace('px', ''))
+      const menuHeight = this.root.querySelector('.menu').getBoundingClientRect().height
       const above = menuHeight <= dropdown.top
       const below = windowHeight >= dropdown.top + dropdown.height + menuHeight
 
