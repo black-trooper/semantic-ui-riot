@@ -59,30 +59,30 @@ describe('su-dropdown', function () {
   })
 
   it('clicking dropdown opens/closes dropdown and triggers open/close event', function () {
-    $('su-dropdown .menu').is(':visible').should.equal(false)
+    $('su-dropdown .menu').css('visibility').should.equal('hidden')
 
     $('su-dropdown').click()
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(true)
+    $('su-dropdown .menu').css('visibility').should.equal('visible')
     spyOnOpen.should.have.been.calledOnce
 
     $('su-dropdown').click()
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(false)
+    $('su-dropdown .menu').css('visibility').should.equal('hidden')
     spyOnClose.should.have.been.calledOnce
   })
 
   it('focusing/blurring dropdown opens/closes dropdown and triggers open/close event', function () {
-    $('su-dropdown .menu').is(':visible').should.equal(false)
+    $('su-dropdown .menu').css('visibility').should.equal('hidden')
 
     $('su-dropdown').focus()
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(true)
+    $('su-dropdown .menu').css('visibility').should.equal('visible')
     spyOnOpen.should.have.been.calledOnce
 
     $('su-dropdown').blur()
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(false)
+    $('su-dropdown .menu').css('visibility').should.equal('hidden')
     spyOnClose.should.have.been.calledOnce
     spyOnBlur.should.have.been.calledOnce
   })
@@ -98,7 +98,7 @@ describe('su-dropdown', function () {
     spyOnChange.should.have.been.callCount(0)
 
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(false)
+    $('su-dropdown .menu').css('visibility').should.equal('hidden')
     spyOnClose.should.have.been.calledOnce
 
     expect(tag.value).to.be.null
@@ -118,7 +118,7 @@ describe('su-dropdown', function () {
     spyOnChange.should.have.been.calledOnce
 
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(false)
+    $('su-dropdown .menu').css('visibility').should.equal('hidden')
     spyOnClose.should.have.been.calledOnce
 
     tag.value.should.deep.equal(items[1].value)
@@ -141,7 +141,7 @@ describe('su-dropdown', function () {
     spyOnChange.should.have.been.calledOnce
 
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(false)
+    $('su-dropdown .menu').css('visibility').should.equal('hidden')
     spyOnClose.should.have.been.calledOnce
 
     tag.value.should.deep.equal(items[1].value)
@@ -182,7 +182,7 @@ describe('su-dropdown', function () {
     let dropdown = $('su-dropdown')[0]
     fireKeyEvent(dropdown, 'keydown', keys.escape)
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(false)
+    $('su-dropdown .menu').css('visibility').should.equal('hidden')
     spyOnClose.should.have.been.calledOnce
   })
 

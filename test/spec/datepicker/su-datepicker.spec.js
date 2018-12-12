@@ -44,39 +44,39 @@ describe('su-datepicker', function () {
   it('opens/closes datepicker and triggers open/close event', function () {
     $('body').append('<su-datepicker />')
     mount({ popup: true })
-    $('su-datepicker .menu').is(':visible').should.equal(false)
+    $('su-datepicker .menu').css('visibility').should.equal('hidden')
 
     fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
     spyOnOpen.should.have.been.calledOnce
-    $('su-datepicker .menu').is(':visible').should.equal(true)
+    $('su-datepicker .menu').css('visibility').should.equal('visible')
 
     fireEvent($('su-datepicker .dp-day .ui.button:first')[0], 'click')
     spyOnClick.should.have.been.calledOnce
     spyOnChange.should.have.been.calledOnce
     spyOnClose.should.have.been.calledOnce
-    $('su-datepicker .menu').is(':visible').should.equal(false)
+    $('su-datepicker .menu').css('visibility').should.equal('hidden')
 
 
     fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
     spyOnOpen.should.have.been.calledTwice
-    $('su-datepicker .menu').is(':visible').should.equal(true)
+    $('su-datepicker .menu').css('visibility').should.equal('visible')
 
     fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
     spyOnClose.should.have.been.calledTwice
-    $('su-datepicker .menu').is(':visible').should.equal(false)
+    $('su-datepicker .menu').css('visibility').should.equal('hidden')
 
     fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
     spyOnOpen.should.have.been.callCount(3)
-    $('su-datepicker .menu').is(':visible').should.equal(true)
+    $('su-datepicker .menu').css('visibility').should.equal('visible')
 
     fireEvent($('su-datepicker .menu')[0], 'mousedown')
     fireEvent($('su-datepicker button.ui.icon.button')[0], 'blur')
     fireEvent($('su-datepicker .menu')[0], 'mouseup')
-    $('su-datepicker .menu').is(':visible').should.equal(true)
+    $('su-datepicker .menu').css('visibility').should.equal('visible')
     spyOnClose.should.have.been.calledTwice
 
     fireEvent($('su-datepicker .menu')[0], 'blur')
-    $('su-datepicker .menu').is(':visible').should.equal(false)
+    $('su-datepicker .menu').css('visibility').should.equal('hidden')
     spyOnClose.should.have.been.callCount(3)
   })
 
@@ -142,15 +142,15 @@ describe('su-datepicker', function () {
       popup: true,
       currentDate: new Date(2017, 11, 1)
     })
-    $('su-datepicker .menu').is(':visible').should.equal(false)
+    $('su-datepicker .menu').css('visibility').should.equal('hidden')
 
     fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
     spyOnOpen.should.have.been.calledOnce
-    $('su-datepicker .menu').is(':visible').should.equal(true)
+    $('su-datepicker .menu').css('visibility').should.equal('visible')
 
     fireEvent($('su-datepicker .dp-day .ui.button:eq(5)')[0], 'click')
     spyOnClose.should.have.been.calledOnce
-    $('su-datepicker .menu').is(':visible').should.equal(false)
+    $('su-datepicker .menu').css('visibility').should.equal('hidden')
     tag.refs.input.value.should.equal('2017-12-01')
 
     tag.value = new Date(2018, 11, 1)
@@ -168,19 +168,19 @@ describe('su-datepicker', function () {
       locale: require('date-fns/locale/ja'),
       tabindex: 10
     })
-    $('su-datepicker .menu').is(':visible').should.equal(false)
+    $('su-datepicker .menu').css('visibility').should.equal('hidden')
     $('su-datepicker .dp-weekday:first').text().should.equal('日')
     $('su-datepicker .dp-navigation .month').text().trim().should.equal('12月')
 
     fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
     spyOnOpen.should.have.been.calledOnce
-    $('su-datepicker .menu').is(':visible').should.equal(true)
+    $('su-datepicker .menu').css('visibility').should.equal('visible')
     $('su-datepicker input').attr('placeholder').should.equal('YYYY/MM/DD')
     $('su-datepicker input').attr('tabindex').should.equal('10')
 
     fireEvent($('su-datepicker .dp-day .ui.button:eq(5)')[0], 'click')
     spyOnClose.should.have.been.calledOnce
-    $('su-datepicker .menu').is(':visible').should.equal(false)
+    $('su-datepicker .menu').css('visibility').should.equal('hidden')
     tag.refs.input.value.should.equal('2017/12/01')
   })
 
@@ -352,11 +352,11 @@ describe('su-datepicker', function () {
     mount({
       popup: true
     })
-    $('su-datepicker .menu').is(':visible').should.equal(false)
+    $('su-datepicker .menu').css('visibility').should.equal('hidden')
 
     fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
     spyOnOpen.should.have.been.callCount(0)
-    $('su-datepicker .menu').is(':visible').should.equal(false)
+    $('su-datepicker .menu').css('visibility').should.equal('hidden')
   })
 
   it('today and clear event', function () {
