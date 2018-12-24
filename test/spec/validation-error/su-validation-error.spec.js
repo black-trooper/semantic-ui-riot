@@ -1,6 +1,5 @@
 require('../../../dist/tags/validation-error/su-validation-error.js')
 
-
 describe('su-validation-error', function () {
   let tag
   const mount = option => {
@@ -29,7 +28,8 @@ describe('su-validation-error', function () {
         'address': ['The address field is required.']
       }
     })
-    const $error = $('su-validation-error .ui.pointing.prompt');
+    const $error = $('su-validation-error .ui.pointing.prompt')
+    $('su-validation-error ul.list').length.should.equals(0)
     $error.length.should.equal(1)
     $error.text().trim().should.equal('The address field is required.')
   })
@@ -41,10 +41,23 @@ describe('su-validation-error', function () {
         'address': ['Error message1', 'Error message2']
       }
     })
-    const $error = $('su-validation-error .ui.pointing.prompt div');
+    const $error = $('su-validation-error .ui.pointing.prompt div')
+    $('su-validation-error ul.list').length.should.equals(0)
     $error.length.should.equal(2)
     $($error[0]).text().should.equal('Error message1')
     $($error[1]).text().should.equal('Error message2')
   })
 
+  it('block errors', function () {
+    mount({
+      errors: {
+        'address': ['Error message1', 'Error message2']
+      }
+    })
+    $('su-validation-error .ui.pointing.prompt div').length.should.equals(0)
+    $('su-validation-error ul.list').length.should.equals(1)
+    const $error = $('su-validation-error li')
+    $($error[0]).text().should.equal('Error message1')
+    $($error[1]).text().should.equal('Error message2')
+  })
 })
