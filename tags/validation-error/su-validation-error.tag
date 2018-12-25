@@ -3,7 +3,7 @@
     <div each="{ message in opts.errors[opts.name] }">{ message }</div>
   </div>
 
-  <ul if="{ opts.errors && !opts.name }" class="list">
+  <ul if="{ !isEmptyErrors() && !opts.name }" class="list">
     <virtual each="{ errors in opts.errors }">
       <li each="{ message in errors }">{ message }</li>
     </virtual>
@@ -11,13 +11,20 @@
 
   <style>
     :scope.ui.error.message {
-      display: block;
+      display: block !important;
     }
   </style>
 
   <script>
     this.getClass = () => {
-      return opts.name ? '' : 'ui error message'
+      if (opts.name || this.isEmptyErrors()) {
+        return ''
+      }
+      return 'ui error message'
+    }
+
+    this.isEmptyErrors = () => {
+      return !opts.errors || Object.keys(opts.errors).length == 0
     }
   </script>
 </su-validation-error>
