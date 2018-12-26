@@ -56,8 +56,25 @@ describe('su-validation-error', function () {
     })
     $('su-validation-error .ui.pointing.prompt div').length.should.equals(0)
     $('su-validation-error ul.list').length.should.equals(1)
+    $('su-validation-error').hasClass('message').should.equal(true)
     const $error = $('su-validation-error li')
     $($error[0]).text().should.equal('Error message1')
     $($error[1]).text().should.equal('Error message2')
+  })
+
+  it('block none errors', function () {
+    mount({
+      errors: {}
+    })
+    $('su-validation-error .ui.pointing.prompt div').length.should.equals(0)
+    $('su-validation-error ul.list').length.should.equals(0)
+    $('su-validation-error').hasClass('message').should.equal(false)
+  })
+
+  it('block undefined errors', function () {
+    mount()
+    $('su-validation-error .ui.pointing.prompt div').length.should.equals(0)
+    $('su-validation-error ul.list').length.should.equals(0)
+    $('su-validation-error').hasClass('message').should.equal(false)
   })
 })
