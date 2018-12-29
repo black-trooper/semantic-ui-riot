@@ -112,11 +112,13 @@ describe('su-dropdown-search', function () {
     $('su-dropdown .search').focus()
     spyOnSearch.should.have.been.calledOnce
     $('su-dropdown .menu').css('visibility').should.equal('visible')
+    $('su-dropdown .menu div').length.should.equal(52)
     $('su-dropdown .item').length.should.equal(52)
     spyOnOpen.should.have.been.calledOnce
 
     $('su-dropdown .search').val('m')
     fireEvent($('su-dropdown .search')[0], 'input')
+    $('su-dropdown .menu div').length.should.equal(15)
     $('su-dropdown .item').length.should.equal(15)
     spyOnSearch.should.have.been.calledTwice
   })
