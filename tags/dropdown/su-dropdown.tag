@@ -16,7 +16,7 @@
     tabindex="-1">
     <div each="{item in opts.items}" value="{ item.value }" default="{ item.default }" onmousedown="{ mousedown }"
       onmouseup="{ mouseup }" class="{ item: isItem(item) } { header: item.header && !filtered} { divider: item.divider && !filtered} { default: item.default } { hover: item.active } { active: item.value == value } { selected: item.value == value }"
-      onclick="{ itemClick }" if="{ !(opts.multiple && item.default) && !item.selected }">
+      onclick="{ itemClick }" if="{ !(opts.multiple && item.default) && !item.selected && item.searched }">
       <i class="{ item.icon } icon" if="{ item.icon }"></i>
       <img class="ui avatar image" src="{ item.image }" if="{ item.image }" />
       <span class="description" if="{ item.description }">{ item.description }</span>

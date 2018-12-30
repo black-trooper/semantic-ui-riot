@@ -22,6 +22,7 @@ import '../tags/table/su-table.tag'
 import '../tags/table/su-th.tag'
 import '../tags/toast/su-toast.tag'
 import '../tags/toast/su-toast-item.tag'
+import '../tags/validation-error/su-validation-error.tag'
 import Q from 'q'
 
 export default function (_options) {
