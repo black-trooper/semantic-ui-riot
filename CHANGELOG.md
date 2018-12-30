@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.21.0] - 2018-12-30
+### Added
+- Add su-validation-error
+
+### Fixed
+- Fix the problem where options are not filter when searching
+
 ## [0.20.1] - 2018-12-12
 ### Fixed
 - Fix upward position in su-dropdown
