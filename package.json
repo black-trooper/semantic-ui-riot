@@ -36,9 +36,9 @@
     "url": "https://github.com/black-trooper/semantic-ui-riot/issues"
   },
   "dependencies": {
-    "riot": "^3.9.0",
     "date-fns": "^1.29.0",
-    "q": "^1.5.1"
+    "q": "^1.5.1",
+    "riot": "^3.9.0"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -62,7 +62,6 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^3.0.5",
     "mocha": "^4.0.1",
-    "riot-route": "^3.1.1",
     "riotjs-loader": "^4.0.0",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.13.0",
