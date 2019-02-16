@@ -1,11 +1,12 @@
 riot.tag2('su-table', '', '', '', function(opts) {
+    const tag = this
     let lastData
     let lastCondition = {}
     let headers
     const suTableIndex = 'su-table-index'
 
-    this.on('mount', () => {
-      headers = this.tags['su-th']
+    tag.on('mount', () => {
+      headers = tag.tags['su-th']
       if (!Array.isArray(headers)) {
         headers = headers ? [headers] : []
       }
@@ -18,13 +19,13 @@ riot.tag2('su-table', '', '', '', function(opts) {
             th.sorted = th.opts.field == lastCondition.field
             th.reverse = lastCondition.reverse
           })
-          this.update()
+          tag.update()
         })
       })
-      this.update()
+      tag.update()
     })
 
-    this.on('update', () => {
+    tag.on('update', () => {
       if (JSON.stringify(lastData) != JSON.stringify(opts.data)) {
         lastData = opts.data
         lastCondition = {
@@ -43,7 +44,7 @@ riot.tag2('su-table', '', '', '', function(opts) {
             th.sorted = th.opts.field == lastCondition.field
             th.reverse = lastCondition.reverse
           })
-          this.update()
+          tag.update()
         }
       }
     })

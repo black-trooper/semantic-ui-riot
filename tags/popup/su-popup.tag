@@ -1,5 +1,7 @@
 <su-popup onmouseover="{ mouseover }" onmouseout="{ mouseout }">
-  <div id="{ getId() }" class="ui popup { opts.position } { opts.dataVariation } transition { transitionStatus } { nowrap: isNowrap() }"></div>
+  <div id="{ getId() }"
+    class="ui popup { opts.position } { opts.dataVariation } transition { transitionStatus } { nowrap: isNowrap() }">
+  </div>
   <yield />
 
   <style>
@@ -91,51 +93,52 @@
   </style>
 
   <script>
-    this.content = ''
-    this.on('mount', () => {
+    const tag = this
+    tag.content = ''
+    tag.on('mount', () => {
       if (!opts.position) {
         opts.position = 'top left'
       }
       if (opts.tooltip) {
         if (opts.dataTitle) {
-          this.content = `<div class="header">${opts.dataTitle}</div><div class="content">${opts.tooltip}</div>`
+          tag.content = `<div class="header">${opts.dataTitle}</div><div class="content">${opts.tooltip}</div>`
         } else {
-          this.content = opts.tooltip
+          tag.content = opts.tooltip
         }
       }
-      else if (this.tags['su-popup-content']) {
-        this.content = this.tags['su-popup-content'].root.innerHTML
-        this.tags['su-popup-content'].unmount()
+      else if (tag.tags['su-popup-content']) {
+        tag.content = tag.tags['su-popup-content'].root.innerHTML
+        tag.tags['su-popup-content'].unmount()
       }
-      document.getElementById(this.getId()).innerHTML = this.content
-      this.update()
+      document.getElementById(tag.getId()).innerHTML = tag.content
+      tag.update()
     })
 
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
-    this.mouseover = () => {
-      this.transitionStatus = 'visible'
-      this.trigger('mouseover')
+    tag.mouseover = () => {
+      tag.transitionStatus = 'visible'
+      tag.trigger('mouseover')
     }
 
-    this.mouseout = () => {
-      this.transitionStatus = 'hidden'
-      this.trigger('mouseout')
+    tag.mouseout = () => {
+      tag.transitionStatus = 'hidden'
+      tag.trigger('mouseout')
     }
 
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
-    this.isNowrap = () => {
+    tag.isNowrap = () => {
       if (opts.dataVariation && opts.dataVariation.indexOf('wide') >= 0) {
         return false
       }
       return true
     }
 
-    this.getId = () => {
-      return `su-popup-${this._riot_id}`
+    tag.getId = () => {
+      return `su-popup-${tag._riot_id}`
     }
   </script>
 </su-popup>

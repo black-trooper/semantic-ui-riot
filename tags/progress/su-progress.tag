@@ -37,56 +37,57 @@
   </style>
 
   <script>
-    this.value = null
-    this.defaultValue = null
+    const tag = this
+    tag.value = null
+    tag.defaultValue = null
     let total = 100
     let lastValue = null
     let lastOptsValue = null
 
-    this.on('mount', () => {
+    tag.on('mount', () => {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
       init(opts.riotValue, opts.total)
 
-      this.update()
-      this.defaultValue = this.value
+      tag.update()
+      tag.defaultValue = tag.value
     })
 
-    this.on('update', () => {
+    tag.on('update', () => {
       let changed = false
-      if (this.value >= total) {
-        this.value = total
+      if (tag.value >= total) {
+        tag.value = total
       }
-      if (this.value <= 0) {
-        this.value = 0
+      if (tag.value <= 0) {
+        tag.value = 0
       }
-      if (lastValue != this.value) {
-        lastValue = this.value
+      if (lastValue != tag.value) {
+        lastValue = tag.value
         changed = true
       } else if (lastOptsValue != opts.riotValue) {
-        this.value = opts.riotValue
+        tag.value = opts.riotValue
         lastOptsValue = opts.riotValue
         lastValue = opts.riotValue
         changed = true
       }
 
       if (changed) {
-        this.percent = getPercent()
+        tag.percent = getPercent()
       }
     })
 
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
-    this.getClass = () => {
+    tag.getClass = () => {
       const excludeClasses = ['progress', 'active']
-      return Array.apply(null, this.root.classList).filter(clazz => {
+      return Array.apply(null, tag.root.classList).filter(clazz => {
         return !excludeClasses.some(excludeClass => excludeClass == clazz)
       }).join(' ')
     }
 
-    this.getStates = () => {
+    tag.getStates = () => {
       if (isSuccess()) {
         return 'success'
       }
@@ -95,7 +96,7 @@
       }
     }
 
-    this.isProgress = () => {
+    tag.isProgress = () => {
       return hasClass('progress')
     }
 
@@ -103,31 +104,31 @@
     //                                                                               Logic
     //                                                                               =====
     const init = (optsValue, optsTotal) => {
-      if (this.value == null) {
-        this.value = optsValue || 0
+      if (tag.value == null) {
+        tag.value = optsValue || 0
       }
       if (optsTotal > 0) {
         total = optsTotal
       }
-      this.percent = getPercent()
-      lastValue = this.value
+      tag.percent = getPercent()
+      lastValue = tag.value
       lastOptsValue = optsValue
     }
 
     const getPercent = () => {
-      return parseInt(this.value / total * 100)
+      return parseInt(tag.value / total * 100)
     }
 
     const isActive = () => {
-      return hasClass('active') && this.percent > 0 && this.percent < 100
+      return hasClass('active') && tag.percent > 0 && tag.percent < 100
     }
 
     const isSuccess = () => {
-      return this.percent == 100
+      return tag.percent == 100
     }
 
     const hasClass = className => {
-      return this.root.classList.contains(className)
+      return tag.root.classList.contains(className)
     }
   </script>
 </su-progress>

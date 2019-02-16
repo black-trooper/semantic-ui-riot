@@ -1,4 +1,5 @@
-<su-dropdown class="ui selection {opts.class} { search: opts.search } { multiple: opts.multiple} dropdown { active: isActive() } { visible: isActive() } { upward: upward }"
+<su-dropdown
+  class="ui selection {opts.class} { search: opts.search } { multiple: opts.multiple} dropdown { active: isActive() } { visible: isActive() } { upward: upward }"
   onclick="{ toggle }" onfocus="{ focus }" onmousedown="{ mousedown }" onmouseup="{ mouseup }" onblur="{ blur }"
   onkeydown="{ keydown }" onkeyup="{ keyup }" tabindex="{ opts.search ? -1 : getTabindex() }">
   <i class="dropdown icon"></i>
@@ -12,10 +13,11 @@
   <div class="{ default: default} text { filtered: filtered }" if="{ !opts.multiple || !selectedFlg }">
     { label }
   </div>
-  <div class="menu transition { transitionStatus }" onmousedown="{ mousedown }" onmouseup="{ mouseup }" onblur="{ blur }"
-    tabindex="-1">
+  <div class="menu transition { transitionStatus }" onmousedown="{ mousedown }" onmouseup="{ mouseup }"
+    onblur="{ blur }" tabindex="-1">
     <div each="{item in opts.items}" value="{ item.value }" default="{ item.default }" onmousedown="{ mousedown }"
-      onmouseup="{ mouseup }" class="{ item: isItem(item) } { header: item.header && !filtered} { divider: item.divider && !filtered} { default: item.default } { hover: item.active } { active: item.value == value } { selected: item.value == value }"
+      onmouseup="{ mouseup }"
+      class="{ item: isItem(item) } { header: item.header && !filtered} { divider: item.divider && !filtered} { default: item.default } { hover: item.active } { active: item.value == value } { selected: item.value == value }"
       onclick="{ itemClick }" if="{ !(opts.multiple && item.default) && !item.selected && item.searched }">
       <i class="{ item.icon } icon" if="{ item.icon }"></i>
       <img class="ui avatar image" src="{ item.image }" if="{ item.image }" />
@@ -41,12 +43,13 @@
   </style>
 
   <script>
-    this.selectedFlg = false
-    this.filtered = false
-    this.transitionStatus = 'hidden'
-    this.value = ''
-    this.label = ''
-    this.defaultValue = ''
+    const tag = this
+    tag.selectedFlg = false
+    tag.filtered = false
+    tag.transitionStatus = 'hidden'
+    tag.value = ''
+    tag.label = ''
+    tag.defaultValue = ''
     let visibleFlg = false
     const keys = {
       enter: 13,
@@ -56,44 +59,44 @@
     }
 
     if (opts.items && opts.items.length > 0) {
-      this.label = opts.items[0].label
-      this.value = opts.items[0].value
-      this.default = opts.items[0].default
+      tag.label = opts.items[0].label
+      tag.value = opts.items[0].value
+      tag.default = opts.items[0].default
     }
 
-    this.on('mount', () => {
+    tag.on('mount', () => {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
       if (typeof opts.riotValue !== 'undefined') {
-        this.value = opts.riotValue
-        this.defaultValue = this.value
-        this.update()
+        tag.value = opts.riotValue
+        tag.defaultValue = tag.value
+        tag.update()
         parentUpdate()
       } else {
-        this.defaultValue = this.value
+        tag.defaultValue = tag.value
       }
     })
 
-    this.on('update', () => {
+    tag.on('update', () => {
       if (opts.multiple) {
         opts.items.forEach(item => item.selected = false)
-        opts.items.filter(item => this.value && this.value.indexOf(item.value) >= 0).forEach(item => item.selected = true)
+        opts.items.filter(item => tag.value && tag.value.indexOf(item.value) >= 0).forEach(item => item.selected = true)
         selectMultiTarget(true)
       } else if (opts.items) {
-        const selected = opts.items.filter(item => item.value === this.value)
+        const selected = opts.items.filter(item => item.value === tag.value)
         if (selected && selected.length > 0) {
           const target = selected[0]
-          if (this.label !== target.label) {
+          if (tag.label !== target.label) {
             selectTarget(target, true)
           }
         } else if (opts.items && opts.items.length > 0) {
-          if (this.value != opts.items[0].value) {
-            this.value = opts.items[0].value
+          if (tag.value != opts.items[0].value) {
+            tag.value = opts.items[0].value
           }
-          if (this.label != opts.items[0].label) {
-            this.label = opts.items[0].label
-            this.default = opts.items[0].default
+          if (tag.label != opts.items[0].label) {
+            tag.label = opts.items[0].label
+            tag.default = opts.items[0].default
           }
         }
       }
@@ -102,23 +105,23 @@
     // ===================================================================================
     //                                                                               State
     //                                                                               =====
-    this.reset = () => {
-      this.value = this.defaultValue
+    tag.reset = () => {
+      tag.value = tag.defaultValue
     }
 
-    this.changed = () => {
+    tag.changed = () => {
       if (opts.multiple) {
-        const value = this.value ? this.value : []
-        const defaultValue = this.defaultValue ? this.defaultValue : []
+        const value = tag.value ? tag.value : []
+        const defaultValue = tag.defaultValue ? tag.defaultValue : []
         return value.toString() !== defaultValue.toString()
       }
-      return this.value !== this.defaultValue
+      return tag.value !== tag.defaultValue
     }
 
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
-    this.toggle = () => {
+    tag.toggle = () => {
       if (!visibleFlg) {
         open()
       } else {
@@ -126,31 +129,31 @@
       }
     }
 
-    this.focus = () => {
+    tag.focus = () => {
       open()
     }
 
-    this.mousedown = () => {
-      this.itemActivated = true
+    tag.mousedown = () => {
+      tag.itemActivated = true
     }
 
-    this.mouseup = () => {
-      this.itemActivated = false
+    tag.mouseup = () => {
+      tag.itemActivated = false
     }
 
-    this.blur = () => {
-      if (!this.itemActivated) {
-        if (!this.closing && visibleFlg) {
-          const target = opts.multiple ? opts.items.filter(item => item.selected) : { value: this.value, label: this.label, default: this.default }
-          this.trigger('blur', target)
+    tag.blur = () => {
+      if (!tag.itemActivated) {
+        if (!tag.closing && visibleFlg) {
+          const target = opts.multiple ? opts.items.filter(item => item.selected) : { value: tag.value, label: tag.label, default: tag.default }
+          tag.trigger('blur', target)
         }
         close()
       }
     }
 
-    this.itemClick = event => {
+    tag.itemClick = event => {
       event.stopPropagation()
-      if (!this.isItem(event.item.item)) {
+      if (!tag.isItem(event.item.item)) {
         return
       }
       if (opts.multiple) {
@@ -164,7 +167,7 @@
       close()
     }
 
-    this.keydown = event => {
+    tag.keydown = event => {
       const keyCode = event.keyCode
       if (keyCode == keys.escape) {
         close()
@@ -210,11 +213,11 @@
           nextActiveItem[0].active = true
         }
       }
-      this.update()
+      tag.update()
       scrollPosition()
     }
 
-    this.keyup = event => {
+    tag.keyup = event => {
       const keyCode = event.keyCode
       if (keyCode != keys.enter) {
         return
@@ -242,27 +245,27 @@
       }
     }
 
-    this.stopPropagation = event => {
+    tag.stopPropagation = event => {
       event.stopPropagation()
     }
 
     // -----------------------------------------------------
     //                                         search option
     //                                         -------------
-    this.input = event => {
+    tag.input = event => {
       const value = event.target.value.toLowerCase()
-      this.filtered = value.length > 0
+      tag.filtered = value.length > 0
       search(value)
     }
 
     // -----------------------------------------------------
     //                                       multiple option
     //                                       ---------------
-    this.unselect = event => {
+    tag.unselect = event => {
       event.stopPropagation()
       event.item.item.selected = false
-      this.value = opts.items.filter(item => item.selected).map(item => item.value)
-      this.selectedFlg = opts.items.some(item => item.selected)
+      tag.value = opts.items.filter(item => item.selected).map(item => item.value)
+      tag.selectedFlg = opts.items.some(item => item.selected)
       parentUpdate()
     }
 
@@ -270,94 +273,94 @@
     //                                                                               Logic
     //                                                                               =====
     const open = () => {
-      if (this.openning || this.closing || visibleFlg || this.isReadOnly() || this.isDisabled()) {
+      if (tag.openning || tag.closing || visibleFlg || tag.isReadOnly() || tag.isDisabled()) {
         return
       }
-      this.openning = true
+      tag.openning = true
       search('')
-      this.upward = isUpward()
-      this.transitionStatus = `visible animating in slide ${this.upward ? 'up' : 'down'}`
+      tag.upward = isUpward()
+      tag.transitionStatus = `visible animating in slide ${tag.upward ? 'up' : 'down'}`
       opts.items.forEach(item => item.active = false)
       setTimeout(() => {
-        this.openning = false
+        tag.openning = false
         visibleFlg = true
-        this.transitionStatus = 'visible'
-        this.update()
+        tag.transitionStatus = 'visible'
+        tag.update()
       }, 300)
 
       if (opts.search) {
-        this.refs.condition.focus()
+        tag.refs.condition.focus()
       }
-      this.update()
+      tag.update()
       scrollPosition()
-      this.trigger('open')
+      tag.trigger('open')
     }
 
     const close = () => {
-      if (this.closing || !visibleFlg) {
+      if (tag.closing || !visibleFlg) {
         return
       }
-      this.closing = true
-      this.transitionStatus = `visible animating out slide ${this.upward ? 'up' : 'down'}`
+      tag.closing = true
+      tag.transitionStatus = `visible animating out slide ${tag.upward ? 'up' : 'down'}`
       setTimeout(() => {
-        this.closing = false
+        tag.closing = false
         visibleFlg = false
-        this.transitionStatus = 'hidden'
-        this.update()
+        tag.transitionStatus = 'hidden'
+        tag.update()
       }, 300)
 
       if (opts.search) {
-        this.refs.condition.blur()
-        if (this.filtered && this.filteredItems.length > 0) {
-          selectTarget(this.filteredItems[0])
+        tag.refs.condition.blur()
+        if (tag.filtered && tag.filteredItems.length > 0) {
+          selectTarget(tag.filteredItems[0])
         } else {
-          this.refs.condition.value = ''
-          this.filtered = false
+          tag.refs.condition.value = ''
+          tag.filtered = false
         }
       }
-      this.update()
-      this.trigger('close')
+      tag.update()
+      tag.trigger('close')
     }
 
     const selectTarget = (target, updating) => {
-      if (this.value === target.value &&
-        this.label === target.label &&
-        this.default === target.default) {
+      if (tag.value === target.value &&
+        tag.label === target.label &&
+        tag.default === target.default) {
         if (!updating) {
-          this.trigger('select', target)
+          tag.trigger('select', target)
         }
         return
       }
-      this.value = target.value
-      this.label = target.label
-      this.default = target.default
+      tag.value = target.value
+      tag.label = target.label
+      tag.default = target.default
       if (opts.search) {
-        this.refs.condition.value = ''
-        this.filtered = false
+        tag.refs.condition.value = ''
+        tag.filtered = false
       }
       if (!updating) {
-        this.update()
+        tag.update()
         parentUpdate()
-        this.trigger('select', target)
-        this.trigger('change', target)
+        tag.trigger('select', target)
+        tag.trigger('change', target)
       }
     }
 
     const selectMultiTarget = (updating) => {
-      if (JSON.stringify(this.value) == JSON.stringify(opts.items.filter(item => item.selected).map(item => item.value))
-        && this.selectedFlg == opts.items.some(item => item.selected)) {
+      if (JSON.stringify(tag.value) == JSON.stringify(opts.items.filter(item => item.selected).map(item => item.value))
+        && tag.selectedFlg == opts.items.some(item => item.selected)) {
         if (!updating) {
-          this.trigger('select', opts.items.filter(item => item.selected))
+          tag.trigger('select', opts.items.filter(item => item.selected))
         }
         return
       }
-      this.value = opts.items.filter(item => item.selected).map(item => item.value)
-      this.selectedFlg = opts.items.some(item => item.selected)
+      tag.value = opts.items.filter(item => item.selected).map(item => item.value)
+      tag.selectedFlg = opts.items.some(item => item.selected)
       if (!updating) {
-        this.update()
+        tag.update()
         parentUpdate()
-        this.trigger('select', opts.items.filter(item => item.selected))
-        this.trigger('change', opts.items.filter(item => item.selected))
+        tag.trigger('select', opts.items.filter(item => item.selected))
+        tag.trigger('change', opts.items.filter(item => item.selected))
       }
     }
 
@@ -365,16 +368,16 @@
       opts.items.forEach(item => {
         item.searched = item.label && item.label.toLowerCase().indexOf(target) >= 0
       })
-      this.filteredItems = opts.items.filter(item => {
+      tag.filteredItems = opts.items.filter(item => {
         return item.searched
       })
-      this.update()
-      this.trigger('search')
+      tag.update()
+      tag.trigger('search')
     }
 
     const scrollPosition = () => {
-      const menu = this.root.querySelector('.menu')
-      const item = this.root.querySelector('.item.hover')
+      const menu = tag.root.querySelector('.menu')
+      const item = tag.root.querySelector('.item.hover')
 
       if (menu && item) {
         const menuScroll = menu.scrollTop
@@ -390,8 +393,8 @@
     }
 
     const parentUpdate = () => {
-      if (this.parent) {
-        this.parent.update()
+      if (tag.parent) {
+        tag.parent.update()
       }
     }
 
@@ -402,9 +405,9 @@
       if (opts.direction == 'downward') {
         return false
       }
-      const dropdown = this.root.getBoundingClientRect()
+      const dropdown = tag.root.getBoundingClientRect()
       const windowHeight = document.documentElement.offsetHeight || document.body.offsetHeight
-      const menuHeight = this.root.querySelector('.menu').getBoundingClientRect().height
+      const menuHeight = tag.root.querySelector('.menu').getBoundingClientRect().height
       const above = menuHeight <= dropdown.top
       const below = windowHeight >= dropdown.top + dropdown.height + menuHeight
 
@@ -420,30 +423,30 @@
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
-    this.isItem = item => {
+    tag.isItem = item => {
       return item.searched && !item.header && !item.divider
     }
 
-    this.isActive = () => {
-      if (this.closing) {
+    tag.isActive = () => {
+      if (tag.closing) {
         return false
       }
-      return this.openning || visibleFlg
+      return tag.openning || visibleFlg
     }
 
-    this.getTabindex = () => {
+    tag.getTabindex = () => {
       if (opts.tabindex) {
         return opts.tabindex
       }
       return 0
     }
 
-    this.isReadOnly = () => {
-      return this.root.classList.contains('read-only')
+    tag.isReadOnly = () => {
+      return tag.root.classList.contains('read-only')
     }
 
-    this.isDisabled = () => {
-      return this.root.classList.contains('disabled')
+    tag.isDisabled = () => {
+      return tag.root.classList.contains('disabled')
     }
   </script>
 </su-dropdown>

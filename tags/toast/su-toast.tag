@@ -48,21 +48,21 @@
   </style>
 
   <script>
-    const self = this
-    this.mixin('semantic-ui')
-    this.items = []
+    const tag = this
+    tag.mixin('semantic-ui')
+    tag.items = []
 
-    this.on('mount', () => {
+    tag.on('mount', () => {
       if (!opts.position) {
         opts.position = 'bottom right'
       }
-      this.update()
+      tag.update()
     })
 
     // ===================================================================================
     //                                                                          Observable
     //                                                                          ==========
-    this.observable.on('showToast', option => {
+    tag.observable.on('showToast', option => {
       const item = {
         title: option.title,
         messages: Array.isArray(option.message) ? option.message : [option.message],
@@ -70,12 +70,12 @@
         progress: option.progress,
         class: option.class
       }
-      this.items.push(item)
-      this.update()
+      tag.items.push(item)
+      tag.update()
 
       setTimeout(() => {
-        this.items.shift()
-        this.update()
+        tag.items.shift()
+        tag.update()
       }, 5000)
     })
 
@@ -108,7 +108,7 @@
             option.class = param.class
           }
         }
-        self.observable.trigger('showToast', option)
+        tag.observable.trigger('showToast', option)
       }
     })
   </script>

@@ -1,8 +1,8 @@
 riot.tag2('su-confirm', '<su-modal class="tiny" ref="modal" modal="{modal}"> <div class="ui icon message"> <i class="question circle outline icon"></i> <div class="scrolling content"> <div class="header" if="{parent.title}"> {parent.title} </div> <p each="{messsage in parent.messages}">{messsage}</p> </div> </div> </su-modal>', 'su-confirm .ui.dimmer,[data-is="su-confirm"] .ui.dimmer{ z-index: 1010; } su-confirm .ui.modal,[data-is="su-confirm"] .ui.modal{ z-index: 1011; } su-confirm .ui.message,[data-is="su-confirm"] .ui.message{ background: none; box-shadow: none; }', '', function(opts) {
-    const self = this
-    this.mixin('semantic-ui')
+    const tag = this
+    tag.mixin('semantic-ui')
 
-    this.modal = {
+    tag.modal = {
       closable: false,
       buttons: []
     }
@@ -14,20 +14,20 @@ riot.tag2('su-confirm', '<su-modal class="tiny" ref="modal" modal="{modal}"> <di
       action: 'positiveAction'
     }
 
-    this.on('mount', () => {
+    tag.on('mount', () => {
       let defaultOkButton = {}
       let defaultCancelButton = {}
       reverse = false
-      if (this.defaultOptions && this.defaultOptions.confirm) {
-        if (this.defaultOptions.confirm.reverse) {
-          reverse = this.defaultOptions.confirm.reverse
+      if (tag.defaultOptions && tag.defaultOptions.confirm) {
+        if (tag.defaultOptions.confirm.reverse) {
+          reverse = tag.defaultOptions.confirm.reverse
         }
-        if (this.defaultOptions.confirm.buttons) {
-          if (this.defaultOptions.confirm.buttons.ok) {
-            defaultOkButton = this.defaultOptions.confirm.buttons.ok
+        if (tag.defaultOptions.confirm.buttons) {
+          if (tag.defaultOptions.confirm.buttons.ok) {
+            defaultOkButton = tag.defaultOptions.confirm.buttons.ok
           }
-          if (this.defaultOptions.confirm.buttons.cancel) {
-            defaultCancelButton = this.defaultOptions.confirm.buttons.cancel
+          if (tag.defaultOptions.confirm.buttons.cancel) {
+            defaultCancelButton = tag.defaultOptions.confirm.buttons.cancel
           }
         }
       }
@@ -47,11 +47,11 @@ riot.tag2('su-confirm', '<su-modal class="tiny" ref="modal" modal="{modal}"> <di
         okButton.default = true
       }
 
-      this.refs.modal.on('positiveAction', () => {
-        this.observable.trigger('callbackConfirm', true)
+      tag.refs.modal.on('positiveAction', () => {
+        tag.observable.trigger('callbackConfirm', true)
       })
-      this.refs.modal.on('negativeAction', () => {
-        this.observable.trigger('callbackConfirm', false)
+      tag.refs.modal.on('negativeAction', () => {
+        tag.observable.trigger('callbackConfirm', false)
       })
     })
 
@@ -78,17 +78,17 @@ riot.tag2('su-confirm', '<su-modal class="tiny" ref="modal" modal="{modal}"> <di
         cancel.default = cancelButton.default
       }
 
-      this.modal.buttons.length = 0
-      this.modal.buttons.push((option.reverse || reverse) ? ok : cancel)
-      this.modal.buttons.push((option.reverse || reverse) ? cancel : ok)
+      tag.modal.buttons.length = 0
+      tag.modal.buttons.push((option.reverse || reverse) ? ok : cancel)
+      tag.modal.buttons.push((option.reverse || reverse) ? cancel : ok)
     }
 
-    this.observable.on('showConfirm', option => {
-      this.title = option.title
-      this.messages = Array.isArray(option.message) ? option.message : [option.message]
+    tag.observable.on('showConfirm', option => {
+      tag.title = option.title
+      tag.messages = Array.isArray(option.message) ? option.message : [option.message]
       setButtons(option)
-      this.update()
-      this.refs.modal.show()
+      tag.update()
+      tag.refs.modal.show()
     })
 
     riot.mixin({
@@ -134,9 +134,9 @@ riot.tag2('su-confirm', '<su-modal class="tiny" ref="modal" modal="{modal}"> <di
           }
         }
 
-        return self.Q.Promise((resolve, reject) => {
-          self.observable.trigger('showConfirm', option)
-          self.observable.on('callbackConfirm', result => {
+        return tag.Q.Promise((resolve, reject) => {
+          tag.observable.trigger('showConfirm', option)
+          tag.observable.on('callbackConfirm', result => {
             return result ? resolve() : reject()
           })
         })

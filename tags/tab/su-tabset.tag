@@ -8,38 +8,39 @@
   </div>
 
   <script>
-    this.tabs = []
+    const tag = this
+    tag.tabs = []
     let lastOptsActive, lastActive, active
 
 
-    this.on('mount', () => {
-      if (this.tags['su-tab-header']) {
-        this.tags['su-tab-header'].opts.class = getTitleClass()
+    tag.on('mount', () => {
+      if (tag.tags['su-tab-header']) {
+        tag.tags['su-tab-header'].opts.class = getTitleClass()
       }
 
-      this.tabs = this.tags['su-tab']
-      if (!Array.isArray(this.tabs)) {
-        this.tabs = [this.tabs]
+      tag.tabs = tag.tags['su-tab']
+      if (!Array.isArray(tag.tabs)) {
+        tag.tabs = [tag.tabs]
       }
       supportTraditionalOptions()
 
       if (typeof opts.active === 'undefined') {
-        const titles = this.hasTitle()
+        const titles = tag.hasTitle()
         if (titles) {
           opts.active = titles[0].root.innerText.trim()
         } else {
-          opts.active = this.tabs[0].opts.label
+          opts.active = tag.tabs[0].opts.label
         }
       }
 
-      this.tabs.forEach(tab => {
+      tag.tabs.forEach(tab => {
         initializeChild(tab)
       })
 
-      this.update()
+      tag.update()
     })
 
-    this.on('update', () => {
+    tag.on('update', () => {
       supportTraditionalOptions()
       let changed = false
       if (lastOptsActive != opts.active) {
@@ -53,7 +54,7 @@
       }
 
       if (changed) {
-        const titles = this.hasTitle()
+        const titles = tag.hasTitle()
         if (titles) {
           let index
           titles.forEach((title, i) => {
@@ -67,15 +68,15 @@
             titles[0].active = true
             index = 0
           }
-          this.tabs.forEach((tab, i) => {
+          tag.tabs.forEach((tab, i) => {
             tab.active = index == i
           })
         } else {
-          this.tabs.forEach(tab => {
+          tag.tabs.forEach(tab => {
             tab.active = tab.opts.label == active
           })
-          if (!this.tabs.some(tab => tab.active)) {
-            this.tabs[0].active = true
+          if (!tag.tabs.some(tab => tab.active)) {
+            tag.tabs[0].active = true
           }
         }
       }
@@ -84,30 +85,30 @@
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
-    this.click = event => {
+    tag.click = event => {
       active = event.item.tab.opts.label
-      this.update()
-      this.trigger('click', active)
+      tag.update()
+      tag.trigger('click', active)
     }
 
-    this.clickForTitle = title => {
+    tag.clickForTitle = title => {
       active = title
-      this.update()
-      this.trigger('click', active)
+      tag.update()
+      tag.trigger('click', active)
     }
 
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
-    this.isBottom = () => {
+    tag.isBottom = () => {
       return hasClass('bottom')
     }
 
-    this.hasTitle = () => {
-      if (!this.tags['su-tab-header']) {
+    tag.hasTitle = () => {
+      if (!tag.tags['su-tab-header']) {
         return false
       }
-      const titles = this.tags['su-tab-header'].tags['su-tab-title']
+      const titles = tag.tags['su-tab-header'].tags['su-tab-title']
       if (!titles) {
         return false
       }
@@ -118,7 +119,7 @@
       return titles
     }
 
-    this.getClass = () => {
+    tag.getClass = () => {
       if (hasClass('tabular') && !hasClass('attached')) {
         return 'attached'
       }
@@ -166,12 +167,12 @@
     }
 
     const hasClass = className => {
-      return this.root.classList.contains(className)
+      return tag.root.classList.contains(className)
     }
 
     let shownMessage = false
     const supportTraditionalOptions = () => {
-      this.tabs.forEach(tab => {
+      tag.tabs.forEach(tab => {
         if (typeof tab.opts.title !== 'undefined') {
           if (!shownMessage) {
             console.warn('\'title\' attribute is deprecated. Please use \'label\'.')

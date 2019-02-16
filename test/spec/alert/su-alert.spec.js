@@ -1,4 +1,5 @@
 require('../../../dist/tags/alert/su-alert.js')
+require('../../../dist/tags/modal/su-modal.js')
 
 riot.mixin('semantic-ui', {})
 

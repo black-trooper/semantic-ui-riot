@@ -1,17 +1,17 @@
 riot.tag2('su-alert', '<su-modal class="tiny" ref="modal" modal="{modal}"> <div class="ui icon message"> <i class="info circle icon"></i> <div class="scrolling content"> <div class="header" if="{parent.title}"> {parent.title} </div> <p each="{message in parent.messages}">{message}</p> </div> </div> </su-modal>', 'su-alert .ui.dimmer,[data-is="su-alert"] .ui.dimmer{ z-index: 1020; } su-alert .ui.modal,[data-is="su-alert"] .ui.modal{ z-index: 1021; } su-alert .ui.message,[data-is="su-alert"] .ui.message{ background: none; box-shadow: none; } su-alert .ui.message .header+p,[data-is="su-alert"] .ui.message .header+p{ margin-top: 1em; }', '', function(opts) {
-    const self = this
-    this.mixin('semantic-ui')
+    const tag = this
+    tag.mixin('semantic-ui')
 
-    this.modal = {
+    tag.modal = {
       closable: false,
       buttons: []
     }
     const button = {}
 
-    this.on('mount', () => {
+    tag.on('mount', () => {
       let defaultButton = {}
-      if (this.defaultOptions && this.defaultOptions.alert && this.defaultOptions.alert.button) {
-        defaultButton = this.defaultOptions.alert.button
+      if (tag.defaultOptions && tag.defaultOptions.alert && tag.defaultOptions.alert.button) {
+        defaultButton = tag.defaultOptions.alert.button
       }
       if (defaultButton.default) {
         button.default = true
@@ -20,8 +20,8 @@ riot.tag2('su-alert', '<su-modal class="tiny" ref="modal" modal="{modal}"> <div 
       button.type = defaultButton.type || ''
       button.icon = defaultButton.icon || ''
 
-      this.refs.modal.on('closeAction', () => {
-        this.observable.trigger('callbackConfirm')
+      tag.refs.modal.on('closeAction', () => {
+        tag.observable.trigger('callbackConfirm')
       })
     })
 
@@ -39,16 +39,16 @@ riot.tag2('su-alert', '<su-modal class="tiny" ref="modal" modal="{modal}"> <div 
         btn.default = button.default
       }
 
-      this.modal.buttons.length = 0
-      this.modal.buttons.push(btn)
+      tag.modal.buttons.length = 0
+      tag.modal.buttons.push(btn)
     }
 
-    this.observable.on('showAlert', option => {
-      this.title = option.title
-      this.messages = Array.isArray(option.message) ? option.message : [option.message]
+    tag.observable.on('showAlert', option => {
+      tag.title = option.title
+      tag.messages = Array.isArray(option.message) ? option.message : [option.message]
       setButton(option)
-      this.update()
-      this.refs.modal.show()
+      tag.update()
+      tag.refs.modal.show()
     })
 
     riot.mixin({
@@ -78,10 +78,10 @@ riot.tag2('su-alert', '<su-modal class="tiny" ref="modal" modal="{modal}"> <div 
           }
         }
 
-        return self.Q.Promise(resolve => {
-          self.observable.trigger('showAlert', option)
-          self.observable.on('callbackConfirm', () => {
-            this.refs.modal.hide()
+        return tag.Q.Promise(resolve => {
+          tag.observable.trigger('showAlert', option)
+          tag.observable.on('callbackConfirm', () => {
+            tag.refs.modal.hide()
             return resolve()
           })
         })

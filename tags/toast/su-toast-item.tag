@@ -76,40 +76,41 @@
   </style>
 
   <script>
-    this.on('mount', () => {
-      this.position = this.isRight() ? 'right' : 'left'
-      const direction = this.isRight() ? 'left' : 'right'
-      this.icon = opts.item.icon
-      this.progress = opts.item.progress
-      this.class = opts.item.class
-      this.transition = `transition animating in fade ${direction}`
-      this.title = opts.item.title
-      this.messages = opts.item.messages
-      this.update()
+    const tag = this
+    tag.on('mount', () => {
+      tag.position = tag.isRight() ? 'right' : 'left'
+      const direction = tag.isRight() ? 'left' : 'right'
+      tag.icon = opts.item.icon
+      tag.progress = opts.item.progress
+      tag.class = opts.item.class
+      tag.transition = `transition animating in fade ${direction}`
+      tag.title = opts.item.title
+      tag.messages = opts.item.messages
+      tag.update()
 
       setTimeout(() => {
-        this.transition = ''
-        this.update()
+        tag.transition = ''
+        tag.update()
       }, 300)
 
       setTimeout(() => {
-        this.transition = `transition animating out fade ${direction}`
-        this.update()
+        tag.transition = `transition animating out fade ${direction}`
+        tag.update()
       }, 3000)
 
       setTimeout(() => {
-        this.transition = 'transition hidden'
-        this.hide = true
-        this.update()
+        tag.transition = 'transition hidden'
+        tag.hide = true
+        tag.update()
       }, 3500)
     })
 
-    this.close = () => {
-      this.hide = true
-      this.update()
+    tag.close = () => {
+      tag.hide = true
+      tag.update()
     }
 
-    this.isRight = () => {
+    tag.isRight = () => {
       return opts.position.indexOf('right') >= 0
     }
   </script>

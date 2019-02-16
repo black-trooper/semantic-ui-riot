@@ -17,14 +17,15 @@
   </style>
 
   <script>
-    this.active = false
-    this.mounted = false
-    this.on('mount', () => {
-      this.update()
+    const tag = this
+    tag.active = false
+    tag.mounted = false
+    tag.on('mount', () => {
+      tag.update()
     })
-    this.on('update', () => {
-      if (this.active && !this.mounted) {
-        this.mounted = true
+    tag.on('update', () => {
+      if (tag.active && !tag.mounted) {
+        tag.mounted = true
       }
     })
   </script>

@@ -27,10 +27,10 @@
   </style>
 
   <script>
-    const self = this
-    this.mixin('semantic-ui')
+    const tag = this
+    tag.mixin('semantic-ui')
 
-    this.modal = {
+    tag.modal = {
       closable: false,
       buttons: []
     }
@@ -42,20 +42,20 @@
       action: 'positiveAction'
     }
 
-    this.on('mount', () => {
+    tag.on('mount', () => {
       let defaultOkButton = {}
       let defaultCancelButton = {}
       reverse = false
-      if (this.defaultOptions && this.defaultOptions.confirm) {
-        if (this.defaultOptions.confirm.reverse) {
-          reverse = this.defaultOptions.confirm.reverse
+      if (tag.defaultOptions && tag.defaultOptions.confirm) {
+        if (tag.defaultOptions.confirm.reverse) {
+          reverse = tag.defaultOptions.confirm.reverse
         }
-        if (this.defaultOptions.confirm.buttons) {
-          if (this.defaultOptions.confirm.buttons.ok) {
-            defaultOkButton = this.defaultOptions.confirm.buttons.ok
+        if (tag.defaultOptions.confirm.buttons) {
+          if (tag.defaultOptions.confirm.buttons.ok) {
+            defaultOkButton = tag.defaultOptions.confirm.buttons.ok
           }
-          if (this.defaultOptions.confirm.buttons.cancel) {
-            defaultCancelButton = this.defaultOptions.confirm.buttons.cancel
+          if (tag.defaultOptions.confirm.buttons.cancel) {
+            defaultCancelButton = tag.defaultOptions.confirm.buttons.cancel
           }
         }
       }
@@ -75,11 +75,11 @@
         okButton.default = true
       }
 
-      this.refs.modal.on('positiveAction', () => {
-        this.observable.trigger('callbackConfirm', true)
+      tag.refs.modal.on('positiveAction', () => {
+        tag.observable.trigger('callbackConfirm', true)
       })
-      this.refs.modal.on('negativeAction', () => {
-        this.observable.trigger('callbackConfirm', false)
+      tag.refs.modal.on('negativeAction', () => {
+        tag.observable.trigger('callbackConfirm', false)
       })
     })
 
@@ -106,20 +106,20 @@
         cancel.default = cancelButton.default
       }
 
-      this.modal.buttons.length = 0
-      this.modal.buttons.push((option.reverse || reverse) ? ok : cancel)
-      this.modal.buttons.push((option.reverse || reverse) ? cancel : ok)
+      tag.modal.buttons.length = 0
+      tag.modal.buttons.push((option.reverse || reverse) ? ok : cancel)
+      tag.modal.buttons.push((option.reverse || reverse) ? cancel : ok)
     }
 
     // ===================================================================================
     //                                                                          Observable
     //                                                                          ==========
-    this.observable.on('showConfirm', option => {
-      this.title = option.title
-      this.messages = Array.isArray(option.message) ? option.message : [option.message]
+    tag.observable.on('showConfirm', option => {
+      tag.title = option.title
+      tag.messages = Array.isArray(option.message) ? option.message : [option.message]
       setButtons(option)
-      this.update()
-      this.refs.modal.show()
+      tag.update()
+      tag.refs.modal.show()
     })
 
     riot.mixin({
@@ -165,9 +165,9 @@
           }
         }
 
-        return self.Q.Promise((resolve, reject) => {
-          self.observable.trigger('showConfirm', option)
-          self.observable.on('callbackConfirm', result => {
+        return tag.Q.Promise((resolve, reject) => {
+          tag.observable.trigger('showConfirm', option)
+          tag.observable.on('callbackConfirm', result => {
             return result ? resolve() : reject()
           })
         })

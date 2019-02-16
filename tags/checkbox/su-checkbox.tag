@@ -16,35 +16,36 @@
   </style>
 
   <script>
-    this.checked = false
-    this.defaultChecked = false
+    const tag = this
+    tag.checked = false
+    tag.defaultChecked = false
     let lastChecked
     let lastOptsChecked
 
-    this.on('mount', () => {
+    tag.on('mount', () => {
       supportTraditionalOptions()
-      if (this.checked) {
-        opts.checked = this.checked
+      if (tag.checked) {
+        opts.checked = tag.checked
       } else {
-        this.checked = normalizeOptChecked()
+        tag.checked = normalizeOptChecked()
       }
-      lastChecked = this.checked
-      lastOptsChecked = this.checked
-      this.defaultChecked = this.checked
-      this.update()
+      lastChecked = tag.checked
+      lastOptsChecked = tag.checked
+      tag.defaultChecked = tag.checked
+      tag.update()
     })
 
-    this.on('update', () => {
+    tag.on('update', () => {
       supportTraditionalOptions()
-      if (lastChecked != this.checked) {
-        opts.checked = this.checked
-        lastChecked = this.checked
-        lastOptsChecked = this.checked
+      if (lastChecked != tag.checked) {
+        opts.checked = tag.checked
+        lastChecked = tag.checked
+        lastOptsChecked = tag.checked
         parentUpdate()
       } else if (lastOptsChecked != normalizeOptChecked()) {
-        this.checked = normalizeOptChecked()
-        lastChecked = this.checked
-        lastOptsChecked = this.checked
+        tag.checked = normalizeOptChecked()
+        lastChecked = tag.checked
+        lastOptsChecked = tag.checked
         parentUpdate()
       }
     })
@@ -52,48 +53,48 @@
     // ===================================================================================
     //                                                                               State
     //                                                                               =====
-    this.reset = () => {
-      this.checked = this.defaultChecked
+    tag.reset = () => {
+      tag.checked = tag.defaultChecked
     }
 
-    this.changed = () => {
-      return this.checked !== this.defaultChecked
+    tag.changed = () => {
+      return tag.checked !== tag.defaultChecked
     }
 
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
-    this.click = () => {
-      if (isReadOnly() || this.isDisabled()) {
+    tag.click = () => {
+      if (isReadOnly() || tag.isDisabled()) {
         event.preventDefault()
         return
       }
-      this.checked = !this.checked
+      tag.checked = !tag.checked
       parentUpdate()
-      this.trigger('click', this.checked)
+      tag.trigger('click', tag.checked)
     }
 
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
-    this.getId = () => {
-      return `su-checkbox-${this._riot_id}`
+    tag.getId = () => {
+      return `su-checkbox-${tag._riot_id}`
     }
 
-    this.isDisabled = () => {
-      return this.root.classList.contains('disabled')
+    tag.isDisabled = () => {
+      return tag.root.classList.contains('disabled')
     }
 
     // ===================================================================================
     //                                                                               Logic
     //                                                                               =====
     const isReadOnly = () => {
-      return this.root.classList.contains('read-only')
+      return tag.root.classList.contains('read-only')
     }
 
     const parentUpdate = () => {
-      if (this.parent) {
-        this.parent.update()
+      if (tag.parent) {
+        tag.parent.update()
       }
     }
 

@@ -8,10 +8,11 @@
   </div>
 
   <script>
-    this.active = false
+    const tag = this
+    tag.active = false
 
-    this.click = () => {
-      this.trigger('click', this)
+    tag.click = () => {
+      tag.trigger('click', tag)
     }
   </script>
 </su-accordion>

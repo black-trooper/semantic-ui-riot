@@ -1,7 +1,7 @@
 <su-modal onclick="{ dimmerClose }">
   <div class="ui dimmer modals page transition { transitionStatus }">
     <div class="ui modal transition visible active {opts.class}" onclick="{ clickModal }" id="{ getId() }">
-      <i class="close icon" if="{ opts.modal.closable && !this.isBasic() }" onclick="{ hide }"></i>
+      <i class="close icon" if="{ opts.modal.closable && !isBasic() }" onclick="{ hide }"></i>
       <div class="ui header { icon: opts.modal.header.icon }" if="{ opts.modal.header }">
         <i class="icon { opts.modal.header.icon }" if="{ opts.modal.header.icon }"></i>
         { (opts.modal.header.text) ? opts.modal.header.text : opts.modal.header }
@@ -48,6 +48,7 @@
   </style>
 
   <script>
+    const tag = this
     let image_content = false
     let openning, closing, visible
 
@@ -55,14 +56,14 @@
       opts.modal = {}
     }
 
-    this.on('mount', () => {
+    tag.on('mount', () => {
       if (typeof opts.modal.closable === 'undefined') {
         opts.modal.closable = true
       }
     })
 
-    this.on('update', () => {
-      if (this.refs.content.getElementsByTagName('img').length > 0) {
+    tag.on('update', () => {
+      if (tag.refs.content.getElementsByTagName('img').length > 0) {
         image_content = true
       }
     })
@@ -70,55 +71,55 @@
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
-    this.show = () => {
+    tag.show = () => {
       if (openning || closing || visible) {
         return
       }
       openning = true
-      this.transitionStatus = 'animating fade in visible'
-      this.update()
+      tag.transitionStatus = 'animating fade in visible'
+      tag.update()
       setDefaultFocus()
-      this.trigger('show')
+      tag.trigger('show')
 
       setTimeout(() => {
         openning = false
         visible = true
-        this.transitionStatus = 'visible active'
-        this.update()
+        tag.transitionStatus = 'visible active'
+        tag.update()
       }, 500)
     }
 
-    this.click = event => {
-      this.trigger(event.item.action || event.item.text)
+    tag.click = event => {
+      tag.trigger(event.item.action || event.item.text)
       if (typeof event.item.closable === 'undefined' || event.item.closable) {
-        this.hide()
+        tag.hide()
       }
     }
 
-    this.dimmerClose = () => {
-      if (opts.modal.closable && !this.isBasic()) {
-        this.hide()
+    tag.dimmerClose = () => {
+      if (opts.modal.closable && !tag.isBasic()) {
+        tag.hide()
       }
     }
 
-    this.clickModal = event => {
+    tag.clickModal = event => {
       event.stopPropagation()
     }
 
-    this.hide = () => {
+    tag.hide = () => {
       if (openning || closing || !visible) {
         return
       }
       closing = true
-      this.transitionStatus = 'animating fade out visible active'
-      this.update()
-      this.trigger('hide')
+      tag.transitionStatus = 'animating fade out visible active'
+      tag.update()
+      tag.trigger('hide')
 
       setTimeout(() => {
         closing = false
         visible = false
-        this.transitionStatus = ''
-        this.update()
+        tag.transitionStatus = ''
+        tag.update()
       }, 300)
     }
 
@@ -126,7 +127,7 @@
     //                                                                               Logic
     //                                                                               =====
     const isContainsClassName = className => {
-      const modalElement = document.getElementById(this.getId())
+      const modalElement = document.getElementById(tag.getId())
       if (!modalElement) {
         return false
       }
@@ -139,22 +140,22 @@
       }
       if (opts.modal.buttons.some(button => button.default)) {
         const text = opts.modal.buttons.filter(button => button.default)[0].text
-        this.refs[`button_${text}`].focus()
+        tag.refs[`button_${text}`].focus()
       }
     }
 
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
-    this.getId = () => {
-      return `su-modal-${this._riot_id}`
+    tag.getId = () => {
+      return `su-modal-${tag._riot_id}`
     }
 
-    this.isBasic = () => {
+    tag.isBasic = () => {
       return isContainsClassName('basic')
     }
 
-    this.isImageContent = () => {
+    tag.isImageContent = () => {
       return image_content
     }
   </script>

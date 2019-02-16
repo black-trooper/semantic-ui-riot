@@ -11,35 +11,36 @@
 
     :scope.ui.read-only input[type="radio"],
     :scope.ui.disabled input[type="radio"] {
-      cursor: default!important;
+      cursor: default !important;
     }
   </style>
 
   <script>
-    this.name = ''
-    this.checked = false
+    const tag = this
+    tag.name = ''
+    tag.checked = false
     let lastChecked
     let lastOptsCheck
 
-    this.on('mount', () => {
-      if (this.checked) {
-        opts.checked = this.checked
+    tag.on('mount', () => {
+      if (tag.checked) {
+        opts.checked = tag.checked
       } else {
-        this.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
+        tag.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
       }
-      lastChecked = this.checked
+      lastChecked = tag.checked
       lastOptsCheck = opts.checked
-      this.update()
+      tag.update()
     })
 
-    this.on('update', () => {
-      this.name = opts.name
-      this.value = opts.value
-      if (lastChecked != this.checked) {
-        opts.checked = this.checked
-        lastChecked = this.checked
+    tag.on('update', () => {
+      tag.name = opts.name
+      tag.value = opts.value
+      if (lastChecked != tag.checked) {
+        opts.checked = tag.checked
+        lastChecked = tag.checked
       } else if (lastOptsCheck != opts.checked) {
-        this.checked = opts.checked
+        tag.checked = opts.checked
         lastOptsCheck = opts.checked
       }
     })
@@ -47,35 +48,35 @@
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
-    this.click = event => {
-      if (isReadOnly() || this.isDisabled()) {
+    tag.click = event => {
+      if (isReadOnly() || tag.isDisabled()) {
         event.preventDefault()
         return
       }
-      this.checked = event.target.checked
-      this.trigger('click', event.target.value)
+      tag.checked = event.target.checked
+      tag.trigger('click', event.target.value)
     }
 
     // ===================================================================================
     //                                                                               Logic
     //                                                                               =====
     const isReadOnly = () => {
-      return this.root.classList.contains('read-only')
+      return tag.root.classList.contains('read-only')
     }
 
     // ===================================================================================
     //                                                                              Helper
     //                                                                              ======
-    this.getId = () => {
-      return `su-radio-${this._riot_id}`
+    tag.getId = () => {
+      return `su-radio-${tag._riot_id}`
     }
 
-    this.isDisabled = () => {
-      return this.root.classList.contains('disabled')
+    tag.isDisabled = () => {
+      return tag.root.classList.contains('disabled')
     }
 
-    this.isRadio = () => {
-      return !this.root.classList.contains('slider')
+    tag.isRadio = () => {
+      return !tag.root.classList.contains('slider')
     }
   </script>
 </su-radio>

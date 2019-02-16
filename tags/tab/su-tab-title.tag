@@ -4,10 +4,11 @@
   </a>
 
   <script>
-    this.active = false
+    const tag = this
+    tag.active = false
 
-    this.click = () => {
-      this.parent.parent.clickForTitle(this.refs.item.innerText)
+    tag.click = () => {
+      tag.parent.parent.clickForTitle(tag.refs.item.innerText)
     }
   </script>
 </su-tab-title>

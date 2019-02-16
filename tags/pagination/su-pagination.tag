@@ -26,37 +26,38 @@
   </div>
 
   <script>
-    this.activePage = 1
-    this.totalPages = 1
-    this.pages = []
+    const tag = this
+    tag.activePage = 1
+    tag.totalPages = 1
+    tag.pages = []
     let lastOptsTotalPages = null
     let lastOptsActivePage = null
     let lastTotalPages = null
     let lastActivePage = null
 
-    this.on('mount', () => {
-      this.update()
+    tag.on('mount', () => {
+      tag.update()
     })
 
-    this.on('update', () => {
+    tag.on('update', () => {
       let needsRegenerate = false
       if (opts.activePage != lastOptsActivePage) {
         lastOptsActivePage = opts.activePage
-        this.activePage = opts.activePage
-        lastActivePage = this.activePage
+        tag.activePage = opts.activePage
+        lastActivePage = tag.activePage
         needsRegenerate = true
-      } else if (this.activePage != lastActivePage) {
-        lastActivePage = this.activePage
+      } else if (tag.activePage != lastActivePage) {
+        lastActivePage = tag.activePage
         needsRegenerate = true
       }
       if (opts.totalPages != lastOptsTotalPages) {
         lastOptsTotalPages = opts.totalPages
-        this.totalPages = opts.totalPages
-        lastTotalPages = this.totalPages
+        tag.totalPages = opts.totalPages
+        lastTotalPages = tag.totalPages
         needsRegenerate = true
-      } else if (this.totalPages != lastTotalPages) {
-        lastTotalPages = this.totalPages
-        opts.totalPages = this.totalPages
+      } else if (tag.totalPages != lastTotalPages) {
+        lastTotalPages = tag.totalPages
+        opts.totalPages = tag.totalPages
         lastOptsTotalPages = opts.totalPages
         needsRegenerate = true
       }
@@ -69,57 +70,57 @@
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
-    this.clickPage = (pageNum, e) => {
+    tag.clickPage = (pageNum, e) => {
       e.preventDefault()
-      if (pageNum < 1 || pageNum > this.totalPages) {
+      if (pageNum < 1 || pageNum > tag.totalPages) {
         return
       }
-      this.activePage = pageNum
-      this.update()
-      this.trigger('change', pageNum)
+      tag.activePage = pageNum
+      tag.update()
+      tag.trigger('change', pageNum)
     }
 
     // ===================================================================================
     //                                                                               Logic
     //                                                                               =====
     const generatePagination = () => {
-      this.pages = []
-      const activePage = parseInt(this.activePage || 1)
-      const totalPages = parseInt(this.totalPages || 1)
+      tag.pages = []
+      const activePage = parseInt(tag.activePage || 1)
+      const totalPages = parseInt(tag.totalPages || 1)
       const pageSize = calcPageSize()
       const index = calcIndex(pageSize)
 
       if (pageSize < 1) {
-        this.update()
+        tag.update()
         return
       }
 
       for (let i = 0; i < pageSize; i++) {
-        this.pages.push({
+        tag.pages.push({
           number: i + index,
           active: i + index == activePage,
         })
       }
-      this.pages[0].number = 1
-      this.pages[pageSize - 1].number = totalPages
+      tag.pages[0].number = 1
+      tag.pages[pageSize - 1].number = totalPages
       if (pageSize > 1) {
-        this.pages[1].disabled = index != 1
+        tag.pages[1].disabled = index != 1
       }
       if (pageSize > 2) {
-        this.pages[pageSize - 2].disabled = index != totalPages - pageSize + 1
+        tag.pages[pageSize - 2].disabled = index != totalPages - pageSize + 1
       }
 
-      this.update()
+      tag.update()
     }
 
     const calcPageSize = () => {
       const pageSize = parseInt(opts.pageSize || 7)
-      return pageSize < this.totalPages ? pageSize : this.totalPages
+      return pageSize < tag.totalPages ? pageSize : tag.totalPages
     }
 
     const calcIndex = pageSize => {
-      const activePage = parseInt(this.activePage || 1)
-      const totalPages = parseInt(this.totalPages || 1)
+      const activePage = parseInt(tag.activePage || 1)
+      const totalPages = parseInt(tag.totalPages || 1)
       const prevPageSize = (pageSize - pageSize % 2) / 2
       if (activePage + prevPageSize > totalPages) {
         return totalPages - pageSize + 1

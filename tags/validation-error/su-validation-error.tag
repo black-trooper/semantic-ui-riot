@@ -16,14 +16,15 @@
   </style>
 
   <script>
-    this.getClass = () => {
-      if (opts.name || this.isEmptyErrors()) {
+    const tag = this
+    tag.getClass = () => {
+      if (opts.name || tag.isEmptyErrors()) {
         return ''
       }
       return 'ui error message'
     }
 
-    this.isEmptyErrors = () => {
+    tag.isEmptyErrors = () => {
       return !opts.errors || Object.keys(opts.errors).length == 0
     }
   </script>

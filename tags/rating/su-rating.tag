@@ -4,60 +4,61 @@
     onmouseout="{ parent.mouseout }"></i>
 
   <script>
-    this.items = []
+    const tag = this
+    tag.items = []
 
-    this.on('mount', () => {
+    tag.on('mount', () => {
       init(opts.max, opts.value)
     })
 
-    this.on('update', () => {
+    tag.on('update', () => {
       updateView()
     })
 
     // ===================================================================================
     //                                                                               State
     //                                                                               =====
-    this.reset = () => {
-      this.value = this.defaultValue
+    tag.reset = () => {
+      tag.value = tag.defaultValue
     }
 
-    this.changed = () => {
-      return this.value != this.defaultValue
+    tag.changed = () => {
+      return tag.value != tag.defaultValue
     }
 
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
-    this.click = target => {
+    tag.click = target => {
       if (isReadOnly()) {
         return
       }
       let valueChanged = false
       let beforeValue
-      if (this.value != target.value) {
-        beforeValue = this.value
+      if (tag.value != target.value) {
+        beforeValue = tag.value
         valueChanged = true
       }
-      this.value = target.value
+      tag.value = target.value
       updateView()
       parentUpdate()
-      this.trigger('click', target.value)
+      tag.trigger('click', target.value)
       if (valueChanged) {
-        this.trigger('change', { value: this.value, beforeValue: beforeValue })
+        tag.trigger('change', { value: tag.value, beforeValue: beforeValue })
       }
     }
 
-    this.mouseover = target => {
+    tag.mouseover = target => {
       if (isReadOnly()) {
         return
       }
-      this.items.forEach(item => {
+      tag.items.forEach(item => {
         item.selected = item.value <= target.value
       })
     }
 
-    this.mouseout = () => {
-      this.items.forEach(item => {
+    tag.mouseout = () => {
+      tag.items.forEach(item => {
         item.selected = false
       })
     }
@@ -66,31 +67,31 @@
     //                                                                               Logic
     //                                                                               =====
     const isReadOnly = () => {
-      return this.root.classList.contains('read-only')
+      return tag.root.classList.contains('read-only')
     }
 
     const init = (max = 5, value = 0) => {
-      this.value = value
-      this.defaultValue = value
-      this.items.length = 0
+      tag.value = value
+      tag.defaultValue = value
+      tag.items.length = 0
       for (let i = 0; i < max; i++) {
-        this.items[i] = { value: i + 1, active: false, selected: false }
+        tag.items[i] = { value: i + 1, active: false, selected: false }
       }
       updateView()
       parentUpdate()
     }
 
     const updateView = () => {
-      this.items.forEach(item => {
-        item.active = item.value <= this.value
+      tag.items.forEach(item => {
+        item.active = item.value <= tag.value
       })
     }
 
     const parentUpdate = () => {
-      if (this.parent) {
-        this.parent.update()
+      if (tag.parent) {
+        tag.parent.update()
       } else {
-        this.update()
+        tag.update()
       }
     }
   </script>
