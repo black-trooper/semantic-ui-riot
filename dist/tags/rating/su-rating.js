@@ -1,4 +1,4 @@
-riot.tag2('su-rating', '<i class="icon {active: active} {selected: selected}" each="{items}" onclick="{click}" onmouseover="{mouseover}" onmouseout="{mouseout}"></i>', '', 'class="ui rating {opts.class}"', function(opts) {
+riot.tag2('su-rating', '<i class="icon {active: item.active} {selected: item.selected}" each="{item in items}" onclick="{parent.click.bind(this, item)}" onmouseover="{parent.mouseover.bind(this, item)}" onmouseout="{parent.mouseout}"></i>', '', 'class="ui rating {opts.class}"', function(opts) {
     this.items = []
 
     this.on('mount', () => {
@@ -17,31 +17,31 @@ riot.tag2('su-rating', '<i class="icon {active: active} {selected: selected}" ea
       return this.value != this.defaultValue
     }
 
-    this.click = event => {
+    this.click = target => {
       if (isReadOnly()) {
         return
       }
       let valueChanged = false
       let beforeValue
-      if (this.value != event.item.value) {
+      if (this.value != target.value) {
         beforeValue = this.value
         valueChanged = true
       }
-      this.value = event.item.value
+      this.value = target.value
       updateView()
       parentUpdate()
-      this.trigger('click', event.item.value)
+      this.trigger('click', target.value)
       if (valueChanged) {
         this.trigger('change', { value: this.value, beforeValue: beforeValue })
       }
     }
 
-    this.mouseover = event => {
+    this.mouseover = target => {
       if (isReadOnly()) {
         return
       }
       this.items.forEach(item => {
-        item.selected = item.value <= event.item.value
+        item.selected = item.value <= target.value
       })
     }
 

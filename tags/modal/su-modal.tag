@@ -10,10 +10,10 @@
         <yield />
       </div>
       <div class="actions">
-        <button each="{ opts.modal.buttons }" class="ui button { type } { labeled: icon && text } { icon: icon } { inverted: isBasic() } { disabled: disabled }"
-          onclick="{ parent.click }" ref="button_{ text }" type="button">
-          { text }
-          <i class="icon { icon }" if="{ icon }"></i>
+        <button each="{ button in opts.modal.buttons }" onclick="{ parent.click }" ref="button_{ button.text }" type="button"
+          class="ui button { button.type } { labeled: button.icon && button.text } { icon: button.icon } { inverted: parent.isBasic() } { disabled: button.disabled }">
+          { button.text }
+          <i class="icon { button.icon }" if="{ button.icon }"></i>
         </button>
       </div>
     </div>
