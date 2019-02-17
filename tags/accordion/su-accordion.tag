@@ -10,8 +10,9 @@
   <script>
     const tag = this
     tag.active = false
+    tag.click = click
 
-    tag.click = () => {
+    function click() {
       tag.trigger('click', tag)
     }
   </script>

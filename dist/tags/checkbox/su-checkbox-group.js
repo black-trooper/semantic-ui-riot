@@ -3,10 +3,16 @@ riot.tag2('su-checkbox-group', '<yield></yield>', '', '', function(opts) {
     tag.label = ''
     tag.value = ''
     tag.defaultValue = ''
+
+    tag.changed = changed
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.reset = reset
+
     let lastValue
     let lastOptsValue
 
-    tag.on('mount', () => {
+    function onMount() {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
@@ -32,9 +38,9 @@ riot.tag2('su-checkbox-group', '<yield></yield>', '', '', function(opts) {
 
       tag.defaultValue = tag.value
       parentUpdate()
-    })
+    }
 
-    tag.on('update', () => {
+    function onUpdate() {
       let changed = false
       if (normalizeValue(lastValue) != normalizeValue(tag.value)) {
         opts.riotValue = tag.value
@@ -61,17 +67,17 @@ riot.tag2('su-checkbox-group', '<yield></yield>', '', '', function(opts) {
         })
         tag.trigger('change', tag.value)
       }
-    })
+    }
 
-    tag.reset = () => {
+    function reset() {
       tag.value = tag.defaultValue
     }
 
-    tag.changed = () => {
+    function changed() {
       return tag.value !== tag.defaultValue
     }
 
-    const updateState = checkbox => {
+    function updateState(checkbox) {
       if (typeof checkbox.opts.value === 'undefined' || typeof tag.value === 'undefined') {
         return
       }
@@ -81,7 +87,7 @@ riot.tag2('su-checkbox-group', '<yield></yield>', '', '', function(opts) {
       }
     }
 
-    const initializeChild = checkbox => {
+    function initializeChild(checkbox) {
       checkbox.opts.name = getCheckboxName()
       checkbox.on('click', () => {
         let checkboxes = tag.tags['su-checkbox']
@@ -93,7 +99,7 @@ riot.tag2('su-checkbox-group', '<yield></yield>', '', '', function(opts) {
       })
     }
 
-    const parentUpdate = () => {
+    function parentUpdate() {
       if (tag.parent) {
         tag.parent.update()
       } else {
@@ -101,7 +107,7 @@ riot.tag2('su-checkbox-group', '<yield></yield>', '', '', function(opts) {
       }
     }
 
-    const normalizeValue = value => {
+    function normalizeValue(value) {
       if (typeof value === 'undefined') {
         return value
       }
@@ -111,7 +117,7 @@ riot.tag2('su-checkbox-group', '<yield></yield>', '', '', function(opts) {
       return value.toString()
     }
 
-    const getCheckboxName = () => {
+    function getCheckboxName() {
       return `su-checkbox-name-${tag._riot_id}`
     }
 });

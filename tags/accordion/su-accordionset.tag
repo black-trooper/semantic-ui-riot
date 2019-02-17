@@ -45,8 +45,9 @@
   <script>
     const tag = this
     tag.accordions = []
+    tag.on('mount', onMount)
 
-    tag.on('mount', () => {
+    function onMount() {
       tag.accordions = tag.tags['su-accordion']
 
       if (!Array.isArray(tag.accordions)) {
@@ -66,12 +67,9 @@
       }
 
       tag.update()
-    })
+    }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
-    const initializeChild = child => {
+    function initializeChild(child) {
       child.on('click', target => {
         const active = target.active
         tag.accordions.forEach(accordion => {

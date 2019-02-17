@@ -6,6 +6,28 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
     tag.value = ''
     tag.label = ''
     tag.defaultValue = ''
+
+    tag.blur = blur
+    tag.changed = changed
+    tag.focus = focus
+    tag.getTabindex = getTabindex
+    tag.isActive = isActive
+    tag.isDisabled = isDisabled
+    tag.isItem = isItem
+    tag.isReadOnly = isReadOnly
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.mousedown = mousedown
+    tag.mouseup = mouseup
+    tag.reset = reset
+    tag.toggle = toggle
+    tag.itemClick = itemClick
+    tag.keydown = keydown
+    tag.keyup = keyup
+    tag.stopPropagation = stopPropagation
+    tag.input = input
+    tag.unselect = unselect
+
     let visibleFlg = false
     const keys = {
       enter: 13,
@@ -20,7 +42,7 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
       tag.default = opts.items[0].default
     }
 
-    tag.on('mount', () => {
+    function onMount() {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
@@ -32,9 +54,9 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
       } else {
         tag.defaultValue = tag.value
       }
-    })
+    }
 
-    tag.on('update', () => {
+    function onUpdate() {
       if (opts.multiple) {
         opts.items.forEach(item => item.selected = false)
         opts.items.filter(item => tag.value && tag.value.indexOf(item.value) >= 0).forEach(item => item.selected = true)
@@ -56,13 +78,13 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
           }
         }
       }
-    })
+    }
 
-    tag.reset = () => {
+    function reset() {
       tag.value = tag.defaultValue
     }
 
-    tag.changed = () => {
+    function changed() {
       if (opts.multiple) {
         const value = tag.value ? tag.value : []
         const defaultValue = tag.defaultValue ? tag.defaultValue : []
@@ -71,7 +93,7 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
       return tag.value !== tag.defaultValue
     }
 
-    tag.toggle = () => {
+    function toggle() {
       if (!visibleFlg) {
         open()
       } else {
@@ -79,19 +101,19 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
       }
     }
 
-    tag.focus = () => {
+    function focus() {
       open()
     }
 
-    tag.mousedown = () => {
+    function mousedown() {
       tag.itemActivated = true
     }
 
-    tag.mouseup = () => {
+    function mouseup() {
       tag.itemActivated = false
     }
 
-    tag.blur = () => {
+    function blur() {
       if (!tag.itemActivated) {
         if (!tag.closing && visibleFlg) {
           const target = opts.multiple ? opts.items.filter(item => item.selected) : { value: tag.value, label: tag.label, default: tag.default }
@@ -101,7 +123,7 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
       }
     }
 
-    tag.itemClick = event => {
+    function itemClick(event) {
       event.stopPropagation()
       if (!tag.isItem(event.item.item)) {
         return
@@ -117,7 +139,7 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
       close()
     }
 
-    tag.keydown = event => {
+    function keydown(event) {
       const keyCode = event.keyCode
       if (keyCode == keys.escape) {
         close()
@@ -167,7 +189,7 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
       scrollPosition()
     }
 
-    tag.keyup = event => {
+    function keyup(event) {
       const keyCode = event.keyCode
       if (keyCode != keys.enter) {
         return
@@ -195,17 +217,17 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
       }
     }
 
-    tag.stopPropagation = event => {
+    function stopPropagation(event) {
       event.stopPropagation()
     }
 
-    tag.input = event => {
+    function input(event) {
       const value = event.target.value.toLowerCase()
       tag.filtered = value.length > 0
       search(value)
     }
 
-    tag.unselect = event => {
+    function unselect(event) {
       event.stopPropagation()
       event.item.item.selected = false
       tag.value = opts.items.filter(item => item.selected).map(item => item.value)
@@ -213,7 +235,7 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
       parentUpdate()
     }
 
-    const open = () => {
+    function open() {
       if (tag.openning || tag.closing || visibleFlg || tag.isReadOnly() || tag.isDisabled()) {
         return
       }
@@ -237,7 +259,7 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
       tag.trigger('open')
     }
 
-    const close = () => {
+    function close() {
       if (tag.closing || !visibleFlg) {
         return
       }
@@ -316,7 +338,7 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
       tag.trigger('search')
     }
 
-    const scrollPosition = () => {
+    function scrollPosition() {
       const menu = tag.root.querySelector('.menu')
       const item = tag.root.querySelector('.item.hover')
 
@@ -333,13 +355,13 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
       }
     }
 
-    const parentUpdate = () => {
+    function parentUpdate() {
       if (tag.parent) {
         tag.parent.update()
       }
     }
 
-    const isUpward = () => {
+    function isUpward() {
       if (opts.direction == 'upward') {
         return true
       }
@@ -361,29 +383,29 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
       return true
     }
 
-    tag.isItem = item => {
+    function isItem(item) {
       return item.searched && !item.header && !item.divider
     }
 
-    tag.isActive = () => {
+    function isActive() {
       if (tag.closing) {
         return false
       }
       return tag.openning || visibleFlg
     }
 
-    tag.getTabindex = () => {
+    function getTabindex() {
       if (opts.tabindex) {
         return opts.tabindex
       }
       return 0
     }
 
-    tag.isReadOnly = () => {
+    function isReadOnly() {
       return tag.root.classList.contains('read-only')
     }
 
-    tag.isDisabled = () => {
+    function isDisabled() {
       return tag.root.classList.contains('disabled')
     }
 });

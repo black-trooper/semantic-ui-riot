@@ -38,9 +38,13 @@
       closable: false,
       buttons: []
     }
+
+    tag.observable.on('showAlert', showAlert)
+    tag.on('mount', onMount)
+
     const button = {}
 
-    tag.on('mount', () => {
+    function onMount() {
       let defaultButton = {}
       if (tag.defaultOptions && tag.defaultOptions.alert && tag.defaultOptions.alert.button) {
         defaultButton = tag.defaultOptions.alert.button
@@ -55,9 +59,9 @@
       tag.refs.modal.on('closeAction', () => {
         tag.observable.trigger('callbackConfirm')
       })
-    })
+    }
 
-    const setButton = option => {
+    function setButton(option) {
       const btn = {
         text: option.button.text || button.text,
         type: option.button.type || button.type,
@@ -75,16 +79,13 @@
       tag.modal.buttons.push(btn)
     }
 
-    // ===================================================================================
-    //                                                                          Observable
-    //                                                                          ==========
-    tag.observable.on('showAlert', option => {
+    function showAlert(option) {
       tag.title = option.title
       tag.messages = Array.isArray(option.message) ? option.message : [option.message]
       setButton(option)
       tag.update()
       tag.refs.modal.show()
-    })
+    }
 
     riot.mixin({
       suAlert: param => {
