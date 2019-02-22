@@ -18,6 +18,9 @@
       }
 
       this.tabs = this.tags['su-tab']
+      if (typeof this.tabs === 'undefined') {
+        return
+      }
       if (!Array.isArray(this.tabs)) {
         this.tabs = [this.tabs]
       }

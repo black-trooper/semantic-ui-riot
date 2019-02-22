@@ -177,6 +177,12 @@ describe('su-tabset-options', function () {
     tag.tags['su-tab-header'].tags['su-tab-title'].active.should.equal(true)
   })
 
+  it("none tab", function () {
+    mount('<su-tabset class="right tabular"></su-tabset>');
+
+    expect(tag.tags['su-tab']).to.be.undefined
+  });
+
   it('lazy mount', function () {
     mount(`
       <su-tabset lazy-mount="true">

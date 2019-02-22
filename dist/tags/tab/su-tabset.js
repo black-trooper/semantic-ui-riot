@@ -8,6 +8,9 @@ riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isB
       }
 
       this.tabs = this.tags['su-tab']
+      if (typeof this.tabs === 'undefined') {
+        return
+      }
       if (!Array.isArray(this.tabs)) {
         this.tabs = [this.tabs]
       }
