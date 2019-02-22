@@ -5162,6 +5162,9 @@ this.on('mount', function () {
   }
 
   _this.tabs = _this.tags['su-tab'];
+  if (typeof _this.tabs === 'undefined') {
+    return;
+  }
   if (!Array.isArray(_this.tabs)) {
     _this.tabs = [_this.tabs];
   }
