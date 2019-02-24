@@ -77,7 +77,16 @@
 
   <script>
     const tag = this
-    tag.on('mount', () => {
+    tag.close = close
+    tag.on('mount', onMount)
+    tag.isRight = isRight
+
+    function close() {
+      tag.hide = true
+      tag.update()
+    }
+
+    function onMount() {
       tag.position = tag.isRight() ? 'right' : 'left'
       const direction = tag.isRight() ? 'left' : 'right'
       tag.icon = opts.item.icon
@@ -103,14 +112,9 @@
         tag.hide = true
         tag.update()
       }, 3500)
-    })
-
-    tag.close = () => {
-      tag.hide = true
-      tag.update()
     }
 
-    tag.isRight = () => {
+    function isRight() {
       return opts.position.indexOf('right') >= 0
     }
   </script>

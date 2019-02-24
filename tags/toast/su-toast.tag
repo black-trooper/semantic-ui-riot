@@ -49,20 +49,24 @@
 
   <script>
     const tag = this
-    tag.mixin('semantic-ui')
     tag.items = []
 
-    tag.on('mount', () => {
+    tag.mixin('semantic-ui')
+    tag.observable.on('showToast', showToast)
+    tag.on('mount', onMount)
+
+    riot.mixin({
+      suToast
+    })
+
+    function onMount() {
       if (!opts.position) {
         opts.position = 'bottom right'
       }
       tag.update()
-    })
+    }
 
-    // ===================================================================================
-    //                                                                          Observable
-    //                                                                          ==========
-    tag.observable.on('showToast', option => {
+    function showToast(option) {
       const item = {
         title: option.title,
         messages: Array.isArray(option.message) ? option.message : [option.message],
@@ -77,39 +81,37 @@
         tag.items.shift()
         tag.update()
       }, 5000)
-    })
+    }
 
-    riot.mixin({
-      suToast: param => {
-        const option = {
-          title: null,
-          message: null,
-          icon: null,
-          progress: null,
-          class: null,
-        }
-
-        if (typeof param === 'string') {
-          option.message = param
-        } else if (param) {
-          if (param.title) {
-            option.title = param.title
-          }
-          if (param.message) {
-            option.message = param.message
-          }
-          if (param.icon) {
-            option.icon = param.icon
-          }
-          if (param.progress) {
-            option.progress = param.progress
-          }
-          if (param.class) {
-            option.class = param.class
-          }
-        }
-        tag.observable.trigger('showToast', option)
+    function suToast(param) {
+      const option = {
+        title: null,
+        message: null,
+        icon: null,
+        progress: null,
+        class: null,
       }
-    })
+
+      if (typeof param === 'string') {
+        option.message = param
+      } else if (param) {
+        if (param.title) {
+          option.title = param.title
+        }
+        if (param.message) {
+          option.message = param.message
+        }
+        if (param.icon) {
+          option.icon = param.icon
+        }
+        if (param.progress) {
+          option.progress = param.progress
+        }
+        if (param.class) {
+          option.class = param.class
+        }
+      }
+      tag.observable.trigger('showToast', option)
+    }
   </script>
 </su-toast>
