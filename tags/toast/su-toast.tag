@@ -49,16 +49,28 @@
 
   <script>
     const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
     tag.items = []
 
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
     tag.mixin('semantic-ui')
     tag.observable.on('showToast', showToast)
     tag.on('mount', onMount)
 
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
     riot.mixin({
       suToast
     })
 
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
     function onMount() {
       if (!opts.position) {
         opts.position = 'bottom right'

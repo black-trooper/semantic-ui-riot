@@ -18,15 +18,32 @@
 
   <script>
     const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
     tag.active = false
     tag.mounted = false
-    tag.on('mount', () => {
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
+
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
       tag.update()
-    })
-    tag.on('update', () => {
+    }
+    function onUpdate() {
       if (tag.active && !tag.mounted) {
         tag.mounted = true
       }
-    })
+    }
   </script>
 </su-tab>

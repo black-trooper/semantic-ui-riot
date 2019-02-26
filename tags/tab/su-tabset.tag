@@ -9,11 +9,32 @@
 
   <script>
     const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
     tag.tabs = []
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.click = click
+    tag.clickForTitle = clickForTitle
+    tag.getClass = getClass
+    tag.hasTitle = hasTitle
+    tag.isBottom = isBottom
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
     let lastOptsActive, lastActive, active
+    let shownMessage = false
 
-
-    tag.on('mount', () => {
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
       if (tag.tags['su-tab-header']) {
         tag.tags['su-tab-header'].opts.class = getTitleClass()
       }
@@ -38,9 +59,9 @@
       })
 
       tag.update()
-    })
+    }
 
-    tag.on('update', () => {
+    function onUpdate() {
       supportTraditionalOptions()
       let changed = false
       if (lastOptsActive != opts.active) {
@@ -80,31 +101,25 @@
           }
         }
       }
-    })
+    }
 
-    // ===================================================================================
-    //                                                                               Event
-    //                                                                               =====
-    tag.click = event => {
+    function click(event) {
       active = event.item.tab.opts.label
       tag.update()
       tag.trigger('click', active)
     }
 
-    tag.clickForTitle = title => {
+    function clickForTitle(title) {
       active = title
       tag.update()
       tag.trigger('click', active)
     }
 
-    // ===================================================================================
-    //                                                                              Helper
-    //                                                                              ======
-    tag.isBottom = () => {
+    function isBottom() {
       return hasClass('bottom')
     }
 
-    tag.hasTitle = () => {
+    function hasTitle() {
       if (!tag.tags['su-tab-header']) {
         return false
       }
@@ -119,16 +134,13 @@
       return titles
     }
 
-    tag.getClass = () => {
+    function getClass() {
       if (hasClass('tabular') && !hasClass('attached')) {
         return 'attached'
       }
     }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
-    const initializeChild = tab => {
+    function initializeChild(tab) {
       tab.mounted = !opts.lazyMount
       if (tab.opts.class) {
         return
@@ -148,7 +160,7 @@
       tab.opts.class = classList.join(' ')
     }
 
-    const getTitleClass = () => {
+    function getTitleClass() {
       const classList = []
       if (hasClass('left') || hasClass('right')) {
         classList.push('vertical')
@@ -166,12 +178,12 @@
       return classList.join(' ')
     }
 
-    const hasClass = className => {
+    function hasClass(className) {
+
       return tag.root.classList.contains(className)
     }
 
-    let shownMessage = false
-    const supportTraditionalOptions = () => {
+    function supportTraditionalOptions() {
       tag.tabs.forEach(tab => {
         if (typeof tab.opts.title !== 'undefined') {
           if (!shownMessage) {
@@ -183,6 +195,5 @@
         }
       })
     }
-
   </script>
 </su-tabset>

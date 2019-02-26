@@ -17,14 +17,31 @@
 
   <script>
     const tag = this
-    tag.getClass = () => {
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.getClass = getClass
+    tag.isEmptyErrors = isEmptyErrors
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
+
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function getClass() {
       if (opts.name || tag.isEmptyErrors()) {
         return ''
       }
       return 'ui error message'
     }
 
-    tag.isEmptyErrors = () => {
+    function isEmptyErrors() {
       return !opts.errors || Object.keys(opts.errors).length == 0
     }
   </script>

@@ -5,31 +5,46 @@
 
   <script>
     const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
     tag.items = []
 
-    tag.on('mount', () => {
-      init(opts.max, opts.value)
-    })
-
-    tag.on('update', () => {
-      updateView()
-    })
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.reset = reset
+    tag.changed = changed
+    tag.click = click
+    tag.mouseout = mouseout
+    tag.mouseover = mouseover
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
 
     // ===================================================================================
-    //                                                                               State
-    //                                                                               =====
-    tag.reset = () => {
+    //                                                                          Properties
+    //                                                                          ==========
+
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
+      init(opts.max, opts.value)
+    }
+
+    function onUpdate() {
+      updateView()
+    }
+
+    function reset() {
       tag.value = tag.defaultValue
     }
 
-    tag.changed = () => {
+    function changed() {
       return tag.value != tag.defaultValue
     }
 
-    // ===================================================================================
-    //                                                                               Event
-    //                                                                               =====
-    tag.click = target => {
+    function click(target) {
       if (isReadOnly()) {
         return
       }
@@ -48,7 +63,7 @@
       }
     }
 
-    tag.mouseover = target => {
+    function mouseover(target) {
       if (isReadOnly()) {
         return
       }
@@ -57,20 +72,17 @@
       })
     }
 
-    tag.mouseout = () => {
+    function mouseout() {
       tag.items.forEach(item => {
         item.selected = false
       })
     }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
-    const isReadOnly = () => {
+    function isReadOnly() {
       return tag.root.classList.contains('read-only')
     }
 
-    const init = (max = 5, value = 0) => {
+    function init(max = 5, value = 0) {
       tag.value = value
       tag.defaultValue = value
       tag.items.length = 0
@@ -81,13 +93,13 @@
       parentUpdate()
     }
 
-    const updateView = () => {
+    function updateView() {
       tag.items.forEach(item => {
         item.active = item.value <= tag.value
       })
     }
 
-    const parentUpdate = () => {
+    function parentUpdate() {
       if (tag.parent) {
         tag.parent.update()
       } else {
