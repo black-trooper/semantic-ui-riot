@@ -1,9 +1,20 @@
 riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.label}</a> </div> <yield></yield> <div class="ui {opts.class} {getClass()} menu" if="{isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.label}</a> </div>', '', '', function(opts) {
     const tag = this
-    tag.tabs = []
-    let lastOptsActive, lastActive, active
 
-    tag.on('mount', () => {
+    tag.tabs = []
+
+    tag.click = click
+    tag.clickForTitle = clickForTitle
+    tag.getClass = getClass
+    tag.hasTitle = hasTitle
+    tag.isBottom = isBottom
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    let lastOptsActive, lastActive, active
+    let shownMessage = false
+
+    function onMount() {
       if (tag.tags['su-tab-header']) {
         tag.tags['su-tab-header'].opts.class = getTitleClass()
       }
@@ -28,9 +39,9 @@ riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isB
       })
 
       tag.update()
-    })
+    }
 
-    tag.on('update', () => {
+    function onUpdate() {
       supportTraditionalOptions()
       let changed = false
       if (lastOptsActive != opts.active) {
@@ -70,25 +81,25 @@ riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isB
           }
         }
       }
-    })
+    }
 
-    tag.click = event => {
+    function click(event) {
       active = event.item.tab.opts.label
       tag.update()
       tag.trigger('click', active)
     }
 
-    tag.clickForTitle = title => {
+    function clickForTitle(title) {
       active = title
       tag.update()
       tag.trigger('click', active)
     }
 
-    tag.isBottom = () => {
+    function isBottom() {
       return hasClass('bottom')
     }
 
-    tag.hasTitle = () => {
+    function hasTitle() {
       if (!tag.tags['su-tab-header']) {
         return false
       }
@@ -103,13 +114,13 @@ riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isB
       return titles
     }
 
-    tag.getClass = () => {
+    function getClass() {
       if (hasClass('tabular') && !hasClass('attached')) {
         return 'attached'
       }
     }
 
-    const initializeChild = tab => {
+    function initializeChild(tab) {
       tab.mounted = !opts.lazyMount
       if (tab.opts.class) {
         return
@@ -129,7 +140,7 @@ riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isB
       tab.opts.class = classList.join(' ')
     }
 
-    const getTitleClass = () => {
+    function getTitleClass() {
       const classList = []
       if (hasClass('left') || hasClass('right')) {
         classList.push('vertical')
@@ -147,12 +158,12 @@ riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isB
       return classList.join(' ')
     }
 
-    const hasClass = className => {
+    function hasClass(className) {
+
       return tag.root.classList.contains(className)
     }
 
-    let shownMessage = false
-    const supportTraditionalOptions = () => {
+    function supportTraditionalOptions() {
       tag.tabs.forEach(tab => {
         if (typeof tab.opts.title !== 'undefined') {
           if (!shownMessage) {
@@ -164,5 +175,4 @@ riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isB
         }
       })
     }
-
 });

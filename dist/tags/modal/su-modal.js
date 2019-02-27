@@ -1,25 +1,40 @@
 riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionStatus}"> <div class="ui modal transition visible active {opts.class}" onclick="{clickModal}" id="{getId()}"> <i class="close icon" if="{opts.modal.closable && !isBasic()}" onclick="{hide}"></i> <div class="ui header {icon: opts.modal.header.icon}" if="{opts.modal.header}"> <i class="icon {opts.modal.header.icon}" if="{opts.modal.header.icon}"></i> {(opts.modal.header.text) ? opts.modal.header.text : opts.modal.header} </div> <div class="content {image: isImageContent()}" ref="content"> <yield></yield> </div> <div class="actions"> <button each="{button in opts.modal.buttons}" onclick="{parent.click}" ref="button_{button.text}" type="button" class="ui button {button.type} {labeled: button.icon && button.text} {icon: button.icon} {inverted: parent.isBasic()} {disabled: button.disabled}"> {button.text} <i class="icon {button.icon}" if="{button.icon}"></i> </button> </div> </div> </div>', 'su-modal .ui.dimmer.visible.transition,[data-is="su-modal"] .ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; } su-modal .ui.fullscreen.modal,[data-is="su-modal"] .ui.fullscreen.modal{ left: 0 !important; } @media only screen and (min-width: 768px) { su-modal .ui.modal>.close,[data-is="su-modal"] .ui.modal>.close{ display: none; } su-modal .ui.fullscreen.modal>.close,[data-is="su-modal"] .ui.fullscreen.modal>.close{ display: inline; } }', 'onclick="{dimmerClose}"', function(opts) {
     const tag = this
+
+    tag.click = click
+    tag.clickModal = clickModal
+    tag.dimmerClose = dimmerClose
+    tag.getId = getId
+    tag.hide = hide
+    tag.isBasic = isBasic
+    tag.isImageContent = isImageContent
+    tag.show = show
+    tag.on('before-mount', onBeforeMount)
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
     let image_content = false
     let openning, closing, visible
 
-    if (!opts.modal) {
-      opts.modal = {}
+    function onBeforeMount() {
+      if (!opts.modal) {
+        opts.modal = {}
+      }
     }
 
-    tag.on('mount', () => {
+    function onMount() {
       if (typeof opts.modal.closable === 'undefined') {
         opts.modal.closable = true
       }
-    })
+    }
 
-    tag.on('update', () => {
+    function onUpdate() {
       if (tag.refs.content.getElementsByTagName('img').length > 0) {
         image_content = true
       }
-    })
+    }
 
-    tag.show = () => {
+    function show() {
       if (openning || closing || visible) {
         return
       }
@@ -37,24 +52,24 @@ riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionS
       }, 500)
     }
 
-    tag.click = event => {
+    function click(event) {
       tag.trigger(event.item.action || event.item.text)
       if (typeof event.item.closable === 'undefined' || event.item.closable) {
         tag.hide()
       }
     }
 
-    tag.dimmerClose = () => {
+    function dimmerClose() {
       if (opts.modal.closable && !tag.isBasic()) {
         tag.hide()
       }
     }
 
-    tag.clickModal = event => {
+    function clickModal(event) {
       event.stopPropagation()
     }
 
-    tag.hide = () => {
+    function hide() {
       if (openning || closing || !visible) {
         return
       }
@@ -71,7 +86,7 @@ riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionS
       }, 300)
     }
 
-    const isContainsClassName = className => {
+    function isContainsClassName(className) {
       const modalElement = document.getElementById(tag.getId())
       if (!modalElement) {
         return false
@@ -79,7 +94,7 @@ riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionS
       return modalElement.classList.contains(className)
     }
 
-    const setDefaultFocus = () => {
+    function setDefaultFocus() {
       if (!opts.modal || !opts.modal.buttons || opts.modal.buttons.length == 0) {
         return
       }
@@ -89,15 +104,15 @@ riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionS
       }
     }
 
-    tag.getId = () => {
+    function getId() {
       return `su-modal-${tag._riot_id}`
     }
 
-    tag.isBasic = () => {
+    function isBasic() {
       return isContainsClassName('basic')
     }
 
-    tag.isImageContent = () => {
+    function isImageContent() {
       return image_content
     }
 });

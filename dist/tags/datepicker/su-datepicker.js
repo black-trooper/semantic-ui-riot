@@ -8,12 +8,42 @@ import startOfMonth from 'date-fns/start_of_month'
 riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward}"> <div class="ui action input {disabled: isDisabled()}" if="{opts.popup}"> <input type="text" placeholder="{opts.placeholder}" ref="input" tabindex="{getTabindex()}" readonly="{isReadOnly()}"> <button class="ui icon button {disabled: isDisabled()}" onclick="{toggle}" onblur="{blur}" type="button"> <i class="calendar icon"></i> </button> </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="{getTabindex()}"> <div class="ui compact segments"> <div class="ui center aligned secondary segment"> <div class="ui buttons dp-navigation"> <button class="icon tiny ui button {disabled: isDisabled()} prev" onclick="{clickPrevious}" type="button"> <i class="chevron left icon"></i> </button> <button class="ui button {disabled: isDisabled()} month" onclick="{selectMonth}" type="button">{getCurrentMonthView()}</button> <button class="ui button {disabled: isDisabled()} year" onclick="{selectYear}" type="button">{getCurrentYear()}</button> <button class="icon tiny ui button {disabled: isDisabled()} next" onclick="{clickNext}" type="button"> <i class="chevron right icon"></i> </button> </div> <div class="dp-wrapper"> <div each="{week in getWeekNames()}" class="dp-weekday">{week}</div> </div> </div> <div class="ui center aligned segment" if="{!yearSelecting && !monthSelecting}"> <div each="{week in weeks}" class="dp-wrapper"> <div each="{day in week.days}" class="dp-day"> <button class="ui button {today: isToday(day)} {primary: isActive(day)} {non-active: !isActive(day)} {disabled: day.getMonth() != getCurrentMonth() || isDisabled()}" onclick="{clickDay}" type="button">{day.getDate()}</button> </div> </div> </div> <div class="ui center aligned segment" if="{!yearSelecting && !monthSelecting}"> <div class="ui two column grid"> <div class="column dp-clear"> <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{clickClear}" type="button"><i class="times icon"></i></button> </div> <div class="column dp-today"> <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{clickToday}" type="button"><i class="calendar check icon"></i></button> </div> </div> </div> <div class="ui center aligned segment" if="{monthSelecting}"> <div each="{element in months}" class="dp-wrapper"> <div each="{month in element}" class="dp-month"> <button class="ui button {disabled : isDisabled()}" onclick="{clickMonth}" type="button">{month.label}</button> </div> </div> </div> <div class="ui center aligned segment" if="{yearSelecting}"> <div each="{element in years}" class="dp-wrapper"> <div each="{year in element}" class="dp-month"> <button class="ui button {disabled : isDisabled()}" onclick="{clickYear}" type="button">{year}</button> </div> </div> </div> </div> </div> </div>', 'su-datepicker .ui.segment,[data-is="su-datepicker"] .ui.segment{ padding-top: 0.5rem; padding-bottom: 0.5rem; } su-datepicker .ui.dropdown .menu,[data-is="su-datepicker"] .ui.dropdown .menu{ display: block; } su-datepicker .ui.buttons.dp-navigation,[data-is="su-datepicker"] .ui.buttons.dp-navigation{ margin-bottom: 0.4rem; } su-datepicker .ui.dropdown,[data-is="su-datepicker"] .ui.dropdown{ display: block; } su-datepicker .dp-wrapper,[data-is="su-datepicker"] .dp-wrapper{ display: flex; } su-datepicker .dp-day,[data-is="su-datepicker"] .dp-day,su-datepicker .dp-month,[data-is="su-datepicker"] .dp-month{ cursor: pointer; } su-datepicker .dp-weekday,[data-is="su-datepicker"] .dp-weekday,su-datepicker .dp-day,[data-is="su-datepicker"] .dp-day,su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button{ width: 2.5rem; } su-datepicker .dp-month,[data-is="su-datepicker"] .dp-month,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ width: 4.375rem; } su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ padding: 0; height: 2.5rem; font-weight: normal } su-datepicker .dp-day .ui.button.today,[data-is="su-datepicker"] .dp-day .ui.button.today{ font-weight: 700; } su-datepicker .dp-today .ui.button,[data-is="su-datepicker"] .dp-today .ui.button,su-datepicker .dp-clear .ui.button,[data-is="su-datepicker"] .dp-clear .ui.button,su-datepicker .dp-navigation .ui.button,[data-is="su-datepicker"] .dp-navigation .ui.button,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button,su-datepicker .dp-day .ui.button.non-active,[data-is="su-datepicker"] .dp-day .ui.button.non-active{ background-color: transparent; } su-datepicker .dp-today .ui.button:hover,[data-is="su-datepicker"] .dp-today .ui.button:hover,su-datepicker .dp-clear .ui.button:hover,[data-is="su-datepicker"] .dp-clear .ui.button:hover,su-datepicker .dp-navigation .ui.button:hover,[data-is="su-datepicker"] .dp-navigation .ui.button:hover,su-datepicker .dp-month .ui.button:hover,[data-is="su-datepicker"] .dp-month .ui.button:hover,su-datepicker .dp-day .ui.button.non-active:hover,[data-is="su-datepicker"] .dp-day .ui.button.non-active:hover{ background-color: #e0e1e2; } su-datepicker .dp-day .ui.button.disabled,[data-is="su-datepicker"] .dp-day .ui.button.disabled{ pointer-events: all !important; } su-datepicker .dp-navigation,[data-is="su-datepicker"] .dp-navigation{ width: 100%; } su-datepicker .dp-navigation .ui.button,[data-is="su-datepicker"] .dp-navigation .ui.button{ width: 20%; } su-datepicker .dp-navigation .ui.button.year,[data-is="su-datepicker"] .dp-navigation .ui.button.year,su-datepicker .dp-navigation .ui.button.month,[data-is="su-datepicker"] .dp-navigation .ui.button.month{ width: 30%; }', '', function(opts) {
 
     const tag = this
-    tag.weeks = []
+
+    tag.currentDate = null
+    tag.defaultValue = null
+    tag.transitionStatus = opts.popup ? 'hidden' : 'visible'
     tag.value = null
     tag.valueAsDate = null
-    tag.defaultValue = null
-    tag.currentDate = null
-    tag.transitionStatus = opts.popup ? 'hidden' : 'visible'
+    tag.weeks = []
+
+    tag.mixin('semantic-ui')
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.reset = reset
+    tag.changed = changed
+    tag.selectMonth = selectMonth
+    tag.selectYear = selectYear
+    tag.clickDay = clickDay
+    tag.clickMonth = clickMonth
+    tag.clickYear = clickYear
+    tag.clickPrevious = clickPrevious
+    tag.clickNext = clickNext
+    tag.clickClear = clickClear
+    tag.clickToday = clickToday
+    tag.toggle = toggle
+    tag.mousedown = mousedown
+    tag.mouseup = mouseup
+    tag.blur = blur
+    tag.getCurrentYear = getCurrentYear
+    tag.getCurrentMonthView = getCurrentMonthView
+    tag.getCurrentMonth = getCurrentMonth
+    tag.getWeekNames = getWeekNames
+    tag.isActive = isActive
+    tag.isToday = isToday
+    tag.getTabindex = getTabindex
+    tag.isReadOnly = isReadOnly
+    tag.isDisabled = isDisabled
+
     let visibleFlg = false
     let itemActivated = false
     let lastValue = null
@@ -22,9 +52,7 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
     let lastOptsCurrentDate = null
     let yearRange = 20
 
-    tag.mixin('semantic-ui')
-
-    tag.on('mount', () => {
+    function onMount() {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
@@ -51,9 +79,9 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
       }
       tag.update()
       tag.defaultValue = tag.valueAsDate
-    })
+    }
 
-    tag.on('update', () => {
+    function onUpdate() {
       let changed = false
       if (!isEqualDay(lastValue, tag.value)) {
         tag.valueAsDate = copyDate(tag.value)
@@ -84,29 +112,29 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
         lastCurrentDate = copyDate(tag.currentDate)
         generate()
       }
-    })
+    }
 
-    tag.reset = () => {
+    function reset() {
       tag.valueAsDate = tag.defaultValue
       setValueFromValueAsDate()
     }
 
-    tag.changed = () => {
+    function changed() {
       return !isEqualDay(tag.valueAsDate, tag.defaultValue)
     }
 
-    tag.selectMonth = () => {
+    function selectMonth() {
       tag.yearSelecting = false
       tag.monthSelecting = !tag.monthSelecting
     }
 
-    tag.selectYear = () => {
+    function selectYear() {
       tag.years = getYears()
       tag.monthSelecting = false
       tag.yearSelecting = !tag.yearSelecting
     }
 
-    tag.clickDay = event => {
+    function clickDay(event) {
       if (tag.isReadOnly() || tag.isDisabled()) {
         return
       }
@@ -114,17 +142,17 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
       tag.trigger('click', tag.valueAsDate)
     }
 
-    tag.clickMonth = event => {
+    function clickMonth(event) {
       tag.currentDate.setMonth(event.item.month.value)
       tag.monthSelecting = false
     }
 
-    tag.clickYear = event => {
+    function clickYear(event) {
       tag.currentDate.setYear(event.item.year)
       tag.selectMonth()
     }
 
-    tag.clickPrevious = () => {
+    function clickPrevious() {
       if (tag.yearSelecting) {
         addYear(-yearRange)
       } else {
@@ -133,7 +161,7 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
       }
     }
 
-    tag.clickNext = () => {
+    function clickNext() {
       if (tag.yearSelecting) {
         addYear(yearRange)
       } else {
@@ -142,17 +170,17 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
       }
     }
 
-    tag.clickClear = () => {
+    function clickClear() {
       setDate(null)
       tag.trigger('clear', tag.valueAsDate)
     }
 
-    tag.clickToday = () => {
+    function clickToday() {
       setDate(new Date())
       tag.trigger('today', tag.valueAsDate)
     }
 
-    tag.toggle = () => {
+    function toggle() {
       if (tag.isReadOnly() || tag.isDisabled()) {
         return
       }
@@ -167,21 +195,21 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
       }
     }
 
-    tag.mousedown = () => {
+    function mousedown() {
       itemActivated = true
     }
 
-    tag.mouseup = () => {
+    function mouseup() {
       itemActivated = false
     }
 
-    tag.blur = () => {
+    function blur() {
       if (opts.popup && !itemActivated) {
         close()
       }
     }
 
-    const generate = () => {
+    function generate() {
       const startDate = startOfMonth(tag.currentDate)
       const baseDate = addDays(startDate, - startDate.getDay())
       let i = 0
@@ -196,7 +224,7 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
       }
     }
 
-    const addYear = year => {
+    function addYear(year) {
       tag.years = tag.years.map(values => {
         values = values.map(value => {
           return value + parseInt(year)
@@ -205,7 +233,7 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
       })
     }
 
-    const getYears = () => {
+    function getYears() {
       const rowSize = ((yearRange - yearRange % 4) / 4) + ((yearRange % 4 != 0) ? 1 : 0)
       const years = new Array()
       for (let index = 0; index < rowSize; index++) {
@@ -217,7 +245,7 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
       return years
     }
 
-    const getMonthes = () => {
+    function getMonthes() {
       const months = [[], [], []]
       const monthNames = range(12).map(month => format(new Date(2018, month, 1), 'MMM', { locale: getLocale() }))
       monthNames.forEach((month, index) => {
@@ -229,7 +257,7 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
       return months
     }
 
-    const open = () => {
+    function open() {
       tag.upward = isUpward()
       tag.transitionStatus = 'visible'
       visibleFlg = true
@@ -243,13 +271,13 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
       tag.trigger('open', tag.valueAsDate)
     }
 
-    const close = () => {
+    function close() {
       tag.transitionStatus = 'hidden'
       visibleFlg = false
       tag.trigger('close', tag.valueAsDate)
     }
 
-    const setDate = date => {
+    function setDate(date) {
       tag.valueAsDate = date
       setValueFromValueAsDate()
       if (tag.refs.input) {
@@ -259,11 +287,11 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
       tag.trigger('change', tag.valueAsDate)
     }
 
-    const setValueFromValueAsDate = () => {
+    function setValueFromValueAsDate() {
       tag.value = tag.valueAsDate ? format(tag.valueAsDate, getPattern(), { locale: getLocale() }) : null
     }
 
-    const isEqualDay = (d1, d2) => {
+    function isEqualDay(d1, d2) {
       if (d1 == d2) {
         return true
       }
@@ -273,14 +301,14 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
       return isSameDay(d1, d2)
     }
 
-    const copyDate = date => {
+    function copyDate(date) {
       if (!date) {
         return date
       }
       return parse(date)
     }
 
-    const isUpward = () => {
+    function isUpward() {
       if (opts.direction == 'upward') {
         return true
       }
@@ -302,35 +330,31 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
       return true
     }
 
-    tag.getCurrentYear = () => {
+    function getCurrentYear() {
       if (tag.currentDate) {
         return tag.currentDate.getFullYear()
       }
     }
 
-    tag.getCurrentMonthView = () => {
+    function getCurrentMonthView() {
       if (tag.currentDate) {
         return format(tag.currentDate, 'MMM', { locale: getLocale() })
       }
     }
 
-    tag.getCurrentMonth = () => {
+    function getCurrentMonth() {
       return tag.currentDate.getMonth()
     }
 
-    tag.getWeekNames = () => {
+    function getWeekNames() {
       return range(7, 1).map(day => format(new Date(2018, 6, day), 'dd', { locale: getLocale() }))
     }
 
-    tag.isActive = date => {
+    function isActive(date) {
       return isEqualDay(tag.valueAsDate, date)
     }
 
-    tag.isToday = date => {
-      return isToday(date)
-    }
-
-    tag.getTabindex = () => {
+    function getTabindex() {
       if (!opts.popup) {
         return false
       }
@@ -340,14 +364,14 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
       return 0
     }
 
-    tag.isReadOnly = () => {
+    function isReadOnly() {
       return tag.root.classList.contains('read-only')
     }
-    tag.isDisabled = () => {
+    function isDisabled() {
       return tag.root.classList.contains('disabled')
     }
 
-    const getPattern = () => {
+    function getPattern() {
       if (opts.pattern) {
         return opts.pattern
       }
@@ -357,7 +381,7 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
       return 'YYYY-MM-DD'
     }
 
-    const getLocale = () => {
+    function getLocale() {
       if (opts.locale) {
         return opts.locale
       }
@@ -366,7 +390,7 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
       }
     }
 
-    const range = (size, startAt = 0) => {
+    function range(size, startAt = 0) {
       return Array.from(Array(size).keys()).map(i => i + startAt)
     }
 });

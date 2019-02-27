@@ -1,11 +1,15 @@
 riot.tag2('su-confirm', '<su-modal class="tiny" ref="modal" modal="{modal}"> <div class="ui icon message"> <i class="question circle outline icon"></i> <div class="scrolling content"> <div class="header" if="{parent.title}"> {parent.title} </div> <p each="{messsage in parent.messages}">{messsage}</p> </div> </div> </su-modal>', 'su-confirm .ui.dimmer,[data-is="su-confirm"] .ui.dimmer{ z-index: 1010; } su-confirm .ui.modal,[data-is="su-confirm"] .ui.modal{ z-index: 1011; } su-confirm .ui.message,[data-is="su-confirm"] .ui.message{ background: none; box-shadow: none; }', '', function(opts) {
     const tag = this
-    tag.mixin('semantic-ui')
 
     tag.modal = {
       closable: false,
       buttons: []
     }
+
+    tag.mixin('semantic-ui')
+    tag.observable.on('showConfirm', showConfirm)
+    tag.on('mount', onMount)
+
     let reverse = false
     const cancelButton = {
       action: 'negativeAction'
@@ -13,8 +17,11 @@ riot.tag2('su-confirm', '<su-modal class="tiny" ref="modal" modal="{modal}"> <di
     const okButton = {
       action: 'positiveAction'
     }
+    riot.mixin({
+      suConfirm
+    })
 
-    tag.on('mount', () => {
+    function onMount() {
       let defaultOkButton = {}
       let defaultCancelButton = {}
       reverse = false
@@ -53,9 +60,9 @@ riot.tag2('su-confirm', '<su-modal class="tiny" ref="modal" modal="{modal}"> <di
       tag.refs.modal.on('negativeAction', () => {
         tag.observable.trigger('callbackConfirm', false)
       })
-    })
+    }
 
-    const setButtons = option => {
+    function setButtons(option) {
       const cancel = {
         text: option.buttons.cancel.text || cancelButton.text,
         type: option.buttons.cancel.type !== null ? option.buttons.cancel.type : cancelButton.type,
@@ -83,63 +90,61 @@ riot.tag2('su-confirm', '<su-modal class="tiny" ref="modal" modal="{modal}"> <di
       tag.modal.buttons.push((option.reverse || reverse) ? cancel : ok)
     }
 
-    tag.observable.on('showConfirm', option => {
+    function showConfirm(option) {
       tag.title = option.title
       tag.messages = Array.isArray(option.message) ? option.message : [option.message]
       setButtons(option)
       tag.update()
       tag.refs.modal.show()
-    })
+    }
 
-    riot.mixin({
-      suConfirm: param => {
-        const option = {
-          title: null,
-          message: null,
-          reverse: null,
-          buttons: {
-            ok: {
-              text: null,
-              default: null,
-              type: null,
-              icon: null,
-            },
-            cancel: {
-              text: null,
-              default: null,
-              type: null,
-              icon: null,
-            },
+    function suConfirm(param) {
+      const option = {
+        title: null,
+        message: null,
+        reverse: null,
+        buttons: {
+          ok: {
+            text: null,
+            default: null,
+            type: null,
+            icon: null,
           },
-        }
-        if (typeof param === 'string') {
-          option.message = param
-        } else if (param) {
-          if (param.title) {
-            option.title = param.title
-          }
-          if (param.message) {
-            option.message = param.message
-          }
-          if (param.reverse) {
-            option.reverse = param.reverse
-          }
-          if (param.buttons) {
-            if (param.buttons.ok) {
-              option.buttons.ok = param.buttons.ok
-            }
-            if (param.buttons.cancel) {
-              option.buttons.cancel = param.buttons.cancel
-            }
-          }
-        }
-
-        return tag.Q.Promise((resolve, reject) => {
-          tag.observable.trigger('showConfirm', option)
-          tag.observable.on('callbackConfirm', result => {
-            return result ? resolve() : reject()
-          })
-        })
+          cancel: {
+            text: null,
+            default: null,
+            type: null,
+            icon: null,
+          },
+        },
       }
-    })
+      if (typeof param === 'string') {
+        option.message = param
+      } else if (param) {
+        if (param.title) {
+          option.title = param.title
+        }
+        if (param.message) {
+          option.message = param.message
+        }
+        if (param.reverse) {
+          option.reverse = param.reverse
+        }
+        if (param.buttons) {
+          if (param.buttons.ok) {
+            option.buttons.ok = param.buttons.ok
+          }
+          if (param.buttons.cancel) {
+            option.buttons.cancel = param.buttons.cancel
+          }
+        }
+      }
+
+      return tag.Q.Promise((resolve, reject) => {
+        tag.observable.trigger('showConfirm', option)
+        tag.observable.on('callbackConfirm', result => {
+          return result ? resolve() : reject()
+        })
+      })
+    }
 });

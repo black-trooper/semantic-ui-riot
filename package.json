@@ -49,6 +49,7 @@
     "eslint-loader": "^2.0.0",
     "eslint-plugin-html": "^3.1.1",
     "htmlhint-loader": "^1.3.1",
+    "htmlhint-riot-rules": "^0.3.7",
     "istanbul-instrumenter-loader": "^3.0.1",
     "jquery": "^3.3.1",
     "karma": "^3.0.0",

@@ -44,34 +44,43 @@
 
   <script>
     const tag = this
-    tag.selectedFlg = false
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+    tag.defaultValue = ''
     tag.filtered = false
+    tag.label = ''
+    tag.selectedFlg = false
     tag.transitionStatus = 'hidden'
     tag.value = ''
-    tag.label = ''
-    tag.defaultValue = ''
 
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
     tag.blur = blur
     tag.changed = changed
     tag.focus = focus
     tag.getTabindex = getTabindex
     tag.isActive = isActive
     tag.isDisabled = isDisabled
+    tag.input = input
     tag.isItem = isItem
-    tag.isReadOnly = isReadOnly
-    tag.on('mount', onMount)
-    tag.on('update', onUpdate)
-    tag.mousedown = mousedown
-    tag.mouseup = mouseup
-    tag.reset = reset
-    tag.toggle = toggle
     tag.itemClick = itemClick
+    tag.isReadOnly = isReadOnly
     tag.keydown = keydown
     tag.keyup = keyup
+    tag.mousedown = mousedown
+    tag.mouseup = mouseup
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.reset = reset
     tag.stopPropagation = stopPropagation
-    tag.input = input
+    tag.toggle = toggle
     tag.unselect = unselect
 
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
     let visibleFlg = false
     const keys = {
       enter: 13,
@@ -80,13 +89,15 @@
       downArrow: 40,
     }
 
-    if (opts.items && opts.items.length > 0) {
-      tag.label = opts.items[0].label
-      tag.value = opts.items[0].value
-      tag.default = opts.items[0].default
-    }
-
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
     function onMount() {
+      if (opts.items && opts.items.length > 0) {
+        tag.label = opts.items[0].label
+        tag.value = opts.items[0].value
+        tag.default = opts.items[0].default
+      }
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
@@ -124,9 +135,6 @@
       }
     }
 
-    // ===================================================================================
-    //                                                                               State
-    //                                                                               =====
     function reset() {
       tag.value = tag.defaultValue
     }
@@ -140,9 +148,6 @@
       return tag.value !== tag.defaultValue
     }
 
-    // ===================================================================================
-    //                                                                               Event
-    //                                                                               =====
     function toggle() {
       if (!visibleFlg) {
         open()
@@ -291,9 +296,6 @@
       parentUpdate()
     }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
     function open() {
       if (tag.openning || tag.closing || visibleFlg || tag.isReadOnly() || tag.isDisabled()) {
         return
@@ -344,7 +346,7 @@
       tag.trigger('close')
     }
 
-    const selectTarget = (target, updating) => {
+    function selectTarget(target, updating) {
       if (tag.value === target.value &&
         tag.label === target.label &&
         tag.default === target.default) {
@@ -368,7 +370,7 @@
       }
     }
 
-    const selectMultiTarget = (updating) => {
+    function selectMultiTarget(updating) {
       if (JSON.stringify(tag.value) == JSON.stringify(opts.items.filter(item => item.selected).map(item => item.value))
         && tag.selectedFlg == opts.items.some(item => item.selected)) {
         if (!updating) {
@@ -386,7 +388,7 @@
       }
     }
 
-    const search = target => {
+    function search(target) {
       opts.items.forEach(item => {
         item.searched = item.label && item.label.toLowerCase().indexOf(target) >= 0
       })
@@ -442,9 +444,6 @@
       return true
     }
 
-    // ===================================================================================
-    //                                                                              Helper
-    //                                                                              ======
     function isItem(item) {
       return item.searched && !item.header && !item.divider
     }

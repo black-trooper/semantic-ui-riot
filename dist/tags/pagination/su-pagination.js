@@ -1,18 +1,24 @@
 riot.tag2('su-pagination', '<div class="ui pagination menu {opts.class}"> <a class="icon item {disabled: activePage <= 1}" onclick="{clickPage.bind(this,1)}"> <i aria-hidden="true" class="angle double left icon"></i> </a> <a class="icon item {disabled: activePage <= 1}" onclick="{clickPage.bind(this,activePage - 1)}"> <i class="angle left icon"></i> </a> <virtual each="{page in pages}"> <a class="item" onclick="{clickPage.bind(this,page.number)}" if="{!page.active && !page.disabled}"> {page.number} </a> <a class="active item" if="{page.active}">{page.number}</a> <div class="disabled icon item" if="{page.disabled}"> <i class="ellipsis horizontal icon"></i> </div> </virtual> <a class="icon item {disabled: activePage >= totalPages}" onclick="{clickPage.bind(this,activePage + 1)}"> <i class="angle right icon"></i> </a> <a class="icon item {disabled: activePage >= totalPages}" onclick="{clickPage.bind(this,totalPages )}"> <i aria-hidden="true" class="angle double right icon"></i> </a> </div>', '', '', function(opts) {
     const tag = this
+
     tag.activePage = 1
-    tag.totalPages = 1
     tag.pages = []
+    tag.totalPages = 1
+
+    tag.clickPage = clickPage
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    let lastActivePage = null
     let lastOptsTotalPages = null
     let lastOptsActivePage = null
     let lastTotalPages = null
-    let lastActivePage = null
 
-    tag.on('mount', () => {
+    function onMount() {
       tag.update()
-    })
+    }
 
-    tag.on('update', () => {
+    function onUpdate() {
       let needsRegenerate = false
       if (opts.activePage != lastOptsActivePage) {
         lastOptsActivePage = opts.activePage
@@ -38,9 +44,9 @@ riot.tag2('su-pagination', '<div class="ui pagination menu {opts.class}"> <a cla
       if (needsRegenerate) {
         generatePagination()
       }
-    })
+    }
 
-    tag.clickPage = (pageNum, e) => {
+    function clickPage(pageNum, e) {
       e.preventDefault()
       if (pageNum < 1 || pageNum > tag.totalPages) {
         return
@@ -50,7 +56,7 @@ riot.tag2('su-pagination', '<div class="ui pagination menu {opts.class}"> <a cla
       tag.trigger('change', pageNum)
     }
 
-    const generatePagination = () => {
+    function generatePagination() {
       tag.pages = []
       const activePage = parseInt(tag.activePage || 1)
       const totalPages = parseInt(tag.totalPages || 1)
@@ -80,12 +86,12 @@ riot.tag2('su-pagination', '<div class="ui pagination menu {opts.class}"> <a cla
       tag.update()
     }
 
-    const calcPageSize = () => {
+    function calcPageSize() {
       const pageSize = parseInt(opts.pageSize || 7)
       return pageSize < tag.totalPages ? pageSize : tag.totalPages
     }
 
-    const calcIndex = pageSize => {
+    function calcIndex(pageSize) {
       const activePage = parseInt(tag.activePage || 1)
       const totalPages = parseInt(tag.totalPages || 1)
       const prevPageSize = (pageSize - pageSize % 2) / 2

@@ -38,13 +38,32 @@
 
   <script>
     const tag = this
-    tag.value = null
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
     tag.defaultValue = null
-    let total = 100
-    let lastValue = null
-    let lastOptsValue = null
+    tag.value = null
 
-    tag.on('mount', () => {
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.getClass = getClass
+    tag.getStates = getStates
+    tag.isProgress = isProgress
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
+    let lastOptsValue = null
+    let lastValue = null
+    let total = 100
+
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
@@ -52,9 +71,9 @@
 
       tag.update()
       tag.defaultValue = tag.value
-    })
+    }
 
-    tag.on('update', () => {
+    function onUpdate() {
       let changed = false
       if (tag.value >= total) {
         tag.value = total
@@ -75,19 +94,16 @@
       if (changed) {
         tag.percent = getPercent()
       }
-    })
+    }
 
-    // ===================================================================================
-    //                                                                              Helper
-    //                                                                              ======
-    tag.getClass = () => {
+    function getClass() {
       const excludeClasses = ['progress', 'active']
       return Array.apply(null, tag.root.classList).filter(clazz => {
         return !excludeClasses.some(excludeClass => excludeClass == clazz)
       }).join(' ')
     }
 
-    tag.getStates = () => {
+    function getStates() {
       if (isSuccess()) {
         return 'success'
       }
@@ -96,14 +112,11 @@
       }
     }
 
-    tag.isProgress = () => {
+    function isProgress() {
       return hasClass('progress')
     }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
-    const init = (optsValue, optsTotal) => {
+    function init(optsValue, optsTotal) {
       if (tag.value == null) {
         tag.value = optsValue || 0
       }
@@ -115,19 +128,19 @@
       lastOptsValue = optsValue
     }
 
-    const getPercent = () => {
+    function getPercent() {
       return parseInt(tag.value / total * 100)
     }
 
-    const isActive = () => {
+    function isActive() {
       return hasClass('active') && tag.percent > 0 && tag.percent < 100
     }
 
-    const isSuccess = () => {
+    function isSuccess() {
       return tag.percent == 100
     }
 
-    const hasClass = className => {
+    function hasClass(className) {
       return tag.root.classList.contains(className)
     }
   </script>

@@ -1,24 +1,33 @@
 riot.tag2('su-rating', '<i class="icon {active: item.active} {selected: item.selected}" each="{item in items}" onclick="{parent.click.bind(this, item)}" onmouseover="{parent.mouseover.bind(this, item)}" onmouseout="{parent.mouseout}"></i>', '', 'class="ui rating {opts.class}"', function(opts) {
     const tag = this
+
     tag.items = []
 
-    tag.on('mount', () => {
+    tag.reset = reset
+    tag.changed = changed
+    tag.click = click
+    tag.mouseout = mouseout
+    tag.mouseover = mouseover
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    function onMount() {
       init(opts.max, opts.value)
-    })
+    }
 
-    tag.on('update', () => {
+    function onUpdate() {
       updateView()
-    })
+    }
 
-    tag.reset = () => {
+    function reset() {
       tag.value = tag.defaultValue
     }
 
-    tag.changed = () => {
+    function changed() {
       return tag.value != tag.defaultValue
     }
 
-    tag.click = target => {
+    function click(target) {
       if (isReadOnly()) {
         return
       }
@@ -37,7 +46,7 @@ riot.tag2('su-rating', '<i class="icon {active: item.active} {selected: item.sel
       }
     }
 
-    tag.mouseover = target => {
+    function mouseover(target) {
       if (isReadOnly()) {
         return
       }
@@ -46,17 +55,17 @@ riot.tag2('su-rating', '<i class="icon {active: item.active} {selected: item.sel
       })
     }
 
-    tag.mouseout = () => {
+    function mouseout() {
       tag.items.forEach(item => {
         item.selected = false
       })
     }
 
-    const isReadOnly = () => {
+    function isReadOnly() {
       return tag.root.classList.contains('read-only')
     }
 
-    const init = (max = 5, value = 0) => {
+    function init(max = 5, value = 0) {
       tag.value = value
       tag.defaultValue = value
       tag.items.length = 0
@@ -67,13 +76,13 @@ riot.tag2('su-rating', '<i class="icon {active: item.active} {selected: item.sel
       parentUpdate()
     }
 
-    const updateView = () => {
+    function updateView() {
       tag.items.forEach(item => {
         item.active = item.value <= tag.value
       })
     }
 
-    const parentUpdate = () => {
+    function parentUpdate() {
       if (tag.parent) {
         tag.parent.update()
       } else {

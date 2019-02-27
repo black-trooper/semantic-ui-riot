@@ -27,19 +27,36 @@
 
   <script>
     const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
     tag.activePage = 1
-    tag.totalPages = 1
     tag.pages = []
+    tag.totalPages = 1
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.clickPage = clickPage
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
+    let lastActivePage = null
     let lastOptsTotalPages = null
     let lastOptsActivePage = null
     let lastTotalPages = null
-    let lastActivePage = null
 
-    tag.on('mount', () => {
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
       tag.update()
-    })
+    }
 
-    tag.on('update', () => {
+    function onUpdate() {
       let needsRegenerate = false
       if (opts.activePage != lastOptsActivePage) {
         lastOptsActivePage = opts.activePage
@@ -65,12 +82,9 @@
       if (needsRegenerate) {
         generatePagination()
       }
-    })
+    }
 
-    // ===================================================================================
-    //                                                                               Event
-    //                                                                               =====
-    tag.clickPage = (pageNum, e) => {
+    function clickPage(pageNum, e) {
       e.preventDefault()
       if (pageNum < 1 || pageNum > tag.totalPages) {
         return
@@ -80,10 +94,7 @@
       tag.trigger('change', pageNum)
     }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
-    const generatePagination = () => {
+    function generatePagination() {
       tag.pages = []
       const activePage = parseInt(tag.activePage || 1)
       const totalPages = parseInt(tag.totalPages || 1)
@@ -113,12 +124,12 @@
       tag.update()
     }
 
-    const calcPageSize = () => {
+    function calcPageSize() {
       const pageSize = parseInt(opts.pageSize || 7)
       return pageSize < tag.totalPages ? pageSize : tag.totalPages
     }
 
-    const calcIndex = pageSize => {
+    function calcIndex(pageSize) {
       const activePage = parseInt(tag.activePage || 1)
       const totalPages = parseInt(tag.totalPages || 1)
       const prevPageSize = (pageSize - pageSize % 2) / 2

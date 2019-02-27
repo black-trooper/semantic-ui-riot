@@ -3,13 +3,31 @@
 
   <script>
     const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+    tag.defaultValue = ''
     tag.label = ''
     tag.value = ''
-    tag.defaultValue = ''
-    let lastValue
-    let lastOptsValue
 
-    tag.on('mount', () => {
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.changed = changed
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.reset = reset
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
+    let lastOptsValue
+    let lastValue
+
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
@@ -31,9 +49,9 @@
 
       tag.defaultValue = tag.value
       tag.update()
-    })
+    }
 
-    tag.on('update', () => {
+    function onUpdate() {
       let changed = false
       if (lastValue != tag.value) {
         opts.riotValue = tag.value
@@ -59,23 +77,17 @@
       if (changed) {
         tag.trigger('change', tag.value)
       }
-    })
+    }
 
-    // ===================================================================================
-    //                                                                               State
-    //                                                                               =====
-    tag.reset = () => {
+    function reset() {
       tag.value = tag.defaultValue
     }
 
-    tag.changed = () => {
+    function changed() {
       return tag.value !== tag.defaultValue
     }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
-    const updateState = radio => {
+    function updateState(radio) {
       if (typeof radio.opts.value === 'undefined') {
         return
       }
@@ -85,7 +97,7 @@
       }
     }
 
-    const initializeChild = radio => {
+    function initializeChild(radio) {
       radio.opts.name = getRadioName()
       radio.on('click', value => {
         tag.value = value
@@ -93,7 +105,7 @@
       })
     }
 
-    const getRadioName = () => {
+    function getRadioName() {
       return `su-radio-name-${tag._riot_id}`
     }
   </script>

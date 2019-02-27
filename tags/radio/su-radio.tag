@@ -17,12 +17,32 @@
 
   <script>
     const tag = this
-    tag.name = ''
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
     tag.checked = false
+    tag.name = ''
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.click = click
+    tag.getId = getId
+    tag.isDisabled = isDisabled
+    tag.isRadio = isRadio
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
     let lastChecked
     let lastOptsCheck
 
-    tag.on('mount', () => {
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
       if (tag.checked) {
         opts.checked = tag.checked
       } else {
@@ -31,9 +51,9 @@
       lastChecked = tag.checked
       lastOptsCheck = opts.checked
       tag.update()
-    })
+    }
 
-    tag.on('update', () => {
+    function onUpdate() {
       tag.name = opts.name
       tag.value = opts.value
       if (lastChecked != tag.checked) {
@@ -43,12 +63,9 @@
         tag.checked = opts.checked
         lastOptsCheck = opts.checked
       }
-    })
+    }
 
-    // ===================================================================================
-    //                                                                               Event
-    //                                                                               =====
-    tag.click = event => {
+    function click(event) {
       if (isReadOnly() || tag.isDisabled()) {
         event.preventDefault()
         return
@@ -57,25 +74,19 @@
       tag.trigger('click', event.target.value)
     }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
-    const isReadOnly = () => {
+    function isReadOnly() {
       return tag.root.classList.contains('read-only')
     }
 
-    // ===================================================================================
-    //                                                                              Helper
-    //                                                                              ======
-    tag.getId = () => {
+    function getId() {
       return `su-radio-${tag._riot_id}`
     }
 
-    tag.isDisabled = () => {
+    function isDisabled() {
       return tag.root.classList.contains('disabled')
     }
 
-    tag.isRadio = () => {
+    function isRadio() {
       return !tag.root.classList.contains('slider')
     }
   </script>

@@ -94,8 +94,28 @@
 
   <script>
     const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
     tag.content = ''
-    tag.on('mount', () => {
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.getId = getId
+    tag.isNowrap = isNowrap
+    tag.mouseover = mouseover
+    tag.mouseout = mouseout
+    tag.on('mount', onMount)
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
+
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
       if (!opts.position) {
         opts.position = 'top left'
       }
@@ -112,32 +132,26 @@
       }
       document.getElementById(tag.getId()).innerHTML = tag.content
       tag.update()
-    })
+    }
 
-    // ===================================================================================
-    //                                                                               Event
-    //                                                                               =====
-    tag.mouseover = () => {
+    function mouseover() {
       tag.transitionStatus = 'visible'
       tag.trigger('mouseover')
     }
 
-    tag.mouseout = () => {
+    function mouseout() {
       tag.transitionStatus = 'hidden'
       tag.trigger('mouseout')
     }
 
-    // ===================================================================================
-    //                                                                              Helper
-    //                                                                              ======
-    tag.isNowrap = () => {
+    function isNowrap() {
       if (opts.dataVariation && opts.dataVariation.indexOf('wide') >= 0) {
         return false
       }
       return true
     }
 
-    tag.getId = () => {
+    function getId() {
       return `su-popup-${tag._riot_id}`
     }
   </script>

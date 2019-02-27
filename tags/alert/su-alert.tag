@@ -32,18 +32,32 @@
 
   <script>
     const tag = this
-    tag.mixin('semantic-ui')
-
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
     tag.modal = {
       closable: false,
       buttons: []
     }
 
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.mixin('semantic-ui')
     tag.observable.on('showAlert', showAlert)
     tag.on('mount', onMount)
 
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
     const button = {}
+    riot.mixin({
+      suAlert
+    })
 
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
     function onMount() {
       let defaultButton = {}
       if (tag.defaultOptions && tag.defaultOptions.alert && tag.defaultOptions.alert.button) {
@@ -87,41 +101,39 @@
       tag.refs.modal.show()
     }
 
-    riot.mixin({
-      suAlert: param => {
-        const option = {
-          title: null,
-          message: null,
-          button: {
-            text: null,
-            default: null,
-            type: null,
-            icon: null,
-          },
-        }
-
-        if (typeof param === 'string') {
-          option.message = param
-        } else if (param) {
-          if (param.title) {
-            option.title = param.title
-          }
-          if (param.message) {
-            option.message = param.message
-          }
-          if (param.button) {
-            option.button = param.button
-          }
-        }
-
-        return tag.Q.Promise(resolve => {
-          tag.observable.trigger('showAlert', option)
-          tag.observable.on('callbackConfirm', () => {
-            tag.refs.modal.hide()
-            return resolve()
-          })
-        })
+    function suAlert(param) {
+      const option = {
+        title: null,
+        message: null,
+        button: {
+          text: null,
+          default: null,
+          type: null,
+          icon: null,
+        },
       }
-    })
+
+      if (typeof param === 'string') {
+        option.message = param
+      } else if (param) {
+        if (param.title) {
+          option.title = param.title
+        }
+        if (param.message) {
+          option.message = param.message
+        }
+        if (param.button) {
+          option.button = param.button
+        }
+      }
+
+      return tag.Q.Promise(resolve => {
+        tag.observable.trigger('showAlert', option)
+        tag.observable.on('callbackConfirm', () => {
+          tag.refs.modal.hide()
+          return resolve()
+        })
+      })
+    }
   </script>
 </su-alert>

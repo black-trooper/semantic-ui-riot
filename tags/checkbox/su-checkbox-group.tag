@@ -3,18 +3,30 @@
 
   <script>
     const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
     tag.label = ''
     tag.value = ''
     tag.defaultValue = ''
 
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
     tag.changed = changed
     tag.on('mount', onMount)
     tag.on('update', onUpdate)
     tag.reset = reset
 
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
     let lastValue
     let lastOptsValue
 
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
     function onMount() {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
@@ -72,9 +84,6 @@
       }
     }
 
-    // ===================================================================================
-    //                                                                               State
-    //                                                                               =====
     function reset() {
       tag.value = tag.defaultValue
     }
@@ -83,9 +92,6 @@
       return tag.value !== tag.defaultValue
     }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
     function updateState(checkbox) {
       if (typeof checkbox.opts.value === 'undefined' || typeof tag.value === 'undefined') {
         return

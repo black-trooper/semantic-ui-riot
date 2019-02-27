@@ -46,17 +46,41 @@
 
   <script>
     const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
     tag.defaultValue = ''
     tag.value = ''
     tag.label = ''
 
-    if (opts.items && opts.items.length > 0) {
-      tag.label = opts.items[0].label
-      tag.value = opts.items[0].value
-      tag.default = opts.items[0].default
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.blur = blur
+    tag.change = change
+    tag.changed = changed
+    tag.changeValues = changeValues
+    tag.reset = reset
+    tag.on('before-mount', onBeforeMount)
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
+
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onBeforeMount() {
+      if (opts.items && opts.items.length > 0) {
+        tag.label = opts.items[0].label
+        tag.value = opts.items[0].value
+        tag.default = opts.items[0].default
+      }
     }
 
-    tag.on('mount', () => {
+    function onMount() {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
@@ -67,9 +91,9 @@
       } else {
         tag.defaultValue = tag.value
       }
-    })
+    }
 
-    tag.on('update', () => {
+    function onUpdate() {
       if (opts.items) {
         let selected = opts.items.filter(item => item.value === tag.value)
         if (!selected || selected.length == 0) {
@@ -92,31 +116,31 @@
           }
         }
       }
-    })
+    }
 
     // ===================================================================================
     //                                                                               State
     //                                                                               =====
-    tag.reset = () => {
+    function reset() {
       tag.value = tag.defaultValue
     }
 
-    tag.changed = () => {
+    function changed() {
       return tag.value !== tag.defaultValue
     }
 
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
-    tag.blur = () => {
+    function blur() {
       tag.trigger('blur')
     }
 
-    tag.change = target => {
+    function change(target) {
       tag.changeValues(target.target.value)
     }
 
-    tag.changeValues = (value, updating) => {
+    function changeValues(value, updating) {
       let item
       if (opts.items.some(item => item.value == value || item.label == value)) {
         item = opts.items.filter(item => item.value == value || item.label == value)[0]
@@ -142,7 +166,7 @@
     // ===================================================================================
     //                                                                               Logic
     //                                                                               =====
-    const flatMap = (xs, f) => {
+    function flatMap(xs, f) {
       return xs.reduce(function (ys, x) {
         return ys.concat(f(x))
       }, [])

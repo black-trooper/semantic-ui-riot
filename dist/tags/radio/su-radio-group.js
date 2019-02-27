@@ -1,12 +1,19 @@
 riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
     const tag = this
+
+    tag.defaultValue = ''
     tag.label = ''
     tag.value = ''
-    tag.defaultValue = ''
-    let lastValue
-    let lastOptsValue
 
-    tag.on('mount', () => {
+    tag.changed = changed
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.reset = reset
+
+    let lastOptsValue
+    let lastValue
+
+    function onMount() {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
@@ -28,9 +35,9 @@ riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
 
       tag.defaultValue = tag.value
       tag.update()
-    })
+    }
 
-    tag.on('update', () => {
+    function onUpdate() {
       let changed = false
       if (lastValue != tag.value) {
         opts.riotValue = tag.value
@@ -56,17 +63,17 @@ riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
       if (changed) {
         tag.trigger('change', tag.value)
       }
-    })
+    }
 
-    tag.reset = () => {
+    function reset() {
       tag.value = tag.defaultValue
     }
 
-    tag.changed = () => {
+    function changed() {
       return tag.value !== tag.defaultValue
     }
 
-    const updateState = radio => {
+    function updateState(radio) {
       if (typeof radio.opts.value === 'undefined') {
         return
       }
@@ -76,7 +83,7 @@ riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
       }
     }
 
-    const initializeChild = radio => {
+    function initializeChild(radio) {
       radio.opts.name = getRadioName()
       radio.on('click', value => {
         tag.value = value
@@ -84,7 +91,7 @@ riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
       })
     }
 
-    const getRadioName = () => {
+    function getRadioName() {
       return `su-radio-name-${tag._riot_id}`
     }
 });

@@ -154,12 +154,50 @@
     import startOfMonth from 'date-fns/start_of_month'
 
     const tag = this
-    tag.weeks = []
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+    tag.currentDate = null
+    tag.defaultValue = null
+    tag.transitionStatus = opts.popup ? 'hidden' : 'visible'
     tag.value = null
     tag.valueAsDate = null
-    tag.defaultValue = null
-    tag.currentDate = null
-    tag.transitionStatus = opts.popup ? 'hidden' : 'visible'
+    tag.weeks = []
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.mixin('semantic-ui')
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.reset = reset
+    tag.changed = changed
+    tag.selectMonth = selectMonth
+    tag.selectYear = selectYear
+    tag.clickDay = clickDay
+    tag.clickMonth = clickMonth
+    tag.clickYear = clickYear
+    tag.clickPrevious = clickPrevious
+    tag.clickNext = clickNext
+    tag.clickClear = clickClear
+    tag.clickToday = clickToday
+    tag.toggle = toggle
+    tag.mousedown = mousedown
+    tag.mouseup = mouseup
+    tag.blur = blur
+    tag.getCurrentYear = getCurrentYear
+    tag.getCurrentMonthView = getCurrentMonthView
+    tag.getCurrentMonth = getCurrentMonth
+    tag.getWeekNames = getWeekNames
+    tag.isActive = isActive
+    tag.isToday = isToday
+    tag.getTabindex = getTabindex
+    tag.isReadOnly = isReadOnly
+    tag.isDisabled = isDisabled
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
     let visibleFlg = false
     let itemActivated = false
     let lastValue = null
@@ -168,9 +206,10 @@
     let lastOptsCurrentDate = null
     let yearRange = 20
 
-    tag.mixin('semantic-ui')
-
-    tag.on('mount', () => {
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
@@ -197,9 +236,9 @@
       }
       tag.update()
       tag.defaultValue = tag.valueAsDate
-    })
+    }
 
-    tag.on('update', () => {
+    function onUpdate() {
       let changed = false
       if (!isEqualDay(lastValue, tag.value)) {
         tag.valueAsDate = copyDate(tag.value)
@@ -230,35 +269,29 @@
         lastCurrentDate = copyDate(tag.currentDate)
         generate()
       }
-    })
+    }
 
-    // ===================================================================================
-    //                                                                               State
-    //                                                                               =====
-    tag.reset = () => {
+    function reset() {
       tag.valueAsDate = tag.defaultValue
       setValueFromValueAsDate()
     }
 
-    tag.changed = () => {
+    function changed() {
       return !isEqualDay(tag.valueAsDate, tag.defaultValue)
     }
 
-    // ===================================================================================
-    //                                                                               Event
-    //                                                                               =====
-    tag.selectMonth = () => {
+    function selectMonth() {
       tag.yearSelecting = false
       tag.monthSelecting = !tag.monthSelecting
     }
 
-    tag.selectYear = () => {
+    function selectYear() {
       tag.years = getYears()
       tag.monthSelecting = false
       tag.yearSelecting = !tag.yearSelecting
     }
 
-    tag.clickDay = event => {
+    function clickDay(event) {
       if (tag.isReadOnly() || tag.isDisabled()) {
         return
       }
@@ -266,17 +299,17 @@
       tag.trigger('click', tag.valueAsDate)
     }
 
-    tag.clickMonth = event => {
+    function clickMonth(event) {
       tag.currentDate.setMonth(event.item.month.value)
       tag.monthSelecting = false
     }
 
-    tag.clickYear = event => {
+    function clickYear(event) {
       tag.currentDate.setYear(event.item.year)
       tag.selectMonth()
     }
 
-    tag.clickPrevious = () => {
+    function clickPrevious() {
       if (tag.yearSelecting) {
         addYear(-yearRange)
       } else {
@@ -285,7 +318,7 @@
       }
     }
 
-    tag.clickNext = () => {
+    function clickNext() {
       if (tag.yearSelecting) {
         addYear(yearRange)
       } else {
@@ -294,12 +327,12 @@
       }
     }
 
-    tag.clickClear = () => {
+    function clickClear() {
       setDate(null)
       tag.trigger('clear', tag.valueAsDate)
     }
 
-    tag.clickToday = () => {
+    function clickToday() {
       setDate(new Date())
       tag.trigger('today', tag.valueAsDate)
     }
@@ -307,7 +340,7 @@
     // -----------------------------------------------------
     //                                          popup option
     //                                          ------------
-    tag.toggle = () => {
+    function toggle() {
       if (tag.isReadOnly() || tag.isDisabled()) {
         return
       }
@@ -322,24 +355,21 @@
       }
     }
 
-    tag.mousedown = () => {
+    function mousedown() {
       itemActivated = true
     }
 
-    tag.mouseup = () => {
+    function mouseup() {
       itemActivated = false
     }
 
-    tag.blur = () => {
+    function blur() {
       if (opts.popup && !itemActivated) {
         close()
       }
     }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
-    const generate = () => {
+    function generate() {
       const startDate = startOfMonth(tag.currentDate)
       const baseDate = addDays(startDate, - startDate.getDay())
       let i = 0
@@ -354,7 +384,7 @@
       }
     }
 
-    const addYear = year => {
+    function addYear(year) {
       tag.years = tag.years.map(values => {
         values = values.map(value => {
           return value + parseInt(year)
@@ -363,7 +393,7 @@
       })
     }
 
-    const getYears = () => {
+    function getYears() {
       const rowSize = ((yearRange - yearRange % 4) / 4) + ((yearRange % 4 != 0) ? 1 : 0)
       const years = new Array()
       for (let index = 0; index < rowSize; index++) {
@@ -375,7 +405,7 @@
       return years
     }
 
-    const getMonthes = () => {
+    function getMonthes() {
       const months = [[], [], []]
       const monthNames = range(12).map(month => format(new Date(2018, month, 1), 'MMM', { locale: getLocale() }))
       monthNames.forEach((month, index) => {
@@ -387,7 +417,7 @@
       return months
     }
 
-    const open = () => {
+    function open() {
       tag.upward = isUpward()
       tag.transitionStatus = 'visible'
       visibleFlg = true
@@ -401,13 +431,13 @@
       tag.trigger('open', tag.valueAsDate)
     }
 
-    const close = () => {
+    function close() {
       tag.transitionStatus = 'hidden'
       visibleFlg = false
       tag.trigger('close', tag.valueAsDate)
     }
 
-    const setDate = date => {
+    function setDate(date) {
       tag.valueAsDate = date
       setValueFromValueAsDate()
       if (tag.refs.input) {
@@ -417,11 +447,11 @@
       tag.trigger('change', tag.valueAsDate)
     }
 
-    const setValueFromValueAsDate = () => {
+    function setValueFromValueAsDate() {
       tag.value = tag.valueAsDate ? format(tag.valueAsDate, getPattern(), { locale: getLocale() }) : null
     }
 
-    const isEqualDay = (d1, d2) => {
+    function isEqualDay(d1, d2) {
       if (d1 == d2) {
         return true
       }
@@ -431,14 +461,14 @@
       return isSameDay(d1, d2)
     }
 
-    const copyDate = date => {
+    function copyDate(date) {
       if (!date) {
         return date
       }
       return parse(date)
     }
 
-    const isUpward = () => {
+    function isUpward() {
       if (opts.direction == 'upward') {
         return true
       }
@@ -460,38 +490,32 @@
       return true
     }
 
-    // ===================================================================================
-    //                                                                              Helper
-    //                                                                              ======
-    tag.getCurrentYear = () => {
+    function getCurrentYear() {
       if (tag.currentDate) {
         return tag.currentDate.getFullYear()
       }
     }
 
-    tag.getCurrentMonthView = () => {
+    function getCurrentMonthView() {
       if (tag.currentDate) {
         return format(tag.currentDate, 'MMM', { locale: getLocale() })
       }
     }
 
-    tag.getCurrentMonth = () => {
+    function getCurrentMonth() {
       return tag.currentDate.getMonth()
     }
 
-    tag.getWeekNames = () => {
+    function getWeekNames() {
       return range(7, 1).map(day => format(new Date(2018, 6, day), 'dd', { locale: getLocale() }))
     }
 
-    tag.isActive = date => {
+    function isActive(date) {
       return isEqualDay(tag.valueAsDate, date)
     }
 
-    tag.isToday = date => {
-      return isToday(date)
-    }
 
-    tag.getTabindex = () => {
+    function getTabindex() {
       if (!opts.popup) {
         return false
       }
@@ -501,14 +525,14 @@
       return 0
     }
 
-    tag.isReadOnly = () => {
+    function isReadOnly() {
       return tag.root.classList.contains('read-only')
     }
-    tag.isDisabled = () => {
+    function isDisabled() {
       return tag.root.classList.contains('disabled')
     }
 
-    const getPattern = () => {
+    function getPattern() {
       if (opts.pattern) {
         return opts.pattern
       }
@@ -518,7 +542,7 @@
       return 'YYYY-MM-DD'
     }
 
-    const getLocale = () => {
+    function getLocale() {
       if (opts.locale) {
         return opts.locale
       }
@@ -527,7 +551,7 @@
       }
     }
 
-    const range = (size, startAt = 0) => {
+    function range(size, startAt = 0) {
       return Array.from(Array(size).keys()).map(i => i + startAt)
     }
   </script>

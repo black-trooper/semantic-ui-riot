@@ -49,29 +49,53 @@
 
   <script>
     const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.click = click
+    tag.clickModal = clickModal
+    tag.dimmerClose = dimmerClose
+    tag.getId = getId
+    tag.hide = hide
+    tag.isBasic = isBasic
+    tag.isImageContent = isImageContent
+    tag.show = show
+    tag.on('before-mount', onBeforeMount)
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
     let image_content = false
     let openning, closing, visible
 
-    if (!opts.modal) {
-      opts.modal = {}
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onBeforeMount() {
+      if (!opts.modal) {
+        opts.modal = {}
+      }
     }
 
-    tag.on('mount', () => {
+    function onMount() {
       if (typeof opts.modal.closable === 'undefined') {
         opts.modal.closable = true
       }
-    })
+    }
 
-    tag.on('update', () => {
+    function onUpdate() {
       if (tag.refs.content.getElementsByTagName('img').length > 0) {
         image_content = true
       }
-    })
+    }
 
-    // ===================================================================================
-    //                                                                               Event
-    //                                                                               =====
-    tag.show = () => {
+    function show() {
       if (openning || closing || visible) {
         return
       }
@@ -89,24 +113,24 @@
       }, 500)
     }
 
-    tag.click = event => {
+    function click(event) {
       tag.trigger(event.item.action || event.item.text)
       if (typeof event.item.closable === 'undefined' || event.item.closable) {
         tag.hide()
       }
     }
 
-    tag.dimmerClose = () => {
+    function dimmerClose() {
       if (opts.modal.closable && !tag.isBasic()) {
         tag.hide()
       }
     }
 
-    tag.clickModal = event => {
+    function clickModal(event) {
       event.stopPropagation()
     }
 
-    tag.hide = () => {
+    function hide() {
       if (openning || closing || !visible) {
         return
       }
@@ -123,10 +147,7 @@
       }, 300)
     }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
-    const isContainsClassName = className => {
+    function isContainsClassName(className) {
       const modalElement = document.getElementById(tag.getId())
       if (!modalElement) {
         return false
@@ -134,7 +155,7 @@
       return modalElement.classList.contains(className)
     }
 
-    const setDefaultFocus = () => {
+    function setDefaultFocus() {
       if (!opts.modal || !opts.modal.buttons || opts.modal.buttons.length == 0) {
         return
       }
@@ -144,18 +165,15 @@
       }
     }
 
-    // ===================================================================================
-    //                                                                              Helper
-    //                                                                              ======
-    tag.getId = () => {
+    function getId() {
       return `su-modal-${tag._riot_id}`
     }
 
-    tag.isBasic = () => {
+    function isBasic() {
       return isContainsClassName('basic')
     }
 
-    tag.isImageContent = () => {
+    function isImageContent() {
       return image_content
     }
   </script>

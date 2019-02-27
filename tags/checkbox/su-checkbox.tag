@@ -17,12 +17,34 @@
 
   <script>
     const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
     tag.checked = false
     tag.defaultChecked = false
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.changed = changed
+    tag.click = click
+    tag.getId = getId
+    tag.isDisabled = isDisabled
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.reset = reset
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
     let lastChecked
     let lastOptsChecked
+    let shownMessage = false
 
-    tag.on('mount', () => {
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
       supportTraditionalOptions()
       if (tag.checked) {
         opts.checked = tag.checked
@@ -33,9 +55,9 @@
       lastOptsChecked = tag.checked
       tag.defaultChecked = tag.checked
       tag.update()
-    })
+    }
 
-    tag.on('update', () => {
+    function onUpdate() {
       supportTraditionalOptions()
       if (lastChecked != tag.checked) {
         opts.checked = tag.checked
@@ -48,23 +70,17 @@
         lastOptsChecked = tag.checked
         parentUpdate()
       }
-    })
+    }
 
-    // ===================================================================================
-    //                                                                               State
-    //                                                                               =====
-    tag.reset = () => {
+    function reset() {
       tag.checked = tag.defaultChecked
     }
 
-    tag.changed = () => {
+    function changed() {
       return tag.checked !== tag.defaultChecked
     }
 
-    // ===================================================================================
-    //                                                                               Event
-    //                                                                               =====
-    tag.click = () => {
+    function click() {
       if (isReadOnly() || tag.isDisabled()) {
         event.preventDefault()
         return
@@ -74,32 +90,25 @@
       tag.trigger('click', tag.checked)
     }
 
-    // ===================================================================================
-    //                                                                              Helper
-    //                                                                              ======
-    tag.getId = () => {
+    function getId() {
       return `su-checkbox-${tag._riot_id}`
     }
 
-    tag.isDisabled = () => {
+    function isDisabled() {
       return tag.root.classList.contains('disabled')
     }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
-    const isReadOnly = () => {
+    function isReadOnly() {
       return tag.root.classList.contains('read-only')
     }
 
-    const parentUpdate = () => {
+    function parentUpdate() {
       if (tag.parent) {
         tag.parent.update()
       }
     }
 
-    let shownMessage = false
-    const supportTraditionalOptions = () => {
+    function supportTraditionalOptions() {
       if (typeof opts.check !== 'undefined') {
         if (!shownMessage) {
           console.warn('\'check\' attribute is deprecated. Please use \'checked\'.')
@@ -110,7 +119,7 @@
       }
     }
 
-    const normalizeOptChecked = () => {
+    function normalizeOptChecked() {
       return opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
     }
   </script>

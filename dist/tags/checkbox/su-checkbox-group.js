@@ -1,5 +1,6 @@
 riot.tag2('su-checkbox-group', '<yield></yield>', '', '', function(opts) {
     const tag = this
+
     tag.label = ''
     tag.value = ''
     tag.defaultValue = ''
