@@ -1,9 +1,9 @@
 <su-toast-item class="item { transition }">
   <div class=" { position } floated" if="{ !hide }">
-    <div class="ui attached active progress { class } top" if="{ progress == 'top' }">
+    <div class="ui attached active progress { className } top" if="{ progress == 'top' }">
       <div class="bar"></div>
     </div>
-    <div class="ui { icon: icon } { class } floating compact message">
+    <div class="ui { icon: icon } { className } floating compact message">
       <i class="close icon" onclick="{ close }"></i>
       <i class="{ icon } icon" if="{ icon }"></i>
       <div class="content">
@@ -13,7 +13,7 @@
         <p each="{ message in messages }">{ message }</p>
       </div>
     </div>
-    <div class="ui attached active progress { class } bottom" if="{ progress == 'bottom' }">
+    <div class="ui attached active progress { className } bottom" if="{ progress == 'bottom' }">
       <div class="bar"></div>
     </div>
   </div>
@@ -80,13 +80,20 @@
     // ===================================================================================
     //                                                                      Tag Properties
     //                                                                      ==============
+    tag.position = isRight() ? 'right' : 'left'
+    tag.direction = isRight() ? 'left' : 'right'
+    tag.icon = opts.item.icon
+    tag.progress = opts.item.progress
+    tag.className = opts.item.class
+    tag.transition = `transition animating in fade ${tag.direction}`
+    tag.title = opts.item.title
+    tag.messages = opts.item.messages
 
     // ===================================================================================
     //                                                                         Tag Methods
     //                                                                         ===========
     tag.close = close
     tag.on('mount', onMount)
-    tag.isRight = isRight
 
     // ===================================================================================
     //                                                                          Properties
@@ -101,23 +108,13 @@
     }
 
     function onMount() {
-      tag.position = tag.isRight() ? 'right' : 'left'
-      const direction = tag.isRight() ? 'left' : 'right'
-      tag.icon = opts.item.icon
-      tag.progress = opts.item.progress
-      tag.class = opts.item.class
-      tag.transition = `transition animating in fade ${direction}`
-      tag.title = opts.item.title
-      tag.messages = opts.item.messages
-      tag.update()
-
       setTimeout(() => {
         tag.transition = ''
         tag.update()
       }, 300)
 
       setTimeout(() => {
-        tag.transition = `transition animating out fade ${direction}`
+        tag.transition = `transition animating out fade ${tag.direction}`
         tag.update()
       }, 3000)
 
