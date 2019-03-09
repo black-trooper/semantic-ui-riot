@@ -1,12 +1,12 @@
 <su-alert>
-  <su-modal class="tiny" ref="modal" modal="{ modal }">
+  <su-modal class="tiny" ref="modal" modal="{ modal }" title="{ title }" messages="{ messages }">
     <div class="ui icon message">
       <i class="info circle icon"></i>
       <div class="scrolling content">
-        <div class="header" if="{ parent.title }">
-          { parent.title }
+        <div class="header" if="{ opts.title }">
+          { opts.title }
         </div>
-        <p each="{ message in parent.messages }">{ message }</p>
+        <p each="{ message in opts.messages }">{ message }</p>
       </div>
     </div>
   </su-modal>

@@ -1,12 +1,12 @@
 <su-confirm>
-  <su-modal class="tiny" ref="modal" modal="{ modal }">
+  <su-modal class="tiny" ref="modal" modal="{ modal }" title="{ title }" messages="{ messages }">
     <div class="ui icon message">
       <i class="question circle outline icon"></i>
       <div class="scrolling content">
-        <div class="header" if="{ parent.title }">
-          { parent.title }
+        <div class="header" if="{ opts.title }">
+          { opts.title }
         </div>
-        <p each="{ messsage in parent.messages }">{ messsage }</p>
+        <p each="{ messsage in opts.messages }">{ messsage }</p>
       </div>
     </div>
   </su-modal>
