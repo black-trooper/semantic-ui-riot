@@ -1,6 +1,7 @@
 <su-toast class="{ opts.position }">
   <div class="ui list">
-    <su-toast-item each="{ item in items }" item="{ item }" position="{ parent.opts.position }"></su-toast-item>
+    <su-toast-item each="{ item in items }" icon="{ item.icon }" progress="{ item.progress }"
+      class-name="{ item.class }" title="{ item.title }" messages="{ item.messages }" position="{ position }" />
   </div>
 
   <style>

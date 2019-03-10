@@ -82,12 +82,12 @@
     //                                                                      ==============
     tag.position = isRight() ? 'right' : 'left'
     tag.direction = isRight() ? 'left' : 'right'
-    tag.icon = opts.item.icon
-    tag.progress = opts.item.progress
-    tag.className = opts.item.class
+    tag.icon = opts.icon
+    tag.progress = opts.progress
+    tag.className = opts.className
     tag.transition = `transition animating in fade ${tag.direction}`
-    tag.title = opts.item.title
-    tag.messages = opts.item.messages
+    tag.title = opts.title
+    tag.messages = opts.messages
 
     // ===================================================================================
     //                                                                         Tag Methods
