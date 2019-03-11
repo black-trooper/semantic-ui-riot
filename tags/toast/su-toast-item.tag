@@ -126,7 +126,8 @@
     }
 
     function isRight() {
-      return opts.position.indexOf('right') >= 0
+      const position = opts.position || ''
+      return position.indexOf('right') >= 0
     }
   </script>
 </su-toast-item>

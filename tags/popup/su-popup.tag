@@ -1,6 +1,6 @@
 <su-popup onmouseover="{ mouseover }" onmouseout="{ mouseout }">
   <div id="{ getId() }"
-    class="ui popup { opts.position } { opts.dataVariation } transition { transitionStatus } { nowrap: isNowrap() }">
+    class="ui popup { position } { dataVariation } transition { transitionStatus } { nowrap: isNowrap() }">
   </div>
   <yield />
 
@@ -98,6 +98,7 @@
     //                                                                      Tag Properties
     //                                                                      ==============
     tag.content = ''
+    tag.dataVariation = opts.dataVariation || ''
 
     // ===================================================================================
     //                                                                         Tag Methods
@@ -107,6 +108,7 @@
     tag.mouseover = mouseover
     tag.mouseout = mouseout
     tag.on('mount', onMount)
+    tag.on('update', onUpdate)
 
     // ===================================================================================
     //                                                                          Properties
@@ -116,9 +118,6 @@
     //                                                                             Methods
     //                                                                             =======
     function onMount() {
-      if (!opts.position) {
-        opts.position = 'top left'
-      }
       if (opts.tooltip) {
         if (opts.dataTitle) {
           tag.content = `<div class="header">${opts.dataTitle}</div><div class="content">${opts.tooltip}</div>`
@@ -134,6 +133,10 @@
       tag.update()
     }
 
+    function onUpdate() {
+      tag.position = opts.position || 'top left'
+    }
+
     function mouseover() {
       tag.transitionStatus = 'visible'
       tag.trigger('mouseover')
@@ -145,7 +148,7 @@
     }
 
     function isNowrap() {
-      if (opts.dataVariation && opts.dataVariation.indexOf('wide') >= 0) {
+      if (tag.dataVariation.indexOf('wide') >= 0) {
         return false
       }
       return true

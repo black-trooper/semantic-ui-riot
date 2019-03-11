@@ -3,12 +3,12 @@ riot.tag2('su-toast-item', '<div class=" {position} floated" if="{!hide}"> <div 
 
     tag.position = isRight() ? 'right' : 'left'
     tag.direction = isRight() ? 'left' : 'right'
-    tag.icon = opts.item.icon
-    tag.progress = opts.item.progress
-    tag.className = opts.item.class
+    tag.icon = opts.icon
+    tag.progress = opts.progress
+    tag.className = opts.className
     tag.transition = `transition animating in fade ${tag.direction}`
-    tag.title = opts.item.title
-    tag.messages = opts.item.messages
+    tag.title = opts.title
+    tag.messages = opts.messages
 
     tag.close = close
     tag.on('mount', onMount)
@@ -37,6 +37,7 @@ riot.tag2('su-toast-item', '<div class=" {position} floated" if="{!hide}"> <div 
     }
 
     function isRight() {
-      return opts.position.indexOf('right') >= 0
+      const position = opts.position || ''
+      return position.indexOf('right') >= 0
     }
 });
