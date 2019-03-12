@@ -1,7 +1,6 @@
 <su-rating class="ui rating { opts.class }">
   <i class="icon { active: item.active } { selected: item.selected }" each="{ item in items }"
-    onclick="{ parent.click.bind(this, item) }" onmouseover="{ parent.mouseover.bind(this, item) }"
-    onmouseout="{ parent.mouseout }"></i>
+    onclick="{ click.bind(this, item) }" onmouseover="{ mouseover.bind(this, item) }" onmouseout="{ mouseout }"></i>
 
   <script>
     const tag = this

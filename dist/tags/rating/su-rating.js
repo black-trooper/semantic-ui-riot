@@ -1,4 +1,4 @@
-riot.tag2('su-rating', '<i class="icon {active: item.active} {selected: item.selected}" each="{item in items}" onclick="{parent.click.bind(this, item)}" onmouseover="{parent.mouseover.bind(this, item)}" onmouseout="{parent.mouseout}"></i>', '', 'class="ui rating {opts.class}"', function(opts) {
+riot.tag2('su-rating', '<i class="icon {active: item.active} {selected: item.selected}" each="{item in items}" onclick="{click.bind(this, item)}" onmouseover="{mouseover.bind(this, item)}" onmouseout="{mouseout}"></i>', '', 'class="ui rating {opts.class}"', function(opts) {
     const tag = this
 
     tag.items = []
