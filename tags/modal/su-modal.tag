@@ -4,7 +4,7 @@
       <i class="close icon" if="{ opts.modal.closable && !isBasic() }" onclick="{ hide }"></i>
       <div class="ui header { icon: opts.modal.header.icon }" if="{ opts.modal.header }">
         <i class="icon { opts.modal.header.icon }" if="{ opts.modal.header.icon }"></i>
-        { (opts.modal.header.text) ? opts.modal.header.text : opts.modal.header }
+        { getTitle() }
       </div>
       <div class="content { image: isImageContent() }" ref="content">
         <yield />
@@ -60,6 +60,7 @@
     tag.clickModal = clickModal
     tag.dimmerClose = dimmerClose
     tag.getId = getId
+    tag.getTitle = getTitle
     tag.hide = hide
     tag.isBasic = isBasic
     tag.isImageContent = isImageContent
@@ -163,6 +164,13 @@
         const text = opts.modal.buttons.filter(button => button.default)[0].text
         tag.refs[`button_${text}`].focus()
       }
+    }
+
+    function getTitle() {
+      if (opts.modal.header.text) {
+        return opts.modal.header.text
+      }
+      return opts.modal.header
     }
 
     function getId() {

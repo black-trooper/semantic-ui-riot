@@ -40,12 +40,12 @@ module.exports = (env, argv) => {
                 // 'file-line-limit': 100,
                 'tag-name-include-hyphen': true,
                 'use-script-inside-tag': true,
-                // 'tag-expressions-simple': 15,
+                'tag-expressions-simple': 15,
                 // 'tag-options-primitive': true,
                 'assign-this-to-tag': { force: true },
                 'properties-and-methods-order': { alphabetize: false },
                 'fake-es6-syntax-disabled': true,
-                // 'tag-parent-disabled': true,
+                'tag-parent-disabled': true,
                 'use-each-in-syntax': true
               }
             }
