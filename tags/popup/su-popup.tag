@@ -59,6 +59,11 @@
       transform: translateX(-50%) !important;
     }
 
+    .ui.popup.top.center.scale.transition.in,
+    .ui.popup.bottom.center.scale.transition.in {
+      animation-name: xScaleIn
+    }
+
     .ui.popup.top.right {
       top: auto;
       bottom: 100%;
@@ -89,6 +94,67 @@
       top: 50%;
       -webkit-transform: translateY(-50%) !important;
       transform: translateY(-50%) !important;
+    }
+
+    .ui.popup.left.center.scale.transition.in,
+    .ui.popup.right.center.scale.transition.in {
+      animation-name: yScaleIn
+    }
+
+    @-webkit-keyframes xScaleIn {
+      0% {
+        opacity: 0;
+        -webkit-transform: scale(0.8) translateX(-50%);
+        transform: scale(0.8) translateX(-50%);
+      }
+
+      100% {
+        opacity: 1;
+        -webkit-transform: scale(1) translateX(-50%);
+        transform: scale(1) translateX(-50%);
+      }
+    }
+
+    @keyframes xScaleIn {
+      0% {
+        opacity: 0;
+        -webkit-transform: scale(0.8) translateX(-50%);
+        transform: scale(0.8) translateX(-50%);
+      }
+
+      100% {
+        opacity: 1;
+        -webkit-transform: scale(1) translateX(-50%);
+        transform: scale(1) translateX(-50%);
+      }
+    }
+
+    @-webkit-keyframes yScaleIn {
+      0% {
+        opacity: 0;
+        -webkit-transform: scale(0.8) translateY(-50%);
+        transform: scale(0.8) translateY(-50%);
+      }
+
+      100% {
+        opacity: 1;
+        -webkit-transform: scale(1) translateY(-50%);
+        transform: scale(1) translateY(-50%);
+      }
+    }
+
+    @keyframes yScaleIn {
+      0% {
+        opacity: 0;
+        -webkit-transform: scale(0.8) translateY(-50%);
+        transform: scale(0.8) translateY(-50%);
+      }
+
+      100% {
+        opacity: 1;
+        -webkit-transform: scale(1) translateY(-50%);
+        transform: scale(1) translateY(-50%);
+      }
     }
   </style>
 
@@ -138,7 +204,7 @@
     }
 
     function mouseover() {
-      tag.transitionStatus = 'visible'
+      tag.transitionStatus = 'scale in visible'
       tag.trigger('mouseover')
     }
 
