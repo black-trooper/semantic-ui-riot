@@ -1,5 +1,5 @@
 <su-popup onmouseover="{ mouseover }" onmouseout="{ mouseout }">
-  <div id="{ getId() }"
+  <div id="{ getId() }" onmouseover="{ stopPropagation }" onmouseout="{ stopPropagation }"
     class="ui popup { position } { dataVariation } transition { transitionStatus } { nowrap: isNowrap() }">
   </div>
   <yield />
@@ -175,6 +175,7 @@
     tag.mouseout = mouseout
     tag.on('mount', onMount)
     tag.on('update', onUpdate)
+    tag.stopPropagation = stopPropagation
 
     // ===================================================================================
     //                                                                          Properties
@@ -211,6 +212,10 @@
     function mouseout() {
       tag.transitionStatus = 'hidden'
       tag.trigger('mouseout')
+    }
+
+    function stopPropagation(event) {
+      event.stopPropagation()
     }
 
     function isNowrap() {
