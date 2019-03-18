@@ -1,5 +1,5 @@
 <su-popup onmouseover="{ mouseover }" onmouseout="{ mouseout }">
-  <div id="{ getId() }"
+  <div id="{ getId() }" onmouseover="{ stopPropagation }" onmouseout="{ stopPropagation }"
     class="ui popup { position } { dataVariation } transition { transitionStatus } { nowrap: isNowrap() }">
   </div>
   <yield />
@@ -46,8 +46,8 @@
       bottom: 100%;
       left: 50%;
       right: auto;
-      -webkit-transform: translateX(-50%) !important;
-      transform: translateX(-50%) !important;
+      -webkit-transform: translateX(-50%);
+      transform: translateX(-50%);
     }
 
     .ui.popup.bottom.center {
@@ -55,8 +55,13 @@
       bottom: auto;
       left: 50%;
       right: auto;
-      -webkit-transform: translateX(-50%) !important;
-      transform: translateX(-50%) !important;
+      -webkit-transform: translateX(-50%);
+      transform: translateX(-50%);
+    }
+
+    .ui.popup.top.center.scale.transition.in,
+    .ui.popup.bottom.center.scale.transition.in {
+      animation-name: xScaleIn
     }
 
     .ui.popup.top.right {
@@ -79,16 +84,77 @@
       left: auto;
       right: 100%;
       top: 50%;
-      -webkit-transform: translateY(-50%) !important;
-      transform: translateY(-50%) !important;
+      -webkit-transform: translateY(-50%);
+      transform: translateY(-50%);
     }
 
     .ui.popup.right.center {
       left: 100%;
       right: auto;
       top: 50%;
-      -webkit-transform: translateY(-50%) !important;
-      transform: translateY(-50%) !important;
+      -webkit-transform: translateY(-50%);
+      transform: translateY(-50%);
+    }
+
+    .ui.popup.left.center.scale.transition.in,
+    .ui.popup.right.center.scale.transition.in {
+      animation-name: yScaleIn
+    }
+
+    @-webkit-keyframes xScaleIn {
+      0% {
+        opacity: 0;
+        -webkit-transform: scale(0.8) translateX(-50%);
+        transform: scale(0.8) translateX(-50%);
+      }
+
+      100% {
+        opacity: 1;
+        -webkit-transform: scale(1) translateX(-50%);
+        transform: scale(1) translateX(-50%);
+      }
+    }
+
+    @keyframes xScaleIn {
+      0% {
+        opacity: 0;
+        -webkit-transform: scale(0.8) translateX(-50%);
+        transform: scale(0.8) translateX(-50%);
+      }
+
+      100% {
+        opacity: 1;
+        -webkit-transform: scale(1) translateX(-50%);
+        transform: scale(1) translateX(-50%);
+      }
+    }
+
+    @-webkit-keyframes yScaleIn {
+      0% {
+        opacity: 0;
+        -webkit-transform: scale(0.8) translateY(-50%);
+        transform: scale(0.8) translateY(-50%);
+      }
+
+      100% {
+        opacity: 1;
+        -webkit-transform: scale(1) translateY(-50%);
+        transform: scale(1) translateY(-50%);
+      }
+    }
+
+    @keyframes yScaleIn {
+      0% {
+        opacity: 0;
+        -webkit-transform: scale(0.8) translateY(-50%);
+        transform: scale(0.8) translateY(-50%);
+      }
+
+      100% {
+        opacity: 1;
+        -webkit-transform: scale(1) translateY(-50%);
+        transform: scale(1) translateY(-50%);
+      }
     }
   </style>
 
@@ -109,6 +175,7 @@
     tag.mouseout = mouseout
     tag.on('mount', onMount)
     tag.on('update', onUpdate)
+    tag.stopPropagation = stopPropagation
 
     // ===================================================================================
     //                                                                          Properties
@@ -138,13 +205,17 @@
     }
 
     function mouseover() {
-      tag.transitionStatus = 'visible'
+      tag.transitionStatus = 'scale in visible'
       tag.trigger('mouseover')
     }
 
     function mouseout() {
       tag.transitionStatus = 'hidden'
       tag.trigger('mouseout')
+    }
+
+    function stopPropagation(event) {
+      event.stopPropagation()
     }
 
     function isNowrap() {
