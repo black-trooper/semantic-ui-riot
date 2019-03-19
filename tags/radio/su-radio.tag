@@ -11,71 +11,83 @@
 
     :scope.ui.read-only input[type="radio"],
     :scope.ui.disabled input[type="radio"] {
-      cursor: default!important;
+      cursor: default !important;
     }
   </style>
 
   <script>
-    this.name = ''
-    this.checked = false
+    const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+    tag.checked = false
+    tag.name = ''
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.click = click
+    tag.getId = getId
+    tag.isDisabled = isDisabled
+    tag.isRadio = isRadio
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
     let lastChecked
     let lastOptsCheck
 
-    this.on('mount', () => {
-      if (this.checked) {
-        opts.checked = this.checked
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
+      if (tag.checked) {
+        opts.checked = tag.checked
       } else {
-        this.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
+        tag.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
       }
-      lastChecked = this.checked
+      lastChecked = tag.checked
       lastOptsCheck = opts.checked
-      this.update()
-    })
+      tag.update()
+    }
 
-    this.on('update', () => {
-      this.name = opts.name
-      this.value = opts.value
-      if (lastChecked != this.checked) {
-        opts.checked = this.checked
-        lastChecked = this.checked
+    function onUpdate() {
+      tag.name = opts.name
+      tag.value = opts.value
+      if (lastChecked != tag.checked) {
+        opts.checked = tag.checked
+        lastChecked = tag.checked
       } else if (lastOptsCheck != opts.checked) {
-        this.checked = opts.checked
+        tag.checked = opts.checked
         lastOptsCheck = opts.checked
       }
-    })
+    }
 
-    // ===================================================================================
-    //                                                                               Event
-    //                                                                               =====
-    this.click = event => {
-      if (isReadOnly() || this.isDisabled()) {
+    function click(event) {
+      if (isReadOnly() || tag.isDisabled()) {
         event.preventDefault()
         return
       }
-      this.checked = event.target.checked
-      this.trigger('click', event.target.value)
+      tag.checked = event.target.checked
+      tag.trigger('click', event.target.value)
     }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
-    const isReadOnly = () => {
-      return this.root.classList.contains('read-only')
+    function isReadOnly() {
+      return tag.root.classList.contains('read-only')
     }
 
-    // ===================================================================================
-    //                                                                              Helper
-    //                                                                              ======
-    this.getId = () => {
-      return `su-radio-${this._riot_id}`
+    function getId() {
+      return `su-radio-${tag._riot_id}`
     }
 
-    this.isDisabled = () => {
-      return this.root.classList.contains('disabled')
+    function isDisabled() {
+      return tag.root.classList.contains('disabled')
     }
 
-    this.isRadio = () => {
-      return !this.root.classList.contains('slider')
+    function isRadio() {
+      return !tag.root.classList.contains('slider')
     }
   </script>
 </su-radio>

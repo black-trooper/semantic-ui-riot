@@ -2,28 +2,47 @@
   <yield />
 
   <script>
-    this.label = ''
-    this.value = ''
-    this.defaultValue = ''
+    const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+    tag.label = ''
+    tag.value = ''
+    tag.defaultValue = ''
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.changed = changed
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.reset = reset
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
     let lastValue
     let lastOptsValue
 
-    this.on('mount', () => {
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
-      if (this.value) {
-        opts.riotValue = this.value
+      if (tag.value) {
+        opts.riotValue = tag.value
       } else {
-        this.value = opts.riotValue
+        tag.value = opts.riotValue
       }
-      if (typeof this.value !== 'undefined' && !Array.isArray(this.value)) {
-        this.value = this.value.toString().split(/\s+/).join('').split(',')
+      if (typeof tag.value !== 'undefined' && !Array.isArray(tag.value)) {
+        tag.value = tag.value.toString().split(/\s+/).join('').split(',')
       }
-      lastValue = this.value
-      lastOptsValue = this.value
+      lastValue = tag.value
+      lastOptsValue = tag.value
 
-      let checkboxes = this.tags['su-checkbox']
+      let checkboxes = tag.tags['su-checkbox']
       if (!Array.isArray(checkboxes)) {
         checkboxes = [checkboxes]
       }
@@ -32,84 +51,78 @@
         updateState(checkbox)
       })
 
-      this.defaultValue = this.value
+      tag.defaultValue = tag.value
       parentUpdate()
-    })
+    }
 
-    this.on('update', () => {
+    function onUpdate() {
       let changed = false
-      if (normalizeValue(lastValue) != normalizeValue(this.value)) {
-        opts.riotValue = this.value
-        lastOptsValue = this.value
-        lastValue = this.value
+      if (normalizeValue(lastValue) != normalizeValue(tag.value)) {
+        opts.riotValue = tag.value
+        lastOptsValue = tag.value
+        lastValue = tag.value
         changed = true
       } else if (normalizeValue(lastOptsValue) != normalizeValue(opts.riotValue)) {
-        this.value = opts.riotValue
+        tag.value = opts.riotValue
         lastOptsValue = opts.riotValue
         lastValue = opts.riotValue
         changed = true
       }
-      if (typeof this.value !== 'undefined' && !Array.isArray(this.value)) {
-        this.value = this.value.toString().split(/\s+/).join('').split(',')
+      if (typeof tag.value !== 'undefined' && !Array.isArray(tag.value)) {
+        tag.value = tag.value.toString().split(/\s+/).join('').split(',')
       }
 
       if (changed) {
-        let checkboxes = this.tags['su-checkbox']
+        let checkboxes = tag.tags['su-checkbox']
         if (!Array.isArray(checkboxes)) {
           checkboxes = [checkboxes]
         }
         checkboxes.forEach(checkbox => {
           updateState(checkbox)
         })
-        this.trigger('change', this.value)
+        tag.trigger('change', tag.value)
       }
-    })
-
-    // ===================================================================================
-    //                                                                               State
-    //                                                                               =====
-    this.reset = () => {
-      this.value = this.defaultValue
     }
 
-    this.changed = () => {
-      return this.value !== this.defaultValue
+    function reset() {
+      tag.value = tag.defaultValue
     }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
-    const updateState = checkbox => {
-      if (typeof checkbox.opts.value === 'undefined' || typeof this.value === 'undefined') {
+    function changed() {
+      return tag.value !== tag.defaultValue
+    }
+
+    function updateState(checkbox) {
+      if (typeof checkbox.opts.value === 'undefined' || typeof tag.value === 'undefined') {
         return
       }
-      checkbox.checked = this.value.some(v => v == checkbox.opts.value)
+      checkbox.checked = tag.value.some(v => v == checkbox.opts.value)
       if (checkbox.checked) {
-        this.label = checkbox.root.getElementsByTagName('label')[0].innerText
+        tag.label = checkbox.root.getElementsByTagName('label')[0].innerText
       }
     }
 
-    const initializeChild = checkbox => {
+    function initializeChild(checkbox) {
       checkbox.opts.name = getCheckboxName()
       checkbox.on('click', () => {
-        let checkboxes = this.tags['su-checkbox']
+        let checkboxes = tag.tags['su-checkbox']
         if (!Array.isArray(checkboxes)) {
           checkboxes = [checkboxes]
         }
-        this.value = checkboxes.filter(_checkbox => _checkbox.checked).map(_checkbox => _checkbox.opts.value)
-        this.update()
+        tag.value = checkboxes.filter(_checkbox => _checkbox.checked).map(_checkbox => _checkbox.opts.value)
+        tag.update()
       })
     }
 
-    const parentUpdate = () => {
-      if (this.parent) {
-        this.parent.update()
+    function parentUpdate() {
+      if (tag.parent) {
+        tag.parent.update()
       } else {
-        this.update()
+        tag.update()
       }
     }
 
-    const normalizeValue = value => {
+    function normalizeValue(value) {
       if (typeof value === 'undefined') {
         return value
       }
@@ -119,8 +132,8 @@
       return value.toString()
     }
 
-    const getCheckboxName = () => {
-      return `su-checkbox-name-${this._riot_id}`
+    function getCheckboxName() {
+      return `su-checkbox-name-${tag._riot_id}`
     }
   </script>
 </su-checkbox-group>

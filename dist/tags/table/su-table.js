@@ -1,11 +1,16 @@
 riot.tag2('su-table', '', '', '', function(opts) {
+    const tag = this
+
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
     let lastData
     let lastCondition = {}
     let headers
     const suTableIndex = 'su-table-index'
 
-    this.on('mount', () => {
-      headers = this.tags['su-th']
+    function onMount() {
+      headers = tag.tags['su-th']
       if (!Array.isArray(headers)) {
         headers = headers ? [headers] : []
       }
@@ -18,13 +23,13 @@ riot.tag2('su-table', '', '', '', function(opts) {
             th.sorted = th.opts.field == lastCondition.field
             th.reverse = lastCondition.reverse
           })
-          this.update()
+          tag.update()
         })
       })
-      this.update()
-    })
+      tag.update()
+    }
 
-    this.on('update', () => {
+    function onUpdate() {
       if (JSON.stringify(lastData) != JSON.stringify(opts.data)) {
         lastData = opts.data
         lastCondition = {
@@ -43,19 +48,19 @@ riot.tag2('su-table', '', '', '', function(opts) {
             th.sorted = th.opts.field == lastCondition.field
             th.reverse = lastCondition.reverse
           })
-          this.update()
+          tag.update()
         }
       }
-    })
+    }
 
-    const sort = field => {
+    function sort(field) {
       addIndexField(opts.data)
       const condition = generateCondition(field, lastCondition)
       opts.data.sort(sortBy(condition))
       lastCondition = condition
     }
 
-    const generateCondition = (field, condition) => {
+    function generateCondition(field, condition) {
       if (condition.field === field) {
         if (!condition.reverse) {
           condition.reverse = true
@@ -71,7 +76,7 @@ riot.tag2('su-table', '', '', '', function(opts) {
       return condition
     }
 
-    const sortBy = condition => {
+    function sortBy(condition) {
       const field = condition.field
       const reverse = condition.reverse ? -1 : 1
       const nullsFirst = opts.nullsFirst ? -1 : 1
@@ -96,7 +101,7 @@ riot.tag2('su-table', '', '', '', function(opts) {
       }
     }
 
-    const addIndexField = json => {
+    function addIndexField(json) {
       json.forEach((data, index) => {
         if (data[suTableIndex] === undefined) {
           data[suTableIndex] = index

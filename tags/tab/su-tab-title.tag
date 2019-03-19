@@ -4,10 +4,26 @@
   </a>
 
   <script>
-    this.active = false
+    const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+    tag.active = false
 
-    this.click = () => {
-      this.parent.parent.clickForTitle(this.refs.item.innerText)
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.click = click
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
+
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function click() {
+      tag.parent.parent.clickForTitle(tag.refs.item.innerText)
     }
   </script>
 </su-tab-title>

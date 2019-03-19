@@ -45,103 +45,128 @@
   </style>
 
   <script>
-    this.defaultValue = ''
-    this.value = ''
-    this.label = ''
+    const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+    tag.defaultValue = ''
+    tag.value = ''
+    tag.label = ''
 
-    if (opts.items && opts.items.length > 0) {
-      this.label = opts.items[0].label
-      this.value = opts.items[0].value
-      this.default = opts.items[0].default
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.blur = blur
+    tag.change = change
+    tag.changed = changed
+    tag.changeValues = changeValues
+    tag.reset = reset
+    tag.on('before-mount', onBeforeMount)
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
+
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onBeforeMount() {
+      if (opts.items && opts.items.length > 0) {
+        tag.label = opts.items[0].label
+        tag.value = opts.items[0].value
+        tag.default = opts.items[0].default
+      }
     }
 
-    this.on('mount', () => {
+    function onMount() {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
       if (typeof opts.riotValue !== 'undefined') {
-        this.value = opts.riotValue
-        this.defaultValue = this.value
-        this.update()
+        tag.value = opts.riotValue
+        tag.defaultValue = tag.value
+        tag.update()
       } else {
-        this.defaultValue = this.value
+        tag.defaultValue = tag.value
       }
-    })
+    }
 
-    this.on('update', () => {
+    function onUpdate() {
       if (opts.items) {
-        let selected = opts.items.filter(item => item.value === this.value)
+        let selected = opts.items.filter(item => item.value === tag.value)
         if (!selected || selected.length == 0) {
           const childItems = flatMap(opts.items.filter(item => item.items), item => item.items)
-          selected = childItems.filter(item => item.value == this.value)
+          selected = childItems.filter(item => item.value == tag.value)
         }
 
         if (selected && selected.length > 0) {
           const target = selected[0]
-          if (this.label !== target.label) {
-            this.changeValues(this.value, true)
+          if (tag.label !== target.label) {
+            tag.changeValues(tag.value, true)
           }
         } else if (opts.items && opts.items.length > 0) {
-          if (this.value != opts.items[0].value) {
-            this.value = opts.items[0].value
+          if (tag.value != opts.items[0].value) {
+            tag.value = opts.items[0].value
           }
-          if (this.label != opts.items[0].label) {
-            this.label = opts.items[0].label
-            this.default = opts.items[0].default
+          if (tag.label != opts.items[0].label) {
+            tag.label = opts.items[0].label
+            tag.default = opts.items[0].default
           }
         }
       }
-    })
+    }
 
     // ===================================================================================
     //                                                                               State
     //                                                                               =====
-    this.reset = () => {
-      this.value = this.defaultValue
+    function reset() {
+      tag.value = tag.defaultValue
     }
 
-    this.changed = () => {
-      return this.value !== this.defaultValue
+    function changed() {
+      return tag.value !== tag.defaultValue
     }
 
     // ===================================================================================
     //                                                                               Event
     //                                                                               =====
-    this.blur = () => {
-      this.trigger('blur')
+    function blur() {
+      tag.trigger('blur')
     }
 
-    this.change = target => {
-      this.changeValues(target.target.value)
+    function change(target) {
+      tag.changeValues(target.target.value)
     }
 
-    this.changeValues = (value, updating) => {
+    function changeValues(value, updating) {
       let item
       if (opts.items.some(item => item.value == value || item.label == value)) {
         item = opts.items.filter(item => item.value == value || item.label == value)[0]
-        this.label = item.label
-        this.value = item.value
-        this.default = item.default
+        tag.label = item.label
+        tag.value = item.value
+        tag.default = item.default
       } else {
         const childItems = flatMap(opts.items.filter(item => item.items), item => item.items)
         if (childItems.some(item => item.value == value || item.label == value)) {
           item = childItems.filter(item => item.value == value || item.label == value)[0]
-          this.label = item.label
-          this.value = item.value
-          this.default = item.default
+          tag.label = item.label
+          tag.value = item.value
+          tag.default = item.default
         }
       }
 
       if (!updating) {
-        this.update()
-        this.trigger('change', item)
+        tag.update()
+        tag.trigger('change', item)
       }
     }
 
     // ===================================================================================
     //                                                                               Logic
     //                                                                               =====
-    const flatMap = (xs, f) => {
+    function flatMap(xs, f) {
       return xs.reduce(function (ys, x) {
         return ys.concat(f(x))
       }, [])

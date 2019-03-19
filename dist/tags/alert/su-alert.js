@@ -1,17 +1,24 @@
-riot.tag2('su-alert', '<su-modal class="tiny" ref="modal" modal="{modal}"> <div class="ui icon message"> <i class="info circle icon"></i> <div class="scrolling content"> <div class="header" if="{parent.title}"> {parent.title} </div> <p each="{message in parent.messages}">{message}</p> </div> </div> </su-modal>', 'su-alert .ui.dimmer,[data-is="su-alert"] .ui.dimmer{ z-index: 1020; } su-alert .ui.modal,[data-is="su-alert"] .ui.modal{ z-index: 1021; } su-alert .ui.message,[data-is="su-alert"] .ui.message{ background: none; box-shadow: none; } su-alert .ui.message .header+p,[data-is="su-alert"] .ui.message .header+p{ margin-top: 1em; }', '', function(opts) {
-    const self = this
-    this.mixin('semantic-ui')
+riot.tag2('su-alert', '<su-modal class="tiny" ref="modal" modal="{modal}" title="{title}" messages="{messages}"> <div class="ui icon message"> <i class="info circle icon"></i> <div class="scrolling content"> <div class="header" if="{opts.title}"> {opts.title} </div> <p each="{message in opts.messages}">{message}</p> </div> </div> </su-modal>', 'su-alert .ui.dimmer,[data-is="su-alert"] .ui.dimmer{ z-index: 1020; } su-alert .ui.modal,[data-is="su-alert"] .ui.modal{ z-index: 1021; } su-alert .ui.message,[data-is="su-alert"] .ui.message{ background: none; box-shadow: none; } su-alert .ui.message .header+p,[data-is="su-alert"] .ui.message .header+p{ margin-top: 1em; }', '', function(opts) {
+    const tag = this
 
-    this.modal = {
+    tag.modal = {
       closable: false,
       buttons: []
     }
-    const button = {}
 
-    this.on('mount', () => {
+    tag.mixin('semantic-ui')
+    tag.observable.on('showAlert', showAlert)
+    tag.on('mount', onMount)
+
+    const button = {}
+    riot.mixin({
+      suAlert
+    })
+
+    function onMount() {
       let defaultButton = {}
-      if (this.defaultOptions && this.defaultOptions.alert && this.defaultOptions.alert.button) {
-        defaultButton = this.defaultOptions.alert.button
+      if (tag.defaultOptions && tag.defaultOptions.alert && tag.defaultOptions.alert.button) {
+        defaultButton = tag.defaultOptions.alert.button
       }
       if (defaultButton.default) {
         button.default = true
@@ -20,12 +27,12 @@ riot.tag2('su-alert', '<su-modal class="tiny" ref="modal" modal="{modal}"> <div 
       button.type = defaultButton.type || ''
       button.icon = defaultButton.icon || ''
 
-      this.refs.modal.on('closeAction', () => {
-        this.observable.trigger('callbackConfirm')
+      tag.refs.modal.on('closeAction', () => {
+        tag.observable.trigger('callbackConfirm')
       })
-    })
+    }
 
-    const setButton = option => {
+    function setButton(option) {
       const btn = {
         text: option.button.text || button.text,
         type: option.button.type || button.type,
@@ -39,52 +46,50 @@ riot.tag2('su-alert', '<su-modal class="tiny" ref="modal" modal="{modal}"> <div 
         btn.default = button.default
       }
 
-      this.modal.buttons.length = 0
-      this.modal.buttons.push(btn)
+      tag.modal.buttons.length = 0
+      tag.modal.buttons.push(btn)
     }
 
-    this.observable.on('showAlert', option => {
-      this.title = option.title
-      this.messages = Array.isArray(option.message) ? option.message : [option.message]
+    function showAlert(option) {
+      tag.title = option.title
+      tag.messages = Array.isArray(option.message) ? option.message : [option.message]
       setButton(option)
-      this.update()
-      this.refs.modal.show()
-    })
+      tag.update()
+      tag.refs.modal.show()
+    }
 
-    riot.mixin({
-      suAlert: param => {
-        const option = {
-          title: null,
-          message: null,
-          button: {
-            text: null,
-            default: null,
-            type: null,
-            icon: null,
-          },
-        }
-
-        if (typeof param === 'string') {
-          option.message = param
-        } else if (param) {
-          if (param.title) {
-            option.title = param.title
-          }
-          if (param.message) {
-            option.message = param.message
-          }
-          if (param.button) {
-            option.button = param.button
-          }
-        }
-
-        return self.Q.Promise(resolve => {
-          self.observable.trigger('showAlert', option)
-          self.observable.on('callbackConfirm', () => {
-            this.refs.modal.hide()
-            return resolve()
-          })
-        })
+    function suAlert(param) {
+      const option = {
+        title: null,
+        message: null,
+        button: {
+          text: null,
+          default: null,
+          type: null,
+          icon: null,
+        },
       }
-    })
+
+      if (typeof param === 'string') {
+        option.message = param
+      } else if (param) {
+        if (param.title) {
+          option.title = param.title
+        }
+        if (param.message) {
+          option.message = param.message
+        }
+        if (param.button) {
+          option.button = param.button
+        }
+      }
+
+      return tag.Q.Promise(resolve => {
+        tag.observable.trigger('showAlert', option)
+        tag.observable.on('callbackConfirm', () => {
+          tag.refs.modal.hide()
+          return resolve()
+        })
+      })
+    }
 });

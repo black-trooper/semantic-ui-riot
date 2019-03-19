@@ -1,5 +1,7 @@
 <su-popup onmouseover="{ mouseover }" onmouseout="{ mouseout }">
-  <div id="{ getId() }" class="ui popup { opts.position } { opts.dataVariation } transition { transitionStatus } { nowrap: isNowrap() }"></div>
+  <div id="{ getId() }" onmouseover="{ stopPropagation }" onmouseout="{ stopPropagation }"
+    class="ui popup { position } { dataVariation } transition { transitionStatus } { nowrap: isNowrap() }">
+  </div>
   <yield />
 
   <style>
@@ -44,8 +46,8 @@
       bottom: 100%;
       left: 50%;
       right: auto;
-      -webkit-transform: translateX(-50%) !important;
-      transform: translateX(-50%) !important;
+      -webkit-transform: translateX(-50%);
+      transform: translateX(-50%);
     }
 
     .ui.popup.bottom.center {
@@ -53,8 +55,13 @@
       bottom: auto;
       left: 50%;
       right: auto;
-      -webkit-transform: translateX(-50%) !important;
-      transform: translateX(-50%) !important;
+      -webkit-transform: translateX(-50%);
+      transform: translateX(-50%);
+    }
+
+    .ui.popup.top.center.scale.transition.in,
+    .ui.popup.bottom.center.scale.transition.in {
+      animation-name: xScaleIn
     }
 
     .ui.popup.top.right {
@@ -77,65 +84,149 @@
       left: auto;
       right: 100%;
       top: 50%;
-      -webkit-transform: translateY(-50%) !important;
-      transform: translateY(-50%) !important;
+      -webkit-transform: translateY(-50%);
+      transform: translateY(-50%);
     }
 
     .ui.popup.right.center {
       left: 100%;
       right: auto;
       top: 50%;
-      -webkit-transform: translateY(-50%) !important;
-      transform: translateY(-50%) !important;
+      -webkit-transform: translateY(-50%);
+      transform: translateY(-50%);
+    }
+
+    .ui.popup.left.center.scale.transition.in,
+    .ui.popup.right.center.scale.transition.in {
+      animation-name: yScaleIn
+    }
+
+    @-webkit-keyframes xScaleIn {
+      0% {
+        opacity: 0;
+        -webkit-transform: scale(0.8) translateX(-50%);
+        transform: scale(0.8) translateX(-50%);
+      }
+
+      100% {
+        opacity: 1;
+        -webkit-transform: scale(1) translateX(-50%);
+        transform: scale(1) translateX(-50%);
+      }
+    }
+
+    @keyframes xScaleIn {
+      0% {
+        opacity: 0;
+        -webkit-transform: scale(0.8) translateX(-50%);
+        transform: scale(0.8) translateX(-50%);
+      }
+
+      100% {
+        opacity: 1;
+        -webkit-transform: scale(1) translateX(-50%);
+        transform: scale(1) translateX(-50%);
+      }
+    }
+
+    @-webkit-keyframes yScaleIn {
+      0% {
+        opacity: 0;
+        -webkit-transform: scale(0.8) translateY(-50%);
+        transform: scale(0.8) translateY(-50%);
+      }
+
+      100% {
+        opacity: 1;
+        -webkit-transform: scale(1) translateY(-50%);
+        transform: scale(1) translateY(-50%);
+      }
+    }
+
+    @keyframes yScaleIn {
+      0% {
+        opacity: 0;
+        -webkit-transform: scale(0.8) translateY(-50%);
+        transform: scale(0.8) translateY(-50%);
+      }
+
+      100% {
+        opacity: 1;
+        -webkit-transform: scale(1) translateY(-50%);
+        transform: scale(1) translateY(-50%);
+      }
     }
   </style>
 
   <script>
-    this.content = ''
-    this.on('mount', () => {
-      if (!opts.position) {
-        opts.position = 'top left'
-      }
+    const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+    tag.content = ''
+    tag.dataVariation = opts.dataVariation || ''
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.getId = getId
+    tag.isNowrap = isNowrap
+    tag.mouseover = mouseover
+    tag.mouseout = mouseout
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.stopPropagation = stopPropagation
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
+
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
       if (opts.tooltip) {
         if (opts.dataTitle) {
-          this.content = `<div class="header">${opts.dataTitle}</div><div class="content">${opts.tooltip}</div>`
+          tag.content = `<div class="header">${opts.dataTitle}</div><div class="content">${opts.tooltip}</div>`
         } else {
-          this.content = opts.tooltip
+          tag.content = opts.tooltip
         }
       }
-      else if (this.tags['su-popup-content']) {
-        this.content = this.tags['su-popup-content'].root.innerHTML
-        this.tags['su-popup-content'].unmount()
+      else if (tag.tags['su-popup-content']) {
+        tag.content = tag.tags['su-popup-content'].root.innerHTML
+        tag.tags['su-popup-content'].unmount()
       }
-      document.getElementById(this.getId()).innerHTML = this.content
-      this.update()
-    })
-
-    // ===================================================================================
-    //                                                                               Event
-    //                                                                               =====
-    this.mouseover = () => {
-      this.transitionStatus = 'visible'
-      this.trigger('mouseover')
+      document.getElementById(tag.getId()).innerHTML = tag.content
+      tag.update()
     }
 
-    this.mouseout = () => {
-      this.transitionStatus = 'hidden'
-      this.trigger('mouseout')
+    function onUpdate() {
+      tag.position = opts.position || 'top left'
     }
 
-    // ===================================================================================
-    //                                                                              Helper
-    //                                                                              ======
-    this.isNowrap = () => {
-      if (opts.dataVariation && opts.dataVariation.indexOf('wide') >= 0) {
+    function mouseover() {
+      tag.transitionStatus = 'scale in visible'
+      tag.trigger('mouseover')
+    }
+
+    function mouseout() {
+      tag.transitionStatus = 'hidden'
+      tag.trigger('mouseout')
+    }
+
+    function stopPropagation(event) {
+      event.stopPropagation()
+    }
+
+    function isNowrap() {
+      if (tag.dataVariation.indexOf('wide') >= 0) {
         return false
       }
       return true
     }
 
-    this.getId = () => {
-      return `su-popup-${this._riot_id}`
+    function getId() {
+      return `su-popup-${tag._riot_id}`
     }
   </script>
 </su-popup>

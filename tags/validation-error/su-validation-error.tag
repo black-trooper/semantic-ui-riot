@@ -16,14 +16,32 @@
   </style>
 
   <script>
-    this.getClass = () => {
-      if (opts.name || this.isEmptyErrors()) {
+    const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.getClass = getClass
+    tag.isEmptyErrors = isEmptyErrors
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
+
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function getClass() {
+      if (opts.name || tag.isEmptyErrors()) {
         return ''
       }
       return 'ui error message'
     }
 
-    this.isEmptyErrors = () => {
+    function isEmptyErrors() {
       return !opts.errors || Object.keys(opts.errors).length == 0
     }
   </script>

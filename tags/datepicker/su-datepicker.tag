@@ -7,8 +7,8 @@
         <i class="calendar icon"></i>
       </button>
     </div>
-    <div class="menu transition { transitionStatus }" onmousedown="{ mousedown }" onmouseup="{ mouseup }" onblur="{ blur }"
-      tabindex="{ getTabindex() }">
+    <div class="menu transition { transitionStatus }" onmousedown="{ mousedown }" onmouseup="{ mouseup }"
+      onblur="{ blur }" tabindex="{ getTabindex() }">
       <div class="ui compact segments">
         <div class="ui center aligned secondary segment">
           <div class="ui buttons dp-navigation">
@@ -36,19 +36,25 @@
         <div class="ui center aligned segment" if="{ !yearSelecting && !monthSelecting }">
           <div class="ui two column grid">
             <div class="column dp-clear">
-              <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{ clickClear }" type="button"><i class="times icon"></i></button></div>
+              <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{ clickClear }" type="button"><i class="times icon"></i></button>
+            </div>
             <div class="column dp-today">
-              <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{ clickToday }" type="button"><i class="calendar check icon"></i></button></div>
+              <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{ clickToday }" type="button"><i class="calendar check icon"></i></button>
+            </div>
           </div>
         </div>
         <div class="ui center aligned segment" if="{ monthSelecting }">
           <div each="{ element in months }" class="dp-wrapper">
-            <div each="{ month in element}" class="dp-month"><button class="ui button {disabled : isDisabled()}" onclick="{ clickMonth }" type="button">{month.label}</button></div>
+            <div each="{ month in element}" class="dp-month">
+              <button class="ui button {disabled : isDisabled()}" onclick="{ clickMonth }" type="button">{month.label}</button>
+            </div>
           </div>
         </div>
         <div class="ui center aligned segment" if="{ yearSelecting }">
           <div each="{ element in years }" class="dp-wrapper">
-            <div each="{ year in element}" class="dp-month"><button class="ui button {disabled : isDisabled()}" onclick="{ clickYear }" type="button">{year}</button></div>
+            <div each="{ year in element}" class="dp-month">
+              <button class="ui button {disabled : isDisabled()}" onclick="{ clickYear }" type="button">{year}</button>
+            </div>
           </div>
         </div>
       </div>
@@ -147,12 +153,51 @@
     import parse from 'date-fns/parse'
     import startOfMonth from 'date-fns/start_of_month'
 
-    this.weeks = []
-    this.value = null
-    this.valueAsDate = null
-    this.defaultValue = null
-    this.currentDate = null
-    this.transitionStatus = opts.popup ? 'hidden' : 'visible'
+    const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+    tag.currentDate = null
+    tag.defaultValue = null
+    tag.transitionStatus = opts.popup ? 'hidden' : 'visible'
+    tag.value = null
+    tag.valueAsDate = null
+    tag.weeks = []
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.mixin('semantic-ui')
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.reset = reset
+    tag.changed = changed
+    tag.selectMonth = selectMonth
+    tag.selectYear = selectYear
+    tag.clickDay = clickDay
+    tag.clickMonth = clickMonth
+    tag.clickYear = clickYear
+    tag.clickPrevious = clickPrevious
+    tag.clickNext = clickNext
+    tag.clickClear = clickClear
+    tag.clickToday = clickToday
+    tag.toggle = toggle
+    tag.mousedown = mousedown
+    tag.mouseup = mouseup
+    tag.blur = blur
+    tag.getCurrentYear = getCurrentYear
+    tag.getCurrentMonthView = getCurrentMonthView
+    tag.getCurrentMonth = getCurrentMonth
+    tag.getWeekNames = getWeekNames
+    tag.isActive = isActive
+    tag.isToday = isToday
+    tag.getTabindex = getTabindex
+    tag.isReadOnly = isReadOnly
+    tag.isDisabled = isDisabled
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
     let visibleFlg = false
     let itemActivated = false
     let lastValue = null
@@ -161,153 +206,151 @@
     let lastOptsCurrentDate = null
     let yearRange = 20
 
-    this.mixin('semantic-ui')
-
-    this.on('mount', () => {
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
-      if (!this.valueAsDate) {
-        this.valueAsDate = copyDate(this.value || opts.riotValue)
+      if (!tag.valueAsDate) {
+        tag.valueAsDate = copyDate(tag.value || opts.riotValue)
       }
       setValueFromValueAsDate()
-      lastValue = copyDate(this.valueAsDate)
+      if (tag.refs.input) {
+        tag.refs.input.value = tag.value
+      }
+      lastValue = copyDate(tag.valueAsDate)
       lastOptsValue = copyDate(opts.riotValue)
 
-      this.currentDate = copyDate(opts.currentDate)
-      if (this.valueAsDate) {
-        this.currentDate = copyDate(this.valueAsDate)
+      tag.currentDate = copyDate(opts.currentDate)
+      if (tag.valueAsDate) {
+        tag.currentDate = copyDate(tag.valueAsDate)
       }
-      if (!this.currentDate) {
-        this.currentDate = new Date()
+      if (!tag.currentDate) {
+        tag.currentDate = new Date()
       }
-      this.months = getMonthes()
+      tag.months = getMonthes()
       if (opts.yearRange && !isNaN(opts.yearRange) && opts.yearRange > 20) {
         yearRange = opts.yearRange
       }
       if (opts.startMode === 'year') {
-        this.selectYear()
+        tag.selectYear()
       }
-      this.update()
-      this.defaultValue = this.valueAsDate
-    })
+      tag.update()
+      tag.defaultValue = tag.valueAsDate
+    }
 
-    this.on('update', () => {
+    function onUpdate() {
       let changed = false
-      if (!isEqualDay(lastValue, this.value)) {
-        this.valueAsDate = copyDate(this.value)
-        lastValue = copyDate(this.value)
+      if (!isEqualDay(lastValue, tag.value)) {
+        tag.valueAsDate = copyDate(tag.value)
+        lastValue = copyDate(tag.value)
         changed = true
-      } else if (!isEqualDay(lastValue, this.valueAsDate)) {
-        lastValue = copyDate(this.valueAsDate)
+      } else if (!isEqualDay(lastValue, tag.valueAsDate)) {
+        lastValue = copyDate(tag.valueAsDate)
         changed = true
       } else if (!isEqualDay(lastOptsValue, opts.riotValue)) {
-        this.valueAsDate = copyDate(opts.riotValue)
+        tag.valueAsDate = copyDate(opts.riotValue)
         lastOptsValue = copyDate(opts.riotValue)
         lastValue = copyDate(opts.riotValue)
         changed = true
       }
       setValueFromValueAsDate()
-      if (changed && this.refs.input) {
-        this.refs.input.value = this.value
+      if (changed && tag.refs.input) {
+        tag.refs.input.value = tag.value
       }
 
-      if (changed && this.valueAsDate) {
-        this.currentDate = copyDate(this.valueAsDate)
+      if (changed && tag.valueAsDate) {
+        tag.currentDate = copyDate(tag.valueAsDate)
       }
       if (!isEqualDay(lastOptsCurrentDate, opts.currentDate)) {
-        this.currentDate = copyDate(opts.currentDate)
+        tag.currentDate = copyDate(opts.currentDate)
         lastOptsCurrentDate = copyDate(opts.currentDate)
       }
-      if (!isEqualDay(lastCurrentDate, this.currentDate)) {
-        lastCurrentDate = copyDate(this.currentDate)
+      if (!isEqualDay(lastCurrentDate, tag.currentDate)) {
+        lastCurrentDate = copyDate(tag.currentDate)
         generate()
       }
-    })
+    }
 
-    // ===================================================================================
-    //                                                                               State
-    //                                                                               =====
-    this.reset = () => {
-      this.valueAsDate = this.defaultValue
+    function reset() {
+      tag.valueAsDate = tag.defaultValue
       setValueFromValueAsDate()
     }
 
-    this.changed = () => {
-      return !isEqualDay(this.valueAsDate, this.defaultValue)
+    function changed() {
+      return !isEqualDay(tag.valueAsDate, tag.defaultValue)
     }
 
-    // ===================================================================================
-    //                                                                               Event
-    //                                                                               =====
-    this.selectMonth = () => {
-      this.yearSelecting = false
-      this.monthSelecting = !this.monthSelecting
+    function selectMonth() {
+      tag.yearSelecting = false
+      tag.monthSelecting = !tag.monthSelecting
     }
 
-    this.selectYear = () => {
-      this.years = getYears()
-      this.monthSelecting = false
-      this.yearSelecting = !this.yearSelecting
+    function selectYear() {
+      tag.years = getYears()
+      tag.monthSelecting = false
+      tag.yearSelecting = !tag.yearSelecting
     }
 
-    this.clickDay = event => {
-      if (this.isReadOnly() || this.isDisabled()) {
+    function clickDay(event) {
+      if (tag.isReadOnly() || tag.isDisabled()) {
         return
       }
       setDate(event.item.day)
-      this.trigger('click', this.valueAsDate)
+      tag.trigger('click', tag.valueAsDate)
     }
 
-    this.clickMonth = event => {
-      this.currentDate.setMonth(event.item.month.value)
-      this.monthSelecting = false
+    function clickMonth(event) {
+      tag.currentDate.setMonth(event.item.month.value)
+      tag.monthSelecting = false
     }
 
-    this.clickYear = event => {
-      this.currentDate.setYear(event.item.year)
-      this.selectMonth()
+    function clickYear(event) {
+      tag.currentDate.setYear(event.item.year)
+      tag.selectMonth()
     }
 
-    this.clickPrevious = () => {
-      if (this.yearSelecting) {
+    function clickPrevious() {
+      if (tag.yearSelecting) {
         addYear(-yearRange)
       } else {
-        this.monthSelecting = false
-        this.currentDate = addMonths(this.currentDate, -1)
+        tag.monthSelecting = false
+        tag.currentDate = addMonths(tag.currentDate, -1)
       }
     }
 
-    this.clickNext = () => {
-      if (this.yearSelecting) {
+    function clickNext() {
+      if (tag.yearSelecting) {
         addYear(yearRange)
       } else {
-        this.monthSelecting = false
-        this.currentDate = addMonths(this.currentDate, 1)
+        tag.monthSelecting = false
+        tag.currentDate = addMonths(tag.currentDate, 1)
       }
     }
 
-    this.clickClear = () => {
+    function clickClear() {
       setDate(null)
-      this.trigger('clear', this.valueAsDate)
+      tag.trigger('clear', tag.valueAsDate)
     }
 
-    this.clickToday = () => {
+    function clickToday() {
       setDate(new Date())
-      this.trigger('today', this.valueAsDate)
+      tag.trigger('today', tag.valueAsDate)
     }
 
     // -----------------------------------------------------
     //                                          popup option
     //                                          ------------
-    this.toggle = () => {
-      if (this.isReadOnly() || this.isDisabled()) {
+    function toggle() {
+      if (tag.isReadOnly() || tag.isDisabled()) {
         return
       }
       if (!visibleFlg) {
         if (opts.startMode === 'year') {
-          this.selectYear()
-          this.yearSelecting = true
+          tag.selectYear()
+          tag.yearSelecting = true
         }
         open()
       } else {
@@ -315,40 +358,37 @@
       }
     }
 
-    this.mousedown = () => {
+    function mousedown() {
       itemActivated = true
     }
 
-    this.mouseup = () => {
+    function mouseup() {
       itemActivated = false
     }
 
-    this.blur = () => {
+    function blur() {
       if (opts.popup && !itemActivated) {
         close()
       }
     }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
-    const generate = () => {
-      const startDate = startOfMonth(this.currentDate)
+    function generate() {
+      const startDate = startOfMonth(tag.currentDate)
       const baseDate = addDays(startDate, - startDate.getDay())
       let i = 0
-      this.weeks = []
+      tag.weeks = []
 
       for (let r = 0; r < 6; r++) {
         const days = []
         for (let c = 0; c < 7; c++) {
           days.push(addDays(baseDate, i++))
         }
-        this.weeks.push({ days })
+        tag.weeks.push({ days })
       }
     }
 
-    const addYear = year => {
-      this.years = this.years.map(values => {
+    function addYear(year) {
+      tag.years = tag.years.map(values => {
         values = values.map(value => {
           return value + parseInt(year)
         })
@@ -356,19 +396,19 @@
       })
     }
 
-    const getYears = () => {
+    function getYears() {
       const rowSize = ((yearRange - yearRange % 4) / 4) + ((yearRange % 4 != 0) ? 1 : 0)
       const years = new Array()
       for (let index = 0; index < rowSize; index++) {
         years.push([])
       }
       for (let index = 0; index < yearRange; index++) {
-        years[(index - index % 4) / 4][index % 4] = this.currentDate.getFullYear() + index - ((yearRange - yearRange % 2) / 2 - 1)
+        years[(index - index % 4) / 4][index % 4] = tag.currentDate.getFullYear() + index - ((yearRange - yearRange % 2) / 2 - 1)
       }
       return years
     }
 
-    const getMonthes = () => {
+    function getMonthes() {
       const months = [[], [], []]
       const monthNames = range(12).map(month => format(new Date(2018, month, 1), 'MMM', { locale: getLocale() }))
       monthNames.forEach((month, index) => {
@@ -380,41 +420,41 @@
       return months
     }
 
-    const open = () => {
-      this.upward = isUpward()
-      this.transitionStatus = 'visible'
+    function open() {
+      tag.upward = isUpward()
+      tag.transitionStatus = 'visible'
       visibleFlg = true
-      this.currentDate = copyDate(opts.currentDate)
-      if (this.valueAsDate) {
-        this.currentDate = copyDate(this.valueAsDate)
+      tag.currentDate = copyDate(opts.currentDate)
+      if (tag.valueAsDate) {
+        tag.currentDate = copyDate(tag.valueAsDate)
       }
-      if (!this.currentDate) {
-        this.currentDate = new Date()
+      if (!tag.currentDate) {
+        tag.currentDate = new Date()
       }
-      this.trigger('open', this.valueAsDate)
+      tag.trigger('open', tag.valueAsDate)
     }
 
-    const close = () => {
-      this.transitionStatus = 'hidden'
+    function close() {
+      tag.transitionStatus = 'hidden'
       visibleFlg = false
-      this.trigger('close', this.valueAsDate)
+      tag.trigger('close', tag.valueAsDate)
     }
 
-    const setDate = date => {
-      this.valueAsDate = date
+    function setDate(date) {
+      tag.valueAsDate = date
       setValueFromValueAsDate()
-      if (this.refs.input) {
-        this.refs.input.value = this.value
+      if (tag.refs.input) {
+        tag.refs.input.value = tag.value
         close()
       }
-      this.trigger('change', this.valueAsDate)
+      tag.trigger('change', tag.valueAsDate)
     }
 
-    const setValueFromValueAsDate = () => {
-      this.value = this.valueAsDate ? format(this.valueAsDate, getPattern(), { locale: getLocale() }) : null
+    function setValueFromValueAsDate() {
+      tag.value = tag.valueAsDate ? format(tag.valueAsDate, getPattern(), { locale: getLocale() }) : null
     }
 
-    const isEqualDay = (d1, d2) => {
+    function isEqualDay(d1, d2) {
       if (d1 == d2) {
         return true
       }
@@ -424,23 +464,23 @@
       return isSameDay(d1, d2)
     }
 
-    const copyDate = date => {
+    function copyDate(date) {
       if (!date) {
         return date
       }
       return parse(date)
     }
 
-    const isUpward = () => {
+    function isUpward() {
       if (opts.direction == 'upward') {
         return true
       }
       if (opts.direction == 'downward') {
         return false
       }
-      const inputField = this.root.getBoundingClientRect()
+      const inputField = tag.root.getBoundingClientRect()
       const windowHeight = document.documentElement.offsetHeight || document.body.offsetHeight
-      const menuHeight = this.root.querySelector('.menu').getBoundingClientRect().height
+      const menuHeight = tag.root.querySelector('.menu').getBoundingClientRect().height
       const above = menuHeight <= inputField.top
       const below = windowHeight >= inputField.top + inputField.height + menuHeight
 
@@ -453,38 +493,32 @@
       return true
     }
 
-    // ===================================================================================
-    //                                                                              Helper
-    //                                                                              ======
-    this.getCurrentYear = () => {
-      if (this.currentDate) {
-        return this.currentDate.getFullYear()
+    function getCurrentYear() {
+      if (tag.currentDate) {
+        return tag.currentDate.getFullYear()
       }
     }
 
-    this.getCurrentMonthView = () => {
-      if (this.currentDate) {
-        return format(this.currentDate, 'MMM', { locale: getLocale() })
+    function getCurrentMonthView() {
+      if (tag.currentDate) {
+        return format(tag.currentDate, 'MMM', { locale: getLocale() })
       }
     }
 
-    this.getCurrentMonth = () => {
-      return this.currentDate.getMonth()
+    function getCurrentMonth() {
+      return tag.currentDate.getMonth()
     }
 
-    this.getWeekNames = () => {
+    function getWeekNames() {
       return range(7, 1).map(day => format(new Date(2018, 6, day), 'dd', { locale: getLocale() }))
     }
 
-    this.isActive = date => {
-      return isEqualDay(this.valueAsDate, date)
+    function isActive(date) {
+      return isEqualDay(tag.valueAsDate, date)
     }
 
-    this.isToday = date => {
-      return isToday(date)
-    }
 
-    this.getTabindex = () => {
+    function getTabindex() {
       if (!opts.popup) {
         return false
       }
@@ -494,33 +528,33 @@
       return 0
     }
 
-    this.isReadOnly = () => {
-      return this.root.classList.contains('read-only')
+    function isReadOnly() {
+      return tag.root.classList.contains('read-only')
     }
-    this.isDisabled = () => {
-      return this.root.classList.contains('disabled')
+    function isDisabled() {
+      return tag.root.classList.contains('disabled')
     }
 
-    const getPattern = () => {
+    function getPattern() {
       if (opts.pattern) {
         return opts.pattern
       }
-      if (this.defaultOptions && this.defaultOptions.pattern) {
-        return this.defaultOptions.pattern
+      if (tag.defaultOptions && tag.defaultOptions.pattern) {
+        return tag.defaultOptions.pattern
       }
       return 'YYYY-MM-DD'
     }
 
-    const getLocale = () => {
+    function getLocale() {
       if (opts.locale) {
         return opts.locale
       }
-      if (this.defaultOptions && this.defaultOptions.locale) {
-        return this.defaultOptions.locale
+      if (tag.defaultOptions && tag.defaultOptions.locale) {
+        return tag.defaultOptions.locale
       }
     }
 
-    const range = (size, startAt = 0) => {
+    function range(size, startAt = 0) {
       return Array.from(Array(size).keys()).map(i => i + startAt)
     }
   </script>

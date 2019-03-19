@@ -26,6 +26,11 @@
       "error",
       "never"
     ],
+    "func-style": [
+      "error",
+      "declaration"
+    ],
+    "no-func-assign": "error",
     "no-var": 2
   },
   "plugins": [

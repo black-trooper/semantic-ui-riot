@@ -1,23 +1,31 @@
 riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
-    this.label = ''
-    this.value = ''
-    this.defaultValue = ''
-    let lastValue
-    let lastOptsValue
+    const tag = this
 
-    this.on('mount', () => {
+    tag.defaultValue = ''
+    tag.label = ''
+    tag.value = ''
+
+    tag.changed = changed
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.reset = reset
+
+    let lastOptsValue
+    let lastValue
+
+    function onMount() {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
-      if (this.value) {
-        opts.riotValue = this.value
+      if (tag.value) {
+        opts.riotValue = tag.value
       } else {
-        this.value = opts.riotValue
+        tag.value = opts.riotValue
       }
-      lastValue = this.value
-      lastOptsValue = this.value
+      lastValue = tag.value
+      lastOptsValue = tag.value
 
-      let radios = this.tags['su-radio']
+      let radios = tag.tags['su-radio']
       if (!Array.isArray(radios)) {
         radios = [radios]
       }
@@ -25,25 +33,25 @@ riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
         initializeChild(radio)
       })
 
-      this.defaultValue = this.value
-      this.update()
-    })
+      tag.defaultValue = tag.value
+      tag.update()
+    }
 
-    this.on('update', () => {
+    function onUpdate() {
       let changed = false
-      if (lastValue != this.value) {
-        opts.riotValue = this.value
-        lastOptsValue = this.value
-        lastValue = this.value
+      if (lastValue != tag.value) {
+        opts.riotValue = tag.value
+        lastOptsValue = tag.value
+        lastValue = tag.value
         changed = true
       } else if (lastOptsValue != opts.riotValue) {
-        this.value = opts.riotValue
+        tag.value = opts.riotValue
         lastOptsValue = opts.riotValue
         lastValue = opts.riotValue
         changed = true
       }
 
-      let radios = this.tags['su-radio']
+      let radios = tag.tags['su-radio']
 
       if (!Array.isArray(radios)) {
         radios = [radios]
@@ -53,37 +61,37 @@ riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
       })
 
       if (changed) {
-        this.trigger('change', this.value)
+        tag.trigger('change', tag.value)
       }
-    })
-
-    this.reset = () => {
-      this.value = this.defaultValue
     }
 
-    this.changed = () => {
-      return this.value !== this.defaultValue
+    function reset() {
+      tag.value = tag.defaultValue
     }
 
-    const updateState = radio => {
+    function changed() {
+      return tag.value !== tag.defaultValue
+    }
+
+    function updateState(radio) {
       if (typeof radio.opts.value === 'undefined') {
         return
       }
-      radio.checked = this.value == radio.opts.value
+      radio.checked = tag.value == radio.opts.value
       if (radio.checked) {
-        this.label = radio.root.getElementsByTagName('label')[0].innerText
+        tag.label = radio.root.getElementsByTagName('label')[0].innerText
       }
     }
 
-    const initializeChild = radio => {
+    function initializeChild(radio) {
       radio.opts.name = getRadioName()
       radio.on('click', value => {
-        this.value = value
-        this.update()
+        tag.value = value
+        tag.update()
       })
     }
 
-    const getRadioName = () => {
-      return `su-radio-name-${this._riot_id}`
+    function getRadioName() {
+      return `su-radio-name-${tag._riot_id}`
     }
 });

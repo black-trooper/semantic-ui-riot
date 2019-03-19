@@ -1,6 +1,7 @@
-<su-toast class="{ opts.position }">
+<su-toast class="{ position }">
   <div class="ui list">
-    <su-toast-item each="{ item in items }" item="{ item }" position="{ parent.opts.position }"></su-toast-item>
+    <su-toast-item each="{ item in items }" icon="{ item.icon }" progress="{ item.progress }"
+      class-name="{ item.class }" title="{ item.title }" messages="{ item.messages }" position="{ position }" />
   </div>
 
   <style>
@@ -48,21 +49,39 @@
   </style>
 
   <script>
-    const self = this
-    this.mixin('semantic-ui')
-    this.items = []
+    const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+    tag.items = []
 
-    this.on('mount', () => {
-      if (!opts.position) {
-        opts.position = 'bottom right'
-      }
-      this.update()
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.mixin('semantic-ui')
+    tag.observable.on('showToast', showToast)
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
+    riot.mixin({
+      suToast
     })
 
     // ===================================================================================
-    //                                                                          Observable
-    //                                                                          ==========
-    this.observable.on('showToast', option => {
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
+      tag.update()
+    }
+
+    function onUpdate() {
+      tag.position = opts.position || 'bottom right'
+    }
+
+    function showToast(option) {
       const item = {
         title: option.title,
         messages: Array.isArray(option.message) ? option.message : [option.message],
@@ -70,46 +89,44 @@
         progress: option.progress,
         class: option.class
       }
-      this.items.push(item)
-      this.update()
+      tag.items.push(item)
+      tag.update()
 
       setTimeout(() => {
-        this.items.shift()
-        this.update()
+        tag.items.shift()
+        tag.update()
       }, 5000)
-    })
+    }
 
-    riot.mixin({
-      suToast: param => {
-        const option = {
-          title: null,
-          message: null,
-          icon: null,
-          progress: null,
-          class: null,
-        }
-
-        if (typeof param === 'string') {
-          option.message = param
-        } else if (param) {
-          if (param.title) {
-            option.title = param.title
-          }
-          if (param.message) {
-            option.message = param.message
-          }
-          if (param.icon) {
-            option.icon = param.icon
-          }
-          if (param.progress) {
-            option.progress = param.progress
-          }
-          if (param.class) {
-            option.class = param.class
-          }
-        }
-        self.observable.trigger('showToast', option)
+    function suToast(param) {
+      const option = {
+        title: null,
+        message: null,
+        icon: null,
+        progress: null,
+        class: null,
       }
-    })
+
+      if (typeof param === 'string') {
+        option.message = param
+      } else if (param) {
+        if (param.title) {
+          option.title = param.title
+        }
+        if (param.message) {
+          option.message = param.message
+        }
+        if (param.icon) {
+          option.icon = param.icon
+        }
+        if (param.progress) {
+          option.progress = param.progress
+        }
+        if (param.class) {
+          option.class = param.class
+        }
+      }
+      tag.observable.trigger('showToast', option)
+    }
   </script>
 </su-toast>

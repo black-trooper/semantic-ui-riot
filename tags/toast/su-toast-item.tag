@@ -1,9 +1,9 @@
 <su-toast-item class="item { transition }">
   <div class=" { position } floated" if="{ !hide }">
-    <div class="ui attached active progress { class } top" if="{ progress == 'top' }">
+    <div class="ui attached active progress { className } top" if="{ progress == 'top' }">
       <div class="bar"></div>
     </div>
-    <div class="ui { icon: icon } { class } floating compact message">
+    <div class="ui { icon: icon } { className } floating compact message">
       <i class="close icon" onclick="{ close }"></i>
       <i class="{ icon } icon" if="{ icon }"></i>
       <div class="content">
@@ -13,7 +13,7 @@
         <p each="{ message in messages }">{ message }</p>
       </div>
     </div>
-    <div class="ui attached active progress { class } bottom" if="{ progress == 'bottom' }">
+    <div class="ui attached active progress { className } bottom" if="{ progress == 'bottom' }">
       <div class="bar"></div>
     </div>
   </div>
@@ -76,41 +76,58 @@
   </style>
 
   <script>
-    this.on('mount', () => {
-      this.position = this.isRight() ? 'right' : 'left'
-      const direction = this.isRight() ? 'left' : 'right'
-      this.icon = opts.item.icon
-      this.progress = opts.item.progress
-      this.class = opts.item.class
-      this.transition = `transition animating in fade ${direction}`
-      this.title = opts.item.title
-      this.messages = opts.item.messages
-      this.update()
+    const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+    tag.position = isRight() ? 'right' : 'left'
+    tag.direction = isRight() ? 'left' : 'right'
+    tag.icon = opts.icon
+    tag.progress = opts.progress
+    tag.className = opts.className
+    tag.transition = `transition animating in fade ${tag.direction}`
+    tag.title = opts.title
+    tag.messages = opts.messages
 
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.close = close
+    tag.on('mount', onMount)
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
+
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function close() {
+      tag.hide = true
+      tag.update()
+    }
+
+    function onMount() {
       setTimeout(() => {
-        this.transition = ''
-        this.update()
+        tag.transition = ''
+        tag.update()
       }, 300)
 
       setTimeout(() => {
-        this.transition = `transition animating out fade ${direction}`
-        this.update()
+        tag.transition = `transition animating out fade ${tag.direction}`
+        tag.update()
       }, 3000)
 
       setTimeout(() => {
-        this.transition = 'transition hidden'
-        this.hide = true
-        this.update()
+        tag.transition = 'transition hidden'
+        tag.hide = true
+        tag.update()
       }, 3500)
-    })
-
-    this.close = () => {
-      this.hide = true
-      this.update()
     }
 
-    this.isRight = () => {
-      return opts.position.indexOf('right') >= 0
+    function isRight() {
+      const position = opts.position || ''
+      return position.indexOf('right') >= 0
     }
   </script>
 </su-toast-item>

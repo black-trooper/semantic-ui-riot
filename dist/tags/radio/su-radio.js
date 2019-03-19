@@ -1,54 +1,64 @@
-riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', 'su-radio.ui.checkbox label,[data-is="su-radio"].ui.checkbox label{ cursor: pointer; } su-radio.ui.read-only input[type="radio"],[data-is="su-radio"].ui.read-only input[type="radio"],su-radio.ui.disabled input[type="radio"],[data-is="su-radio"].ui.disabled input[type="radio"]{ cursor: default!important; }', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
-    this.name = ''
-    this.checked = false
+riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', 'su-radio.ui.checkbox label,[data-is="su-radio"].ui.checkbox label{ cursor: pointer; } su-radio.ui.read-only input[type="radio"],[data-is="su-radio"].ui.read-only input[type="radio"],su-radio.ui.disabled input[type="radio"],[data-is="su-radio"].ui.disabled input[type="radio"]{ cursor: default !important; }', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
+    const tag = this
+
+    tag.checked = false
+    tag.name = ''
+
+    tag.click = click
+    tag.getId = getId
+    tag.isDisabled = isDisabled
+    tag.isRadio = isRadio
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
     let lastChecked
     let lastOptsCheck
 
-    this.on('mount', () => {
-      if (this.checked) {
-        opts.checked = this.checked
+    function onMount() {
+      if (tag.checked) {
+        opts.checked = tag.checked
       } else {
-        this.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
+        tag.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
       }
-      lastChecked = this.checked
+      lastChecked = tag.checked
       lastOptsCheck = opts.checked
-      this.update()
-    })
+      tag.update()
+    }
 
-    this.on('update', () => {
-      this.name = opts.name
-      this.value = opts.value
-      if (lastChecked != this.checked) {
-        opts.checked = this.checked
-        lastChecked = this.checked
+    function onUpdate() {
+      tag.name = opts.name
+      tag.value = opts.value
+      if (lastChecked != tag.checked) {
+        opts.checked = tag.checked
+        lastChecked = tag.checked
       } else if (lastOptsCheck != opts.checked) {
-        this.checked = opts.checked
+        tag.checked = opts.checked
         lastOptsCheck = opts.checked
       }
-    })
+    }
 
-    this.click = event => {
-      if (isReadOnly() || this.isDisabled()) {
+    function click(event) {
+      if (isReadOnly() || tag.isDisabled()) {
         event.preventDefault()
         return
       }
-      this.checked = event.target.checked
-      this.trigger('click', event.target.value)
+      tag.checked = event.target.checked
+      tag.trigger('click', event.target.value)
     }
 
-    const isReadOnly = () => {
-      return this.root.classList.contains('read-only')
+    function isReadOnly() {
+      return tag.root.classList.contains('read-only')
     }
 
-    this.getId = () => {
-      return `su-radio-${this._riot_id}`
+    function getId() {
+      return `su-radio-${tag._riot_id}`
     }
 
-    this.isDisabled = () => {
-      return this.root.classList.contains('disabled')
+    function isDisabled() {
+      return tag.root.classList.contains('disabled')
     }
 
-    this.isRadio = () => {
-      return !this.root.classList.contains('slider')
+    function isRadio() {
+      return !tag.root.classList.contains('slider')
     }
 });

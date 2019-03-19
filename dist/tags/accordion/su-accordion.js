@@ -1,7 +1,11 @@
 riot.tag2('su-accordion', '<div class="title {active: active}" onclick="{click}"> <i class="dropdown icon"></i> {opts.title} </div> <div class="content active {open : active} {close : !active}"> <yield></yield> </div>', '', '', function(opts) {
-    this.active = false
+    const tag = this
 
-    this.click = () => {
-      this.trigger('click', this)
+    tag.active = false
+
+    tag.click = click
+
+    function click() {
+      tag.trigger('click', tag)
     }
 });

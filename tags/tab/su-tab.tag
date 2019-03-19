@@ -17,15 +17,33 @@
   </style>
 
   <script>
-    this.active = false
-    this.mounted = false
-    this.on('mount', () => {
-      this.update()
-    })
-    this.on('update', () => {
-      if (this.active && !this.mounted) {
-        this.mounted = true
+    const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+    tag.active = false
+    tag.mounted = false
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
+
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
+      tag.update()
+    }
+    function onUpdate() {
+      if (tag.active && !tag.mounted) {
+        tag.mounted = true
       }
-    })
+    }
   </script>
 </su-tab>

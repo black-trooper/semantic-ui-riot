@@ -8,41 +8,63 @@
   </div>
 
   <script>
-    this.tabs = []
+    const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+    tag.tabs = []
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.click = click
+    tag.clickForTitle = clickForTitle
+    tag.getClass = getClass
+    tag.hasTitle = hasTitle
+    tag.isBottom = isBottom
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
     let lastOptsActive, lastActive, active
+    let shownMessage = false
 
-
-    this.on('mount', () => {
-      if (this.tags['su-tab-header']) {
-        this.tags['su-tab-header'].opts.class = getTitleClass()
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
+      if (tag.tags['su-tab-header']) {
+        tag.tags['su-tab-header'].opts.class = getTitleClass()
       }
 
-      this.tabs = this.tags['su-tab']
-      if (typeof this.tabs === 'undefined') {
+      tag.tabs = tag.tags['su-tab']
+      if (typeof tag.tabs === 'undefined') {
         return
       }
-      if (!Array.isArray(this.tabs)) {
-        this.tabs = [this.tabs]
+      if (!Array.isArray(tag.tabs)) {
+        tag.tabs = [tag.tabs]
       }
       supportTraditionalOptions()
 
       if (typeof opts.active === 'undefined') {
-        const titles = this.hasTitle()
+        const titles = tag.hasTitle()
         if (titles) {
           opts.active = titles[0].root.innerText.trim()
         } else {
-          opts.active = this.tabs[0].opts.label
+          opts.active = tag.tabs[0].opts.label
         }
       }
 
-      this.tabs.forEach(tab => {
+      tag.tabs.forEach(tab => {
         initializeChild(tab)
       })
 
-      this.update()
-    })
+      tag.update()
+    }
 
-    this.on('update', () => {
+    function onUpdate() {
       supportTraditionalOptions()
       let changed = false
       if (lastOptsActive != opts.active) {
@@ -56,7 +78,7 @@
       }
 
       if (changed) {
-        const titles = this.hasTitle()
+        const titles = tag.hasTitle()
         if (titles) {
           let index
           titles.forEach((title, i) => {
@@ -70,47 +92,41 @@
             titles[0].active = true
             index = 0
           }
-          this.tabs.forEach((tab, i) => {
+          tag.tabs.forEach((tab, i) => {
             tab.active = index == i
           })
         } else {
-          this.tabs.forEach(tab => {
+          tag.tabs.forEach(tab => {
             tab.active = tab.opts.label == active
           })
-          if (!this.tabs.some(tab => tab.active)) {
-            this.tabs[0].active = true
+          if (!tag.tabs.some(tab => tab.active)) {
+            tag.tabs[0].active = true
           }
         }
       }
-    })
+    }
 
-    // ===================================================================================
-    //                                                                               Event
-    //                                                                               =====
-    this.click = event => {
+    function click(event) {
       active = event.item.tab.opts.label
-      this.update()
-      this.trigger('click', active)
+      tag.update()
+      tag.trigger('click', active)
     }
 
-    this.clickForTitle = title => {
+    function clickForTitle(title) {
       active = title
-      this.update()
-      this.trigger('click', active)
+      tag.update()
+      tag.trigger('click', active)
     }
 
-    // ===================================================================================
-    //                                                                              Helper
-    //                                                                              ======
-    this.isBottom = () => {
+    function isBottom() {
       return hasClass('bottom')
     }
 
-    this.hasTitle = () => {
-      if (!this.tags['su-tab-header']) {
+    function hasTitle() {
+      if (!tag.tags['su-tab-header']) {
         return false
       }
-      const titles = this.tags['su-tab-header'].tags['su-tab-title']
+      const titles = tag.tags['su-tab-header'].tags['su-tab-title']
       if (!titles) {
         return false
       }
@@ -121,16 +137,13 @@
       return titles
     }
 
-    this.getClass = () => {
+    function getClass() {
       if (hasClass('tabular') && !hasClass('attached')) {
         return 'attached'
       }
     }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
-    const initializeChild = tab => {
+    function initializeChild(tab) {
       tab.mounted = !opts.lazyMount
       if (tab.opts.class) {
         return
@@ -150,7 +163,7 @@
       tab.opts.class = classList.join(' ')
     }
 
-    const getTitleClass = () => {
+    function getTitleClass() {
       const classList = []
       if (hasClass('left') || hasClass('right')) {
         classList.push('vertical')
@@ -168,13 +181,13 @@
       return classList.join(' ')
     }
 
-    const hasClass = className => {
-      return this.root.classList.contains(className)
+    function hasClass(className) {
+
+      return tag.root.classList.contains(className)
     }
 
-    let shownMessage = false
-    const supportTraditionalOptions = () => {
-      this.tabs.forEach(tab => {
+    function supportTraditionalOptions() {
+      tag.tabs.forEach(tab => {
         if (typeof tab.opts.title !== 'undefined') {
           if (!shownMessage) {
             console.warn('\'title\' attribute is deprecated. Please use \'label\'.')
@@ -185,6 +198,5 @@
         }
       })
     }
-
   </script>
 </su-tabset>

@@ -1,12 +1,29 @@
 <su-table>
   <script>
+    const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
     let lastData
     let lastCondition = {}
     let headers
     const suTableIndex = 'su-table-index'
 
-    this.on('mount', () => {
-      headers = this.tags['su-th']
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
+      headers = tag.tags['su-th']
       if (!Array.isArray(headers)) {
         headers = headers ? [headers] : []
       }
@@ -19,13 +36,13 @@
             th.sorted = th.opts.field == lastCondition.field
             th.reverse = lastCondition.reverse
           })
-          this.update()
+          tag.update()
         })
       })
-      this.update()
-    })
+      tag.update()
+    }
 
-    this.on('update', () => {
+    function onUpdate() {
       if (JSON.stringify(lastData) != JSON.stringify(opts.data)) {
         lastData = opts.data
         lastCondition = {
@@ -44,19 +61,19 @@
             th.sorted = th.opts.field == lastCondition.field
             th.reverse = lastCondition.reverse
           })
-          this.update()
+          tag.update()
         }
       }
-    })
+    }
 
-    const sort = field => {
+    function sort(field) {
       addIndexField(opts.data)
       const condition = generateCondition(field, lastCondition)
       opts.data.sort(sortBy(condition))
       lastCondition = condition
     }
 
-    const generateCondition = (field, condition) => {
+    function generateCondition(field, condition) {
       if (condition.field === field) {
         if (!condition.reverse) {
           condition.reverse = true
@@ -72,7 +89,7 @@
       return condition
     }
 
-    const sortBy = condition => {
+    function sortBy(condition) {
       const field = condition.field
       const reverse = condition.reverse ? -1 : 1
       const nullsFirst = opts.nullsFirst ? -1 : 1
@@ -97,7 +114,7 @@
       }
     }
 
-    const addIndexField = json => {
+    function addIndexField(json) {
       json.forEach((data, index) => {
         if (data[suTableIndex] === undefined) {
           data[suTableIndex] = index

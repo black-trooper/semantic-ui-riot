@@ -1,95 +1,108 @@
 <su-rating class="ui rating { opts.class }">
-  <i class="icon { active: active } { selected: selected }" each="{ items }" onclick="{ click }" onmouseover="{ mouseover }"
-    onmouseout="{ mouseout }"></i>
+  <i class="icon { active: item.active } { selected: item.selected }" each="{ item in items }"
+    onclick="{ click.bind(this, item) }" onmouseover="{ mouseover.bind(this, item) }" onmouseout="{ mouseout }"></i>
 
   <script>
-    this.items = []
+    const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+    tag.items = []
 
-    this.on('mount', () => {
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.reset = reset
+    tag.changed = changed
+    tag.click = click
+    tag.mouseout = mouseout
+    tag.mouseover = mouseover
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
+
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onMount() {
       init(opts.max, opts.value)
-    })
+    }
 
-    this.on('update', () => {
+    function onUpdate() {
       updateView()
-    })
-
-    // ===================================================================================
-    //                                                                               State
-    //                                                                               =====
-    this.reset = () => {
-      this.value = this.defaultValue
     }
 
-    this.changed = () => {
-      return this.value != this.defaultValue
+    function reset() {
+      tag.value = tag.defaultValue
     }
 
-    // ===================================================================================
-    //                                                                               Event
-    //                                                                               =====
-    this.click = event => {
+    function changed() {
+      return tag.value != tag.defaultValue
+    }
+
+    function click(target) {
       if (isReadOnly()) {
         return
       }
       let valueChanged = false
       let beforeValue
-      if (this.value != event.item.value) {
-        beforeValue = this.value
+      if (tag.value != target.value) {
+        beforeValue = tag.value
         valueChanged = true
       }
-      this.value = event.item.value
+      tag.value = target.value
       updateView()
       parentUpdate()
-      this.trigger('click', event.item.value)
+      tag.trigger('click', target.value)
       if (valueChanged) {
-        this.trigger('change', { value: this.value, beforeValue: beforeValue })
+        tag.trigger('change', { value: tag.value, beforeValue: beforeValue })
       }
     }
 
-    this.mouseover = event => {
+    function mouseover(target) {
       if (isReadOnly()) {
         return
       }
-      this.items.forEach(item => {
-        item.selected = item.value <= event.item.value
+      tag.items.forEach(item => {
+        item.selected = item.value <= target.value
       })
     }
 
-    this.mouseout = () => {
-      this.items.forEach(item => {
+    function mouseout() {
+      tag.items.forEach(item => {
         item.selected = false
       })
     }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
-    const isReadOnly = () => {
-      return this.root.classList.contains('read-only')
+    function isReadOnly() {
+      return tag.root.classList.contains('read-only')
     }
 
-    const init = (max = 5, value = 0) => {
-      this.value = value
-      this.defaultValue = value
-      this.items.length = 0
+    function init(max = 5, value = 0) {
+      tag.value = value
+      tag.defaultValue = value
+      tag.items.length = 0
       for (let i = 0; i < max; i++) {
-        this.items[i] = { value: i + 1, active: false, selected: false }
+        tag.items[i] = { value: i + 1, active: false, selected: false }
       }
       updateView()
       parentUpdate()
     }
 
-    const updateView = () => {
-      this.items.forEach(item => {
-        item.active = item.value <= this.value
+    function updateView() {
+      tag.items.forEach(item => {
+        item.active = item.value <= tag.value
       })
     }
 
-    const parentUpdate = () => {
-      if (this.parent) {
-        this.parent.update()
+    function parentUpdate() {
+      if (tag.parent) {
+        tag.parent.update()
       } else {
-        this.update()
+        tag.update()
       }
     }
   </script>

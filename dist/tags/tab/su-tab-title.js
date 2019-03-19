@@ -1,7 +1,11 @@
 riot.tag2('su-tab-title', '<a class="{opts.class} {active: active} item" onclick="{click}" ref="item"> <yield></yield> </a>', '', '', function(opts) {
-    this.active = false
+    const tag = this
 
-    this.click = () => {
-      this.parent.parent.clickForTitle(this.refs.item.innerText)
+    tag.active = false
+
+    tag.click = click
+
+    function click() {
+      tag.parent.parent.clickForTitle(tag.refs.item.innerText)
     }
 });

@@ -1,19 +1,19 @@
 <su-modal onclick="{ dimmerClose }">
   <div class="ui dimmer modals page transition { transitionStatus }">
     <div class="ui modal transition visible active {opts.class}" onclick="{ clickModal }" id="{ getId() }">
-      <i class="close icon" if="{ opts.modal.closable && !this.isBasic() }" onclick="{ hide }"></i>
+      <i class="close icon" if="{ opts.modal.closable && !isBasic() }" onclick="{ hide }"></i>
       <div class="ui header { icon: opts.modal.header.icon }" if="{ opts.modal.header }">
         <i class="icon { opts.modal.header.icon }" if="{ opts.modal.header.icon }"></i>
-        { (opts.modal.header.text) ? opts.modal.header.text : opts.modal.header }
+        { getTitle() }
       </div>
       <div class="content { image: isImageContent() }" ref="content">
         <yield />
       </div>
       <div class="actions">
-        <button each="{ opts.modal.buttons }" class="ui button { type } { labeled: icon && text } { icon: icon } { inverted: isBasic() } { disabled: disabled }"
-          onclick="{ parent.click }" ref="button_{ text }" type="button">
-          { text }
-          <i class="icon { icon }" if="{ icon }"></i>
+        <button each="{ button in opts.modal.buttons }" onclick="{ click }" ref="button_{ button.text }" type="button"
+          class="ui button { button.type } { labeled: button.icon && button.text } { icon: button.icon } { inverted: isBasic() } { disabled: button.disabled }">
+          { button.text }
+          <i class="icon { button.icon }" if="{ button.icon }"></i>
         </button>
       </div>
     </div>
@@ -48,113 +48,140 @@
   </style>
 
   <script>
+    const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.click = click
+    tag.clickModal = clickModal
+    tag.dimmerClose = dimmerClose
+    tag.getId = getId
+    tag.getTitle = getTitle
+    tag.hide = hide
+    tag.isBasic = isBasic
+    tag.isImageContent = isImageContent
+    tag.show = show
+    tag.on('before-mount', onBeforeMount)
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
     let image_content = false
     let openning, closing, visible
 
-    if (!opts.modal) {
-      opts.modal = {}
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function onBeforeMount() {
+      if (!opts.modal) {
+        opts.modal = {}
+      }
     }
 
-    this.on('mount', () => {
+    function onMount() {
       if (typeof opts.modal.closable === 'undefined') {
         opts.modal.closable = true
       }
-    })
+    }
 
-    this.on('update', () => {
-      if (this.refs.content.getElementsByTagName('img').length > 0) {
+    function onUpdate() {
+      if (tag.refs.content.getElementsByTagName('img').length > 0) {
         image_content = true
       }
-    })
+    }
 
-    // ===================================================================================
-    //                                                                               Event
-    //                                                                               =====
-    this.show = () => {
+    function show() {
       if (openning || closing || visible) {
         return
       }
       openning = true
-      this.transitionStatus = 'animating fade in visible'
-      this.update()
+      tag.transitionStatus = 'animating fade in visible'
+      tag.update()
       setDefaultFocus()
-      this.trigger('show')
+      tag.trigger('show')
 
       setTimeout(() => {
         openning = false
         visible = true
-        this.transitionStatus = 'visible active'
-        this.update()
+        tag.transitionStatus = 'visible active'
+        tag.update()
       }, 500)
     }
 
-    this.click = event => {
-      this.trigger(event.item.action || event.item.text)
+    function click(event) {
+      tag.trigger(event.item.action || event.item.text)
       if (typeof event.item.closable === 'undefined' || event.item.closable) {
-        this.hide()
+        tag.hide()
       }
     }
 
-    this.dimmerClose = () => {
-      if (opts.modal.closable && !this.isBasic()) {
-        this.hide()
+    function dimmerClose() {
+      if (opts.modal.closable && !tag.isBasic()) {
+        tag.hide()
       }
     }
 
-    this.clickModal = event => {
+    function clickModal(event) {
       event.stopPropagation()
     }
 
-    this.hide = () => {
+    function hide() {
       if (openning || closing || !visible) {
         return
       }
       closing = true
-      this.transitionStatus = 'animating fade out visible active'
-      this.update()
-      this.trigger('hide')
+      tag.transitionStatus = 'animating fade out visible active'
+      tag.update()
+      tag.trigger('hide')
 
       setTimeout(() => {
         closing = false
         visible = false
-        this.transitionStatus = ''
-        this.update()
+        tag.transitionStatus = ''
+        tag.update()
       }, 300)
     }
 
-    // ===================================================================================
-    //                                                                               Logic
-    //                                                                               =====
-    const isContainsClassName = className => {
-      const modalElement = document.getElementById(this.getId())
+    function isContainsClassName(className) {
+      const modalElement = document.getElementById(tag.getId())
       if (!modalElement) {
         return false
       }
       return modalElement.classList.contains(className)
     }
 
-    const setDefaultFocus = () => {
+    function setDefaultFocus() {
       if (!opts.modal || !opts.modal.buttons || opts.modal.buttons.length == 0) {
         return
       }
       if (opts.modal.buttons.some(button => button.default)) {
         const text = opts.modal.buttons.filter(button => button.default)[0].text
-        this.refs[`button_${text}`].focus()
+        tag.refs[`button_${text}`].focus()
       }
     }
 
-    // ===================================================================================
-    //                                                                              Helper
-    //                                                                              ======
-    this.getId = () => {
-      return `su-modal-${this._riot_id}`
+    function getTitle() {
+      if (opts.modal.header.text) {
+        return opts.modal.header.text
+      }
+      return opts.modal.header
     }
 
-    this.isBasic = () => {
+    function getId() {
+      return `su-modal-${tag._riot_id}`
+    }
+
+    function isBasic() {
       return isContainsClassName('basic')
     }
 
-    this.isImageContent = () => {
+    function isImageContent() {
       return image_content
     }
   </script>
