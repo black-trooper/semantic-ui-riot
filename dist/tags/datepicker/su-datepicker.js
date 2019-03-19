@@ -60,6 +60,9 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
         tag.valueAsDate = copyDate(tag.value || opts.riotValue)
       }
       setValueFromValueAsDate()
+      if (tag.refs.input) {
+        tag.refs.input.value = tag.value
+      }
       lastValue = copyDate(tag.valueAsDate)
       lastOptsValue = copyDate(opts.riotValue)
 

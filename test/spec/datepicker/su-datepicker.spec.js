@@ -184,6 +184,16 @@ describe('su-datepicker', function () {
     tag.refs.input.value.should.equal('2017/12/01')
   })
 
+  it('popup datepicker default value', function () {
+    $('body').append('<su-datepicker />')
+    mount({
+      popup: true,
+      pattern: 'YYYY/MM/DD',
+      value: '2017/12/01',
+    })
+    tag.refs.input.value.should.equal('2017/12/01')
+  })
+
   it('year first option', function () {
     $('body').append('<su-datepicker />')
     mount({ currentDate: new Date(2017, 11, 1), popup: true, startMode: "year" })

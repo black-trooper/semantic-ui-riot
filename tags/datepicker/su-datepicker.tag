@@ -217,6 +217,9 @@
         tag.valueAsDate = copyDate(tag.value || opts.riotValue)
       }
       setValueFromValueAsDate()
+      if (tag.refs.input) {
+        tag.refs.input.value = tag.value
+      }
       lastValue = copyDate(tag.valueAsDate)
       lastOptsValue = copyDate(opts.riotValue)
 
