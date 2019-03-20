@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.22.0] - 2019-03-19
+### Changed
+- Add animation to su-popup
+- Refactor
+
+### Fixed
+- Fix the problem where the initial value is not displayed to the input field
+
+## [0.21.1] - 2019-02-22
+### Fixed
+- Fix the probrem where empty tabset
+
 ## [0.21.0] - 2018-12-30
 ### Added
 - Add su-validation-error
@@ -150,7 +162,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Add su-rating
 
-[Unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.20.1...HEAD
+[Unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.22.0...HEAD
+[0.22.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.21.1...v0.22.0
+[0.21.1]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.21.0...v0.21.1
+[0.21.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.20.1...v0.21.0
 [0.20.1]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.20.0...v0.20.1
 [0.20.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.19.7...v0.20.0
 [0.19.7]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.19.5...v0.19.7
