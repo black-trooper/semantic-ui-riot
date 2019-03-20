@@ -2737,13 +2737,27 @@ riot.mixin('semantic-ui', {
 riot.tag2('su-accordion', '<div class="title {active: active}" onclick="{click}"> <i class="dropdown icon"></i> {opts.title} </div> <div class="content active {open : active} {close : !active}"> <yield></yield> </div>', '', '', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.active = false;
 
-this.active = false;
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.click = click;
 
-this.click = function () {
-  _this.trigger('click', _this);
-};
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
+
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function click() {
+  tag.trigger('click', tag);
+}
 });
 
 /***/ }),
@@ -2755,21 +2769,35 @@ this.click = function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-accordionset', '<yield></yield>', 'su-accordionset,[data-is="su-accordionset"]{ display: block; } su-accordionset.ui.accordion .title~.content:not(.ui).close,[data-is="su-accordionset"].ui.accordion .title~.content:not(.ui).close{ padding-top: 0; padding-bottom: 0; } su-accordionset .content.close *,[data-is="su-accordionset"] .content.close *{ line-height: 0 !important; opacity: 0 !important; visibility: hidden !important; padding-top:0 !important; padding-bottom:0 !important; margin-top: 0 !important; margin-bottom: 0 !important; min-height: 0!important; transition: all 300ms 0s linear !important; } su-accordionset .content.close .dropdown.icon,[data-is="su-accordionset"] .content.close .dropdown.icon{ height: 0 !important; transition: height 300ms 0s linear !important; } su-accordionset .content.open *,[data-is="su-accordionset"] .content.open *{ line-height: 1.4285; opacity: 1; visibility: visible; transition: all 300ms 0s linear !important; } su-accordionset .content.open .dropdown.icon,[data-is="su-accordionset"] .content.open .dropdown.icon{ height: 1.4285 !important; transition: height 300ms 0s linear !important; }', 'class="ui accordion {opts.class}"', function(opts) {
+riot.tag2('su-accordionset', '<yield></yield>', 'su-accordionset,[data-is="su-accordionset"]{ display: block; } su-accordionset.ui.accordion .title~.content:not(.ui).close,[data-is="su-accordionset"].ui.accordion .title~.content:not(.ui).close{ padding-top: 0; padding-bottom: 0; } su-accordionset .content.close *,[data-is="su-accordionset"] .content.close *{ line-height: 0 !important; opacity: 0 !important; visibility: hidden !important; padding-top: 0 !important; padding-bottom: 0 !important; margin-top: 0 !important; margin-bottom: 0 !important; min-height: 0 !important; transition: all 300ms 0s linear !important; } su-accordionset .content.close .dropdown.icon,[data-is="su-accordionset"] .content.close .dropdown.icon{ height: 0 !important; transition: height 300ms 0s linear !important; } su-accordionset .content.open *,[data-is="su-accordionset"] .content.open *{ line-height: 1.4285; opacity: 1; visibility: visible; transition: all 300ms 0s linear !important; } su-accordionset .content.open .dropdown.icon,[data-is="su-accordionset"] .content.open .dropdown.icon{ height: 1.4285 !important; transition: height 300ms 0s linear !important; }', 'class="ui accordion {opts.class}"', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.accordions = [];
 
-this.accordions = [];
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.on('mount', onMount);
 
-this.on('mount', function () {
-  _this.accordions = _this.tags['su-accordion'];
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
 
-  if (!Array.isArray(_this.accordions)) {
-    _this.accordions = [_this.accordions];
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onMount() {
+  tag.accordions = tag.tags['su-accordion'];
+
+  if (!Array.isArray(tag.accordions)) {
+    tag.accordions = [tag.accordions];
   }
   var defaultActive = false;
-  _this.accordions.forEach(function (accordion) {
+  tag.accordions.forEach(function (accordion) {
 
     initializeChild(accordion);
     if (accordion.opts.active) {
@@ -2778,28 +2806,25 @@ this.on('mount', function () {
     }
   });
   if (!defaultActive) {
-    _this.accordions[0].active = true;
+    tag.accordions[0].active = true;
   }
 
-  _this.update();
-});
+  tag.update();
+}
 
-// ===================================================================================
-//                                                                               Logic
-//                                                                               =====
-var initializeChild = function initializeChild(child) {
+function initializeChild(child) {
   child.on('click', function (target) {
     var active = target.active;
-    _this.accordions.forEach(function (accordion) {
+    tag.accordions.forEach(function (accordion) {
       if (accordion.active) {
         accordion.active = false;
       }
     });
     target.active = !active;
-    _this.update();
-    _this.trigger('click', target);
+    tag.update();
+    tag.trigger('click', target);
   });
-};
+}
 });
 
 /***/ }),
@@ -2811,24 +2836,39 @@ var initializeChild = function initializeChild(child) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-alert', '<su-modal class="tiny" ref="modal" modal="{modal}"> <div class="ui icon message"> <i class="info circle icon"></i> <div class="scrolling content"> <div class="header" if="{parent.title}"> {parent.title} </div> <p each="{message in parent.messages}">{message}</p> </div> </div> </su-modal>', 'su-alert .ui.dimmer,[data-is="su-alert"] .ui.dimmer{ z-index: 1020; } su-alert .ui.modal,[data-is="su-alert"] .ui.modal{ z-index: 1021; } su-alert .ui.message,[data-is="su-alert"] .ui.message{ background: none; box-shadow: none; } su-alert .ui.message .header+p,[data-is="su-alert"] .ui.message .header+p{ margin-top: 1em; }', '', function(opts) {
+riot.tag2('su-alert', '<su-modal class="tiny" ref="modal" modal="{modal}" title="{title}" messages="{messages}"> <div class="ui icon message"> <i class="info circle icon"></i> <div class="scrolling content"> <div class="header" if="{opts.title}"> {opts.title} </div> <p each="{message in opts.messages}">{message}</p> </div> </div> </su-modal>', 'su-alert .ui.dimmer,[data-is="su-alert"] .ui.dimmer{ z-index: 1020; } su-alert .ui.modal,[data-is="su-alert"] .ui.modal{ z-index: 1021; } su-alert .ui.message,[data-is="su-alert"] .ui.message{ background: none; box-shadow: none; } su-alert .ui.message .header+p,[data-is="su-alert"] .ui.message .header+p{ margin-top: 1em; }', '', function(opts) {
 'use strict';
 
-var _this = this;
-
-var self = this;
-this.mixin('semantic-ui');
-
-this.modal = {
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.modal = {
   closable: false,
   buttons: []
-};
-var button = {};
 
-this.on('mount', function () {
+  // ===================================================================================
+  //                                                                         Tag Methods
+  //                                                                         ===========
+};tag.mixin('semantic-ui');
+tag.observable.on('showAlert', showAlert);
+tag.on('mount', onMount);
+
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
+var button = {};
+riot.mixin({
+  suAlert: suAlert
+});
+
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onMount() {
   var defaultButton = {};
-  if (_this.defaultOptions && _this.defaultOptions.alert && _this.defaultOptions.alert.button) {
-    defaultButton = _this.defaultOptions.alert.button;
+  if (tag.defaultOptions && tag.defaultOptions.alert && tag.defaultOptions.alert.button) {
+    defaultButton = tag.defaultOptions.alert.button;
   }
   if (defaultButton.default) {
     button.default = true;
@@ -2837,12 +2877,12 @@ this.on('mount', function () {
   button.type = defaultButton.type || '';
   button.icon = defaultButton.icon || '';
 
-  _this.refs.modal.on('closeAction', function () {
-    _this.observable.trigger('callbackConfirm');
+  tag.refs.modal.on('closeAction', function () {
+    tag.observable.trigger('callbackConfirm');
   });
-});
+}
 
-var setButton = function setButton(option) {
+function setButton(option) {
   var btn = {
     text: option.button.text || button.text,
     type: option.button.type || button.type,
@@ -2856,57 +2896,52 @@ var setButton = function setButton(option) {
     btn.default = button.default;
   }
 
-  _this.modal.buttons.length = 0;
-  _this.modal.buttons.push(btn);
-};
+  tag.modal.buttons.length = 0;
+  tag.modal.buttons.push(btn);
+}
 
-// ===================================================================================
-//                                                                          Observable
-//                                                                          ==========
-this.observable.on('showAlert', function (option) {
-  _this.title = option.title;
-  _this.messages = Array.isArray(option.message) ? option.message : [option.message];
+function showAlert(option) {
+  tag.title = option.title;
+  tag.messages = Array.isArray(option.message) ? option.message : [option.message];
   setButton(option);
-  _this.update();
-  _this.refs.modal.show();
-});
+  tag.update();
+  tag.refs.modal.show();
+}
 
-riot.mixin({
-  suAlert: function suAlert(param) {
-    var option = {
-      title: null,
-      message: null,
-      button: {
-        text: null,
-        default: null,
-        type: null,
-        icon: null
-      }
-    };
-
-    if (typeof param === 'string') {
-      option.message = param;
-    } else if (param) {
-      if (param.title) {
-        option.title = param.title;
-      }
-      if (param.message) {
-        option.message = param.message;
-      }
-      if (param.button) {
-        option.button = param.button;
-      }
+function suAlert(param) {
+  var option = {
+    title: null,
+    message: null,
+    button: {
+      text: null,
+      default: null,
+      type: null,
+      icon: null
     }
+  };
 
-    return self.Q.Promise(function (resolve) {
-      self.observable.trigger('showAlert', option);
-      self.observable.on('callbackConfirm', function () {
-        _this.refs.modal.hide();
-        return resolve();
-      });
-    });
+  if (typeof param === 'string') {
+    option.message = param;
+  } else if (param) {
+    if (param.title) {
+      option.title = param.title;
+    }
+    if (param.message) {
+      option.message = param.message;
+    }
+    if (param.button) {
+      option.button = param.button;
+    }
   }
-});
+
+  return tag.Q.Promise(function (resolve) {
+    tag.observable.trigger('showAlert', option);
+    tag.observable.on('callbackConfirm', function () {
+      tag.refs.modal.hide();
+      return resolve();
+    });
+  });
+}
 });
 
 /***/ }),
@@ -2921,30 +2956,47 @@ riot.mixin({
 riot.tag2('su-checkbox-group', '<yield></yield>', '', '', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.label = '';
+tag.value = '';
+tag.defaultValue = '';
 
-this.label = '';
-this.value = '';
-this.defaultValue = '';
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.changed = changed;
+tag.on('mount', onMount);
+tag.on('update', onUpdate);
+tag.reset = reset;
+
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
 var lastValue = void 0;
 var lastOptsValue = void 0;
 
-this.on('mount', function () {
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onMount() {
   if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
     opts.riotValue = opts.value;
   }
-  if (_this.value) {
-    opts.riotValue = _this.value;
+  if (tag.value) {
+    opts.riotValue = tag.value;
   } else {
-    _this.value = opts.riotValue;
+    tag.value = opts.riotValue;
   }
-  if (typeof _this.value !== 'undefined' && !Array.isArray(_this.value)) {
-    _this.value = _this.value.toString().split(/\s+/).join('').split(',');
+  if (typeof tag.value !== 'undefined' && !Array.isArray(tag.value)) {
+    tag.value = tag.value.toString().split(/\s+/).join('').split(',');
   }
-  lastValue = _this.value;
-  lastOptsValue = _this.value;
+  lastValue = tag.value;
+  lastOptsValue = tag.value;
 
-  var checkboxes = _this.tags['su-checkbox'];
+  var checkboxes = tag.tags['su-checkbox'];
   if (!Array.isArray(checkboxes)) {
     checkboxes = [checkboxes];
   }
@@ -2953,90 +3005,84 @@ this.on('mount', function () {
     updateState(checkbox);
   });
 
-  _this.defaultValue = _this.value;
+  tag.defaultValue = tag.value;
   parentUpdate();
-});
+}
 
-this.on('update', function () {
+function onUpdate() {
   var changed = false;
-  if (normalizeValue(lastValue) != normalizeValue(_this.value)) {
-    opts.riotValue = _this.value;
-    lastOptsValue = _this.value;
-    lastValue = _this.value;
+  if (normalizeValue(lastValue) != normalizeValue(tag.value)) {
+    opts.riotValue = tag.value;
+    lastOptsValue = tag.value;
+    lastValue = tag.value;
     changed = true;
   } else if (normalizeValue(lastOptsValue) != normalizeValue(opts.riotValue)) {
-    _this.value = opts.riotValue;
+    tag.value = opts.riotValue;
     lastOptsValue = opts.riotValue;
     lastValue = opts.riotValue;
     changed = true;
   }
-  if (typeof _this.value !== 'undefined' && !Array.isArray(_this.value)) {
-    _this.value = _this.value.toString().split(/\s+/).join('').split(',');
+  if (typeof tag.value !== 'undefined' && !Array.isArray(tag.value)) {
+    tag.value = tag.value.toString().split(/\s+/).join('').split(',');
   }
 
   if (changed) {
-    var checkboxes = _this.tags['su-checkbox'];
+    var checkboxes = tag.tags['su-checkbox'];
     if (!Array.isArray(checkboxes)) {
       checkboxes = [checkboxes];
     }
     checkboxes.forEach(function (checkbox) {
       updateState(checkbox);
     });
-    _this.trigger('change', _this.value);
+    tag.trigger('change', tag.value);
   }
-});
+}
 
-// ===================================================================================
-//                                                                               State
-//                                                                               =====
-this.reset = function () {
-  _this.value = _this.defaultValue;
-};
+function reset() {
+  tag.value = tag.defaultValue;
+}
 
-this.changed = function () {
-  return _this.value !== _this.defaultValue;
-};
+function changed() {
+  return tag.value !== tag.defaultValue;
+}
 
-// ===================================================================================
-//                                                                               Logic
-//                                                                               =====
-var updateState = function updateState(checkbox) {
-  if (typeof checkbox.opts.value === 'undefined' || typeof _this.value === 'undefined') {
+function updateState(checkbox) {
+  if (typeof checkbox.opts.value === 'undefined' || typeof tag.value === 'undefined') {
     return;
   }
-  checkbox.checked = _this.value.some(function (v) {
+  checkbox.checked = tag.value.some(function (v) {
     return v == checkbox.opts.value;
   });
   if (checkbox.checked) {
-    _this.label = checkbox.root.getElementsByTagName('label')[0].innerText;
+    tag.label = checkbox.root.getElementsByTagName('label')[0].innerText;
   }
-};
+}
 
-var initializeChild = function initializeChild(checkbox) {
+function initializeChild(checkbox) {
   checkbox.opts.name = getCheckboxName();
   checkbox.on('click', function () {
-    var checkboxes = _this.tags['su-checkbox'];
+    var checkboxes = tag.tags['su-checkbox'];
     if (!Array.isArray(checkboxes)) {
       checkboxes = [checkboxes];
     }
-    _this.value = checkboxes.filter(function (_checkbox) {
+    tag.value = checkboxes.filter(function (_checkbox) {
       return _checkbox.checked;
     }).map(function (_checkbox) {
       return _checkbox.opts.value;
     });
-    _this.update();
+    tag.update();
   });
-};
+}
 
-var parentUpdate = function parentUpdate() {
-  if (_this.parent) {
-    _this.parent.update();
+function parentUpdate() {
+  if (tag.parent) {
+    tag.parent.update();
   } else {
-    _this.update();
+    tag.update();
   }
-};
+}
 
-var normalizeValue = function normalizeValue(value) {
+function normalizeValue(value) {
   if (typeof value === 'undefined') {
     return value;
   }
@@ -3044,11 +3090,11 @@ var normalizeValue = function normalizeValue(value) {
     return [value].toString();
   }
   return value.toString();
-};
+}
 
-var getCheckboxName = function getCheckboxName() {
-  return 'su-checkbox-name-' + _this._riot_id;
-};
+function getCheckboxName() {
+  return 'su-checkbox-name-' + tag._riot_id;
+}
 });
 
 /***/ }),
@@ -3063,91 +3109,99 @@ var getCheckboxName = function getCheckboxName() {
 riot.tag2('su-checkbox', '<input type="checkbox" checked="{checked}" onclick="{click}" ref="target" disabled="{isDisabled()}" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', 'su-checkbox.ui.checkbox label,[data-is="su-checkbox"].ui.checkbox label{ cursor: pointer; } su-checkbox.ui.read-only input[type="checkbox"],[data-is="su-checkbox"].ui.read-only input[type="checkbox"],su-checkbox.ui.disabled input[type="checkbox"],[data-is="su-checkbox"].ui.disabled input[type="checkbox"]{ cursor: default !important; }', 'class="ui checkbox {opts.class}"', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.checked = false;
+tag.defaultChecked = false;
 
-this.checked = false;
-this.defaultChecked = false;
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.changed = changed;
+tag.click = click;
+tag.getId = getId;
+tag.isDisabled = isDisabled;
+tag.on('mount', onMount);
+tag.on('update', onUpdate);
+tag.reset = reset;
+
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
 var lastChecked = void 0;
 var lastOptsChecked = void 0;
+var shownMessage = false;
 
-this.on('mount', function () {
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onMount() {
   supportTraditionalOptions();
-  if (_this.checked) {
-    opts.checked = _this.checked;
+  if (tag.checked) {
+    opts.checked = tag.checked;
   } else {
-    _this.checked = normalizeOptChecked();
+    tag.checked = normalizeOptChecked();
   }
-  lastChecked = _this.checked;
-  lastOptsChecked = _this.checked;
-  _this.defaultChecked = _this.checked;
-  _this.update();
-});
+  lastChecked = tag.checked;
+  lastOptsChecked = tag.checked;
+  tag.defaultChecked = tag.checked;
+  tag.update();
+}
 
-this.on('update', function () {
+function onUpdate() {
   supportTraditionalOptions();
-  if (lastChecked != _this.checked) {
-    opts.checked = _this.checked;
-    lastChecked = _this.checked;
-    lastOptsChecked = _this.checked;
+  if (lastChecked != tag.checked) {
+    opts.checked = tag.checked;
+    lastChecked = tag.checked;
+    lastOptsChecked = tag.checked;
     parentUpdate();
   } else if (lastOptsChecked != normalizeOptChecked()) {
-    _this.checked = normalizeOptChecked();
-    lastChecked = _this.checked;
-    lastOptsChecked = _this.checked;
+    tag.checked = normalizeOptChecked();
+    lastChecked = tag.checked;
+    lastOptsChecked = tag.checked;
     parentUpdate();
   }
-});
+}
 
-// ===================================================================================
-//                                                                               State
-//                                                                               =====
-this.reset = function () {
-  _this.checked = _this.defaultChecked;
-};
+function reset() {
+  tag.checked = tag.defaultChecked;
+}
 
-this.changed = function () {
-  return _this.checked !== _this.defaultChecked;
-};
+function changed() {
+  return tag.checked !== tag.defaultChecked;
+}
 
-// ===================================================================================
-//                                                                               Event
-//                                                                               =====
-this.click = function () {
-  if (isReadOnly() || _this.isDisabled()) {
+function click() {
+  if (isReadOnly() || tag.isDisabled()) {
     event.preventDefault();
     return;
   }
-  _this.checked = !_this.checked;
+  tag.checked = !tag.checked;
   parentUpdate();
-  _this.trigger('click', _this.checked);
-};
+  tag.trigger('click', tag.checked);
+}
 
-// ===================================================================================
-//                                                                              Helper
-//                                                                              ======
-this.getId = function () {
-  return 'su-checkbox-' + _this._riot_id;
-};
+function getId() {
+  return 'su-checkbox-' + tag._riot_id;
+}
 
-this.isDisabled = function () {
-  return _this.root.classList.contains('disabled');
-};
+function isDisabled() {
+  return tag.root.classList.contains('disabled');
+}
 
-// ===================================================================================
-//                                                                               Logic
-//                                                                               =====
-var isReadOnly = function isReadOnly() {
-  return _this.root.classList.contains('read-only');
-};
+function isReadOnly() {
+  return tag.root.classList.contains('read-only');
+}
 
-var parentUpdate = function parentUpdate() {
-  if (_this.parent) {
-    _this.parent.update();
+function parentUpdate() {
+  if (tag.parent) {
+    tag.parent.update();
   }
-};
+}
 
-var shownMessage = false;
-var supportTraditionalOptions = function supportTraditionalOptions() {
+function supportTraditionalOptions() {
   if (typeof opts.check !== 'undefined') {
     if (!shownMessage) {
       console.warn('\'check\' attribute is deprecated. Please use \'checked\'.');
@@ -3156,11 +3210,11 @@ var supportTraditionalOptions = function supportTraditionalOptions() {
     opts.checked = opts.check;
     opts.check = undefined;
   }
-};
+}
 
-var normalizeOptChecked = function normalizeOptChecked() {
+function normalizeOptChecked() {
   return opts.checked === true || opts.checked === 'checked' || opts.checked === 'true';
-};
+}
 });
 
 /***/ }),
@@ -3172,18 +3226,27 @@ var normalizeOptChecked = function normalizeOptChecked() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-confirm', '<su-modal class="tiny" ref="modal" modal="{modal}"> <div class="ui icon message"> <i class="question circle outline icon"></i> <div class="scrolling content"> <div class="header" if="{parent.title}"> {parent.title} </div> <p each="{messsage in parent.messages}">{messsage}</p> </div> </div> </su-modal>', 'su-confirm .ui.dimmer,[data-is="su-confirm"] .ui.dimmer{ z-index: 1010; } su-confirm .ui.modal,[data-is="su-confirm"] .ui.modal{ z-index: 1011; } su-confirm .ui.message,[data-is="su-confirm"] .ui.message{ background: none; box-shadow: none; }', '', function(opts) {
+riot.tag2('su-confirm', '<su-modal class="tiny" ref="modal" modal="{modal}" title="{title}" messages="{messages}"> <div class="ui icon message"> <i class="question circle outline icon"></i> <div class="scrolling content"> <div class="header" if="{opts.title}"> {opts.title} </div> <p each="{messsage in opts.messages}">{messsage}</p> </div> </div> </su-modal>', 'su-confirm .ui.dimmer,[data-is="su-confirm"] .ui.dimmer{ z-index: 1010; } su-confirm .ui.modal,[data-is="su-confirm"] .ui.modal{ z-index: 1011; } su-confirm .ui.message,[data-is="su-confirm"] .ui.message{ background: none; box-shadow: none; }', '', function(opts) {
 'use strict';
 
-var _this = this;
-
-var self = this;
-this.mixin('semantic-ui');
-
-this.modal = {
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.modal = {
   closable: false,
   buttons: []
-};
+
+  // ===================================================================================
+  //                                                                         Tag Methods
+  //                                                                         ===========
+};tag.mixin('semantic-ui');
+tag.observable.on('showConfirm', showConfirm);
+tag.on('mount', onMount);
+
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
 var reverse = false;
 var cancelButton = {
   action: 'negativeAction'
@@ -3191,21 +3254,27 @@ var cancelButton = {
 var okButton = {
   action: 'positiveAction'
 };
+riot.mixin({
+  suConfirm: suConfirm
+});
 
-this.on('mount', function () {
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onMount() {
   var defaultOkButton = {};
   var defaultCancelButton = {};
   reverse = false;
-  if (_this.defaultOptions && _this.defaultOptions.confirm) {
-    if (_this.defaultOptions.confirm.reverse) {
-      reverse = _this.defaultOptions.confirm.reverse;
+  if (tag.defaultOptions && tag.defaultOptions.confirm) {
+    if (tag.defaultOptions.confirm.reverse) {
+      reverse = tag.defaultOptions.confirm.reverse;
     }
-    if (_this.defaultOptions.confirm.buttons) {
-      if (_this.defaultOptions.confirm.buttons.ok) {
-        defaultOkButton = _this.defaultOptions.confirm.buttons.ok;
+    if (tag.defaultOptions.confirm.buttons) {
+      if (tag.defaultOptions.confirm.buttons.ok) {
+        defaultOkButton = tag.defaultOptions.confirm.buttons.ok;
       }
-      if (_this.defaultOptions.confirm.buttons.cancel) {
-        defaultCancelButton = _this.defaultOptions.confirm.buttons.cancel;
+      if (tag.defaultOptions.confirm.buttons.cancel) {
+        defaultCancelButton = tag.defaultOptions.confirm.buttons.cancel;
       }
     }
   }
@@ -3225,15 +3294,15 @@ this.on('mount', function () {
     okButton.default = true;
   }
 
-  _this.refs.modal.on('positiveAction', function () {
-    _this.observable.trigger('callbackConfirm', true);
+  tag.refs.modal.on('positiveAction', function () {
+    tag.observable.trigger('callbackConfirm', true);
   });
-  _this.refs.modal.on('negativeAction', function () {
-    _this.observable.trigger('callbackConfirm', false);
+  tag.refs.modal.on('negativeAction', function () {
+    tag.observable.trigger('callbackConfirm', false);
   });
-});
+}
 
-var setButtons = function setButtons(option) {
+function setButtons(option) {
   var cancel = {
     text: option.buttons.cancel.text || cancelButton.text,
     type: option.buttons.cancel.type !== null ? option.buttons.cancel.type : cancelButton.type,
@@ -3256,73 +3325,68 @@ var setButtons = function setButtons(option) {
     cancel.default = cancelButton.default;
   }
 
-  _this.modal.buttons.length = 0;
-  _this.modal.buttons.push(option.reverse || reverse ? ok : cancel);
-  _this.modal.buttons.push(option.reverse || reverse ? cancel : ok);
-};
+  tag.modal.buttons.length = 0;
+  tag.modal.buttons.push(option.reverse || reverse ? ok : cancel);
+  tag.modal.buttons.push(option.reverse || reverse ? cancel : ok);
+}
 
-// ===================================================================================
-//                                                                          Observable
-//                                                                          ==========
-this.observable.on('showConfirm', function (option) {
-  _this.title = option.title;
-  _this.messages = Array.isArray(option.message) ? option.message : [option.message];
+function showConfirm(option) {
+  tag.title = option.title;
+  tag.messages = Array.isArray(option.message) ? option.message : [option.message];
   setButtons(option);
-  _this.update();
-  _this.refs.modal.show();
-});
+  tag.update();
+  tag.refs.modal.show();
+}
 
-riot.mixin({
-  suConfirm: function suConfirm(param) {
-    var option = {
-      title: null,
-      message: null,
-      reverse: null,
-      buttons: {
-        ok: {
-          text: null,
-          default: null,
-          type: null,
-          icon: null
-        },
-        cancel: {
-          text: null,
-          default: null,
-          type: null,
-          icon: null
-        }
-      }
-    };
-    if (typeof param === 'string') {
-      option.message = param;
-    } else if (param) {
-      if (param.title) {
-        option.title = param.title;
-      }
-      if (param.message) {
-        option.message = param.message;
-      }
-      if (param.reverse) {
-        option.reverse = param.reverse;
-      }
-      if (param.buttons) {
-        if (param.buttons.ok) {
-          option.buttons.ok = param.buttons.ok;
-        }
-        if (param.buttons.cancel) {
-          option.buttons.cancel = param.buttons.cancel;
-        }
+function suConfirm(param) {
+  var option = {
+    title: null,
+    message: null,
+    reverse: null,
+    buttons: {
+      ok: {
+        text: null,
+        default: null,
+        type: null,
+        icon: null
+      },
+      cancel: {
+        text: null,
+        default: null,
+        type: null,
+        icon: null
       }
     }
-
-    return self.Q.Promise(function (resolve, reject) {
-      self.observable.trigger('showConfirm', option);
-      self.observable.on('callbackConfirm', function (result) {
-        return result ? resolve() : reject();
-      });
-    });
+  };
+  if (typeof param === 'string') {
+    option.message = param;
+  } else if (param) {
+    if (param.title) {
+      option.title = param.title;
+    }
+    if (param.message) {
+      option.message = param.message;
+    }
+    if (param.reverse) {
+      option.reverse = param.reverse;
+    }
+    if (param.buttons) {
+      if (param.buttons.ok) {
+        option.buttons.ok = param.buttons.ok;
+      }
+      if (param.buttons.cancel) {
+        option.buttons.cancel = param.buttons.cancel;
+      }
+    }
   }
-});
+
+  return tag.Q.Promise(function (resolve, reject) {
+    tag.observable.trigger('showConfirm', option);
+    tag.observable.on('callbackConfirm', function (result) {
+      return result ? resolve() : reject();
+    });
+  });
+}
 });
 
 /***/ }),
@@ -3334,10 +3398,8 @@ riot.mixin({
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward}"> <div class="ui action input {disabled: isDisabled()}" if="{opts.popup}"> <input type="text" placeholder="{opts.placeholder}" ref="input" tabindex="{getTabindex()}" readonly="{isReadOnly()}"> <button class="ui icon button {disabled: isDisabled()}" onclick="{toggle}" onblur="{blur}" type="button"> <i class="calendar icon"></i> </button> </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="{getTabindex()}"> <div class="ui compact segments"> <div class="ui center aligned secondary segment"> <div class="ui buttons dp-navigation"> <button class="icon tiny ui button {disabled: isDisabled()} prev" onclick="{clickPrevious}" type="button"> <i class="chevron left icon"></i> </button> <button class="ui button {disabled: isDisabled()} month" onclick="{selectMonth}" type="button">{getCurrentMonthView()}</button> <button class="ui button {disabled: isDisabled()} year" onclick="{selectYear}" type="button">{getCurrentYear()}</button> <button class="icon tiny ui button {disabled: isDisabled()} next" onclick="{clickNext}" type="button"> <i class="chevron right icon"></i> </button> </div> <div class="dp-wrapper"> <div each="{week in getWeekNames()}" class="dp-weekday">{week}</div> </div> </div> <div class="ui center aligned segment" if="{!yearSelecting && !monthSelecting}"> <div each="{week in weeks}" class="dp-wrapper"> <div each="{day in week.days}" class="dp-day"> <button class="ui button {today: isToday(day)} {primary: isActive(day)} {non-active: !isActive(day)} {disabled: day.getMonth() != getCurrentMonth() || isDisabled()}" onclick="{clickDay}" type="button">{day.getDate()}</button> </div> </div> </div> <div class="ui center aligned segment" if="{!yearSelecting && !monthSelecting}"> <div class="ui two column grid"> <div class="column dp-clear"> <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{clickClear}" type="button"><i class="times icon"></i></button></div> <div class="column dp-today"> <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{clickToday}" type="button"><i class="calendar check icon"></i></button></div> </div> </div> <div class="ui center aligned segment" if="{monthSelecting}"> <div each="{element in months}" class="dp-wrapper"> <div each="{month in element}" class="dp-month"><button class="ui button {disabled : isDisabled()}" onclick="{clickMonth}" type="button">{month.label}</button></div> </div> </div> <div class="ui center aligned segment" if="{yearSelecting}"> <div each="{element in years}" class="dp-wrapper"> <div each="{year in element}" class="dp-month"><button class="ui button {disabled : isDisabled()}" onclick="{clickYear}" type="button">{year}</button></div> </div> </div> </div> </div> </div>', 'su-datepicker .ui.segment,[data-is="su-datepicker"] .ui.segment{ padding-top: 0.5rem; padding-bottom: 0.5rem; } su-datepicker .ui.dropdown .menu,[data-is="su-datepicker"] .ui.dropdown .menu{ display: block; } su-datepicker .ui.buttons.dp-navigation,[data-is="su-datepicker"] .ui.buttons.dp-navigation{ margin-bottom: 0.4rem; } su-datepicker .ui.dropdown,[data-is="su-datepicker"] .ui.dropdown{ display: block; } su-datepicker .dp-wrapper,[data-is="su-datepicker"] .dp-wrapper{ display: flex; } su-datepicker .dp-day,[data-is="su-datepicker"] .dp-day,su-datepicker .dp-month,[data-is="su-datepicker"] .dp-month{ cursor: pointer; } su-datepicker .dp-weekday,[data-is="su-datepicker"] .dp-weekday,su-datepicker .dp-day,[data-is="su-datepicker"] .dp-day,su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button{ width: 2.5rem; } su-datepicker .dp-month,[data-is="su-datepicker"] .dp-month,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ width: 4.375rem; } su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ padding: 0; height: 2.5rem; font-weight: normal } su-datepicker .dp-day .ui.button.today,[data-is="su-datepicker"] .dp-day .ui.button.today{ font-weight: 700; } su-datepicker .dp-today .ui.button,[data-is="su-datepicker"] .dp-today .ui.button,su-datepicker .dp-clear .ui.button,[data-is="su-datepicker"] .dp-clear .ui.button,su-datepicker .dp-navigation .ui.button,[data-is="su-datepicker"] .dp-navigation .ui.button,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button,su-datepicker .dp-day .ui.button.non-active,[data-is="su-datepicker"] .dp-day .ui.button.non-active{ background-color: transparent; } su-datepicker .dp-today .ui.button:hover,[data-is="su-datepicker"] .dp-today .ui.button:hover,su-datepicker .dp-clear .ui.button:hover,[data-is="su-datepicker"] .dp-clear .ui.button:hover,su-datepicker .dp-navigation .ui.button:hover,[data-is="su-datepicker"] .dp-navigation .ui.button:hover,su-datepicker .dp-month .ui.button:hover,[data-is="su-datepicker"] .dp-month .ui.button:hover,su-datepicker .dp-day .ui.button.non-active:hover,[data-is="su-datepicker"] .dp-day .ui.button.non-active:hover{ background-color: #e0e1e2; } su-datepicker .dp-day .ui.button.disabled,[data-is="su-datepicker"] .dp-day .ui.button.disabled{ pointer-events: all !important; } su-datepicker .dp-navigation,[data-is="su-datepicker"] .dp-navigation{ width: 100%; } su-datepicker .dp-navigation .ui.button,[data-is="su-datepicker"] .dp-navigation .ui.button{ width: 20%; } su-datepicker .dp-navigation .ui.button.year,[data-is="su-datepicker"] .dp-navigation .ui.button.year,su-datepicker .dp-navigation .ui.button.month,[data-is="su-datepicker"] .dp-navigation .ui.button.month{ width: 30%; }', '', function(opts) {
+riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward}"> <div class="ui action input {disabled: isDisabled()}" if="{opts.popup}"> <input type="text" placeholder="{opts.placeholder}" ref="input" tabindex="{getTabindex()}" readonly="{isReadOnly()}"> <button class="ui icon button {disabled: isDisabled()}" onclick="{toggle}" onblur="{blur}" type="button"> <i class="calendar icon"></i> </button> </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="{getTabindex()}"> <div class="ui compact segments"> <div class="ui center aligned secondary segment"> <div class="ui buttons dp-navigation"> <button class="icon tiny ui button {disabled: isDisabled()} prev" onclick="{clickPrevious}" type="button"> <i class="chevron left icon"></i> </button> <button class="ui button {disabled: isDisabled()} month" onclick="{selectMonth}" type="button">{getCurrentMonthView()}</button> <button class="ui button {disabled: isDisabled()} year" onclick="{selectYear}" type="button">{getCurrentYear()}</button> <button class="icon tiny ui button {disabled: isDisabled()} next" onclick="{clickNext}" type="button"> <i class="chevron right icon"></i> </button> </div> <div class="dp-wrapper"> <div each="{week in getWeekNames()}" class="dp-weekday">{week}</div> </div> </div> <div class="ui center aligned segment" if="{!yearSelecting && !monthSelecting}"> <div each="{week in weeks}" class="dp-wrapper"> <div each="{day in week.days}" class="dp-day"> <button class="ui button {today: isToday(day)} {primary: isActive(day)} {non-active: !isActive(day)} {disabled: day.getMonth() != getCurrentMonth() || isDisabled()}" onclick="{clickDay}" type="button">{day.getDate()}</button> </div> </div> </div> <div class="ui center aligned segment" if="{!yearSelecting && !monthSelecting}"> <div class="ui two column grid"> <div class="column dp-clear"> <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{clickClear}" type="button"><i class="times icon"></i></button> </div> <div class="column dp-today"> <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{clickToday}" type="button"><i class="calendar check icon"></i></button> </div> </div> </div> <div class="ui center aligned segment" if="{monthSelecting}"> <div each="{element in months}" class="dp-wrapper"> <div each="{month in element}" class="dp-month"> <button class="ui button {disabled : isDisabled()}" onclick="{clickMonth}" type="button">{month.label}</button> </div> </div> </div> <div class="ui center aligned segment" if="{yearSelecting}"> <div each="{element in years}" class="dp-wrapper"> <div each="{year in element}" class="dp-month"> <button class="ui button {disabled : isDisabled()}" onclick="{clickYear}" type="button">{year}</button> </div> </div> </div> </div> </div> </div>', 'su-datepicker .ui.segment,[data-is="su-datepicker"] .ui.segment{ padding-top: 0.5rem; padding-bottom: 0.5rem; } su-datepicker .ui.dropdown .menu,[data-is="su-datepicker"] .ui.dropdown .menu{ display: block; } su-datepicker .ui.buttons.dp-navigation,[data-is="su-datepicker"] .ui.buttons.dp-navigation{ margin-bottom: 0.4rem; } su-datepicker .ui.dropdown,[data-is="su-datepicker"] .ui.dropdown{ display: block; } su-datepicker .dp-wrapper,[data-is="su-datepicker"] .dp-wrapper{ display: flex; } su-datepicker .dp-day,[data-is="su-datepicker"] .dp-day,su-datepicker .dp-month,[data-is="su-datepicker"] .dp-month{ cursor: pointer; } su-datepicker .dp-weekday,[data-is="su-datepicker"] .dp-weekday,su-datepicker .dp-day,[data-is="su-datepicker"] .dp-day,su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button{ width: 2.5rem; } su-datepicker .dp-month,[data-is="su-datepicker"] .dp-month,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ width: 4.375rem; } su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ padding: 0; height: 2.5rem; font-weight: normal } su-datepicker .dp-day .ui.button.today,[data-is="su-datepicker"] .dp-day .ui.button.today{ font-weight: 700; } su-datepicker .dp-today .ui.button,[data-is="su-datepicker"] .dp-today .ui.button,su-datepicker .dp-clear .ui.button,[data-is="su-datepicker"] .dp-clear .ui.button,su-datepicker .dp-navigation .ui.button,[data-is="su-datepicker"] .dp-navigation .ui.button,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button,su-datepicker .dp-day .ui.button.non-active,[data-is="su-datepicker"] .dp-day .ui.button.non-active{ background-color: transparent; } su-datepicker .dp-today .ui.button:hover,[data-is="su-datepicker"] .dp-today .ui.button:hover,su-datepicker .dp-clear .ui.button:hover,[data-is="su-datepicker"] .dp-clear .ui.button:hover,su-datepicker .dp-navigation .ui.button:hover,[data-is="su-datepicker"] .dp-navigation .ui.button:hover,su-datepicker .dp-month .ui.button:hover,[data-is="su-datepicker"] .dp-month .ui.button:hover,su-datepicker .dp-day .ui.button.non-active:hover,[data-is="su-datepicker"] .dp-day .ui.button.non-active:hover{ background-color: #e0e1e2; } su-datepicker .dp-day .ui.button.disabled,[data-is="su-datepicker"] .dp-day .ui.button.disabled{ pointer-events: all !important; } su-datepicker .dp-navigation,[data-is="su-datepicker"] .dp-navigation{ width: 100%; } su-datepicker .dp-navigation .ui.button,[data-is="su-datepicker"] .dp-navigation .ui.button{ width: 20%; } su-datepicker .dp-navigation .ui.button.year,[data-is="su-datepicker"] .dp-navigation .ui.button.year,su-datepicker .dp-navigation .ui.button.month,[data-is="su-datepicker"] .dp-navigation .ui.button.month{ width: 30%; }', '', function(opts) {
 'use strict';
-
-var _this = this;
 
 var _add_days = __webpack_require__(/*! date-fns/add_days */ "date-fns/add_days");
 
@@ -3369,12 +3431,51 @@ var _start_of_month2 = _interopRequireDefault(_start_of_month);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-this.weeks = [];
-this.value = null;
-this.valueAsDate = null;
-this.defaultValue = null;
-this.currentDate = null;
-this.transitionStatus = opts.popup ? 'hidden' : 'visible';
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.currentDate = null;
+tag.defaultValue = null;
+tag.transitionStatus = opts.popup ? 'hidden' : 'visible';
+tag.value = null;
+tag.valueAsDate = null;
+tag.weeks = [];
+
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.mixin('semantic-ui');
+tag.on('mount', onMount);
+tag.on('update', onUpdate);
+tag.reset = reset;
+tag.changed = changed;
+tag.selectMonth = selectMonth;
+tag.selectYear = selectYear;
+tag.clickDay = clickDay;
+tag.clickMonth = clickMonth;
+tag.clickYear = clickYear;
+tag.clickPrevious = clickPrevious;
+tag.clickNext = clickNext;
+tag.clickClear = clickClear;
+tag.clickToday = clickToday;
+tag.toggle = toggle;
+tag.mousedown = mousedown;
+tag.mouseup = mouseup;
+tag.blur = blur;
+tag.getCurrentYear = getCurrentYear;
+tag.getCurrentMonthView = getCurrentMonthView;
+tag.getCurrentMonth = getCurrentMonth;
+tag.getWeekNames = getWeekNames;
+tag.isActive = isActive;
+tag.isToday = _is_today2.default;
+tag.getTabindex = getTabindex;
+tag.isReadOnly = isReadOnly;
+tag.isDisabled = isDisabled;
+
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
 var visibleFlg = false;
 var itemActivated = false;
 var lastValue = null;
@@ -3383,214 +3484,209 @@ var lastCurrentDate = null;
 var lastOptsCurrentDate = null;
 var yearRange = 20;
 
-this.mixin('semantic-ui');
-
-this.on('mount', function () {
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onMount() {
   if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
     opts.riotValue = opts.value;
   }
-  if (!_this.valueAsDate) {
-    _this.valueAsDate = copyDate(_this.value || opts.riotValue);
+  if (!tag.valueAsDate) {
+    tag.valueAsDate = copyDate(tag.value || opts.riotValue);
   }
   setValueFromValueAsDate();
-  lastValue = copyDate(_this.valueAsDate);
+  if (tag.refs.input) {
+    tag.refs.input.value = tag.value;
+  }
+  lastValue = copyDate(tag.valueAsDate);
   lastOptsValue = copyDate(opts.riotValue);
 
-  _this.currentDate = copyDate(opts.currentDate);
-  if (_this.valueAsDate) {
-    _this.currentDate = copyDate(_this.valueAsDate);
+  tag.currentDate = copyDate(opts.currentDate);
+  if (tag.valueAsDate) {
+    tag.currentDate = copyDate(tag.valueAsDate);
   }
-  if (!_this.currentDate) {
-    _this.currentDate = new Date();
+  if (!tag.currentDate) {
+    tag.currentDate = new Date();
   }
-  _this.months = getMonthes();
+  tag.months = getMonthes();
   if (opts.yearRange && !isNaN(opts.yearRange) && opts.yearRange > 20) {
     yearRange = opts.yearRange;
   }
   if (opts.startMode === 'year') {
-    _this.selectYear();
+    tag.selectYear();
   }
-  _this.update();
-  _this.defaultValue = _this.valueAsDate;
-});
+  tag.update();
+  tag.defaultValue = tag.valueAsDate;
+}
 
-this.on('update', function () {
+function onUpdate() {
   var changed = false;
-  if (!isEqualDay(lastValue, _this.value)) {
-    _this.valueAsDate = copyDate(_this.value);
-    lastValue = copyDate(_this.value);
+  if (!isEqualDay(lastValue, tag.value)) {
+    tag.valueAsDate = copyDate(tag.value);
+    lastValue = copyDate(tag.value);
     changed = true;
-  } else if (!isEqualDay(lastValue, _this.valueAsDate)) {
-    lastValue = copyDate(_this.valueAsDate);
+  } else if (!isEqualDay(lastValue, tag.valueAsDate)) {
+    lastValue = copyDate(tag.valueAsDate);
     changed = true;
   } else if (!isEqualDay(lastOptsValue, opts.riotValue)) {
-    _this.valueAsDate = copyDate(opts.riotValue);
+    tag.valueAsDate = copyDate(opts.riotValue);
     lastOptsValue = copyDate(opts.riotValue);
     lastValue = copyDate(opts.riotValue);
     changed = true;
   }
   setValueFromValueAsDate();
-  if (changed && _this.refs.input) {
-    _this.refs.input.value = _this.value;
+  if (changed && tag.refs.input) {
+    tag.refs.input.value = tag.value;
   }
 
-  if (changed && _this.valueAsDate) {
-    _this.currentDate = copyDate(_this.valueAsDate);
+  if (changed && tag.valueAsDate) {
+    tag.currentDate = copyDate(tag.valueAsDate);
   }
   if (!isEqualDay(lastOptsCurrentDate, opts.currentDate)) {
-    _this.currentDate = copyDate(opts.currentDate);
+    tag.currentDate = copyDate(opts.currentDate);
     lastOptsCurrentDate = copyDate(opts.currentDate);
   }
-  if (!isEqualDay(lastCurrentDate, _this.currentDate)) {
-    lastCurrentDate = copyDate(_this.currentDate);
+  if (!isEqualDay(lastCurrentDate, tag.currentDate)) {
+    lastCurrentDate = copyDate(tag.currentDate);
     generate();
   }
-});
+}
 
-// ===================================================================================
-//                                                                               State
-//                                                                               =====
-this.reset = function () {
-  _this.valueAsDate = _this.defaultValue;
+function reset() {
+  tag.valueAsDate = tag.defaultValue;
   setValueFromValueAsDate();
-};
+}
 
-this.changed = function () {
-  return !isEqualDay(_this.valueAsDate, _this.defaultValue);
-};
+function changed() {
+  return !isEqualDay(tag.valueAsDate, tag.defaultValue);
+}
 
-// ===================================================================================
-//                                                                               Event
-//                                                                               =====
-this.selectMonth = function () {
-  _this.yearSelecting = false;
-  _this.monthSelecting = !_this.monthSelecting;
-};
+function selectMonth() {
+  tag.yearSelecting = false;
+  tag.monthSelecting = !tag.monthSelecting;
+}
 
-this.selectYear = function () {
-  _this.years = getYears();
-  _this.monthSelecting = false;
-  _this.yearSelecting = !_this.yearSelecting;
-};
+function selectYear() {
+  tag.years = getYears();
+  tag.monthSelecting = false;
+  tag.yearSelecting = !tag.yearSelecting;
+}
 
-this.clickDay = function (event) {
-  if (_this.isReadOnly() || _this.isDisabled()) {
+function clickDay(event) {
+  if (tag.isReadOnly() || tag.isDisabled()) {
     return;
   }
   setDate(event.item.day);
-  _this.trigger('click', _this.valueAsDate);
-};
+  tag.trigger('click', tag.valueAsDate);
+}
 
-this.clickMonth = function (event) {
-  _this.currentDate.setMonth(event.item.month.value);
-  _this.monthSelecting = false;
-};
+function clickMonth(event) {
+  tag.currentDate.setMonth(event.item.month.value);
+  tag.monthSelecting = false;
+}
 
-this.clickYear = function (event) {
-  _this.currentDate.setYear(event.item.year);
-  _this.selectMonth();
-};
+function clickYear(event) {
+  tag.currentDate.setYear(event.item.year);
+  tag.selectMonth();
+}
 
-this.clickPrevious = function () {
-  if (_this.yearSelecting) {
+function clickPrevious() {
+  if (tag.yearSelecting) {
     addYear(-yearRange);
   } else {
-    _this.monthSelecting = false;
-    _this.currentDate = (0, _add_months2.default)(_this.currentDate, -1);
+    tag.monthSelecting = false;
+    tag.currentDate = (0, _add_months2.default)(tag.currentDate, -1);
   }
-};
+}
 
-this.clickNext = function () {
-  if (_this.yearSelecting) {
+function clickNext() {
+  if (tag.yearSelecting) {
     addYear(yearRange);
   } else {
-    _this.monthSelecting = false;
-    _this.currentDate = (0, _add_months2.default)(_this.currentDate, 1);
+    tag.monthSelecting = false;
+    tag.currentDate = (0, _add_months2.default)(tag.currentDate, 1);
   }
-};
+}
 
-this.clickClear = function () {
+function clickClear() {
   setDate(null);
-  _this.trigger('clear', _this.valueAsDate);
-};
+  tag.trigger('clear', tag.valueAsDate);
+}
 
-this.clickToday = function () {
+function clickToday() {
   setDate(new Date());
-  _this.trigger('today', _this.valueAsDate);
-};
+  tag.trigger('today', tag.valueAsDate);
+}
 
 // -----------------------------------------------------
 //                                          popup option
 //                                          ------------
-this.toggle = function () {
-  if (_this.isReadOnly() || _this.isDisabled()) {
+function toggle() {
+  if (tag.isReadOnly() || tag.isDisabled()) {
     return;
   }
   if (!visibleFlg) {
     if (opts.startMode === 'year') {
-      _this.selectYear();
-      _this.yearSelecting = true;
+      tag.selectYear();
+      tag.yearSelecting = true;
     }
     open();
   } else {
     close();
   }
-};
+}
 
-this.mousedown = function () {
+function mousedown() {
   itemActivated = true;
-};
+}
 
-this.mouseup = function () {
+function mouseup() {
   itemActivated = false;
-};
+}
 
-this.blur = function () {
+function blur() {
   if (opts.popup && !itemActivated) {
     close();
   }
-};
+}
 
-// ===================================================================================
-//                                                                               Logic
-//                                                                               =====
-var generate = function generate() {
-  var startDate = (0, _start_of_month2.default)(_this.currentDate);
+function generate() {
+  var startDate = (0, _start_of_month2.default)(tag.currentDate);
   var baseDate = (0, _add_days2.default)(startDate, -startDate.getDay());
   var i = 0;
-  _this.weeks = [];
+  tag.weeks = [];
 
   for (var r = 0; r < 6; r++) {
     var days = [];
     for (var c = 0; c < 7; c++) {
       days.push((0, _add_days2.default)(baseDate, i++));
     }
-    _this.weeks.push({ days: days });
+    tag.weeks.push({ days: days });
   }
-};
+}
 
-var addYear = function addYear(year) {
-  _this.years = _this.years.map(function (values) {
+function addYear(year) {
+  tag.years = tag.years.map(function (values) {
     values = values.map(function (value) {
       return value + parseInt(year);
     });
     return values;
   });
-};
+}
 
-var getYears = function getYears() {
+function getYears() {
   var rowSize = (yearRange - yearRange % 4) / 4 + (yearRange % 4 != 0 ? 1 : 0);
   var years = new Array();
   for (var index = 0; index < rowSize; index++) {
     years.push([]);
   }
   for (var _index = 0; _index < yearRange; _index++) {
-    years[(_index - _index % 4) / 4][_index % 4] = _this.currentDate.getFullYear() + _index - ((yearRange - yearRange % 2) / 2 - 1);
+    years[(_index - _index % 4) / 4][_index % 4] = tag.currentDate.getFullYear() + _index - ((yearRange - yearRange % 2) / 2 - 1);
   }
   return years;
-};
+}
 
-var getMonthes = function getMonthes() {
+function getMonthes() {
   var months = [[], [], []];
   var monthNames = range(12).map(function (month) {
     return (0, _format2.default)(new Date(2018, month, 1), 'MMM', { locale: getLocale() });
@@ -3602,43 +3698,43 @@ var getMonthes = function getMonthes() {
     };
   });
   return months;
-};
+}
 
-var open = function open() {
-  _this.upward = isUpward();
-  _this.transitionStatus = 'visible';
+function open() {
+  tag.upward = isUpward();
+  tag.transitionStatus = 'visible';
   visibleFlg = true;
-  _this.currentDate = copyDate(opts.currentDate);
-  if (_this.valueAsDate) {
-    _this.currentDate = copyDate(_this.valueAsDate);
+  tag.currentDate = copyDate(opts.currentDate);
+  if (tag.valueAsDate) {
+    tag.currentDate = copyDate(tag.valueAsDate);
   }
-  if (!_this.currentDate) {
-    _this.currentDate = new Date();
+  if (!tag.currentDate) {
+    tag.currentDate = new Date();
   }
-  _this.trigger('open', _this.valueAsDate);
-};
+  tag.trigger('open', tag.valueAsDate);
+}
 
-var close = function close() {
-  _this.transitionStatus = 'hidden';
+function close() {
+  tag.transitionStatus = 'hidden';
   visibleFlg = false;
-  _this.trigger('close', _this.valueAsDate);
-};
+  tag.trigger('close', tag.valueAsDate);
+}
 
-var setDate = function setDate(date) {
-  _this.valueAsDate = date;
+function setDate(date) {
+  tag.valueAsDate = date;
   setValueFromValueAsDate();
-  if (_this.refs.input) {
-    _this.refs.input.value = _this.value;
+  if (tag.refs.input) {
+    tag.refs.input.value = tag.value;
     close();
   }
-  _this.trigger('change', _this.valueAsDate);
-};
+  tag.trigger('change', tag.valueAsDate);
+}
 
-var setValueFromValueAsDate = function setValueFromValueAsDate() {
-  _this.value = _this.valueAsDate ? (0, _format2.default)(_this.valueAsDate, getPattern(), { locale: getLocale() }) : null;
-};
+function setValueFromValueAsDate() {
+  tag.value = tag.valueAsDate ? (0, _format2.default)(tag.valueAsDate, getPattern(), { locale: getLocale() }) : null;
+}
 
-var isEqualDay = function isEqualDay(d1, d2) {
+function isEqualDay(d1, d2) {
   if (d1 == d2) {
     return true;
   }
@@ -3646,25 +3742,25 @@ var isEqualDay = function isEqualDay(d1, d2) {
     return false;
   }
   return (0, _is_same_day2.default)(d1, d2);
-};
+}
 
-var copyDate = function copyDate(date) {
+function copyDate(date) {
   if (!date) {
     return date;
   }
   return (0, _parse2.default)(date);
-};
+}
 
-var isUpward = function isUpward() {
+function isUpward() {
   if (opts.direction == 'upward') {
     return true;
   }
   if (opts.direction == 'downward') {
     return false;
   }
-  var inputField = _this.root.getBoundingClientRect();
+  var inputField = tag.root.getBoundingClientRect();
   var windowHeight = document.documentElement.offsetHeight || document.body.offsetHeight;
-  var menuHeight = _this.root.querySelector('.menu').getBoundingClientRect().height;
+  var menuHeight = tag.root.querySelector('.menu').getBoundingClientRect().height;
   var above = menuHeight <= inputField.top;
   var below = windowHeight >= inputField.top + inputField.height + menuHeight;
 
@@ -3675,42 +3771,35 @@ var isUpward = function isUpward() {
     return false;
   }
   return true;
-};
+}
 
-// ===================================================================================
-//                                                                              Helper
-//                                                                              ======
-this.getCurrentYear = function () {
-  if (_this.currentDate) {
-    return _this.currentDate.getFullYear();
+function getCurrentYear() {
+  if (tag.currentDate) {
+    return tag.currentDate.getFullYear();
   }
-};
+}
 
-this.getCurrentMonthView = function () {
-  if (_this.currentDate) {
-    return (0, _format2.default)(_this.currentDate, 'MMM', { locale: getLocale() });
+function getCurrentMonthView() {
+  if (tag.currentDate) {
+    return (0, _format2.default)(tag.currentDate, 'MMM', { locale: getLocale() });
   }
-};
+}
 
-this.getCurrentMonth = function () {
-  return _this.currentDate.getMonth();
-};
+function getCurrentMonth() {
+  return tag.currentDate.getMonth();
+}
 
-this.getWeekNames = function () {
+function getWeekNames() {
   return range(7, 1).map(function (day) {
     return (0, _format2.default)(new Date(2018, 6, day), 'dd', { locale: getLocale() });
   });
-};
+}
 
-this.isActive = function (date) {
-  return isEqualDay(_this.valueAsDate, date);
-};
+function isActive(date) {
+  return isEqualDay(tag.valueAsDate, date);
+}
 
-this.isToday = function (date) {
-  return (0, _is_today2.default)(date);
-};
-
-this.getTabindex = function () {
+function getTabindex() {
   if (!opts.popup) {
     return false;
   }
@@ -3718,41 +3807,41 @@ this.getTabindex = function () {
     return opts.tabindex;
   }
   return 0;
-};
+}
 
-this.isReadOnly = function () {
-  return _this.root.classList.contains('read-only');
-};
-this.isDisabled = function () {
-  return _this.root.classList.contains('disabled');
-};
+function isReadOnly() {
+  return tag.root.classList.contains('read-only');
+}
+function isDisabled() {
+  return tag.root.classList.contains('disabled');
+}
 
-var getPattern = function getPattern() {
+function getPattern() {
   if (opts.pattern) {
     return opts.pattern;
   }
-  if (_this.defaultOptions && _this.defaultOptions.pattern) {
-    return _this.defaultOptions.pattern;
+  if (tag.defaultOptions && tag.defaultOptions.pattern) {
+    return tag.defaultOptions.pattern;
   }
   return 'YYYY-MM-DD';
-};
+}
 
-var getLocale = function getLocale() {
+function getLocale() {
   if (opts.locale) {
     return opts.locale;
   }
-  if (_this.defaultOptions && _this.defaultOptions.locale) {
-    return _this.defaultOptions.locale;
+  if (tag.defaultOptions && tag.defaultOptions.locale) {
+    return tag.defaultOptions.locale;
   }
-};
+}
 
-var range = function range(size) {
+function range(size) {
   var startAt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
   return Array.from(Array(size).keys()).map(function (i) {
     return i + startAt;
   });
-};
+}
 });
 
 /***/ }),
@@ -3767,128 +3856,153 @@ var range = function range(size) {
 riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="{getTabindex()}" ref="condition" if="{opts.search}" oninput="{input}" onclick="{stopPropagation}" onfocus="{focus}" onblur="{blur}" readonly="{isReadOnly()}"> <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}" onclick="{stopPropagation}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!opts.multiple || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="-1"> <div each="{item in opts.items}" riot-value="{item.value}" default="{item.default}" onmousedown="{mousedown}" onmouseup="{mouseup}" class="{item: isItem(item)} {header: item.header && !filtered} {divider: item.divider && !filtered} {default: item.default} {hover: item.active} {active: item.value == value} {selected: item.value == value}" onclick="{itemClick}" if="{!(opts.multiple && item.default) && !item.selected && item.searched}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div>', 'su-dropdown.ui.dropdown .menu>.item.default,[data-is="su-dropdown"].ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) } su-dropdown.ui.dropdown .menu>.item.hover,[data-is="su-dropdown"].ui.dropdown .menu>.item.hover{ background: rgba(0, 0, 0, .05); color: rgba(0, 0, 0, .95); } su-dropdown.ui.dropdown .menu,[data-is="su-dropdown"].ui.dropdown .menu{ display: block; }', 'class="ui selection {opts.class} {search: opts.search} {multiple: opts.multiple} dropdown {active: isActive()} {visible: isActive()} {upward: upward}" onclick="{toggle}" onfocus="{focus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" onkeydown="{keydown}" onkeyup="{keyup}" tabindex="{opts.search ? -1 : getTabindex()}"', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.defaultValue = '';
+tag.filtered = false;
+tag.label = '';
+tag.selectedFlg = false;
+tag.transitionStatus = 'hidden';
+tag.value = '';
 
-this.selectedFlg = false;
-this.filtered = false;
-this.transitionStatus = 'hidden';
-this.value = '';
-this.label = '';
-this.defaultValue = '';
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.blur = blur;
+tag.changed = changed;
+tag.focus = focus;
+tag.getTabindex = getTabindex;
+tag.isActive = isActive;
+tag.isDisabled = isDisabled;
+tag.input = input;
+tag.isItem = isItem;
+tag.itemClick = itemClick;
+tag.isReadOnly = isReadOnly;
+tag.keydown = keydown;
+tag.keyup = keyup;
+tag.mousedown = mousedown;
+tag.mouseup = mouseup;
+tag.on('mount', onMount);
+tag.on('update', onUpdate);
+tag.reset = reset;
+tag.stopPropagation = stopPropagation;
+tag.toggle = toggle;
+tag.unselect = unselect;
+
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
 var visibleFlg = false;
 var keys = {
   enter: 13,
   escape: 27,
   upArrow: 38,
   downArrow: 40
-};
 
-if (opts.items && opts.items.length > 0) {
-  this.label = opts.items[0].label;
-  this.value = opts.items[0].value;
-  this.default = opts.items[0].default;
-}
-
-this.on('mount', function () {
+  // ===================================================================================
+  //                                                                             Methods
+  //                                                                             =======
+};function onMount() {
+  if (opts.items && opts.items.length > 0) {
+    tag.label = opts.items[0].label;
+    tag.value = opts.items[0].value;
+    tag.default = opts.items[0].default;
+  }
   if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
     opts.riotValue = opts.value;
   }
   if (typeof opts.riotValue !== 'undefined') {
-    _this.value = opts.riotValue;
-    _this.defaultValue = _this.value;
-    _this.update();
+    tag.value = opts.riotValue;
+    tag.defaultValue = tag.value;
+    tag.update();
     parentUpdate();
   } else {
-    _this.defaultValue = _this.value;
+    tag.defaultValue = tag.value;
   }
-});
+}
 
-this.on('update', function () {
+function onUpdate() {
   if (opts.multiple) {
     opts.items.forEach(function (item) {
       return item.selected = false;
     });
     opts.items.filter(function (item) {
-      return _this.value && _this.value.indexOf(item.value) >= 0;
+      return tag.value && tag.value.indexOf(item.value) >= 0;
     }).forEach(function (item) {
       return item.selected = true;
     });
     selectMultiTarget(true);
   } else if (opts.items) {
     var selected = opts.items.filter(function (item) {
-      return item.value === _this.value;
+      return item.value === tag.value;
     });
     if (selected && selected.length > 0) {
       var target = selected[0];
-      if (_this.label !== target.label) {
+      if (tag.label !== target.label) {
         selectTarget(target, true);
       }
     } else if (opts.items && opts.items.length > 0) {
-      if (_this.value != opts.items[0].value) {
-        _this.value = opts.items[0].value;
+      if (tag.value != opts.items[0].value) {
+        tag.value = opts.items[0].value;
       }
-      if (_this.label != opts.items[0].label) {
-        _this.label = opts.items[0].label;
-        _this.default = opts.items[0].default;
+      if (tag.label != opts.items[0].label) {
+        tag.label = opts.items[0].label;
+        tag.default = opts.items[0].default;
       }
     }
   }
-});
+}
 
-// ===================================================================================
-//                                                                               State
-//                                                                               =====
-this.reset = function () {
-  _this.value = _this.defaultValue;
-};
+function reset() {
+  tag.value = tag.defaultValue;
+}
 
-this.changed = function () {
+function changed() {
   if (opts.multiple) {
-    var value = _this.value ? _this.value : [];
-    var defaultValue = _this.defaultValue ? _this.defaultValue : [];
+    var value = tag.value ? tag.value : [];
+    var defaultValue = tag.defaultValue ? tag.defaultValue : [];
     return value.toString() !== defaultValue.toString();
   }
-  return _this.value !== _this.defaultValue;
-};
+  return tag.value !== tag.defaultValue;
+}
 
-// ===================================================================================
-//                                                                               Event
-//                                                                               =====
-this.toggle = function () {
+function toggle() {
   if (!visibleFlg) {
     open();
   } else {
     close();
   }
-};
+}
 
-this.focus = function () {
+function focus() {
   open();
-};
+}
 
-this.mousedown = function () {
-  _this.itemActivated = true;
-};
+function mousedown() {
+  tag.itemActivated = true;
+}
 
-this.mouseup = function () {
-  _this.itemActivated = false;
-};
+function mouseup() {
+  tag.itemActivated = false;
+}
 
-this.blur = function () {
-  if (!_this.itemActivated) {
-    if (!_this.closing && visibleFlg) {
+function blur() {
+  if (!tag.itemActivated) {
+    if (!tag.closing && visibleFlg) {
       var target = opts.multiple ? opts.items.filter(function (item) {
         return item.selected;
-      }) : { value: _this.value, label: _this.label, default: _this.default };
-      _this.trigger('blur', target);
+      }) : { value: tag.value, label: tag.label, default: tag.default };
+      tag.trigger('blur', target);
     }
     close();
   }
-};
+}
 
-this.itemClick = function (event) {
+function itemClick(event) {
   event.stopPropagation();
-  if (!_this.isItem(event.item.item)) {
+  if (!tag.isItem(event.item.item)) {
     return;
   }
   if (opts.multiple) {
@@ -3900,9 +4014,9 @@ this.itemClick = function (event) {
   }
   selectTarget(event.item.item);
   close();
-};
+}
 
-this.keydown = function (event) {
+function keydown(event) {
   var keyCode = event.keyCode;
   if (keyCode == keys.escape) {
     close();
@@ -3957,11 +4071,11 @@ this.keydown = function (event) {
       _nextActiveItem[0].active = true;
     }
   }
-  _this.update();
+  tag.update();
   scrollPosition();
-};
+}
 
-this.keyup = function (event) {
+function keyup(event) {
   var keyCode = event.keyCode;
   if (keyCode != keys.enter) {
     return;
@@ -3993,164 +4107,161 @@ this.keyup = function (event) {
     selectTarget(activeItem);
     close();
   }
-};
+}
 
-this.stopPropagation = function (event) {
+function stopPropagation(event) {
   event.stopPropagation();
-};
+}
 
 // -----------------------------------------------------
 //                                         search option
 //                                         -------------
-this.input = function (event) {
+function input(event) {
   var value = event.target.value.toLowerCase();
-  _this.filtered = value.length > 0;
+  tag.filtered = value.length > 0;
   search(value);
-};
+}
 
 // -----------------------------------------------------
 //                                       multiple option
 //                                       ---------------
-this.unselect = function (event) {
+function unselect(event) {
   event.stopPropagation();
   event.item.item.selected = false;
-  _this.value = opts.items.filter(function (item) {
+  tag.value = opts.items.filter(function (item) {
     return item.selected;
   }).map(function (item) {
     return item.value;
   });
-  _this.selectedFlg = opts.items.some(function (item) {
+  tag.selectedFlg = opts.items.some(function (item) {
     return item.selected;
   });
   parentUpdate();
-};
+}
 
-// ===================================================================================
-//                                                                               Logic
-//                                                                               =====
-var open = function open() {
-  if (_this.openning || _this.closing || visibleFlg || _this.isReadOnly() || _this.isDisabled()) {
+function open() {
+  if (tag.openning || tag.closing || visibleFlg || tag.isReadOnly() || tag.isDisabled()) {
     return;
   }
-  _this.openning = true;
+  tag.openning = true;
   search('');
-  _this.upward = isUpward();
-  _this.transitionStatus = 'visible animating in slide ' + (_this.upward ? 'up' : 'down');
+  tag.upward = isUpward();
+  tag.transitionStatus = 'visible animating in slide ' + (tag.upward ? 'up' : 'down');
   opts.items.forEach(function (item) {
     return item.active = false;
   });
   setTimeout(function () {
-    _this.openning = false;
+    tag.openning = false;
     visibleFlg = true;
-    _this.transitionStatus = 'visible';
-    _this.update();
+    tag.transitionStatus = 'visible';
+    tag.update();
   }, 300);
 
   if (opts.search) {
-    _this.refs.condition.focus();
+    tag.refs.condition.focus();
   }
-  _this.update();
+  tag.update();
   scrollPosition();
-  _this.trigger('open');
-};
+  tag.trigger('open');
+}
 
-var close = function close() {
-  if (_this.closing || !visibleFlg) {
+function close() {
+  if (tag.closing || !visibleFlg) {
     return;
   }
-  _this.closing = true;
-  _this.transitionStatus = 'visible animating out slide ' + (_this.upward ? 'up' : 'down');
+  tag.closing = true;
+  tag.transitionStatus = 'visible animating out slide ' + (tag.upward ? 'up' : 'down');
   setTimeout(function () {
-    _this.closing = false;
+    tag.closing = false;
     visibleFlg = false;
-    _this.transitionStatus = 'hidden';
-    _this.update();
+    tag.transitionStatus = 'hidden';
+    tag.update();
   }, 300);
 
   if (opts.search) {
-    _this.refs.condition.blur();
-    if (_this.filtered && _this.filteredItems.length > 0) {
-      selectTarget(_this.filteredItems[0]);
+    tag.refs.condition.blur();
+    if (tag.filtered && tag.filteredItems.length > 0) {
+      selectTarget(tag.filteredItems[0]);
     } else {
-      _this.refs.condition.value = '';
-      _this.filtered = false;
+      tag.refs.condition.value = '';
+      tag.filtered = false;
     }
   }
-  _this.update();
-  _this.trigger('close');
-};
+  tag.update();
+  tag.trigger('close');
+}
 
-var selectTarget = function selectTarget(target, updating) {
-  if (_this.value === target.value && _this.label === target.label && _this.default === target.default) {
+function selectTarget(target, updating) {
+  if (tag.value === target.value && tag.label === target.label && tag.default === target.default) {
     if (!updating) {
-      _this.trigger('select', target);
+      tag.trigger('select', target);
     }
     return;
   }
-  _this.value = target.value;
-  _this.label = target.label;
-  _this.default = target.default;
+  tag.value = target.value;
+  tag.label = target.label;
+  tag.default = target.default;
   if (opts.search) {
-    _this.refs.condition.value = '';
-    _this.filtered = false;
+    tag.refs.condition.value = '';
+    tag.filtered = false;
   }
   if (!updating) {
-    _this.update();
+    tag.update();
     parentUpdate();
-    _this.trigger('select', target);
-    _this.trigger('change', target);
+    tag.trigger('select', target);
+    tag.trigger('change', target);
   }
-};
+}
 
-var selectMultiTarget = function selectMultiTarget(updating) {
-  if (JSON.stringify(_this.value) == JSON.stringify(opts.items.filter(function (item) {
+function selectMultiTarget(updating) {
+  if (JSON.stringify(tag.value) == JSON.stringify(opts.items.filter(function (item) {
     return item.selected;
   }).map(function (item) {
     return item.value;
-  })) && _this.selectedFlg == opts.items.some(function (item) {
+  })) && tag.selectedFlg == opts.items.some(function (item) {
     return item.selected;
   })) {
     if (!updating) {
-      _this.trigger('select', opts.items.filter(function (item) {
+      tag.trigger('select', opts.items.filter(function (item) {
         return item.selected;
       }));
     }
     return;
   }
-  _this.value = opts.items.filter(function (item) {
+  tag.value = opts.items.filter(function (item) {
     return item.selected;
   }).map(function (item) {
     return item.value;
   });
-  _this.selectedFlg = opts.items.some(function (item) {
+  tag.selectedFlg = opts.items.some(function (item) {
     return item.selected;
   });
   if (!updating) {
-    _this.update();
+    tag.update();
     parentUpdate();
-    _this.trigger('select', opts.items.filter(function (item) {
+    tag.trigger('select', opts.items.filter(function (item) {
       return item.selected;
     }));
-    _this.trigger('change', opts.items.filter(function (item) {
+    tag.trigger('change', opts.items.filter(function (item) {
       return item.selected;
     }));
   }
-};
+}
 
-var search = function search(target) {
+function search(target) {
   opts.items.forEach(function (item) {
     item.searched = item.label && item.label.toLowerCase().indexOf(target) >= 0;
   });
-  _this.filteredItems = opts.items.filter(function (item) {
+  tag.filteredItems = opts.items.filter(function (item) {
     return item.searched;
   });
-  _this.update();
-  _this.trigger('search');
-};
+  tag.update();
+  tag.trigger('search');
+}
 
-var scrollPosition = function scrollPosition() {
-  var menu = _this.root.querySelector('.menu');
-  var item = _this.root.querySelector('.item.hover');
+function scrollPosition() {
+  var menu = tag.root.querySelector('.menu');
+  var item = tag.root.querySelector('.item.hover');
 
   if (menu && item) {
     var menuScroll = menu.scrollTop;
@@ -4163,24 +4274,24 @@ var scrollPosition = function scrollPosition() {
       menu.scrollTop = itemOffset;
     }
   }
-};
+}
 
-var parentUpdate = function parentUpdate() {
-  if (_this.parent) {
-    _this.parent.update();
+function parentUpdate() {
+  if (tag.parent) {
+    tag.parent.update();
   }
-};
+}
 
-var isUpward = function isUpward() {
+function isUpward() {
   if (opts.direction == 'upward') {
     return true;
   }
   if (opts.direction == 'downward') {
     return false;
   }
-  var dropdown = _this.root.getBoundingClientRect();
+  var dropdown = tag.root.getBoundingClientRect();
   var windowHeight = document.documentElement.offsetHeight || document.body.offsetHeight;
-  var menuHeight = _this.root.querySelector('.menu').getBoundingClientRect().height;
+  var menuHeight = tag.root.querySelector('.menu').getBoundingClientRect().height;
   var above = menuHeight <= dropdown.top;
   var below = windowHeight >= dropdown.top + dropdown.height + menuHeight;
 
@@ -4191,36 +4302,33 @@ var isUpward = function isUpward() {
     return false;
   }
   return true;
-};
+}
 
-// ===================================================================================
-//                                                                              Helper
-//                                                                              ======
-this.isItem = function (item) {
+function isItem(item) {
   return item.searched && !item.header && !item.divider;
-};
+}
 
-this.isActive = function () {
-  if (_this.closing) {
+function isActive() {
+  if (tag.closing) {
     return false;
   }
-  return _this.openning || visibleFlg;
-};
+  return tag.openning || visibleFlg;
+}
 
-this.getTabindex = function () {
+function getTabindex() {
   if (opts.tabindex) {
     return opts.tabindex;
   }
   return 0;
-};
+}
 
-this.isReadOnly = function () {
-  return _this.root.classList.contains('read-only');
-};
+function isReadOnly() {
+  return tag.root.classList.contains('read-only');
+}
 
-this.isDisabled = function () {
-  return _this.root.classList.contains('disabled');
-};
+function isDisabled() {
+  return tag.root.classList.contains('disabled');
+}
 });
 
 /***/ }),
@@ -4235,35 +4343,58 @@ this.isDisabled = function () {
 riot.tag2('su-select', '<select onchange="{change}" onblur="{blur}" class="{default: default} text"> <option each="{item in opts.items}" riot-value="{item.value}" if="{!item.items}"> {item.label} </option> <optgroup label="{item.label}" each="{item in opts.items}" if="{item.items}"> <option each="{child in item.items}" riot-value="{child.value}"> {child.label} </option> </optgroup> </select> <i class="dropdown icon"></i>', 'su-select.ui.selection.dropdown,[data-is="su-select"].ui.selection.dropdown{ padding: 0; } su-select.ui.selection.dropdown>select:focus,[data-is="su-select"].ui.selection.dropdown>select:focus{ outline: 0; border-color: #96c8da; } su-select.ui.selection.dropdown>select,[data-is="su-select"].ui.selection.dropdown>select{ display: block !important; padding: .78571429em 2.1em .78571429em 1em; background: 0 0 !important; position: relative; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; -webkit-appearance: none; -moz-appearance: none; -webkit-box-sizing: border-box; box-sizing: border-box; border: none; width: 100%; z-index: 2; font-family: Lato, \'Helvetica Neue\', Arial, Helvetica, sans-serif; } su-select.ui.selection.dropdown>.dropdown.icon,[data-is="su-select"].ui.selection.dropdown>.dropdown.icon{ z-index: 1; }', 'class="ui selection dropdown"', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.defaultValue = '';
+tag.value = '';
+tag.label = '';
 
-this.defaultValue = '';
-this.value = '';
-this.label = '';
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.blur = blur;
+tag.change = change;
+tag.changed = changed;
+tag.changeValues = changeValues;
+tag.reset = reset;
+tag.on('before-mount', onBeforeMount);
+tag.on('mount', onMount);
+tag.on('update', onUpdate);
 
-if (opts.items && opts.items.length > 0) {
-  this.label = opts.items[0].label;
-  this.value = opts.items[0].value;
-  this.default = opts.items[0].default;
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
+
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onBeforeMount() {
+  if (opts.items && opts.items.length > 0) {
+    tag.label = opts.items[0].label;
+    tag.value = opts.items[0].value;
+    tag.default = opts.items[0].default;
+  }
 }
 
-this.on('mount', function () {
+function onMount() {
   if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
     opts.riotValue = opts.value;
   }
   if (typeof opts.riotValue !== 'undefined') {
-    _this.value = opts.riotValue;
-    _this.defaultValue = _this.value;
-    _this.update();
+    tag.value = opts.riotValue;
+    tag.defaultValue = tag.value;
+    tag.update();
   } else {
-    _this.defaultValue = _this.value;
+    tag.defaultValue = tag.value;
   }
-});
+}
 
-this.on('update', function () {
+function onUpdate() {
   if (opts.items) {
     var selected = opts.items.filter(function (item) {
-      return item.value === _this.value;
+      return item.value === tag.value;
     });
     if (!selected || selected.length == 0) {
       var childItems = flatMap(opts.items.filter(function (item) {
@@ -4272,50 +4403,50 @@ this.on('update', function () {
         return item.items;
       });
       selected = childItems.filter(function (item) {
-        return item.value == _this.value;
+        return item.value == tag.value;
       });
     }
 
     if (selected && selected.length > 0) {
       var target = selected[0];
-      if (_this.label !== target.label) {
-        _this.changeValues(_this.value, true);
+      if (tag.label !== target.label) {
+        tag.changeValues(tag.value, true);
       }
     } else if (opts.items && opts.items.length > 0) {
-      if (_this.value != opts.items[0].value) {
-        _this.value = opts.items[0].value;
+      if (tag.value != opts.items[0].value) {
+        tag.value = opts.items[0].value;
       }
-      if (_this.label != opts.items[0].label) {
-        _this.label = opts.items[0].label;
-        _this.default = opts.items[0].default;
+      if (tag.label != opts.items[0].label) {
+        tag.label = opts.items[0].label;
+        tag.default = opts.items[0].default;
       }
     }
   }
-});
+}
 
 // ===================================================================================
 //                                                                               State
 //                                                                               =====
-this.reset = function () {
-  _this.value = _this.defaultValue;
-};
+function reset() {
+  tag.value = tag.defaultValue;
+}
 
-this.changed = function () {
-  return _this.value !== _this.defaultValue;
-};
+function changed() {
+  return tag.value !== tag.defaultValue;
+}
 
 // ===================================================================================
 //                                                                               Event
 //                                                                               =====
-this.blur = function () {
-  _this.trigger('blur');
-};
+function blur() {
+  tag.trigger('blur');
+}
 
-this.change = function (target) {
-  _this.changeValues(target.target.value);
-};
+function change(target) {
+  tag.changeValues(target.target.value);
+}
 
-this.changeValues = function (value, updating) {
+function changeValues(value, updating) {
   var item = void 0;
   if (opts.items.some(function (item) {
     return item.value == value || item.label == value;
@@ -4323,9 +4454,9 @@ this.changeValues = function (value, updating) {
     item = opts.items.filter(function (item) {
       return item.value == value || item.label == value;
     })[0];
-    _this.label = item.label;
-    _this.value = item.value;
-    _this.default = item.default;
+    tag.label = item.label;
+    tag.value = item.value;
+    tag.default = item.default;
   } else {
     var childItems = flatMap(opts.items.filter(function (item) {
       return item.items;
@@ -4338,26 +4469,26 @@ this.changeValues = function (value, updating) {
       item = childItems.filter(function (item) {
         return item.value == value || item.label == value;
       })[0];
-      _this.label = item.label;
-      _this.value = item.value;
-      _this.default = item.default;
+      tag.label = item.label;
+      tag.value = item.value;
+      tag.default = item.default;
     }
   }
 
   if (!updating) {
-    _this.update();
-    _this.trigger('change', item);
+    tag.update();
+    tag.trigger('change', item);
   }
-};
+}
 
 // ===================================================================================
 //                                                                               Logic
 //                                                                               =====
-var flatMap = function flatMap(xs, f) {
+function flatMap(xs, f) {
   return xs.reduce(function (ys, x) {
     return ys.concat(f(x));
   }, []);
-};
+}
 });
 
 /***/ }),
@@ -4369,99 +4500,120 @@ var flatMap = function flatMap(xs, f) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionStatus}"> <div class="ui modal transition visible active {opts.class}" onclick="{clickModal}" id="{getId()}"> <i class="close icon" if="{opts.modal.closable && !this.isBasic()}" onclick="{hide}"></i> <div class="ui header {icon: opts.modal.header.icon}" if="{opts.modal.header}"> <i class="icon {opts.modal.header.icon}" if="{opts.modal.header.icon}"></i> {(opts.modal.header.text) ? opts.modal.header.text : opts.modal.header} </div> <div class="content {image: isImageContent()}" ref="content"> <yield></yield> </div> <div class="actions"> <button each="{opts.modal.buttons}" class="ui button {type} {labeled: icon && text} {icon: icon} {inverted: isBasic()} {disabled: disabled}" onclick="{parent.click}" ref="button_{text}" type="button"> {text} <i class="icon {icon}" if="{icon}"></i> </button> </div> </div> </div>', 'su-modal .ui.dimmer.visible.transition,[data-is="su-modal"] .ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; } su-modal .ui.fullscreen.modal,[data-is="su-modal"] .ui.fullscreen.modal{ left: 0 !important; } @media only screen and (min-width: 768px) { su-modal .ui.modal>.close,[data-is="su-modal"] .ui.modal>.close{ display: none; } su-modal .ui.fullscreen.modal>.close,[data-is="su-modal"] .ui.fullscreen.modal>.close{ display: inline; } }', 'onclick="{dimmerClose}"', function(opts) {
+riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionStatus}"> <div class="ui modal transition visible active {opts.class}" onclick="{clickModal}" id="{getId()}"> <i class="close icon" if="{opts.modal.closable && !isBasic()}" onclick="{hide}"></i> <div class="ui header {icon: opts.modal.header.icon}" if="{opts.modal.header}"> <i class="icon {opts.modal.header.icon}" if="{opts.modal.header.icon}"></i> {getTitle()} </div> <div class="content {image: isImageContent()}" ref="content"> <yield></yield> </div> <div class="actions"> <button each="{button in opts.modal.buttons}" onclick="{click}" ref="button_{button.text}" type="button" class="ui button {button.type} {labeled: button.icon && button.text} {icon: button.icon} {inverted: isBasic()} {disabled: button.disabled}"> {button.text} <i class="icon {button.icon}" if="{button.icon}"></i> </button> </div> </div> </div>', 'su-modal .ui.dimmer.visible.transition,[data-is="su-modal"] .ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; } su-modal .ui.fullscreen.modal,[data-is="su-modal"] .ui.fullscreen.modal{ left: 0 !important; } @media only screen and (min-width: 768px) { su-modal .ui.modal>.close,[data-is="su-modal"] .ui.modal>.close{ display: none; } su-modal .ui.fullscreen.modal>.close,[data-is="su-modal"] .ui.fullscreen.modal>.close{ display: inline; } }', 'onclick="{dimmerClose}"', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
 
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.click = click;
+tag.clickModal = clickModal;
+tag.dimmerClose = dimmerClose;
+tag.getId = getId;
+tag.getTitle = getTitle;
+tag.hide = hide;
+tag.isBasic = isBasic;
+tag.isImageContent = isImageContent;
+tag.show = show;
+tag.on('before-mount', onBeforeMount);
+tag.on('mount', onMount);
+tag.on('update', onUpdate);
+
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
 var image_content = false;
 var openning = void 0,
     closing = void 0,
     visible = void 0;
 
-if (!opts.modal) {
-  opts.modal = {};
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onBeforeMount() {
+  if (!opts.modal) {
+    opts.modal = {};
+  }
 }
 
-this.on('mount', function () {
+function onMount() {
   if (typeof opts.modal.closable === 'undefined') {
     opts.modal.closable = true;
   }
-});
+}
 
-this.on('update', function () {
-  if (_this.refs.content.getElementsByTagName('img').length > 0) {
+function onUpdate() {
+  if (tag.refs.content.getElementsByTagName('img').length > 0) {
     image_content = true;
   }
-});
+}
 
-// ===================================================================================
-//                                                                               Event
-//                                                                               =====
-this.show = function () {
+function show() {
   if (openning || closing || visible) {
     return;
   }
   openning = true;
-  _this.transitionStatus = 'animating fade in visible';
-  _this.update();
+  tag.transitionStatus = 'animating fade in visible';
+  tag.update();
   setDefaultFocus();
-  _this.trigger('show');
+  tag.trigger('show');
 
   setTimeout(function () {
     openning = false;
     visible = true;
-    _this.transitionStatus = 'visible active';
-    _this.update();
+    tag.transitionStatus = 'visible active';
+    tag.update();
   }, 500);
-};
+}
 
-this.click = function (event) {
-  _this.trigger(event.item.action || event.item.text);
+function click(event) {
+  tag.trigger(event.item.action || event.item.text);
   if (typeof event.item.closable === 'undefined' || event.item.closable) {
-    _this.hide();
+    tag.hide();
   }
-};
+}
 
-this.dimmerClose = function () {
-  if (opts.modal.closable && !_this.isBasic()) {
-    _this.hide();
+function dimmerClose() {
+  if (opts.modal.closable && !tag.isBasic()) {
+    tag.hide();
   }
-};
+}
 
-this.clickModal = function (event) {
+function clickModal(event) {
   event.stopPropagation();
-};
+}
 
-this.hide = function () {
+function hide() {
   if (openning || closing || !visible) {
     return;
   }
   closing = true;
-  _this.transitionStatus = 'animating fade out visible active';
-  _this.update();
-  _this.trigger('hide');
+  tag.transitionStatus = 'animating fade out visible active';
+  tag.update();
+  tag.trigger('hide');
 
   setTimeout(function () {
     closing = false;
     visible = false;
-    _this.transitionStatus = '';
-    _this.update();
+    tag.transitionStatus = '';
+    tag.update();
   }, 300);
-};
+}
 
-// ===================================================================================
-//                                                                               Logic
-//                                                                               =====
-var isContainsClassName = function isContainsClassName(className) {
-  var modalElement = document.getElementById(_this.getId());
+function isContainsClassName(className) {
+  var modalElement = document.getElementById(tag.getId());
   if (!modalElement) {
     return false;
   }
   return modalElement.classList.contains(className);
-};
+}
 
-var setDefaultFocus = function setDefaultFocus() {
+function setDefaultFocus() {
   if (!opts.modal || !opts.modal.buttons || opts.modal.buttons.length == 0) {
     return;
   }
@@ -4471,24 +4623,28 @@ var setDefaultFocus = function setDefaultFocus() {
     var text = opts.modal.buttons.filter(function (button) {
       return button.default;
     })[0].text;
-    _this.refs['button_' + text].focus();
+    tag.refs['button_' + text].focus();
   }
-};
+}
 
-// ===================================================================================
-//                                                                              Helper
-//                                                                              ======
-this.getId = function () {
-  return 'su-modal-' + _this._riot_id;
-};
+function getTitle() {
+  if (opts.modal.header.text) {
+    return opts.modal.header.text;
+  }
+  return opts.modal.header;
+}
 
-this.isBasic = function () {
+function getId() {
+  return 'su-modal-' + tag._riot_id;
+}
+
+function isBasic() {
   return isContainsClassName('basic');
-};
+}
 
-this.isImageContent = function () {
+function isImageContent() {
   return image_content;
-};
+}
 });
 
 /***/ }),
@@ -4503,39 +4659,55 @@ this.isImageContent = function () {
 riot.tag2('su-pagination', '<div class="ui pagination menu {opts.class}"> <a class="icon item {disabled: activePage <= 1}" onclick="{clickPage.bind(this,1)}"> <i aria-hidden="true" class="angle double left icon"></i> </a> <a class="icon item {disabled: activePage <= 1}" onclick="{clickPage.bind(this,activePage - 1)}"> <i class="angle left icon"></i> </a> <virtual each="{page in pages}"> <a class="item" onclick="{clickPage.bind(this,page.number)}" if="{!page.active && !page.disabled}"> {page.number} </a> <a class="active item" if="{page.active}">{page.number}</a> <div class="disabled icon item" if="{page.disabled}"> <i class="ellipsis horizontal icon"></i> </div> </virtual> <a class="icon item {disabled: activePage >= totalPages}" onclick="{clickPage.bind(this,activePage + 1)}"> <i class="angle right icon"></i> </a> <a class="icon item {disabled: activePage >= totalPages}" onclick="{clickPage.bind(this,totalPages )}"> <i aria-hidden="true" class="angle double right icon"></i> </a> </div>', '', '', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.activePage = 1;
+tag.pages = [];
+tag.totalPages = 1;
 
-this.activePage = 1;
-this.totalPages = 1;
-this.pages = [];
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.clickPage = clickPage;
+tag.on('mount', onMount);
+tag.on('update', onUpdate);
+
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
+var lastActivePage = null;
 var lastOptsTotalPages = null;
 var lastOptsActivePage = null;
 var lastTotalPages = null;
-var lastActivePage = null;
 
-this.on('mount', function () {
-  _this.update();
-});
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onMount() {
+  tag.update();
+}
 
-this.on('update', function () {
+function onUpdate() {
   var needsRegenerate = false;
   if (opts.activePage != lastOptsActivePage) {
     lastOptsActivePage = opts.activePage;
-    _this.activePage = opts.activePage;
-    lastActivePage = _this.activePage;
+    tag.activePage = opts.activePage;
+    lastActivePage = tag.activePage;
     needsRegenerate = true;
-  } else if (_this.activePage != lastActivePage) {
-    lastActivePage = _this.activePage;
+  } else if (tag.activePage != lastActivePage) {
+    lastActivePage = tag.activePage;
     needsRegenerate = true;
   }
   if (opts.totalPages != lastOptsTotalPages) {
     lastOptsTotalPages = opts.totalPages;
-    _this.totalPages = opts.totalPages;
-    lastTotalPages = _this.totalPages;
+    tag.totalPages = opts.totalPages;
+    lastTotalPages = tag.totalPages;
     needsRegenerate = true;
-  } else if (_this.totalPages != lastTotalPages) {
-    lastTotalPages = _this.totalPages;
-    opts.totalPages = _this.totalPages;
+  } else if (tag.totalPages != lastTotalPages) {
+    lastTotalPages = tag.totalPages;
+    opts.totalPages = tag.totalPages;
     lastOptsTotalPages = opts.totalPages;
     needsRegenerate = true;
   }
@@ -4543,62 +4715,56 @@ this.on('update', function () {
   if (needsRegenerate) {
     generatePagination();
   }
-});
+}
 
-// ===================================================================================
-//                                                                               Event
-//                                                                               =====
-this.clickPage = function (pageNum, e) {
+function clickPage(pageNum, e) {
   e.preventDefault();
-  if (pageNum < 1 || pageNum > _this.totalPages) {
+  if (pageNum < 1 || pageNum > tag.totalPages) {
     return;
   }
-  _this.activePage = pageNum;
-  _this.update();
-  _this.trigger('change', pageNum);
-};
+  tag.activePage = pageNum;
+  tag.update();
+  tag.trigger('change', pageNum);
+}
 
-// ===================================================================================
-//                                                                               Logic
-//                                                                               =====
-var generatePagination = function generatePagination() {
-  _this.pages = [];
-  var activePage = parseInt(_this.activePage || 1);
-  var totalPages = parseInt(_this.totalPages || 1);
+function generatePagination() {
+  tag.pages = [];
+  var activePage = parseInt(tag.activePage || 1);
+  var totalPages = parseInt(tag.totalPages || 1);
   var pageSize = calcPageSize();
   var index = calcIndex(pageSize);
 
   if (pageSize < 1) {
-    _this.update();
+    tag.update();
     return;
   }
 
   for (var i = 0; i < pageSize; i++) {
-    _this.pages.push({
+    tag.pages.push({
       number: i + index,
       active: i + index == activePage
     });
   }
-  _this.pages[0].number = 1;
-  _this.pages[pageSize - 1].number = totalPages;
+  tag.pages[0].number = 1;
+  tag.pages[pageSize - 1].number = totalPages;
   if (pageSize > 1) {
-    _this.pages[1].disabled = index != 1;
+    tag.pages[1].disabled = index != 1;
   }
   if (pageSize > 2) {
-    _this.pages[pageSize - 2].disabled = index != totalPages - pageSize + 1;
+    tag.pages[pageSize - 2].disabled = index != totalPages - pageSize + 1;
   }
 
-  _this.update();
-};
+  tag.update();
+}
 
-var calcPageSize = function calcPageSize() {
+function calcPageSize() {
   var pageSize = parseInt(opts.pageSize || 7);
-  return pageSize < _this.totalPages ? pageSize : _this.totalPages;
-};
+  return pageSize < tag.totalPages ? pageSize : tag.totalPages;
+}
 
-var calcIndex = function calcIndex(pageSize) {
-  var activePage = parseInt(_this.activePage || 1);
-  var totalPages = parseInt(_this.totalPages || 1);
+function calcIndex(pageSize) {
+  var activePage = parseInt(tag.activePage || 1);
+  var totalPages = parseInt(tag.totalPages || 1);
   var prevPageSize = (pageSize - pageSize % 2) / 2;
   if (activePage + prevPageSize > totalPages) {
     return totalPages - pageSize + 1;
@@ -4607,7 +4773,7 @@ var calcIndex = function calcIndex(pageSize) {
     return activePage - prevPageSize;
   }
   return 1;
-};
+}
 });
 
 /***/ }),
@@ -4619,56 +4785,77 @@ var calcIndex = function calcIndex(pageSize) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-popup', '<div id="{getId()}" class="ui popup {opts.position} {opts.dataVariation} transition {transitionStatus} {nowrap: isNowrap()}"></div> <yield></yield>', 'su-popup,[data-is="su-popup"]{ position: relative; } su-popup .ui.popup,[data-is="su-popup"] .ui.popup{ position: absolute; } su-popup .ui.popup.nowrap,[data-is="su-popup"] .ui.popup.nowrap{ white-space: nowrap; } su-popup .ui.popup.wide,[data-is="su-popup"] .ui.popup.wide{ width: 350px; } su-popup .ui.popup.very.wide,[data-is="su-popup"] .ui.popup.very.wide{ width: 550px; } su-popup .ui.popup.top.left,[data-is="su-popup"] .ui.popup.top.left{ top: auto; bottom: 100%; left: 1em; right: auto; margin-left: -1rem; } su-popup .ui.popup.bottom.left,[data-is="su-popup"] .ui.popup.bottom.left{ top: 100%; bottom: auto; left: 1em; right: auto; margin-left: -1rem; } su-popup .ui.popup.top.center,[data-is="su-popup"] .ui.popup.top.center{ top: auto; bottom: 100%; left: 50%; right: auto; -webkit-transform: translateX(-50%) !important; transform: translateX(-50%) !important; } su-popup .ui.popup.bottom.center,[data-is="su-popup"] .ui.popup.bottom.center{ top: 100%; bottom: auto; left: 50%; right: auto; -webkit-transform: translateX(-50%) !important; transform: translateX(-50%) !important; } su-popup .ui.popup.top.right,[data-is="su-popup"] .ui.popup.top.right{ top: auto; bottom: 100%; left: auto; right: 1em; margin-right: -1rem; } su-popup .ui.popup.bottom.right,[data-is="su-popup"] .ui.popup.bottom.right{ top: 100%; bottom: auto; left: auto; right: 1em; margin-right: -1rem; } su-popup .ui.popup.left.center,[data-is="su-popup"] .ui.popup.left.center{ left: auto; right: 100%; top: 50%; -webkit-transform: translateY(-50%) !important; transform: translateY(-50%) !important; } su-popup .ui.popup.right.center,[data-is="su-popup"] .ui.popup.right.center{ left: 100%; right: auto; top: 50%; -webkit-transform: translateY(-50%) !important; transform: translateY(-50%) !important; }', 'onmouseover="{mouseover}" onmouseout="{mouseout}"', function(opts) {
+riot.tag2('su-popup', '<div id="{getId()}" onmouseover="{stopPropagation}" onmouseout="{stopPropagation}" class="ui popup {position} {dataVariation} transition {transitionStatus} {nowrap: isNowrap()}"> </div> <yield></yield>', 'su-popup,[data-is="su-popup"]{ position: relative; } su-popup .ui.popup,[data-is="su-popup"] .ui.popup{ position: absolute; } su-popup .ui.popup.nowrap,[data-is="su-popup"] .ui.popup.nowrap{ white-space: nowrap; } su-popup .ui.popup.wide,[data-is="su-popup"] .ui.popup.wide{ width: 350px; } su-popup .ui.popup.very.wide,[data-is="su-popup"] .ui.popup.very.wide{ width: 550px; } su-popup .ui.popup.top.left,[data-is="su-popup"] .ui.popup.top.left{ top: auto; bottom: 100%; left: 1em; right: auto; margin-left: -1rem; } su-popup .ui.popup.bottom.left,[data-is="su-popup"] .ui.popup.bottom.left{ top: 100%; bottom: auto; left: 1em; right: auto; margin-left: -1rem; } su-popup .ui.popup.top.center,[data-is="su-popup"] .ui.popup.top.center{ top: auto; bottom: 100%; left: 50%; right: auto; -webkit-transform: translateX(-50%); transform: translateX(-50%); } su-popup .ui.popup.bottom.center,[data-is="su-popup"] .ui.popup.bottom.center{ top: 100%; bottom: auto; left: 50%; right: auto; -webkit-transform: translateX(-50%); transform: translateX(-50%); } su-popup .ui.popup.top.center.scale.transition.in,[data-is="su-popup"] .ui.popup.top.center.scale.transition.in,su-popup .ui.popup.bottom.center.scale.transition.in,[data-is="su-popup"] .ui.popup.bottom.center.scale.transition.in{ animation-name: xScaleIn } su-popup .ui.popup.top.right,[data-is="su-popup"] .ui.popup.top.right{ top: auto; bottom: 100%; left: auto; right: 1em; margin-right: -1rem; } su-popup .ui.popup.bottom.right,[data-is="su-popup"] .ui.popup.bottom.right{ top: 100%; bottom: auto; left: auto; right: 1em; margin-right: -1rem; } su-popup .ui.popup.left.center,[data-is="su-popup"] .ui.popup.left.center{ left: auto; right: 100%; top: 50%; -webkit-transform: translateY(-50%); transform: translateY(-50%); } su-popup .ui.popup.right.center,[data-is="su-popup"] .ui.popup.right.center{ left: 100%; right: auto; top: 50%; -webkit-transform: translateY(-50%); transform: translateY(-50%); } su-popup .ui.popup.left.center.scale.transition.in,[data-is="su-popup"] .ui.popup.left.center.scale.transition.in,su-popup .ui.popup.right.center.scale.transition.in,[data-is="su-popup"] .ui.popup.right.center.scale.transition.in{ animation-name: yScaleIn } @-webkit-keyframes xScaleIn { 0% { opacity: 0; -webkit-transform: scale(0.8) translateX(-50%); transform: scale(0.8) translateX(-50%); } 100% { opacity: 1; -webkit-transform: scale(1) translateX(-50%); transform: scale(1) translateX(-50%); } } @keyframes xScaleIn { 0% { opacity: 0; -webkit-transform: scale(0.8) translateX(-50%); transform: scale(0.8) translateX(-50%); } 100% { opacity: 1; -webkit-transform: scale(1) translateX(-50%); transform: scale(1) translateX(-50%); } } @-webkit-keyframes yScaleIn { 0% { opacity: 0; -webkit-transform: scale(0.8) translateY(-50%); transform: scale(0.8) translateY(-50%); } 100% { opacity: 1; -webkit-transform: scale(1) translateY(-50%); transform: scale(1) translateY(-50%); } } @keyframes yScaleIn { 0% { opacity: 0; -webkit-transform: scale(0.8) translateY(-50%); transform: scale(0.8) translateY(-50%); } 100% { opacity: 1; -webkit-transform: scale(1) translateY(-50%); transform: scale(1) translateY(-50%); } }', 'onmouseover="{mouseover}" onmouseout="{mouseout}"', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.content = '';
+tag.dataVariation = opts.dataVariation || '';
 
-this.content = '';
-this.on('mount', function () {
-  if (!opts.position) {
-    opts.position = 'top left';
-  }
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.getId = getId;
+tag.isNowrap = isNowrap;
+tag.mouseover = mouseover;
+tag.mouseout = mouseout;
+tag.on('mount', onMount);
+tag.on('update', onUpdate);
+tag.stopPropagation = stopPropagation;
+
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
+
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onMount() {
   if (opts.tooltip) {
     if (opts.dataTitle) {
-      _this.content = '<div class="header">' + opts.dataTitle + '</div><div class="content">' + opts.tooltip + '</div>';
+      tag.content = '<div class="header">' + opts.dataTitle + '</div><div class="content">' + opts.tooltip + '</div>';
     } else {
-      _this.content = opts.tooltip;
+      tag.content = opts.tooltip;
     }
-  } else if (_this.tags['su-popup-content']) {
-    _this.content = _this.tags['su-popup-content'].root.innerHTML;
-    _this.tags['su-popup-content'].unmount();
+  } else if (tag.tags['su-popup-content']) {
+    tag.content = tag.tags['su-popup-content'].root.innerHTML;
+    tag.tags['su-popup-content'].unmount();
   }
-  document.getElementById(_this.getId()).innerHTML = _this.content;
-  _this.update();
-});
+  document.getElementById(tag.getId()).innerHTML = tag.content;
+  tag.update();
+}
 
-// ===================================================================================
-//                                                                               Event
-//                                                                               =====
-this.mouseover = function () {
-  _this.transitionStatus = 'visible';
-  _this.trigger('mouseover');
-};
+function onUpdate() {
+  tag.position = opts.position || 'top left';
+}
 
-this.mouseout = function () {
-  _this.transitionStatus = 'hidden';
-  _this.trigger('mouseout');
-};
+function mouseover() {
+  tag.transitionStatus = 'scale in visible';
+  tag.trigger('mouseover');
+}
 
-// ===================================================================================
-//                                                                              Helper
-//                                                                              ======
-this.isNowrap = function () {
-  if (opts.dataVariation && opts.dataVariation.indexOf('wide') >= 0) {
+function mouseout() {
+  tag.transitionStatus = 'hidden';
+  tag.trigger('mouseout');
+}
+
+function stopPropagation(event) {
+  event.stopPropagation();
+}
+
+function isNowrap() {
+  if (tag.dataVariation.indexOf('wide') >= 0) {
     return false;
   }
   return true;
-};
+}
 
-this.getId = function () {
-  return 'su-popup-' + _this._riot_id;
-};
+function getId() {
+  return 'su-popup-' + tag._riot_id;
+}
 });
 
 riot.tag2('su-popup-content', '', '', '', function(opts) {
@@ -4686,102 +4873,114 @@ riot.tag2('su-popup-content', '', '', '', function(opts) {
 riot.tag2('su-progress', '<div class="ui progress {getClass()} {getStates()}" data-percent="{percent}"> <div class="bar" riot-style="transition-duration: 300ms; width: {percent}%;"> <div if="{isProgress()}" class="progress">{percent}%</div> </div> <div class="label"> <yield></yield> </div> </div>', 'su-progress .ui.progress:last-child,[data-is="su-progress"] .ui.progress:last-child{ margin: 0 0 2.5em; } su-progress.attached,[data-is="su-progress"].attached{ display: block; height: 0.2rem; padding: 0px; overflow: hidden; border-radius: 0em 0em 0.28571429rem 0.28571429rem; position: absolute; left: 0; width: 100%; } su-progress.top.attached,[data-is="su-progress"].top.attached{ top: 0px; bottom: 100%; border-radius: 0.28571429rem 0.28571429rem 0em 0em; } su-progress.bottom.attached,[data-is="su-progress"].bottom.attached{ top: 100%; bottom: auto; }', 'class="{opts.class}"', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.defaultValue = null;
+tag.value = null;
 
-this.value = null;
-this.defaultValue = null;
-var total = 100;
-var lastValue = null;
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.getClass = getClass;
+tag.getStates = getStates;
+tag.isProgress = isProgress;
+tag.on('mount', onMount);
+tag.on('update', onUpdate);
+
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
 var lastOptsValue = null;
+var lastValue = null;
+var total = 100;
 
-this.on('mount', function () {
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onMount() {
   if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
     opts.riotValue = opts.value;
   }
   init(opts.riotValue, opts.total);
 
-  _this.update();
-  _this.defaultValue = _this.value;
-});
+  tag.update();
+  tag.defaultValue = tag.value;
+}
 
-this.on('update', function () {
+function onUpdate() {
   var changed = false;
-  if (_this.value >= total) {
-    _this.value = total;
+  if (tag.value >= total) {
+    tag.value = total;
   }
-  if (_this.value <= 0) {
-    _this.value = 0;
+  if (tag.value <= 0) {
+    tag.value = 0;
   }
-  if (lastValue != _this.value) {
-    lastValue = _this.value;
+  if (lastValue != tag.value) {
+    lastValue = tag.value;
     changed = true;
   } else if (lastOptsValue != opts.riotValue) {
-    _this.value = opts.riotValue;
+    tag.value = opts.riotValue;
     lastOptsValue = opts.riotValue;
     lastValue = opts.riotValue;
     changed = true;
   }
 
   if (changed) {
-    _this.percent = getPercent();
+    tag.percent = getPercent();
   }
-});
+}
 
-// ===================================================================================
-//                                                                              Helper
-//                                                                              ======
-this.getClass = function () {
+function getClass() {
   var excludeClasses = ['progress', 'active'];
-  return Array.apply(null, _this.root.classList).filter(function (clazz) {
+  return Array.apply(null, tag.root.classList).filter(function (clazz) {
     return !excludeClasses.some(function (excludeClass) {
       return excludeClass == clazz;
     });
   }).join(' ');
-};
+}
 
-this.getStates = function () {
+function getStates() {
   if (isSuccess()) {
     return 'success';
   }
   if (isActive()) {
     return 'active';
   }
-};
+}
 
-this.isProgress = function () {
+function isProgress() {
   return hasClass('progress');
-};
+}
 
-// ===================================================================================
-//                                                                               Logic
-//                                                                               =====
-var init = function init(optsValue, optsTotal) {
-  if (_this.value == null) {
-    _this.value = optsValue || 0;
+function init(optsValue, optsTotal) {
+  if (tag.value == null) {
+    tag.value = optsValue || 0;
   }
   if (optsTotal > 0) {
     total = optsTotal;
   }
-  _this.percent = getPercent();
-  lastValue = _this.value;
+  tag.percent = getPercent();
+  lastValue = tag.value;
   lastOptsValue = optsValue;
-};
+}
 
-var getPercent = function getPercent() {
-  return parseInt(_this.value / total * 100);
-};
+function getPercent() {
+  return parseInt(tag.value / total * 100);
+}
 
-var isActive = function isActive() {
-  return hasClass('active') && _this.percent > 0 && _this.percent < 100;
-};
+function isActive() {
+  return hasClass('active') && tag.percent > 0 && tag.percent < 100;
+}
 
-var isSuccess = function isSuccess() {
-  return _this.percent == 100;
-};
+function isSuccess() {
+  return tag.percent == 100;
+}
 
-var hasClass = function hasClass(className) {
-  return _this.root.classList.contains(className);
-};
+function hasClass(className) {
+  return tag.root.classList.contains(className);
+}
 });
 
 /***/ }),
@@ -4796,27 +4995,44 @@ var hasClass = function hasClass(className) {
 riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.defaultValue = '';
+tag.label = '';
+tag.value = '';
 
-this.label = '';
-this.value = '';
-this.defaultValue = '';
-var lastValue = void 0;
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.changed = changed;
+tag.on('mount', onMount);
+tag.on('update', onUpdate);
+tag.reset = reset;
+
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
 var lastOptsValue = void 0;
+var lastValue = void 0;
 
-this.on('mount', function () {
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onMount() {
   if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
     opts.riotValue = opts.value;
   }
-  if (_this.value) {
-    opts.riotValue = _this.value;
+  if (tag.value) {
+    opts.riotValue = tag.value;
   } else {
-    _this.value = opts.riotValue;
+    tag.value = opts.riotValue;
   }
-  lastValue = _this.value;
-  lastOptsValue = _this.value;
+  lastValue = tag.value;
+  lastOptsValue = tag.value;
 
-  var radios = _this.tags['su-radio'];
+  var radios = tag.tags['su-radio'];
   if (!Array.isArray(radios)) {
     radios = [radios];
   }
@@ -4824,25 +5040,25 @@ this.on('mount', function () {
     initializeChild(radio);
   });
 
-  _this.defaultValue = _this.value;
-  _this.update();
-});
+  tag.defaultValue = tag.value;
+  tag.update();
+}
 
-this.on('update', function () {
+function onUpdate() {
   var changed = false;
-  if (lastValue != _this.value) {
-    opts.riotValue = _this.value;
-    lastOptsValue = _this.value;
-    lastValue = _this.value;
+  if (lastValue != tag.value) {
+    opts.riotValue = tag.value;
+    lastOptsValue = tag.value;
+    lastValue = tag.value;
     changed = true;
   } else if (lastOptsValue != opts.riotValue) {
-    _this.value = opts.riotValue;
+    tag.value = opts.riotValue;
     lastOptsValue = opts.riotValue;
     lastValue = opts.riotValue;
     changed = true;
   }
 
-  var radios = _this.tags['su-radio'];
+  var radios = tag.tags['su-radio'];
 
   if (!Array.isArray(radios)) {
     radios = [radios];
@@ -4852,45 +5068,39 @@ this.on('update', function () {
   });
 
   if (changed) {
-    _this.trigger('change', _this.value);
+    tag.trigger('change', tag.value);
   }
-});
+}
 
-// ===================================================================================
-//                                                                               State
-//                                                                               =====
-this.reset = function () {
-  _this.value = _this.defaultValue;
-};
+function reset() {
+  tag.value = tag.defaultValue;
+}
 
-this.changed = function () {
-  return _this.value !== _this.defaultValue;
-};
+function changed() {
+  return tag.value !== tag.defaultValue;
+}
 
-// ===================================================================================
-//                                                                               Logic
-//                                                                               =====
-var updateState = function updateState(radio) {
+function updateState(radio) {
   if (typeof radio.opts.value === 'undefined') {
     return;
   }
-  radio.checked = _this.value == radio.opts.value;
+  radio.checked = tag.value == radio.opts.value;
   if (radio.checked) {
-    _this.label = radio.root.getElementsByTagName('label')[0].innerText;
+    tag.label = radio.root.getElementsByTagName('label')[0].innerText;
   }
-};
+}
 
-var initializeChild = function initializeChild(radio) {
+function initializeChild(radio) {
   radio.opts.name = getRadioName();
   radio.on('click', function (value) {
-    _this.value = value;
-    _this.update();
+    tag.value = value;
+    tag.update();
   });
-};
+}
 
-var getRadioName = function getRadioName() {
-  return 'su-radio-name-' + _this._riot_id;
-};
+function getRadioName() {
+  return 'su-radio-name-' + tag._riot_id;
+}
 });
 
 /***/ }),
@@ -4902,72 +5112,82 @@ var getRadioName = function getRadioName() {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', 'su-radio.ui.checkbox label,[data-is="su-radio"].ui.checkbox label{ cursor: pointer; } su-radio.ui.read-only input[type="radio"],[data-is="su-radio"].ui.read-only input[type="radio"],su-radio.ui.disabled input[type="radio"],[data-is="su-radio"].ui.disabled input[type="radio"]{ cursor: default!important; }', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
+riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', 'su-radio.ui.checkbox label,[data-is="su-radio"].ui.checkbox label{ cursor: pointer; } su-radio.ui.read-only input[type="radio"],[data-is="su-radio"].ui.read-only input[type="radio"],su-radio.ui.disabled input[type="radio"],[data-is="su-radio"].ui.disabled input[type="radio"]{ cursor: default !important; }', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.checked = false;
+tag.name = '';
 
-this.name = '';
-this.checked = false;
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.click = click;
+tag.getId = getId;
+tag.isDisabled = isDisabled;
+tag.isRadio = isRadio;
+tag.on('mount', onMount);
+tag.on('update', onUpdate);
+
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
 var lastChecked = void 0;
 var lastOptsCheck = void 0;
 
-this.on('mount', function () {
-  if (_this.checked) {
-    opts.checked = _this.checked;
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onMount() {
+  if (tag.checked) {
+    opts.checked = tag.checked;
   } else {
-    _this.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true';
+    tag.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true';
   }
-  lastChecked = _this.checked;
+  lastChecked = tag.checked;
   lastOptsCheck = opts.checked;
-  _this.update();
-});
+  tag.update();
+}
 
-this.on('update', function () {
-  _this.name = opts.name;
-  _this.value = opts.value;
-  if (lastChecked != _this.checked) {
-    opts.checked = _this.checked;
-    lastChecked = _this.checked;
+function onUpdate() {
+  tag.name = opts.name;
+  tag.value = opts.value;
+  if (lastChecked != tag.checked) {
+    opts.checked = tag.checked;
+    lastChecked = tag.checked;
   } else if (lastOptsCheck != opts.checked) {
-    _this.checked = opts.checked;
+    tag.checked = opts.checked;
     lastOptsCheck = opts.checked;
   }
-});
+}
 
-// ===================================================================================
-//                                                                               Event
-//                                                                               =====
-this.click = function (event) {
-  if (isReadOnly() || _this.isDisabled()) {
+function click(event) {
+  if (isReadOnly() || tag.isDisabled()) {
     event.preventDefault();
     return;
   }
-  _this.checked = event.target.checked;
-  _this.trigger('click', event.target.value);
-};
+  tag.checked = event.target.checked;
+  tag.trigger('click', event.target.value);
+}
 
-// ===================================================================================
-//                                                                               Logic
-//                                                                               =====
-var isReadOnly = function isReadOnly() {
-  return _this.root.classList.contains('read-only');
-};
+function isReadOnly() {
+  return tag.root.classList.contains('read-only');
+}
 
-// ===================================================================================
-//                                                                              Helper
-//                                                                              ======
-this.getId = function () {
-  return 'su-radio-' + _this._riot_id;
-};
+function getId() {
+  return 'su-radio-' + tag._riot_id;
+}
 
-this.isDisabled = function () {
-  return _this.root.classList.contains('disabled');
-};
+function isDisabled() {
+  return tag.root.classList.contains('disabled');
+}
 
-this.isRadio = function () {
-  return !_this.root.classList.contains('slider');
-};
+function isRadio() {
+  return !tag.root.classList.contains('slider');
+}
 });
 
 /***/ }),
@@ -4979,103 +5199,114 @@ this.isRadio = function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-rating', '<i class="icon {active: active} {selected: selected}" each="{items}" onclick="{click}" onmouseover="{mouseover}" onmouseout="{mouseout}"></i>', '', 'class="ui rating {opts.class}"', function(opts) {
+riot.tag2('su-rating', '<i class="icon {active: item.active} {selected: item.selected}" each="{item in items}" onclick="{click.bind(this, item)}" onmouseover="{mouseover.bind(this, item)}" onmouseout="{mouseout}"></i>', '', 'class="ui rating {opts.class}"', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.items = [];
 
-this.items = [];
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.reset = reset;
+tag.changed = changed;
+tag.click = click;
+tag.mouseout = mouseout;
+tag.mouseover = mouseover;
+tag.on('mount', onMount);
+tag.on('update', onUpdate);
 
-this.on('mount', function () {
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
+
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onMount() {
   init(opts.max, opts.value);
-});
+}
 
-this.on('update', function () {
+function onUpdate() {
   updateView();
-});
+}
 
-// ===================================================================================
-//                                                                               State
-//                                                                               =====
-this.reset = function () {
-  _this.value = _this.defaultValue;
-};
+function reset() {
+  tag.value = tag.defaultValue;
+}
 
-this.changed = function () {
-  return _this.value != _this.defaultValue;
-};
+function changed() {
+  return tag.value != tag.defaultValue;
+}
 
-// ===================================================================================
-//                                                                               Event
-//                                                                               =====
-this.click = function (event) {
+function click(target) {
   if (isReadOnly()) {
     return;
   }
   var valueChanged = false;
   var beforeValue = void 0;
-  if (_this.value != event.item.value) {
-    beforeValue = _this.value;
+  if (tag.value != target.value) {
+    beforeValue = tag.value;
     valueChanged = true;
   }
-  _this.value = event.item.value;
+  tag.value = target.value;
   updateView();
   parentUpdate();
-  _this.trigger('click', event.item.value);
+  tag.trigger('click', target.value);
   if (valueChanged) {
-    _this.trigger('change', { value: _this.value, beforeValue: beforeValue });
+    tag.trigger('change', { value: tag.value, beforeValue: beforeValue });
   }
-};
+}
 
-this.mouseover = function (event) {
+function mouseover(target) {
   if (isReadOnly()) {
     return;
   }
-  _this.items.forEach(function (item) {
-    item.selected = item.value <= event.item.value;
+  tag.items.forEach(function (item) {
+    item.selected = item.value <= target.value;
   });
-};
+}
 
-this.mouseout = function () {
-  _this.items.forEach(function (item) {
+function mouseout() {
+  tag.items.forEach(function (item) {
     item.selected = false;
   });
-};
+}
 
-// ===================================================================================
-//                                                                               Logic
-//                                                                               =====
-var isReadOnly = function isReadOnly() {
-  return _this.root.classList.contains('read-only');
-};
+function isReadOnly() {
+  return tag.root.classList.contains('read-only');
+}
 
-var init = function init() {
+function init() {
   var max = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 5;
   var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
 
-  _this.value = value;
-  _this.defaultValue = value;
-  _this.items.length = 0;
+  tag.value = value;
+  tag.defaultValue = value;
+  tag.items.length = 0;
   for (var i = 0; i < max; i++) {
-    _this.items[i] = { value: i + 1, active: false, selected: false };
+    tag.items[i] = { value: i + 1, active: false, selected: false };
   }
   updateView();
   parentUpdate();
-};
+}
 
-var updateView = function updateView() {
-  _this.items.forEach(function (item) {
-    item.active = item.value <= _this.value;
+function updateView() {
+  tag.items.forEach(function (item) {
+    item.active = item.value <= tag.value;
   });
-};
+}
 
-var parentUpdate = function parentUpdate() {
-  if (_this.parent) {
-    _this.parent.update();
+function parentUpdate() {
+  if (tag.parent) {
+    tag.parent.update();
   } else {
-    _this.update();
+    tag.update();
   }
-};
+}
 });
 
 /***/ }),
@@ -5102,13 +5333,27 @@ riot.tag2('su-tab-header', '<yield></yield>', '', 'class="ui {opts.class} menu"'
 riot.tag2('su-tab-title', '<a class="{opts.class} {active: active} item" onclick="{click}" ref="item"> <yield></yield> </a>', '', '', function(opts) {
 "use strict";
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.active = false;
 
-this.active = false;
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.click = click;
 
-this.click = function () {
-  _this.parent.parent.clickForTitle(_this.refs.item.innerText);
-};
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
+
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function click() {
+  tag.parent.parent.clickForTitle(tag.refs.item.innerText);
+}
 });
 
 /***/ }),
@@ -5123,18 +5368,34 @@ this.click = function () {
 riot.tag2('su-tab', '<virtual if="{mounted}"><yield></yield></virtual>', 'su-tab.ui.segment,[data-is="su-tab"].ui.segment{ margin-top: 0; margin-bottom: 0; } su-tab.ui.segment.top.attached,[data-is="su-tab"].ui.segment.top.attached{ margin-top: 0 } su-tab.ui.segment.bottom.attached,[data-is="su-tab"].ui.segment.bottom.attached{ margin-bottom: 0 }', 'class="ui {opts.class} {active: active} tab"', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.active = false;
+tag.mounted = false;
 
-this.active = false;
-this.mounted = false;
-this.on('mount', function () {
-  _this.update();
-});
-this.on('update', function () {
-  if (_this.active && !_this.mounted) {
-    _this.mounted = true;
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.on('mount', onMount);
+tag.on('update', onUpdate);
+
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
+
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onMount() {
+  tag.update();
+}
+function onUpdate() {
+  if (tag.active && !tag.mounted) {
+    tag.mounted = true;
   }
-});
+}
 });
 
 /***/ }),
@@ -5149,44 +5410,65 @@ this.on('update', function () {
 riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.label}</a> </div> <yield></yield> <div class="ui {opts.class} {getClass()} menu" if="{isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.label}</a> </div>', '', '', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.tabs = [];
 
-this.tabs = [];
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.click = click;
+tag.clickForTitle = clickForTitle;
+tag.getClass = getClass;
+tag.hasTitle = hasTitle;
+tag.isBottom = isBottom;
+tag.on('mount', onMount);
+tag.on('update', onUpdate);
+
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
 var lastOptsActive = void 0,
     lastActive = void 0,
     active = void 0;
+var shownMessage = false;
 
-this.on('mount', function () {
-  if (_this.tags['su-tab-header']) {
-    _this.tags['su-tab-header'].opts.class = getTitleClass();
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onMount() {
+  if (tag.tags['su-tab-header']) {
+    tag.tags['su-tab-header'].opts.class = getTitleClass();
   }
 
-  _this.tabs = _this.tags['su-tab'];
-  if (typeof _this.tabs === 'undefined') {
+  tag.tabs = tag.tags['su-tab'];
+  if (typeof tag.tabs === 'undefined') {
     return;
   }
-  if (!Array.isArray(_this.tabs)) {
-    _this.tabs = [_this.tabs];
+  if (!Array.isArray(tag.tabs)) {
+    tag.tabs = [tag.tabs];
   }
   supportTraditionalOptions();
 
   if (typeof opts.active === 'undefined') {
-    var titles = _this.hasTitle();
+    var titles = tag.hasTitle();
     if (titles) {
       opts.active = titles[0].root.innerText.trim();
     } else {
-      opts.active = _this.tabs[0].opts.label;
+      opts.active = tag.tabs[0].opts.label;
     }
   }
 
-  _this.tabs.forEach(function (tab) {
+  tag.tabs.forEach(function (tab) {
     initializeChild(tab);
   });
 
-  _this.update();
-});
+  tag.update();
+}
 
-this.on('update', function () {
+function onUpdate() {
   supportTraditionalOptions();
   var changed = false;
   if (lastOptsActive != opts.active) {
@@ -5200,7 +5482,7 @@ this.on('update', function () {
   }
 
   if (changed) {
-    var titles = _this.hasTitle();
+    var titles = tag.hasTitle();
     if (titles) {
       var index = void 0;
       titles.forEach(function (title, i) {
@@ -5216,49 +5498,43 @@ this.on('update', function () {
         titles[0].active = true;
         index = 0;
       }
-      _this.tabs.forEach(function (tab, i) {
+      tag.tabs.forEach(function (tab, i) {
         tab.active = index == i;
       });
     } else {
-      _this.tabs.forEach(function (tab) {
+      tag.tabs.forEach(function (tab) {
         tab.active = tab.opts.label == active;
       });
-      if (!_this.tabs.some(function (tab) {
+      if (!tag.tabs.some(function (tab) {
         return tab.active;
       })) {
-        _this.tabs[0].active = true;
+        tag.tabs[0].active = true;
       }
     }
   }
-});
+}
 
-// ===================================================================================
-//                                                                               Event
-//                                                                               =====
-this.click = function (event) {
+function click(event) {
   active = event.item.tab.opts.label;
-  _this.update();
-  _this.trigger('click', active);
-};
+  tag.update();
+  tag.trigger('click', active);
+}
 
-this.clickForTitle = function (title) {
+function clickForTitle(title) {
   active = title;
-  _this.update();
-  _this.trigger('click', active);
-};
+  tag.update();
+  tag.trigger('click', active);
+}
 
-// ===================================================================================
-//                                                                              Helper
-//                                                                              ======
-this.isBottom = function () {
+function isBottom() {
   return hasClass('bottom');
-};
+}
 
-this.hasTitle = function () {
-  if (!_this.tags['su-tab-header']) {
+function hasTitle() {
+  if (!tag.tags['su-tab-header']) {
     return false;
   }
-  var titles = _this.tags['su-tab-header'].tags['su-tab-title'];
+  var titles = tag.tags['su-tab-header'].tags['su-tab-title'];
   if (!titles) {
     return false;
   }
@@ -5267,18 +5543,15 @@ this.hasTitle = function () {
     return [titles];
   }
   return titles;
-};
+}
 
-this.getClass = function () {
+function getClass() {
   if (hasClass('tabular') && !hasClass('attached')) {
     return 'attached';
   }
-};
+}
 
-// ===================================================================================
-//                                                                               Logic
-//                                                                               =====
-var initializeChild = function initializeChild(tab) {
+function initializeChild(tab) {
   tab.mounted = !opts.lazyMount;
   if (tab.opts.class) {
     return;
@@ -5296,9 +5569,9 @@ var initializeChild = function initializeChild(tab) {
     classList.push('attached');
   }
   tab.opts.class = classList.join(' ');
-};
+}
 
-var getTitleClass = function getTitleClass() {
+function getTitleClass() {
   var classList = [];
   if (hasClass('left') || hasClass('right')) {
     classList.push('vertical');
@@ -5314,15 +5587,15 @@ var getTitleClass = function getTitleClass() {
     classList.push('tabular');
   }
   return classList.join(' ');
-};
+}
 
-var hasClass = function hasClass(className) {
-  return _this.root.classList.contains(className);
-};
+function hasClass(className) {
 
-var shownMessage = false;
-var supportTraditionalOptions = function supportTraditionalOptions() {
-  _this.tabs.forEach(function (tab) {
+  return tag.root.classList.contains(className);
+}
+
+function supportTraditionalOptions() {
+  tag.tabs.forEach(function (tab) {
     if (typeof tab.opts.title !== 'undefined') {
       if (!shownMessage) {
         console.warn('\'title\' attribute is deprecated. Please use \'label\'.');
@@ -5332,7 +5605,7 @@ var supportTraditionalOptions = function supportTraditionalOptions() {
       tab.opts.title = undefined;
     }
   });
-};
+}
 });
 
 /***/ }),
@@ -5347,15 +5620,30 @@ var supportTraditionalOptions = function supportTraditionalOptions() {
 riot.tag2('su-table', '', '', '', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
 
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.on('mount', onMount);
+tag.on('update', onUpdate);
+
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
 var lastData = void 0;
 var lastCondition = {};
 var headers = void 0;
 var suTableIndex = 'su-table-index';
 
-this.on('mount', function () {
-  headers = _this.tags['su-th'];
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onMount() {
+  headers = tag.tags['su-th'];
   if (!Array.isArray(headers)) {
     headers = headers ? [headers] : [];
   }
@@ -5368,13 +5656,13 @@ this.on('mount', function () {
         th.sorted = th.opts.field == lastCondition.field;
         th.reverse = lastCondition.reverse;
       });
-      _this.update();
+      tag.update();
     });
   });
-  _this.update();
-});
+  tag.update();
+}
 
-this.on('update', function () {
+function onUpdate() {
   if (JSON.stringify(lastData) != JSON.stringify(opts.data)) {
     lastData = opts.data;
     lastCondition = {
@@ -5393,19 +5681,19 @@ this.on('update', function () {
         th.sorted = th.opts.field == lastCondition.field;
         th.reverse = lastCondition.reverse;
       });
-      _this.update();
+      tag.update();
     }
   }
-});
+}
 
-var sort = function sort(field) {
+function sort(field) {
   addIndexField(opts.data);
   var condition = generateCondition(field, lastCondition);
   opts.data.sort(sortBy(condition));
   lastCondition = condition;
-};
+}
 
-var generateCondition = function generateCondition(field, condition) {
+function generateCondition(field, condition) {
   if (condition.field === field) {
     if (!condition.reverse) {
       condition.reverse = true;
@@ -5419,9 +5707,9 @@ var generateCondition = function generateCondition(field, condition) {
   }
 
   return condition;
-};
+}
 
-var sortBy = function sortBy(condition) {
+function sortBy(condition) {
   var field = condition.field;
   var reverse = condition.reverse ? -1 : 1;
   var nullsFirst = opts.nullsFirst ? -1 : 1;
@@ -5444,15 +5732,15 @@ var sortBy = function sortBy(condition) {
 
     return ason[suTableIndex] - bson[suTableIndex];
   };
-};
+}
 
-var addIndexField = function addIndexField(json) {
+function addIndexField(json) {
   json.forEach(function (data, index) {
     if (data[suTableIndex] === undefined) {
       data[suTableIndex] = index;
     }
   });
-};
+}
 });
 
 /***/ }),
@@ -5467,11 +5755,26 @@ var addIndexField = function addIndexField(json) {
 riot.tag2('su-th', '', '', 'onclick="{click}" class="{sorted: sorted} {ascending: sorted && !reverse} {descending: sorted && reverse}"', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
 
-this.click = function () {
-  _this.trigger('click', opts.field);
-};
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.click = click;
+
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
+
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function click() {
+  tag.trigger('click', opts.field);
+}
 });
 
 /***/ }),
@@ -5483,47 +5786,62 @@ this.click = function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-toast-item', '<div class=" {position} floated" if="{!hide}"> <div class="ui attached active progress {class} top" if="{progress == \'top\'}"> <div class="bar"></div> </div> <div class="ui {icon: icon} {class} floating compact message"> <i class="close icon" onclick="{close}"></i> <i class="{icon} icon" if="{icon}"></i> <div class="content"> <div class="header" if="{title}"> {title} </div> <p each="{message in messages}">{message}</p> </div> </div> <div class="ui attached active progress {class} bottom" if="{progress == \'bottom\'}"> <div class="bar"></div> </div> </div>', 'su-toast-item .ui.message,[data-is="su-toast-item"] .ui.message{ margin: 0 } @-webkit-keyframes progress-active { 0% { -webkit-transform: scale(0, 1); transform: scale(0, 1); } 100% { -webkit-transform: scale(1); transform: scale(1); } } @keyframes progress-active { 0% { -webkit-transform: scale(0, 1); transform: scale(0, 1); } 100% { -webkit-transform: scale(1); transform: scale(1); } } su-toast-item .attached.progress,[data-is="su-toast-item"] .attached.progress{ z-index: 1; } su-toast-item .attached.progress .bar,[data-is="su-toast-item"] .attached.progress .bar{ min-width: 0%; width: 100%; } su-toast-item .active.progress .bar:after,[data-is="su-toast-item"] .active.progress .bar:after,su-toast-item .ui.progress.success .bar:after,[data-is="su-toast-item"] .ui.progress.success .bar:after,su-toast-item .ui.progress.warning .bar:after,[data-is="su-toast-item"] .ui.progress.warning .bar:after,su-toast-item .ui.progress.error .bar:after,[data-is="su-toast-item"] .ui.progress.error .bar:after{ animation: progress-active 3.5s infinite !important; -webkit-transform-origin: left; transform-origin: left; opacity: 0.3 !important; } su-toast-item .bottom.attached.progress,[data-is="su-toast-item"] .bottom.attached.progress{ margin: -3px 0 6px; } su-toast-item .top.attached.progress,[data-is="su-toast-item"] .top.attached.progress{ margin: 6px 0 -3px; }', 'class="item {transition}"', function(opts) {
+riot.tag2('su-toast-item', '<div class=" {position} floated" if="{!hide}"> <div class="ui attached active progress {className} top" if="{progress == \'top\'}"> <div class="bar"></div> </div> <div class="ui {icon: icon} {className} floating compact message"> <i class="close icon" onclick="{close}"></i> <i class="{icon} icon" if="{icon}"></i> <div class="content"> <div class="header" if="{title}"> {title} </div> <p each="{message in messages}">{message}</p> </div> </div> <div class="ui attached active progress {className} bottom" if="{progress == \'bottom\'}"> <div class="bar"></div> </div> </div>', 'su-toast-item .ui.message,[data-is="su-toast-item"] .ui.message{ margin: 0 } @-webkit-keyframes progress-active { 0% { -webkit-transform: scale(0, 1); transform: scale(0, 1); } 100% { -webkit-transform: scale(1); transform: scale(1); } } @keyframes progress-active { 0% { -webkit-transform: scale(0, 1); transform: scale(0, 1); } 100% { -webkit-transform: scale(1); transform: scale(1); } } su-toast-item .attached.progress,[data-is="su-toast-item"] .attached.progress{ z-index: 1; } su-toast-item .attached.progress .bar,[data-is="su-toast-item"] .attached.progress .bar{ min-width: 0%; width: 100%; } su-toast-item .active.progress .bar:after,[data-is="su-toast-item"] .active.progress .bar:after,su-toast-item .ui.progress.success .bar:after,[data-is="su-toast-item"] .ui.progress.success .bar:after,su-toast-item .ui.progress.warning .bar:after,[data-is="su-toast-item"] .ui.progress.warning .bar:after,su-toast-item .ui.progress.error .bar:after,[data-is="su-toast-item"] .ui.progress.error .bar:after{ animation: progress-active 3.5s infinite !important; -webkit-transform-origin: left; transform-origin: left; opacity: 0.3 !important; } su-toast-item .bottom.attached.progress,[data-is="su-toast-item"] .bottom.attached.progress{ margin: -3px 0 6px; } su-toast-item .top.attached.progress,[data-is="su-toast-item"] .top.attached.progress{ margin: 6px 0 -3px; }', 'class="item {transition}"', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.position = isRight() ? 'right' : 'left';
+tag.direction = isRight() ? 'left' : 'right';
+tag.icon = opts.icon;
+tag.progress = opts.progress;
+tag.className = opts.className;
+tag.transition = 'transition animating in fade ' + tag.direction;
+tag.title = opts.title;
+tag.messages = opts.messages;
 
-this.on('mount', function () {
-  _this.position = _this.isRight() ? 'right' : 'left';
-  var direction = _this.isRight() ? 'left' : 'right';
-  _this.icon = opts.item.icon;
-  _this.progress = opts.item.progress;
-  _this.class = opts.item.class;
-  _this.transition = 'transition animating in fade ' + direction;
-  _this.title = opts.item.title;
-  _this.messages = opts.item.messages;
-  _this.update();
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.close = close;
+tag.on('mount', onMount);
 
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
+
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function close() {
+  tag.hide = true;
+  tag.update();
+}
+
+function onMount() {
   setTimeout(function () {
-    _this.transition = '';
-    _this.update();
+    tag.transition = '';
+    tag.update();
   }, 300);
 
   setTimeout(function () {
-    _this.transition = 'transition animating out fade ' + direction;
-    _this.update();
+    tag.transition = 'transition animating out fade ' + tag.direction;
+    tag.update();
   }, 3000);
 
   setTimeout(function () {
-    _this.transition = 'transition hidden';
-    _this.hide = true;
-    _this.update();
+    tag.transition = 'transition hidden';
+    tag.hide = true;
+    tag.update();
   }, 3500);
-});
+}
 
-this.close = function () {
-  _this.hide = true;
-  _this.update();
-};
-
-this.isRight = function () {
-  return opts.position.indexOf('right') >= 0;
-};
+function isRight() {
+  var position = opts.position || '';
+  return position.indexOf('right') >= 0;
+}
 });
 
 /***/ }),
@@ -5535,26 +5853,42 @@ this.isRight = function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-toast', '<div class="ui list"> <su-toast-item each="{item in items}" item="{item}" position="{parent.opts.position}"></su-toast-item> </div>', 'su-toast,[data-is="su-toast"]{ position: fixed; padding: 1rem; z-index: 3000; } su-toast.right,[data-is="su-toast"].right{ right: 0; } su-toast.left,[data-is="su-toast"].left{ left: 0; } su-toast.top,[data-is="su-toast"].top{ top: 0; } su-toast.bottom,[data-is="su-toast"].bottom{ bottom: 0; } su-toast.middle,[data-is="su-toast"].middle{ top: 50%; margin-top: -35px; } su-toast.center,[data-is="su-toast"].center{ left: 50%; margin-left: 150px; } su-toast .ui.message,[data-is="su-toast"] .ui.message{ min-width: 20rem; position: relative; padding-right: 2.5rem; } su-toast .ui.icon.message,[data-is="su-toast"] .ui.icon.message{ width: auto !important; }', 'class="{opts.position}"', function(opts) {
+riot.tag2('su-toast', '<div class="ui list"> <su-toast-item each="{item in items}" icon="{item.icon}" progress="{item.progress}" class-name="{item.class}" title="{item.title}" messages="{item.messages}" position="{position}"></su-toast-item> </div>', 'su-toast,[data-is="su-toast"]{ position: fixed; padding: 1rem; z-index: 3000; } su-toast.right,[data-is="su-toast"].right{ right: 0; } su-toast.left,[data-is="su-toast"].left{ left: 0; } su-toast.top,[data-is="su-toast"].top{ top: 0; } su-toast.bottom,[data-is="su-toast"].bottom{ bottom: 0; } su-toast.middle,[data-is="su-toast"].middle{ top: 50%; margin-top: -35px; } su-toast.center,[data-is="su-toast"].center{ left: 50%; margin-left: 150px; } su-toast .ui.message,[data-is="su-toast"] .ui.message{ min-width: 20rem; position: relative; padding-right: 2.5rem; } su-toast .ui.icon.message,[data-is="su-toast"] .ui.icon.message{ width: auto !important; }', 'class="{position}"', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
+tag.items = [];
 
-var self = this;
-this.mixin('semantic-ui');
-this.items = [];
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.mixin('semantic-ui');
+tag.observable.on('showToast', showToast);
+tag.on('mount', onMount);
+tag.on('update', onUpdate);
 
-this.on('mount', function () {
-  if (!opts.position) {
-    opts.position = 'bottom right';
-  }
-  _this.update();
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
+riot.mixin({
+  suToast: suToast
 });
 
 // ===================================================================================
-//                                                                          Observable
-//                                                                          ==========
-this.observable.on('showToast', function (option) {
+//                                                                             Methods
+//                                                                             =======
+function onMount() {
+  tag.update();
+}
+
+function onUpdate() {
+  tag.position = opts.position || 'bottom right';
+}
+
+function showToast(option) {
   var item = {
     title: option.title,
     messages: Array.isArray(option.message) ? option.message : [option.message],
@@ -5562,47 +5896,45 @@ this.observable.on('showToast', function (option) {
     progress: option.progress,
     class: option.class
   };
-  _this.items.push(item);
-  _this.update();
+  tag.items.push(item);
+  tag.update();
 
   setTimeout(function () {
-    _this.items.shift();
-    _this.update();
+    tag.items.shift();
+    tag.update();
   }, 5000);
-});
+}
 
-riot.mixin({
-  suToast: function suToast(param) {
-    var option = {
-      title: null,
-      message: null,
-      icon: null,
-      progress: null,
-      class: null
-    };
+function suToast(param) {
+  var option = {
+    title: null,
+    message: null,
+    icon: null,
+    progress: null,
+    class: null
+  };
 
-    if (typeof param === 'string') {
-      option.message = param;
-    } else if (param) {
-      if (param.title) {
-        option.title = param.title;
-      }
-      if (param.message) {
-        option.message = param.message;
-      }
-      if (param.icon) {
-        option.icon = param.icon;
-      }
-      if (param.progress) {
-        option.progress = param.progress;
-      }
-      if (param.class) {
-        option.class = param.class;
-      }
+  if (typeof param === 'string') {
+    option.message = param;
+  } else if (param) {
+    if (param.title) {
+      option.title = param.title;
     }
-    self.observable.trigger('showToast', option);
+    if (param.message) {
+      option.message = param.message;
+    }
+    if (param.icon) {
+      option.icon = param.icon;
+    }
+    if (param.progress) {
+      option.progress = param.progress;
+    }
+    if (param.class) {
+      option.class = param.class;
+    }
   }
-});
+  tag.observable.trigger('showToast', option);
+}
 });
 
 /***/ }),
@@ -5617,18 +5949,34 @@ riot.mixin({
 riot.tag2('su-validation-error', '<div if="{opts.errors && opts.errors[opts.name]}" class="ui basic pointing prompt label transition visible"> <div each="{message in opts.errors[opts.name]}">{message}</div> </div> <ul if="{!isEmptyErrors() && !opts.name}" class="list"> <virtual each="{errors in opts.errors}"> <li each="{message in errors}">{message}</li> </virtual> </ul>', 'su-validation-error.ui.error.message,[data-is="su-validation-error"].ui.error.message{ display: block !important; }', 'class="{getClass()}"', function(opts) {
 'use strict';
 
-var _this = this;
+var tag = this;
+// ===================================================================================
+//                                                                      Tag Properties
+//                                                                      ==============
 
-this.getClass = function () {
-  if (opts.name || _this.isEmptyErrors()) {
+// ===================================================================================
+//                                                                         Tag Methods
+//                                                                         ===========
+tag.getClass = getClass;
+tag.isEmptyErrors = isEmptyErrors;
+
+// ===================================================================================
+//                                                                          Properties
+//                                                                          ==========
+
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function getClass() {
+  if (opts.name || tag.isEmptyErrors()) {
     return '';
   }
   return 'ui error message';
-};
+}
 
-this.isEmptyErrors = function () {
+function isEmptyErrors() {
   return !opts.errors || Object.keys(opts.errors).length == 0;
-};
+}
 });
 
 /***/ }),
