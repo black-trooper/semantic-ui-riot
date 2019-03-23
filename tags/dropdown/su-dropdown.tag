@@ -72,6 +72,7 @@
     tag.keyup = keyup
     tag.mousedown = mousedown
     tag.mouseup = mouseup
+    tag.on('before-mount', onBeforeMount)
     tag.on('mount', onMount)
     tag.on('update', onUpdate)
     tag.reset = reset
@@ -93,12 +94,15 @@
     // ===================================================================================
     //                                                                             Methods
     //                                                                             =======
-    function onMount() {
+    function onBeforeMount() {
       if (opts.items && opts.items.length > 0) {
         tag.label = opts.items[0].label
         tag.value = opts.items[0].value
         tag.default = opts.items[0].default
       }
+    }
+
+    function onMount() {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
