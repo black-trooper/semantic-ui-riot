@@ -18,7 +18,7 @@
     <div each="{item in opts.items}" value="{ item.value }" default="{ item.default }" onmousedown="{ mousedown }"
       onmouseup="{ mouseup }"
       class="{ item: isItem(item) } { header: item.header && !filtered} { divider: item.divider && !filtered} { default: item.default } { hover: item.active } { active: item.value == value } { selected: item.value == value }"
-      onclick="{ itemClick }" if="{ !(opts.multiple && item.default) && !item.selected && item.searched }">
+      onclick="{ itemClick }" if="{ isVisible(item) }">
       <i class="{ item.icon } icon" if="{ item.icon }"></i>
       <img class="ui avatar image" src="{ item.image }" if="{ item.image }" />
       <span class="description" if="{ item.description }">{ item.description }</span>
@@ -65,12 +65,14 @@
     tag.isDisabled = isDisabled
     tag.input = input
     tag.isItem = isItem
-    tag.itemClick = itemClick
     tag.isReadOnly = isReadOnly
+    tag.isVisible = isVisible
+    tag.itemClick = itemClick
     tag.keydown = keydown
     tag.keyup = keyup
     tag.mousedown = mousedown
     tag.mouseup = mouseup
+    tag.on('before-mount', onBeforeMount)
     tag.on('mount', onMount)
     tag.on('update', onUpdate)
     tag.reset = reset
@@ -92,12 +94,15 @@
     // ===================================================================================
     //                                                                             Methods
     //                                                                             =======
-    function onMount() {
+    function onBeforeMount() {
       if (opts.items && opts.items.length > 0) {
         tag.label = opts.items[0].label
         tag.value = opts.items[0].value
         tag.default = opts.items[0].default
       }
+    }
+
+    function onMount() {
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
@@ -468,6 +473,16 @@
 
     function isDisabled() {
       return tag.root.classList.contains('disabled')
+    }
+
+    function isVisible(item) {
+      if (opts.multiple && item.default) {
+        return false
+      }
+      if (item.selected) {
+        return false
+      }
+      return item.searched || item.divider || item.header
     }
   </script>
 </su-dropdown>
