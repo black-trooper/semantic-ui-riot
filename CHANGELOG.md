@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.22.1] - 2019-03-24
+### Fixed
+- Fix the problem what the divider is not displayed in su-dropdown
+- Fix the problem what the label is not displayed initially in su-dropdown
+
 ## [0.22.0] - 2019-03-19
 ### Changed
 - Add animation to su-popup
@@ -162,7 +167,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Add su-rating
 
-[Unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.22.0...HEAD
+[Unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.22.1...HEAD
+[0.22.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.22.0...v0.22.1
 [0.22.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.21.1...v0.22.0
 [0.21.1]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.21.0...v0.21.1
 [0.21.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.20.1...v0.21.0
