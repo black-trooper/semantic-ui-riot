@@ -1,38 +1,32 @@
-<su-checkbox class="ui checkbox { opts.class }">
-  <input type="checkbox" checked="{ checked }" onclick="{ click }" ref="target" disabled="{ isDisabled() }" id="{ getId() }"
+<su-checkbox>
+  <input type="checkbox" checked="{ checked }" onclick="{ click }" ref="target" disabled="{ state.disabled }" id="{ getId() }"
   />
-  <label if="{ !opts.label }" for="{ getId() }"><yield /></label>
-  <label if="{ opts.label }" for="{ getId() }">{ opts.label }</label>
+  <label if="{ !props.label }" for="{ getId() }"><slot /></label>
+  <label if="{ props.label }" for="{ getId() }">{ props.label }</label>
 
   <style>
-    :scope.ui.checkbox label {
+    :host.ui.checkbox label {
       cursor: pointer;
     }
 
-    :scope.ui.read-only input[type="checkbox"],
-    :scope.ui.disabled input[type="checkbox"] {
+    :host.ui.read-only input[type="checkbox"],
+    :host.ui.disabled input[type="checkbox"] {
       cursor: default !important;
     }
   </style>
 
   <script>
-    const tag = this
-    // ===================================================================================
-    //                                                                      Tag Properties
-    //                                                                      ==============
-    tag.checked = false
-    tag.defaultChecked = false
+    let tag
 
-    // ===================================================================================
-    //                                                                         Tag Methods
-    //                                                                         ===========
-    tag.changed = changed
-    tag.click = click
-    tag.getId = getId
-    tag.isDisabled = isDisabled
-    tag.on('mount', onMount)
-    tag.on('update', onUpdate)
-    tag.reset = reset
+    export default {
+      checked: false,
+      // changed,
+      click,
+      getId,
+      onMounted,
+      onUpdated,
+      // reset,
+    }
 
     // ===================================================================================
     //                                                                          Properties
@@ -40,87 +34,68 @@
     let lastChecked
     let lastOptsChecked
     let shownMessage = false
+    let defaultChecked = false
 
     // ===================================================================================
     //                                                                             Methods
     //                                                                             =======
-    function onMount() {
-      supportTraditionalOptions()
-      if (tag.checked) {
-        opts.checked = tag.checked
-      } else {
-        tag.checked = normalizeOptChecked()
-      }
-      lastChecked = tag.checked
-      lastOptsChecked = tag.checked
-      tag.defaultChecked = tag.checked
-      tag.update()
+    function onMounted(props) {
+      this.root.classList.add('ui', 'checkbox')
+  lastChecked = this.checked
+      lastOptsChecked = this.checked
+      defaultChecked = this.checked
+      this.update({
+        checked: normalizeOptChecked(props.checked)
+      })
     }
 
-    function onUpdate() {
-      supportTraditionalOptions()
-      if (lastChecked != tag.checked) {
-        opts.checked = tag.checked
-        lastChecked = tag.checked
-        lastOptsChecked = tag.checked
-        parentUpdate()
-      } else if (lastOptsChecked != normalizeOptChecked()) {
-        tag.checked = normalizeOptChecked()
-        lastChecked = tag.checked
-        lastOptsChecked = tag.checked
-        parentUpdate()
-      }
+    function onUpdated(props) {
+      this.state.disabled = this.root.classList.contains('disabled')
+      this.state.readOnly = this.root.classList.contains('read-only')
+
+      // if (lastChecked != tag.checked) {
+      //   props.checked = tag.checked
+      //   lastChecked = tag.checked
+      //   lastOptsChecked = tag.checked
+      //   parentUpdate()
+      // } else if (lastOptsChecked != normalizeOptChecked(props.checked)) {
+      //   tag.checked = normalizeOptChecked(props.checked)
+      //   lastChecked = tag.checked
+      //   lastOptsChecked = tag.checked
+      //   parentUpdate()
+      // }
     }
 
-    function reset() {
-      tag.checked = tag.defaultChecked
-    }
+    // function reset() {
+    //   tag.checked = defaultChecked
+    // }
 
-    function changed() {
-      return tag.checked !== tag.defaultChecked
-    }
+    // function changed() {
+    //   return tag.checked !== defaultChecked
+    // }
 
     function click() {
-      if (isReadOnly() || tag.isDisabled()) {
+      if (this.state.readOnly || this.state.disabled) {
         event.preventDefault()
         return
       }
-      tag.checked = !tag.checked
-      parentUpdate()
-      tag.trigger('click', tag.checked)
+      this.checked = !this.checked
+      // parentUpdate()
+      // this.trigger('click', this.checked)
     }
 
     function getId() {
-      return `su-checkbox-${tag._riot_id}`
-    }
-
-    function isDisabled() {
-      return tag.root.classList.contains('disabled')
-    }
-
-    function isReadOnly() {
-      return tag.root.classList.contains('read-only')
+      return `su-checkbox-${this.uid}`
     }
 
     function parentUpdate() {
       if (tag.parent) {
-        tag.parent.update()
+        // tag.parent.update()
       }
     }
 
-    function supportTraditionalOptions() {
-      if (typeof opts.check !== 'undefined') {
-        if (!shownMessage) {
-          console.warn('\'check\' attribute is deprecated. Please use \'checked\'.')
-        }
-        shownMessage = true
-        opts.checked = opts.check
-        opts.check = undefined
-      }
-    }
-
-    function normalizeOptChecked() {
-      return opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
+    function normalizeOptChecked(checked) {
+      return checked === true || checked === 'checked' || checked === 'true'
     }
   </script>
 </su-checkbox>
