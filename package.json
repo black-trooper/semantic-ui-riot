@@ -13,7 +13,7 @@
     "prod": "webpack --mode production",
     "clean": "rimraf ./coverage && rimraf ./dist/tags",
     "compile": "npm run clean && riot -w tags dist/tags",
-    "test": "npm run clean && riot tags dist/tags && karma start",
+    "test": "npm run clean && karma start",
     "test-watch": "karma start --no-single-run",
     "build": "npm run test && npm run dev && npm run prod"
   },
@@ -38,9 +38,10 @@
   "dependencies": {
     "date-fns": "^1.29.0",
     "q": "^1.5.1",
-    "riot": "^3.13.2"
+    "riot": "^4.0.0-beta.5"
   },
   "devDependencies": {
+    "@riotjs/webpack-loader": "^4.0.0-alpha.4",
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.4",
     "babel-preset-es2015-riot": "^1.1.0",
