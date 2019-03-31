@@ -18,6 +18,19 @@ module.exports = function (config) {
       module: {
         rules: [
           {
+            test: /\.tag$/,
+            exclude: /node_modules/,
+            use: [
+              {
+                loader: '@riotjs/webpack-loader',
+                options: {
+                  type: 'es6', // transpile the riot tags using babel
+                  hot: true
+                }
+              }
+            ]
+          },
+          {
             test: /\.js$/,
             enforce: 'post',
             include: path.resolve('dist/tags/'),
