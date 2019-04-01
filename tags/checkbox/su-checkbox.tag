@@ -1,5 +1,5 @@
-<su-checkbox>
-  <input type="checkbox" checked="{ checked }" onclick="{ click }" ref="target" disabled="{ state.disabled }" id="{ getId() }"
+<su-checkbox checked="{ state.checked }">
+  <input type="checkbox" checked="{ state.checked }" onclick="{ onClick }" ref="target" disabled="{ state.disabled }" id="{ getId() }"
   />
   <label if="{ !props.label }" for="{ getId() }"><slot /></label>
   <label if="{ props.label }" for="{ getId() }">{ props.label }</label>
@@ -16,84 +16,91 @@
   </style>
 
   <script>
-    let tag
+    import observable from 'riot-observable'
 
     export default {
-      checked: false,
-      // changed,
-      click,
-      getId,
+      state: {
+        checked: false,
+        defaultChecked: false,
+        observable: null,
+        lastChecked: false,
+        lastOptsChecked: false,
+      },
+      onBeforeUpdate,
       onMounted,
       onUpdated,
-      // reset,
+      onClick,
+      getId,
+      changed,
+      reset,
     }
 
     // ===================================================================================
-    //                                                                          Properties
-    //                                                                          ==========
-    let lastChecked
-    let lastOptsChecked
-    let shownMessage = false
-    let defaultChecked = false
-
-    // ===================================================================================
-    //                                                                             Methods
-    //                                                                             =======
-    function onMounted(props) {
+    //                                                                           Lifecycle
+    //                                                                           =========
+    function onMounted(props, state) {
+      state.observable = observable(this)
       this.root.classList.add('ui', 'checkbox')
-  lastChecked = this.checked
-      lastOptsChecked = this.checked
-      defaultChecked = this.checked
+
+      state.checked = normalizeOptChecked(props.checked)
+      state.lastChecked = state.checked
+      state.lastOptsChecked = state.checked
+      state.defaultChecked = state.checked
+      this.update()
+    }
+
+    function onBeforeUpdate(props, state) {
+      state.disabled = this.root.classList.contains('disabled')
+      state.readOnly = this.root.classList.contains('read-only')
+
+      if (state.lastOptsChecked != normalizeOptChecked(props.checked)) {
+        state.checked = normalizeOptChecked(props.checked)
+        state.lastOptsChecked = state.checked
+      }
+    }
+
+    function onUpdated(props, state) {
+      if (state.lastChecked != state.checked) {
+        state.lastChecked = state.checked
+        state.lastOptsChecked = state.checked
+      }
+    }
+
+    function changed() {
+      return this.state.checked !== this.state.defaultChecked
+    }
+
+    function reset() {
       this.update({
-        checked: normalizeOptChecked(props.checked)
+        checked: this.state.defaultChecked
       })
     }
 
-    function onUpdated(props) {
-      this.state.disabled = this.root.classList.contains('disabled')
-      this.state.readOnly = this.root.classList.contains('read-only')
-
-      // if (lastChecked != tag.checked) {
-      //   props.checked = tag.checked
-      //   lastChecked = tag.checked
-      //   lastOptsChecked = tag.checked
-      //   parentUpdate()
-      // } else if (lastOptsChecked != normalizeOptChecked(props.checked)) {
-      //   tag.checked = normalizeOptChecked(props.checked)
-      //   lastChecked = tag.checked
-      //   lastOptsChecked = tag.checked
-      //   parentUpdate()
-      // }
-    }
-
-    // function reset() {
-    //   tag.checked = defaultChecked
-    // }
-
-    // function changed() {
-    //   return tag.checked !== defaultChecked
-    // }
-
-    function click() {
+    // ===================================================================================
+    //                                                                              Events
+    //                                                                              ======
+    function onClick() {
       if (this.state.readOnly || this.state.disabled) {
         event.preventDefault()
         return
       }
-      this.checked = !this.checked
-      // parentUpdate()
-      // this.trigger('click', this.checked)
+
+      this.update({
+        checked: !this.state.checked
+      })
+      this.state.observable.trigger('click', this.checked)
     }
 
+    // ===================================================================================
+    //                                                                              Helper
+    //                                                                              ======
     function getId() {
       return `su-checkbox-${this.uid}`
     }
 
-    function parentUpdate() {
-      if (tag.parent) {
-        // tag.parent.update()
-      }
-    }
-
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
     function normalizeOptChecked(checked) {
       return checked === true || checked === 'checked' || checked === 'true'
     }
