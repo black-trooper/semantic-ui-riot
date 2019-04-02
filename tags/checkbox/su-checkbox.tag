@@ -1,8 +1,7 @@
-<su-checkbox checked="{ state.checked }">
-  <input type="checkbox" checked="{ state.checked }" onclick="{ onClick }" ref="target" disabled="{ state.disabled }" id="{ getId() }"
-  />
-  <label if="{ !props.label }" for="{ getId() }"><slot /></label>
-  <label if="{ props.label }" for="{ getId() }">{ props.label }</label>
+<su-checkbox checked="{ state.checked }" changed="{ changed }">
+  <input type="checkbox" checked="{ state.checked }" onclick="{ onClick }" ref="target" disabled="{ disabled }" id="su-checkbox-{ uid }" />
+  <label if="{ !props.label }" for="su-checkbox-{ uid }"><slot /></label>
+  <label if="{ props.label }" for="su-checkbox-{ uid }">{ props.label }</label>
 
   <style>
     :host.ui.checkbox label {
@@ -26,12 +25,11 @@
         lastChecked: false,
         lastOptsChecked: false,
       },
+      changed: false,
       onBeforeUpdate,
       onMounted,
       onUpdated,
       onClick,
-      getId,
-      changed,
       reset,
     }
 
@@ -50,8 +48,8 @@
     }
 
     function onBeforeUpdate(props, state) {
-      state.disabled = this.root.classList.contains('disabled')
-      state.readOnly = this.root.classList.contains('read-only')
+      this.disabled = this.root.classList.contains('disabled')
+      this.changed = state.checked !== state.defaultChecked
 
       if (state.lastOptsChecked != normalizeOptChecked(props.checked)) {
         state.checked = normalizeOptChecked(props.checked)
@@ -64,10 +62,6 @@
         state.lastChecked = state.checked
         state.lastOptsChecked = state.checked
       }
-    }
-
-    function changed() {
-      return this.state.checked !== this.state.defaultChecked
     }
 
     function reset() {
@@ -89,13 +83,6 @@
         checked: !this.state.checked
       })
       this.state.observable.trigger('click', this.checked)
-    }
-
-    // ===================================================================================
-    //                                                                              Helper
-    //                                                                              ======
-    function getId() {
-      return `su-checkbox-${this.uid}`
     }
 
     // ===================================================================================
