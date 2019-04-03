@@ -1,5 +1,5 @@
 <su-checkbox checked="{ state.checked }" changed="{ changed }">
-  <input type="checkbox" checked="{ state.checked }" onclick="{ onClick }" ref="target" disabled="{ disabled }" id="su-checkbox-{ uid }" />
+  <input type="checkbox" checked="{ state.checked }" onclick="{ onClick }" disabled="{ disabled }" id="su-checkbox-{ uid }" />
   <label if="{ !props.label }" for="su-checkbox-{ uid }"><slot /></label>
   <label if="{ props.label }" for="su-checkbox-{ uid }">{ props.label }</label>
 
@@ -37,7 +37,7 @@
     //                                                                           Lifecycle
     //                                                                           =========
     function onMounted(props, state) {
-      state.observable = observable(this)
+      this.observable = observable(this)
       this.root.classList.add('ui', 'checkbox')
 
       state.checked = normalizeOptChecked(props.checked)
@@ -82,7 +82,7 @@
       this.update({
         checked: !this.state.checked
       })
-      this.state.observable.trigger('click', this.checked)
+      this.observable.trigger('click', this.checked)
     }
 
     // ===================================================================================
