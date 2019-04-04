@@ -1,4 +1,4 @@
-<su-checkbox checked="{ state.checked }" changed="{ changed }">
+<su-checkbox class="ui checkbox { props.class }" checked="{ state.checked }" changed="{ changed }">
   <input type="checkbox" checked="{ state.checked }" onclick="{ onClick }" disabled="{ disabled }" id="su-checkbox-{ uid }" />
   <label if="{ !props.label }" for="su-checkbox-{ uid }"><slot /></label>
   <label if="{ props.label }" for="su-checkbox-{ uid }">{ props.label }</label>
@@ -38,7 +38,6 @@
     //                                                                           =========
     function onMounted(props, state) {
       this.observable = observable(this)
-      this.root.classList.add('ui', 'checkbox')
 
       state.checked = normalizeOptChecked(props.checked)
       state.lastChecked = state.checked
