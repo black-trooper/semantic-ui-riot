@@ -12,9 +12,7 @@
         lastValue: '',
         lastOptsValue: '',
       },
-      funga: ' aaaaaaaaaaaaaaaaaaaaaaaaaaa',
       changed: false,
-      onClickCheckbox,
       onMounted,
       onBeforeUpdate,
       onUpdated,
@@ -73,12 +71,10 @@
       }
     }
 
-    function onClickCheckbox(props, state) {
-
-    }
-
     function reset() {
-      state.value = this.defaultValue
+      this.update({
+        value: this.defaultValue
+      })
     }
 
     // ===================================================================================
