@@ -82,6 +82,9 @@
         checked: !this.state.checked
       })
       this.observable.trigger('click', this.checked)
+      if (this.obs && this.props.name) {
+        this.obs.trigger(`${this.props.name}-click`, this.props.value)
+      }
     }
 
     // ===================================================================================

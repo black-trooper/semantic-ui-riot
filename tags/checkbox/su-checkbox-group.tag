@@ -38,6 +38,13 @@
         initializeChild(checkbox, this.uid)
         updateState(checkbox)
       })
+      this.obs.on(`su-checkbox-name-${this.uid}-click`, () => {
+        this.update({
+          value: checkboxes.filter(_checkbox => _checkbox.checked).map(_checkbox => {
+            return _checkbox.getAttribute('value')
+          })
+        })
+      })
 
       this.defaultValue = state.value
       // parentUpdate()
@@ -96,14 +103,6 @@
 
     function initializeChild(checkbox, uid) {
       checkbox.setAttribute('name', `su-checkbox-name-${uid}`)
-      // checkbox.on('click', () => {
-      //   let checkboxes = this.$$['su-checkbox']
-      //   if (!Array.isArray(checkboxes)) {
-      //     checkboxes = [checkboxes]
-      //   }
-      //   state.value = checkboxes.filter(_checkbox => _checkbox.checked).map(_checkbox => _checkbox.props.value)
-      //   this.update()
-      // })
     }
 
     // function parentUpdate() {
