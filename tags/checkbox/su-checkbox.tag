@@ -82,8 +82,8 @@
         checked: !this.state.checked
       })
       this.observable.trigger('click', this.checked)
-      if (this.obs && this.props.name) {
-        this.obs.trigger(`${this.props.name}-click`, this.props.value)
+      if (this.obs && this.root.getAttribute('name')) {
+        this.obs.trigger(`${this.root.getAttribute('name')}-click`, this.props.value)
       }
     }
 

@@ -7,12 +7,12 @@
     export default {
       state: {
         value: '',
-        defaultValue: '',
         label: '',
         lastValue: '',
         lastOptsValue: '',
       },
       changed: false,
+      defaultValue: '',
       onMounted,
       onBeforeUpdate,
       onUpdated,
@@ -51,7 +51,7 @@
     }
 
     function onBeforeUpdate(props, state) {
-      this.changed = state.value !== state.defaultValue
+      this.changed = state.value !== this.defaultValue
 
       if (normalizeValue(state.lastOptsValue) != normalizeValue(props.value)) {
         state.value = props.value
