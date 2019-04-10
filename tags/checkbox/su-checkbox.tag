@@ -15,8 +15,6 @@
   </style>
 
   <script>
-    import observable from 'riot-observable'
-
     export default {
       state: {
         checked: false,
@@ -37,8 +35,6 @@
     //                                                                           Lifecycle
     //                                                                           =========
     function onMounted(props, state) {
-      this.observable = observable(this)
-
       state.checked = normalizeOptChecked(props.checked)
       state.lastChecked = state.checked
       state.lastOptsChecked = state.checked
@@ -81,7 +77,7 @@
       this.update({
         checked: !this.state.checked
       })
-      this.observable.trigger('click', this.checked)
+      this.dispatch && this.dispatch('click', this.checked)
       if (this.obs && this.root.getAttribute('name')) {
         this.obs.trigger(`${this.root.getAttribute('name')}-click`, this.props.value)
       }

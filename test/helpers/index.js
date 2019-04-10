@@ -1,3 +1,5 @@
+import observable from 'riot-observable'
+
 export function fireEvent(el, name) {
   var e = document.createEvent('HTMLEvents')
   e.initEvent(name, false, true)
@@ -16,4 +18,23 @@ export const keys = {
   escape: 27,
   upArrow: 38,
   downArrow: 40
+}
+
+export function init(riot) {
+  let id = 0;
+  const obs = observable()
+  riot.install(function (component) {
+    component.uid = id++
+    component.obs = obs
+
+    component.dispatch = (name, data) => {
+      const eventName = `on${name}`
+      const callback = component.props[eventName]
+
+      // for native events
+      component.root.dispatchEvent(new Event(name, data))
+
+      if (callback) callback(data);
+    }
+  })
 }

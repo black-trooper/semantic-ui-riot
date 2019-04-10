@@ -2,12 +2,9 @@
   <slot />
 
   <script>
-    import observable from 'riot-observable'
-
     export default {
       state: {
         value: '',
-        label: '',
         lastValue: '',
         lastOptsValue: '',
       },
@@ -23,7 +20,6 @@
     //                                                                           Lifecycle
     //                                                                           =========
     function onMounted(props, state) {
-      this.observable = observable(this)
       if (!state.value) {
         state.value = props.riotValue
       }
@@ -74,7 +70,7 @@
         checkboxes.forEach(checkbox => {
           updateState(checkbox, state.value)
         })
-        this.observable.trigger('change', state.value)
+        this.dispatch && this.dispatch('change', state.value)
       }
     }
 
@@ -96,9 +92,6 @@
       } else {
         checkbox.removeAttribute('checked')
       }
-      // if (checkbox.checked) {
-      //   this.label = checkbox.root.getElementsByTagName('label')[0].innerText
-      // }
     }
 
     function initializeChild(checkbox, uid) {

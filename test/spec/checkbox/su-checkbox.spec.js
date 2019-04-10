@@ -1,15 +1,18 @@
 import * as riot from 'riot'
+import { init } from '../../helpers/'
 import TargetComponent from '../../../tags/checkbox/su-checkbox.tag'
 
 describe('su-checkbox', function () {
   let element, component
   let spyOnClick = sinon.spy()
+  init(riot)
 
   beforeEach(function () {
     riot.register('su-checkbox', TargetComponent)
     element = document.createElement('su-checkbox')
-    component = riot.mount(element)[0]
-    component.on('click', spyOnClick)
+    component = riot.mount(element, {
+      'onclick': spyOnClick
+    })[0]
   })
 
   afterEach(function () {
