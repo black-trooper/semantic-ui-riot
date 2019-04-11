@@ -3,11 +3,11 @@ const path = require('path')
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: ['mocha', 'sinon-chai', 'riot'],
+    frameworks: ['mocha', 'sinon-chai'],
     files: [
       'node_modules/jquery/dist/jquery.min.js',
       'test/css/index.css',
-      'test/spec/**/*'
+      'test/spec/checkbox/*'
     ],
     preprocessors: {
       'test/spec/**/*.js': ['webpack', 'sourcemap'],

@@ -1,22 +1,33 @@
-require('../../../dist/tags/checkbox/su-checkbox-group.js')
-require('../../../dist/tags/checkbox/su-checkbox.js')
+import * as riot from 'riot'
+import { init } from '../../helpers/'
+import CheckboxGroupComponent from '../../../tags/checkbox/su-checkbox-group.tag'
+import CheckboxComponent from '../../../tags/checkbox/su-checkbox.tag'
 
 describe('su-checkbox-group-undefined', function () {
-  let tag
+  let element, component
+  init(riot)
 
   beforeEach(function () {
-    const group = $('<su-checkbox-group value="1"></su-checkbox-group>')
-    group.append('<su-checkbox>Checkbox choice1</su-checkbox>')
-      .append('<su-checkbox>Checkbox choice2</su-checkbox>')
-    $('body').append(group)
-    tag = riot.mount('su-checkbox-group')[0]
+    riot.register('su-checkbox-group', CheckboxGroupComponent)
+    riot.register('su-checkbox', CheckboxComponent)
+    element = document.createElement('su-checkbox-group')
+    const child1 = document.createElement('su-checkbox')
+    const child2 = document.createElement('su-checkbox')
+    element.appendChild(child1)
+    element.appendChild(child2)
+
+    component = riot.mount(element)[0]
+    riot.mount(child1)
+    riot.mount(child2)
   })
 
   afterEach(function () {
-    tag.unmount()
+    component.unmount()
+    riot.unregister('su-checkbox')
+    riot.unregister('su-checkbox-group')
   })
 
   it('is mounted', function () {
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 })

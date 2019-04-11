@@ -1,94 +1,84 @@
-require('../../../dist/tags/checkbox/su-checkbox.js')
+import * as riot from 'riot'
+import { init } from '../../helpers/'
+import TargetComponent from '../../../tags/checkbox/su-checkbox.tag'
 
 describe('su-checkbox-options', function () {
-  let tag
+  let element, component
   let spyOnClick = sinon.spy()
+  init(riot)
+
   let mount = opts => {
-    tag = riot.mount('su-checkbox', opts)[0]
-    tag.on('click', spyOnClick)
+    const option = Object.assign({
+      'onclick': spyOnClick
+    }, opts)
+    component = riot.mount(element, option)[0]
   }
 
   beforeEach(function () {
-    $('body').append('<su-checkbox>Make my profile visible</su-checkbox>')
+    riot.register('su-checkbox', TargetComponent)
+    element = document.createElement('su-checkbox')
   })
 
   afterEach(function () {
     spyOnClick.reset()
-    tag.unmount()
+    component.unmount()
+    riot.unregister('su-checkbox')
   })
 
   it('is mounted', function () {
     mount()
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 
   it('click checkbox', function () {
     mount({ checked: true })
-    tag.checked.should.equal(true)
+    expect(component.state.checked).to.be.equal(true)
+    expect(element.getAttribute("checked")).to.be.ok
 
-    $('su-checkbox input').click()
-    spyOnClick.should.have.been.calledOnce
-    tag.checked.should.equal(false)
+    component.$('input').click()
+    expect(component.state.checked).to.be.equal(false)
+    expect(element.getAttribute("checked")).to.be.not.ok
 
-    $('su-checkbox input').click()
-    spyOnClick.should.have.been.calledTwice
-    tag.checked.should.equal(true)
-  })
-
-  it('click checkbox traditional', function () {
-    mount({ check: true })
-    tag.checked.should.equal(true)
-
-    $('su-checkbox input').click()
-    spyOnClick.should.have.been.calledOnce
-    tag.checked.should.equal(false)
-
-    $('su-checkbox input').click()
-    spyOnClick.should.have.been.calledTwice
-    tag.checked.should.equal(true)
+    component.$('input').click()
+    expect(component.state.checked).to.be.equal(true)
+    expect(element.getAttribute("checked")).to.be.ok
   })
 
   it('readonly', function () {
     mount({ class: 'read-only' })
-    tag.checked.should.equal(false)
+    expect(component.state.checked).to.be.equal(false)
+    expect(element.getAttribute("checked")).to.be.not.ok
 
-    $('su-checkbox input').click()
-    tag.checked.should.equal(false)
-    spyOnClick.should.have.been.callCount(0)
+    component.$('input').click()
+    expect(component.state.checked).to.be.equal(false)
+    expect(element.getAttribute("checked")).to.be.not.ok
+    expect(spyOnClick).to.have.been.not.called
   })
 
   it('disabled', function () {
     mount({ class: 'disabled' })
-    tag.checked.should.equal(false)
+    expect(component.state.checked).to.be.equal(false)
+    expect(element.getAttribute("checked")).to.be.not.ok
 
-    $('su-checkbox input').click()
-    tag.checked.should.equal(false)
-    spyOnClick.should.have.been.callCount(0)
+    component.$('input').click()
+    expect(component.state.checked).to.be.equal(false)
+    expect(element.getAttribute("checked")).to.be.not.ok
+    expect(spyOnClick).to.have.been.not.called
   })
 
   it('update checked', function () {
     mount({ checked: true })
-    tag.checked.should.equal(true)
+    expect(component.state.checked).to.be.equal(true)
+    expect(element.getAttribute("checked")).to.be.ok
 
-    tag.checked = false
-    tag.checked.should.equal(false)
+    component.update({ checked: false })
+    expect(component.state.checked).to.be.equal(false)
+    expect(element.getAttribute("checked")).to.be.not.ok
 
-    tag.checked = true
-    tag.checked.should.equal(true)
+    component.update({ checked: true })
+    expect(component.state.checked).to.be.equal(true)
+    expect(element.getAttribute("checked")).to.be.ok
 
-    spyOnClick.should.have.been.callCount(0)
-  })
-
-  it('update checked traditional', function () {
-    mount({ check: true })
-    tag.checked.should.equal(true)
-
-    tag.checked = false
-    tag.checked.should.equal(false)
-
-    tag.checked = true
-    tag.checked.should.equal(true)
-
-    spyOnClick.should.have.been.callCount(0)
+    expect(spyOnClick).to.have.been.not.called
   })
 })

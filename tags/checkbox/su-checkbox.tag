@@ -43,6 +43,7 @@
     }
 
     function onBeforeUpdate(props, state) {
+      this.readOnly = this.root.classList.contains('read-only')
       this.disabled = this.root.classList.contains('disabled')
       this.changed = state.checked !== state.defaultChecked
 
@@ -69,7 +70,7 @@
     //                                                                              Events
     //                                                                              ======
     function onClick() {
-      if (this.state.readOnly || this.state.disabled) {
+      if (this.readOnly || this.disabled) {
         event.preventDefault()
         return
       }
