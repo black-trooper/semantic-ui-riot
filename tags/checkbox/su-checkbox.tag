@@ -77,7 +77,7 @@
       this.update({
         checked: !this.state.checked
       })
-      this.dispatch && this.dispatch('click', this.checked)
+      this.dispatch('click', this.checked)
       if (this.obs && this.root.getAttribute('name')) {
         this.obs.trigger(`${this.root.getAttribute('name')}-click`, this.props.value)
       }

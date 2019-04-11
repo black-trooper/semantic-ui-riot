@@ -30,10 +30,6 @@ export function init(riot) {
     component.dispatch = (name, data) => {
       const eventName = `on${name}`
       const callback = component.props[eventName]
-
-      // for native events
-      component.root.dispatchEvent(new Event(name, data))
-
       if (callback) callback(data);
     }
   })

@@ -110,8 +110,7 @@ describe('su-checkbox-group', function () {
     expect(component.changed).to.be.not.ok
 
     component.$$('su-checkbox input')[0].click()
-    console.log(component.state.value)
-    // expect(component.state.value).to.be.equal([component.$$('su-checkbox')[0].getAttribute("value")])
+    expect(component.state.value[0]).to.be.equal(component.$$('su-checkbox')[0].getAttribute("value"))
     expect(component.defaultValue).to.be.undefined
     expect(component.changed).to.be.ok
 

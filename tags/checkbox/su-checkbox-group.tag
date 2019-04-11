@@ -70,7 +70,7 @@
         checkboxes.forEach(checkbox => {
           updateState(checkbox, state.value)
         })
-        this.dispatch && this.dispatch('change', state.value)
+        this.dispatch('change', state.value)
       }
     }
 
