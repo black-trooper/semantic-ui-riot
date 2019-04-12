@@ -40,23 +40,6 @@ describe('su-checkbox', function () {
     expect(element.getAttribute("checked")).to.be.not.ok
   })
 
-  /*
-  it('click label', function () {
-    expect(component.state.checked).to.be.equal(false)
-    expect(element.getAttribute("checked")).to.be.not.ok
-
-    fireEvent($('su-checkbox label')[0], 'click')
-    spyOnClick.should.have.been.calledOnce
-    expect(component.state.checked).to.be.equal(true)
-    expect(element.getAttribute("checked")).to.be.ok
-
-    fireEvent($('su-checkbox label')[0], 'click')
-    spyOnClick.should.have.been.calledTwice
-    expect(component.state.checked).to.be.equal(false)
-    expect(element.getAttribute("checked")).to.be.not.ok
-  })
-  */
-
   it('update states', function () {
     expect(component.state.checked).to.be.equal(false)
     expect(element.getAttribute("checked")).to.be.not.ok
