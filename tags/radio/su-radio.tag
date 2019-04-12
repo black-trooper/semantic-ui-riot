@@ -1,93 +1,85 @@
-<su-radio class="ui {radio: isRadio() } checkbox { opts.class }">
-  <input type="radio" name="{ name }" value="{ value }" checked="{ checked }" onclick="{ click }" ref="target" id="{ getId() }"
-  />
-  <label if="{ !opts.label }" for="{ getId() }"><yield /></label>
-  <label if="{ opts.label }" for="{ getId() }">{ opts.label }</label>
+<su-radio class="ui { radio } checkbox { props.class }">
+  <input type="radio" name="{ radioName }" value="{ value }" onclick="{ onClick }" id="su-radio-{ uid }" />
+  <label if="{ !props.label }" for="su-radio-{ uid }"><slot /></label>
+  <label if="{ props.label }" for="su-radio-{ uid }">{ props.label }</label>
 
   <style>
-    :scope.ui.checkbox label {
+    :host.ui.checkbox label {
       cursor: pointer;
     }
 
-    :scope.ui.read-only input[type="radio"],
-    :scope.ui.disabled input[type="radio"] {
+    :host.ui.read-only input[type="radio"],
+    :host.ui.disabled input[type="radio"] {
       cursor: default !important;
     }
   </style>
 
   <script>
-    const tag = this
-    // ===================================================================================
-    //                                                                      Tag Properties
-    //                                                                      ==============
-    tag.checked = false
-    tag.name = ''
-
-    // ===================================================================================
-    //                                                                         Tag Methods
-    //                                                                         ===========
-    tag.click = click
-    tag.getId = getId
-    tag.isDisabled = isDisabled
-    tag.isRadio = isRadio
-    tag.on('mount', onMount)
-    tag.on('update', onUpdate)
-
-    // ===================================================================================
-    //                                                                          Properties
-    //                                                                          ==========
-    let lastChecked
-    let lastOptsCheck
-
-    // ===================================================================================
-    //                                                                             Methods
-    //                                                                             =======
-    function onMount() {
-      if (tag.checked) {
-        opts.checked = tag.checked
-      } else {
-        tag.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
-      }
-      lastChecked = tag.checked
-      lastOptsCheck = opts.checked
-      tag.update()
+    export default {
+      state: {
+        checked: false,
+        lastChecked: false,
+        lastOptsChecked: false,
+      },
+      radio: 'radio',
+      onMounted,
+      onBeforeUpdate,
+      onUpdated,
+      onClick,
     }
 
-    function onUpdate() {
-      tag.name = opts.name
-      tag.value = opts.value
-      if (lastChecked != tag.checked) {
-        opts.checked = tag.checked
-        lastChecked = tag.checked
-      } else if (lastOptsCheck != opts.checked) {
-        tag.checked = opts.checked
-        lastOptsCheck = opts.checked
+    // ===================================================================================
+    //                                                                           Lifecycle
+    //                                                                           =========
+    function onMounted(props, state) {
+      state.checked = normalizeOptChecked(props.checked)
+      state.lastChecked = state.checked
+      state.lastOptsChecked = props.checked
+      this.update()
+    }
+
+    function onBeforeUpdate(props, state) {
+      this.readOnly = this.root.classList.contains('read-only')
+      this.disabled = this.root.classList.contains('disabled')
+      this.radio = this.root.classList.contains('slider') ? '' : 'radio'
+      this.radioName = this.root.getAttribute('name')
+
+      if (state.lastOptsChecked != normalizeOptChecked(props.checked)) {
+        state.checked = normalizeOptChecked(props.checked)
+        state.lastOptsChecked = state.checked
       }
     }
 
-    function click(event) {
-      if (isReadOnly() || tag.isDisabled()) {
+    function onUpdated(props, state) {
+      if (state.lastChecked != state.checked) {
+        state.lastChecked = state.checked
+        state.lastOptsChecked = state.checked
+      }
+    }
+
+    // ===================================================================================
+    //                                                                              Events
+    //                                                                              ======
+    function onClick(event) {
+      if (this.readOnly || this.disabled) {
         event.preventDefault()
         return
       }
-      tag.checked = event.target.checked
-      tag.trigger('click', event.target.value)
+
+      this.update({
+        checked: event.target.checked
+      })
+      this.dispatch('click', event.target.value)
+      if (this.obs && this.root.getAttribute('name')) {
+        this.obs.trigger(`${this.root.getAttribute('name')}-click`, this.props.value)
+      }
     }
 
-    function isReadOnly() {
-      return tag.root.classList.contains('read-only')
-    }
-
-    function getId() {
-      return `su-radio-${tag._riot_id}`
-    }
-
-    function isDisabled() {
-      return tag.root.classList.contains('disabled')
-    }
-
-    function isRadio() {
-      return !tag.root.classList.contains('slider')
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
+    function normalizeOptChecked(checked) {
+      return checked === true || checked === 'checked' || checked === 'true'
     }
   </script>
 </su-radio>
