@@ -1,62 +1,68 @@
-require('../../../dist/tags/radio/su-radio.js')
-require('../../../dist/tags/radio/su-radio-group.js')
+import * as riot from 'riot'
+import { init } from '../../helpers/'
+import TargetComponent from '../../../tags/radio/su-radio.tag'
 
 describe('su-radio-options', function () {
-  let tag
+  let element, component
   let spyOnClick = sinon.spy()
+  init(riot)
+
   let mount = opts => {
-    tag = riot.mount('su-radio', opts)[0]
-    tag.on('click', spyOnClick)
+    const option = Object.assign({
+      'onclick': spyOnClick
+    }, opts)
+    component = riot.mount(element, option)[0]
   }
 
   beforeEach(function () {
-    $('body').append('<su-radio name="radio1" ref="radio1_1">Radio choice1</su-radio>')
-      .append('<su-radio name="radio1" ref="radio1_2">Radio choice2</su-radio>')
+    riot.register('su-radio', TargetComponent)
+    element = document.createElement('su-radio')
   })
 
   afterEach(function () {
     spyOnClick.reset()
-    tag.unmount()
+    component.unmount()
+    riot.unregister('su-radio')
   })
 
   it('is mounted', function () {
     mount()
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 
   it('checked', function () {
     mount({ checked: true })
-    tag.checked.should.equal(true)
+    expect(component.$('input').checked).to.be.ok
   })
 
   it('readonly', function () {
     mount({ class: 'read-only' })
-    tag.checked.should.equal(false)
+    expect(component.$('input').checked).to.be.not.ok
 
-    $('su-radio:eq(0) input').click()
-    tag.checked.should.equal(false)
-    spyOnClick.should.have.been.callCount(0)
+    component.$('input').click()
+    expect(component.$('input').checked).to.be.not.ok
+    expect(spyOnClick).to.have.been.not.called
   })
 
   it('disabled', function () {
     mount({ class: 'disabled' })
-    tag.checked.should.equal(false)
+    expect(component.$('input').checked).to.be.not.ok
 
-    $('su-radio:eq(0) input').click()
-    tag.checked.should.equal(false)
-    spyOnClick.should.have.been.callCount(0)
+    component.$('input').click()
+    expect(component.$('input').checked).to.be.not.ok
+    expect(spyOnClick).to.have.been.not.called
   })
 
   it('update checked', function () {
     mount({ checked: true })
-    tag.checked.should.equal(true)
+    expect(component.$('input').checked).to.be.ok
 
-    tag.checked = false
-    tag.checked.should.equal(false)
+    component.update({ checked: false })
+    expect(component.$('input').checked).to.be.not.ok
 
-    tag.checked = true
-    tag.checked.should.equal(true)
+    component.update({ checked: true })
+    expect(component.$('input').checked).to.be.ok
 
-    spyOnClick.should.have.been.callCount(0)
+    expect(spyOnClick).to.have.been.not.called
   })
 })

@@ -1,90 +1,102 @@
-require('../../../dist/tags/radio/su-radio.js')
-require('../../../dist/tags/radio/su-radio-group.js')
+import * as riot from 'riot'
+import { init } from '../../helpers/'
+import RadioGroupComponent from '../../../tags/radio/su-radio-group.tag'
+import RadioComponent from '../../../tags/radio/su-radio.tag'
 
 describe('su-radio-group', function () {
-  let tag
+  let element, component
   let spyOnChange = sinon.spy()
+  init(riot)
 
   beforeEach(function () {
-    const group = $('<su-radio-group></su-radio-group>')
-    group.append('<su-radio value="1">Radio choice1</su-radio>')
-      .append('<su-radio value="2">Radio choice2</su-radio>')
-    $('body').append(group)
-    tag = riot.mount('su-radio-group')[0]
-    tag.on('change', spyOnChange)
+    riot.register('su-radio-group', RadioGroupComponent)
+    riot.register('su-radio', RadioComponent)
+    element = document.createElement('su-radio-group')
+    const child1 = document.createElement('su-radio')
+    child1.setAttribute('value', '1')
+    const child2 = document.createElement('su-radio')
+    child2.setAttribute('value', '2')
+    element.appendChild(child1)
+    element.appendChild(child2)
+
+    component = riot.mount(element, {
+      'onchange': spyOnChange
+    })[0]
+    riot.mount(child1)
+    riot.mount(child2)
   })
 
   afterEach(function () {
     spyOnChange.reset()
-    tag.unmount()
+    component.unmount()
+    riot.unregister('su-radio')
+    riot.unregister('su-radio-group')
   })
 
   it('is mounted', function () {
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 
   it('update value', function () {
-    tag.tags['su-radio'][0].checked.should.equal(false)
-    tag.tags['su-radio'][1].checked.should.equal(false)
+    expect(component.$$('su-radio')[0].checked).to.be.not.ok
+    expect(component.$$('su-radio')[1].checked).to.be.not.ok
 
-    tag.value = '1'
-    tag.update()
-    tag.tags['su-radio'][0].checked.should.equal(true)
-    tag.tags['su-radio'][1].checked.should.equal(false)
+    component.update({ value: '1' })
+    expect(component.$$('su-radio')[0].checked).to.be.ok
+    expect(component.$$('su-radio')[1].checked).to.be.not.ok
     spyOnChange.should.have.been.calledOnce
 
-    tag.value = '2'
-    tag.update()
-    tag.tags['su-radio'][0].checked.should.equal(false)
-    tag.tags['su-radio'][1].checked.should.equal(true)
+    component.update({ value: '2' })
+    expect(component.$$('su-radio')[0].checked).to.be.not.ok
+    expect(component.$$('su-radio')[1].checked).to.be.ok
     spyOnChange.should.have.been.calledTwice
   })
 
   it('update option', function () {
-    tag.tags['su-radio'][0].checked.should.equal(false)
-    tag.tags['su-radio'][1].checked.should.equal(false)
+    expect(component.$$('su-radio')[0].checked).to.be.not.ok
+    expect(component.$$('su-radio')[1].checked).to.be.not.ok
 
-    tag.opts.riotValue = '1'
-    tag.update()
-    tag.tags['su-radio'][0].checked.should.equal(true)
-    tag.tags['su-radio'][1].checked.should.equal(false)
+    element.setAttribute('value', '1')
+    component.update()
+    expect(component.$$('su-radio')[0].checked).to.be.ok
+    expect(component.$$('su-radio')[1].checked).to.be.not.ok
     spyOnChange.should.have.been.calledOnce
 
-    tag.opts.riotValue = '2'
-    tag.update()
-    tag.tags['su-radio'][0].checked.should.equal(false)
-    tag.tags['su-radio'][1].checked.should.equal(true)
+    element.setAttribute('value', '2')
+    component.update()
+    expect(component.$$('su-radio')[0].checked).to.be.not.ok
+    expect(component.$$('su-radio')[1].checked).to.be.ok
     spyOnChange.should.have.been.calledTwice
   })
 
-  it('click checkbox', function () {
-    tag.tags['su-radio'][0].checked.should.equal(false)
-    tag.tags['su-radio'][1].checked.should.equal(false)
+  it('click radio', function () {
+    expect(component.$$('su-radio')[0].checked).to.be.not.ok
+    expect(component.$$('su-radio')[1].checked).to.be.not.ok
 
-    $('su-radio:eq(0) input').click()
-    tag.tags['su-radio'][0].checked.should.equal(true)
-    tag.tags['su-radio'][1].checked.should.equal(false)
+    component.$$('su-radio input')[0].click()
+    expect(component.$$('su-radio')[0].checked).to.be.ok
+    expect(component.$$('su-radio')[1].checked).to.be.not.ok
     spyOnChange.should.have.been.calledOnce
 
-    $('su-radio:eq(1) input').click()
-    tag.tags['su-radio'][0].checked.should.equal(false)
-    tag.tags['su-radio'][1].checked.should.equal(true)
+    component.$$('su-radio input')[1].click()
+    expect(component.$$('su-radio')[0].checked).to.be.not.ok
+    expect(component.$$('su-radio')[1].checked).to.be.ok
     spyOnChange.should.have.been.calledTwice
   })
 
   it('reset value', function () {
-    expect(tag.value).to.be.undefined
-    expect(tag.defaultValue).to.be.undefined
-    tag.changed().should.equal(false)
+    expect(component.state.value).to.be.undefined
+    expect(component.defaultValue).to.be.undefined
+    expect(component.changed).to.be.not.ok
 
-    $('su-radio:eq(0) input').click()
-    expect(tag.defaultValue).to.be.undefined
-    tag.value.should.equal(tag.tags['su-radio'][0].value)
-    tag.changed().should.equal(true)
+    component.$$('su-radio input')[0].click()
+    expect(component.state.value[0]).to.be.equal(component.$$('su-radio')[0].getAttribute("value"))
+    expect(component.defaultValue).to.be.undefined
+    expect(component.changed).to.be.ok
 
-    tag.reset()
-    expect(tag.value).to.be.undefined
-    expect(tag.defaultValue).to.be.undefined
-    tag.changed().should.equal(false)
+    component.reset()
+    expect(component.state.value).to.be.undefined
+    expect(component.defaultValue).to.be.undefined
+    expect(component.changed).to.be.not.ok
   })
 })

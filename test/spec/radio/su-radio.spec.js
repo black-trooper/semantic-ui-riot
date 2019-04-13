@@ -1,58 +1,39 @@
-require('../../../dist/tags/radio/su-radio.js')
-require('../../../dist/tags/radio/su-radio-group.js')
+import * as riot from 'riot'
+import { init } from '../../helpers/'
+import TargetComponent from '../../../tags/radio/su-radio.tag'
 
 describe('su-radio', function () {
-  let tag1, tag2
+  let element, component
   let spyOnClick = sinon.spy()
+  init(riot)
 
   beforeEach(function () {
-    $('body').append('<su-radio name="radio1" ref="radio1_1">Radio choice1</su-radio>')
-      .append('<su-radio name="radio1" ref="radio1_2">Radio choice2</su-radio>')
-    let tags = riot.mount('su-radio')
-    tag1 = tags[0]
-    tag2 = tags[1]
-    tag1.on('click', spyOnClick)
-    this.clock = sinon.useFakeTimers()
+    riot.register('su-radio', TargetComponent)
+    element = document.createElement('su-radio')
+    component = riot.mount(element, {
+      'onclick': spyOnClick
+    })[0]
   })
 
   afterEach(function () {
     spyOnClick.reset()
-    this.clock.restore()
-    tag1.unmount()
+    component.unmount()
+    riot.unregister('su-radio')
   })
 
   it('is mounted', function () {
-    tag1.isMounted.should.be.true
-    tag2.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 
   it('click checkbox', function () {
-    tag1.refs.target.checked.should.equal(false)
-    tag2.refs.target.checked.should.equal(false)
+    expect(component.$('input').checked).to.be.not.ok
 
-    $('su-radio:eq(0) input').click()
-    spyOnClick.should.have.been.calledOnce
-    tag1.refs.target.checked.should.equal(true)
-    tag2.refs.target.checked.should.equal(false)
+    component.$('input').click()
+    expect(spyOnClick).to.have.been.calledOnce
+    expect(component.$('input').checked).to.be.ok
 
-    $('su-radio:eq(1) input').click()
-    spyOnClick.should.have.been.calledOnce
-    tag1.refs.target.checked.should.equal(false)
-    tag2.refs.target.checked.should.equal(true)
-  })
-
-  it('click label', function () {
-    tag1.refs.target.checked.should.equal(false)
-    tag2.refs.target.checked.should.equal(false)
-
-    $('su-radio:eq(0) label').click()
-    spyOnClick.should.have.been.calledOnce
-    tag1.refs.target.checked.should.equal(true)
-    tag2.refs.target.checked.should.equal(false)
-
-    $('su-radio:eq(1) label').click()
-    spyOnClick.should.have.been.calledOnce
-    tag1.refs.target.checked.should.equal(false)
-    tag2.refs.target.checked.should.equal(true)
+    component.$('input').click()
+    expect(spyOnClick).to.have.been.calledTwice
+    expect(component.$('input').checked).to.be.ok
   })
 })

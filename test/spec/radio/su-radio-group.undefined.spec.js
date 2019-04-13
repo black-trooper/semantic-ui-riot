@@ -1,22 +1,35 @@
-require('../../../dist/tags/radio/su-radio.js')
-require('../../../dist/tags/radio/su-radio-group.js')
+import * as riot from 'riot'
+import { init } from '../../helpers/'
+import RadioGroupComponent from '../../../tags/radio/su-radio-group.tag'
+import RadioComponent from '../../../tags/radio/su-radio.tag'
 
 describe('su-radio-group-undefined', function () {
-  let tag
+  let element, component
+  init(riot)
 
   beforeEach(function () {
-    const group = $('<su-radio-group value="1"></su-radio-group>')
-    group.append('<su-radio>Radio choice1</su-radio>')
-      .append('<su-radio>Radio choice2</su-radio>')
-    $('body').append(group)
-    tag = riot.mount('su-radio-group')[0]
+    riot.register('su-radio-group', RadioGroupComponent)
+    riot.register('su-radio', RadioComponent)
+    element = document.createElement('su-radio-group')
+    const child1 = document.createElement('su-radio')
+    const child2 = document.createElement('su-radio')
+    element.appendChild(child1)
+    element.appendChild(child2)
+
+    component = riot.mount(element, {
+      value: 1,
+    })[0]
+    riot.mount(child1)
+    riot.mount(child2)
   })
 
   afterEach(function () {
-    tag.unmount()
+    component.unmount()
+    riot.unregister('su-radio')
+    riot.unregister('su-radio-group')
   })
 
   it('is mounted', function () {
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 })

@@ -1,5 +1,5 @@
 <su-radio class="ui { radio } checkbox { props.class }">
-  <input type="radio" name="{ radioName }" value="{ value }" onclick="{ onClick }" id="su-radio-{ uid }" />
+  <input type="radio" name="{ radioName }" value="{ value }" checked="{ state.checked }" onclick="{ onClick }" id="su-radio-{ uid }" />
   <label if="{ !props.label }" for="su-radio-{ uid }"><slot /></label>
   <label if="{ props.label }" for="su-radio-{ uid }">{ props.label }</label>
 
@@ -34,7 +34,7 @@
     function onMounted(props, state) {
       state.checked = normalizeOptChecked(props.checked)
       state.lastChecked = state.checked
-      state.lastOptsChecked = props.checked
+      state.lastOptsChecked = state.checked
       this.update()
     }
 
@@ -53,7 +53,6 @@
     function onUpdated(props, state) {
       if (state.lastChecked != state.checked) {
         state.lastChecked = state.checked
-        state.lastOptsChecked = state.checked
       }
     }
 
