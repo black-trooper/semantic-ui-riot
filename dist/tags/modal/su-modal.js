@@ -1,4 +1,4 @@
-riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionStatus}"> <div class="ui modal transition visible active {opts.class}" onclick="{clickModal}" id="{getId()}"> <i class="close icon" if="{opts.modal.closable && !isBasic()}" onclick="{hide}"></i> <div class="ui header {icon: opts.modal.header.icon}" if="{opts.modal.header}"> <i class="icon {opts.modal.header.icon}" if="{opts.modal.header.icon}"></i> {getTitle()} </div> <div class="content {image: isImageContent()}" ref="content"> <yield></yield> </div> <div class="actions"> <button each="{button in opts.modal.buttons}" onclick="{click}" ref="button_{button.text}" type="button" class="ui button {button.type} {labeled: button.icon && button.text} {icon: button.icon} {inverted: isBasic()} {disabled: button.disabled}"> {button.text} <i class="icon {button.icon}" if="{button.icon}"></i> </button> </div> </div> </div>', 'su-modal .ui.dimmer.visible.transition,[data-is="su-modal"] .ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; } su-modal .ui.fullscreen.modal,[data-is="su-modal"] .ui.fullscreen.modal{ left: 0 !important; } @media only screen and (min-width: 768px) { su-modal .ui.modal>.close,[data-is="su-modal"] .ui.modal>.close{ display: none; } su-modal .ui.fullscreen.modal>.close,[data-is="su-modal"] .ui.fullscreen.modal>.close{ display: inline; } }', 'onclick="{dimmerClose}"', function(opts) {
+riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionStatus}"> <div class="ui modal transition visible active {opts.class}" onclick="{clickModal}" id="{getId()}"> <i class="close icon" if="{opts.modal.closable && !isBasic()}" onclick="{hide}"></i> <div class="ui header {icon: opts.modal.header.icon}" if="{opts.modal.header}"> <i class="icon {opts.modal.header.icon}" if="{opts.modal.header.icon}"></i> {getTitle()} </div> <div class="content {image: isImageContent()}" ref="content"> <yield></yield> </div> <div class="actions"> <button each="{button in opts.modal.buttons}" onclick="{click.bind(this, button)}" ref="button_{button.text}" type="button" class="ui button {button.type} {labeled: button.icon && button.text} {icon: button.icon} {inverted: isBasic()} {disabled: button.disabled}"> {button.text} <i class="icon {button.icon}" if="{button.icon}"></i> </button> </div> </div> </div>', 'su-modal .ui.dimmer.visible.transition,[data-is="su-modal"] .ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; } su-modal .ui.fullscreen.modal,[data-is="su-modal"] .ui.fullscreen.modal{ left: 0 !important; } @media only screen and (min-width: 768px) { su-modal .ui.modal>.close,[data-is="su-modal"] .ui.modal>.close{ display: none; } su-modal .ui.fullscreen.modal>.close,[data-is="su-modal"] .ui.fullscreen.modal>.close{ display: inline; } }', 'onclick="{dimmerClose}"', function(opts) {
     const tag = this
 
     tag.click = click
@@ -53,9 +53,9 @@ riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionS
       }, 500)
     }
 
-    function click(event) {
-      tag.trigger(event.item.action || event.item.text)
-      if (typeof event.item.closable === 'undefined' || event.item.closable) {
+    function click(item) {
+      tag.trigger(item.action || item.text)
+      if (typeof item.closable === 'undefined' || item.closable) {
         tag.hide()
       }
     }
