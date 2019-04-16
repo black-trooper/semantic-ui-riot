@@ -10,7 +10,7 @@
         <yield />
       </div>
       <div class="actions">
-        <button each="{ button in opts.modal.buttons }" onclick="{ click }" ref="button_{ button.text }" type="button"
+        <button each="{ button in opts.modal.buttons }" onclick="{ click.bind(this, button) }" ref="button_{ button.text }" type="button"
           class="ui button { button.type } { labeled: button.icon && button.text } { icon: button.icon } { inverted: isBasic() } { disabled: button.disabled }">
           { button.text }
           <i class="icon { button.icon }" if="{ button.icon }"></i>
@@ -114,9 +114,9 @@
       }, 500)
     }
 
-    function click(event) {
-      tag.trigger(event.item.action || event.item.text)
-      if (typeof event.item.closable === 'undefined' || event.item.closable) {
+    function click(item) {
+      tag.trigger(item.action || item.text)
+      if (typeof item.closable === 'undefined' || item.closable) {
         tag.hide()
       }
     }
