@@ -64,6 +64,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^3.0.5",
     "mocha": "^4.0.1",
+    "riot-observable": "^3.0.0",
     "riotjs-loader": "^4.0.0",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.13.0",

@@ -1,5 +1,5 @@
-<su-modal onclick="{ onClickDimmer }">
-  <div class="ui dimmer modals page transition { status.transition }">
+<su-modal onclick="{ onClickDimmer }" id="su-modal-{ uid }">
+  <div class="ui dimmer modals page transition { state.transition }">
     <div class="ui modal transition visible active {props.class}" onclick="{ onClickModal }">
       <i class="close icon" if="{ this.closable && !basic }" onclick="{ onClickHide }"></i>
       <div class="ui header { headerClass }" if="{ this.header }">
@@ -49,13 +49,15 @@
 
   <script>
     export default {
-      status: {
+      state: {
         transition: '',
       },
       image_content: false,
       openning: false,
       closing: false,
+      closable: true,
       visible: false,
+      onMounted,
       onBeforeUpdate,
       onClickModal,
       onClickButton,
@@ -66,6 +68,17 @@
     // ===================================================================================
     //                                                                           Lifecycle
     //                                                                           =========
+    function onMounted(props, state) {
+      if (this.obs) {
+        this.obs.on(`su-modal-${this.uid}-show`, () => {
+          show(this)
+        })
+        this.obs.on(`su-modal-${this.uid}-hide`, () => {
+          hide(this)
+        })
+      }
+    }
+
     function onBeforeUpdate(props, state) {
       this.basic = this.root.classList.contains('basic')
       this.contentClass = this.$('img') ? 'image' : ''
@@ -86,12 +99,6 @@
           button.class = classes.join(' ')
         })
       }
-
-      if (this.root.getAttribute('show') && !this.visible) {
-        show()
-      } else if (!this.root.getAttribute('show') && this.visible) {
-        onClickHide()
-      }
     }
 
     // ===================================================================================
@@ -100,13 +107,13 @@
     function onClickButton(event) {
       this.dispatch(event.item.action || event.item.text)
       if (typeof event.item.closable === 'undefined' || event.item.closable) {
-        onClickHide()
+        hide(this)
       }
     }
 
     function onClickDimmer() {
-      if (this.props.modal.closable && !this.basic) {
-        onClickHide()
+      if (this.closable && !this.basic) {
+        hide(this)
       }
     }
 
@@ -115,51 +122,58 @@
     }
 
     function onClickHide() {
-      if (this.openning || this.closing || !this.visible) {
-        return
-      }
-      this.closing = true
-      this.update({
-        transition: 'animating fade out visible active'
-      })
-      this.dispatch('hide')
-
-      setTimeout(() => {
-        this.closing = false
-        this.visible = false
-        this.update({
-          transition: ''
-        })
-      }, 300)
+      hide(this)
     }
 
     // ===================================================================================
     //                                                                               Logic
     //                                                                               =====
-    function show() {
-      console.log('show')
-      if (this.openning || this.closing || this.visible) {
+    function show(tag) {
+      if (tag.openning || tag.closing || tag.visible) {
         return
       }
-      console.log('shown')
-      this.openning = true
-      this.status.transition = ''
-      setDefaultFocus()
-      // this.dispatch('show')
+      tag.openning = true
+      tag.state.transition = 'animating fade in visible'
+      setDefaultFocus(tag)
+      tag.dispatch('show')
+      tag.update()
 
       setTimeout(() => {
-        this.openning = false
-        this.visible = true
+        tag.openning = false
+        tag.visible = true
+        tag.update({
+          transition: 'visible active'
+        })
       }, 500)
     }
 
-    function setDefaultFocus() {
-      if (!this.buttons || this.buttons.length == 0) {
+    function hide(tag) {
+      if (tag.openning || tag.closing || !tag.visible) {
         return
       }
-      if (this.buttons.some(button => button.default)) {
-        const text = this.buttons.filter(button => button.default)[0].text
-        // tag.refs[`button_${text}`].focus()
+      tag.closing = true
+      tag.update({
+        transition: 'animating fade out visible active'
+      })
+      tag.dispatch('hide')
+      tag.update()
+
+      setTimeout(() => {
+        tag.closing = false
+        tag.visible = false
+        tag.update({
+          transition: ''
+        })
+      }, 300)
+    }
+
+    function setDefaultFocus(tag) {
+      if (!tag.buttons || tag.buttons.length == 0) {
+        return
+      }
+      if (tag.buttons.some(button => button.default)) {
+        const text = tag.buttons.filter(button => button.default)[0].text
+        tag.$(`[ref='button_${text}']`).focus()
       }
     }
   </script>
