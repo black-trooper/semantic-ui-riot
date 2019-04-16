@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.22.2] - 2019-04-16
+### Fixed
+- Fix the problem that the event does not fire even if the button is clicked
+
 ## [0.22.1] - 2019-03-24
 ### Fixed
 - Fix the problem what the divider is not displayed in su-dropdown
@@ -167,8 +171,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Add su-rating
 
-[Unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.22.1...HEAD
-[0.22.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.22.0...v0.22.1
+[Unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.22.2...HEAD
+[0.22.2]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.22.1...v0.22.2
+[0.22.1]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.22.0...v0.22.1
 [0.22.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.21.1...v0.22.0
 [0.21.1]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.21.0...v0.21.1
 [0.21.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.20.1...v0.21.0
