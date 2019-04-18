@@ -1,4 +1,4 @@
-<su-modal onclick="{ onClickDimmer }" id="su-modal-{ uid }">
+<su-modal onclick="{ onClickDimmer }" id="{ su_id }">
   <div class="ui dimmer modals page transition { state.transition }">
     <div class="ui modal transition visible active {props.class}" onclick="{ onClickModal }">
       <i class="close icon" if="{ this.closable && !basic }" onclick="{ onClickHide }"></i>
@@ -10,7 +10,7 @@
         <slot />
       </div>
       <div class="actions">
-        <button each="{ button in buttons }" onclick="{ onClickButton }" ref="button_{ button.text }" type="button"
+        <button each="{ button in buttons }" onclick="{ () => onClickButton(button) }" ref="button_{ button.text }" type="button"
           class="ui button { button.type } { button.class }">
           { button.text }
           <i class="icon { button.icon }" if="{ button.icon }"></i>
@@ -48,6 +48,7 @@
   </style>
 
   <script>
+    let index = 0
     export default {
       state: {
         transition: '',
@@ -69,11 +70,13 @@
     //                                                                           Lifecycle
     //                                                                           =========
     function onMounted(props, state) {
+      this.su_id = `su-modal-${index++}`
+      this.update()
       if (this.obs) {
-        this.obs.on(`su-modal-${this.uid}-show`, () => {
+        this.obs.on(`${this.su_id}-show`, () => {
           show(this)
         })
-        this.obs.on(`su-modal-${this.uid}-hide`, () => {
+        this.obs.on(`${this.su_id}-hide`, () => {
           hide(this)
         })
       }
@@ -84,17 +87,19 @@
       this.contentClass = this.$('img') ? 'image' : ''
 
       if (props.modal) {
-        this.header = props.modal.header
         this.closable = typeof props.modal.closable === 'undefined' || props.modal.closable
-        this.headerClass = props.modal.header.icon ? 'icon' : ''
-        this.title = props.modal.header.text ? props.modal.header.text : props.modal.header
+        if (props.modal.header) {
+          this.header = props.modal.header
+          this.headerClass = props.modal.header.icon ? 'icon' : ''
+          this.title = props.modal.header.text ? props.modal.header.text : props.modal.header
+        }
 
         this.buttons = props.modal.buttons
-        buttons.forEach(button => {
+        this.buttons.forEach(button => {
           const classes = []
           if (button.icon && button.text) classes.push('labeled')
           if (button.icon) classes.push('icon')
-          if (basic) classes.push('inverted')
+          if (this.basic) classes.push('inverted')
           if (button.disabled) classes.push('disabled')
           button.class = classes.join(' ')
         })
@@ -104,9 +109,9 @@
     // ===================================================================================
     //                                                                              Events
     //                                                                              ======
-    function onClickButton(event) {
-      this.dispatch(event.item.action || event.item.text)
-      if (typeof event.item.closable === 'undefined' || event.item.closable) {
+    function onClickButton(item) {
+      this.dispatch(item.action || item.text)
+      if (typeof item.closable === 'undefined' || item.closable) {
         hide(this)
       }
     }
