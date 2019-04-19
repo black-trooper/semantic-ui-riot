@@ -1,9 +1,9 @@
 <su-modal onclick="{ onClickDimmer }" id="{ su_id }">
   <div class="ui dimmer modals page transition { state.transition }">
     <div class="ui modal transition visible active {props.class}" onclick="{ onClickModal }">
-      <i class="close icon" if="{ this.closable && !basic }" onclick="{ onClickHide }"></i>
-      <div class="ui header { headerClass }" if="{ this.header }">
-        <i class="icon { this.header.icon }" if="{ this.header.icon }"></i>
+      <i class="close icon" if="{ closable && !basic }" onclick="{ onClickHide }"></i>
+      <div class="ui header { headerClass }" if="{ header }">
+        <i class="icon { header.icon }" if="{ header.icon }"></i>
         { title }
       </div>
       <div class="content { contentClass }" ref="content">
@@ -95,7 +95,7 @@
         }
 
         this.buttons = props.modal.buttons
-        this.buttons.forEach(button => {
+        this.buttons && this.buttons.forEach(button => {
           const classes = []
           if (button.icon && button.text) classes.push('labeled')
           if (button.icon) classes.push('icon')
@@ -139,9 +139,9 @@
       }
       tag.openning = true
       tag.state.transition = 'animating fade in visible'
-      setDefaultFocus(tag)
       tag.dispatch('show')
       tag.update()
+      setDefaultFocus(tag)
 
       setTimeout(() => {
         tag.openning = false
