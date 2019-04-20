@@ -3,10 +3,10 @@
     <div class="ui icon message">
       <i class="info circle icon"></i>
       <div class="scrolling content">
-        <div class="header" if="{ opts.title }">
-          { opts.title }
+        <div class="header" if="{ props.title }">
+          { props.title }
         </div>
-        <p each="{ message in opts.messages }">{ message }</p>
+        <p each="{ message in props.messages }">{ message }</p>
       </div>
     </div>
   </su-modal>
@@ -31,37 +31,39 @@
   </style>
 
   <script>
-    const tag = this
+    export default {
+      state: {
+
+      },
+      modal: {
+        closable: false,
+        buttons: []
+      },
+      onMounted
+    }
     // ===================================================================================
     //                                                                      Tag Properties
     //                                                                      ==============
-    tag.modal = {
-      closable: false,
-      buttons: []
-    }
 
     // ===================================================================================
     //                                                                         Tag Methods
     //                                                                         ===========
-    tag.mixin('semantic-ui')
-    tag.observable.on('showAlert', showAlert)
-    tag.on('mount', onMount)
+    // tag.mixin('semantic-ui')
+    // tag.observable.on('showAlert', showAlert)
+
 
     // ===================================================================================
     //                                                                          Properties
     //                                                                          ==========
     const button = {}
-    riot.mixin({
-      suAlert
-    })
 
     // ===================================================================================
     //                                                                             Methods
     //                                                                             =======
-    function onMount() {
+    function onMounted(props, state) {
       let defaultButton = {}
-      if (tag.defaultOptions && tag.defaultOptions.alert && tag.defaultOptions.alert.button) {
-        defaultButton = tag.defaultOptions.alert.button
+      if (this.defaultOptions && this.defaultOptions.alert && this.defaultOptions.alert.button) {
+        defaultButton = this.defaultOptions.alert.button
       }
       if (defaultButton.default) {
         button.default = true
@@ -70,12 +72,17 @@
       button.type = defaultButton.type || ''
       button.icon = defaultButton.icon || ''
 
-      tag.refs.modal.on('closeAction', () => {
-        tag.observable.trigger('callbackConfirm')
-      })
+      if (this.obs) {
+        this.obs.on('su-alert-show', option => {
+          suAlert(this, option)
+        })
+      }
+      // tag.refs.modal.on('closeAction', () => {
+      //   tag.observable.trigger('callbackConfirm')
+      // })
     }
 
-    function setButton(option) {
+    function setButton(tag, option) {
       const btn = {
         text: option.button.text || button.text,
         type: option.button.type || button.type,
@@ -93,15 +100,15 @@
       tag.modal.buttons.push(btn)
     }
 
-    function showAlert(option) {
+    function showAlert(tag, option = {}) {
       tag.title = option.title
       tag.messages = Array.isArray(option.message) ? option.message : [option.message]
-      setButton(option)
+      setButton(tag, option)
       tag.update()
-      tag.refs.modal.show()
+      tag.showModal(tag.$('su-modal'))
     }
 
-    function suAlert(param) {
+    function suAlert(tag, param) {
       const option = {
         title: null,
         message: null,
@@ -127,13 +134,15 @@
         }
       }
 
-      return tag.Q.Promise(resolve => {
-        tag.observable.trigger('showAlert', option)
-        tag.observable.on('callbackConfirm', () => {
-          tag.refs.modal.hide()
-          return resolve()
-        })
-      })
+      showAlert(tag, option)
+
+      // return Q.Promise(resolve => {
+      //   tag.observable.trigger('showAlert', option)
+      //   tag.observable.on('callbackConfirm', () => {
+      //     tag.refs.modal.hide()
+      //     return resolve()
+      //   })
+      // })
     }
   </script>
 </su-alert>
