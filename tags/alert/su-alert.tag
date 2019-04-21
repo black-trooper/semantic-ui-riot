@@ -1,12 +1,12 @@
 <su-alert>
-  <su-modal class="tiny" ref="modal" modal="{ modal }" title="{ title }" messages="{ messages }">
+  <su-modal class="tiny" modal="{ modal }" onclose="{ onClose }">
     <div class="ui icon message">
       <i class="info circle icon"></i>
       <div class="scrolling content">
-        <div class="header" if="{ props.title }">
-          { props.title }
+        <div class="header" if="{ title }">
+          { title }
         </div>
-        <p each="{ message in props.messages }">{ message }</p>
+        <p each="{ message in messages }">{ message }</p>
       </div>
     </div>
   </su-modal>
@@ -33,70 +33,63 @@
   <script>
     export default {
       state: {
-
       },
       modal: {
         closable: false,
         buttons: []
       },
-      onMounted
+      button: {},
+      onMounted,
+      onClose
     }
-    // ===================================================================================
-    //                                                                      Tag Properties
-    //                                                                      ==============
 
     // ===================================================================================
-    //                                                                         Tag Methods
-    //                                                                         ===========
-    // tag.mixin('semantic-ui')
-    // tag.observable.on('showAlert', showAlert)
-
-
-    // ===================================================================================
-    //                                                                          Properties
-    //                                                                          ==========
-    const button = {}
-
-    // ===================================================================================
-    //                                                                             Methods
-    //                                                                             =======
+    //                                                                           Lifecycle
+    //                                                                           =========
     function onMounted(props, state) {
       let defaultButton = {}
       if (this.defaultOptions && this.defaultOptions.alert && this.defaultOptions.alert.button) {
         defaultButton = this.defaultOptions.alert.button
       }
       if (defaultButton.default) {
-        button.default = true
+        this.button.default = true
       }
-      button.text = defaultButton.text || 'Close'
-      button.type = defaultButton.type || ''
-      button.icon = defaultButton.icon || ''
+      this.button.text = defaultButton.text || 'Close'
+      this.button.type = defaultButton.type || ''
+      this.button.icon = defaultButton.icon || ''
 
       if (this.obs) {
         this.obs.on('su-alert-show', option => {
           suAlert(this, option)
         })
       }
-      // tag.refs.modal.on('closeAction', () => {
-      //   tag.observable.trigger('callbackConfirm')
-      // })
     }
 
+    // ===================================================================================
+    //                                                                              Events
+    //                                                                              ======
+    function onClose(props, state) {
+      this.obs.trigger('callbackConfirm')
+    }
+
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
     function setButton(tag, option) {
       const btn = {
-        text: option.button.text || button.text,
-        type: option.button.type || button.type,
-        icon: option.button.icon || button.icon,
-        action: 'closeAction',
+        text: option.button.text || tag.button.text,
+        type: option.button.type || tag.button.type,
+        icon: option.button.icon || tag.button.icon,
+        action: 'close',
         closable: false,
       }
       if (option.button.default) {
         btn.default = true
       } else if (option.button.default === null) {
-        btn.default = button.default
+        btn.default = tag.button.default
       }
 
-      tag.modal.buttons.length = 0
+      tag.modal.buttons.length = 0 // reset
       tag.modal.buttons.push(btn)
     }
 
@@ -134,15 +127,13 @@
         }
       }
 
-      showAlert(tag, option)
-
-      // return Q.Promise(resolve => {
-      //   tag.observable.trigger('showAlert', option)
-      //   tag.observable.on('callbackConfirm', () => {
-      //     tag.refs.modal.hide()
-      //     return resolve()
-      //   })
-      // })
+      return new Promise(resolve => {
+        showAlert(tag, option)
+        tag.obs.on('callbackConfirm', () => {
+          tag.hideModal(tag.$('su-modal'))
+          return resolve()
+        })
+      })
     }
   </script>
 </su-alert>
