@@ -1,7 +1,7 @@
 import * as riot from 'riot'
 import { init } from '../../helpers/'
-import CheckboxGroupComponent from '../../../tags/checkbox/su-checkbox-group.tag'
-import CheckboxComponent from '../../../tags/checkbox/su-checkbox.tag'
+import CheckboxGroupComponent from '../../../dist/tags/checkbox/su-checkbox-group.js'
+import CheckboxComponent from '../../../dist/tags/checkbox/su-checkbox.js'
 
 describe('su-checkbox-group-undefined', function () {
   let element, component

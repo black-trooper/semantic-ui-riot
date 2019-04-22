@@ -3,10 +3,10 @@
     <div class="ui icon message">
       <i class="question circle outline icon"></i>
       <div class="scrolling content">
-        <div class="header" if="{ opts.title }">
-          { opts.title }
+        <div class="header" if="{ props.title }">
+          { props.title }
         </div>
-        <p each="{ messsage in opts.messages }">{ messsage }</p>
+        <p each="{ messsage in props.messages }">{ messsage }</p>
       </div>
     </div>
   </su-modal>
@@ -27,7 +27,11 @@
   </style>
 
   <script>
-    const tag = this
+    export default {
+      state: {
+
+      },
+    }
     // ===================================================================================
     //                                                                      Tag Properties
     //                                                                      ==============
@@ -41,7 +45,7 @@
     //                                                                         ===========
     tag.mixin('semantic-ui')
     tag.observable.on('showConfirm', showConfirm)
-    tag.on('mount', onMount)
+
 
     // ===================================================================================
     //                                                                          Properties
@@ -60,7 +64,7 @@
     // ===================================================================================
     //                                                                             Methods
     //                                                                             =======
-    function onMount() {
+    function onMounted(props, state) {
       let defaultOkButton = {}
       let defaultCancelButton = {}
       reverse = false

@@ -21,16 +21,23 @@ export const keys = {
 }
 
 export function init(riot) {
-  let id = 0;
   const obs = observable()
   riot.install(function (component) {
-    component.uid = id++
     component.obs = obs
 
     component.dispatch = (name, data) => {
       const eventName = `on${name}`
       const callback = component.props[eventName]
       if (callback) callback(data);
+    }
+    component.showModal = (target) => {
+      component.obs.trigger(`${target.id}-show`)
+    }
+    component.hideModal = target => {
+      component.obs.trigger(`${target.id}-hide`)
+    }
+    component.suAlert = opts => {
+      component.obs.trigger(`su-alert-show`, opts)
     }
   })
 }

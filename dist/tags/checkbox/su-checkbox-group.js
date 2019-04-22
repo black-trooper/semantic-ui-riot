@@ -1,124 +1,134 @@
-riot.tag2('su-checkbox-group', '<yield></yield>', '', '', function(opts) {
-    const tag = this
+// ===================================================================================
+//                                                                           Lifecycle
+//                                                                           =========
+function onMounted(props, state) {
+  if (!state.value) {
+    state.value = props.value;
+  }
+  if (typeof state.value !== 'undefined' && !Array.isArray(state.value)) {
+    state.value = state.value.toString().split(/\s+/).join('').split(',');
+  }
+  state.lastValue = state.value;
+  state.lastOptsValue = state.value;
 
-    tag.label = ''
-    tag.value = ''
-    tag.defaultValue = ''
-
-    tag.changed = changed
-    tag.on('mount', onMount)
-    tag.on('update', onUpdate)
-    tag.reset = reset
-
-    let lastValue
-    let lastOptsValue
-
-    function onMount() {
-      if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
-        opts.riotValue = opts.value
-      }
-      if (tag.value) {
-        opts.riotValue = tag.value
-      } else {
-        tag.value = opts.riotValue
-      }
-      if (typeof tag.value !== 'undefined' && !Array.isArray(tag.value)) {
-        tag.value = tag.value.toString().split(/\s+/).join('').split(',')
-      }
-      lastValue = tag.value
-      lastOptsValue = tag.value
-
-      let checkboxes = tag.tags['su-checkbox']
-      if (!Array.isArray(checkboxes)) {
-        checkboxes = [checkboxes]
-      }
-      checkboxes.forEach(checkbox => {
-        initializeChild(checkbox)
-        updateState(checkbox)
+  let checkboxes = this.$$('su-checkbox');
+  checkboxes.forEach(checkbox => {
+    initializeChild(checkbox, this.uid);
+    updateState(checkbox);
+  });
+  this.obs.on(`su-checkbox-name-${this.uid}-click`, () => {
+    this.update({
+      value: checkboxes.filter(_checkbox => _checkbox.checked).map(_checkbox => {
+        return _checkbox.getAttribute('value')
       })
+    });
+  });
 
-      tag.defaultValue = tag.value
-      parentUpdate()
-    }
+  this.defaultValue = state.value;
+  // parentUpdate()
+}
 
-    function onUpdate() {
-      let changed = false
-      if (normalizeValue(lastValue) != normalizeValue(tag.value)) {
-        opts.riotValue = tag.value
-        lastOptsValue = tag.value
-        lastValue = tag.value
-        changed = true
-      } else if (normalizeValue(lastOptsValue) != normalizeValue(opts.riotValue)) {
-        tag.value = opts.riotValue
-        lastOptsValue = opts.riotValue
-        lastValue = opts.riotValue
-        changed = true
-      }
-      if (typeof tag.value !== 'undefined' && !Array.isArray(tag.value)) {
-        tag.value = tag.value.toString().split(/\s+/).join('').split(',')
-      }
+function onBeforeUpdate(props, state) {
+  this.changed = state.value !== this.defaultValue;
 
-      if (changed) {
-        let checkboxes = tag.tags['su-checkbox']
-        if (!Array.isArray(checkboxes)) {
-          checkboxes = [checkboxes]
+  if (normalizeValue(state.lastOptsValue) != normalizeValue(props.value)) {
+    state.value = props.value;
+    state.lastOptsValue = props.value;
+  }
+}
+
+function onUpdated(props, state) {
+  let changed = false;
+  if (normalizeValue(state.lastValue) != normalizeValue(state.value)) {
+    state.lastValue = state.value;
+    changed = true;
+  }
+  if (typeof state.value !== 'undefined' && !Array.isArray(state.value)) {
+    state.value = state.value.toString().split(/\s+/).join('').split(',');
+  }
+
+  if (changed) {
+    let checkboxes = this.$$('su-checkbox');
+    checkboxes.forEach(checkbox => {
+      updateState(checkbox, state.value);
+    });
+    this.dispatch('change', state.value);
+  }
+}
+
+function reset() {
+  this.update({
+    value: this.defaultValue
+  });
+}
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+function updateState(checkbox, value) {
+  if (typeof checkbox.getAttribute('value') === 'undefined' || typeof value === 'undefined') {
+    return
+  }
+  if (value.some(v => v == checkbox.getAttribute('value'))) {
+    checkbox.setAttribute('checked', true);
+  } else {
+    checkbox.removeAttribute('checked');
+  }
+}
+
+function initializeChild(checkbox, uid) {
+  checkbox.setAttribute('name', `su-checkbox-name-${uid}`);
+}
+
+// function parentUpdate() {
+//   if (this.parent) {
+//     this.parent.update()
+//   } else {
+//     this.update()
+//   }
+// }
+
+function normalizeValue(value) {
+  if (typeof value === 'undefined') {
+    return value
+  }
+  if (!Array.isArray(value)) {
+    return [value].toString()
+  }
+  return value.toString()
+}
+
+var suCheckboxGroup = {
+  'css': null,
+
+  'exports': {
+    state: {
+      value: '',
+      lastValue: '',
+      lastOptsValue: '',
+    },
+
+    changed: false,
+    defaultValue: '',
+    onMounted,
+    onBeforeUpdate,
+    onUpdated,
+    reset
+  },
+
+  'template': function(template, expressionTypes, bindingTypes, getComponent) {
+    return template('<slot></slot>', [{
+      'expressions': [{
+        'type': expressionTypes.VALUE,
+
+        'evaluate': function(scope) {
+          return scope.state.value;
         }
-        checkboxes.forEach(checkbox => {
-          updateState(checkbox)
-        })
-        tag.trigger('change', tag.value)
-      }
-    }
+      }]
+    }]);
+  },
 
-    function reset() {
-      tag.value = tag.defaultValue
-    }
+  'name': 'su-checkbox-group'
+};
 
-    function changed() {
-      return tag.value !== tag.defaultValue
-    }
-
-    function updateState(checkbox) {
-      if (typeof checkbox.opts.value === 'undefined' || typeof tag.value === 'undefined') {
-        return
-      }
-      checkbox.checked = tag.value.some(v => v == checkbox.opts.value)
-      if (checkbox.checked) {
-        tag.label = checkbox.root.getElementsByTagName('label')[0].innerText
-      }
-    }
-
-    function initializeChild(checkbox) {
-      checkbox.opts.name = getCheckboxName()
-      checkbox.on('click', () => {
-        let checkboxes = tag.tags['su-checkbox']
-        if (!Array.isArray(checkboxes)) {
-          checkboxes = [checkboxes]
-        }
-        tag.value = checkboxes.filter(_checkbox => _checkbox.checked).map(_checkbox => _checkbox.opts.value)
-        tag.update()
-      })
-    }
-
-    function parentUpdate() {
-      if (tag.parent) {
-        tag.parent.update()
-      } else {
-        tag.update()
-      }
-    }
-
-    function normalizeValue(value) {
-      if (typeof value === 'undefined') {
-        return value
-      }
-      if (!Array.isArray(value)) {
-        return [value].toString()
-      }
-      return value.toString()
-    }
-
-    function getCheckboxName() {
-      return `su-checkbox-name-${tag._riot_id}`
-    }
-});
+export default suCheckboxGroup;

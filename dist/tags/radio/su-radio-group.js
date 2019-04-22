@@ -1,97 +1,93 @@
-riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
-    const tag = this
+// ===================================================================================
+//                                                                           Lifecycle
+//                                                                           =========
+function onMounted(props, state) {
+  if (!state.value) {
+    state.value = props.value;
+  }
+  state.lastValue = state.value;
+  state.lastOptsValue = state.value;
 
-    tag.defaultValue = ''
-    tag.label = ''
-    tag.value = ''
+  this.$$('su-radio').forEach(radio => {
+    initializeChild(radio, this.uid);
+  });
+  this.obs.on(`su-radio-name-${this.uid}-click`, value => {
+    this.update({
+      value
+    });
+  });
 
-    tag.changed = changed
-    tag.on('mount', onMount)
-    tag.on('update', onUpdate)
-    tag.reset = reset
+  this.defaultValue = this.value;
+}
 
-    let lastOptsValue
-    let lastValue
+function onBeforeUpdate(props, state) {
+  this.changed = state.value !== this.defaultValue;
 
-    function onMount() {
-      if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
-        opts.riotValue = opts.value
-      }
-      if (tag.value) {
-        opts.riotValue = tag.value
-      } else {
-        tag.value = opts.riotValue
-      }
-      lastValue = tag.value
-      lastOptsValue = tag.value
+  if (state.lastOptsValue != props.value) {
+    state.value = props.value;
+    state.lastOptsValue = props.value;
+  }
+}
 
-      let radios = tag.tags['su-radio']
-      if (!Array.isArray(radios)) {
-        radios = [radios]
-      }
-      radios.forEach(radio => {
-        initializeChild(radio)
-      })
+function onUpdated(props, state) {
+  let changed = false;
+  if (state.lastValue != state.value) {
+    state.lastValue = state.value;
+    changed = true;
+  }
 
-      tag.defaultValue = tag.value
-      tag.update()
-    }
+  this.$$('su-radio').forEach(radio => {
+    updateState(radio, state.value);
+  });
 
-    function onUpdate() {
-      let changed = false
-      if (lastValue != tag.value) {
-        opts.riotValue = tag.value
-        lastOptsValue = tag.value
-        lastValue = tag.value
-        changed = true
-      } else if (lastOptsValue != opts.riotValue) {
-        tag.value = opts.riotValue
-        lastOptsValue = opts.riotValue
-        lastValue = opts.riotValue
-        changed = true
-      }
+  if (changed) {
+    this.dispatch('change', state.value);
+  }
+}
 
-      let radios = tag.tags['su-radio']
+function reset() {
+  this.update({
+    value: this.defaultValue
+  });
+}
 
-      if (!Array.isArray(radios)) {
-        radios = [radios]
-      }
-      radios.forEach(radio => {
-        updateState(radio)
-      })
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+function updateState(radio, value) {
+  if (typeof radio.getAttribute('value') === 'undefined' || typeof value === 'undefined') {
+    return
+  }
+  radio.checked = value == radio.getAttribute('value');
+}
 
-      if (changed) {
-        tag.trigger('change', tag.value)
-      }
-    }
+function initializeChild(radio, uid) {
+  radio.setAttribute('name', `su-radio-name-${uid}`);
+}
 
-    function reset() {
-      tag.value = tag.defaultValue
-    }
+var suRadioGroup = {
+  'css': null,
 
-    function changed() {
-      return tag.value !== tag.defaultValue
-    }
+  'exports': {
+    state: {
+      value: '',
+      lastValue: '',
+      lastOptsValue: '',
+    },
 
-    function updateState(radio) {
-      if (typeof radio.opts.value === 'undefined') {
-        return
-      }
-      radio.checked = tag.value == radio.opts.value
-      if (radio.checked) {
-        tag.label = radio.root.getElementsByTagName('label')[0].innerText
-      }
-    }
+    changed: false,
+    defaultValue: '',
+    onBeforeUpdate,
+    onMounted,
+    onUpdated,
+    reset
+  },
 
-    function initializeChild(radio) {
-      radio.opts.name = getRadioName()
-      radio.on('click', value => {
-        tag.value = value
-        tag.update()
-      })
-    }
+  'template': function(template, expressionTypes, bindingTypes, getComponent) {
+    return template('<slot></slot>', []);
+  },
 
-    function getRadioName() {
-      return `su-radio-name-${tag._riot_id}`
-    }
-});
+  'name': 'su-radio-group'
+};
+
+export default suRadioGroup;

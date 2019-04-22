@@ -21,7 +21,7 @@
     //                                                                           =========
     function onMounted(props, state) {
       if (!state.value) {
-        state.value = props.riotValue
+        state.value = props.value
       }
       if (typeof state.value !== 'undefined' && !Array.isArray(state.value)) {
         state.value = state.value.toString().split(/\s+/).join('').split(',')

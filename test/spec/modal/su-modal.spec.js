@@ -1,6 +1,6 @@
 import * as riot from 'riot'
 import { init } from '../../helpers/'
-import TargetComponent from '../../../tags/modal/su-modal.tag'
+import TargetComponent from '../../../dist/tags/modal/su-modal.js'
 
 describe('su-modal', function () {
   let element, component

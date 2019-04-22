@@ -1,6 +1,6 @@
 import * as riot from 'riot'
 import { init } from '../../helpers/'
-import TargetComponent from '../../../tags/radio/su-radio.tag'
+import TargetComponent from '../../../dist/tags/radio/su-radio.js'
 
 describe('su-radio-options', function () {
   let element, component

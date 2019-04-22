@@ -1,7 +1,7 @@
 import * as riot from 'riot'
 import { init } from '../../helpers/'
-import RadioGroupComponent from '../../../tags/radio/su-radio-group.tag'
-import RadioComponent from '../../../tags/radio/su-radio.tag'
+import RadioGroupComponent from '../../../dist/tags/radio/su-radio-group.js'
+import RadioComponent from '../../../dist/tags/radio/su-radio.js'
 
 describe('su-radio-group-single', function () {
   let element, component

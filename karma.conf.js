@@ -6,8 +6,10 @@ module.exports = function (config) {
     frameworks: ['mocha', 'sinon-chai'],
     files: [
       'node_modules/jquery/dist/jquery.min.js',
-      'test/css/index.css',
-      'test/spec/checkbox/*'
+      'test/spec/checkbox/*',
+      'test/spec/radio/*',
+      'test/spec/modal/*',
+      'test/css/index.css'
     ],
     preprocessors: {
       'test/spec/**/*.js': ['webpack', 'sourcemap'],

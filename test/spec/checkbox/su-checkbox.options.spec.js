@@ -1,6 +1,6 @@
 import * as riot from 'riot'
 import { init } from '../../helpers/'
-import TargetComponent from '../../../tags/checkbox/su-checkbox.tag'
+import TargetComponent from '../../../dist/tags/checkbox/su-checkbox.js'
 
 describe('su-checkbox-options', function () {
   let element, component
