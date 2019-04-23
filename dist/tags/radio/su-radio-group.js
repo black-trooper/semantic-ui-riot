@@ -1,7 +1,10 @@
+let index = 0;
+
 // ===================================================================================
 //                                                                           Lifecycle
 //                                                                           =========
 function onMounted(props, state) {
+  this.su_id = `su-radio-group-${index++}`;
   if (!state.value) {
     state.value = props.value;
   }
@@ -9,9 +12,9 @@ function onMounted(props, state) {
   state.lastOptsValue = state.value;
 
   this.$$('su-radio').forEach(radio => {
-    initializeChild(radio, this.uid);
+    initializeChild(radio, this.su_id);
   });
-  this.obs.on(`su-radio-name-${this.uid}-click`, value => {
+  this.obs.on(`${this.su_id}-radio-click`, value => {
     this.update({
       value
     });
@@ -62,7 +65,7 @@ function updateState(radio, value) {
 }
 
 function initializeChild(radio, uid) {
-  radio.setAttribute('name', `su-radio-name-${uid}`);
+  radio.setAttribute('name', `${uid}-radio`);
 }
 
 var suRadioGroup = {

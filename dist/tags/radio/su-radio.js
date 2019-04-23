@@ -1,7 +1,10 @@
+let index = 0;
+
 // ===================================================================================
 //                                                                           Lifecycle
 //                                                                           =========
 function onMounted(props, state) {
+  this.su_id = `su-radio-${index++}`;
   state.checked = normalizeOptChecked(props.checked);
   state.lastChecked = state.checked;
   state.lastOptsChecked = state.checked;
@@ -120,7 +123,7 @@ var suRadio = {
           'name': 'id',
 
           'evaluate': function(scope) {
-            return ['su-radio-', scope.uid].join('');
+            return scope.su_id;
           }
         }]
       }, {
@@ -139,7 +142,7 @@ var suRadio = {
             'name': 'for',
 
             'evaluate': function(scope) {
-              return ['su-radio-', scope.uid].join('');
+              return scope.su_id;
             }
           }]
         }])
@@ -166,7 +169,7 @@ var suRadio = {
             'name': 'for',
 
             'evaluate': function(scope) {
-              return ['su-radio-', scope.uid].join('');
+              return scope.su_id;
             }
           }]
         }])
