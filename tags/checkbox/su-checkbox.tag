@@ -1,7 +1,7 @@
 <su-checkbox class="ui checkbox { props.class }" checked="{ state.checked }" changed="{ changed }">
-  <input type="checkbox" checked="{ state.checked }" onclick="{ onClick }" disabled="{ disabled }" id="su-checkbox-{ uid }" />
-  <label if="{ !props.label }" for="su-checkbox-{ uid }"><slot /></label>
-  <label if="{ props.label }" for="su-checkbox-{ uid }">{ props.label }</label>
+  <input type="checkbox" checked="{ state.checked }" onclick="{ onClick }" disabled="{ disabled }" id="{ su_id }" />
+  <label if="{ !props.label }" for="{ su_id }"><slot /></label>
+  <label if="{ props.label }" for="{ su_id }">{ props.label }</label>
 
   <style>
     :host.ui.checkbox label {
@@ -15,6 +15,7 @@
   </style>
 
   <script>
+    let index = 0
     export default {
       state: {
         checked: false,
@@ -35,6 +36,7 @@
     //                                                                           Lifecycle
     //                                                                           =========
     function onMounted(props, state) {
+      this.su_id = `su-checkbox-${index++}`
       state.checked = normalizeOptChecked(props.checked)
       state.lastChecked = state.checked
       state.lastOptsChecked = state.checked

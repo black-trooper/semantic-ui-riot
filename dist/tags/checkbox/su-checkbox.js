@@ -1,7 +1,10 @@
+let index = 0;
+
 // ===================================================================================
 //                                                                           Lifecycle
 //                                                                           =========
 function onMounted(props, state) {
+  this.su_id = `su-checkbox-${index++}`;
   state.checked = normalizeOptChecked(props.checked);
   state.lastChecked = state.checked;
   state.lastOptsChecked = state.checked;
@@ -138,7 +141,7 @@ var suCheckbox = {
           'name': 'id',
 
           'evaluate': function(scope) {
-            return ['su-checkbox-', scope.uid].join('');
+            return scope.su_id;
           }
         }]
       }, {
@@ -157,7 +160,7 @@ var suCheckbox = {
             'name': 'for',
 
             'evaluate': function(scope) {
-              return ['su-checkbox-', scope.uid].join('');
+              return scope.su_id;
             }
           }]
         }])
@@ -184,7 +187,7 @@ var suCheckbox = {
             'name': 'for',
 
             'evaluate': function(scope) {
-              return ['su-checkbox-', scope.uid].join('');
+              return scope.su_id;
             }
           }]
         }])

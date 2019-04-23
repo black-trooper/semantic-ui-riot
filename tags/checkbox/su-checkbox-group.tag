@@ -2,6 +2,7 @@
   <slot />
 
   <script>
+    let index = 0
     export default {
       state: {
         value: '',
@@ -20,6 +21,7 @@
     //                                                                           Lifecycle
     //                                                                           =========
     function onMounted(props, state) {
+      this.su_id = `su-checkbox-group-${index++}`
       if (!state.value) {
         state.value = props.value
       }
@@ -31,10 +33,10 @@
 
       let checkboxes = this.$$('su-checkbox')
       checkboxes.forEach(checkbox => {
-        initializeChild(checkbox, this.uid)
+        initializeChild(checkbox, this.su_id)
         updateState(checkbox)
       })
-      this.obs.on(`su-checkbox-name-${this.uid}-click`, () => {
+      this.obs.on(`${this.su_id}-checkbox-click`, () => {
         this.update({
           value: checkboxes.filter(_checkbox => _checkbox.checked).map(_checkbox => {
             return _checkbox.getAttribute('value')
@@ -95,7 +97,7 @@
     }
 
     function initializeChild(checkbox, uid) {
-      checkbox.setAttribute('name', `su-checkbox-name-${uid}`)
+      checkbox.setAttribute('name', `${uid}-checkbox`)
     }
 
     // function parentUpdate() {
