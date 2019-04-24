@@ -9,6 +9,7 @@ module.exports = function (config) {
       'test/spec/checkbox/*',
       'test/spec/radio/*',
       'test/spec/modal/*',
+      'test/spec/alert/*',
       'test/css/index.css'
     ],
     preprocessors: {

@@ -1,125 +1,123 @@
-require('../../../dist/tags/alert/su-alert.js')
-require('../../../dist/tags/modal/su-modal.js')
-
-riot.mixin('semantic-ui', {})
+import * as riot from 'riot'
+import { init } from '../../helpers/'
+import TargetComponent from '../../../dist/tags/alert/su-alert.js'
+import ModalComponent from '../../../dist/tags/modal/su-modal.js'
 
 describe('su-alert', function () {
-  const Q = require('q')
-  let tag
-  let app
-  let mount = () => {
-    tag = riot.mount('su-alert')[0]
-    app = riot.mount('app')[0]
+  let element, component
+  init(riot)
+
+  const mount = () => {
+    component = riot.mount(element)[0]
   }
 
   beforeEach(function () {
+    riot.register('su-alert', TargetComponent)
+    riot.register('su-modal', ModalComponent)
+    element = document.createElement('su-alert')
     this.clock = sinon.useFakeTimers()
-    riot.mixin('semantic-ui',
-      {
-        observable: riot.observable(),
-        Q: {
-          Promise: Q.Promise
-        }
-      })
-    riot.tag('app')
-    $('body').append(`
-      <su-alert></su-alert>
-      <app></app>
-    `)
   })
 
   afterEach(function () {
     this.clock.restore()
-    tag.unmount()
-    app.unmount()
+    riot.unregister('su-modal')
+    riot.unregister('su-alert')
   })
 
   it('is mounted', function () {
     mount()
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 
   it('opens/closes alert', function () {
     mount()
-    $('su-alert su-modal > .dimmer').is(':visible').should.equal(false)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
 
-    app.suAlert('hello')
-    tag.messages[0].should.equal('hello')
+    component.suAlert('hello')
+    expect(component.$('p').innerText).to.equal('hello')
     this.clock.tick(510)
-    $('su-alert').is(':visible').should.equal(true)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
-    const btn_one = $('su-alert su-modal .ui.button:first')
-    btn_one.text().trim().should.equal('Close')
-    btn_one.is(':focus').should.equal(false)
+    const btn_one = component.$('.ui.button')
+    expect(btn_one.innerText.trim()).to.equal('Close')
+    // expect(btn_one).to.be.not.equal(document.activeElement)
 
-    $('su-modal').click()
+    component.$('su-modal').click()
     this.clock.tick(310)
-    $('su-modal').is(':visible').should.equal(true)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
     btn_one.click()
     this.clock.tick(310)
-    $('su-alert su-modal > .dimmer').is(':visible').should.equal(false)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
   })
 
   it('title and messages', function () {
     mount()
-    app.suAlert({ title: 'riot', message: ['hello!', 'hello!!'] })
-    tag.title.should.equal('riot')
-    tag.messages[0].should.equal('hello!')
-    tag.messages[1].should.equal('hello!!')
+    component.suAlert({ title: 'riot', message: ['hello!', 'hello!!'] })
+    expect(component.$('.header').innerText.trim()).to.equal('riot')
+    expect(component.$$('p')[0].innerText).to.equal('hello!')
+    expect(component.$$('p')[1].innerText).to.equal('hello!!')
   })
 
   it('title only', function () {
     mount()
-    app.suAlert({ title: 'riot' })
-    tag.title.should.equal('riot')
-    expect(tag.messages[0]).to.be.null
+    component.suAlert({ title: 'riot' })
+    expect(component.$('.header').innerText.trim()).to.equal('riot')
+    expect(component.$('p').innerText).to.be.empty
   })
 
   it('messages only', function () {
     mount()
-    app.suAlert({ message: ['hello!', 'hello!!'] })
-    expect(tag.title).to.be.null
-    tag.messages[0].should.equal('hello!')
-    tag.messages[1].should.equal('hello!!')
+    component.suAlert({ message: ['hello!', 'hello!!'] })
+    expect(component.$('.header')).to.undefined
+    expect(component.$$('p')[0].innerText).to.equal('hello!')
+    expect(component.$$('p')[1].innerText).to.equal('hello!!')
   })
 
   it('none message', function () {
     mount()
-    app.suAlert()
-    expect(tag.title).to.be.null
-    expect(tag.messages[0]).to.be.null
+    component.suAlert()
+    expect(component.$('.header')).to.undefined
+    expect(component.$('p').innerText).to.empty
   })
 
   it('button name by opts', function () {
     mount()
-    app.suAlert({
+    component.suAlert({
       button: {
         text: 'ok',
         default: true,
       }
     })
-    const btn_one = $('su-alert su-modal .ui.button:first')
-    btn_one.text().trim().should.equal('ok')
-    btn_one.is(':focus').should.equal(true)
+    expect(component.$('.header')).to.undefined
+    expect(component.$('p').innerText).to.empty
+    //   mount()
+    //   app.suAlert({
+    //     button: {
+    //       text: 'ok',
+    //       default: true,
+    //     }
+    //   })
+    const btn_one = component.$('su-modal .ui.button')
+    expect(btn_one.innerText.trim()).to.equal('ok')
+    // btn_one.is(':focus').to.equal(true)
   })
 
-  it('button name by defaultOptions', function () {
-    riot.mixin('semantic-ui', {
-      defaultOptions: {
-        alert: {
-          button: {
-            text: 'Yes',
-            default: true,
-          }
-        }
-      }
-    })
-    mount()
-    app.suAlert()
-    const btn_one = $('su-alert su-modal .ui.button:first')
-    btn_one.text().trim().should.equal('Yes')
-    btn_one.is(':focus').should.equal(true)
-  })
-
+  // it('button name by defaultOptions', function () {
+  //   riot.mixin('semantic-ui', {
+  //     defaultOptions: {
+  //       alert: {
+  //         button: {
+  //           text: 'Yes',
+  //           default: true,
+  //         }
+  //       }
+  //     }
+  //   })
+  //   mount()
+  //   app.suAlert()
+  //   const btn_one = $('su-alert su-modal .ui.button:first')
+  //   btn_one.text().trim().to.equal('Yes')
+  //   btn_one.is(':focus').to.equal(true)
+  // })
 })
