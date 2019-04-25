@@ -48,8 +48,8 @@
     //                                                                           =========
     function onMounted(props, state) {
       let defaultButton = {}
-      if (this.defaultOptions && this.defaultOptions.alert && this.defaultOptions.alert.button) {
-        defaultButton = this.defaultOptions.alert.button
+      if (this.suDefaultOptions && this.suDefaultOptions.alert && this.suDefaultOptions.alert.button) {
+        defaultButton = this.suDefaultOptions.alert.button
       }
       if (defaultButton.default) {
         this.button.default = true

@@ -1,95 +1,211 @@
-riot.tag2('su-alert', '<su-modal class="tiny" ref="modal" modal="{modal}" title="{title}" messages="{messages}"> <div class="ui icon message"> <i class="info circle icon"></i> <div class="scrolling content"> <div class="header" if="{opts.title}"> {opts.title} </div> <p each="{message in opts.messages}">{message}</p> </div> </div> </su-modal>', 'su-alert .ui.dimmer,[data-is="su-alert"] .ui.dimmer{ z-index: 1020; } su-alert .ui.modal,[data-is="su-alert"] .ui.modal{ z-index: 1021; } su-alert .ui.message,[data-is="su-alert"] .ui.message{ background: none; box-shadow: none; } su-alert .ui.message .header+p,[data-is="su-alert"] .ui.message .header+p{ margin-top: 1em; }', '', function(opts) {
-    const tag = this
+// ===================================================================================
+//                                                                           Lifecycle
+//                                                                           =========
+function onMounted(props, state) {
+  let defaultButton = {};
+  if (this.suDefaultOptions && this.suDefaultOptions.alert && this.suDefaultOptions.alert.button) {
+    defaultButton = this.suDefaultOptions.alert.button;
+  }
+  if (defaultButton.default) {
+    this.button.default = true;
+  }
+  this.button.text = defaultButton.text || 'Close';
+  this.button.type = defaultButton.type || '';
+  this.button.icon = defaultButton.icon || '';
 
-    tag.modal = {
+  if (this.obs) {
+    this.obs.on('su-alert-show', option => {
+      suAlert(this, option);
+    });
+  }
+}
+
+// ===================================================================================
+//                                                                              Events
+//                                                                              ======
+function onClose(props, state) {
+  this.obs.trigger('callbackConfirm');
+}
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+function setButton(tag, option) {
+  const btn = {
+    text: option.button.text || tag.button.text,
+    type: option.button.type || tag.button.type,
+    icon: option.button.icon || tag.button.icon,
+    action: 'close',
+    closable: false,
+  };
+  if (option.button.default) {
+    btn.default = true;
+  } else if (option.button.default === null) {
+    btn.default = tag.button.default;
+  }
+
+  tag.modal.buttons.length = 0; // reset
+  tag.modal.buttons.push(btn);
+}
+
+function showAlert(tag, option = {}) {
+  tag.title = option.title;
+  tag.messages = Array.isArray(option.message) ? option.message : [option.message];
+  setButton(tag, option);
+  tag.update();
+  tag.showModal(tag.$('su-modal'));
+}
+
+function suAlert(tag, param) {
+  const option = {
+    title: null,
+    message: null,
+    button: {
+      text: null,
+      default: null,
+      type: null,
+      icon: null,
+    },
+  };
+
+  if (typeof param === 'string') {
+    option.message = param;
+  } else if (param) {
+    if (param.title) {
+      option.title = param.title;
+    }
+    if (param.message) {
+      option.message = param.message;
+    }
+    if (param.button) {
+      option.button = param.button;
+    }
+  }
+
+  return new Promise(resolve => {
+    showAlert(tag, option);
+    tag.obs.on('callbackConfirm', () => {
+      tag.hideModal(tag.$('su-modal'));
+      return resolve()
+    });
+  })
+}
+
+var suAlert$1 = {
+  'css': `su-alert .ui.dimmer,[is="su-alert"] .ui.dimmer{
+      z-index: 1020;
+    } su-alert .ui.modal,[is="su-alert"] .ui.modal{
+      z-index: 1021;
+    } su-alert .ui.message,[is="su-alert"] .ui.message{
+      background: none;
+      box-shadow: none;
+    } su-alert .ui.message .header+p,[is="su-alert"] .ui.message .header+p{
+      margin-top: 1em;
+    }`,
+
+  'exports': {
+    state: {
+    },
+
+    modal: {
       closable: false,
       buttons: []
-    }
+    },
 
-    tag.mixin('semantic-ui')
-    tag.observable.on('showAlert', showAlert)
-    tag.on('mount', onMount)
+    button: {},
+    onMounted,
+    onClose
+  },
 
-    const button = {}
-    riot.mixin({
-      suAlert
-    })
+  'template': function(template, expressionTypes, bindingTypes, getComponent) {
+    return template('<su-modal expr42 class="tiny"></su-modal>', [{
+      'type': bindingTypes.TAG,
+      'getComponent': getComponent,
 
-    function onMount() {
-      let defaultButton = {}
-      if (tag.defaultOptions && tag.defaultOptions.alert && tag.defaultOptions.alert.button) {
-        defaultButton = tag.defaultOptions.alert.button
-      }
-      if (defaultButton.default) {
-        button.default = true
-      }
-      button.text = defaultButton.text || 'Close'
-      button.type = defaultButton.type || ''
-      button.icon = defaultButton.icon || ''
+      'evaluate': function(scope) {
+        return 'su-modal';
+      },
 
-      tag.refs.modal.on('closeAction', () => {
-        tag.observable.trigger('callbackConfirm')
-      })
-    }
+      'slots': [{
+        'id': 'default',
+        'html': '<div class="ui icon message"><i class="info circle icon"></i><div class="scrolling content"><div expr43 class="header"></div><p expr44></p></div></div>',
 
-    function setButton(option) {
-      const btn = {
-        text: option.button.text || button.text,
-        type: option.button.type || button.type,
-        icon: option.button.icon || button.icon,
-        action: 'closeAction',
-        closable: false,
-      }
-      if (option.button.default) {
-        btn.default = true
-      } else if (option.button.default === null) {
-        btn.default = button.default
-      }
+        'bindings': [{
+          'type': bindingTypes.IF,
 
-      tag.modal.buttons.length = 0
-      tag.modal.buttons.push(btn)
-    }
+          'evaluate': function(scope) {
+            return scope.title;
+          },
 
-    function showAlert(option) {
-      tag.title = option.title
-      tag.messages = Array.isArray(option.message) ? option.message : [option.message]
-      setButton(option)
-      tag.update()
-      tag.refs.modal.show()
-    }
+          'redundantAttribute': 'expr43',
+          'selector': '[expr43]',
 
-    function suAlert(param) {
-      const option = {
-        title: null,
-        message: null,
-        button: {
-          text: null,
-          default: null,
-          type: null,
-          icon: null,
-        },
-      }
+          'template': template('<!---->', [{
+            'expressions': [{
+              'type': expressionTypes.TEXT,
+              'childNodeIndex': 0,
 
-      if (typeof param === 'string') {
-        option.message = param
-      } else if (param) {
-        if (param.title) {
-          option.title = param.title
+              'evaluate': function(scope) {
+                return ['\n          ', scope.title, '\n        '].join('');
+              }
+            }]
+          }])
+        }, {
+          'type': bindingTypes.EACH,
+          'getKey': null,
+          'condition': null,
+
+          'template': template('<!---->', [{
+            'expressions': [{
+              'type': expressionTypes.TEXT,
+              'childNodeIndex': 0,
+
+              'evaluate': function(scope) {
+                return scope.message;
+              }
+            }]
+          }]),
+
+          'redundantAttribute': 'expr44',
+          'selector': '[expr44]',
+          'itemName': 'message',
+          'indexName': null,
+
+          'evaluate': function(scope) {
+            return scope.messages;
+          }
+        }]
+      }],
+
+      'attributes': [{
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'class',
+
+        'evaluate': function() {
+          return 'tiny';
         }
-        if (param.message) {
-          option.message = param.message
-        }
-        if (param.button) {
-          option.button = param.button
-        }
-      }
+      }, {
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'modal',
 
-      return tag.Q.Promise(resolve => {
-        tag.observable.trigger('showAlert', option)
-        tag.observable.on('callbackConfirm', () => {
-          tag.refs.modal.hide()
-          return resolve()
-        })
-      })
-    }
-});
+        'evaluate': function(scope) {
+          return scope.modal;
+        }
+      }, {
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'onclose',
+
+        'evaluate': function(scope) {
+          return scope.onClose;
+        }
+      }],
+
+      'redundantAttribute': 'expr42',
+      'selector': '[expr42]'
+    }]);
+  },
+
+  'name': 'su-alert'
+};
+
+export default suAlert$1;

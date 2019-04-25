@@ -91,33 +91,27 @@ describe('su-alert', function () {
     })
     expect(component.$('.header')).to.undefined
     expect(component.$('p').innerText).to.empty
-    //   mount()
-    //   app.suAlert({
-    //     button: {
-    //       text: 'ok',
-    //       default: true,
-    //     }
-    //   })
     const btn_one = component.$('su-modal .ui.button')
     expect(btn_one.innerText.trim()).to.equal('ok')
     // btn_one.is(':focus').to.equal(true)
   })
 
-  // it('button name by defaultOptions', function () {
-  //   riot.mixin('semantic-ui', {
-  //     defaultOptions: {
-  //       alert: {
-  //         button: {
-  //           text: 'Yes',
-  //           default: true,
-  //         }
-  //       }
-  //     }
-  //   })
-  //   mount()
-  //   app.suAlert()
-  //   const btn_one = $('su-alert su-modal .ui.button:first')
-  //   btn_one.text().trim().to.equal('Yes')
-  //   btn_one.is(':focus').to.equal(true)
-  // })
+  it('button name by defaultOptions', function () {
+    riot.install(function (_component) {
+      _component.suDefaultOptions = {
+        alert: {
+          button: {
+            text: 'Yes',
+            default: true,
+          }
+        }
+      }
+    })
+
+    mount()
+    component.suAlert()
+    const btn_one = component.$('su-modal .ui.button')
+    expect(btn_one.innerText.trim()).to.equal('Yes')
+    // btn_one.is(':focus').to.equal(true)
+  })
 })
