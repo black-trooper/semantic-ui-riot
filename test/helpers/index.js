@@ -30,10 +30,10 @@ export function init(riot) {
       const callback = component.props[eventName]
       if (callback) callback(data);
     }
-    component.showModal = (target) => {
+    component.suShowModal = (target) => {
       component.obs.trigger(`${target.id}-show`)
     }
-    component.hideModal = target => {
+    component.suHideModal = target => {
       component.obs.trigger(`${target.id}-hide`)
     }
     component.suAlert = opts => {

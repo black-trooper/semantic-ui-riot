@@ -53,7 +53,7 @@ function showAlert(tag, option = {}) {
   tag.messages = Array.isArray(option.message) ? option.message : [option.message];
   setButton(tag, option);
   tag.update();
-  tag.showModal(tag.$('su-modal'));
+  tag.suShowModal(tag.$('su-modal'));
 }
 
 function suAlert(tag, param) {
@@ -85,7 +85,7 @@ function suAlert(tag, param) {
   return new Promise(resolve => {
     showAlert(tag, option);
     tag.obs.on('callbackConfirm', () => {
-      tag.hideModal(tag.$('su-modal'));
+      tag.suHideModal(tag.$('su-modal'));
       return resolve()
     });
   })
@@ -118,7 +118,7 @@ var suAlert$1 = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<su-modal expr42 class="tiny"></su-modal>', [{
+    return template('<su-modal expr45 class="tiny"></su-modal>', [{
       'type': bindingTypes.TAG,
       'getComponent': getComponent,
 
@@ -128,7 +128,7 @@ var suAlert$1 = {
 
       'slots': [{
         'id': 'default',
-        'html': '<div class="ui icon message"><i class="info circle icon"></i><div class="scrolling content"><div expr43 class="header"></div><p expr44></p></div></div>',
+        'html': '<div class="ui icon message"><i class="info circle icon"></i><div class="scrolling content"><div expr46 class="header"></div><p expr47></p></div></div>',
 
         'bindings': [{
           'type': bindingTypes.IF,
@@ -137,8 +137,8 @@ var suAlert$1 = {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr43',
-          'selector': '[expr43]',
+          'redundantAttribute': 'expr46',
+          'selector': '[expr46]',
 
           'template': template('<!---->', [{
             'expressions': [{
@@ -166,8 +166,8 @@ var suAlert$1 = {
             }]
           }]),
 
-          'redundantAttribute': 'expr44',
-          'selector': '[expr44]',
+          'redundantAttribute': 'expr47',
+          'selector': '[expr47]',
           'itemName': 'message',
           'indexName': null,
 
@@ -200,8 +200,8 @@ var suAlert$1 = {
         }
       }],
 
-      'redundantAttribute': 'expr42',
-      'selector': '[expr42]'
+      'redundantAttribute': 'expr45',
+      'selector': '[expr45]'
     }]);
   },
 

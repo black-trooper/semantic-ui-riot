@@ -98,7 +98,7 @@
       tag.messages = Array.isArray(option.message) ? option.message : [option.message]
       setButton(tag, option)
       tag.update()
-      tag.showModal(tag.$('su-modal'))
+      tag.suShowModal(tag.$('su-modal'))
     }
 
     function suAlert(tag, param) {
@@ -130,7 +130,7 @@
       return new Promise(resolve => {
         showAlert(tag, option)
         tag.obs.on('callbackConfirm', () => {
-          tag.hideModal(tag.$('su-modal'))
+          tag.suHideModal(tag.$('su-modal'))
           return resolve()
         })
       })
