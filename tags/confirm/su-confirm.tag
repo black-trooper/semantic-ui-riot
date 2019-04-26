@@ -1,12 +1,12 @@
 <su-confirm>
-  <su-modal class="tiny" ref="modal" modal="{ modal }" title="{ title }" messages="{ messages }">
+  <su-modal class="tiny" modal="{ modal }" onok="{ onOk }" oncancel="{ onCancel }">
     <div class="ui icon message">
       <i class="question circle outline icon"></i>
       <div class="scrolling content">
-        <div class="header" if="{ props.title }">
-          { props.title }
+        <div class="header" if="{ title }">
+          { title }
         </div>
-        <p each="{ messsage in props.messages }">{ messsage }</p>
+        <p each="{ messsage in messages }">{ messsage }</p>
       </div>
     </div>
   </su-modal>
@@ -29,94 +29,92 @@
   <script>
     export default {
       state: {
-
       },
-    }
-    // ===================================================================================
-    //                                                                      Tag Properties
-    //                                                                      ==============
-    tag.modal = {
-      closable: false,
-      buttons: []
+      modal: {
+        closable: false,
+        buttons: []
+      },
+      reverse: false,
+      cancelButton: {
+        action: 'negativeAction'
+      },
+      okButton: {
+        action: 'positiveAction'
+      },
+      onMounted,
+      onOk,
+      onCancel
     }
 
     // ===================================================================================
-    //                                                                         Tag Methods
-    //                                                                         ===========
-    tag.mixin('semantic-ui')
-    tag.observable.on('showConfirm', showConfirm)
-
-
-    // ===================================================================================
-    //                                                                          Properties
-    //                                                                          ==========
-    let reverse = false
-    const cancelButton = {
-      action: 'negativeAction'
-    }
-    const okButton = {
-      action: 'positiveAction'
-    }
-    riot.mixin({
-      suConfirm
-    })
-
-    // ===================================================================================
-    //                                                                             Methods
-    //                                                                             =======
+    //                                                                           Lifecycle
+    //                                                                           =========
     function onMounted(props, state) {
       let defaultOkButton = {}
       let defaultCancelButton = {}
-      reverse = false
-      if (tag.defaultOptions && tag.defaultOptions.confirm) {
-        if (tag.defaultOptions.confirm.reverse) {
-          reverse = tag.defaultOptions.confirm.reverse
+      this.reverse = false
+      if (this.suDefaultOptions && this.suDefaultOptions.confirm) {
+        if (this.suDefaultOptions.confirm.reverse) {
+          this.reverse = this.suDefaultOptions.confirm.reverse
         }
-        if (tag.defaultOptions.confirm.buttons) {
-          if (tag.defaultOptions.confirm.buttons.ok) {
-            defaultOkButton = tag.defaultOptions.confirm.buttons.ok
+        if (this.suDefaultOptions.confirm.buttons) {
+          if (this.suDefaultOptions.confirm.buttons.ok) {
+            defaultOkButton = this.suDefaultOptions.confirm.buttons.ok
           }
-          if (tag.defaultOptions.confirm.buttons.cancel) {
-            defaultCancelButton = tag.defaultOptions.confirm.buttons.cancel
+          if (this.suDefaultOptions.confirm.buttons.cancel) {
+            defaultCancelButton = this.suDefaultOptions.confirm.buttons.cancel
           }
         }
       }
 
-      okButton.text = defaultOkButton.text || 'OK'
-      okButton.type = typeof defaultOkButton.type !== 'undefined' ? defaultOkButton.type : 'primary'
-      okButton.icon = typeof defaultOkButton.icon !== 'undefined' ? defaultOkButton.icon : 'check'
-      cancelButton.text = defaultCancelButton.text || 'Cancel'
-      cancelButton.type = defaultCancelButton.type || ''
-      cancelButton.icon = defaultCancelButton.icon || ''
+      this.okButton.text = defaultOkButton.text || 'OK'
+      this.okButton.type = typeof defaultOkButton.type !== 'undefined' ? defaultOkButton.type : 'primary'
+      this.okButton.icon = typeof defaultOkButton.icon !== 'undefined' ? defaultOkButton.icon : 'check'
+      this.cancelButton.text = defaultCancelButton.text || 'Cancel'
+      this.cancelButton.type = defaultCancelButton.type || ''
+      this.cancelButton.icon = defaultCancelButton.icon || ''
 
       if (defaultOkButton.default) {
-        okButton.default = true
+        this.okButton.default = true
       } else if (defaultCancelButton.default) {
-        cancelButton.default = true
+        this.cancelButton.default = true
       } else if (typeof defaultOkButton.default === 'undefined' && typeof defaultOkButton.default === 'undefined') {
-        okButton.default = true
+        this.okButton.default = true
       }
 
-      tag.refs.modal.on('positiveAction', () => {
-        tag.observable.trigger('callbackConfirm', true)
-      })
-      tag.refs.modal.on('negativeAction', () => {
-        tag.observable.trigger('callbackConfirm', false)
-      })
+      if (this.obs) {
+        this.obs.on('su-confirm-show', option => {
+          suConfirm(this, option)
+        })
+      }
     }
 
-    function setButtons(option) {
+    // ===================================================================================
+    //                                                                              Events
+    //                                                                              ======
+    function onOk() {
+      this.obs.trigger('callbackConfirm', true)
+    }
+
+    function onCancel() {
+      this.obs.trigger('callbackConfirm', false)
+    }
+
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
+    function setButtons(tag, option) {
       const cancel = {
-        text: option.buttons.cancel.text || cancelButton.text,
-        type: option.buttons.cancel.type !== null ? option.buttons.cancel.type : cancelButton.type,
-        icon: option.buttons.cancel.icon !== null ? option.buttons.cancel.icon : cancelButton.icon,
-        action: cancelButton.action,
+        text: option.buttons.cancel.text || tag.cancelButton.text,
+        type: option.buttons.cancel.type !== null ? option.buttons.cancel.type : tag.cancelButton.type,
+        icon: option.buttons.cancel.icon !== null ? option.buttons.cancel.icon : tag.cancelButton.icon,
+        action: 'cancel',
       }
       const ok = {
-        text: option.buttons.ok.text || okButton.text,
-        type: option.buttons.ok.type !== null ? option.buttons.ok.type : okButton.type,
-        icon: option.buttons.ok.icon !== null ? option.buttons.ok.icon : okButton.icon,
-        action: okButton.action,
+        text: option.buttons.ok.text || tag.okButton.text,
+        type: option.buttons.ok.type !== null ? option.buttons.ok.type : tag.okButton.type,
+        icon: option.buttons.ok.icon !== null ? option.buttons.ok.icon : tag.okButton.icon,
+        action: 'ok',
       }
 
       if (option.buttons.ok.default) {
@@ -133,15 +131,15 @@
       tag.modal.buttons.push((option.reverse || reverse) ? cancel : ok)
     }
 
-    function showConfirm(option) {
+    function showConfirm(tag, option = {}) {
       tag.title = option.title
       tag.messages = Array.isArray(option.message) ? option.message : [option.message]
-      setButtons(option)
+      setButtons(tag, option)
       tag.update()
-      tag.refs.modal.show()
+      tag.suShowModal(tag.$('su-modal'))
     }
 
-    function suConfirm(param) {
+    function suConfirm(tag, param) {
       const option = {
         title: null,
         message: null,
@@ -183,9 +181,10 @@
         }
       }
 
-      return tag.Q.Promise((resolve, reject) => {
-        tag.observable.trigger('showConfirm', option)
+      return new Promise((resolve, reject) => {
+        showConfirm(tag, option)
         tag.observable.on('callbackConfirm', result => {
+          tag.suHideModal(tag.$('su-modal'))
           return result ? resolve() : reject()
         })
       })
