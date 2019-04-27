@@ -1,44 +1,72 @@
 // ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.modal = {
-  closable: false,
-  buttons: []
-};
+//                                                                           Lifecycle
+//                                                                           =========
+function onMounted(props, state) {
+  let defaultOkButton = {};
+  let defaultCancelButton = {};
+  this.reverse = false;
+  if (this.suDefaultOptions && this.suDefaultOptions.confirm) {
+    if (this.suDefaultOptions.confirm.reverse) {
+      this.reverse = this.suDefaultOptions.confirm.reverse;
+    }
+    if (this.suDefaultOptions.confirm.buttons) {
+      if (this.suDefaultOptions.confirm.buttons.ok) {
+        defaultOkButton = this.suDefaultOptions.confirm.buttons.ok;
+      }
+      if (this.suDefaultOptions.confirm.buttons.cancel) {
+        defaultCancelButton = this.suDefaultOptions.confirm.buttons.cancel;
+      }
+    }
+  }
+
+  this.okButton.text = defaultOkButton.text || 'OK';
+  this.okButton.type = typeof defaultOkButton.type !== 'undefined' ? defaultOkButton.type : 'primary';
+  this.okButton.icon = typeof defaultOkButton.icon !== 'undefined' ? defaultOkButton.icon : 'check';
+  this.cancelButton.text = defaultCancelButton.text || 'Cancel';
+  this.cancelButton.type = defaultCancelButton.type || '';
+  this.cancelButton.icon = defaultCancelButton.icon || '';
+
+  if (defaultOkButton.default) {
+    this.okButton.default = true;
+  } else if (defaultCancelButton.default) {
+    this.cancelButton.default = true;
+  } else if (typeof defaultOkButton.default === 'undefined' && typeof defaultOkButton.default === 'undefined') {
+    this.okButton.default = true;
+  }
+
+  if (this.obs) {
+    this.obs.on('su-confirm-show', option => {
+      suConfirm(this, option);
+    });
+  }
+}
 
 // ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.mixin('semantic-ui');
-tag.observable.on('showConfirm', showConfirm);
+//                                                                              Events
+//                                                                              ======
+function onOk() {
+  this.obs.trigger('callbackConfirm', true);
+}
 
+function onCancel() {
+  this.obs.trigger('callbackConfirm', false);
+}
 
 // ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-let reverse = false;
-const cancelButton = {
-  action: 'negativeAction'
-};
-const okButton = {
-  action: 'positiveAction'
-};
-riot.mixin({
-  suConfirm
-});
-
-function setButtons(option) {
+//                                                                               Logic
+//                                                                               =====
+function setButtons(tag, option) {
   const cancel = {
-    text: option.buttons.cancel.text || cancelButton.text,
-    type: option.buttons.cancel.type !== null ? option.buttons.cancel.type : cancelButton.type,
-    icon: option.buttons.cancel.icon !== null ? option.buttons.cancel.icon : cancelButton.icon,
-    action: cancelButton.action,
+    text: option.buttons.cancel.text || tag.cancelButton.text,
+    type: option.buttons.cancel.type !== null ? option.buttons.cancel.type : tag.cancelButton.type,
+    icon: option.buttons.cancel.icon !== null ? option.buttons.cancel.icon : tag.cancelButton.icon,
+    action: 'cancel',
   };
   const ok = {
-    text: option.buttons.ok.text || okButton.text,
-    type: option.buttons.ok.type !== null ? option.buttons.ok.type : okButton.type,
-    icon: option.buttons.ok.icon !== null ? option.buttons.ok.icon : okButton.icon,
-    action: okButton.action,
+    text: option.buttons.ok.text || tag.okButton.text,
+    type: option.buttons.ok.type !== null ? option.buttons.ok.type : tag.okButton.type,
+    icon: option.buttons.ok.icon !== null ? option.buttons.ok.icon : tag.okButton.icon,
+    action: 'ok',
   };
 
   if (option.buttons.ok.default) {
@@ -46,24 +74,25 @@ function setButtons(option) {
   } else if (option.buttons.cancel.default) {
     cancel.default = true;
   } else if (option.buttons.ok.default === null && option.buttons.cancel.default === null) {
-    ok.default = okButton.default;
-    cancel.default = cancelButton.default;
+    ok.default = tag.okButton.default;
+    cancel.default = tag.cancelButton.default;
   }
 
   tag.modal.buttons.length = 0;
-  tag.modal.buttons.push((option.reverse || reverse) ? ok : cancel);
-  tag.modal.buttons.push((option.reverse || reverse) ? cancel : ok);
+  tag.modal.buttons.push((option.reverse || tag.reverse) ? ok : cancel);
+  tag.modal.buttons.push((option.reverse || tag.reverse) ? cancel : ok);
 }
 
-function showConfirm(option) {
+function showConfirm(tag, option = {}) {
   tag.title = option.title;
   tag.messages = Array.isArray(option.message) ? option.message : [option.message];
-  setButtons(option);
+  // kokookasii
+  setButtons(tag, option);
   tag.update();
-  tag.refs.modal.show();
+  tag.suShowModal(tag.$('su-modal'));
 }
 
-function suConfirm(param) {
+function suConfirm(tag, param) {
   const option = {
     title: null,
     message: null,
@@ -105,9 +134,10 @@ function suConfirm(param) {
     }
   }
 
-  return tag.Q.Promise((resolve, reject) => {
-    tag.observable.trigger('showConfirm', option);
+  return new Promise((resolve, reject) => {
+    showConfirm(tag, option);
     tag.observable.on('callbackConfirm', result => {
+      tag.suHideModal(tag.$('su-modal'));
       return result ? resolve() : reject()
     });
   })
@@ -125,12 +155,30 @@ var suConfirm$1 = {
 
   'exports': {
     state: {
+    },
 
-    }
+    modal: {
+      closable: false,
+      buttons: []
+    },
+
+    reverse: false,
+
+    cancelButton: {
+      action: 'negativeAction'
+    },
+
+    okButton: {
+      action: 'positiveAction'
+    },
+
+    onMounted,
+    onOk,
+    onCancel
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<su-modal expr7 class="tiny" ref="modal"></su-modal>', [{
+    return template('<su-modal expr7 class="tiny"></su-modal>', [{
       'type': bindingTypes.TAG,
       'getComponent': getComponent,
 
@@ -146,7 +194,7 @@ var suConfirm$1 = {
           'type': bindingTypes.IF,
 
           'evaluate': function(scope) {
-            return scope.props.title;
+            return scope.title;
           },
 
           'redundantAttribute': 'expr8',
@@ -158,7 +206,7 @@ var suConfirm$1 = {
               'childNodeIndex': 0,
 
               'evaluate': function(scope) {
-                return ['\n          ', scope.props.title, '\n        '].join('');
+                return ['\n          ', scope.title, '\n        '].join('');
               }
             }]
           }])
@@ -184,7 +232,7 @@ var suConfirm$1 = {
           'indexName': null,
 
           'evaluate': function(scope) {
-            return scope.props.messages;
+            return scope.messages;
           }
         }]
       }],
@@ -198,13 +246,6 @@ var suConfirm$1 = {
         }
       }, {
         'type': expressionTypes.ATTRIBUTE,
-        'name': 'ref',
-
-        'evaluate': function() {
-          return 'modal';
-        }
-      }, {
-        'type': expressionTypes.ATTRIBUTE,
         'name': 'modal',
 
         'evaluate': function(scope) {
@@ -212,17 +253,17 @@ var suConfirm$1 = {
         }
       }, {
         'type': expressionTypes.ATTRIBUTE,
-        'name': 'title',
+        'name': 'onok',
 
         'evaluate': function(scope) {
-          return scope.title;
+          return scope.onOk;
         }
       }, {
         'type': expressionTypes.ATTRIBUTE,
-        'name': 'messages',
+        'name': 'oncancel',
 
         'evaluate': function(scope) {
-          return scope.messages;
+          return scope.onCancel;
         }
       }],
 

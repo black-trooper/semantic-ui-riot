@@ -122,18 +122,19 @@
       } else if (option.buttons.cancel.default) {
         cancel.default = true
       } else if (option.buttons.ok.default === null && option.buttons.cancel.default === null) {
-        ok.default = okButton.default
-        cancel.default = cancelButton.default
+        ok.default = tag.okButton.default
+        cancel.default = tag.cancelButton.default
       }
 
       tag.modal.buttons.length = 0
-      tag.modal.buttons.push((option.reverse || reverse) ? ok : cancel)
-      tag.modal.buttons.push((option.reverse || reverse) ? cancel : ok)
+      tag.modal.buttons.push((option.reverse || tag.reverse) ? ok : cancel)
+      tag.modal.buttons.push((option.reverse || tag.reverse) ? cancel : ok)
     }
 
     function showConfirm(tag, option = {}) {
       tag.title = option.title
       tag.messages = Array.isArray(option.message) ? option.message : [option.message]
+      // kokookasii
       setButtons(tag, option)
       tag.update()
       tag.suShowModal(tag.$('su-modal'))
