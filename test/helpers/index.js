@@ -39,5 +39,8 @@ export function init(riot) {
     component.suAlert = opts => {
       component.obs.trigger(`su-alert-show`, opts)
     }
+    component.suConfirm = opts => {
+      component.obs.trigger(`su-confirm-show`, opts)
+    }
   })
 }
