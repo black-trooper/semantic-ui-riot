@@ -68,7 +68,7 @@
     // ===================================================================================
     //                                                                              Events
     //                                                                              ======
-    function onClose(props, state) {
+    function onClose() {
       this.obs.trigger('callbackConfirm')
     }
 
