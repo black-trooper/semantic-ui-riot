@@ -1,24 +1,24 @@
 <su-dropdown
-  class="ui selection {opts.class} { search: opts.search } { multiple: opts.multiple} dropdown { active: isActive() } { visible: isActive() } { upward: upward }"
-  onclick="{ toggle }" onfocus="{ focus }" onmousedown="{ mousedown }" onmouseup="{ mouseup }" onblur="{ blur }"
-  onkeydown="{ keydown }" onkeyup="{ keyup }" tabindex="{ opts.search ? -1 : getTabindex() }">
+  class="ui selection {props.class} { props.search && 'search' } { props.multiple && 'multiple'} dropdown { isActive() && 'active visible' } { upward: 'upward' }"
+  onclick="{ onToggle }" onfocus="{ onFocus }" onmousedown="{ onMousedown }" onmouseup="{ onMouseup }"
+  onblur="{ onBlur }" onkeydown="{ onKeydown }" onkeyup="{ onKeyup }" tabindex="{ props.search ? -1 : getTabindex() }">
   <i class="dropdown icon"></i>
-  <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ opts.search }" oninput="{ input }"
-    onclick="{ stopPropagation }" onfocus="{ focus }" onblur="{ blur }" readonly="{ isReadOnly() }" />
-  <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }"
+  <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ props.search }" oninput="{ onInput }"
+    onclick="{ stopPropagation }" onfocus="{ onFocus }" onblur="{ onBlur }" readonly="{ readonly }" />
+  <a each="{item in props.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }"
     onclick="{ stopPropagation }">
     { item.label }
-    <i class="delete icon" onclick="{ unselect }"></i>
+    <i class="delete icon" onclick="{ onUnselect }"></i>
   </a>
-  <div class="{ default: default} text { filtered: filtered }" if="{ !opts.multiple || !selectedFlg }">
+  <div class="{ default&& 'default'} text { filtered&& 'filtered' }" if="{ !props.multiple || !selectedFlg }">
     { label }
   </div>
-  <div class="menu transition { transitionStatus }" onmousedown="{ mousedown }" onmouseup="{ mouseup }"
-    onblur="{ blur }" tabindex="-1">
-    <div each="{item in opts.items}" value="{ item.value }" default="{ item.default }" onmousedown="{ mousedown }"
-      onmouseup="{ mouseup }"
-      class="{ item: isItem(item) } { header: item.header && !filtered} { divider: item.divider && !filtered} { default: item.default } { hover: item.active } { active: item.value == value } { selected: item.value == value }"
-      onclick="{ itemClick }" if="{ isVisible(item) }">
+  <div class="menu transition { transitionStatus }" onmousedown="{ onMousedown }" onmouseup="{ onMouseup }"
+    onblur="{ onBlur }" tabindex="-1">
+    <div each="{item in props.items}" value="{ item.value }" default="{ item.default }" onmousedown="{ onMousedown }"
+      onmouseup="{ onMouseup }"
+      class="{ item: isItem(item) } { item.header && !filtered && 'header' } { item.divider && !filtered && 'divider' } { item.default && 'default'  } { item.active && 'hover'  } { item.value == value && 'active selected'  }"
+      onclick="{ event => onItemClick(event, item) }" if="{ isVisible(item) }">
       <i class="{ item.icon } icon" if="{ item.icon }"></i>
       <img class="ui avatar image" src="{ item.image }" if="{ item.image }" />
       <span class="description" if="{ item.description }">{ item.description }</span>
@@ -28,195 +28,190 @@
   </div>
 
   <style>
-    :scope.ui.dropdown .menu>.item.default {
+    :host.ui.dropdown .menu>.item.default {
       color: rgba(0, 0, 0, 0.4)
     }
 
-    :scope.ui.dropdown .menu>.item.hover {
+    :host.ui.dropdown .menu>.item.hover {
       background: rgba(0, 0, 0, .05);
       color: rgba(0, 0, 0, .95);
     }
 
-    :scope.ui.dropdown .menu {
+    :host.ui.dropdown .menu {
       display: block;
     }
   </style>
 
   <script>
-    const tag = this
-    // ===================================================================================
-    //                                                                      Tag Properties
-    //                                                                      ==============
-    tag.defaultValue = ''
-    tag.filtered = false
-    tag.label = ''
-    tag.selectedFlg = false
-    tag.transitionStatus = 'hidden'
-    tag.value = ''
+    export default {
+      state: {
+        defaultValue: '',
+        filtered: false,
+        label: '',
+        selectedFlg: false,
+        transitionStatus: 'hidden',
+        value: '',
+      },
+      changed: false,
+      visibleFlg: false,
+      keys: {
+        enter: 13,
+        escape: 27,
+        upArrow: 38,
+        downArrow: 40,
+      },
+      onBlur,
+      onFocus,
+      onInput,
+      onItemClick,
+      onKeydown,
+      onKeyup,
+      onMousedown,
+      onMouseup,
+      onToggle,
+      onUnselect,
+      stopPropagation,
 
-    // ===================================================================================
-    //                                                                         Tag Methods
-    //                                                                         ===========
-    tag.blur = blur
-    tag.changed = changed
-    tag.focus = focus
-    tag.getTabindex = getTabindex
-    tag.isActive = isActive
-    tag.isDisabled = isDisabled
-    tag.input = input
-    tag.isItem = isItem
-    tag.isReadOnly = isReadOnly
-    tag.isVisible = isVisible
-    tag.itemClick = itemClick
-    tag.keydown = keydown
-    tag.keyup = keyup
-    tag.mousedown = mousedown
-    tag.mouseup = mouseup
-    tag.on('before-mount', onBeforeMount)
-    tag.on('mount', onMount)
-    tag.on('update', onUpdate)
-    tag.reset = reset
-    tag.stopPropagation = stopPropagation
-    tag.toggle = toggle
-    tag.unselect = unselect
-
-    // ===================================================================================
-    //                                                                          Properties
-    //                                                                          ==========
-    let visibleFlg = false
-    const keys = {
-      enter: 13,
-      escape: 27,
-      upArrow: 38,
-      downArrow: 40,
+      getTabindex,
+      isActive,
+      isDisabled,
+      isItem,
+      isReadOnly,
+      isVisible,
+      reset,
     }
 
     // ===================================================================================
-    //                                                                             Methods
-    //                                                                             =======
+    //                                                                           Lifecycle
+    //                                                                           =========
     function onBeforeMount() {
-      if (opts.items && opts.items.length > 0) {
-        tag.label = opts.items[0].label
-        tag.value = opts.items[0].value
-        tag.default = opts.items[0].default
+      if (props.items && props.items.length > 0) {
+        this.label = props.items[0].label
+        this.value = props.items[0].value
+        this.default = props.items[0].default
       }
     }
 
-    function onMount() {
-      if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
-        opts.riotValue = opts.value
+    function onMounted(props, state) {
+      if (typeof props.riotValue === 'undefined' && typeof props.value !== 'undefined') {
+        props.riotValue = props.value
       }
-      if (typeof opts.riotValue !== 'undefined') {
-        tag.value = opts.riotValue
-        tag.defaultValue = tag.value
-        tag.update()
+      if (typeof props.riotValue !== 'undefined') {
+        this.value = props.riotValue
+        this.defaultValue = this.value
+        this.update()
         parentUpdate()
       } else {
-        tag.defaultValue = tag.value
+        this.defaultValue = this.value
       }
     }
 
-    function onUpdate() {
-      if (opts.multiple) {
-        opts.items.forEach(item => item.selected = false)
-        opts.items.filter(item => tag.value && tag.value.indexOf(item.value) >= 0).forEach(item => item.selected = true)
+    function onBeforeUpdate(props, state) {
+      if (props.multiple) {
+        const value = this.value ? this.value : []
+        const defaultValue = this.defaultValue ? this.defaultValue : []
+        return value.toString() !== defaultValue.toString()
+      }
+      this.changed = this.value !== this.defaultValue
+      this.readonly = this.root.classList.contains('read-only')
+      this.disabled = this.root.classList.contains('disabled')
+    }
+
+    function onUpdated(props, state) {
+      if (props.multiple) {
+        props.items.forEach(item => item.selected = false)
+        props.items.filter(item => this.value && this.value.indexOf(item.value) >= 0).forEach(item => item.selected = true)
         selectMultiTarget(true)
-      } else if (opts.items) {
-        const selected = opts.items.filter(item => item.value === tag.value)
+      } else if (props.items) {
+        const selected = props.items.filter(item => item.value === this.value)
         if (selected && selected.length > 0) {
           const target = selected[0]
-          if (tag.label !== target.label) {
-            selectTarget(target, true)
+          if (this.label !== target.label) {
+            selectTarget(this, target, true)
           }
-        } else if (opts.items && opts.items.length > 0) {
-          if (tag.value != opts.items[0].value) {
-            tag.value = opts.items[0].value
+        } else if (props.items && props.items.length > 0) {
+          if (this.value != props.items[0].value) {
+            this.value = props.items[0].value
           }
-          if (tag.label != opts.items[0].label) {
-            tag.label = opts.items[0].label
-            tag.default = opts.items[0].default
+          if (this.label != props.items[0].label) {
+            this.label = props.items[0].label
+            this.default = props.items[0].default
           }
         }
       }
     }
 
     function reset() {
-      tag.value = tag.defaultValue
+      this.value = this.defaultValue
     }
 
-    function changed() {
-      if (opts.multiple) {
-        const value = tag.value ? tag.value : []
-        const defaultValue = tag.defaultValue ? tag.defaultValue : []
-        return value.toString() !== defaultValue.toString()
-      }
-      return tag.value !== tag.defaultValue
-    }
-
-    function toggle() {
-      if (!visibleFlg) {
-        open()
+    // ===================================================================================
+    //                                                                              Events
+    //                                                                              ======
+    function onToggle() {
+      if (!this.visibleFlg) {
+        open(this)
       } else {
-        close()
+        close(this)
       }
     }
 
-    function focus() {
-      open()
+    function onFocus() {
+      open(this)
     }
 
-    function mousedown() {
-      tag.itemActivated = true
+    function onMousedown() {
+      this.itemActivated = true
     }
 
-    function mouseup() {
-      tag.itemActivated = false
+    function onMouseup() {
+      this.itemActivated = false
     }
 
-    function blur() {
-      if (!tag.itemActivated) {
-        if (!tag.closing && visibleFlg) {
-          const target = opts.multiple ? opts.items.filter(item => item.selected) : { value: tag.value, label: tag.label, default: tag.default }
-          tag.trigger('blur', target)
+    function onBlur() {
+      if (!this.itemActivated) {
+        if (!this.closing && visibleFlg) {
+          const target = props.multiple ? props.items.filter(item => item.selected) : { value: this.value, label: this.label, default: this.default }
+          this.trigger('blur', target)
         }
         close()
       }
     }
 
-    function itemClick(event) {
+    function onItemClick(event, item) {
       event.stopPropagation()
-      if (!tag.isItem(event.item.item)) {
+      if (!this.isItem(event.item.item)) {
         return
       }
-      if (opts.multiple) {
+      if (props.multiple) {
         if (!event.item.item.default) {
           event.item.item.selected = true
         }
         selectMultiTarget()
         return
       }
-      selectTarget(event.item.item)
+      selectTarget(this, event.item.item)
       close()
     }
 
-    function keydown(event) {
+    function onKeydown(event) {
       const keyCode = event.keyCode
       if (keyCode == keys.escape) {
-        close()
+        close(this)
       }
       if (keyCode == keys.downArrow) {
-        open()
+        open(this)
       }
       if (keyCode != keys.upArrow && keyCode != keys.downArrow) {
         return true
       }
 
       event.preventDefault()
-      const searchedItems = opts.items.filter(item => {
-        if (opts.search && !item.searched) {
+      const searchedItems = props.items.filter(item => {
+        if (props.search && !item.searched) {
           return false
         }
-        if (opts.multiple && (item.default || item.selected)) {
+        if (props.multiple && (item.default || item.selected)) {
           return false
         }
         return true
@@ -245,23 +240,23 @@
           nextActiveItem[0].active = true
         }
       }
-      tag.update()
+      this.update()
       scrollPosition()
     }
 
-    function keyup(event) {
+    function onKeyup(event) {
       const keyCode = event.keyCode
       if (keyCode != keys.enter) {
         return
       }
-      const searchedItems = opts.items.filter(item => item.searched && !item.selected)
+      const searchedItems = props.items.filter(item => item.searched && !item.selected)
       const index = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0))
       const activeItem = searchedItems[index]
       if (!activeItem) {
         return
       }
 
-      if (opts.multiple) {
+      if (props.multiple) {
         activeItem.selected = true
         activeItem.active = false
         if (index < searchedItems.length - 1) {
@@ -272,7 +267,7 @@
         selectMultiTarget()
       } else {
         activeItem.active = false
-        selectTarget(activeItem)
+        selectTarget(this, activeItem)
         close()
       }
     }
@@ -284,32 +279,35 @@
     // -----------------------------------------------------
     //                                         search option
     //                                         -------------
-    function input(event) {
+    function onInput(event) {
       const value = event.target.value.toLowerCase()
-      tag.filtered = value.length > 0
+      this.filtered = value.length > 0
       search(value)
     }
 
     // -----------------------------------------------------
     //                                       multiple option
     //                                       ---------------
-    function unselect(event) {
+    function onUnselect(event) {
       event.stopPropagation()
       event.item.item.selected = false
-      tag.value = opts.items.filter(item => item.selected).map(item => item.value)
-      tag.selectedFlg = opts.items.some(item => item.selected)
+      this.value = props.items.filter(item => item.selected).map(item => item.value)
+      this.selectedFlg = props.items.some(item => item.selected)
       parentUpdate()
     }
 
-    function open() {
-      if (tag.openning || tag.closing || visibleFlg || tag.isReadOnly() || tag.isDisabled()) {
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
+    function open(tag) {
+      if (tag.openning || tag.closing || visibleFlg || tag.readonly || tag.disabled) {
         return
       }
       tag.openning = true
       search('')
       tag.upward = isUpward()
       tag.transitionStatus = `visible animating in slide ${tag.upward ? 'up' : 'down'}`
-      opts.items.forEach(item => item.active = false)
+      props.items.forEach(item => item.active = false)
       setTimeout(() => {
         tag.openning = false
         visibleFlg = true
@@ -317,7 +315,7 @@
         tag.update()
       }, 300)
 
-      if (opts.search) {
+      if (props.search) {
         tag.refs.condition.focus()
       }
       tag.update()
@@ -325,7 +323,7 @@
       tag.trigger('open')
     }
 
-    function close() {
+    function close(tag) {
       if (tag.closing || !visibleFlg) {
         return
       }
@@ -338,10 +336,10 @@
         tag.update()
       }, 300)
 
-      if (opts.search) {
+      if (props.search) {
         tag.refs.condition.blur()
         if (tag.filtered && tag.filteredItems.length > 0) {
-          selectTarget(tag.filteredItems[0])
+          selectTarget(tag, tag.filteredItems[0])
         } else {
           tag.refs.condition.value = ''
           tag.filtered = false
@@ -351,7 +349,7 @@
       tag.trigger('close')
     }
 
-    function selectTarget(target, updating) {
+    function selectTarget(tag, target, updating) {
       if (tag.value === target.value &&
         tag.label === target.label &&
         tag.default === target.default) {
@@ -363,7 +361,7 @@
       tag.value = target.value
       tag.label = target.label
       tag.default = target.default
-      if (opts.search) {
+      if (props.search) {
         tag.refs.condition.value = ''
         tag.filtered = false
       }
@@ -375,36 +373,36 @@
       }
     }
 
-    function selectMultiTarget(updating) {
-      if (JSON.stringify(tag.value) == JSON.stringify(opts.items.filter(item => item.selected).map(item => item.value))
-        && tag.selectedFlg == opts.items.some(item => item.selected)) {
+    function selectMultiTarget(tag, updating) {
+      if (JSON.stringify(tag.value) == JSON.stringify(props.items.filter(item => item.selected).map(item => item.value))
+        && tag.selectedFlg == props.items.some(item => item.selected)) {
         if (!updating) {
-          tag.trigger('select', opts.items.filter(item => item.selected))
+          tag.trigger('select', props.items.filter(item => item.selected))
         }
         return
       }
-      tag.value = opts.items.filter(item => item.selected).map(item => item.value)
-      tag.selectedFlg = opts.items.some(item => item.selected)
+      tag.value = props.items.filter(item => item.selected).map(item => item.value)
+      tag.selectedFlg = props.items.some(item => item.selected)
       if (!updating) {
         tag.update()
         parentUpdate()
-        tag.trigger('select', opts.items.filter(item => item.selected))
-        tag.trigger('change', opts.items.filter(item => item.selected))
+        tag.trigger('select', props.items.filter(item => item.selected))
+        tag.trigger('change', props.items.filter(item => item.selected))
       }
     }
 
-    function search(target) {
-      opts.items.forEach(item => {
+    function search(tag, target) {
+      props.items.forEach(item => {
         item.searched = item.label && item.label.toLowerCase().indexOf(target) >= 0
       })
-      tag.filteredItems = opts.items.filter(item => {
+      tag.filteredItems = props.items.filter(item => {
         return item.searched
       })
       tag.update()
       tag.trigger('search')
     }
 
-    function scrollPosition() {
+    function scrollPosition(tag) {
       const menu = tag.root.querySelector('.menu')
       const item = tag.root.querySelector('.item.hover')
 
@@ -421,17 +419,17 @@
       }
     }
 
-    function parentUpdate() {
+    function parentUpdate(tag) {
       if (tag.parent) {
         tag.parent.update()
       }
     }
 
     function isUpward() {
-      if (opts.direction == 'upward') {
+      if (props.direction == 'upward') {
         return true
       }
-      if (opts.direction == 'downward') {
+      if (props.direction == 'downward') {
         return false
       }
       const dropdown = tag.root.getBoundingClientRect()
@@ -454,29 +452,21 @@
     }
 
     function isActive() {
-      if (tag.closing) {
+      if (this.closing) {
         return false
       }
-      return tag.openning || visibleFlg
+      return this.openning || visibleFlg
     }
 
     function getTabindex() {
-      if (opts.tabindex) {
-        return opts.tabindex
+      if (props.tabindex) {
+        return props.tabindex
       }
       return 0
     }
 
-    function isReadOnly() {
-      return tag.root.classList.contains('read-only')
-    }
-
-    function isDisabled() {
-      return tag.root.classList.contains('disabled')
-    }
-
     function isVisible(item) {
-      if (opts.multiple && item.default) {
+      if (props.multiple && item.default) {
         return false
       }
       if (item.selected) {
