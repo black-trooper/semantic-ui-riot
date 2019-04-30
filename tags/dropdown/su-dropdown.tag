@@ -1,8 +1,8 @@
 <su-dropdown
-  class="ui selection {props.class} { props.search && 'search' } { props.multiple && 'multiple'} dropdown { isActive() && 'active visible' } { upward: 'upward' }"
+  class="ui selection {props.class} { props.search && 'search' } { props.multiple && 'multiple'} dropdown { isActive() && 'active visible' } { upward && 'upward' }"
   onclick="{ onToggle }" onfocus="{ onFocus }" onmousedown="{ onMousedown }" onmouseup="{ onMouseup }"
   onblur="{ onBlur }" onkeydown="{ onKeydown }" onkeyup="{ onKeyup }" tabindex="{ props.search ? -1 : getTabindex() }">
-  <i class="dropdown icon"></i>
+  <i class="dropdown icon"></i>あiuee
   <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ props.search }" oninput="{ onInput }"
     onclick="{ stopPropagation }" onfocus="{ onFocus }" onblur="{ onBlur }" readonly="{ readonly }" />
   <a each="{item in props.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }"
@@ -10,14 +10,15 @@
     { item.label }
     <i class="delete icon" onclick="{ onUnselect }"></i>
   </a>
-  <div class="{ default&& 'default'} text { filtered&& 'filtered' }" if="{ !props.multiple || !selectedFlg }">
+  <div class="{ defaultFlg && 'default'} text { filtered && 'filtered' }" if="{ !props.multiple || !selectedFlg }">
     { label }
   </div>
+
   <div class="menu transition { transitionStatus }" onmousedown="{ onMousedown }" onmouseup="{ onMouseup }"
     onblur="{ onBlur }" tabindex="-1">
     <div each="{item in props.items}" value="{ item.value }" default="{ item.default }" onmousedown="{ onMousedown }"
       onmouseup="{ onMouseup }"
-      class="{ item: isItem(item) } { item.header && !filtered && 'header' } { item.divider && !filtered && 'divider' } { item.default && 'default'  } { item.active && 'hover'  } { item.value == value && 'active selected'  }"
+      class="{ isItem(item) && 'item' } { item.header && !filtered && 'header' } { item.divider && !filtered && 'divider' } { item.default && 'default'  } { item.active && 'hover'  } { item.value == value && 'active selected'  }"
       onclick="{ event => onItemClick(event, item) }" if="{ isVisible(item) }">
       <i class="{ item.icon } icon" if="{ item.icon }"></i>
       <img class="ui avatar image" src="{ item.image }" if="{ item.image }" />
@@ -88,7 +89,7 @@
       if (props.items && props.items.length > 0) {
         this.label = props.items[0].label
         this.value = props.items[0].value
-        this.default = props.items[0].default
+        this.defaultFlg = props.items[0].default
       }
     }
 
@@ -135,7 +136,7 @@
           }
           if (this.label != props.items[0].label) {
             this.label = props.items[0].label
-            this.default = props.items[0].default
+            this.defaultFlg = props.items[0].default
           }
         }
       }
@@ -171,7 +172,7 @@
     function onBlur() {
       if (!this.itemActivated) {
         if (!this.closing && visibleFlg) {
-          const target = props.multiple ? props.items.filter(item => item.selected) : { value: this.value, label: this.label, default: this.default }
+          const target = props.multiple ? props.items.filter(item => item.selected) : { value: this.value, label: this.label, default: this.defaultFlg }
           this.trigger('blur', target)
         }
         close()
