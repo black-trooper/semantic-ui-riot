@@ -90,7 +90,7 @@ describe('su-radio-group', function () {
     expect(component.changed).to.be.not.ok
 
     component.$$('su-radio input')[0].click()
-    expect(component.state.value[0]).to.be.equal(component.$$('su-radio')[0].getAttribute("value"))
+    expect(component.state.value[0]).to.equal(component.$$('su-radio')[0].getAttribute("value"))
     expect(component.defaultValue).to.be.undefined
     expect(component.changed).to.be.ok
 

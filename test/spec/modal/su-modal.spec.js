@@ -49,32 +49,32 @@ describe('su-modal', function () {
         }]
       }
     })
-    expect(component.$('.dimmer').classList.contains('visible')).to.be.equal(false)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
 
     component.suShowModal(element)
     spyOnShow.should.have.been.calledOnce
     this.clock.tick(510)
-    expect(component.$('.dimmer').classList.contains('visible')).to.be.equal(true)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
     component.$('.ui.button').click()
     spyOnHide.should.have.been.calledOnce
     this.clock.tick(310)
-    expect(component.$('.dimmer').classList.contains('visible')).to.be.equal(false)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
   })
 
   it('dimmer close', function () {
     mount()
-    expect(component.$('.dimmer').classList.contains('visible')).to.be.equal(false)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
 
     component.suShowModal(element)
     spyOnShow.should.have.been.calledOnce
     this.clock.tick(510)
-    expect(component.$('.dimmer').classList.contains('visible')).to.be.equal(true)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
     element.click()
     spyOnHide.should.have.been.calledOnce
     this.clock.tick(310)
-    expect(component.$('.dimmer').classList.contains('visible')).to.be.equal(false)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
   })
 
   it('opens/closes event duplicate', function () {
@@ -86,19 +86,19 @@ describe('su-modal', function () {
         }]
       }
     })
-    expect(component.$('.dimmer').classList.contains('visible')).to.be.equal(false)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
 
     component.suShowModal(element)
     component.suShowModal(element)
     spyOnShow.should.have.been.calledOnce
     this.clock.tick(510)
-    expect(component.$('.dimmer').classList.contains('visible')).to.be.equal(true)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
     component.$('.ui.button').click()
     component.$('.ui.button').click()
     spyOnHide.should.have.been.calledOnce
     this.clock.tick(310)
-    expect(component.$('.dimmer').classList.contains('visible')).to.be.equal(false)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
   })
 
   it('buttons', function () {
@@ -114,22 +114,22 @@ describe('su-modal', function () {
     mount({ modal })
     component.suShowModal(element)
     this.clock.tick(510)
-    expect(component.$('.dimmer').classList.contains('visible')).to.be.equal(true)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
     const btn_ok = component.$('.ui.button')
-    expect(btn_ok.classList.contains('labeled')).to.be.equal(true)
-    expect(btn_ok.classList.contains('icon')).to.be.equal(true)
-    expect(btn_ok.querySelectorAll('.icon').length).to.be.equal(1)
-    expect(btn_ok.innerText.trim()).to.be.equal(modal.buttons[0].text)
-    expect(btn_ok.classList.contains(modal.buttons[0].type)).to.be.equal(true)
-    expect(btn_ok.querySelectorAll(`.${modal.buttons[0].icon}`).length).to.be.equal(1)
+    expect(btn_ok.classList.contains('labeled')).to.equal(true)
+    expect(btn_ok.classList.contains('icon')).to.equal(true)
+    expect(btn_ok.querySelectorAll('.icon')).to.have.lengthOf(1)
+    expect(btn_ok.innerText.trim()).to.equal(modal.buttons[0].text)
+    expect(btn_ok.classList.contains(modal.buttons[0].type)).to.equal(true)
+    expect(btn_ok.querySelectorAll(`.${modal.buttons[0].icon}`)).to.have.lengthOf(1)
     // expect(btn_ok).to.be.not.equal(document.activeElement)
 
     const btn_cancel = component.$$('.ui.button')[1]
-    expect(btn_cancel.classList.contains('labeled')).to.be.equal(false)
-    expect(btn_cancel.classList.contains('icon')).to.be.equal(false)
-    expect(btn_cancel.querySelectorAll('.icon').length).to.be.equal(0)
-    expect(btn_cancel.innerText.trim()).to.be.equal(modal.buttons[1].text)
+    expect(btn_cancel.classList.contains('labeled')).to.equal(false)
+    expect(btn_cancel.classList.contains('icon')).to.equal(false)
+    expect(btn_cancel.querySelectorAll('.icon')).to.have.lengthOf(0)
+    expect(btn_cancel.innerText.trim()).to.equal(modal.buttons[1].text)
     // expect(btn_cancel).to.be.not.equal(document.activeElement)
   })
 
@@ -148,18 +148,18 @@ describe('su-modal', function () {
     mount({ modal })
     component.suShowModal(element)
     this.clock.tick(510)
-    expect(component.$('.dimmer').classList.contains('visible')).to.be.equal(true)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
     const btn_one = component.$('.ui.button')
-    expect(btn_one.innerText.trim()).to.be.equal(modal.buttons[0].text)
-    // expect(isFocus(btn_one)).to.be.equal(true)
+    expect(btn_one.innerText.trim()).to.equal(modal.buttons[0].text)
+    // expect(isFocus(btn_one)).to.equal(true)
 
     const btn_two = component.$$('.ui.button')[1]
-    expect(btn_two.innerText.trim()).to.be.equal(modal.buttons[1].text)
+    expect(btn_two.innerText.trim()).to.equal(modal.buttons[1].text)
     // expect(btn_two).to.be.not.equal(document.activeElement)
 
     const btn_three = component.$$('.ui.button')[2]
-    expect(btn_three.innerText.trim()).to.be.equal(modal.buttons[2].text)
+    expect(btn_three.innerText.trim()).to.equal(modal.buttons[2].text)
     // expect(isFocus(btn_three)).to.be.not.equal(false)
   })
 
@@ -170,11 +170,11 @@ describe('su-modal', function () {
     mount({ modal: modal })
     component.suShowModal(element)
     this.clock.tick(510)
-    expect(component.$('.dimmer').classList.contains('visible')).to.be.equal(true)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
     const header = component.$('.ui.header')
-    expect(header.classList.contains('icon')).to.be.equal(false)
-    expect(header.innerText.trim()).to.be.equal(modal.header)
+    expect(header.classList.contains('icon')).to.equal(false)
+    expect(header.innerText.trim()).to.equal(modal.header)
   })
 
   it('icon header', function () {
@@ -187,11 +187,11 @@ describe('su-modal', function () {
     mount({ modal })
     component.suShowModal(element)
     this.clock.tick(510)
-    expect(component.$('.dimmer').classList.contains('visible')).to.be.equal(true)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
     const header = component.$('.ui.header')
-    expect(header.classList.contains('icon')).to.be.equal(true)
-    expect(header.innerText.trim()).to.be.equal(modal.header.text)
+    expect(header.classList.contains('icon')).to.equal(true)
+    expect(header.innerText.trim()).to.equal(modal.header.text)
   })
 
   it('image content', function () {
@@ -209,23 +209,23 @@ describe('su-modal', function () {
     mount()
     component.suShowModal(element)
     this.clock.tick(510)
-    expect(component.$('.dimmer').classList.contains('visible')).to.be.equal(true)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
     const content = component.$('.content')
-    expect(content.classList.contains('image')).to.be.equal(true)
+    expect(content.classList.contains('image')).to.equal(true)
   })
 
   it('full screen', function () {
     mount({ class: 'fullscreen' })
     component.suShowModal(element)
     this.clock.tick(510)
-    expect(component.$('.dimmer').classList.contains('visible')).to.be.equal(true)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
-    expect(component.$$('i.close.icon').length).to.be.equal(1)
+    expect(component.$$('i.close.icon')).to.have.lengthOf(1)
 
     component.$('i.close.icon').click()
     spyOnHide.should.have.been.calledOnce
     this.clock.tick(310)
-    expect(component.$('.dimmer').classList.contains('visible')).to.be.equal(false)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
   })
 })

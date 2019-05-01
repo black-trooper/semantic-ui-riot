@@ -26,62 +26,62 @@ describe('su-checkbox', function () {
   })
 
   it('click checkbox', function () {
-    expect(component.state.checked).to.be.equal(false)
+    expect(component.state.checked).to.equal(false)
     expect(element.getAttribute("checked")).to.be.not.ok
 
     component.$('input').click()
     expect(spyOnClick).to.have.been.calledOnce
-    expect(component.state.checked).to.be.equal(true)
+    expect(component.state.checked).to.equal(true)
     expect(element.getAttribute("checked")).to.be.ok
 
     component.$('input').click()
     expect(spyOnClick).to.have.been.calledTwice
-    expect(component.state.checked).to.be.equal(false)
+    expect(component.state.checked).to.equal(false)
     expect(element.getAttribute("checked")).to.be.not.ok
   })
 
   it('update states', function () {
-    expect(component.state.checked).to.be.equal(false)
+    expect(component.state.checked).to.equal(false)
     expect(element.getAttribute("checked")).to.be.not.ok
 
     component.update({ checked: true })
-    expect(component.state.checked).to.be.equal(true)
+    expect(component.state.checked).to.equal(true)
     expect(element.getAttribute("checked")).to.be.ok
 
     component.update({ checked: false })
-    expect(component.state.checked).to.be.equal(false)
+    expect(component.state.checked).to.equal(false)
     expect(element.getAttribute("checked")).to.be.not.ok
 
     expect(spyOnClick).to.have.been.not.called
   })
 
   it('update props', function () {
-    expect(component.state.checked).to.be.equal(false)
+    expect(component.state.checked).to.equal(false)
     expect(element.getAttribute("checked")).to.be.not.ok
 
     element.setAttribute('checked', 'true')
     component.update()
-    expect(component.state.checked).to.be.equal(true)
+    expect(component.state.checked).to.equal(true)
     expect(element.getAttribute("checked")).to.be.ok
 
     element.setAttribute('checked', 'false')
     component.update()
-    expect(component.state.checked).to.be.equal(false)
+    expect(component.state.checked).to.equal(false)
     expect(element.getAttribute("checked")).to.be.not.ok
 
     element.setAttribute('checked', true)
     component.update()
-    expect(component.state.checked).to.be.equal(true)
+    expect(component.state.checked).to.equal(true)
     expect(element.getAttribute("checked")).to.be.ok
 
     element.setAttribute('checked', false)
     component.update()
-    expect(component.state.checked).to.be.equal(false)
+    expect(component.state.checked).to.equal(false)
     expect(element.getAttribute("checked")).to.be.not.ok
 
     element.removeAttribute('checked')
     component.update()
-    expect(component.state.checked).to.be.equal(false)
+    expect(component.state.checked).to.equal(false)
     expect(element.getAttribute("checked")).to.be.not.ok
 
     expect(spyOnClick).to.have.been.not.called
