@@ -1,7 +1,70 @@
+const keys = {
+  enter: 13,
+  escape: 27,
+  upArrow: 38,
+  downArrow: 40,
+};
+
 // ===================================================================================
+//                                                                           Lifecycle
+//                                                                           =========
+function onBeforeMount(props, state) {
+  if (props.items && props.items.length > 0) {
+    this.label = props.items[0].label;
+    this.value = props.items[0].value;
+    this.defaultFlg = props.items[0].default;
+  }
+}
+
+function onMounted(props, state) {
+  if (typeof props.value !== 'undefined') {
+    this.defaultValue = this.value;
+    parentUpdate();
+  } else {
+    this.defaultValue = this.value;
+  }
+  this.update();
+}
+
+function onBeforeUpdate(props, state) {
+  if (props.multiple) {
+    const value = this.value ? this.value : [];
+    const defaultValue = this.defaultValue ? this.defaultValue : [];
+    return value.toString() !== defaultValue.toString()
+  }
+  this.changed = this.value !== this.defaultValue;
+  this.readonly = this.root.classList.contains('read-only');
+  this.disabled = this.root.classList.contains('disabled');
+  this.tabindex = props.tabindex || '0';
+}
+
+function onUpdated(props, state) {
+  if (props.multiple) {
+    props.items.forEach(item => item.selected = false);
+    props.items.filter(item => this.value && this.value.indexOf(item.value) >= 0).forEach(item => item.selected = true);
+    selectMultiTarget(true);
+  } else if (props.items) {
+    const selected = props.items.filter(item => item.value === this.value);
+    if (selected && selected.length > 0) {
+      const target = selected[0];
+      if (this.label !== target.label) {
+        selectTarget(this, target, true);
+      }
+    } else if (props.items && props.items.length > 0) {
+      if (this.value != props.items[0].value) {
+        this.value = props.items[0].value;
+      }
+      if (this.label != props.items[0].label) {
+        this.label = props.items[0].label;
+        this.defaultFlg = props.items[0].default;
+      }
+    }
+  }
+}
 
 function reset() {
   this.value = this.defaultValue;
+  this.update();
 }
 
 // ===================================================================================
@@ -29,28 +92,28 @@ function onMouseup() {
 
 function onBlur() {
   if (!this.itemActivated) {
-    if (!this.closing && visibleFlg) {
-      const target = props.multiple ? props.items.filter(item => item.selected) : { value: this.value, label: this.label, default: this.defaultFlg };
-      this.trigger('blur', target);
+    if (!this.closing && this.visibleFlg) {
+      const target = this.props.multiple ? this.props.items.filter(item => item.selected) : { value: this.value, label: this.label, default: this.defaultFlg };
+      this.dispatch('blur', target);
     }
-    close();
+    close(this);
   }
 }
 
 function onItemClick(event, item) {
   event.stopPropagation();
-  if (!this.isItem(event.item.item)) {
+  if (!this.isItem(item)) {
     return
   }
-  if (props.multiple) {
-    if (!event.item.item.default) {
-      event.item.item.selected = true;
+  if (this.props.multiple) {
+    if (!item.default) {
+      item.selected = true;
     }
-    selectMultiTarget();
+    selectMultiTarget(this);
     return
   }
-  selectTarget(this, event.item.item);
-  close();
+  selectTarget(this, item);
+  close(this);
 }
 
 function onKeydown(event) {
@@ -66,11 +129,11 @@ function onKeydown(event) {
   }
 
   event.preventDefault();
-  const searchedItems = props.items.filter(item => {
-    if (props.search && !item.searched) {
+  const searchedItems = this.props.items.filter(item => {
+    if (this.props.search && !item.searched) {
       return false
     }
-    if (props.multiple && (item.default || item.selected)) {
+    if (this.props.multiple && (item.default || item.selected)) {
       return false
     }
     return true
@@ -80,6 +143,7 @@ function onKeydown(event) {
   }
   if (searchedItems.every(item => !item.active)) {
     searchedItems[0].active = true;
+    this.update();
     return true
   }
 
@@ -93,14 +157,13 @@ function onKeydown(event) {
   }
   else if (keyCode == keys.downArrow) {
     const nextActiveItem = searchedItems.filter((item, index) => index > activeIndex && !item.header && !item.divider);
-
     if (nextActiveItem.length > 0) {
       searchedItems[activeIndex].active = false;
       nextActiveItem[0].active = true;
     }
   }
   this.update();
-  scrollPosition();
+  scrollPosition(this);
 }
 
 function onKeyup(event) {
@@ -108,14 +171,14 @@ function onKeyup(event) {
   if (keyCode != keys.enter) {
     return
   }
-  const searchedItems = props.items.filter(item => item.searched && !item.selected);
+  const searchedItems = this.props.items.filter(item => item.searched && !item.selected);
   const index = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0));
   const activeItem = searchedItems[index];
   if (!activeItem) {
     return
   }
 
-  if (props.multiple) {
+  if (this.props.multiple) {
     activeItem.selected = true;
     activeItem.active = false;
     if (index < searchedItems.length - 1) {
@@ -123,11 +186,11 @@ function onKeyup(event) {
     } else if (index > 0) {
       searchedItems[index - 1].active = true;
     }
-    selectMultiTarget();
+    selectMultiTarget(this);
   } else {
     activeItem.active = false;
     selectTarget(this, activeItem);
-    close();
+    close(this);
   }
 }
 
@@ -141,7 +204,7 @@ function stopPropagation(event) {
 function onInput(event) {
   const value = event.target.value.toLowerCase();
   this.filtered = value.length > 0;
-  search(value);
+  search(this, value);
 }
 
 // -----------------------------------------------------
@@ -150,8 +213,8 @@ function onInput(event) {
 function onUnselect(event) {
   event.stopPropagation();
   event.item.item.selected = false;
-  this.value = props.items.filter(item => item.selected).map(item => item.value);
-  this.selectedFlg = props.items.some(item => item.selected);
+  this.value = this.props.items.filter(item => item.selected).map(item => item.value);
+  this.selectedFlg = this.props.items.some(item => item.selected);
   parentUpdate();
 }
 
@@ -159,43 +222,43 @@ function onUnselect(event) {
 //                                                                               Logic
 //                                                                               =====
 function open(tag) {
-  if (tag.openning || tag.closing || visibleFlg || tag.readonly || tag.disabled) {
+  if (tag.openning || tag.closing || tag.visibleFlg || tag.readonly || tag.disabled) {
     return
   }
   tag.openning = true;
-  search('');
-  tag.upward = isUpward();
+  search(tag, '');
+  tag.upward = isUpward(tag);
   tag.transitionStatus = `visible animating in slide ${tag.upward ? 'up' : 'down'}`;
-  props.items.forEach(item => item.active = false);
+  tag.props.items.forEach(item => item.active = false);
   setTimeout(() => {
     tag.openning = false;
-    visibleFlg = true;
+    tag.visibleFlg = true;
     tag.transitionStatus = 'visible';
     tag.update();
   }, 300);
 
-  if (props.search) {
+  if (tag.props.search) {
     tag.refs.condition.focus();
   }
   tag.update();
-  scrollPosition();
-  tag.trigger('open');
+  scrollPosition(tag);
+  tag.dispatch('open');
 }
 
 function close(tag) {
-  if (tag.closing || !visibleFlg) {
+  if (tag.closing || !tag.visibleFlg) {
     return
   }
   tag.closing = true;
   tag.transitionStatus = `visible animating out slide ${tag.upward ? 'up' : 'down'}`;
   setTimeout(() => {
     tag.closing = false;
-    visibleFlg = false;
+    tag.visibleFlg = false;
     tag.transitionStatus = 'hidden';
     tag.update();
   }, 300);
 
-  if (props.search) {
+  if (tag.props.search) {
     tag.refs.condition.blur();
     if (tag.filtered && tag.filteredItems.length > 0) {
       selectTarget(tag, tag.filteredItems[0]);
@@ -205,30 +268,30 @@ function close(tag) {
     }
   }
   tag.update();
-  tag.trigger('close');
+  tag.dispatch('close');
 }
 
 function selectTarget(tag, target, updating) {
   if (tag.value === target.value &&
     tag.label === target.label &&
-    tag.default === target.default) {
+    tag.defaultFlg === target.default) {
     if (!updating) {
-      tag.trigger('select', target);
+      tag.dispatch('select', target);
     }
     return
   }
   tag.value = target.value;
   tag.label = target.label;
-  tag.default = target.default;
-  if (props.search) {
+  tag.defaultFlg = target.default;
+  if (tag.props.search) {
     tag.refs.condition.value = '';
     tag.filtered = false;
   }
   if (!updating) {
     tag.update();
-    parentUpdate();
-    tag.trigger('select', target);
-    tag.trigger('change', target);
+    // parentUpdate()
+    tag.dispatch('select', target);
+    tag.dispatch('change', target);
   }
 }
 
@@ -236,7 +299,7 @@ function selectMultiTarget(tag, updating) {
   if (JSON.stringify(tag.value) == JSON.stringify(props.items.filter(item => item.selected).map(item => item.value))
     && tag.selectedFlg == props.items.some(item => item.selected)) {
     if (!updating) {
-      tag.trigger('select', props.items.filter(item => item.selected));
+      tag.dispatch('select', props.items.filter(item => item.selected));
     }
     return
   }
@@ -245,20 +308,20 @@ function selectMultiTarget(tag, updating) {
   if (!updating) {
     tag.update();
     parentUpdate();
-    tag.trigger('select', props.items.filter(item => item.selected));
-    tag.trigger('change', props.items.filter(item => item.selected));
+    tag.dispatch('select', props.items.filter(item => item.selected));
+    tag.dispatch('change', props.items.filter(item => item.selected));
   }
 }
 
 function search(tag, target) {
-  props.items.forEach(item => {
+  tag.props.items.forEach(item => {
     item.searched = item.label && item.label.toLowerCase().indexOf(target) >= 0;
   });
-  tag.filteredItems = props.items.filter(item => {
+  tag.filteredItems = tag.props.items.filter(item => {
     return item.searched
   });
   tag.update();
-  tag.trigger('search');
+  tag.dispatch('search');
 }
 
 function scrollPosition(tag) {
@@ -284,11 +347,11 @@ function parentUpdate(tag) {
   }
 }
 
-function isUpward() {
-  if (props.direction == 'upward') {
+function isUpward(tag) {
+  if (tag.props.direction == 'upward') {
     return true
   }
-  if (props.direction == 'downward') {
+  if (tag.props.direction == 'downward') {
     return false
   }
   const dropdown = tag.root.getBoundingClientRect();
@@ -314,18 +377,11 @@ function isActive() {
   if (this.closing) {
     return false
   }
-  return this.openning || visibleFlg
-}
-
-function getTabindex() {
-  if (props.tabindex) {
-    return props.tabindex
-  }
-  return 0
+  return this.openning || this.visibleFlg
 }
 
 function isVisible(item) {
-  if (props.multiple && item.default) {
+  if (this.props.multiple && item.default) {
     return false
   }
   if (item.selected) {
@@ -356,14 +412,10 @@ var suDropdown = {
 
     changed: false,
     visibleFlg: false,
-
-    keys: {
-      enter: 13,
-      escape: 27,
-      upArrow: 38,
-      downArrow: 40,
-    },
-
+    onBeforeMount,
+    onMounted,
+    onBeforeUpdate,
+    onUpdated,
     onBlur,
     onFocus,
     onInput,
@@ -375,18 +427,15 @@ var suDropdown = {
     onToggle,
     onUnselect,
     stopPropagation,
-    getTabindex,
     isActive,
-    isDisabled,
     isItem,
-    isReadOnly,
     isVisible,
     reset
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<i class="dropdown icon"></i>あiuee\n  <input expr122 class="search" autocomplete="off" ref="condition"/><a expr123 class="ui label transition visible" style="display: inline-block !important;"></a><div expr125></div><div expr126 tabindex="-1"><div expr127></div><div expr132 class="message"></div></div>',
+      '<i class="dropdown icon"></i><input expr537 class="search" autocomplete="off" ref="condition"/><a expr538 class="ui label transition visible" style="display: inline-block !important;"></a><div expr540></div><div expr541 tabindex="-1"><div expr542></div><div expr547 class="message"></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -460,7 +509,7 @@ var suDropdown = {
           'name': 'tabindex',
 
           'evaluate': function(scope) {
-            return scope.props.search ? -1 : scope.getTabindex();
+            return scope.props.search ? -1 : scope.tabindex;
           }
         }]
       }, {
@@ -470,8 +519,8 @@ var suDropdown = {
           return scope.props.search;
         },
 
-        'redundantAttribute': 'expr122',
-        'selector': '[expr122]',
+        'redundantAttribute': 'expr537',
+        'selector': '[expr537]',
 
         'template': template(null, [{
           'expressions': [{
@@ -479,7 +528,7 @@ var suDropdown = {
             'name': 'tabindex',
 
             'evaluate': function(scope) {
-              return scope.getTabindex();
+              return scope.tabindex;
             }
           }, {
             'type': expressionTypes.EVENT,
@@ -526,7 +575,7 @@ var suDropdown = {
           return scope.item.selected;
         },
 
-        'template': template('<!----><i expr124 class="delete icon"></i>', [{
+        'template': template('<!----><i expr539 class="delete icon"></i>', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 0,
@@ -543,8 +592,8 @@ var suDropdown = {
             }
           }]
         }, {
-          'redundantAttribute': 'expr124',
-          'selector': '[expr124]',
+          'redundantAttribute': 'expr539',
+          'selector': '[expr539]',
 
           'expressions': [{
             'type': expressionTypes.EVENT,
@@ -556,8 +605,8 @@ var suDropdown = {
           }]
         }]),
 
-        'redundantAttribute': 'expr123',
-        'selector': '[expr123]',
+        'redundantAttribute': 'expr538',
+        'selector': '[expr538]',
         'itemName': 'item',
         'indexName': null,
 
@@ -571,8 +620,8 @@ var suDropdown = {
           return !scope.props.multiple || !scope.selectedFlg;
         },
 
-        'redundantAttribute': 'expr125',
-        'selector': '[expr125]',
+        'redundantAttribute': 'expr540',
+        'selector': '[expr540]',
 
         'template': template('<!---->', [{
           'expressions': [{
@@ -592,8 +641,8 @@ var suDropdown = {
           }]
         }])
       }, {
-        'redundantAttribute': 'expr126',
-        'selector': '[expr126]',
+        'redundantAttribute': 'expr541',
+        'selector': '[expr541]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -633,7 +682,7 @@ var suDropdown = {
         },
 
         'template': template(
-          '<i expr128></i><img expr129 class="ui avatar image"/><span expr130 class="description"></span><span expr131 class="text"><!----></span>',
+          '<i expr543></i><img expr544 class="ui avatar image"/><span expr545 class="description"></span><span expr546 class="text"><!----></span>',
           [{
             'expressions': [{
               'type': expressionTypes.VALUE,
@@ -696,8 +745,8 @@ var suDropdown = {
               return scope.item.icon;
             },
 
-            'redundantAttribute': 'expr128',
-            'selector': '[expr128]',
+            'redundantAttribute': 'expr543',
+            'selector': '[expr543]',
 
             'template': template(null, [{
               'expressions': [{
@@ -716,8 +765,8 @@ var suDropdown = {
               return scope.item.image;
             },
 
-            'redundantAttribute': 'expr129',
-            'selector': '[expr129]',
+            'redundantAttribute': 'expr544',
+            'selector': '[expr544]',
 
             'template': template(null, [{
               'expressions': [{
@@ -736,8 +785,8 @@ var suDropdown = {
               return scope.item.description;
             },
 
-            'redundantAttribute': 'expr130',
-            'selector': '[expr130]',
+            'redundantAttribute': 'expr545',
+            'selector': '[expr545]',
 
             'template': template('<!---->', [{
               'expressions': [{
@@ -750,8 +799,8 @@ var suDropdown = {
               }]
             }])
           }, {
-            'redundantAttribute': 'expr131',
-            'selector': '[expr131]',
+            'redundantAttribute': 'expr546',
+            'selector': '[expr546]',
 
             'expressions': [{
               'type': expressionTypes.TEXT,
@@ -764,8 +813,8 @@ var suDropdown = {
           }]
         ),
 
-        'redundantAttribute': 'expr127',
-        'selector': '[expr127]',
+        'redundantAttribute': 'expr542',
+        'selector': '[expr542]',
         'itemName': 'item',
         'indexName': null,
 
@@ -779,8 +828,8 @@ var suDropdown = {
           return scope.filtered && scope.filteredItems.length == 0;
         },
 
-        'redundantAttribute': 'expr132',
-        'selector': '[expr132]',
+        'redundantAttribute': 'expr547',
+        'selector': '[expr547]',
         'template': template('No results found.', [])
       }]
     );

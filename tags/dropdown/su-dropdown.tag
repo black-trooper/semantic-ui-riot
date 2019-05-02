@@ -1,9 +1,9 @@
 <su-dropdown
   class="ui selection {props.class} { props.search && 'search' } { props.multiple && 'multiple'} dropdown { isActive() && 'active visible' } { upward && 'upward' }"
   onclick="{ onToggle }" onfocus="{ onFocus }" onmousedown="{ onMousedown }" onmouseup="{ onMouseup }"
-  onblur="{ onBlur }" onkeydown="{ onKeydown }" onkeyup="{ onKeyup }" tabindex="{ props.search ? -1 : getTabindex() }">
-  <i class="dropdown icon"></i>あiuee
-  <input class="search" autocomplete="off" tabindex="{ getTabindex() }" ref="condition" if="{ props.search }" oninput="{ onInput }"
+  onblur="{ onBlur }" onkeydown="{ onKeydown }" onkeyup="{ onKeyup }" tabindex="{ props.search ? -1 : tabindex }">
+  <i class="dropdown icon"></i>
+  <input class="search" autocomplete="off" tabindex="{ tabindex }" ref="condition" if="{ props.search }" oninput="{ onInput }"
     onclick="{ stopPropagation }" onfocus="{ onFocus }" onblur="{ onBlur }" readonly="{ readonly }" />
   <a each="{item in props.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }"
     onclick="{ stopPropagation }">
@@ -55,12 +55,11 @@
       },
       changed: false,
       visibleFlg: false,
-      keys: {
-        enter: 13,
-        escape: 27,
-        upArrow: 38,
-        downArrow: 40,
-      },
+      onBeforeMount,
+      onMounted,
+      onBeforeUpdate,
+      onUpdated,
+
       onBlur,
       onFocus,
       onInput,
@@ -73,19 +72,23 @@
       onUnselect,
       stopPropagation,
 
-      getTabindex,
       isActive,
-      isDisabled,
       isItem,
-      isReadOnly,
       isVisible,
       reset,
+    }
+
+    const keys = {
+      enter: 13,
+      escape: 27,
+      upArrow: 38,
+      downArrow: 40,
     }
 
     // ===================================================================================
     //                                                                           Lifecycle
     //                                                                           =========
-    function onBeforeMount() {
+    function onBeforeMount(props, state) {
       if (props.items && props.items.length > 0) {
         this.label = props.items[0].label
         this.value = props.items[0].value
@@ -94,17 +97,13 @@
     }
 
     function onMounted(props, state) {
-      if (typeof props.riotValue === 'undefined' && typeof props.value !== 'undefined') {
-        props.riotValue = props.value
-      }
-      if (typeof props.riotValue !== 'undefined') {
-        this.value = props.riotValue
+      if (typeof props.value !== 'undefined') {
         this.defaultValue = this.value
-        this.update()
         parentUpdate()
       } else {
         this.defaultValue = this.value
       }
+      this.update()
     }
 
     function onBeforeUpdate(props, state) {
@@ -116,6 +115,7 @@
       this.changed = this.value !== this.defaultValue
       this.readonly = this.root.classList.contains('read-only')
       this.disabled = this.root.classList.contains('disabled')
+      this.tabindex = props.tabindex || '0'
     }
 
     function onUpdated(props, state) {
@@ -144,6 +144,7 @@
 
     function reset() {
       this.value = this.defaultValue
+      this.update()
     }
 
     // ===================================================================================
@@ -171,28 +172,28 @@
 
     function onBlur() {
       if (!this.itemActivated) {
-        if (!this.closing && visibleFlg) {
-          const target = props.multiple ? props.items.filter(item => item.selected) : { value: this.value, label: this.label, default: this.defaultFlg }
-          this.trigger('blur', target)
+        if (!this.closing && this.visibleFlg) {
+          const target = this.props.multiple ? this.props.items.filter(item => item.selected) : { value: this.value, label: this.label, default: this.defaultFlg }
+          this.dispatch('blur', target)
         }
-        close()
+        close(this)
       }
     }
 
     function onItemClick(event, item) {
       event.stopPropagation()
-      if (!this.isItem(event.item.item)) {
+      if (!this.isItem(item)) {
         return
       }
-      if (props.multiple) {
-        if (!event.item.item.default) {
-          event.item.item.selected = true
+      if (this.props.multiple) {
+        if (!item.default) {
+          item.selected = true
         }
-        selectMultiTarget()
+        selectMultiTarget(this)
         return
       }
-      selectTarget(this, event.item.item)
-      close()
+      selectTarget(this, item)
+      close(this)
     }
 
     function onKeydown(event) {
@@ -208,11 +209,11 @@
       }
 
       event.preventDefault()
-      const searchedItems = props.items.filter(item => {
-        if (props.search && !item.searched) {
+      const searchedItems = this.props.items.filter(item => {
+        if (this.props.search && !item.searched) {
           return false
         }
-        if (props.multiple && (item.default || item.selected)) {
+        if (this.props.multiple && (item.default || item.selected)) {
           return false
         }
         return true
@@ -222,6 +223,7 @@
       }
       if (searchedItems.every(item => !item.active)) {
         searchedItems[0].active = true
+        this.update()
         return true
       }
 
@@ -235,14 +237,13 @@
       }
       else if (keyCode == keys.downArrow) {
         const nextActiveItem = searchedItems.filter((item, index) => index > activeIndex && !item.header && !item.divider)
-
         if (nextActiveItem.length > 0) {
           searchedItems[activeIndex].active = false
           nextActiveItem[0].active = true
         }
       }
       this.update()
-      scrollPosition()
+      scrollPosition(this)
     }
 
     function onKeyup(event) {
@@ -250,14 +251,14 @@
       if (keyCode != keys.enter) {
         return
       }
-      const searchedItems = props.items.filter(item => item.searched && !item.selected)
+      const searchedItems = this.props.items.filter(item => item.searched && !item.selected)
       const index = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0))
       const activeItem = searchedItems[index]
       if (!activeItem) {
         return
       }
 
-      if (props.multiple) {
+      if (this.props.multiple) {
         activeItem.selected = true
         activeItem.active = false
         if (index < searchedItems.length - 1) {
@@ -265,11 +266,11 @@
         } else if (index > 0) {
           searchedItems[index - 1].active = true
         }
-        selectMultiTarget()
+        selectMultiTarget(this)
       } else {
         activeItem.active = false
         selectTarget(this, activeItem)
-        close()
+        close(this)
       }
     }
 
@@ -283,7 +284,7 @@
     function onInput(event) {
       const value = event.target.value.toLowerCase()
       this.filtered = value.length > 0
-      search(value)
+      search(this, value)
     }
 
     // -----------------------------------------------------
@@ -292,8 +293,8 @@
     function onUnselect(event) {
       event.stopPropagation()
       event.item.item.selected = false
-      this.value = props.items.filter(item => item.selected).map(item => item.value)
-      this.selectedFlg = props.items.some(item => item.selected)
+      this.value = this.props.items.filter(item => item.selected).map(item => item.value)
+      this.selectedFlg = this.props.items.some(item => item.selected)
       parentUpdate()
     }
 
@@ -301,43 +302,43 @@
     //                                                                               Logic
     //                                                                               =====
     function open(tag) {
-      if (tag.openning || tag.closing || visibleFlg || tag.readonly || tag.disabled) {
+      if (tag.openning || tag.closing || tag.visibleFlg || tag.readonly || tag.disabled) {
         return
       }
       tag.openning = true
-      search('')
-      tag.upward = isUpward()
+      search(tag, '')
+      tag.upward = isUpward(tag)
       tag.transitionStatus = `visible animating in slide ${tag.upward ? 'up' : 'down'}`
-      props.items.forEach(item => item.active = false)
+      tag.props.items.forEach(item => item.active = false)
       setTimeout(() => {
         tag.openning = false
-        visibleFlg = true
+        tag.visibleFlg = true
         tag.transitionStatus = 'visible'
         tag.update()
       }, 300)
 
-      if (props.search) {
+      if (tag.props.search) {
         tag.refs.condition.focus()
       }
       tag.update()
-      scrollPosition()
-      tag.trigger('open')
+      scrollPosition(tag)
+      tag.dispatch('open')
     }
 
     function close(tag) {
-      if (tag.closing || !visibleFlg) {
+      if (tag.closing || !tag.visibleFlg) {
         return
       }
       tag.closing = true
       tag.transitionStatus = `visible animating out slide ${tag.upward ? 'up' : 'down'}`
       setTimeout(() => {
         tag.closing = false
-        visibleFlg = false
+        tag.visibleFlg = false
         tag.transitionStatus = 'hidden'
         tag.update()
       }, 300)
 
-      if (props.search) {
+      if (tag.props.search) {
         tag.refs.condition.blur()
         if (tag.filtered && tag.filteredItems.length > 0) {
           selectTarget(tag, tag.filteredItems[0])
@@ -347,30 +348,30 @@
         }
       }
       tag.update()
-      tag.trigger('close')
+      tag.dispatch('close')
     }
 
     function selectTarget(tag, target, updating) {
       if (tag.value === target.value &&
         tag.label === target.label &&
-        tag.default === target.default) {
+        tag.defaultFlg === target.default) {
         if (!updating) {
-          tag.trigger('select', target)
+          tag.dispatch('select', target)
         }
         return
       }
       tag.value = target.value
       tag.label = target.label
-      tag.default = target.default
-      if (props.search) {
+      tag.defaultFlg = target.default
+      if (tag.props.search) {
         tag.refs.condition.value = ''
         tag.filtered = false
       }
       if (!updating) {
         tag.update()
-        parentUpdate()
-        tag.trigger('select', target)
-        tag.trigger('change', target)
+        // parentUpdate()
+        tag.dispatch('select', target)
+        tag.dispatch('change', target)
       }
     }
 
@@ -378,7 +379,7 @@
       if (JSON.stringify(tag.value) == JSON.stringify(props.items.filter(item => item.selected).map(item => item.value))
         && tag.selectedFlg == props.items.some(item => item.selected)) {
         if (!updating) {
-          tag.trigger('select', props.items.filter(item => item.selected))
+          tag.dispatch('select', props.items.filter(item => item.selected))
         }
         return
       }
@@ -387,20 +388,20 @@
       if (!updating) {
         tag.update()
         parentUpdate()
-        tag.trigger('select', props.items.filter(item => item.selected))
-        tag.trigger('change', props.items.filter(item => item.selected))
+        tag.dispatch('select', props.items.filter(item => item.selected))
+        tag.dispatch('change', props.items.filter(item => item.selected))
       }
     }
 
     function search(tag, target) {
-      props.items.forEach(item => {
+      tag.props.items.forEach(item => {
         item.searched = item.label && item.label.toLowerCase().indexOf(target) >= 0
       })
-      tag.filteredItems = props.items.filter(item => {
+      tag.filteredItems = tag.props.items.filter(item => {
         return item.searched
       })
       tag.update()
-      tag.trigger('search')
+      tag.dispatch('search')
     }
 
     function scrollPosition(tag) {
@@ -426,11 +427,11 @@
       }
     }
 
-    function isUpward() {
-      if (props.direction == 'upward') {
+    function isUpward(tag) {
+      if (tag.props.direction == 'upward') {
         return true
       }
-      if (props.direction == 'downward') {
+      if (tag.props.direction == 'downward') {
         return false
       }
       const dropdown = tag.root.getBoundingClientRect()
@@ -456,18 +457,11 @@
       if (this.closing) {
         return false
       }
-      return this.openning || visibleFlg
-    }
-
-    function getTabindex() {
-      if (props.tabindex) {
-        return props.tabindex
-      }
-      return 0
+      return this.openning || this.visibleFlg
     }
 
     function isVisible(item) {
-      if (props.multiple && item.default) {
+      if (this.props.multiple && item.default) {
         return false
       }
       if (item.selected) {
