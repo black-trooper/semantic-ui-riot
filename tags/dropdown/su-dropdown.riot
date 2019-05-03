@@ -3,7 +3,7 @@
   onclick="{ onToggle }" onfocus="{ onFocus }" onmousedown="{ onMousedown }" onmouseup="{ onMouseup }"
   onblur="{ onBlur }" onkeydown="{ onKeydown }" onkeyup="{ onKeyup }" tabindex="{ props.search ? -1 : tabindex }">
   <i class="dropdown icon"></i>
-  <input class="search" autocomplete="off" tabindex="{ tabindex }" ref="condition" if="{ props.search }" oninput="{ onInput }"
+  <input class="search" autocomplete="off" tabindex="{ tabindex }" if="{ props.search }" oninput="{ onInput }"
     onclick="{ stopPropagation }" onfocus="{ onFocus }" onblur="{ onBlur }" readonly="{ readonly }" />
   <a each="{item in props.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }"
     onclick="{ stopPropagation }">
@@ -318,7 +318,7 @@
       }, 300)
 
       if (tag.props.search) {
-        tag.refs.condition.focus()
+        tag.$('.search').focus()
       }
       tag.update()
       scrollPosition(tag)
@@ -339,11 +339,11 @@
       }, 300)
 
       if (tag.props.search) {
-        tag.refs.condition.blur()
+        tag.$('.search').blur()
         if (tag.filtered && tag.filteredItems.length > 0) {
           selectTarget(tag, tag.filteredItems[0])
         } else {
-          tag.refs.condition.value = ''
+          tag.$('.search').value = ''
           tag.filtered = false
         }
       }
@@ -364,7 +364,7 @@
       tag.label = target.label
       tag.defaultFlg = target.default
       if (tag.props.search) {
-        tag.refs.condition.value = ''
+        tag.$('.search').value = ''
         tag.filtered = false
       }
       if (!updating) {
