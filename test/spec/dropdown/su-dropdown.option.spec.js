@@ -1,21 +1,25 @@
-require('../../../dist/tags/dropdown/su-dropdown.js')
+import * as riot from 'riot'
+import { init } from '../../helpers/'
+import TargetComponent from '../../../dist/tags/dropdown/su-dropdown.js'
 
 describe('su-dropdown.option', function () {
-  let tag
+  let element, component
   let spyOnOpen = sinon.spy()
   let spyOnClose = sinon.spy()
   let spyOnSelect = sinon.spy()
   let spyOnChange = sinon.spy()
   let spyOnBlur = sinon.spy()
+  init(riot)
 
   const mount = opts => {
     opts.items = items
-    tag = riot.mount('su-dropdown', opts)[0]
-    tag.on('open', spyOnOpen)
-      .on('close', spyOnClose)
-      .on('select', spyOnSelect)
-      .on('change', spyOnChange)
-      .on('blur', spyOnBlur)
+    opts.onopen = spyOnOpen
+    opts.onclose = spyOnClose
+    opts.onselect = spyOnSelect
+    opts.onchange = spyOnChange
+    opts.onblur = spyOnBlur
+
+    component = riot.mount(element, opts)[0]
   }
 
   let items = [
@@ -35,7 +39,8 @@ describe('su-dropdown.option', function () {
   ]
 
   beforeEach(function () {
-    $('body').append('<su-dropdown></su-dropdown>')
+    riot.register('su-dropdown', TargetComponent)
+    element = document.createElement('su-dropdown')
     this.clock = sinon.useFakeTimers()
   })
 
@@ -46,7 +51,8 @@ describe('su-dropdown.option', function () {
     spyOnChange.reset()
     spyOnBlur.reset()
     this.clock.restore()
-    tag.unmount()
+    component.unmount()
+    riot.unregister('su-dropdown')
   })
 
   it('upward', function () {
@@ -54,19 +60,19 @@ describe('su-dropdown.option', function () {
       direction: 'upward'
     })
 
-    $('su-dropdown .menu').css('visibility').should.equal('hidden')
-    $('su-dropdown').hasClass('upward').should.equal(false)
+    expect(component.$('.menu').classList.contains('visible')).to.equal(false)
+    expect(element.classList.contains('upward')).to.equal(false)
 
-    $('su-dropdown').click()
+    element.click()
     this.clock.tick(310)
-    $('su-dropdown .menu').css('visibility').should.equal('visible')
-    $('su-dropdown').hasClass('upward').should.equal(true)
+    expect(component.$('.menu').classList.contains('visible')).to.equal(true)
+    expect(element.classList.contains('upward')).to.equal(true)
     spyOnOpen.should.have.been.calledOnce
 
-    $('su-dropdown').click()
+    element.click()
     this.clock.tick(310)
-    $('su-dropdown .menu').css('visibility').should.equal('hidden')
-    $('su-dropdown').hasClass('upward').should.equal(true)
+    expect(component.$('.menu').classList.contains('visible')).to.equal(false)
+    expect(element.classList.contains('upward')).to.equal(true)
     spyOnClose.should.have.been.calledOnce
   })
 
@@ -75,19 +81,19 @@ describe('su-dropdown.option', function () {
       direction: 'downward'
     })
 
-    $('su-dropdown .menu').css('visibility').should.equal('hidden')
-    $('su-dropdown').hasClass('upward').should.equal(false)
+    expect(component.$('.menu').classList.contains('visible')).to.equal(false)
+    expect(element.classList.contains('upward')).to.equal(false)
 
-    $('su-dropdown').click()
+    element.click()
     this.clock.tick(310)
-    $('su-dropdown .menu').css('visibility').should.equal('visible')
-    $('su-dropdown').hasClass('upward').should.equal(false)
+    expect(component.$('.menu').classList.contains('visible')).to.equal(true)
+    expect(element.classList.contains('upward')).to.equal(false)
     spyOnOpen.should.have.been.calledOnce
 
-    $('su-dropdown').click()
+    element.click()
     this.clock.tick(310)
-    $('su-dropdown .menu').css('visibility').should.equal('hidden')
-    $('su-dropdown').hasClass('upward').should.equal(false)
+    expect(component.$('.menu').classList.contains('visible')).to.equal(false)
+    expect(element.classList.contains('upward')).to.equal(false)
     spyOnClose.should.have.been.calledOnce
   })
 })

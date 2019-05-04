@@ -9,30 +9,39 @@ const keys = {
 //                                                                           Lifecycle
 //                                                                           =========
 function onBeforeMount(props, state) {
-  if (props.items && props.items.length > 0) {
-    this.label = props.items[0].label;
-    this.value = props.items[0].value;
-    this.defaultFlg = props.items[0].default;
+  if (props.multiple) ; else {
+    if (props.items && props.items.length > 0) {
+      this.state.label = props.items[0].label;
+      this.state.value = props.items[0].value;
+      this.state.defaultFlg = props.items[0].default;
+    }
   }
 }
 
 function onMounted(props, state) {
   if (typeof props.value !== 'undefined') {
-    this.defaultValue = this.value;
-    parentUpdate();
-  } else {
-    this.defaultValue = this.value;
+    this.state.value = props.value;
   }
+  if (props.multiple) {
+    props.items.forEach(item => item.selected = false);
+    props.items
+      .filter(item => this.state.value && this.state.value.indexOf(item.value) >= 0)
+      .forEach(item => item.selected = true);
+    this.state.value = this.props.items.filter(item => item.selected).map(item => item.value);
+    this.selectedFlg = this.props.items.some(item => item.selected);
+  }
+  this.state.defaultValue = this.state.value;
   this.update();
 }
 
 function onBeforeUpdate(props, state) {
   if (props.multiple) {
-    const value = this.value ? this.value : [];
-    const defaultValue = this.defaultValue ? this.defaultValue : [];
-    return value.toString() !== defaultValue.toString()
+    const value = this.state.value ? this.state.value : [];
+    const defaultValue = this.state.defaultValue ? this.state.defaultValue : [];
+    this.changed = value.toString() !== defaultValue.toString();
+  } else {
+    this.changed = this.state.value !== this.state.defaultValue;
   }
-  this.changed = this.value !== this.defaultValue;
   this.readonly = this.root.classList.contains('read-only');
   this.disabled = this.root.classList.contains('disabled');
   this.tabindex = props.tabindex || '0';
@@ -41,29 +50,29 @@ function onBeforeUpdate(props, state) {
 function onUpdated(props, state) {
   if (props.multiple) {
     props.items.forEach(item => item.selected = false);
-    props.items.filter(item => this.value && this.value.indexOf(item.value) >= 0).forEach(item => item.selected = true);
-    selectMultiTarget(true);
+    props.items.filter(item => this.state.value && this.state.value.indexOf(item.value) >= 0).forEach(item => item.selected = true);
+    selectMultiTarget(this, true);
   } else if (props.items) {
-    const selected = props.items.filter(item => item.value === this.value);
+    const selected = props.items.filter(item => item.value === this.state.value);
     if (selected && selected.length > 0) {
       const target = selected[0];
-      if (this.label !== target.label) {
+      if (this.state.label !== target.label) {
         selectTarget(this, target, true);
       }
     } else if (props.items && props.items.length > 0) {
-      if (this.value != props.items[0].value) {
-        this.value = props.items[0].value;
+      if (this.state.value != props.items[0].value) {
+        this.state.value = props.items[0].value;
       }
-      if (this.label != props.items[0].label) {
-        this.label = props.items[0].label;
-        this.defaultFlg = props.items[0].default;
+      if (this.state.label != props.items[0].label) {
+        this.state.label = props.items[0].label;
+        this.state.defaultFlg = props.items[0].default;
       }
     }
   }
 }
 
 function reset() {
-  this.value = this.defaultValue;
+  this.state.value = this.state.defaultValue;
   this.update();
 }
 
@@ -93,7 +102,7 @@ function onMouseup() {
 function onBlur() {
   if (!this.itemActivated) {
     if (!this.closing && this.visibleFlg) {
-      const target = this.props.multiple ? this.props.items.filter(item => item.selected) : { value: this.value, label: this.label, default: this.defaultFlg };
+      const target = this.props.multiple ? this.props.items.filter(item => item.selected) : { value: this.state.value, label: this.state.label, default: this.state.defaultFlg };
       this.dispatch('blur', target);
     }
     close(this);
@@ -210,12 +219,13 @@ function onInput(event) {
 // -----------------------------------------------------
 //                                       multiple option
 //                                       ---------------
-function onUnselect(event) {
+function onUnselect(event, target) {
   event.stopPropagation();
-  event.item.item.selected = false;
-  this.value = this.props.items.filter(item => item.selected).map(item => item.value);
+  target.selected = false;
+  this.state.value = this.props.items.filter(item => item.selected).map(item => item.value);
   this.selectedFlg = this.props.items.some(item => item.selected);
-  parentUpdate();
+  this.update();
+  // parentUpdate()
 }
 
 // ===================================================================================
@@ -272,17 +282,17 @@ function close(tag) {
 }
 
 function selectTarget(tag, target, updating) {
-  if (tag.value === target.value &&
-    tag.label === target.label &&
-    tag.defaultFlg === target.default) {
+  if (tag.state.value === target.value &&
+    tag.state.label === target.label &&
+    tag.state.defaultFlg === target.default) {
     if (!updating) {
       tag.dispatch('select', target);
     }
     return
   }
-  tag.value = target.value;
-  tag.label = target.label;
-  tag.defaultFlg = target.default;
+  tag.state.value = target.value;
+  tag.state.label = target.label;
+  tag.state.defaultFlg = target.default;
   if (tag.props.search) {
     tag.$('.search').value = '';
     tag.filtered = false;
@@ -296,20 +306,20 @@ function selectTarget(tag, target, updating) {
 }
 
 function selectMultiTarget(tag, updating) {
-  if (JSON.stringify(tag.value) == JSON.stringify(props.items.filter(item => item.selected).map(item => item.value))
-    && tag.selectedFlg == props.items.some(item => item.selected)) {
+  if (JSON.stringify(tag.state.value) == JSON.stringify(tag.props.items.filter(item => item.selected).map(item => item.value))
+    && tag.selectedFlg == tag.props.items.some(item => item.selected)) {
     if (!updating) {
-      tag.dispatch('select', props.items.filter(item => item.selected));
+      tag.dispatch('select', tag.props.items.filter(item => item.selected));
     }
     return
   }
-  tag.value = props.items.filter(item => item.selected).map(item => item.value);
-  tag.selectedFlg = props.items.some(item => item.selected);
+  tag.state.value = tag.props.items.filter(item => item.selected).map(item => item.value);
+  tag.selectedFlg = tag.props.items.some(item => item.selected);
   if (!updating) {
     tag.update();
-    parentUpdate();
-    tag.dispatch('select', props.items.filter(item => item.selected));
-    tag.dispatch('change', props.items.filter(item => item.selected));
+    // parentUpdate()
+    tag.dispatch('select', tag.props.items.filter(item => item.selected));
+    tag.dispatch('change', tag.props.items.filter(item => item.selected));
   }
 }
 
@@ -338,12 +348,6 @@ function scrollPosition(tag) {
     if (abovePage || belowPage) {
       menu.scrollTop = itemOffset;
     }
-  }
-}
-
-function parentUpdate(tag) {
-  if (tag.parent) {
-    tag.parent.update();
   }
 }
 
@@ -435,7 +439,7 @@ var suDropdown = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<i class="dropdown icon"></i><input expr10 class="search" autocomplete="off"/><a expr11 class="ui label transition visible" style="display: inline-block !important;"></a><div expr13></div><div expr14 tabindex="-1"><div expr15></div><div expr20 class="message"></div></div>',
+      '<i class="dropdown icon"></i><input expr461 class="search" autocomplete="off"/><a expr462 class="ui label transition visible" style="display: inline-block !important;"></a><div expr464></div><div expr465 tabindex="-1"><div expr466></div><div expr471 class="message"></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -519,8 +523,8 @@ var suDropdown = {
           return scope.props.search;
         },
 
-        'redundantAttribute': 'expr10',
-        'selector': '[expr10]',
+        'redundantAttribute': 'expr461',
+        'selector': '[expr461]',
 
         'template': template(null, [{
           'expressions': [{
@@ -575,7 +579,7 @@ var suDropdown = {
           return scope.item.selected;
         },
 
-        'template': template('<!----><i expr12 class="delete icon"></i>', [{
+        'template': template('<!----><i expr463 class="delete icon"></i>', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 0,
@@ -592,21 +596,21 @@ var suDropdown = {
             }
           }]
         }, {
-          'redundantAttribute': 'expr12',
-          'selector': '[expr12]',
+          'redundantAttribute': 'expr463',
+          'selector': '[expr463]',
 
           'expressions': [{
             'type': expressionTypes.EVENT,
             'name': 'onclick',
 
             'evaluate': function(scope) {
-              return scope.onUnselect;
+              return event => scope.onUnselect(event, scope.item);
             }
           }]
         }]),
 
-        'redundantAttribute': 'expr11',
-        'selector': '[expr11]',
+        'redundantAttribute': 'expr462',
+        'selector': '[expr462]',
         'itemName': 'item',
         'indexName': null,
 
@@ -620,8 +624,8 @@ var suDropdown = {
           return !scope.props.multiple || !scope.selectedFlg;
         },
 
-        'redundantAttribute': 'expr13',
-        'selector': '[expr13]',
+        'redundantAttribute': 'expr464',
+        'selector': '[expr464]',
 
         'template': template('<!---->', [{
           'expressions': [{
@@ -629,20 +633,24 @@ var suDropdown = {
             'childNodeIndex': 0,
 
             'evaluate': function(scope) {
-              return ['\n    ', scope.label, '\n  '].join('');
+              return ['\n    ', scope.state.label, '\n  '].join('');
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
             'evaluate': function(scope) {
-              return [scope.defaultFlg && 'default', ' text ', scope.filtered && 'filtered'].join('');
+              return [
+                scope.state.defaultFlg && 'default',
+                ' text ',
+                scope.filtered && 'filtered'
+              ].join('');
             }
           }]
         }])
       }, {
-        'redundantAttribute': 'expr14',
-        'selector': '[expr14]',
+        'redundantAttribute': 'expr465',
+        'selector': '[expr465]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -682,7 +690,7 @@ var suDropdown = {
         },
 
         'template': template(
-          '<i expr16></i><img expr17 class="ui avatar image"/><span expr18 class="description"></span><span expr19 class="text"><!----></span>',
+          '<i expr467></i><img expr468 class="ui avatar image"/><span expr469 class="description"></span><span expr470 class="text"><!----></span>',
           [{
             'expressions': [{
               'type': expressionTypes.VALUE,
@@ -745,8 +753,8 @@ var suDropdown = {
               return scope.item.icon;
             },
 
-            'redundantAttribute': 'expr16',
-            'selector': '[expr16]',
+            'redundantAttribute': 'expr467',
+            'selector': '[expr467]',
 
             'template': template(null, [{
               'expressions': [{
@@ -765,8 +773,8 @@ var suDropdown = {
               return scope.item.image;
             },
 
-            'redundantAttribute': 'expr17',
-            'selector': '[expr17]',
+            'redundantAttribute': 'expr468',
+            'selector': '[expr468]',
 
             'template': template(null, [{
               'expressions': [{
@@ -785,8 +793,8 @@ var suDropdown = {
               return scope.item.description;
             },
 
-            'redundantAttribute': 'expr18',
-            'selector': '[expr18]',
+            'redundantAttribute': 'expr469',
+            'selector': '[expr469]',
 
             'template': template('<!---->', [{
               'expressions': [{
@@ -799,8 +807,8 @@ var suDropdown = {
               }]
             }])
           }, {
-            'redundantAttribute': 'expr19',
-            'selector': '[expr19]',
+            'redundantAttribute': 'expr470',
+            'selector': '[expr470]',
 
             'expressions': [{
               'type': expressionTypes.TEXT,
@@ -813,8 +821,8 @@ var suDropdown = {
           }]
         ),
 
-        'redundantAttribute': 'expr15',
-        'selector': '[expr15]',
+        'redundantAttribute': 'expr466',
+        'selector': '[expr466]',
         'itemName': 'item',
         'indexName': null,
 
@@ -828,8 +836,8 @@ var suDropdown = {
           return scope.filtered && scope.filteredItems.length == 0;
         },
 
-        'redundantAttribute': 'expr20',
-        'selector': '[expr20]',
+        'redundantAttribute': 'expr471',
+        'selector': '[expr471]',
         'template': template('No results found.', [])
       }]
     );

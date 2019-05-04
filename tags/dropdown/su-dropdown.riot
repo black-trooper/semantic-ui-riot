@@ -8,10 +8,11 @@
   <a each="{item in props.items}" class="ui label transition visible" style="display: inline-block !important;" if="{ item.selected }"
     onclick="{ stopPropagation }">
     { item.label }
-    <i class="delete icon" onclick="{ onUnselect }"></i>
+    <i class="delete icon" onclick="{ event => onUnselect(event, item) }"></i>
   </a>
-  <div class="{ defaultFlg && 'default'} text { filtered && 'filtered' }" if="{ !props.multiple || !selectedFlg }">
-    { label }
+  <div class="{ state.defaultFlg && 'default'} text { filtered && 'filtered' }"
+    if="{ !props.multiple || !selectedFlg }">
+    { state.label }
   </div>
 
   <div class="menu transition { transitionStatus }" onmousedown="{ onMousedown }" onmouseup="{ onMouseup }"
@@ -89,30 +90,40 @@
     //                                                                           Lifecycle
     //                                                                           =========
     function onBeforeMount(props, state) {
-      if (props.items && props.items.length > 0) {
-        this.label = props.items[0].label
-        this.value = props.items[0].value
-        this.defaultFlg = props.items[0].default
+      if (props.multiple) {
+      } else {
+        if (props.items && props.items.length > 0) {
+          this.state.label = props.items[0].label
+          this.state.value = props.items[0].value
+          this.state.defaultFlg = props.items[0].default
+        }
       }
     }
 
     function onMounted(props, state) {
       if (typeof props.value !== 'undefined') {
-        this.defaultValue = this.value
-        parentUpdate()
-      } else {
-        this.defaultValue = this.value
+        this.state.value = props.value
       }
+      if (props.multiple) {
+        props.items.forEach(item => item.selected = false)
+        props.items
+          .filter(item => this.state.value && this.state.value.indexOf(item.value) >= 0)
+          .forEach(item => item.selected = true)
+        this.state.value = this.props.items.filter(item => item.selected).map(item => item.value)
+        this.selectedFlg = this.props.items.some(item => item.selected)
+      }
+      this.state.defaultValue = this.state.value
       this.update()
     }
 
     function onBeforeUpdate(props, state) {
       if (props.multiple) {
-        const value = this.value ? this.value : []
-        const defaultValue = this.defaultValue ? this.defaultValue : []
-        return value.toString() !== defaultValue.toString()
+        const value = this.state.value ? this.state.value : []
+        const defaultValue = this.state.defaultValue ? this.state.defaultValue : []
+        this.changed = value.toString() !== defaultValue.toString()
+      } else {
+        this.changed = this.state.value !== this.state.defaultValue
       }
-      this.changed = this.value !== this.defaultValue
       this.readonly = this.root.classList.contains('read-only')
       this.disabled = this.root.classList.contains('disabled')
       this.tabindex = props.tabindex || '0'
@@ -121,29 +132,29 @@
     function onUpdated(props, state) {
       if (props.multiple) {
         props.items.forEach(item => item.selected = false)
-        props.items.filter(item => this.value && this.value.indexOf(item.value) >= 0).forEach(item => item.selected = true)
-        selectMultiTarget(true)
+        props.items.filter(item => this.state.value && this.state.value.indexOf(item.value) >= 0).forEach(item => item.selected = true)
+        selectMultiTarget(this, true)
       } else if (props.items) {
-        const selected = props.items.filter(item => item.value === this.value)
+        const selected = props.items.filter(item => item.value === this.state.value)
         if (selected && selected.length > 0) {
           const target = selected[0]
-          if (this.label !== target.label) {
+          if (this.state.label !== target.label) {
             selectTarget(this, target, true)
           }
         } else if (props.items && props.items.length > 0) {
-          if (this.value != props.items[0].value) {
-            this.value = props.items[0].value
+          if (this.state.value != props.items[0].value) {
+            this.state.value = props.items[0].value
           }
-          if (this.label != props.items[0].label) {
-            this.label = props.items[0].label
-            this.defaultFlg = props.items[0].default
+          if (this.state.label != props.items[0].label) {
+            this.state.label = props.items[0].label
+            this.state.defaultFlg = props.items[0].default
           }
         }
       }
     }
 
     function reset() {
-      this.value = this.defaultValue
+      this.state.value = this.state.defaultValue
       this.update()
     }
 
@@ -173,7 +184,7 @@
     function onBlur() {
       if (!this.itemActivated) {
         if (!this.closing && this.visibleFlg) {
-          const target = this.props.multiple ? this.props.items.filter(item => item.selected) : { value: this.value, label: this.label, default: this.defaultFlg }
+          const target = this.props.multiple ? this.props.items.filter(item => item.selected) : { value: this.state.value, label: this.state.label, default: this.state.defaultFlg }
           this.dispatch('blur', target)
         }
         close(this)
@@ -290,12 +301,13 @@
     // -----------------------------------------------------
     //                                       multiple option
     //                                       ---------------
-    function onUnselect(event) {
+    function onUnselect(event, target) {
       event.stopPropagation()
-      event.item.item.selected = false
-      this.value = this.props.items.filter(item => item.selected).map(item => item.value)
+      target.selected = false
+      this.state.value = this.props.items.filter(item => item.selected).map(item => item.value)
       this.selectedFlg = this.props.items.some(item => item.selected)
-      parentUpdate()
+      this.update()
+      // parentUpdate()
     }
 
     // ===================================================================================
@@ -352,17 +364,17 @@
     }
 
     function selectTarget(tag, target, updating) {
-      if (tag.value === target.value &&
-        tag.label === target.label &&
-        tag.defaultFlg === target.default) {
+      if (tag.state.value === target.value &&
+        tag.state.label === target.label &&
+        tag.state.defaultFlg === target.default) {
         if (!updating) {
           tag.dispatch('select', target)
         }
         return
       }
-      tag.value = target.value
-      tag.label = target.label
-      tag.defaultFlg = target.default
+      tag.state.value = target.value
+      tag.state.label = target.label
+      tag.state.defaultFlg = target.default
       if (tag.props.search) {
         tag.$('.search').value = ''
         tag.filtered = false
@@ -376,20 +388,20 @@
     }
 
     function selectMultiTarget(tag, updating) {
-      if (JSON.stringify(tag.value) == JSON.stringify(props.items.filter(item => item.selected).map(item => item.value))
-        && tag.selectedFlg == props.items.some(item => item.selected)) {
+      if (JSON.stringify(tag.state.value) == JSON.stringify(tag.props.items.filter(item => item.selected).map(item => item.value))
+        && tag.selectedFlg == tag.props.items.some(item => item.selected)) {
         if (!updating) {
-          tag.dispatch('select', props.items.filter(item => item.selected))
+          tag.dispatch('select', tag.props.items.filter(item => item.selected))
         }
         return
       }
-      tag.value = props.items.filter(item => item.selected).map(item => item.value)
-      tag.selectedFlg = props.items.some(item => item.selected)
+      tag.state.value = tag.props.items.filter(item => item.selected).map(item => item.value)
+      tag.selectedFlg = tag.props.items.some(item => item.selected)
       if (!updating) {
         tag.update()
-        parentUpdate()
-        tag.dispatch('select', props.items.filter(item => item.selected))
-        tag.dispatch('change', props.items.filter(item => item.selected))
+        // parentUpdate()
+        tag.dispatch('select', tag.props.items.filter(item => item.selected))
+        tag.dispatch('change', tag.props.items.filter(item => item.selected))
       }
     }
 

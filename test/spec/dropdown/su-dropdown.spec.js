@@ -103,7 +103,7 @@ describe('su-dropdown', function () {
     expect(component.$('.menu').classList.contains('visible')).to.equal(false)
     expect(spyOnClose).calledOnce
 
-    expect(component.value).to.null
+    expect(component.state.value).to.null
   })
 
   it('clicking item', function () {
@@ -123,7 +123,7 @@ describe('su-dropdown', function () {
     expect(component.$('.menu').classList.contains('visible')).to.equal(false)
     expect(spyOnClose).calledOnce
 
-    expect(component.value).to.equal(items[1].value)
+    expect(component.state.value).to.equal(items[1].value)
   })
 
   it('pressing enter key on item', function () {
@@ -145,7 +145,7 @@ describe('su-dropdown', function () {
     expect(component.$('.menu').classList.contains('visible')).to.equal(false)
     expect(spyOnClose).calledOnce
 
-    expect(component.value).to.equal(items[1].value)
+    expect(component.state.value).to.equal(items[1].value)
   })
 
   it('pressing key down will active item', function () {
@@ -187,18 +187,18 @@ describe('su-dropdown', function () {
   })
 
   it('update value', function () {
-    expect(component.value).to.be.null
-    component.value = items[1].value
+    expect(component.state.value).to.be.null
+    component.state.value = items[1].value
     component.update()
-    component.value.should.deep.equal(items[1].value)
-    component.label.should.deep.equal(items[1].label)
+    component.state.value.should.deep.equal(items[1].value)
+    component.state.label.should.deep.equal(items[1].label)
   })
 
   it('update item value', function () {
     component.$$('.item')[1].click()
     items[1].value = 'M'
     component.update()
-    expect(component.value).to.be.null
+    expect(component.state.value).to.be.null
   })
 
   // it('update items', function () {
@@ -238,21 +238,21 @@ describe('su-dropdown', function () {
   // })
 
   it('reset value', function () {
-    expect(component.value).to.be.null
-    expect(component.defaultValue).to.be.null
+    expect(component.state.value).to.be.null
+    expect(component.state.defaultValue).to.be.null
     component.changed.should.deep.equal(false)
     element.click()
     this.clock.tick(310)
 
     component.$$('.item')[1].click()
 
-    expect(component.value).to.equal(items[1].value)
+    expect(component.state.value).to.equal(items[1].value)
     expect(component.changed).to.equal(true)
-    expect(component.defaultValue).to.be.null
+    expect(component.state.defaultValue).to.be.null
 
     component.reset()
-    expect(component.value).to.be.null
-    expect(component.defaultValue).to.be.null
+    expect(component.state.value).to.be.null
+    expect(component.state.defaultValue).to.be.null
     expect(component.changed).to.equal(false)
   })
 })
