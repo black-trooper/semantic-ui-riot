@@ -1,7 +1,10 @@
-require('../../../dist/tags/dropdown/su-dropdown.js')
+import * as riot from 'riot'
+import { init, fireEvent, fireKeyEvent } from '../../helpers/'
+import TargetComponent from '../../../dist/tags/dropdown/su-dropdown.js'
 
 describe('su-dropdown-multiple-option', function () {
-  let tag
+  let element, component
+  init(riot)
 
   let items = [
     {
@@ -29,61 +32,63 @@ describe('su-dropdown-multiple-option', function () {
     { value: 'ux', label: 'User Experience' }
   ]
 
-  const mount = html => {
-    $('body').append(html)
-    tag = riot.mount('su-dropdown', {
-      items
+  const mount = value => {
+    riot.register('su-dropdown', TargetComponent)
+    element = document.createElement('su-dropdown')
+    component = riot.mount(element, {
+      'multiple': true,
+      'items': items,
+      'value': value,
     })[0]
   }
 
   afterEach(function () {
-    tag.unmount()
+    component.unmount()
+    riot.unregister('su-dropdown')
   })
 
   it('default value', function () {
-    mount('<su-dropdown multiple="true" value="angular"></su-dropdown>')
-    $('su-dropdown > .label').length.should.equal(1)
-    $('su-dropdown > .label:first').text().trim().should.equal(items[1].label)
+    mount('angular')
+    expect(component.$$('.label')).to.have.lengthOf(1)
+    expect(component.$('.label').innerText.trim()).to.equal(items[1].label)
   })
 
   it('default values', function () {
-    mount('<su-dropdown multiple="true" value="[angular,css]"></su-dropdown>')
-    $('su-dropdown > .label').length.should.equal(2)
-    $('su-dropdown > .label:first').text().trim().should.equal(items[1].label)
-    $('su-dropdown > .label:eq(1)').text().trim().should.equal(items[2].label)
+    mount('[angular,css]')
+    expect(component.$$('.label')).to.have.lengthOf(2)
+    expect(component.$('.label').innerText.trim()).to.equal(items[1].label)
+    expect(component.$$('.label')[1].innerText.trim()).to.equal(items[2].label)
   })
 
   it('default riotValue', function () {
-    mount('<su-dropdown multiple="true" value="{\'angular\'}"></su-dropdown>')
-    $('su-dropdown > .label').length.should.equal(1)
-    $('su-dropdown > .label:first').text().trim().should.equal(items[1].label)
+    mount('{\'angular\'}')
+    expect(component.$$('.label')).to.have.lengthOf(1)
+    expect(component.$('.label').innerText.trim()).to.equal(items[1].label)
   })
 
   it('default riotValues', function () {
-    mount('<su-dropdown multiple="true" value="{[\'angular\', \'css\']}"></su-dropdown>')
-    $('su-dropdown > .label').length.should.equal(2)
-    $('su-dropdown > .label:first').text().trim().should.equal(items[1].label)
-    $('su-dropdown > .label:eq(1)').text().trim().should.equal(items[2].label)
+    mount('{[\'angular\', \'css\']}')
+    expect(component.$$('.label')).to.have.lengthOf(2)
+    expect(component.$('.label').innerText.trim()).to.equal(items[1].label)
+    expect(component.$$('.label')[1].innerText.trim()).to.equal(items[2].label)
   })
 
   it('reset value', function () {
-    mount('<su-dropdown multiple="true" value="{[\'angular\', \'css\']}"></su-dropdown>')
-    tag.value.should.deep.equal(['angular', 'css'])
-    tag.defaultValue.should.deep.equal(['angular', 'css'])
-    tag.changed().should.deep.equal(false)
-    $('su-dropdown').click()
+    mount('{[\'angular\', \'css\']}')
+    expect(component.state.value).deep.equal(['angular', 'css'])
+    expect(component.state.defaultValue).deep.equal(['angular', 'css'])
+    expect(component.changed).deep.equal(false)
+    element.click()
 
-    $('su-dropdown > .label:first .delete').click()
-    $('su-dropdown > .label:first').text().trim().should.equal(items[2].label)
-    tag.value.should.deep.equal(['css'])
-    tag.defaultValue.should.deep.equal(['angular', 'css'])
-    tag.changed().should.deep.equal(true)
+    component.$('.label .delete').click()
+    expect(component.$('.label').innerText.trim()).to.equal(items[2].label)
+    expect(component.state.value).deep.equal(['css'])
+    expect(component.state.defaultValue).deep.equal(['angular', 'css'])
+    expect(component.changed).deep.equal(true)
 
-    tag.reset()
-    tag.value.should.deep.equal(['angular', 'css'])
-    tag.defaultValue.should.deep.equal(['angular', 'css'])
-    tag.changed().should.deep.equal(false)
-
-    $('su-dropdown').blur()
+    component.reset()
+    expect(component.state.value).deep.equal(['angular', 'css'])
+    expect(component.state.defaultValue).deep.equal(['angular', 'css'])
+    expect(component.changed).deep.equal(false)
   })
 })
