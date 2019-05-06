@@ -1,0 +1,39 @@
+<su-tab class="ui { props.class } { state.active && 'active' } tab">
+  <virtual if="{ state.mounted }"><slot /></virtual>
+
+  <style>
+    :host.ui.segment {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    :host.ui.segment.top.attached {
+      margin-top: 0
+    }
+
+    :host.ui.segment.bottom.attached {
+      margin-bottom: 0
+    }
+  </style>
+
+  <script>
+    export default {
+      state: {
+        active: false,
+        mounted: false,
+      },
+      onMounted,
+      onUpdated,
+    }
+
+    function onMounted(props, state) {
+      this.update()
+    }
+
+    function onUpdated(props, state) {
+      if (state.active && !state.mounted) {
+        state.mounted = true
+      }
+    }
+  </script>
+</su-tab>
