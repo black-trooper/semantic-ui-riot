@@ -1,4 +1,4 @@
-riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="{getTabindex()}" ref="condition" if="{opts.search}" oninput="{input}" onclick="{stopPropagation}" onfocus="{focus}" onblur="{blur}" readonly="{isReadOnly()}"> <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}" onclick="{stopPropagation}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!opts.multiple || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="-1"> <div each="{item in opts.items}" riot-value="{item.value}" default="{item.default}" onmousedown="{mousedown}" onmouseup="{mouseup}" class="{item: isItem(item)} {header: item.header && !filtered} {divider: item.divider && !filtered} {default: item.default} {hover: item.active} {active: item.value == value} {selected: item.value == value}" onclick="{itemClick}" if="{isVisible(item)}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div>', 'su-dropdown.ui.dropdown .menu>.item.default,[data-is="su-dropdown"].ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) } su-dropdown.ui.dropdown .menu>.item.hover,[data-is="su-dropdown"].ui.dropdown .menu>.item.hover{ background: rgba(0, 0, 0, .05); color: rgba(0, 0, 0, .95); } su-dropdown.ui.dropdown .menu,[data-is="su-dropdown"].ui.dropdown .menu{ display: block; }', 'class="ui selection {opts.class} {search: opts.search} {multiple: opts.multiple} dropdown {active: isActive()} {visible: isActive()} {upward: upward}" onclick="{toggle}" onfocus="{focus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" onkeydown="{keydown}" onkeyup="{keyup}" tabindex="{opts.search ? -1 : getTabindex()}"', function(opts) {
+riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="{getTabindex()}" ref="condition" if="{opts.search}" oninput="{input}" onclick="{stopPropagation}" onfocus="{focus}" onblur="{blur}" readonly="{isReadOnly()}"> <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}" onclick="{stopPropagation}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!opts.multiple || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="-1"> <div each="{item in opts.items}" riot-value="{item.value}" default="{item.default}" onmousedown="{mousedown}" onmouseup="{mouseup}" class="{item: isItem(item)} {header: item.header && !filtered} {divider: item.divider && !filtered} {default: item.default} {hover: item.active} {active: item.value == value} {selected: item.value == value} {disabled: item.disabled}" onclick="{itemClick}" if="{isVisible(item)}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div>', 'su-dropdown.ui.dropdown .menu>.item.default,[data-is="su-dropdown"].ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) } su-dropdown.ui.dropdown .menu>.item.hover,[data-is="su-dropdown"].ui.dropdown .menu>.item.hover{ background: rgba(0, 0, 0, .05); color: rgba(0, 0, 0, .95); } su-dropdown.ui.dropdown .menu,[data-is="su-dropdown"].ui.dropdown .menu{ display: block; }', 'class="ui selection {opts.class} {search: opts.search} {multiple: opts.multiple} dropdown {active: isActive()} {visible: isActive()} {upward: upward}" onclick="{toggle}" onfocus="{focus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" onkeydown="{keydown}" onkeyup="{keyup}" tabindex="{opts.search ? -1 : getTabindex()}"', function(opts) {
     const tag = this
 
     tag.defaultValue = ''
@@ -130,7 +130,7 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
 
     function itemClick(event) {
       event.stopPropagation()
-      if (!tag.isItem(event.item.item)) {
+      if (!tag.isItem(event.item.item) || event.item.item.disabled) {
         return
       }
       if (opts.multiple) {
@@ -176,14 +176,14 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
 
       const activeIndex = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0))
       if (keyCode == keys.upArrow) {
-        const nextActiveItem = searchedItems.filter((item, index) => index < activeIndex && !item.header && !item.divider)
+        const nextActiveItem = searchedItems.filter((item, index) => index < activeIndex && !item.header && !item.divider && !item.disabled)
         if (nextActiveItem.length > 0) {
           searchedItems[activeIndex].active = false
           nextActiveItem[nextActiveItem.length - 1].active = true
         }
       }
       else if (keyCode == keys.downArrow) {
-        const nextActiveItem = searchedItems.filter((item, index) => index > activeIndex && !item.header && !item.divider)
+        const nextActiveItem = searchedItems.filter((item, index) => index > activeIndex && !item.header && !item.divider && !item.disabled)
 
         if (nextActiveItem.length > 0) {
           searchedItems[activeIndex].active = false
