@@ -17,7 +17,7 @@
     onblur="{ blur }" tabindex="-1">
     <div each="{item in opts.items}" value="{ item.value }" default="{ item.default }" onmousedown="{ mousedown }"
       onmouseup="{ mouseup }"
-      class="{ item: isItem(item) } { header: item.header && !filtered} { divider: item.divider && !filtered} { default: item.default } { hover: item.active } { active: item.value == value } { selected: item.value == value }"
+      class="{ item: isItem(item) } { header: item.header && !filtered} { divider: item.divider && !filtered} { default: item.default } { hover: item.active } { active: item.value == value } { selected: item.value == value } { disabled: item.disabled }"
       onclick="{ itemClick }" if="{ isVisible(item) }">
       <i class="{ item.icon } icon" if="{ item.icon }"></i>
       <img class="ui avatar image" src="{ item.image }" if="{ item.image }" />
@@ -185,7 +185,7 @@
 
     function itemClick(event) {
       event.stopPropagation()
-      if (!tag.isItem(event.item.item)) {
+      if (!tag.isItem(event.item.item) || event.item.item.disabled) {
         return
       }
       if (opts.multiple) {
@@ -231,14 +231,14 @@
 
       const activeIndex = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0))
       if (keyCode == keys.upArrow) {
-        const nextActiveItem = searchedItems.filter((item, index) => index < activeIndex && !item.header && !item.divider)
+        const nextActiveItem = searchedItems.filter((item, index) => index < activeIndex && !item.header && !item.divider && !item.disabled)
         if (nextActiveItem.length > 0) {
           searchedItems[activeIndex].active = false
           nextActiveItem[nextActiveItem.length - 1].active = true
         }
       }
       else if (keyCode == keys.downArrow) {
-        const nextActiveItem = searchedItems.filter((item, index) => index > activeIndex && !item.header && !item.divider)
+        const nextActiveItem = searchedItems.filter((item, index) => index > activeIndex && !item.header && !item.divider && !item.disabled)
 
         if (nextActiveItem.length > 0) {
           searchedItems[activeIndex].active = false

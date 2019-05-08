@@ -124,6 +124,51 @@ describe('su-dropdown', function () {
     tag.value.should.deep.equal(items[1].value)
   })
 
+  it('clicking disabled item', function () {
+    const newItems = [
+      {
+        label: 'Alphabet',
+        value: null,
+        default: true
+      },
+      {
+        label: 'A to C',
+        header: true
+      },
+      {
+        label: 'a',
+        value: 'a'
+      },
+      {
+        label: 'b',
+        value: 'b',
+        disabled: true
+      },
+      {
+        label: 'c',
+        value: 'c'
+      },
+    ]
+    tag.opts.items = newItems
+    $('su-dropdown').click()
+    this.clock.tick(310)
+
+    fireEvent($('su-dropdown .item:eq(2)')[0], 'mousedown')
+    fireEvent($('su-dropdown')[0], 'blur')
+    fireEvent($('su-dropdown .item:eq(2)')[0], 'mouseup')
+    $('su-dropdown .item:eq(2)').click()
+    $('su-dropdown > .text').text().trim().should.equal(newItems[0].label)
+    $('su-dropdown > .text').hasClass('default').should.equal(true)
+    spyOnSelect.should.have.been.callCount(0)
+    spyOnChange.should.have.been.callCount(0)
+
+    this.clock.tick(310)
+    $('su-dropdown .menu').css('visibility').should.equal('visible')
+    spyOnClose.should.have.been.callCount(0)
+
+    expect(tag.value).to.be.null
+  })
+
   it('pressing enter key on item', function () {
     $('su-dropdown').focus()
     this.clock.tick(310)
@@ -148,29 +193,57 @@ describe('su-dropdown', function () {
   })
 
   it('pressing key down will active item', function () {
+    const newItems = [
+      {
+        label: 'Alphabet',
+        value: null,
+        default: true
+      },
+      {
+        label: 'A to C',
+        header: true
+      },
+      {
+        label: 'a',
+        value: 'a'
+      },
+      {
+        label: 'b',
+        value: 'b',
+        disabled: true
+      },
+      {
+        label: 'c',
+        value: 'c'
+      },
+    ]
+    tag.opts.items = newItems
     $('su-dropdown').focus()
+    this.clock.tick(310)
+
+    $('su-dropdown .menu .item').length.should.equal(4)
 
     let dropdown = $('su-dropdown')[0]
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
-    $('su-dropdown .hover .text').text().should.equal(items[0].label)
+    $('su-dropdown .hover .text').text().should.equal(newItems[0].label)
 
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
-    $('su-dropdown .hover .text').text().should.equal(items[1].label)
+    $('su-dropdown .hover .text').text().should.equal(newItems[2].label)
 
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
-    $('su-dropdown .hover .text').text().should.equal(items[2].label)
+    $('su-dropdown .hover .text').text().should.equal(newItems[4].label)
 
     fireKeyEvent(dropdown, 'keydown', keys.downArrow)
-    $('su-dropdown .hover .text').text().should.equal(items[2].label)
+    $('su-dropdown .hover .text').text().should.equal(newItems[4].label)
 
     fireKeyEvent(dropdown, 'keydown', keys.upArrow)
-    $('su-dropdown .hover .text').text().should.equal(items[1].label)
+    $('su-dropdown .hover .text').text().should.equal(newItems[2].label)
 
     fireKeyEvent(dropdown, 'keydown', keys.upArrow)
-    $('su-dropdown .hover .text').text().should.equal(items[0].label)
+    $('su-dropdown .hover .text').text().should.equal(newItems[0].label)
 
     fireKeyEvent(dropdown, 'keydown', keys.upArrow)
-    $('su-dropdown .hover .text').text().should.equal(items[0].label)
+    $('su-dropdown .hover .text').text().should.equal(newItems[0].label)
 
     $('su-dropdown').blur()
   })
