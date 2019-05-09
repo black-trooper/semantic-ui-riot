@@ -1,5 +1,7 @@
-<su-tab class="ui { props.class } { state.active && 'active' } tab">
-  <virtual if="{ state.mounted }"><slot /></virtual>
+<su-tab class="ui { props.class } { state.active && 'active' } tab" id="{ su_id }">
+  <span if="{ state.mounted }">
+    <slot />
+  </span>
 
   <style>
     :host.ui.segment {
@@ -17,6 +19,7 @@
   </style>
 
   <script>
+    let index = 0
     export default {
       state: {
         active: false,
@@ -27,7 +30,15 @@
     }
 
     function onMounted(props, state) {
-      this.update()
+      this.su_id = `su-tab-${index++}`
+      this.obs.on(`${this.su_id}-toggle-active`, active => {
+        this.update({
+          active
+        })
+      })
+      this.update({
+        active: props.active
+      })
     }
 
     function onUpdated(props, state) {

@@ -64,14 +64,10 @@ function onUpdated(props, state) {
       });
     } else {
       this.tabs.forEach(tab => {
-        if (tab.getAttribute('label') == state.active) {
-          tab.classList.add('active');
-        } else {
-          tab.classList.remove('active');
-        }
+        this.obs.trigger(`${tab.id}-toggle-active`, tab.getAttribute('label') == state.active);
       });
       if (!this.tabs.some(tab => tab.classList.contains('active'))) {
-        this.tabs[0].classList.add('active');
+        this.obs.trigger(`${this.tabs[0].id}-toggle-active`, true);
       }
     }
   }
@@ -187,17 +183,17 @@ var suTabset = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<div expr117></div><slot></slot><div expr119></div>', [{
+    return template('<div expr43></div><slot></slot><div expr45></div>', [{
       'type': bindingTypes.IF,
 
       'evaluate': function(scope) {
         return !scope.isBottom() && scope.showMenu();
       },
 
-      'redundantAttribute': 'expr117',
-      'selector': '[expr117]',
+      'redundantAttribute': 'expr43',
+      'selector': '[expr43]',
 
-      'template': template('<a expr118></a>', [{
+      'template': template('<a expr44></a>', [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
           'name': 'class',
@@ -241,8 +237,8 @@ var suTabset = {
           }]
         }]),
 
-        'redundantAttribute': 'expr118',
-        'selector': '[expr118]',
+        'redundantAttribute': 'expr44',
+        'selector': '[expr44]',
         'itemName': 'tab',
         'indexName': null,
 
@@ -257,10 +253,10 @@ var suTabset = {
         return scope.isBottom() && scope.showMenu();
       },
 
-      'redundantAttribute': 'expr119',
-      'selector': '[expr119]',
+      'redundantAttribute': 'expr45',
+      'selector': '[expr45]',
 
-      'template': template('<a expr120></a>', [{
+      'template': template('<a expr46></a>', [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
           'name': 'class',
@@ -304,8 +300,8 @@ var suTabset = {
           }]
         }]),
 
-        'redundantAttribute': 'expr120',
-        'selector': '[expr120]',
+        'redundantAttribute': 'expr46',
+        'selector': '[expr46]',
         'itemName': 'tab',
         'indexName': null,
 

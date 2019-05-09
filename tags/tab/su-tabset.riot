@@ -88,14 +88,10 @@
           })
         } else {
           this.tabs.forEach(tab => {
-            if (tab.getAttribute('label') == state.active) {
-              tab.classList.add('active')
-            } else {
-              tab.classList.remove('active')
-            }
+            this.obs.trigger(`${tab.id}-toggle-active`, tab.getAttribute('label') == state.active)
           })
           if (!this.tabs.some(tab => tab.classList.contains('active'))) {
-            this.tabs[0].classList.add('active')
+            this.obs.trigger(`${this.tabs[0].id}-toggle-active`, true)
           }
         }
       }
