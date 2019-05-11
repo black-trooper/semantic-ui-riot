@@ -38,7 +38,7 @@
   "dependencies": {
     "date-fns": "^1.29.0",
     "q": "^1.5.1",
-    "riot": "^4.0.0-rc.8"
+    "riot": "^4.0.0-rc.10"
   },
   "devDependencies": {
     "@riotjs/cli": "^4.0.0",
