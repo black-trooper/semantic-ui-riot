@@ -87,7 +87,12 @@ var suRadioGroup = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot></slot>', []);
+    return template('<slot expr33></slot>', [{
+      'type': bindingTypes.SLOT,
+      'name': 'default',
+      'redundantAttribute': 'expr33',
+      'selector': '[expr33]'
+    }]);
   },
 
   'name': 'su-radio-group'

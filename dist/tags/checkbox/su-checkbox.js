@@ -87,7 +87,7 @@ var suCheckbox = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<input expr4 type="checkbox"/><label expr5></label><label expr6></label>',
+      '<input expr6 type="checkbox"/><label expr7></label><label expr9></label>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -112,8 +112,8 @@ var suCheckbox = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr4',
-        'selector': '[expr4]',
+        'redundantAttribute': 'expr6',
+        'selector': '[expr6]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -151,10 +151,10 @@ var suCheckbox = {
           return !scope.props.label;
         },
 
-        'redundantAttribute': 'expr5',
-        'selector': '[expr5]',
+        'redundantAttribute': 'expr7',
+        'selector': '[expr7]',
 
-        'template': template('<slot></slot>', [{
+        'template': template('<slot expr8></slot>', [{
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
             'name': 'for',
@@ -163,6 +163,11 @@ var suCheckbox = {
               return scope.su_id;
             }
           }]
+        }, {
+          'type': bindingTypes.SLOT,
+          'name': 'default',
+          'redundantAttribute': 'expr8',
+          'selector': '[expr8]'
         }])
       }, {
         'type': bindingTypes.IF,
@@ -171,8 +176,8 @@ var suCheckbox = {
           return scope.props.label;
         },
 
-        'redundantAttribute': 'expr6',
-        'selector': '[expr6]',
+        'redundantAttribute': 'expr9',
+        'selector': '[expr9]',
 
         'template': template('<!---->', [{
           'expressions': [{

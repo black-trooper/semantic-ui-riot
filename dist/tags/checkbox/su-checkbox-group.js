@@ -120,7 +120,7 @@ var suCheckboxGroup = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot></slot>', [{
+    return template('<slot expr5></slot>', [{
       'expressions': [{
         'type': expressionTypes.VALUE,
 
@@ -128,6 +128,11 @@ var suCheckboxGroup = {
           return scope.state.value;
         }
       }]
+    }, {
+      'type': bindingTypes.SLOT,
+      'name': 'default',
+      'redundantAttribute': 'expr5',
+      'selector': '[expr5]'
     }]);
   },
 
