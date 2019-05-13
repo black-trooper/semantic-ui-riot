@@ -7,6 +7,11 @@ function onMounted(props, state) {
       active
     });
   });
+  this.obs.on(`${this.su_id}-mount`, () => {
+    this.update({
+      mounted: true
+    });
+  });
   this.update({
     active: props.active
   });

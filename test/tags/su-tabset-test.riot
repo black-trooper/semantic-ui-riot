@@ -1,0 +1,15 @@
+<su-tabset-test>
+  <su-tabset onclick="{ label => onClick(label) }">
+    <su-tab label="Home">Home content</su-tab>
+    <su-tab label="Messages">Messages content</su-tab>
+  </su-tabset>
+
+  <script>
+    export default {
+      onClick
+    }
+    function onClick(label) {
+      this.dispatch('click', label)
+    }
+  </script>
+</su-tabset-test>

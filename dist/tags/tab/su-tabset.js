@@ -110,6 +110,9 @@ function getClass() {
 //                                                                               Logic
 //                                                                               =====
 function initializeChild(tag, tab) {
+  if (!tag.props.lazyMount) {
+    tag.obs.trigger(`${tab.id}-mount`);
+  }
   tab.mounted = !tag.props.lazyMount;
   if (tab.classList) {
     return
