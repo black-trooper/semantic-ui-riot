@@ -12,7 +12,7 @@ function onMounted(props, state) {
   }
 
   this.tabs = this.$$('su-tab');
-  if (typeof this.tabs === 'undefined') {
+  if (this.tabs.length == 0) {
     return
   }
 
@@ -113,8 +113,9 @@ function initializeChild(tag, tab) {
   if (!tag.props.lazyMount) {
     tag.obs.trigger(`${tab.id}-mount`);
   }
-  tab.mounted = !tag.props.lazyMount;
-  if (tab.classList) {
+  if (Array.from(tab.classList.values()).some(clazz => {
+    return clazz != 'ui' && clazz != 'tab' && clazz != 'active'
+  })) {
     return
   }
   let classList = hasClass(tag, 'no-segment') ? [] : ['segment'];
@@ -129,7 +130,7 @@ function initializeChild(tag, tab) {
     }
     classList.push('attached');
   }
-  tab.classList.add(classList);
+  tag.obs.trigger(`${tab.id}-add-class`, classList.join(' '));
 }
 
 function hasTitle(tag) {
@@ -186,17 +187,17 @@ var suTabset = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<div expr62></div><slot expr64></slot><div expr65></div>', [{
+    return template('<div expr290></div><slot expr292></slot><div expr293></div>', [{
       'type': bindingTypes.IF,
 
       'evaluate': function(scope) {
         return !scope.isBottom() && scope.showMenu();
       },
 
-      'redundantAttribute': 'expr62',
-      'selector': '[expr62]',
+      'redundantAttribute': 'expr290',
+      'selector': '[expr290]',
 
-      'template': template('<a expr63></a>', [{
+      'template': template('<a expr291></a>', [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
           'name': 'class',
@@ -240,8 +241,8 @@ var suTabset = {
           }]
         }]),
 
-        'redundantAttribute': 'expr63',
-        'selector': '[expr63]',
+        'redundantAttribute': 'expr291',
+        'selector': '[expr291]',
         'itemName': 'tab',
         'indexName': null,
 
@@ -252,8 +253,8 @@ var suTabset = {
     }, {
       'type': bindingTypes.SLOT,
       'name': 'default',
-      'redundantAttribute': 'expr64',
-      'selector': '[expr64]'
+      'redundantAttribute': 'expr292',
+      'selector': '[expr292]'
     }, {
       'type': bindingTypes.IF,
 
@@ -261,10 +262,10 @@ var suTabset = {
         return scope.isBottom() && scope.showMenu();
       },
 
-      'redundantAttribute': 'expr65',
-      'selector': '[expr65]',
+      'redundantAttribute': 'expr293',
+      'selector': '[expr293]',
 
-      'template': template('<a expr66></a>', [{
+      'template': template('<a expr294></a>', [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
           'name': 'class',
@@ -308,8 +309,8 @@ var suTabset = {
           }]
         }]),
 
-        'redundantAttribute': 'expr66',
-        'selector': '[expr66]',
+        'redundantAttribute': 'expr294',
+        'selector': '[expr294]',
         'itemName': 'tab',
         'indexName': null,
 

@@ -7,17 +7,23 @@ function onMounted(props, state) {
       active
     });
   });
+  this.obs.on(`${this.su_id}-add-class`, classes => {
+    this.update({
+      classes
+    });
+  });
   this.obs.on(`${this.su_id}-mount`, () => {
     this.update({
       mounted: true
     });
   });
   this.update({
+    classes: props.class,
     active: props.active
   });
 }
 
-function onUpdated(props, state) {
+function onBeforeUpdate(props, state) {
   if (state.active && !state.mounted) {
     state.mounted = true;
   }
@@ -40,17 +46,17 @@ var suTab = {
     },
 
     onMounted,
-    onUpdated
+    onBeforeUpdate
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<span expr67></span>', [{
+    return template('<span expr38></span>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
 
         'evaluate': function(scope) {
-          return ['ui ', scope.props.class, ' ', scope.state.active && 'active', ' tab'].join('');
+          return ['ui ', scope.state.classes, ' ', scope.state.active && 'active', ' tab'].join('');
         }
       }, {
         'type': expressionTypes.ATTRIBUTE,
@@ -67,14 +73,14 @@ var suTab = {
         return scope.state.mounted;
       },
 
-      'redundantAttribute': 'expr67',
-      'selector': '[expr67]',
+      'redundantAttribute': 'expr38',
+      'selector': '[expr38]',
 
-      'template': template('<slot expr68></slot>', [{
+      'template': template('<slot expr39></slot>', [{
         'type': bindingTypes.SLOT,
         'name': 'default',
-        'redundantAttribute': 'expr68',
-        'selector': '[expr68]'
+        'redundantAttribute': 'expr39',
+        'selector': '[expr39]'
       }])
     }]);
   },

@@ -1,4 +1,4 @@
-<su-tab class="ui { props.class } { state.active && 'active' } tab" id="{ su_id }">
+<su-tab class="ui { state.classes } { state.active && 'active' } tab" id="{ su_id }">
   <span if="{ state.mounted }">
     <slot />
   </span>
@@ -26,7 +26,7 @@
         mounted: false,
       },
       onMounted,
-      onUpdated,
+      onBeforeUpdate,
     }
 
     function onMounted(props, state) {
@@ -36,17 +36,23 @@
           active
         })
       })
+      this.obs.on(`${this.su_id}-add-class`, classes => {
+        this.update({
+          classes
+        })
+      })
       this.obs.on(`${this.su_id}-mount`, () => {
         this.update({
           mounted: true
         })
       })
       this.update({
+        classes: props.class,
         active: props.active
       })
     }
 
-    function onUpdated(props, state) {
+    function onBeforeUpdate(props, state) {
       if (state.active && !state.mounted) {
         state.mounted = true
       }

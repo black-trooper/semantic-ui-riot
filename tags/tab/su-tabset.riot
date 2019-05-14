@@ -19,7 +19,6 @@
       getClass,
       showMenu,
       isBottom,
-
     }
 
     // ===================================================================================
@@ -36,7 +35,7 @@
       }
 
       this.tabs = this.$$('su-tab')
-      if (typeof this.tabs === 'undefined') {
+      if (this.tabs.length == 0) {
         return
       }
 
@@ -137,8 +136,9 @@
       if (!tag.props.lazyMount) {
         tag.obs.trigger(`${tab.id}-mount`)
       }
-      tab.mounted = !tag.props.lazyMount
-      if (tab.classList) {
+      if (Array.from(tab.classList.values()).some(clazz => {
+        return clazz != 'ui' && clazz != 'tab' && clazz != 'active'
+      })) {
         return
       }
       let classList = hasClass(tag, 'no-segment') ? [] : ['segment']
@@ -153,7 +153,7 @@
         }
         classList.push('attached')
       }
-      tab.classList.add(classList)
+      tag.obs.trigger(`${tab.id}-add-class`, classList.join(' '))
     }
 
     function hasTitle(tag) {
