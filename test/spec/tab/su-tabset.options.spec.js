@@ -1,8 +1,7 @@
 import * as riot from 'riot'
-import { init, fireEvent } from '../../helpers/'
+import { init, fireEvent, compile } from '../../helpers/'
 import TabComponent from '../../../dist/tags/tab/su-tab.js'
 import TabsetComponent from '../../../dist/tags/tab/su-tabset.js'
-import AppComponent from '../../tags/su-tabset-test.options.js'
 
 describe('su-tabset-options', function () {
   let element, component
@@ -11,15 +10,17 @@ describe('su-tabset-options', function () {
 
   beforeEach(function () {
     element = document.createElement('app')
-    riot.register('app', AppComponent)
     riot.register('su-tabset', TabsetComponent)
     riot.register('su-tab', TabComponent)
     this.clock = sinon.useFakeTimers()
   })
 
-  const mount = opt => {
-    opt.onclick = spyOnClick
-    component = riot.mount(element, opt)[0]
+  const mount = code => {
+    const AppComponent = compile(code)
+    riot.register('app', AppComponent)
+    component = riot.mount(element, {
+      onclick: spyOnClick
+    })[0]
   }
 
   afterEach(function () {
@@ -30,19 +31,44 @@ describe('su-tabset-options', function () {
     riot.unregister('app')
   })
 
+  it('su-tab has class', function () {
+    mount(`
+      <app>
+        <su-tabset>
+          <su-tab label="Home" class="none">Home content</su-tab>
+          <su-tab label="Message" class="none">Messages content</su-tab>
+        </su-tabset>
+      </app>`)
+
+    expect(component.$$('su-tab')[0].classList.contains('none')).to.equal(true)
+    expect(component.$$('su-tab')[0].classList.contains('segment')).to.equal(false)
+    expect(component.$$('su-tab')[1].classList.contains('none')).to.equal(true)
+    expect(component.$$('su-tab')[1].classList.contains('segment')).to.equal(false)
+  })
+
   it('no segment', function () {
-    mount({
-      class: 'no-segment'
-    })
+    mount(`
+      <app>
+        <su-tabset class="no-segment">
+          <su-tab label="Home">Home content</su-tab>
+          <su-tab label="Messages">Messages content</su-tab>
+        </su-tabset>
+      </app>
+    `)
 
     expect(component.$$('su-tab')[0].classList.contains('segment')).to.equal(false)
     expect(component.$$('su-tab')[1].classList.contains('segment')).to.equal(false)
   })
 
   it('top tabular', function () {
-    mount({
-      class: 'top tabular'
-    })
+    mount(`
+      <app>
+        <su-tabset class="top tabular">
+          <su-tab label="Home">Home content</su-tab>
+          <su-tab label="Messages">Messages content</su-tab>
+        </su-tabset>
+      </app>
+    `)
 
     expect(component.$$('su-tab')[0].classList.contains('tabular')).to.equal(true)
     expect(component.$$('su-tab')[0].classList.contains('attached')).to.equal(true)
@@ -55,9 +81,14 @@ describe('su-tabset-options', function () {
   })
 
   it('bottom tabular', function () {
-    mount({
-      class: 'bottom tabular'
-    })
+    mount(`
+      <app>
+        <su-tabset class="bottom tabular">
+          <su-tab label="Home">Home content</su-tab>
+          <su-tab label="Messages">Messages content</su-tab>
+        </su-tabset>
+      </app>
+    `)
 
     expect(component.$$('su-tab')[0].classList.contains('tabular')).to.equal(true)
     expect(component.$$('su-tab')[0].classList.contains('attached')).to.equal(true)
@@ -70,9 +101,14 @@ describe('su-tabset-options', function () {
   })
 
   it('top attached', function () {
-    mount({
-      class: 'top attached'
-    })
+    mount(`
+      <app>
+        <su-tabset class="top attached">
+          <su-tab label="Home">Home content</su-tab>
+          <su-tab label="Messages">Messages content</su-tab>
+        </su-tabset>
+      </app>
+    `)
 
     expect(component.$$('su-tab')[0].classList.contains('attached')).to.equal(true)
     expect(component.$$('su-tab')[0].classList.contains('bottom')).to.equal(true)
@@ -83,9 +119,14 @@ describe('su-tabset-options', function () {
   })
 
   it('bottom attached', function () {
-    mount({
-      class: 'bottom attached'
-    })
+    mount(`
+      <app>
+        <su-tabset class="bottom attached">
+          <su-tab label="Home">Home content</su-tab>
+          <su-tab label="Messages">Messages content</su-tab>
+        </su-tabset>
+      </app>
+    `)
 
     expect(component.$$('su-tab')[0].classList.contains('attached')).to.equal(true)
     expect(component.$$('su-tab')[0].classList.contains('top')).to.equal(true)
@@ -95,28 +136,119 @@ describe('su-tabset-options', function () {
     expect(component.$('su-tabset').classList.contains('attached')).to.equal(true)
   })
 
+  // it('tab-header', function () {
+  //   mount(`
+  //     <app>
+  //       <su-tabset class="left tabular">
+  //         <div class="ui grid">
+  //           <div class="four wide column">
+  //             <su-tab-header>
+  //               <su-tab-title>Home</su-tab-title>
+  //               <su-tab-title>Messages</su-tab-title>
+  //               <su-tab-title>Friends</su-tab-title>
+  //             </su-tab-header>
+  //           </div>
+  //           <div class="twelve wide stretched column">
+  //             <su-tab>Home content</su-tab>
+  //             <su-tab>Messages content</su-tab>
+  //             <su-tab>Friends content</su-tab>
+  //           </div>
+  //         </div>
+  //       </su-tabset>
+  //     </app>`)
+
+  //   expect(component.$$('su-tab')[0].classList.contains('active')).to.equal(true)
+  //   expect(component.$$('su-tab')[1].classList.contains('active')).to.equal(false)
+  //   expect(component.$$('su-tab-title')[0].classList.contains('active')).to.equal(true)
+  //   expect(component.$$('su-tab-title')[1].classList.contains('active')).to.equal(false)
+
+  //   fireEvent($('a.item:eq(1)')[0], 'click')
+  //   expect(component.$$('su-tab')[0].classList.contains('active')).to.equal(false)
+  //   expect(component.$$('su-tab')[1].classList.contains('active')).to.equal(true)
+  //   expect(component.$$('su-tab-title')[0].classList.contains('active')).to.equal(false)
+  //   expect(component.$$('su-tab-title')[1].classList.contains('active')).to.equal(true)
+  // })
+
   it('default active', function () {
-    mount({
-      active: 'Messages'
-    })
+    mount(`
+      <app>
+        <su-tabset active="Messages">
+          <su-tab label="Home">Home content</su-tab>
+          <su-tab label="Messages">Messages content</su-tab>
+        </su-tabset>
+      </app>
+    `)
 
     expect(component.$$('su-tab')[0].classList.contains('active')).to.equal(false)
     expect(component.$$('su-tab')[1].classList.contains('active')).to.equal(true)
   })
 
   it('default active is not match', function () {
-    mount({
-      active: 'Nothing'
-    })
+    mount(`
+      <app>
+        <su-tabset active="Nothing">
+          <su-tab label="Home">Home content</su-tab>
+          <su-tab label="Messages">Messages content</su-tab>
+        </su-tabset>
+      </app>
+    `)
 
     expect(component.$$('su-tab')[0].classList.contains('active')).to.equal(true)
     expect(component.$$('su-tab')[1].classList.contains('active')).to.equal(false)
   })
 
+  it('single tab', function () {
+    mount(`
+      <app>
+        <su-tabset>
+          <su-tab label="Home">Home content</su-tab>
+        </su-tabset>
+      </app>
+    `)
+    expect(component.$('su-tab').classList.contains('segment')).to.equal(true)
+    expect(component.$('su-tab').classList.contains('active')).to.equal(true)
+  })
+
+  // it('single tab-header', function () {
+  //   mount(`
+  //     <app>
+  //       <su-tabset class="right tabular">
+  //         <div class="ui grid">
+  //           <div class="four wide column">
+  //             <su-tab-header>
+  //               <su-tab-title>Home</su-tab-title>
+  //             </su-tab-header>
+  //           </div>
+  //           <div class="twelve wide stretched column">
+  //             <su-tab>Home content</su-tab>
+  //           </div>
+  //         </div>
+  //       </su-tabset>
+  //     </app>`)
+
+  //     expect(component.$$('su-tab')[0].classList.contains('active')).to.equal(true)
+  //     expect(component.$$('su-tab-title')[0].classList.contains('active')).to.equal(true)
+  // })
+
+  it("none tab", function () {
+    mount(`
+      <app>
+        <su-tabset></su-tabset>
+      </app>
+    `)
+    expect(component.$('su-tab')).to.be.undefined
+    expect(component.$$('su-tab').length).to.equal(0)
+  });
+
   it('lazy mount', function () {
-    mount({
-      lazyMount: true
-    })
+    mount(`
+      <app>
+        <su-tabset lazy-mount="true">
+          <su-tab label="Home">Home content</su-tab>
+          <su-tab label="Messages">Messages content</su-tab>
+        </su-tabset>
+      </app>
+    `)
 
     expect(component.$$('su-tab')[0].classList.contains('active')).to.equal(true)
     expect(component.$$('su-tab')[1].classList.contains('active')).to.equal(false)

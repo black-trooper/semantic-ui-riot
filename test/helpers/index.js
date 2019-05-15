@@ -1,4 +1,8 @@
 import observable from 'riot-observable'
+import * as compiler from '@riotjs/compiler'
+
+const GLOBAL_REGISTRY = '__riot_registry__'
+window[GLOBAL_REGISTRY] = {}
 
 export function fireEvent(el, name) {
   var e = document.createEvent('HTMLEvents')
@@ -43,4 +47,31 @@ export function init(riot) {
       component.obs.trigger(`su-confirm-show`, opts)
     }
   })
+
+  compiler.registerPostprocessor(function (code) {
+    return {
+      code: `(function (global){${code}})(this)`.replace('export default', 'return'),
+      map: {}
+    }
+  })
+}
+
+export function compile(tag, tagName = 'app') {
+  const { code } = compiler.compile(tag)
+
+  globalEval(`window.${GLOBAL_REGISTRY}['${tagName}'] = ${code}`)
+  return window[GLOBAL_REGISTRY][tagName]
+}
+
+// evaluates a compiled tag within the global context
+function globalEval(js) {
+  const node = document.createElement('script')
+  const root = document.documentElement
+
+  // make the source available in the "(no domain)" tab
+  // of Chrome DevTools, with a .js extension
+  node.text = js
+
+  root.appendChild(node)
+  root.removeChild(node)
 }

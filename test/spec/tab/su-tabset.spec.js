@@ -1,8 +1,7 @@
 import * as riot from 'riot'
-import { init, fireEvent } from '../../helpers/'
+import { init, fireEvent, compile } from '../../helpers/'
 import TabComponent from '../../../dist/tags/tab/su-tab.js'
 import TabsetComponent from '../../../dist/tags/tab/su-tabset.js'
-import AppComponent from '../../tags/su-tabset-test.js'
 
 describe('su-tabset', function () {
   let element, component
@@ -11,6 +10,23 @@ describe('su-tabset', function () {
 
   beforeEach(function () {
     element = document.createElement('app')
+    const AppComponent = compile(`
+      <app>
+        <su-tabset onclick="{ label => onClick(label) }">
+          <su-tab label="Home">Home content</su-tab>
+          <su-tab label="Messages">Messages content</su-tab>
+        </su-tabset>
+
+        <script>
+          export default {
+            onClick
+          }
+          function onClick(label) {
+            this.dispatch('click', label)
+          }
+        </script>
+      </app>
+    `)
     riot.register('app', AppComponent)
     riot.register('su-tabset', TabsetComponent)
     riot.register('su-tab', TabComponent)
