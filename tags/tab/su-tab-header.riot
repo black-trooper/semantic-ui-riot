@@ -1,0 +1,19 @@
+<su-tab-header class="ui { state.classes } menu" id="{ su_id }">
+  <slot />
+
+  <script>
+    export default {
+      onMounted
+    }
+    let index = 0
+
+    function onMounted(props, state) {
+      this.su_id = `su-tab-header-${index++}`
+      this.obs.on(`${this.su_id}-add-class`, classes => {
+        this.update({
+          classes
+        })
+      })
+    }
+  </script>
+</su-tab-header>
