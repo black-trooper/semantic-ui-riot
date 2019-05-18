@@ -31,6 +31,11 @@
 
     function onMounted(props, state) {
       this.su_id = `su-tab-${index++}`
+      this.update({
+        classes: props.class,
+        active: props.active
+      })
+
       this.obs.on(`${this.su_id}-toggle-active`, active => {
         this.update({
           active
@@ -45,10 +50,6 @@
         this.update({
           mounted: true
         })
-      })
-      this.update({
-        classes: props.class,
-        active: props.active
       })
     }
 

@@ -2,14 +2,24 @@
 //                                                                          Properties
 //                                                                          ==========
 let lastOptsActive, lastActive;
+let index = 0;
 
 // ===================================================================================
 //                                                                           Lifecycle
 //                                                                           =========
 function onMounted(props, state) {
-  if (this.$('su-tab-header')) {
-    this.$('su-tab-header').state.class = getTitleClass();
+  this.su_id = `su-tabset-${index++}`;
+
+  const tabHeader = this.$('su-tab-header');
+  if (tabHeader) {
+    this.obs.trigger(`${tabHeader.id}-add-class`, getTitleClass(this));
   }
+  this.$$('su-tab-title').forEach(title => {
+    this.obs.trigger(`${title.id}-add-tabset-id`, this.su_id);
+  });
+  this.obs.on(`${this.su_id}-title-clicked`, title => {
+    onClickForTitle(this, title);
+  });
 
   this.tabs = this.$$('su-tab');
   if (this.tabs.length == 0) {
@@ -18,8 +28,8 @@ function onMounted(props, state) {
 
   if (typeof props.active === 'undefined') {
     const titles = hasTitle(this);
-    if (titles) {
-      state.active = titles[0].root.innerText.trim();
+    if (titles.length > 0) {
+      state.active = titles[0].innerText.trim();
     } else {
       state.active = this.tabs[0].getAttribute('label');
     }
@@ -46,21 +56,21 @@ function onUpdated(props, state) {
 
   if (changed) {
     const titles = hasTitle(this);
-    if (titles) {
+    if (titles.length > 0) {
       let index;
       titles.forEach((title, i) => {
-        title.active = false;
-        if (title.root.innerText.trim() === state.active.trim()) {
-          title.active = true;
+        this.obs.trigger(`${title.id}-toggle-active`, false);
+        if (title.innerText.trim() === state.active.trim()) {
+          this.obs.trigger(`${title.id}-toggle-active`, true);
           index = i;
         }
       });
-      if (!titles.some(title => title.active)) {
-        titles[0].active = true;
+      if (!index) {
+        this.obs.trigger(`${titles[0].id}-toggle-active`, true);
         index = 0;
       }
       this.tabs.forEach((tab, i) => {
-        tab.active = index == i;
+        this.obs.trigger(`${tab.id}-toggle-active`, index == i);
       });
     } else {
       this.tabs.forEach(tab => {
@@ -82,11 +92,11 @@ function onClick(item) {
   this.dispatch('click', this.state.active);
 }
 
-// function clickForTitle(title) {
-//   active = title
-//   tag.update()
-//   tag.trigger('click', active)
-// }
+function onClickForTitle(tag, title) {
+  tag.state.active = title;
+  tag.update();
+  tag.dispatch('click', tag.state.active);
+}
 
 
 // ===================================================================================
@@ -137,12 +147,7 @@ function hasTitle(tag) {
   if (!tag.$('su-tab-header')) {
     return false
   }
-  const titles = tag.$$('su-tab-header su-tab-title');
-  if (!titles) {
-    return false
-  }
-
-  return titles
+  return tag.$$('su-tab-header su-tab-title')
 }
 
 function getTitleClass(tag) {
@@ -187,17 +192,26 @@ var suTabset = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<div expr290></div><slot expr292></slot><div expr293></div>', [{
+    return template('<div expr282></div><slot expr284></slot><div expr285></div>', [{
+      'expressions': [{
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'id',
+
+        'evaluate': function(scope) {
+          return scope.su_id;
+        }
+      }]
+    }, {
       'type': bindingTypes.IF,
 
       'evaluate': function(scope) {
         return !scope.isBottom() && scope.showMenu();
       },
 
-      'redundantAttribute': 'expr290',
-      'selector': '[expr290]',
+      'redundantAttribute': 'expr282',
+      'selector': '[expr282]',
 
-      'template': template('<a expr291></a>', [{
+      'template': template('<a expr283></a>', [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
           'name': 'class',
@@ -241,8 +255,8 @@ var suTabset = {
           }]
         }]),
 
-        'redundantAttribute': 'expr291',
-        'selector': '[expr291]',
+        'redundantAttribute': 'expr283',
+        'selector': '[expr283]',
         'itemName': 'tab',
         'indexName': null,
 
@@ -253,8 +267,8 @@ var suTabset = {
     }, {
       'type': bindingTypes.SLOT,
       'name': 'default',
-      'redundantAttribute': 'expr292',
-      'selector': '[expr292]'
+      'redundantAttribute': 'expr284',
+      'selector': '[expr284]'
     }, {
       'type': bindingTypes.IF,
 
@@ -262,10 +276,10 @@ var suTabset = {
         return scope.isBottom() && scope.showMenu();
       },
 
-      'redundantAttribute': 'expr293',
-      'selector': '[expr293]',
+      'redundantAttribute': 'expr285',
+      'selector': '[expr285]',
 
-      'template': template('<a expr294></a>', [{
+      'template': template('<a expr286></a>', [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
           'name': 'class',
@@ -309,8 +323,8 @@ var suTabset = {
           }]
         }]),
 
-        'redundantAttribute': 'expr294',
-        'selector': '[expr294]',
+        'redundantAttribute': 'expr286',
+        'selector': '[expr286]',
         'itemName': 'tab',
         'indexName': null,
 

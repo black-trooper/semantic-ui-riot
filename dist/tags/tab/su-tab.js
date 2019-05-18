@@ -2,6 +2,11 @@ let index = 0;
 
 function onMounted(props, state) {
   this.su_id = `su-tab-${index++}`;
+  this.update({
+    classes: props.class,
+    active: props.active
+  });
+
   this.obs.on(`${this.su_id}-toggle-active`, active => {
     this.update({
       active
@@ -16,10 +21,6 @@ function onMounted(props, state) {
     this.update({
       mounted: true
     });
-  });
-  this.update({
-    classes: props.class,
-    active: props.active
   });
 }
 
@@ -50,7 +51,7 @@ var suTab = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<span expr38></span>', [{
+    return template('<span expr287></span>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -73,14 +74,14 @@ var suTab = {
         return scope.state.mounted;
       },
 
-      'redundantAttribute': 'expr38',
-      'selector': '[expr38]',
+      'redundantAttribute': 'expr287',
+      'selector': '[expr287]',
 
-      'template': template('<slot expr39></slot>', [{
+      'template': template('<slot expr288></slot>', [{
         'type': bindingTypes.SLOT,
         'name': 'default',
-        'redundantAttribute': 'expr39',
-        'selector': '[expr39]'
+        'redundantAttribute': 'expr288',
+        'selector': '[expr288]'
       }])
     }]);
   },
