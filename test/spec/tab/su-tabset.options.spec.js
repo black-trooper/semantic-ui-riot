@@ -2,6 +2,8 @@ import * as riot from 'riot'
 import { init, fireEvent, compile } from '../../helpers/'
 import TabComponent from '../../../dist/tags/tab/su-tab.js'
 import TabsetComponent from '../../../dist/tags/tab/su-tabset.js'
+import TabHeaderComponent from '../../../dist/tags/tab/su-tab-header.js'
+import TabTitleComponent from '../../../dist/tags/tab/su-tab-title.js'
 
 describe('su-tabset-options', function () {
   let element, component
@@ -10,6 +12,8 @@ describe('su-tabset-options', function () {
 
   beforeEach(function () {
     element = document.createElement('app')
+    riot.register('su-tab-title', TabTitleComponent)
+    riot.register('su-tab-header', TabHeaderComponent)
     riot.register('su-tabset', TabsetComponent)
     riot.register('su-tab', TabComponent)
     this.clock = sinon.useFakeTimers()
@@ -26,6 +30,8 @@ describe('su-tabset-options', function () {
   afterEach(function () {
     spyOnClick.reset()
     this.clock.restore()
+    riot.unregister('su-tab-title')
+    riot.unregister('su-tab-header')
     riot.unregister('su-tab')
     riot.unregister('su-tabset')
     riot.unregister('app')
@@ -136,38 +142,38 @@ describe('su-tabset-options', function () {
     expect(component.$('su-tabset').classList.contains('attached')).to.equal(true)
   })
 
-  // it('tab-header', function () {
-  //   mount(`
-  //     <app>
-  //       <su-tabset class="left tabular">
-  //         <div class="ui grid">
-  //           <div class="four wide column">
-  //             <su-tab-header>
-  //               <su-tab-title>Home</su-tab-title>
-  //               <su-tab-title>Messages</su-tab-title>
-  //               <su-tab-title>Friends</su-tab-title>
-  //             </su-tab-header>
-  //           </div>
-  //           <div class="twelve wide stretched column">
-  //             <su-tab>Home content</su-tab>
-  //             <su-tab>Messages content</su-tab>
-  //             <su-tab>Friends content</su-tab>
-  //           </div>
-  //         </div>
-  //       </su-tabset>
-  //     </app>`)
+  it('tab-header', function () {
+    mount(`
+      <app>
+        <su-tabset class="left tabular">
+          <div class="ui grid">
+            <div class="four wide column">
+              <su-tab-header>
+                <su-tab-title>Home</su-tab-title>
+                <su-tab-title>Messages</su-tab-title>
+                <su-tab-title>Friends</su-tab-title>
+              </su-tab-header>
+            </div>
+            <div class="twelve wide stretched column">
+              <su-tab>Home content</su-tab>
+              <su-tab>Messages content</su-tab>
+              <su-tab>Friends content</su-tab>
+            </div>
+          </div>
+        </su-tabset>
+      </app>`)
 
-  //   expect(component.$$('su-tab')[0].classList.contains('active')).to.equal(true)
-  //   expect(component.$$('su-tab')[1].classList.contains('active')).to.equal(false)
-  //   expect(component.$$('su-tab-title')[0].classList.contains('active')).to.equal(true)
-  //   expect(component.$$('su-tab-title')[1].classList.contains('active')).to.equal(false)
+    expect(component.$$('su-tab')[0].classList.contains('active')).to.equal(true)
+    expect(component.$$('su-tab')[1].classList.contains('active')).to.equal(false)
+    expect(component.$$('su-tab-title a')[0].classList.contains('active')).to.equal(true)
+    expect(component.$$('su-tab-title a')[1].classList.contains('active')).to.equal(false)
 
-  //   fireEvent($('a.item:eq(1)')[0], 'click')
-  //   expect(component.$$('su-tab')[0].classList.contains('active')).to.equal(false)
-  //   expect(component.$$('su-tab')[1].classList.contains('active')).to.equal(true)
-  //   expect(component.$$('su-tab-title')[0].classList.contains('active')).to.equal(false)
-  //   expect(component.$$('su-tab-title')[1].classList.contains('active')).to.equal(true)
-  // })
+    fireEvent(component.$$('a.item')[1], 'click')
+    expect(component.$$('su-tab')[0].classList.contains('active')).to.equal(false)
+    expect(component.$$('su-tab')[1].classList.contains('active')).to.equal(true)
+    expect(component.$$('su-tab-title a')[0].classList.contains('active')).to.equal(false)
+    expect(component.$$('su-tab-title a')[1].classList.contains('active')).to.equal(true)
+  })
 
   it('default active', function () {
     mount(`
@@ -209,26 +215,26 @@ describe('su-tabset-options', function () {
     expect(component.$('su-tab').classList.contains('active')).to.equal(true)
   })
 
-  // it('single tab-header', function () {
-  //   mount(`
-  //     <app>
-  //       <su-tabset class="right tabular">
-  //         <div class="ui grid">
-  //           <div class="four wide column">
-  //             <su-tab-header>
-  //               <su-tab-title>Home</su-tab-title>
-  //             </su-tab-header>
-  //           </div>
-  //           <div class="twelve wide stretched column">
-  //             <su-tab>Home content</su-tab>
-  //           </div>
-  //         </div>
-  //       </su-tabset>
-  //     </app>`)
+  it('single tab-header', function () {
+    mount(`
+      <app>
+        <su-tabset class="right tabular">
+          <div class="ui grid">
+            <div class="four wide column">
+              <su-tab-header>
+                <su-tab-title>Home</su-tab-title>
+              </su-tab-header>
+            </div>
+            <div class="twelve wide stretched column">
+              <su-tab>Home content</su-tab>
+            </div>
+          </div>
+        </su-tabset>
+      </app>`)
 
-  //     expect(component.$$('su-tab')[0].classList.contains('active')).to.equal(true)
-  //     expect(component.$$('su-tab-title')[0].classList.contains('active')).to.equal(true)
-  // })
+    expect(component.$('su-tab').classList.contains('active')).to.equal(true)
+    expect(component.$('su-tab-title a').classList.contains('active')).to.equal(true)
+  })
 
   it("none tab", function () {
     mount(`

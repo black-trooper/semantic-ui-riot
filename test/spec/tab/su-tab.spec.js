@@ -25,8 +25,8 @@ describe('su-tab', function () {
   })
 
   it('change active', function () {
-    expect(component.state.active).to.equal(false)
-    // expect(component.root.innerText).to.equal('')
+    expect(component.state.active).to.be.not.ok
+    expect(component.root.innerText).to.equal('tab content')
     expect(component.root.classList.contains('active')).to.equal(false)
     expect(component.root.classList.contains('orange')).to.equal(true)
 
