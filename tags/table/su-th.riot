@@ -1,0 +1,35 @@
+<su-th onclick="{ onClick }" class="{ classes }" id="{ su_id }">
+  <script>
+    export default {
+      state: {
+        sorted: false,
+        reverse: false,
+      },
+      classes: '',
+      onBeforeUpdate,
+      onClick
+    }
+
+    let index = 0
+
+    // ===================================================================================
+    //                                                                           Lifecycle
+    //                                                                           =========
+    function onMounted(props, state) {
+      this.su_id = `su-th-${index++}`
+    }
+
+    function onBeforeUpdate(props, state) {
+      const temp = []
+      if (state.sorted) {
+        temp.push('sorted ')
+        temp.push(stat.reverse ? 'descending' : 'ascending')
+      }
+      this.classes = temp.join(' ')
+    }
+
+    function onClick() {
+      this.obs.trigger(`${su_id}-click`, opts.field)
+    }
+  </script>
+</su-th>
