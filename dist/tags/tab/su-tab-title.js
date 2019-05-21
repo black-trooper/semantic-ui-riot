@@ -1,5 +1,8 @@
 let index = 0;
 
+// ===================================================================================
+//                                                                           Lifecycle
+//                                                                           =========
 function onMounted(props, state) {
   this.su_id = `su-tab-title-${index++}`;
   this.update();
@@ -14,6 +17,9 @@ function onMounted(props, state) {
   });
 }
 
+// ===================================================================================
+//                                                                              Events
+//                                                                              ======
 function onClick() {
   this.obs.trigger(`${this.suTabsetId}-title-clicked`, this.$('a.item').innerText.trim());
 }
@@ -31,7 +37,7 @@ var suTabTitle = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<a expr280><slot expr281></slot></a>', [{
+    return template('<a expr80><slot expr81></slot></a>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'id',
@@ -41,8 +47,8 @@ var suTabTitle = {
         }
       }]
     }, {
-      'redundantAttribute': 'expr280',
-      'selector': '[expr280]',
+      'redundantAttribute': 'expr80',
+      'selector': '[expr80]',
 
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
@@ -62,8 +68,8 @@ var suTabTitle = {
     }, {
       'type': bindingTypes.SLOT,
       'name': 'default',
-      'redundantAttribute': 'expr281',
-      'selector': '[expr281]'
+      'redundantAttribute': 'expr81',
+      'selector': '[expr81]'
     }]);
   },
 

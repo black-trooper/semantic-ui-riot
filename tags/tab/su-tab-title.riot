@@ -14,6 +14,9 @@
 
     let index = 0
 
+    // ===================================================================================
+    //                                                                           Lifecycle
+    //                                                                           =========
     function onMounted(props, state) {
       this.su_id = `su-tab-title-${index++}`
       this.update()
@@ -28,6 +31,9 @@
       })
     }
 
+    // ===================================================================================
+    //                                                                              Events
+    //                                                                              ======
     function onClick() {
       this.obs.trigger(`${this.suTabsetId}-title-clicked`, this.$('a.item').innerText.trim())
     }
