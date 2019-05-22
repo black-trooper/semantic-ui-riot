@@ -1,7 +1,3 @@
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-let lastOptsActive, lastActive;
 let index = 0;
 
 // ===================================================================================
@@ -180,19 +176,18 @@ var suTabset = {
       active: false,
     },
 
+    lastOptsActive: null,
+    lastActive: null,
     onMounted,
     onUpdated,
     onClick,
-
-    // clickForTitle,
     getClass,
-
     showMenu,
     isBottom
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<div expr282></div><slot expr284></slot><div expr285></div>', [{
+    return template('<div expr71></div><slot expr73></slot><div expr74></div>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'id',
@@ -208,10 +203,10 @@ var suTabset = {
         return !scope.isBottom() && scope.showMenu();
       },
 
-      'redundantAttribute': 'expr282',
-      'selector': '[expr282]',
+      'redundantAttribute': 'expr71',
+      'selector': '[expr71]',
 
-      'template': template('<a expr283></a>', [{
+      'template': template('<a expr72></a>', [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
           'name': 'class',
@@ -255,8 +250,8 @@ var suTabset = {
           }]
         }]),
 
-        'redundantAttribute': 'expr283',
-        'selector': '[expr283]',
+        'redundantAttribute': 'expr72',
+        'selector': '[expr72]',
         'itemName': 'tab',
         'indexName': null,
 
@@ -267,8 +262,8 @@ var suTabset = {
     }, {
       'type': bindingTypes.SLOT,
       'name': 'default',
-      'redundantAttribute': 'expr284',
-      'selector': '[expr284]'
+      'redundantAttribute': 'expr73',
+      'selector': '[expr73]'
     }, {
       'type': bindingTypes.IF,
 
@@ -276,10 +271,10 @@ var suTabset = {
         return scope.isBottom() && scope.showMenu();
       },
 
-      'redundantAttribute': 'expr285',
-      'selector': '[expr285]',
+      'redundantAttribute': 'expr74',
+      'selector': '[expr74]',
 
-      'template': template('<a expr286></a>', [{
+      'template': template('<a expr75></a>', [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
           'name': 'class',
@@ -323,8 +318,8 @@ var suTabset = {
           }]
         }]),
 
-        'redundantAttribute': 'expr286',
-        'selector': '[expr286]',
+        'redundantAttribute': 'expr75',
+        'selector': '[expr75]',
         'itemName': 'tab',
         'indexName': null,
 
