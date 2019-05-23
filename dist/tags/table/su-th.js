@@ -1,14 +1,35 @@
-function onBeforeUpdate(props, state) {
-  const temp = [];
-  if (state.sorted) {
-    temp.push('sorted ');
-    temp.push(stat.reverse ? 'descending' : 'ascending');
-  }
-  this.classes = temp.join(' ');
+let index = 0;
+
+// ===================================================================================
+//                                                                           Lifecycle
+//                                                                           =========
+function onMounted(props, state) {
+  this.su_id = `su-th-${index++}`;
+  this.update();
+
+  this.obs.on(`${this.su_id}-set-condition`, condition => {
+    this.update({
+      sorted: props.field == condition.field,
+      reverse: condition.reverse
+    });
+  });
 }
 
+function onBeforeUpdate(props, state) {
+  const classList = [];
+  if (state.sorted) {
+    classList.push('sorted ');
+    classList.push(state.reverse ? 'descending' : 'ascending');
+  }
+  this.clazz = classList.join(' ');
+  state.field = props.field;
+}
+
+// ===================================================================================
+//                                                                              Events
+//                                                                              ======
 function onClick() {
-  this.obs.trigger(`${su_id}-click`, opts.field);
+  this.obs.trigger(`${this.su_id}-click`, this.state.field);
 }
 
 var suTh = {
@@ -20,12 +41,44 @@ var suTh = {
       reverse: false,
     },
 
-    classes: '',
+    clazz: '',
+    onMounted,
     onBeforeUpdate,
     onClick
   },
 
-  'template': null,
+  'template': function(template, expressionTypes, bindingTypes, getComponent) {
+    return template('<slot expr49></slot>', [{
+      'expressions': [{
+        'type': expressionTypes.EVENT,
+        'name': 'onclick',
+
+        'evaluate': function(scope) {
+          return scope.onClick;
+        }
+      }, {
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'class',
+
+        'evaluate': function(scope) {
+          return scope.clazz;
+        }
+      }, {
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'id',
+
+        'evaluate': function(scope) {
+          return scope.su_id;
+        }
+      }]
+    }, {
+      'type': bindingTypes.SLOT,
+      'name': 'default',
+      'redundantAttribute': 'expr49',
+      'selector': '[expr49]'
+    }]);
+  },
+
   'name': 'su-th'
 };
 
