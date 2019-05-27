@@ -16,7 +16,7 @@ describe('su-table', function () {
   const mount = opts => {
     const AppComponent = compile(`
       <app>
-        <su-table data="{ props.data }" nulls-first="{ props.nullsFirst }">
+        <su-table data="{ props.data }" nulls-first="{ props.nullsFirst }" default-sort-field="{ props.defaultSortField }" default-sort-reverse="{ props.defaultSortReverse }">
           <su-th field="name">Name</su-th>
           <su-th field="age">Age</su-th>
           <su-th field="gender">Gender</su-th>
@@ -96,12 +96,12 @@ describe('su-table', function () {
     expect(component.$$('su-th')[1].classList.contains('descending')).to.equal(false)
 
     // gender
-    // fireEvent(component.$$('su-th')[2], 'click')
-    // expect(component.props.data[0]['su-table-index']).to.equal(1)
-    // expect(component.props.data[1]['su-table-index']).to.equal(0)
-    // expect(component.props.data[2]['su-table-index']).to.equal(2)
-    // expect(component.props.data[3]['su-table-index']).to.equal(4)
-    // expect(component.props.data[4]['su-table-index']).to.equal(3)
+    fireEvent(component.$$('su-th')[2], 'click')
+    expect(component.props.data[0]['su-table-index']).to.equal(1)
+    expect(component.props.data[1]['su-table-index']).to.equal(0)
+    expect(component.props.data[2]['su-table-index']).to.equal(2)
+    expect(component.props.data[3]['su-table-index']).to.equal(4)
+    expect(component.props.data[4]['su-table-index']).to.equal(3)
   })
 
   it('nulls first', function () {
@@ -117,38 +117,36 @@ describe('su-table', function () {
     })
 
     // gender
-    // console.log(JSON.stringify(component.props.data))
     fireEvent(component.$$('su-th')[2], 'click')
-    // console.log(JSON.stringify(component.props.data))
     expect(component.props.data[0]['su-table-index']).to.equal(3)
     expect(component.props.data[1]['su-table-index']).to.equal(1)
-    // expect(component.props.data[2]['su-table-index']).to.equal(0)
-    // expect(component.props.data[3]['su-table-index']).to.equal(2)
-    // expect(component.props.data[4]['su-table-index']).to.equal(4)
+    expect(component.props.data[2]['su-table-index']).to.equal(0)
+    expect(component.props.data[3]['su-table-index']).to.equal(2)
+    expect(component.props.data[4]['su-table-index']).to.equal(4)
   })
 
-  // it('default sort', function () {
-  //   mount({
-  //     data: [
-  //       { name: 'John', age: 15, gender: 'Male' },
-  //       { name: 'Amber', age: 40, gender: 'Female' },
-  //       { name: 'Terry', age: 25, gender: 'Male' },
-  //       { name: 'Leslie', age: 25 },
-  //       { name: 'Ben', age: 70, gender: 'Male' },
-  //     ],
-  //     defaultSortField: 'age',
-  //     defaultSortReverse: true,
-  //   })
+  it('default sort', function () {
+    mount({
+      data: [
+        { name: 'John', age: 15, gender: 'Male' },
+        { name: 'Amber', age: 40, gender: 'Female' },
+        { name: 'Terry', age: 25, gender: 'Male' },
+        { name: 'Leslie', age: 25 },
+        { name: 'Ben', age: 70, gender: 'Male' },
+      ],
+      defaultSortField: 'age',
+      defaultSortReverse: true,
+    })
 
-  //   component.props.data[0].name.should.equal('Ben')
-  //   component.props.data[0]['su-table-index'].should.equal(4)
-  //   component.props.data[1]['su-table-index'].should.equal(1)
-  //   component.props.data[2]['su-table-index'].should.equal(2)
-  //   component.props.data[3]['su-table-index'].should.equal(3)
-  //   component.props.data[4]['su-table-index'].should.equal(0)
-  // })
+    expect(component.props.data[0].name).to.equal('Ben')
+    expect(component.props.data[0]['su-table-index']).to.equal(4)
+    expect(component.props.data[1]['su-table-index']).to.equal(1)
+    expect(component.props.data[2]['su-table-index']).to.equal(2)
+    expect(component.props.data[3]['su-table-index']).to.equal(3)
+    expect(component.props.data[4]['su-table-index']).to.equal(0)
+  })
 
-
+  // TODO update attribute
   // it('update data with default sort', function () {
   //   mount({
   //     data: [],
@@ -165,11 +163,11 @@ describe('su-table', function () {
   //   ]
   //   tag.update()
 
-  //   component.props.data[0].name.should.equal('Ben')
-  //   component.props.data[0]['su-table-index'].should.equal(4)
-  //   component.props.data[1]['su-table-index'].should.equal(1)
-  //   component.props.data[2]['su-table-index'].should.equal(2)
-  //   component.props.data[3]['su-table-index'].should.equal(3)
-  //   component.props.data[4]['su-table-index'].should.equal(0)
+  //   expect(component.props.data[0].name).to.equal('Ben')
+  //   expect(component.props.data[0]['su-table-index']).to.equal(4)
+  //   expect(component.props.data[1]['su-table-index']).to.equal(1)
+  //   expect(component.props.data[2]['su-table-index']).to.equal(2)
+  //   expect(component.props.data[3]['su-table-index']).to.equal(3)
+  //   expect(component.props.data[4]['su-table-index']).to.equal(0)
   // })
 })
