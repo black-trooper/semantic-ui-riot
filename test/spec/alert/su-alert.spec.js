@@ -40,6 +40,7 @@ describe('su-alert', function () {
 
     const btn_one = component.$('.ui.button')
     expect(btn_one.innerText.trim()).to.equal('Close')
+    // TODO: focus
     // expect(btn_one).to.be.not.equal(document.activeElement)
 
     component.$('su-modal').click()
@@ -93,6 +94,7 @@ describe('su-alert', function () {
     expect(component.$('p').innerText).to.empty
     const btn_one = component.$('su-modal .ui.button')
     expect(btn_one.innerText.trim()).to.equal('ok')
+    // TODO: focus
     // btn_one.is(':focus').to.equal(true)
   })
 
@@ -112,6 +114,7 @@ describe('su-alert', function () {
     component.suAlert()
     const btn_one = component.$('su-modal .ui.button')
     expect(btn_one.innerText.trim()).to.equal('Yes')
+    // TODO: focus
     // btn_one.is(':focus').to.equal(true)
   })
 })

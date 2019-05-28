@@ -16,6 +16,7 @@ describe('su-modal', function () {
     component = riot.mount(element, option)[0]
   }
 
+  // TODO: isFocus
   // const isFocus = elem => {
   //   return elem === document.activeElement
   //     && (!document.hasFocus || document.hasFocus())
@@ -123,6 +124,7 @@ describe('su-modal', function () {
     expect(btn_ok.innerText.trim()).to.equal(modal.buttons[0].text)
     expect(btn_ok.classList.contains(modal.buttons[0].type)).to.equal(true)
     expect(btn_ok.querySelectorAll(`.${modal.buttons[0].icon}`)).to.have.lengthOf(1)
+    // TODO: focus
     // expect(btn_ok).to.be.not.equal(document.activeElement)
 
     const btn_cancel = component.$$('.ui.button')[1]
@@ -130,6 +132,7 @@ describe('su-modal', function () {
     expect(btn_cancel.classList.contains('icon')).to.equal(false)
     expect(btn_cancel.querySelectorAll('.icon')).to.have.lengthOf(0)
     expect(btn_cancel.innerText.trim()).to.equal(modal.buttons[1].text)
+    // TODO: focus
     // expect(btn_cancel).to.be.not.equal(document.activeElement)
   })
 
@@ -152,14 +155,17 @@ describe('su-modal', function () {
 
     const btn_one = component.$('.ui.button')
     expect(btn_one.innerText.trim()).to.equal(modal.buttons[0].text)
+    // TODO: focus
     // expect(isFocus(btn_one)).to.equal(true)
 
     const btn_two = component.$$('.ui.button')[1]
     expect(btn_two.innerText.trim()).to.equal(modal.buttons[1].text)
+    // TODO: focus
     // expect(btn_two).to.be.not.equal(document.activeElement)
 
     const btn_three = component.$$('.ui.button')[2]
     expect(btn_three.innerText.trim()).to.equal(modal.buttons[2].text)
+    // TODO: focus
     // expect(isFocus(btn_three)).to.be.not.equal(false)
   })
 

@@ -110,9 +110,6 @@ describe('su-dropdown', function () {
     element.click()
     this.clock.tick(310)
 
-    // fireEvent(component.$('.item:eq(1)')[0], 'mousedown')
-    // fireEvent($('su-dropdown')[0], 'blur')
-    // fireEvent(component.$('.item:eq(1)')[0], 'mouseup')
     component.$$('.item')[1].click()
     expect(component.$('.text').innerText.trim()).to.equal(items[1].label)
     expect(component.$('.text').classList.contains('default')).to.equal(false)
@@ -201,6 +198,7 @@ describe('su-dropdown', function () {
     expect(component.state.value).to.be.null
   })
 
+  // TODO update attribute
   // it('update items', function () {
   //   expect(component.$$('.menu .item')).to.have.lengthOf(3)
 

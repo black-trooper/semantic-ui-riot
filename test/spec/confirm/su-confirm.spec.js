@@ -65,9 +65,11 @@ describe('su-confirm', function () {
 
     const btn_cancel = component.$('su-modal .ui.button')
     btn_cancel.innerText.trim().should.equal('Cancel')
+    // TODO: focus
     // btn_cancel.is(':focus').should.equal(false)
     const btn_ok = component.$$('su-modal .ui.button')[1]
     btn_ok.innerText.trim().should.equal('OK')
+    // TODO: focus
     // btn_ok.is(':focus').should.equal(true)
 
     component.$('su-modal').click()
@@ -132,11 +134,13 @@ describe('su-confirm', function () {
     expect(btn_cancel.innerText.trim()).to.equal('Not delete')
     expect(btn_cancel.querySelectorAll('.undo')).to.have.lengthOf(1)
     expect(btn_cancel.classList.contains('positive')).to.equal(true)
+    // TODO: focus
     // btn_cancel.is(':focus').should.equal(true)
     const btn_ok = component.$('su-modal .ui.button')
     expect(btn_ok.innerText.trim()).to.equal('Delete')
     expect(btn_ok.querySelectorAll('.trash')).to.have.lengthOf(1)
     expect(btn_ok.classList.contains('negative')).to.equal(true)
+    // TODO: focus
     // btn_ok.is(':focus').should.equal(false)
   })
 
@@ -186,11 +190,13 @@ describe('su-confirm', function () {
     expect(btn_cancel.innerText.trim()).to.equal('Not delete')
     expect(btn_cancel.querySelectorAll('.undo')).to.have.lengthOf(1)
     expect(btn_cancel.classList.contains('positive')).to.equal(true)
+    // TODO: focus
     // btn_cancel.is(':focus').should.equal(true)
     const btn_ok = component.$('su-modal .ui.button')
     expect(btn_ok.innerText.trim()).to.equal('Delete')
     expect(btn_ok.querySelectorAll('.trash')).to.have.lengthOf(1)
     expect(btn_ok.classList.contains('negative')).to.equal(true)
+    // TODO: focus
     // btn_ok.is(':focus').should.equal(false)
   })
 
@@ -257,11 +263,13 @@ describe('su-confirm', function () {
     expect(btn_cancel.innerText.trim()).to.equal('Not delete')
     expect(btn_cancel.querySelectorAll('.undo')).to.have.lengthOf(1)
     expect(btn_cancel.classList.contains('positive')).to.equal(true)
+    // TODO: focus
     // btn_cancel.is(':focus').should.equal(true)
     const btn_ok = component.$('su-modal .ui.button')
     expect(btn_ok.innerText.trim()).to.equal('Delete')
     expect(btn_ok.querySelectorAll('.trash')).to.have.lengthOf(1)
     expect(btn_ok.classList.contains('negative')).to.equal(true)
+    // TODO: focus
     // btn_ok.is(':focus').should.equal(false)
   })
 })
