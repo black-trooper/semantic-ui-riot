@@ -1,6 +1,11 @@
 // ===================================================================================
 //                                                                           Lifecycle
 //                                                                           =========
+function onBeforeMount(props, state) {
+  this.lastData = {};
+  this.lastCondition = {};
+}
+
 function onMounted(props, state) {
   this.headers = this.$$('su-th');
 
@@ -18,27 +23,25 @@ function onMounted(props, state) {
 }
 
 function onUpdated(props, state) {
-  // if (JSON.stringify(this.lastData) != JSON.stringify(props.data)) {
-  //   this.lastData = props.data
-  //   this.lastCondition = {
-  //     field: state.suTableIndex,
-  //     reverse: false,
-  //   }
+  if (JSON.stringify(this.lastData) != JSON.stringify(props.data)) {
+    this.lastData = props.data;
+    this.lastCondition = {
+      field: state.suTableIndex,
+      reverse: false,
+    };
 
-  //   if (props.defaultSortField) {
-  //     if (props.defaultSortReverse) {
-  //       this.lastCondition.field = props.defaultSortField
-  //       this.lastCondition.reverse = false
-  //     }
-  //     sort(props.defaultSortField)
+    if (props.defaultSortField) {
+      if (props.defaultSortReverse) {
+        this.lastCondition.field = props.defaultSortField;
+        this.lastCondition.reverse = false;
+      }
+      sort(this, props.defaultSortField);
 
-  //     headers.forEach(th => {
-  //       th.sorted = th.props.field == this.lastCondition.field
-  //       th.reverse = this.lastCondition.reverse
-  //     })
-  //     this.update()
-  //   }
-  // }
+      this.headers.forEach(th => {
+        this.obs.trigger(`${th.id}-set-condition`, this.lastCondition);
+      });
+    }
+  }
 }
 
 // ===================================================================================
@@ -71,6 +74,7 @@ function sortBy(condition, tag) {
   const field = condition.field;
   const reverse = condition.reverse ? -1 : 1;
   const nullsFirst = tag.props.nullsFirst ? -1 : 1;
+
   return (ason, bson) => {
     const a = ason[field];
     const b = bson[field];
@@ -105,22 +109,23 @@ var suTable = {
 
   'exports': {
     state: {
-      suTableIndex: 'su-table-index'
+      suTableIndex: 'su-table-index',
     },
 
     lastData: {},
     lastCondition: {},
     headers: [],
+    onBeforeMount,
     onMounted,
     onUpdated
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot expr48></slot>', [{
+    return template('<slot expr50></slot>', [{
       'type': bindingTypes.SLOT,
       'name': 'default',
-      'redundantAttribute': 'expr48',
-      'selector': '[expr48]'
+      'redundantAttribute': 'expr50',
+      'selector': '[expr50]'
     }]);
   },
 
