@@ -1,47 +1,53 @@
-require('../../../dist/tags/accordion/su-accordion.js')
-require('../../../dist/tags/accordion/su-accordionset.js')
+import * as riot from 'riot'
+import { init, fireEvent, compile } from '../../helpers/'
+import AccordionsetComponent from '../../../dist/tags/accordion/su-accordionset.js'
+import AccordionComponent from '../../../dist/tags/accordion/su-accordion.js'
 
 describe('su-accordionset-options', function () {
-  let tag
-  let mount = group => {
-    $('body').append(group)
-    tag = riot.mount('su-accordionset')[0]
+  let element, component
+  init(riot)
+
+  beforeEach(function () {
+    element = document.createElement('app')
+    riot.register('su-accordionset', AccordionsetComponent)
+    riot.register('su-accordion', AccordionComponent)
+  })
+
+  const mount = code => {
+    const AppComponent = compile(code)
+    riot.register('app', AppComponent)
+    component = riot.mount(element, {})[0]
   }
 
   afterEach(function () {
-    tag.unmount()
-  })
-
-  it('su-accordion has class', function () {
-    mount(`
-      <su-accordionset>
-        <su-accordion title="Home" class="none">Home content</su-accordion>
-        <su-accordion title="Message" class="none">Messages content</su-accordion>
-      </su-accordionset>`)
-
-    tag.tags['su-accordion'][0].root.classList.contains('none').should.equal(true)
-    tag.tags['su-accordion'][0].root.classList.contains('segment').should.equal(false)
-    tag.tags['su-accordion'][1].root.classList.contains('none').should.equal(true)
-    tag.tags['su-accordion'][1].root.classList.contains('segment').should.equal(false)
+    riot.unregister('su-accordion')
+    riot.unregister('su-accordionset')
+    riot.unregister('app')
   })
 
   it('default active', function () {
     mount(`
-      <su-accordionset>
-        <su-accordion title="Home">Home content</su-accordion>
-        <su-accordion title="Message" active="true">Messages content</su-accordion>
-      </su-accordionset>`)
+      <app>
+        <su-accordionset>
+          <su-accordion title="Home">Home content</su-accordion>
+          <su-accordion title="Message" active="true">Messages content</su-accordion>
+        </su-accordionset>
+      </app>`)
 
-    tag.tags['su-accordion'][0].active.should.equal(false)
-    tag.tags['su-accordion'][1].active.should.equal(true)
+
+    expect(component.$$('su-accordion div.title')[0].classList.contains('active')).to.equal(false)
+    expect(component.$$('su-accordion div.title')[1].classList.contains('active')).to.equal(true)
   })
 
   it('single accordion', function () {
     mount(`
-      <su-accordionset>
-        <su-accordion title="Home">Home content</su-accordion>
-      </su-accordionset>`)
+      <app>
+        <su-accordionset>
+          <su-accordion title="Home">Home content</su-accordion>
+        </su-accordionset>
+      </app>`)
 
-    tag.tags['su-accordion'].active.should.equal(true)
+
+    expect(component.$$('su-accordion div.title')[0].classList.contains('active')).to.equal(true)
   })
 })

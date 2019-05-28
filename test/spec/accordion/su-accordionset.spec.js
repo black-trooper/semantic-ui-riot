@@ -1,46 +1,59 @@
-const fireEvent = require('../../helpers').fireEvent
-require('../../../dist/tags/accordion/su-accordion.js')
-require('../../../dist/tags/accordion/su-accordionset.js')
+import * as riot from 'riot'
+import { init, fireEvent, compile } from '../../helpers/'
+import AccordionsetComponent from '../../../dist/tags/accordion/su-accordionset.js'
+import AccordionComponent from '../../../dist/tags/accordion/su-accordion.js'
 
 describe('su-accordionset', function () {
-  let tag
+  let element, component
   let spyOnClick = sinon.spy()
+  init(riot)
 
   beforeEach(function () {
-    const group = $('<su-accordionset></su-accordionset>')
-    group.append('<su-accordion title="Home">Home content</su-accordion>')
-      .append('<su-accordion title="Message">Messages content</su-accordion>')
-    $('body').append(group)
-    tag = riot.mount('su-accordionset')[0]
-    tag.on('click', spyOnClick)
+    element = document.createElement('app')
+    riot.register('su-accordionset', AccordionsetComponent)
+    riot.register('su-accordion', AccordionComponent)
+    const AppComponent = compile(`
+      <app>
+        <su-accordionset onclick="{ props.onclick }">
+          <su-accordion title="Home">Home content</su-accordion>
+          <su-accordion title="Message">Messages content</su-accordion>
+        </su-accordionset>
+      </app>
+    `)
+    riot.register('app', AppComponent)
+    component = riot.mount(element, {
+      'onclick': spyOnClick
+    })[0]
   })
 
   afterEach(function () {
     spyOnClick.reset()
-    tag.unmount()
+    riot.unregister('su-accordion')
+    riot.unregister('su-accordionset')
+    riot.unregister('app')
   })
 
   it('is mounted', function () {
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 
   it('click title', function () {
-    tag.tags['su-accordion'][0].active.should.equal(true)
-    tag.tags['su-accordion'][1].active.should.equal(false)
+    expect(component.$$('su-accordion div.title')[0].classList.contains('active')).to.equal(true)
+    expect(component.$$('su-accordion div.title')[1].classList.contains('active')).to.equal(false)
 
-    fireEvent($('div.title:eq(1)')[0], 'click')
-    tag.tags['su-accordion'][0].active.should.equal(false)
-    tag.tags['su-accordion'][1].active.should.equal(true)
-    spyOnClick.should.have.been.calledOnce
+    fireEvent(component.$$('su-accordion div.title')[1], 'click')
+    expect(component.$$('su-accordion div.title')[0].classList.contains('active')).to.equal(false)
+    expect(component.$$('su-accordion div.title')[1].classList.contains('active')).to.equal(true)
+    expect(spyOnClick).to.have.been.calledOnce
 
-    fireEvent($('div.title:eq(0)')[0], 'click')
-    tag.tags['su-accordion'][0].active.should.equal(true)
-    tag.tags['su-accordion'][1].active.should.equal(false)
-    spyOnClick.should.have.been.calledTwice
+    fireEvent(component.$$('su-accordion div.title')[0], 'click')
+    expect(component.$$('su-accordion div.title')[0].classList.contains('active')).to.equal(true)
+    expect(component.$$('su-accordion div.title')[1].classList.contains('active')).to.equal(false)
+    expect(spyOnClick).to.have.been.calledTwice
 
-    fireEvent($('div.title:eq(0)')[0], 'click')
-    tag.tags['su-accordion'][0].active.should.equal(false)
-    tag.tags['su-accordion'][1].active.should.equal(false)
-    spyOnClick.should.have.been.callCount(3)
+    fireEvent(component.$$('su-accordion div.title')[0], 'click')
+    expect(component.$$('su-accordion div.title')[0].classList.contains('active')).to.equal(false)
+    expect(component.$$('su-accordion div.title')[1].classList.contains('active')).to.equal(false)
+    expect(spyOnClick).to.have.been.callCount(3)
   })
 })
