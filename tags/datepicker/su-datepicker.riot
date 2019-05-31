@@ -1,4 +1,4 @@
-<su-datepicker>
+<su-datepicker value="{ state.value }">
   <div class="ui { props.popup ? 'dropdown' : '' } { upward ? 'upward' : '' }">
     <div class="ui action input { disabled }" if="{ props.popup }">
       <input type="text" placeholder="{ props.placeholder }" tabindex="{ tabIndex }" readonly="{ readOnly }"
@@ -235,18 +235,16 @@
         this.yearRange = props.yearRange
       }
       if (props.startMode === 'year') {
-        selectYear()
+        this.selectYear()
       }
       this.update()
-      this.defaultValue = this.valueAsDate
+      this.defaultValue = this.state.valueAsDate
     }
 
     function onBeforeUpdate(props, state) {
       this.readOnly = this.root.classList.contains('read-only') ? "read-only" : ''
       this.disabled = this.root.classList.contains('disabled') ? 'disabled' : ''
-    }
 
-    function onUpdated(props, state) {
       let changed = false
       if (!isEqualDay(this.lastValue, state.value)) {
         state.valueAsDate = copyDate(state.value)
@@ -277,13 +275,15 @@
         this.lastCurrentDate = copyDate(state.currentDate)
         generate(this)
       }
+    }
 
-      this.changed = !isEqualDay(this.valueAsDate, this.defaultValue)
+    function onUpdated(props, state) {
+      this.changed = !isEqualDay(this.state.valueAsDate, this.defaultValue)
     }
 
     // trigger
     // function reset() {
-    //   tag.valueAsDate = tag.defaultValue
+    //   tag.state.valueAsDate = tag.defaultValue
     //   setValueFromValueAsDate(this)
     // }
 
@@ -297,7 +297,7 @@
     }
 
     function selectYear() {
-      this.years = getYears(this)
+      this.state.years = getYears(this)
       this.monthSelecting = false
       this.yearSelecting = !this.yearSelecting
       this.update()
@@ -308,7 +308,7 @@
         return
       }
       setDate(this, day)
-      this.dispatch('click', this.valueAsDate)
+      this.dispatch('click', this.state.valueAsDate)
       this.update()
     }
 
@@ -320,13 +320,13 @@
 
     function clickYear(year) {
       this.state.currentDate.setYear(year)
-      selectMonth()
+      this.selectMonth()
       this.update()
     }
 
     function clickPrevious() {
       if (this.yearSelecting) {
-        addYear(this, -yearRange)
+        this.state.years = addYear(this.state.years, -this.yearRange)
       } else {
         this.monthSelecting = false
         this.state.currentDate = addMonths(this.state.currentDate, -1)
@@ -336,7 +336,7 @@
 
     function clickNext() {
       if (this.yearSelecting) {
-        addYear(this, yearRange)
+        this.state.years = addYear(this.state.years, this.yearRange)
       } else {
         this.monthSelecting = false
         this.state.currentDate = addMonths(this.state.currentDate, 1)
@@ -347,13 +347,13 @@
     function clickClear() {
       setDate(this, null)
       this.update()
-      this.dispatch('clear', this.valueAsDate)
+      this.dispatch('clear', this.state.valueAsDate)
     }
 
     function clickToday() {
       setDate(this, new Date())
       this.update()
-      this.dispatch('today', this.valueAsDate)
+      this.dispatch('today', this.state.valueAsDate)
     }
 
     // -----------------------------------------------------
@@ -365,7 +365,7 @@
       }
       if (!this.visibleFlg) {
         if (this.props.startMode === 'year') {
-          selectYear()
+          this.selectYear()
           this.yearSelecting = true
         }
         open(this)
@@ -412,7 +412,7 @@
     }
 
     function isActive(date) {
-      return isEqualDay(this.valueAsDate, date)
+      return isEqualDay(this.state.valueAsDate, date)
     }
 
     // ===================================================================================
@@ -433,23 +433,23 @@
       }
     }
 
-    function addYear(tag, year) {
-      tag.years = tag.years.map(values => {
+    function addYear(years, range) {
+      return years.map(values => {
         values = values.map(value => {
-          return value + parseInt(year)
+          return value + parseInt(range)
         })
         return values
       })
     }
 
     function getYears(tag) {
-      const rowSize = ((yearRange - yearRange % 4) / 4) + ((yearRange % 4 != 0) ? 1 : 0)
+      const rowSize = ((tag.yearRange - tag.yearRange % 4) / 4) + ((tag.yearRange % 4 != 0) ? 1 : 0)
       const years = new Array()
       for (let index = 0; index < rowSize; index++) {
         years.push([])
       }
-      for (let index = 0; index < yearRange; index++) {
-        years[(index - index % 4) / 4][index % 4] = tag.state.currentDate.getFullYear() + index - ((yearRange - yearRange % 2) / 2 - 1)
+      for (let index = 0; index < tag.yearRange; index++) {
+        years[(index - index % 4) / 4][index % 4] = tag.state.currentDate.getFullYear() + index - ((tag.yearRange - tag.yearRange % 2) / 2 - 1)
       }
       return years
     }
@@ -471,33 +471,33 @@
       tag.state.transitionStatus = 'visible'
       tag.visibleFlg = true
       tag.state.currentDate = copyDate(tag.props.currentDate)
-      if (tag.valueAsDate) {
-        tag.state.currentDate = copyDate(tag.valueAsDate)
+      if (tag.state.valueAsDate) {
+        tag.state.currentDate = copyDate(tag.state.valueAsDate)
       }
       if (!tag.state.currentDate) {
         tag.state.currentDate = new Date()
       }
-      tag.dispatch('open', tag.valueAsDate)
+      tag.dispatch('open', tag.state.valueAsDate)
     }
 
     function close(tag) {
       tag.state.transitionStatus = 'hidden'
       tag.visibleFlg = false
-      tag.dispatch('close', tag.valueAsDate)
+      tag.dispatch('close', tag.state.valueAsDate)
     }
 
     function setDate(tag, date) {
-      tag.valueAsDate = date
+      tag.state.valueAsDate = date
       setValueFromValueAsDate(tag)
       if (tag.props.popup) {
         tag.$('input').value = tag.state.value
         close(tag)
       }
-      tag.dispatch('change', tag.valueAsDate)
+      tag.dispatch('change', tag.state.valueAsDate)
     }
 
     function setValueFromValueAsDate(tag) {
-      tag.value = tag.valueAsDate ? format(tag.valueAsDate, tag.pattern, { locale: tag.locale }) : null
+      tag.state.value = tag.state.valueAsDate ? format(tag.state.valueAsDate, tag.pattern, { locale: tag.locale }) : null
     }
 
     function isEqualDay(d1, d2) {
