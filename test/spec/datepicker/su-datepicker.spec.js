@@ -40,6 +40,14 @@ describe('su-datepicker', function () {
           class="{ props.class }"
           direction="{ props.direction }"
         />
+        <button id="reset" type="button" onclick="{ reset }">reset</button>
+        <script>
+          export default {
+            reset() {
+              this.obs.trigger(this.$('su-datepicker').id + '-reset')
+            }
+          }
+        </script>
       </app>`)
     riot.register('app', AppComponent)
     component = riot.mount(element, option)[0]
@@ -437,46 +445,38 @@ describe('su-datepicker', function () {
     expect(component.$('.ui.dropdown').classList.contains('upward')).to.equal(false)
   })
 
-  // it('reset value', function () {
-  //   mount()
-  //   expect(component.$('su-datepicker').value).to.be.null
-  //   expect(tag.valueAsDate).to.be.undefined
-  //   expect(tag.defaultValue).to.be.undefined
+  it('reset value', function () {
+    mount()
+    expect(component.$('su-datepicker').value).to.be.null
+    expect(component.$('su-datepicker').getAttribute('changed')).to.be.not.ok
 
-  //   fireEvent(component.$('.dp-today .button'), 'click')
-  //   const today = new Date()
-  //   expect(component.$('su-datepicker').value).to.equal(`${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())}`)
-  //   tag.valueAsDate.getFullYear().to.equal(today.getFullYear())
-  //   tag.valueAsDate.getMonth().to.equal(today.getMonth())
-  //   tag.valueAsDate.getDate().to.equal(today.getDate())
-  //   expect(tag.defaultValue).to.be.undefined
+    fireEvent(component.$('.dp-today .button'), 'click')
+    const today = new Date()
+    expect(component.$('su-datepicker').value).to.equal(`${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())}`)
+    expect(component.$('su-datepicker').getAttribute('changed')).to.be.ok
 
-  //   tag.reset()
-  //   expect(component.$('su-datepicker').value).to.be.null
-  //   expect(tag.valueAsDate).to.be.undefined
-  //   expect(tag.defaultValue).to.be.undefined
-  // })
+    fireEvent(component.$('#reset'), 'click')
+    expect(component.$('su-datepicker').value).to.be.null
+    expect(component.$('su-datepicker').getAttribute('changed')).to.be.not.ok
+  })
 
-  // it('reset default value', function () {
-  //   const date = new Date(2017, 0, 1)
-  //   mount({ value: date })
+  it('reset default value', function () {
+    const date = new Date(2017, 0, 1)
+    mount({ value: date })
 
-  //   tag.valueAsDate.getTime().to.equal(date.getTime())
-  //   tag.defaultValue.getTime().to.equal(date.getTime())
-  //   tag.changed().to.equal(false)
+    expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
+    expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2017')
+    expect(component.$('su-datepicker').value).to.equal('2017-01-01')
+    console.log(component.$('su-datepicker').getAttribute('changed'))
+    expect(component.$('su-datepicker').getAttribute('changed')).to.be.not.ok
 
-  //   fireEvent(component.$('.dp-today .button'), 'click')
-  //   const today = new Date()
-  //   expect(component.$('su-datepicker').value).to.equal(`${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())}`)
-  //   tag.valueAsDate.getFullYear().to.equal(today.getFullYear())
-  //   tag.valueAsDate.getMonth().to.equal(today.getMonth())
-  //   tag.valueAsDate.getDate().to.equal(today.getDate())
-  //   tag.defaultValue.getTime().to.equal(date.getTime())
-  //   tag.changed().to.equal(true)
+    fireEvent(component.$('.dp-today .button'), 'click')
+    const today = new Date()
+    expect(component.$('su-datepicker').value).to.equal(`${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())}`)
+    expect(component.$('su-datepicker').getAttribute('changed')).to.be.ok
 
-  //   tag.reset()
-  //   tag.valueAsDate.getTime().to.equal(date.getTime())
-  //   tag.defaultValue.getTime().to.equal(date.getTime())
-  //   tag.changed().to.equal(false)
-  // })
+    fireEvent(component.$('#reset'), 'click')
+    expect(component.$('su-datepicker').value).to.equal('2017-01-01')
+    expect(component.$('su-datepicker').getAttribute('changed')).to.be.not.ok
+  })
 })

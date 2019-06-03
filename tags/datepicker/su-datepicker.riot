@@ -1,4 +1,4 @@
-<su-datepicker value="{ state.value }">
+<su-datepicker value="{ state.value }" changed="{ changed }" id="{ su_id }">
   <div class="ui { props.popup ? 'dropdown' : '' } { upward ? 'upward' : '' }">
     <div class="ui action input { disabled }" if="{ props.popup }">
       <input type="text" placeholder="{ props.placeholder }" tabindex="{ tabIndex }" readonly="{ readOnly }"
@@ -145,6 +145,7 @@
   </style>
 
   <script>
+    let index = 0
     import {
       addDays,
       addMonths,
@@ -175,7 +176,6 @@
       onBeforeMount,
       onMounted,
       onBeforeUpdate,
-      onUpdated,
 
       clickDay,
       clickMonth,
@@ -210,6 +210,8 @@
       this.locale = getLocale(this)
       this.tabIndex = getTabindex(this)
       this.weekNames = getWeekNames(this)
+      this.su_id = `su-datepicker-${index++}`
+      this.obs.on(`${this.su_id}-reset`, () => { reset(this) })
     }
 
     function onMounted(props, state) {
@@ -237,8 +239,8 @@
       if (props.startMode === 'year') {
         this.selectYear()
       }
+      state.defaultValue = state.valueAsDate
       this.update()
-      this.defaultValue = this.state.valueAsDate
     }
 
     function onBeforeUpdate(props, state) {
@@ -275,17 +277,14 @@
         this.lastCurrentDate = copyDate(state.currentDate)
         generate(this)
       }
+      this.changed = !isEqualDay(state.valueAsDate, state.defaultValue)
     }
 
-    function onUpdated(props, state) {
-      this.changed = !isEqualDay(this.state.valueAsDate, this.defaultValue)
+    function reset(tag) {
+      tag.state.valueAsDate = tag.state.defaultValue
+      setValueFromValueAsDate(tag)
+      tag.update()
     }
-
-    // trigger
-    // function reset() {
-    //   tag.state.valueAsDate = tag.defaultValue
-    //   setValueFromValueAsDate(this)
-    // }
 
     // ===================================================================================
     //                                                                               Event
