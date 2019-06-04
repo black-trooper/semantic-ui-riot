@@ -165,23 +165,19 @@ describe('su-dropdown-multiple', function () {
   })
 
   it('reset value', function () {
-    expect(component.state.value).to.deep.equal([])
-    expect(component.state.defaultValue).to.deep.equal([])
-    component.changed.should.deep.equal(false)
+    expect(element.value).to.deep.equal([])
+    expect(element.getAttribute("changed")).to.be.not.ok
     element.click()
     this.clock.tick(310)
 
     component.$('.item').click()
     component.$('.item').click()
+    expect(element.value).to.deep.equal(['angular', 'css'])
+    expect(element.getAttribute("changed")).to.be.ok
 
-    expect(component.state.value).to.deep.equal(['angular', 'css'])
-    expect(component.state.defaultValue).to.deep.equal([])
-    component.changed.should.deep.equal(true)
-
-    component.reset()
-    expect(component.state.value).to.deep.equal([])
-    expect(component.state.defaultValue).to.deep.equal([])
-    component.changed.should.deep.equal(false)
+    component.obs.trigger(`${element.id}-reset`)
+    expect(element.value).to.deep.equal([])
+    expect(element.getAttribute("changed")).to.be.not.ok
 
     fireEvent(element, 'blur')
   })

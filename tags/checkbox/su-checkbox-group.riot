@@ -1,4 +1,4 @@
-<su-checkbox-group value="{ state.value }">
+<su-checkbox-group value="{ state.value }" changed="{ changed }" id="{ su_id }">
   <slot />
 
   <script>
@@ -14,7 +14,6 @@
       onMounted,
       onBeforeUpdate,
       onUpdated,
-      reset,
     }
 
     // ===================================================================================
@@ -22,6 +21,7 @@
     //                                                                           =========
     function onMounted(props, state) {
       this.su_id = `su-checkbox-group-${index++}`
+      this.obs.on(`${this.su_id}-reset`, () => { reset(this) })
       if (!state.value) {
         state.value = props.value
       }
@@ -45,7 +45,7 @@
       })
 
       this.defaultValue = state.value
-      // parentUpdate()
+      this.update()
     }
 
     function onBeforeUpdate(props, state) {
@@ -76,9 +76,9 @@
       }
     }
 
-    function reset() {
-      this.update({
-        value: this.defaultValue
+    function reset(tag) {
+      tag.update({
+        value: tag.defaultValue
       })
     }
 

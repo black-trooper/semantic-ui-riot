@@ -467,7 +467,6 @@ describe('su-datepicker', function () {
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
     expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2017')
     expect(component.$('su-datepicker').value).to.equal('2017-01-01')
-    console.log(component.$('su-datepicker').getAttribute('changed'))
     expect(component.$('su-datepicker').getAttribute('changed')).to.be.not.ok
 
     fireEvent(component.$('.dp-today .button'), 'click')

@@ -85,18 +85,15 @@ describe('su-radio-group', function () {
   })
 
   it('reset value', function () {
-    expect(component.state.value).to.be.undefined
-    expect(component.defaultValue).to.be.undefined
-    expect(component.changed).to.be.not.ok
+    expect(element.value).to.be.undefined
+    expect(element.getAttribute("changed")).to.be.not.ok
 
     component.$$('su-radio input')[0].click()
-    expect(component.state.value[0]).to.equal(component.$$('su-radio')[0].getAttribute("value"))
-    expect(component.defaultValue).to.be.undefined
-    expect(component.changed).to.be.ok
+    expect(element.value).to.equal(component.$$('su-radio')[0].getAttribute("value"))
+    expect(element.getAttribute("changed")).to.be.ok
 
-    component.reset()
-    expect(component.state.value).to.be.undefined
-    expect(component.defaultValue).to.be.undefined
-    expect(component.changed).to.be.not.ok
+    component.obs.trigger(`${element.id}-reset`)
+    expect(element.value).to.be.undefined
+    expect(element.getAttribute("changed")).to.be.not.ok
   })
 })

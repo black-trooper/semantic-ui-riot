@@ -75,20 +75,17 @@ describe('su-dropdown-multiple-option', function () {
 
   it('reset value', function () {
     mount('{[\'angular\', \'css\']}')
-    expect(component.state.value).deep.equal(['angular', 'css'])
-    expect(component.state.defaultValue).deep.equal(['angular', 'css'])
-    expect(component.changed).deep.equal(false)
-    element.click()
+    expect(element.value).to.deep.equal(['angular', 'css'])
+    expect(element.getAttribute("changed")).to.be.not.ok
 
+    element.click()
     component.$('.label .delete').click()
     expect(component.$('.label').innerText.trim()).to.equal(items[2].label)
-    expect(component.state.value).deep.equal(['css'])
-    expect(component.state.defaultValue).deep.equal(['angular', 'css'])
-    expect(component.changed).deep.equal(true)
+    expect(element.value).to.deep.equal(['css'])
+    expect(element.getAttribute("changed")).to.be.ok
 
-    component.reset()
-    expect(component.state.value).deep.equal(['angular', 'css'])
-    expect(component.state.defaultValue).deep.equal(['angular', 'css'])
-    expect(component.changed).deep.equal(false)
+    component.obs.trigger(`${element.id}-reset`)
+    expect(element.value).to.deep.equal(['angular', 'css'])
+    expect(element.getAttribute("changed")).to.be.not.ok
   })
 })

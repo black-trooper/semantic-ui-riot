@@ -88,24 +88,15 @@ describe('su-checkbox', function () {
   })
 
   it('reset value', function () {
-    expect(component.state.checked).to.be.not.ok
     expect(element.getAttribute("checked")).to.be.not.ok
-    expect(component.state.defaultChecked).to.be.not.ok
     expect(element.getAttribute("changed")).to.be.not.ok
-    expect(component.changed).to.be.not.ok
 
     component.$('input').click()
-    expect(component.state.checked).to.be.ok
     expect(element.getAttribute("checked")).to.be.ok
-    expect(component.state.defaultChecked).to.be.not.ok
     expect(element.getAttribute("changed")).to.be.ok
-    expect(component.changed).to.be.ok
 
-    component.reset()
-    expect(component.state.checked).to.be.not.ok
+    component.obs.trigger(`${element.id}-reset`)
     expect(element.getAttribute("checked")).to.be.not.ok
-    expect(component.state.defaultChecked).to.be.not.ok
     expect(element.getAttribute("changed")).to.be.not.ok
-    expect(component.changed).to.be.not.ok
   })
 })

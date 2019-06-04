@@ -5,6 +5,7 @@ let index = 0;
 //                                                                           =========
 function onMounted(props, state) {
   this.su_id = `su-checkbox-group-${index++}`;
+  this.obs.on(`${this.su_id}-reset`, () => { reset(this); });
   if (!state.value) {
     state.value = props.value;
   }
@@ -28,7 +29,7 @@ function onMounted(props, state) {
   });
 
   this.defaultValue = state.value;
-  // parentUpdate()
+  this.update();
 }
 
 function onBeforeUpdate(props, state) {
@@ -59,9 +60,9 @@ function onUpdated(props, state) {
   }
 }
 
-function reset() {
-  this.update({
-    value: this.defaultValue
+function reset(tag) {
+  tag.update({
+    value: tag.defaultValue
   });
 }
 
@@ -115,24 +116,37 @@ var suCheckboxGroup = {
     defaultValue: '',
     onMounted,
     onBeforeUpdate,
-    onUpdated,
-    reset
+    onUpdated
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot expr5></slot>', [{
+    return template('<slot expr9></slot>', [{
       'expressions': [{
         'type': expressionTypes.VALUE,
 
         'evaluate': function(scope) {
           return scope.state.value;
         }
+      }, {
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'changed',
+
+        'evaluate': function(scope) {
+          return scope.changed;
+        }
+      }, {
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'id',
+
+        'evaluate': function(scope) {
+          return scope.su_id;
+        }
       }]
     }, {
       'type': bindingTypes.SLOT,
       'name': 'default',
-      'redundantAttribute': 'expr5',
-      'selector': '[expr5]'
+      'redundantAttribute': 'expr9',
+      'selector': '[expr9]'
     }]);
   },
 

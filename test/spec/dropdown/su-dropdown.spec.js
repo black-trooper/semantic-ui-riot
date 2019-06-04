@@ -236,21 +236,17 @@ describe('su-dropdown', function () {
   // })
 
   it('reset value', function () {
-    expect(component.state.value).to.be.null
-    expect(component.state.defaultValue).to.be.null
-    component.changed.should.deep.equal(false)
+    expect(element.value).to.be.null
+    expect(element.getAttribute("changed")).to.be.not.ok
     element.click()
     this.clock.tick(310)
 
     component.$$('.item')[1].click()
-
-    expect(component.state.value).to.equal(items[1].value)
+    expect(element.value).to.equal(items[1].value)
     expect(component.changed).to.equal(true)
-    expect(component.state.defaultValue).to.be.null
 
-    component.reset()
-    expect(component.state.value).to.be.null
-    expect(component.state.defaultValue).to.be.null
-    expect(component.changed).to.equal(false)
+    component.obs.trigger(`${element.id}-reset`)
+    expect(element.value).to.be.null
+    expect(element.getAttribute("changed")).to.be.not.ok
   })
 })

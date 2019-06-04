@@ -105,18 +105,15 @@ describe('su-checkbox-group', function () {
   })
 
   it('reset value', function () {
-    expect(component.state.value).to.be.undefined
-    expect(component.defaultValue).to.be.undefined
-    expect(component.changed).to.be.not.ok
+    expect(component.root.value).to.be.undefined
+    expect(component.root.getAttribute('changed')).to.be.not.ok
 
     component.$$('su-checkbox input')[0].click()
-    expect(component.state.value[0]).to.equal(component.$$('su-checkbox')[0].getAttribute("value"))
-    expect(component.defaultValue).to.be.undefined
-    expect(component.changed).to.be.ok
+    expect(component.root.value[0]).to.equal(component.$('su-checkbox').getAttribute("value"))
+    expect(component.root.getAttribute('changed')).to.be.ok
 
-    component.reset()
-    expect(component.state.value).to.be.undefined
-    expect(component.defaultValue).to.be.undefined
-    expect(component.changed).to.be.not.ok
+    component.obs.trigger(`${component.root.id}-reset`)
+    expect(component.root.value).to.be.undefined
+    expect(component.root.getAttribute('changed')).to.be.not.ok
   })
 })

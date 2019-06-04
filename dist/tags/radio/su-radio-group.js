@@ -5,6 +5,7 @@ let index = 0;
 //                                                                           =========
 function onMounted(props, state) {
   this.su_id = `su-radio-group-${index++}`;
+  this.obs.on(`${this.su_id}-reset`, () => { reset(this); });
   if (!state.value) {
     state.value = props.value;
   }
@@ -20,7 +21,8 @@ function onMounted(props, state) {
     });
   });
 
-  this.defaultValue = this.value;
+  this.defaultValue = state.value;
+  this.update();
 }
 
 function onBeforeUpdate(props, state) {
@@ -48,9 +50,9 @@ function onUpdated(props, state) {
   }
 }
 
-function reset() {
-  this.update({
-    value: this.defaultValue
+function reset(tag) {
+  tag.update({
+    value: tag.defaultValue
   });
 }
 
@@ -82,16 +84,37 @@ var suRadioGroup = {
     defaultValue: '',
     onBeforeUpdate,
     onMounted,
-    onUpdated,
-    reset
+    onUpdated
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot expr33></slot>', [{
+    return template('<slot expr160></slot>', [{
+      'expressions': [{
+        'type': expressionTypes.VALUE,
+
+        'evaluate': function(scope) {
+          return scope.state.value;
+        }
+      }, {
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'changed',
+
+        'evaluate': function(scope) {
+          return scope.changed;
+        }
+      }, {
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'id',
+
+        'evaluate': function(scope) {
+          return scope.su_id;
+        }
+      }]
+    }, {
       'type': bindingTypes.SLOT,
       'name': 'default',
-      'redundantAttribute': 'expr33',
-      'selector': '[expr33]'
+      'redundantAttribute': 'expr160',
+      'selector': '[expr160]'
     }]);
   },
 

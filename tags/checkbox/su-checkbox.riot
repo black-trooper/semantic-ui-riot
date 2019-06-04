@@ -1,5 +1,5 @@
-<su-checkbox class="ui checkbox { props.class }" checked="{ state.checked }" changed="{ changed }">
-  <input type="checkbox" checked="{ state.checked }" onclick="{ onClick }" disabled="{ disabled }" id="{ su_id }" />
+<su-checkbox class="ui checkbox { props.class }" checked="{ state.checked }" changed="{ changed }" id="{ su_id }">
+  <input type="checkbox" checked="{ state.checked }" onclick="{ onClick }" disabled="{ disabled }" id="{ su_id }-input" />
   <label if="{ !props.label }" for="{ su_id }"><slot /></label>
   <label if="{ props.label }" for="{ su_id }">{ props.label }</label>
 
@@ -29,7 +29,6 @@
       onMounted,
       onUpdated,
       onClick,
-      reset,
     }
 
     // ===================================================================================
@@ -37,6 +36,7 @@
     //                                                                           =========
     function onMounted(props, state) {
       this.su_id = `su-checkbox-${index++}`
+      this.obs.on(`${this.su_id}-reset`, () => { reset(this) })
       state.checked = normalizeOptChecked(props.checked)
       state.lastChecked = state.checked
       state.lastOptsChecked = state.checked
@@ -62,9 +62,9 @@
       }
     }
 
-    function reset() {
-      this.update({
-        checked: this.state.defaultChecked
+    function reset(tag) {
+      tag.update({
+        checked: tag.state.defaultChecked
       })
     }
 

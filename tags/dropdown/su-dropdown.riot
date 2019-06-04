@@ -1,7 +1,8 @@
 <su-dropdown
   class="ui selection {props.class} { props.search && 'search' } { props.multiple && 'multiple'} dropdown { isActive() && 'active visible' } { upward && 'upward' }"
   onclick="{ onToggle }" onfocus="{ onFocus }" onmousedown="{ onMousedown }" onmouseup="{ onMouseup }"
-  onblur="{ onBlur }" onkeydown="{ onKeydown }" onkeyup="{ onKeyup }" tabindex="{ props.search ? -1 : tabindex }">
+  onblur="{ onBlur }" onkeydown="{ onKeydown }" onkeyup="{ onKeyup }" tabindex="{ props.search ? -1 : tabindex }"
+  value="{ state.value }" changed="{ changed }" id="{ su_id }">
   <i class="dropdown icon"></i>
   <input class="search" autocomplete="off" tabindex="{ tabindex }" if="{ props.search }" oninput="{ onInput }"
     onclick="{ stopPropagation }" onfocus="{ onFocus }" onblur="{ onBlur }" readonly="{ readonly }" />
@@ -45,6 +46,7 @@
   </style>
 
   <script>
+    let index = 0
     export default {
       state: {
         defaultValue: '',
@@ -76,7 +78,6 @@
       isActive,
       isItem,
       isVisible,
-      reset,
     }
 
     const keys = {
@@ -90,6 +91,9 @@
     //                                                                           Lifecycle
     //                                                                           =========
     function onBeforeMount(props, state) {
+      this.su_id = `su-dropdown-${index++}`
+      this.obs.on(`${this.su_id}-reset`, () => { reset(this) })
+
       if (props.multiple) {
       } else {
         if (props.items && props.items.length > 0) {
@@ -153,9 +157,10 @@
       }
     }
 
-    function reset() {
-      this.state.value = this.state.defaultValue
-      this.update()
+    function reset(tag) {
+      tag.update({
+        value: tag.state.defaultValue
+      })
     }
 
     // ===================================================================================
