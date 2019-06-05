@@ -64,13 +64,13 @@
 
     function onUpdated(props, state) {
       let changed = false
-      if (lastOptsActive != props.active) {
-        lastOptsActive = props.active
+      if (this.lastOptsActive != props.active) {
+        this.lastOptsActive = props.active
         state.active = props.active
         changed = true
       }
-      if (lastActive != state.active) {
-        lastActive = state.$$
+      if (this.lastActive != state.active) {
+        this.lastActive = state.$$
         changed = true
       }
 

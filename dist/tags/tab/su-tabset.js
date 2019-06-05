@@ -40,13 +40,13 @@ function onMounted(props, state) {
 
 function onUpdated(props, state) {
   let changed = false;
-  if (lastOptsActive != props.active) {
-    lastOptsActive = props.active;
+  if (this.lastOptsActive != props.active) {
+    this.lastOptsActive = props.active;
     state.active = props.active;
     changed = true;
   }
-  if (lastActive != state.active) {
-    lastActive = state.$$;
+  if (this.lastActive != state.active) {
+    this.lastActive = state.$$;
     changed = true;
   }
 
@@ -187,7 +187,7 @@ var suTabset = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<div expr71></div><slot expr73></slot><div expr74></div>', [{
+    return template('<div expr104></div><slot expr106></slot><div expr107></div>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'id',
@@ -203,10 +203,10 @@ var suTabset = {
         return !scope.isBottom() && scope.showMenu();
       },
 
-      'redundantAttribute': 'expr71',
-      'selector': '[expr71]',
+      'redundantAttribute': 'expr104',
+      'selector': '[expr104]',
 
-      'template': template('<a expr72></a>', [{
+      'template': template('<a expr105></a>', [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
           'name': 'class',
@@ -250,8 +250,8 @@ var suTabset = {
           }]
         }]),
 
-        'redundantAttribute': 'expr72',
-        'selector': '[expr72]',
+        'redundantAttribute': 'expr105',
+        'selector': '[expr105]',
         'itemName': 'tab',
         'indexName': null,
 
@@ -262,8 +262,8 @@ var suTabset = {
     }, {
       'type': bindingTypes.SLOT,
       'name': 'default',
-      'redundantAttribute': 'expr73',
-      'selector': '[expr73]'
+      'redundantAttribute': 'expr106',
+      'selector': '[expr106]'
     }, {
       'type': bindingTypes.IF,
 
@@ -271,10 +271,10 @@ var suTabset = {
         return scope.isBottom() && scope.showMenu();
       },
 
-      'redundantAttribute': 'expr74',
-      'selector': '[expr74]',
+      'redundantAttribute': 'expr107',
+      'selector': '[expr107]',
 
-      'template': template('<a expr75></a>', [{
+      'template': template('<a expr108></a>', [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
           'name': 'class',
@@ -318,8 +318,8 @@ var suTabset = {
           }]
         }]),
 
-        'redundantAttribute': 'expr75',
-        'selector': '[expr75]',
+        'redundantAttribute': 'expr108',
+        'selector': '[expr108]',
         'itemName': 'tab',
         'indexName': null,
 
