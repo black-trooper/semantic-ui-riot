@@ -55,11 +55,7 @@ function normalizeOptChecked(checked) {
 }
 
 var suRadio = {
-  'css': `su-radio.ui.checkbox label,[is="su-radio"].ui.checkbox label{
-      cursor: pointer;
-    } su-radio.ui.read-only input[type="radio"],[is="su-radio"].ui.read-only input[type="radio"],su-radio.ui.disabled input[type="radio"],[is="su-radio"].ui.disabled input[type="radio"]{
-      cursor: default !important;
-    }`,
+  'css': `su-radio.ui.checkbox label,[is="su-radio"].ui.checkbox label{ cursor: pointer; } su-radio.ui.read-only input[type="radio"],[is="su-radio"].ui.read-only input[type="radio"],su-radio.ui.disabled input[type="radio"],[is="su-radio"].ui.disabled input[type="radio"]{ cursor: default !important; }`,
 
   'exports': {
     state: {
@@ -77,7 +73,7 @@ var suRadio = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<input expr34 type="radio"/><label expr35></label><label expr37></label>',
+      '<input expr63 type="radio"/><label expr64></label><label expr66></label>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -88,8 +84,8 @@ var suRadio = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr34',
-        'selector': '[expr34]',
+        'redundantAttribute': 'expr63',
+        'selector': '[expr63]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -133,10 +129,10 @@ var suRadio = {
           return !scope.props.label;
         },
 
-        'redundantAttribute': 'expr35',
-        'selector': '[expr35]',
+        'redundantAttribute': 'expr64',
+        'selector': '[expr64]',
 
-        'template': template('<slot expr36></slot>', [{
+        'template': template('<slot expr65></slot>', [{
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
             'name': 'for',
@@ -148,8 +144,8 @@ var suRadio = {
         }, {
           'type': bindingTypes.SLOT,
           'name': 'default',
-          'redundantAttribute': 'expr36',
-          'selector': '[expr36]'
+          'redundantAttribute': 'expr65',
+          'selector': '[expr65]'
         }])
       }, {
         'type': bindingTypes.IF,
@@ -158,8 +154,8 @@ var suRadio = {
           return scope.props.label;
         },
 
-        'redundantAttribute': 'expr37',
-        'selector': '[expr37]',
+        'redundantAttribute': 'expr66',
+        'selector': '[expr66]',
 
         'template': template('<!---->', [{
           'expressions': [{

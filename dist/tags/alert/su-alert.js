@@ -92,16 +92,7 @@ function suAlert(tag, param) {
 }
 
 var suAlert$1 = {
-  'css': `su-alert .ui.dimmer,[is="su-alert"] .ui.dimmer{
-      z-index: 1020;
-    } su-alert .ui.modal,[is="su-alert"] .ui.modal{
-      z-index: 1021;
-    } su-alert .ui.message,[is="su-alert"] .ui.message{
-      background: none;
-      box-shadow: none;
-    } su-alert .ui.message .header+p,[is="su-alert"] .ui.message .header+p{
-      margin-top: 1em;
-    }`,
+  'css': `su-alert .ui.dimmer,[is="su-alert"] .ui.dimmer{ z-index: 1020; } su-alert .ui.modal,[is="su-alert"] .ui.modal{ z-index: 1021; } su-alert .ui.message,[is="su-alert"] .ui.message{ background: none; box-shadow: none; } su-alert .ui.message .header+p,[is="su-alert"] .ui.message .header+p{ margin-top: 1em; }`,
 
   'exports': {
     state: {
@@ -118,7 +109,7 @@ var suAlert$1 = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<su-modal expr0 class="tiny"></su-modal>', [{
+    return template('<su-modal expr4 class="tiny"></su-modal>', [{
       'type': bindingTypes.TAG,
       'getComponent': getComponent,
 
@@ -128,7 +119,7 @@ var suAlert$1 = {
 
       'slots': [{
         'id': 'default',
-        'html': '<div class="ui icon message"><i class="info circle icon"></i><div class="scrolling content"><div expr1 class="header"></div><p expr2></p></div></div>',
+        'html': '<div class="ui icon message"><i class="info circle icon"></i><div class="scrolling content"><div expr5 class="header"></div><p expr6></p></div></div>',
 
         'bindings': [{
           'type': bindingTypes.IF,
@@ -137,8 +128,8 @@ var suAlert$1 = {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr1',
-          'selector': '[expr1]',
+          'redundantAttribute': 'expr5',
+          'selector': '[expr5]',
 
           'template': template('<!---->', [{
             'expressions': [{
@@ -166,8 +157,8 @@ var suAlert$1 = {
             }]
           }]),
 
-          'redundantAttribute': 'expr2',
-          'selector': '[expr2]',
+          'redundantAttribute': 'expr6',
+          'selector': '[expr6]',
           'itemName': 'message',
           'indexName': null,
 
@@ -200,8 +191,8 @@ var suAlert$1 = {
         }
       }],
 
-      'redundantAttribute': 'expr0',
-      'selector': '[expr0]'
+      'redundantAttribute': 'expr4',
+      'selector': '[expr4]'
     }]);
   },
 

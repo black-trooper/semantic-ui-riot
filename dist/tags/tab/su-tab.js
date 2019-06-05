@@ -1,5 +1,8 @@
 let index = 0;
 
+// ===================================================================================
+//                                                                           Lifecycle
+//                                                                           =========
 function onMounted(props, state) {
   this.su_id = `su-tab-${index++}`;
   this.update({
@@ -31,14 +34,7 @@ function onBeforeUpdate(props, state) {
 }
 
 var suTab = {
-  'css': `su-tab.ui.segment,[is="su-tab"].ui.segment{
-      margin-top: 0;
-      margin-bottom: 0;
-    } su-tab.ui.segment.top.attached,[is="su-tab"].ui.segment.top.attached{
-      margin-top: 0
-    } su-tab.ui.segment.bottom.attached,[is="su-tab"].ui.segment.bottom.attached{
-      margin-bottom: 0
-    }`,
+  'css': `su-tab.ui.segment,[is="su-tab"].ui.segment{ margin-top: 0; margin-bottom: 0; } su-tab.ui.segment.top.attached,[is="su-tab"].ui.segment.top.attached{ margin-top: 0 } su-tab.ui.segment.bottom.attached,[is="su-tab"].ui.segment.bottom.attached{ margin-bottom: 0 }`,
 
   'exports': {
     state: {
@@ -51,7 +47,7 @@ var suTab = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<span expr287></span>', [{
+    return template('<span expr70></span>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -74,14 +70,14 @@ var suTab = {
         return scope.state.mounted;
       },
 
-      'redundantAttribute': 'expr287',
-      'selector': '[expr287]',
+      'redundantAttribute': 'expr70',
+      'selector': '[expr70]',
 
-      'template': template('<slot expr288></slot>', [{
+      'template': template('<slot expr71></slot>', [{
         'type': bindingTypes.SLOT,
         'name': 'default',
-        'redundantAttribute': 'expr288',
-        'selector': '[expr288]'
+        'redundantAttribute': 'expr71',
+        'selector': '[expr71]'
       }])
     }]);
   },

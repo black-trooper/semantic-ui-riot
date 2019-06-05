@@ -2,8 +2,6 @@ import * as riot from 'riot'
 import { init, fireEvent, compile } from '../../helpers/'
 import TargetComponent from '../../../dist/tags/datepicker/su-datepicker.js'
 
-// riot.mixin('semantic-ui', {})
-
 describe('su-datepicker', function () {
   let element, component
   let spyOnOpen = sinon.spy()

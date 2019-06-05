@@ -117,23 +117,7 @@ function setDefaultFocus(tag) {
 }
 
 var suModal = {
-  'css': `su-modal .ui.dimmer.visible.transition,[is="su-modal"] .ui.dimmer.visible.transition{
-      display: flex !important;
-      align-items: center;
-      justify-content: center;
-    } su-modal .ui.modal,[is="su-modal"] .ui.modal{
-      top: auto;
-      left: auto;
-      position: relative;
-      margin: 0 !important;
-    } su-modal .ui.fullscreen.modal,[is="su-modal"] .ui.fullscreen.modal{
-      left: 0 !important;
-    } su-modal @media only screen and (min-width: 768px),[is="su-modal"] @media only screen and (min-width: 768px){ su-modal .ui.modal>.close,[is="su-modal"] .ui.modal>.close{
-        display: none;
-      } su-modal .ui.fullscreen.modal>.close,[is="su-modal"] .ui.fullscreen.modal>.close{
-        display: inline;
-      }
-    }`,
+  'css': `su-modal .ui.dimmer.visible.transition,[is="su-modal"] .ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; } su-modal .ui.fullscreen.modal,[is="su-modal"] .ui.fullscreen.modal{ left: 0 !important; } @media only screen and (min-width: 768px) { su-modal .ui.modal>.close,[is="su-modal"] .ui.modal>.close{ display: none; } su-modal .ui.fullscreen.modal>.close,[is="su-modal"] .ui.fullscreen.modal>.close{ display: inline; } }`,
 
   'exports': {
     state: {
@@ -155,7 +139,7 @@ var suModal = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr24><div expr25><i expr26 class="close icon"></i><div expr27></div><div expr29><slot expr30></slot></div><div class="actions"><button expr31 type="button"></button></div></div></div>',
+      '<div expr53><div expr54><i expr55 class="close icon"></i><div expr56></div><div expr58><slot expr59></slot></div><div class="actions"><button expr60 type="button"></button></div></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.EVENT,
@@ -173,8 +157,8 @@ var suModal = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr24',
-        'selector': '[expr24]',
+        'redundantAttribute': 'expr53',
+        'selector': '[expr53]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -185,8 +169,8 @@ var suModal = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr25',
-        'selector': '[expr25]',
+        'redundantAttribute': 'expr54',
+        'selector': '[expr54]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -210,8 +194,8 @@ var suModal = {
           return scope.closable && !scope.basic;
         },
 
-        'redundantAttribute': 'expr26',
-        'selector': '[expr26]',
+        'redundantAttribute': 'expr55',
+        'selector': '[expr55]',
 
         'template': template(null, [{
           'expressions': [{
@@ -230,10 +214,10 @@ var suModal = {
           return scope.header;
         },
 
-        'redundantAttribute': 'expr27',
-        'selector': '[expr27]',
+        'redundantAttribute': 'expr56',
+        'selector': '[expr56]',
 
-        'template': template('<i expr28></i><!---->', [{
+        'template': template('<i expr57></i><!---->', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 1,
@@ -256,8 +240,8 @@ var suModal = {
             return scope.header.icon;
           },
 
-          'redundantAttribute': 'expr28',
-          'selector': '[expr28]',
+          'redundantAttribute': 'expr57',
+          'selector': '[expr57]',
 
           'template': template(null, [{
             'expressions': [{
@@ -271,8 +255,8 @@ var suModal = {
           }])
         }])
       }, {
-        'redundantAttribute': 'expr29',
-        'selector': '[expr29]',
+        'redundantAttribute': 'expr58',
+        'selector': '[expr58]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -285,14 +269,14 @@ var suModal = {
       }, {
         'type': bindingTypes.SLOT,
         'name': 'default',
-        'redundantAttribute': 'expr30',
-        'selector': '[expr30]'
+        'redundantAttribute': 'expr59',
+        'selector': '[expr59]'
       }, {
         'type': bindingTypes.EACH,
         'getKey': null,
         'condition': null,
 
-        'template': template('<!----><i expr32></i>', [{
+        'template': template('<!----><i expr61></i>', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 0,
@@ -329,8 +313,8 @@ var suModal = {
             return scope.button.icon;
           },
 
-          'redundantAttribute': 'expr32',
-          'selector': '[expr32]',
+          'redundantAttribute': 'expr61',
+          'selector': '[expr61]',
 
           'template': template(null, [{
             'expressions': [{
@@ -344,8 +328,8 @@ var suModal = {
           }])
         }]),
 
-        'redundantAttribute': 'expr31',
-        'selector': '[expr31]',
+        'redundantAttribute': 'expr60',
+        'selector': '[expr60]',
         'itemName': 'button',
         'indexName': null,
 

@@ -63,11 +63,7 @@ function normalizeOptChecked(checked) {
 }
 
 var suCheckbox = {
-  'css': `su-checkbox.ui.checkbox label,[is="su-checkbox"].ui.checkbox label{
-      cursor: pointer;
-    } su-checkbox.ui.read-only input[type="checkbox"],[is="su-checkbox"].ui.read-only input[type="checkbox"],su-checkbox.ui.disabled input[type="checkbox"],[is="su-checkbox"].ui.disabled input[type="checkbox"]{
-      cursor: default !important;
-    }`,
+  'css': `su-checkbox.ui.checkbox label,[is="su-checkbox"].ui.checkbox label{ cursor: pointer; } su-checkbox.ui.read-only input[type="checkbox"],[is="su-checkbox"].ui.read-only input[type="checkbox"],su-checkbox.ui.disabled input[type="checkbox"],[is="su-checkbox"].ui.disabled input[type="checkbox"]{ cursor: default !important; }`,
 
   'exports': {
     state: {
@@ -87,7 +83,7 @@ var suCheckbox = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<input expr154 type="checkbox"/><label expr155></label><label expr157></label>',
+      '<input expr10 type="checkbox"/><label expr11></label><label expr13></label>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -119,8 +115,8 @@ var suCheckbox = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr154',
-        'selector': '[expr154]',
+        'redundantAttribute': 'expr10',
+        'selector': '[expr10]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -158,10 +154,10 @@ var suCheckbox = {
           return !scope.props.label;
         },
 
-        'redundantAttribute': 'expr155',
-        'selector': '[expr155]',
+        'redundantAttribute': 'expr11',
+        'selector': '[expr11]',
 
-        'template': template('<slot expr156></slot>', [{
+        'template': template('<slot expr12></slot>', [{
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
             'name': 'for',
@@ -173,8 +169,8 @@ var suCheckbox = {
         }, {
           'type': bindingTypes.SLOT,
           'name': 'default',
-          'redundantAttribute': 'expr156',
-          'selector': '[expr156]'
+          'redundantAttribute': 'expr12',
+          'selector': '[expr12]'
         }])
       }, {
         'type': bindingTypes.IF,
@@ -183,8 +179,8 @@ var suCheckbox = {
           return scope.props.label;
         },
 
-        'redundantAttribute': 'expr157',
-        'selector': '[expr157]',
+        'redundantAttribute': 'expr13',
+        'selector': '[expr13]',
 
         'template': template('<!---->', [{
           'expressions': [{

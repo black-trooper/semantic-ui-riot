@@ -39,33 +39,7 @@ function initializeChild(tag, child) {
 }
 
 var suAccordionset = {
-  'css': `su-accordionset,[is="su-accordionset"]{
-      display: block;
-    } su-accordionset.ui.accordion .title~.content:not(.ui).close,[is="su-accordionset"].ui.accordion .title~.content:not(.ui).close{
-      padding-top: 0;
-      padding-bottom: 0;
-    } su-accordionset .content.close *,[is="su-accordionset"] .content.close *{
-      line-height: 0 !important;
-      opacity: 0 !important;
-      visibility: hidden !important;
-      padding-top: 0 !important;
-      padding-bottom: 0 !important;
-      margin-top: 0 !important;
-      margin-bottom: 0 !important;
-      min-height: 0 !important;
-      transition: all 300ms 0s linear !important;
-    } su-accordionset .content.close .dropdown.icon,[is="su-accordionset"] .content.close .dropdown.icon{
-      height: 0 !important;
-      transition: height 300ms 0s linear !important;
-    } su-accordionset .content.open *,[is="su-accordionset"] .content.open *{
-      line-height: 1.4285;
-      opacity: 1;
-      visibility: visible;
-      transition: all 300ms 0s linear !important;
-    } su-accordionset .content.open .dropdown.icon,[is="su-accordionset"] .content.open .dropdown.icon{
-      height: 1.4285 !important;
-      transition: height 300ms 0s linear !important;
-    }`,
+  'css': `su-accordionset,[is="su-accordionset"]{ display: block; } su-accordionset.ui.accordion .title~.content:not(.ui).close,[is="su-accordionset"].ui.accordion .title~.content:not(.ui).close{ padding-top: 0; padding-bottom: 0; } su-accordionset .content.close *,[is="su-accordionset"] .content.close *{ line-height: 0 !important; opacity: 0 !important; visibility: hidden !important; padding-top: 0 !important; padding-bottom: 0 !important; margin-top: 0 !important; margin-bottom: 0 !important; min-height: 0 !important; transition: all 300ms 0s linear !important; } su-accordionset .content.close .dropdown.icon,[is="su-accordionset"] .content.close .dropdown.icon{ height: 0 !important; transition: height 300ms 0s linear !important; } su-accordionset .content.open *,[is="su-accordionset"] .content.open *{ line-height: 1.4285; opacity: 1; visibility: visible; transition: all 300ms 0s linear !important; } su-accordionset .content.open .dropdown.icon,[is="su-accordionset"] .content.open .dropdown.icon{ height: 1.4285 !important; transition: height 300ms 0s linear !important; }`,
 
   'exports': {
     state: {

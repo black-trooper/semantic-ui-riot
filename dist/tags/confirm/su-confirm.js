@@ -144,14 +144,7 @@ function suConfirm(tag, param) {
 }
 
 var suConfirm$1 = {
-  'css': `su-confirm .ui.dimmer,[is="su-confirm"] .ui.dimmer{
-      z-index: 1010;
-    } su-confirm .ui.modal,[is="su-confirm"] .ui.modal{
-      z-index: 1011;
-    } su-confirm .ui.message,[is="su-confirm"] .ui.message{
-      background: none;
-      box-shadow: none;
-    }`,
+  'css': `su-confirm .ui.dimmer,[is="su-confirm"] .ui.dimmer{ z-index: 1010; } su-confirm .ui.modal,[is="su-confirm"] .ui.modal{ z-index: 1011; } su-confirm .ui.message,[is="su-confirm"] .ui.message{ background: none; box-shadow: none; }`,
 
   'exports': {
     state: {
@@ -178,7 +171,7 @@ var suConfirm$1 = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<su-modal expr10 class="tiny"></su-modal>', [{
+    return template('<su-modal expr14 class="tiny"></su-modal>', [{
       'type': bindingTypes.TAG,
       'getComponent': getComponent,
 
@@ -188,7 +181,7 @@ var suConfirm$1 = {
 
       'slots': [{
         'id': 'default',
-        'html': '<div class="ui icon message"><i class="question circle outline icon"></i><div class="scrolling content"><div expr11 class="header"></div><p expr12></p></div></div>',
+        'html': '<div class="ui icon message"><i class="question circle outline icon"></i><div class="scrolling content"><div expr15 class="header"></div><p expr16></p></div></div>',
 
         'bindings': [{
           'type': bindingTypes.IF,
@@ -197,8 +190,8 @@ var suConfirm$1 = {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr11',
-          'selector': '[expr11]',
+          'redundantAttribute': 'expr15',
+          'selector': '[expr15]',
 
           'template': template('<!---->', [{
             'expressions': [{
@@ -226,8 +219,8 @@ var suConfirm$1 = {
             }]
           }]),
 
-          'redundantAttribute': 'expr12',
-          'selector': '[expr12]',
+          'redundantAttribute': 'expr16',
+          'selector': '[expr16]',
           'itemName': 'messsage',
           'indexName': null,
 
@@ -267,8 +260,8 @@ var suConfirm$1 = {
         }
       }],
 
-      'redundantAttribute': 'expr10',
-      'selector': '[expr10]'
+      'redundantAttribute': 'expr14',
+      'selector': '[expr14]'
     }]);
   },
 

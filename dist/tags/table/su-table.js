@@ -121,11 +121,11 @@ var suTable = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot expr50></slot>', [{
+    return template('<slot expr77></slot>', [{
       'type': bindingTypes.SLOT,
       'name': 'default',
-      'redundantAttribute': 'expr50',
-      'selector': '[expr50]'
+      'redundantAttribute': 'expr77',
+      'selector': '[expr77]'
     }]);
   },
 
