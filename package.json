@@ -38,11 +38,11 @@
   "dependencies": {
     "date-fns": "^1.29.0",
     "q": "^1.5.1",
-    "riot": "4.0.1"
+    "riot": "4.0.8"
   },
   "devDependencies": {
     "@riotjs/cli": "^4.0.1",
-    "@riotjs/compiler": "4.2.3",
+    "@riotjs/compiler": "4.2.6",
     "@riotjs/webpack-loader": "^4.0.0",
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.4",
