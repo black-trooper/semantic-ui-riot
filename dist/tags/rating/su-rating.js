@@ -1,8 +1,11 @@
+let index = 0;
+
 // ===================================================================================
 //                                                                           Lifecycle
 //                                                                           =========
 function onBeforeMount(props, state) {
   init(this, props.max, props.value);
+  this.su_id = `su-rating-${index++}`;
   this.obs.on(`${this.su_id}-reset`, () => { reset(this); });
 }
 
@@ -98,7 +101,7 @@ var suRating = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<i expr97></i>', [{
+    return template('<i expr80></i>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -169,8 +172,8 @@ var suRating = {
         }]
       }]),
 
-      'redundantAttribute': 'expr97',
-      'selector': '[expr97]',
+      'redundantAttribute': 'expr80',
+      'selector': '[expr80]',
       'itemName': 'item',
       'indexName': null,
 

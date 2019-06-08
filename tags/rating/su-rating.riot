@@ -23,6 +23,7 @@
     //                                                                           =========
     function onBeforeMount(props, state) {
       init(this, props.max, props.value)
+      this.su_id = `su-rating-${index++}`
       this.obs.on(`${this.su_id}-reset`, () => { reset(this) })
     }
 
