@@ -12,6 +12,7 @@
       changed: false,
 
       onBeforeMount,
+      onMounted,
       onBeforeUpdate,
       onClick,
       onMouseover,
@@ -25,6 +26,10 @@
       init(this, props.max, props.value)
       this.su_id = `su-rating-${index++}`
       this.obs.on(`${this.su_id}-reset`, () => { reset(this) })
+    }
+
+    function onMounted(props, state) {
+      this.update()
     }
 
     function onBeforeUpdate(props, state) {

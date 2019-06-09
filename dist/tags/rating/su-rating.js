@@ -9,6 +9,10 @@ function onBeforeMount(props, state) {
   this.obs.on(`${this.su_id}-reset`, () => { reset(this); });
 }
 
+function onMounted(props, state) {
+  this.update();
+}
+
 function onBeforeUpdate(props, state) {
   this.readOnly = this.root.classList.contains('read-only');
   this.changed = state.value != state.defaultValue;
@@ -94,6 +98,7 @@ var suRating = {
 
     changed: false,
     onBeforeMount,
+    onMounted,
     onBeforeUpdate,
     onClick,
     onMouseover,
@@ -101,7 +106,7 @@ var suRating = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<i expr80></i>', [{
+    return template('<i expr90></i>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -172,8 +177,8 @@ var suRating = {
         }]
       }]),
 
-      'redundantAttribute': 'expr80',
-      'selector': '[expr80]',
+      'redundantAttribute': 'expr90',
+      'selector': '[expr90]',
       'itemName': 'item',
       'indexName': null,
 
