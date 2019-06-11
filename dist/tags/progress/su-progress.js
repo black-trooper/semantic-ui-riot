@@ -1,10 +1,10 @@
 // ===================================================================================
 //                                                                           Lifecycle
 //                                                                           =========
-function onMounted() {
+function onMounted(props, state) {
   this.value = props.value || 0;
   if (props.total > 0) {
-    total = props.total;
+    this.total = props.total;
   }
   this.percent = getPercent(this);
   this.lastValue = this.value;
@@ -12,10 +12,10 @@ function onMounted() {
   this.update();
 }
 
-function onUpdated() {
+function onUpdated(props, state) {
   let changed = false;
-  if (this.state.value >= total) {
-    this.state.value = total;
+  if (this.state.value >= this.total) {
+    this.state.value = this.total;
   }
   if (this.state.value <= 0) {
     this.state.value = 0;
@@ -62,7 +62,7 @@ function isProgress() {
 //                                                                               Logic
 //                                                                               =====
 function getPercent(tag) {
-  return parseInt(tag.value / total * 100)
+  return parseInt(tag.value / tag.total * 100) + ''
 }
 
 function isActive(tag) {
@@ -97,7 +97,7 @@ var suProgress = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr62><div expr63 class="bar"><div expr64 class="progress"></div></div><div class="label"><slot expr65></slot></div></div>',
+      '<div expr128><div expr129 class="bar"><div expr130 class="progress"></div></div><div class="label"><slot expr131></slot></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -106,10 +106,17 @@ var suProgress = {
           'evaluate': function(scope) {
             return scope.props.class;
           }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'percent',
+
+          'evaluate': function(scope) {
+            return scope.percent;
+          }
         }]
       }, {
-        'redundantAttribute': 'expr62',
-        'selector': '[expr62]',
+        'redundantAttribute': 'expr128',
+        'selector': '[expr128]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -127,8 +134,8 @@ var suProgress = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr63',
-        'selector': '[expr63]',
+        'redundantAttribute': 'expr129',
+        'selector': '[expr129]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -145,8 +152,8 @@ var suProgress = {
           return scope.isProgress();
         },
 
-        'redundantAttribute': 'expr64',
-        'selector': '[expr64]',
+        'redundantAttribute': 'expr130',
+        'selector': '[expr130]',
 
         'template': template('<!---->', [{
           'expressions': [{
@@ -161,8 +168,8 @@ var suProgress = {
       }, {
         'type': bindingTypes.SLOT,
         'name': 'default',
-        'redundantAttribute': 'expr65',
-        'selector': '[expr65]'
+        'redundantAttribute': 'expr131',
+        'selector': '[expr131]'
       }]
     );
   },

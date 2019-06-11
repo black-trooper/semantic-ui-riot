@@ -1,116 +1,132 @@
-const fireEvent = require('../../helpers').fireEvent
-require('../../../dist/tags/progress/su-progress.js')
+import * as riot from 'riot'
+import { init, compile } from '../../helpers/'
+import TargetComponent from '../../../dist/tags/progress/su-progress.js'
 
 describe('su-progress', function () {
-  let tag
+  let element, component
   const spyOnMouseover = sinon.spy()
   const spyOnMouseout = sinon.spy()
+  init(riot)
 
-  const mount = (html, opts) => {
-    $('body').append(html)
-    tag = riot.mount('su-progress', opts)[0]
-    tag.on('mouseover', spyOnMouseover)
-    tag.on('mouseout', spyOnMouseout)
+  const mount = opts => {
+    const option = Object.assign({
+      'onmouseover': spyOnMouseover,
+      'onmouseout': spyOnMouseout,
+    }, opts)
+    element = document.createElement('app')
+    riot.register('su-progress', TargetComponent)
+    const AppComponent = compile(`
+      <app>
+        <su-progress
+          value="{ props.value }"
+          total="{ props.total }"
+          class="{ props.class }"
+          onmouseover="{ () => dispatch('mouseover') }"
+          onmouseout="{ () => dispatch('mouseout') }"
+        >Uploading Files</su-progress>
+      </app>`)
+    riot.register('app', AppComponent)
+    component = riot.mount(element, option)[0]
   }
 
   afterEach(function () {
     spyOnMouseover.reset()
     spyOnMouseout.reset()
-    tag.unmount()
+    riot.unregister('su-progress')
+    riot.unregister('app')
   })
 
   it('is mounted', function () {
-    mount('<su-progress></su-progress>')
-    tag.isMounted.should.be.true
+    mount()
+    expect(component).to.be.ok
   })
 
   it('show label and update value', function () {
-    mount('<su-progress>Uploading Files</su-progress>')
-    $('su-progress .ui.progress > .label').text().trim().should.equal('Uploading Files')
-    $('su-progress .bar > .progress').length.should.equal(0)
-    $('su-progress .ui.progress').hasClass('success').should.equal(false)
-    $('su-progress .ui.progress').hasClass('active').should.equal(false)
-    tag.percent.should.equal(0)
+    mount()
+    expect(component.$('su-progress .ui.progress > .label').innerText.trim()).to.equal('Uploading Files')
+    expect(component.$('su-progress .bar > .progress')).to.be.undefined
+    expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(false)
+    expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
+    expect(component.$('su-progress').getAttribute('percent')).to.equal('0')
 
-    tag.value = 50
-    tag.update()
-    tag.percent.should.equal(50)
-    $('su-progress .ui.progress').hasClass('success').should.equal(false)
-    $('su-progress .ui.progress').hasClass('active').should.equal(false)
+    // tag.value = 50
+    // tag.update()
+    // expect(component.$('su-progress').getAttribute('percent')).to.equal('50')
+    // expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(false)
+    // expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
 
-    tag.value = 100
-    tag.update()
-    tag.percent.should.equal(100)
-    $('su-progress .ui.progress').hasClass('success').should.equal(true)
-    $('su-progress .ui.progress').hasClass('active').should.equal(false)
+    // tag.value = 100
+    // tag.update()
+    // expect(component.$('su-progress').getAttribute('percent')).to.equal('100')
+    // expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(true)
+    // expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
 
-    tag.value = 101
-    tag.update()
-    tag.percent.should.equal(100)
-    $('su-progress .ui.progress').hasClass('success').should.equal(true)
-    $('su-progress .ui.progress').hasClass('active').should.equal(false)
+    // tag.value = 101
+    // tag.update()
+    // expect(component.$('su-progress').getAttribute('percent')).to.equal('100')
+    // expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(true)
+    // expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
   })
 
   it('opts value', function () {
-    mount('<su-progress>Uploading Files</su-progress>', {
+    mount({
       value: 50
     })
-    $('su-progress .ui.progress > .label').text().trim().should.equal('Uploading Files')
-    $('su-progress .bar > .progress').length.should.equal(0)
-    $('su-progress .ui.progress').hasClass('success').should.equal(false)
-    $('su-progress .ui.progress').hasClass('active').should.equal(false)
-    tag.percent.should.equal(50)
+    expect(component.$('su-progress .ui.progress > .label').innerText.trim()).to.equal('Uploading Files')
+    expect(component.$('su-progress .bar > .progress')).to.be.undefined
+    expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(false)
+    expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
+    expect(component.$('su-progress').getAttribute('percent')).to.equal('50')
 
-    tag.opts.riotValue = 100
-    tag.update()
-    tag.percent.should.equal(100)
-    $('su-progress .ui.progress').hasClass('success').should.equal(true)
-    $('su-progress .ui.progress').hasClass('active').should.equal(false)
+    // tag.opts.riotValue = 100
+    // tag.update()
+    // expect(component.$('su-progress').getAttribute('percent')).to.equal('100')
+    // expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(true)
+    // expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
   })
 
   it('active option', function () {
-    mount('<su-progress>Uploading Files</su-progress>', {
+    mount({
       class: 'progress active'
     })
-    $('su-progress .ui.progress > .label').text().trim().should.equal('Uploading Files')
-    $('su-progress .bar > .progress').length.should.equal(1)
-    $('su-progress .ui.progress').hasClass('success').should.equal(false)
-    $('su-progress .ui.progress').hasClass('active').should.equal(false)
-    tag.percent.should.equal(0)
+    expect(component.$('su-progress .ui.progress > .label').innerText.trim()).to.equal('Uploading Files')
+    expect(component.$$('su-progress .bar > .progress').length).to.equal(1)
+    expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(false)
+    expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
+    expect(component.$('su-progress').getAttribute('percent')).to.equal('0')
 
-    tag.value = 50
-    tag.update()
-    tag.percent.should.equal(50)
-    $('su-progress .ui.progress').hasClass('success').should.equal(false)
-    $('su-progress .ui.progress').hasClass('active').should.equal(true)
+    // tag.value = 50
+    // tag.update()
+    // expect(component.$('su-progress').getAttribute('percent')).to.equal('50')
+    // expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(false)
+    // expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(true)
 
-    tag.value = 100
-    tag.update()
-    tag.percent.should.equal(100)
-    $('su-progress .ui.progress').hasClass('success').should.equal(true)
-    $('su-progress .ui.progress').hasClass('active').should.equal(false)
+    // tag.value = 100
+    // tag.update()
+    // expect(component.$('su-progress').getAttribute('percent')).to.equal('100')
+    // expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(true)
+    // expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
   })
 
   it('total option', function () {
-    mount('<su-progress>Uploading Files</su-progress>', {
+    mount({
       total: '200'
     })
-    $('su-progress .ui.progress > .label').text().trim().should.equal('Uploading Files')
-    $('su-progress .ui.progress').hasClass('success').should.equal(false)
-    $('su-progress .ui.progress').hasClass('active').should.equal(false)
-    tag.percent.should.equal(0)
+    expect(component.$('su-progress .ui.progress > .label').innerText.trim()).to.equal('Uploading Files')
+    expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(false)
+    expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
+    expect(component.$('su-progress').getAttribute('percent')).to.equal('0')
 
-    tag.value = 100
-    tag.update()
-    tag.percent.should.equal(50)
-    $('su-progress .ui.progress').hasClass('success').should.equal(false)
-    $('su-progress .ui.progress').hasClass('active').should.equal(false)
+    // tag.value = 100
+    // tag.update()
+    // expect(component.$('su-progress').getAttribute('percent')).to.equal('50')
+    // expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(false)
+    // expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
 
-    tag.value = 200
-    tag.update()
-    tag.percent.should.equal(100)
-    $('su-progress .ui.progress').hasClass('success').should.equal(true)
-    $('su-progress .ui.progress').hasClass('active').should.equal(false)
+    // tag.value = 200
+    // tag.update()
+    // expect(component.$('su-progress').getAttribute('percent')).to.equal('100')
+    // expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(true)
+    // expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
   })
-
 })
