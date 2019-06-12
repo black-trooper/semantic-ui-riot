@@ -2,17 +2,17 @@
 //                                                                           Lifecycle
 //                                                                           =========
 function onMounted(props, state) {
-  this.value = props.value || 0;
+  this.state.value = props.value || 0;
   if (props.total > 0) {
     this.total = props.total;
   }
   this.percent = getPercent(this);
-  this.lastValue = this.value;
+  this.lastValue = this.state.value;
   this.lastPropsValue = props.value;
   this.update();
 }
 
-function onUpdated(props, state) {
+function onBeforeUpdate(props, state) {
   let changed = false;
   if (this.state.value >= this.total) {
     this.state.value = this.total;
@@ -20,13 +20,20 @@ function onUpdated(props, state) {
   if (this.state.value <= 0) {
     this.state.value = 0;
   }
+  let propsValue = props.value;
+  if (propsValue >= this.total) {
+    propsValue = this.total;
+  }
+  if (propsValue <= 0) {
+    propsValue = 0;
+  }
   if (this.lastValue != this.state.value) {
     this.lastValue = this.state.value;
     changed = true;
-  } else if (this.lastPropsValue != props.value) {
-    this.state.value = props.value;
-    this.lastPropsValue = props.value;
-    this.lastValue = props.value;
+  } else if (this.lastPropsValue != propsValue) {
+    this.state.value = propsValue;
+    this.lastPropsValue = propsValue;
+    this.lastValue = propsValue;
     changed = true;
   }
 
@@ -62,7 +69,7 @@ function isProgress() {
 //                                                                               Logic
 //                                                                               =====
 function getPercent(tag) {
-  return parseInt(tag.value / tag.total * 100) + ''
+  return parseInt(tag.state.value / tag.total * 100) + ''
 }
 
 function isActive(tag) {
@@ -89,7 +96,7 @@ var suProgress = {
     lastValue: null,
     total: 100,
     onMounted,
-    onUpdated,
+    onBeforeUpdate,
     getClass,
     getStates,
     isProgress
@@ -97,7 +104,7 @@ var suProgress = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr128><div expr129 class="bar"><div expr130 class="progress"></div></div><div class="label"><slot expr131></slot></div></div>',
+      '<div expr96><div expr97 class="bar"><div expr98 class="progress"></div></div><div class="label"><slot expr99></slot></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -115,8 +122,8 @@ var suProgress = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr128',
-        'selector': '[expr128]',
+        'redundantAttribute': 'expr96',
+        'selector': '[expr96]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -134,8 +141,8 @@ var suProgress = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr129',
-        'selector': '[expr129]',
+        'redundantAttribute': 'expr97',
+        'selector': '[expr97]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -152,8 +159,8 @@ var suProgress = {
           return scope.isProgress();
         },
 
-        'redundantAttribute': 'expr130',
-        'selector': '[expr130]',
+        'redundantAttribute': 'expr98',
+        'selector': '[expr98]',
 
         'template': template('<!---->', [{
           'expressions': [{
@@ -168,8 +175,8 @@ var suProgress = {
       }, {
         'type': bindingTypes.SLOT,
         'name': 'default',
-        'redundantAttribute': 'expr131',
-        'selector': '[expr131]'
+        'redundantAttribute': 'expr99',
+        'selector': '[expr99]'
       }]
     );
   },

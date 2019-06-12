@@ -18,7 +18,7 @@ describe('su-progress', function () {
     const AppComponent = compile(`
       <app>
         <su-progress
-          value="{ props.value }"
+          value="{ value || props.value }"
           total="{ props.total }"
           class="{ props.class }"
           onmouseover="{ () => dispatch('mouseover') }"
@@ -49,23 +49,23 @@ describe('su-progress', function () {
     expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
     expect(component.$('su-progress').getAttribute('percent')).to.equal('0')
 
-    // tag.value = 50
-    // tag.update()
-    // expect(component.$('su-progress').getAttribute('percent')).to.equal('50')
-    // expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(false)
-    // expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
+    component.value = 50
+    component.update()
+    expect(component.$('su-progress').getAttribute('percent')).to.equal('50')
+    expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(false)
+    expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
 
-    // tag.value = 100
-    // tag.update()
-    // expect(component.$('su-progress').getAttribute('percent')).to.equal('100')
-    // expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(true)
-    // expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
+    component.value = 100
+    component.update()
+    expect(component.$('su-progress').getAttribute('percent')).to.equal('100')
+    expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(true)
+    expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
 
-    // tag.value = 101
-    // tag.update()
-    // expect(component.$('su-progress').getAttribute('percent')).to.equal('100')
-    // expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(true)
-    // expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
+    component.value = 101
+    component.update()
+    expect(component.$('su-progress').getAttribute('percent')).to.equal('100')
+    expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(true)
+    expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
   })
 
   it('opts value', function () {
@@ -78,11 +78,11 @@ describe('su-progress', function () {
     expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
     expect(component.$('su-progress').getAttribute('percent')).to.equal('50')
 
-    // tag.opts.riotValue = 100
-    // tag.update()
-    // expect(component.$('su-progress').getAttribute('percent')).to.equal('100')
-    // expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(true)
-    // expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
+    component.value = 100
+    component.update()
+    expect(component.$('su-progress').getAttribute('percent')).to.equal('100')
+    expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(true)
+    expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
   })
 
   it('active option', function () {
@@ -95,17 +95,17 @@ describe('su-progress', function () {
     expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
     expect(component.$('su-progress').getAttribute('percent')).to.equal('0')
 
-    // tag.value = 50
-    // tag.update()
-    // expect(component.$('su-progress').getAttribute('percent')).to.equal('50')
-    // expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(false)
-    // expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(true)
+    component.value = 50
+    component.update()
+    expect(component.$('su-progress').getAttribute('percent')).to.equal('50')
+    expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(false)
+    expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(true)
 
-    // tag.value = 100
-    // tag.update()
-    // expect(component.$('su-progress').getAttribute('percent')).to.equal('100')
-    // expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(true)
-    // expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
+    component.value = 100
+    component.update()
+    expect(component.$('su-progress').getAttribute('percent')).to.equal('100')
+    expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(true)
+    expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
   })
 
   it('total option', function () {
@@ -117,16 +117,16 @@ describe('su-progress', function () {
     expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
     expect(component.$('su-progress').getAttribute('percent')).to.equal('0')
 
-    // tag.value = 100
-    // tag.update()
-    // expect(component.$('su-progress').getAttribute('percent')).to.equal('50')
-    // expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(false)
-    // expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
+    component.value = 100
+    component.update()
+    expect(component.$('su-progress').getAttribute('percent')).to.equal('50')
+    expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(false)
+    expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
 
-    // tag.value = 200
-    // tag.update()
-    // expect(component.$('su-progress').getAttribute('percent')).to.equal('100')
-    // expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(true)
-    // expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
+    component.value = 200
+    component.update()
+    expect(component.$('su-progress').getAttribute('percent')).to.equal('100')
+    expect(component.$('su-progress .ui.progress').classList.contains('success')).to.equal(true)
+    expect(component.$('su-progress .ui.progress').classList.contains('active')).to.equal(false)
   })
 })

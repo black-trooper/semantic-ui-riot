@@ -46,7 +46,7 @@
       total: 100,
 
       onMounted,
-      onUpdated,
+      onBeforeUpdate,
       getClass,
       getStates,
       isProgress,
@@ -56,17 +56,17 @@
     //                                                                           Lifecycle
     //                                                                           =========
     function onMounted(props, state) {
-      this.value = props.value || 0
+      this.state.value = props.value || 0
       if (props.total > 0) {
         this.total = props.total
       }
       this.percent = getPercent(this)
-      this.lastValue = this.value
+      this.lastValue = this.state.value
       this.lastPropsValue = props.value
       this.update()
     }
 
-    function onUpdated(props, state) {
+    function onBeforeUpdate(props, state) {
       let changed = false
       if (this.state.value >= this.total) {
         this.state.value = this.total
@@ -74,13 +74,20 @@
       if (this.state.value <= 0) {
         this.state.value = 0
       }
+      let propsValue = props.value
+      if (propsValue >= this.total) {
+        propsValue = this.total
+      }
+      if (propsValue <= 0) {
+        propsValue = 0
+      }
       if (this.lastValue != this.state.value) {
         this.lastValue = this.state.value
         changed = true
-      } else if (this.lastPropsValue != props.value) {
-        this.state.value = props.value
-        this.lastPropsValue = props.value
-        this.lastValue = props.value
+      } else if (this.lastPropsValue != propsValue) {
+        this.state.value = propsValue
+        this.lastPropsValue = propsValue
+        this.lastValue = propsValue
         changed = true
       }
 
@@ -116,7 +123,7 @@
     //                                                                               Logic
     //                                                                               =====
     function getPercent(tag) {
-      return parseInt(tag.value / tag.total * 100) + ''
+      return parseInt(tag.state.value / tag.total * 100) + ''
     }
 
     function isActive(tag) {
