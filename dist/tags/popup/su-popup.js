@@ -6,23 +6,20 @@ let index = 0;
 function onMounted(props, state) {
   this.su_id = `su-popup-${index++}`;
   if (props.tooltip) {
-    if (props.dataTitle) {
-      state.content = `<div class="header">${props.dataTitle}</div><div class="content">${props.tooltip}</div>`;
-    } else {
-      state.content = props.tooltip;
-    }
+    state.content = props.tooltip;
   }
-  else if (this.tags['su-popup-content']) {
-    state.content = this.$('su-popup-content').root.innerHTML;
-    // this.tags['su-popup-content'].unmount()
+  else if (this.$('su-popup-content')) {
+    state.content = this.$('su-popup-content').innerHTML;
+    this.root.removeChild(this.$('su-popup-content'));
   }
-  document.getElementById(this.su_id).innerHTML = state.content;
   this.update();
+  this.$('.content').innerHTML = state.content;
+  console.log(this.root);
 }
 
 function onBeforeUpdate(props, state) {
   state.dataVariation = props.dataVariation || '';
-  state.nowrap = state.dataVariation.indexOf('wide') < 0;
+  state.nowrap = state.dataVariation.indexOf('wide') < 0 ? 'nowrap' : '';
   state.position = props.position || 'top left';
 }
 
@@ -31,12 +28,12 @@ function onBeforeUpdate(props, state) {
 //                                                                               =====
 function onMouseOver() {
   this.update({ transitionStatus: 'scale in visible' });
-  this.trigger('mouseover');
+  this.dispatch('mouseover');
 }
 
 function onMouseOut() {
   this.update({ transitionStatus: 'hidden' });
-  this.trigger('mouseout');
+  this.dispatch('mouseout');
 }
 
 function stopPropagation(event) {
@@ -60,70 +57,93 @@ var suPopup = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<div expr62></div><slot expr63></slot>', [{
-      'expressions': [{
-        'type': expressionTypes.EVENT,
-        'name': 'onmouseover',
+    return template(
+      '<div expr149><div expr150 class="header"></div><div class="content"></div></div><slot expr151></slot>',
+      [{
+        'expressions': [{
+          'type': expressionTypes.EVENT,
+          'name': 'onmouseover',
 
-        'evaluate': function(scope) {
-          return scope.onMouseOver;
-        }
+          'evaluate': function(scope) {
+            return scope.onMouseOver;
+          }
+        }, {
+          'type': expressionTypes.EVENT,
+          'name': 'onmouseout',
+
+          'evaluate': function(scope) {
+            return scope.onMouseOut;
+          }
+        }]
       }, {
-        'type': expressionTypes.EVENT,
-        'name': 'onmouseout',
+        'redundantAttribute': 'expr149',
+        'selector': '[expr149]',
+
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'id',
+
+          'evaluate': function(scope) {
+            return scope.su_id;
+          }
+        }, {
+          'type': expressionTypes.EVENT,
+          'name': 'onmouseover',
+
+          'evaluate': function(scope) {
+            return scope.stopPropagation;
+          }
+        }, {
+          'type': expressionTypes.EVENT,
+          'name': 'onmouseout',
+
+          'evaluate': function(scope) {
+            return scope.stopPropagation;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
+
+          'evaluate': function(scope) {
+            return [
+              'ui popup ',
+              scope.state.position,
+              ' ',
+              scope.state.dataVariation,
+              ' transition ',
+              scope.state.transitionStatus,
+              ' ',
+              scope.state.nowrap
+            ].join('');
+          }
+        }]
+      }, {
+        'type': bindingTypes.IF,
 
         'evaluate': function(scope) {
-          return scope.onMouseOut;
-        }
+          return scope.props.dataTitle;
+        },
+
+        'redundantAttribute': 'expr150',
+        'selector': '[expr150]',
+
+        'template': template('<!---->', [{
+          'expressions': [{
+            'type': expressionTypes.TEXT,
+            'childNodeIndex': 0,
+
+            'evaluate': function(scope) {
+              return scope.props.dataTitle;
+            }
+          }]
+        }])
+      }, {
+        'type': bindingTypes.SLOT,
+        'name': 'default',
+        'redundantAttribute': 'expr151',
+        'selector': '[expr151]'
       }]
-    }, {
-      'redundantAttribute': 'expr62',
-      'selector': '[expr62]',
-
-      'expressions': [{
-        'type': expressionTypes.ATTRIBUTE,
-        'name': 'id',
-
-        'evaluate': function(scope) {
-          return scope.su_id;
-        }
-      }, {
-        'type': expressionTypes.EVENT,
-        'name': 'onmouseover',
-
-        'evaluate': function(scope) {
-          return scope.stopPropagation;
-        }
-      }, {
-        'type': expressionTypes.EVENT,
-        'name': 'onmouseout',
-
-        'evaluate': function(scope) {
-          return scope.stopPropagation;
-        }
-      }, {
-        'type': expressionTypes.ATTRIBUTE,
-        'name': 'class',
-
-        'evaluate': function(scope) {
-          return [
-            'ui popup ',
-            scope.state.position,
-            ' ',
-            scope.state.dataVariation,
-            ' transition ',
-            scope.state.transitionStatus,
-            ' ',
-            scope.state.nowrap
-          ].join('');
-        }
-      }]
-    }, {
-      'type': bindingTypes.SLOT,
-      'name': 'default',
-      'redundantAttribute': 'expr63',
-      'selector': '[expr63]'
-    }]);
+    );
   },
 
   'name': 'su-popup'

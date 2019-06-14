@@ -1,6 +1,8 @@
 <su-popup onmouseover="{ onMouseOver }" onmouseout="{ onMouseOut }">
   <div id="{ su_id }" onmouseover="{ stopPropagation }" onmouseout="{ stopPropagation }"
     class="ui popup { state.position } { state.dataVariation } transition { state.transitionStatus } { state.nowrap }">
+    <div class="header" if="{props.dataTitle}">{props.dataTitle}</div>
+    <div class="content"></div>
   </div>
   <slot />
 
@@ -178,23 +180,20 @@
     function onMounted(props, state) {
       this.su_id = `su-popup-${index++}`
       if (props.tooltip) {
-        if (props.dataTitle) {
-          state.content = `<div class="header">${props.dataTitle}</div><div class="content">${props.tooltip}</div>`
-        } else {
-          state.content = props.tooltip
-        }
+        state.content = props.tooltip
       }
-      else if (this.tags['su-popup-content']) {
-        state.content = this.$('su-popup-content').root.innerHTML
-        // this.tags['su-popup-content'].unmount()
+      else if (this.$('su-popup-content')) {
+        state.content = this.$('su-popup-content').innerHTML
+        this.root.removeChild(this.$('su-popup-content'))
       }
-      document.getElementById(this.su_id).innerHTML = state.content
       this.update()
+      this.$('.content').innerHTML = state.content
+      console.log(this.root)
     }
 
     function onBeforeUpdate(props, state) {
       state.dataVariation = props.dataVariation || ''
-      state.nowrap = state.dataVariation.indexOf('wide') < 0
+      state.nowrap = state.dataVariation.indexOf('wide') < 0 ? 'nowrap' : ''
       state.position = props.position || 'top left'
     }
 
@@ -203,12 +202,12 @@
     //                                                                               =====
     function onMouseOver() {
       this.update({ transitionStatus: 'scale in visible' })
-      this.trigger('mouseover')
+      this.dispatch('mouseover')
     }
 
     function onMouseOut() {
       this.update({ transitionStatus: 'hidden' })
-      this.trigger('mouseout')
+      this.dispatch('mouseout')
     }
 
     function stopPropagation(event) {
