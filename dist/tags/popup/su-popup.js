@@ -14,7 +14,6 @@ function onMounted(props, state) {
   }
   this.update();
   this.$('.content').innerHTML = state.content;
-  console.log(this.root);
 }
 
 function onBeforeUpdate(props, state) {
@@ -58,7 +57,7 @@ var suPopup = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr149><div expr150 class="header"></div><div class="content"></div></div><slot expr151></slot>',
+      '<div expr152><div expr153 class="header"></div><div class="content"></div></div><slot expr154></slot>',
       [{
         'expressions': [{
           'type': expressionTypes.EVENT,
@@ -76,8 +75,8 @@ var suPopup = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr149',
-        'selector': '[expr149]',
+        'redundantAttribute': 'expr152',
+        'selector': '[expr152]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -124,8 +123,8 @@ var suPopup = {
           return scope.props.dataTitle;
         },
 
-        'redundantAttribute': 'expr150',
-        'selector': '[expr150]',
+        'redundantAttribute': 'expr153',
+        'selector': '[expr153]',
 
         'template': template('<!---->', [{
           'expressions': [{
@@ -140,8 +139,8 @@ var suPopup = {
       }, {
         'type': bindingTypes.SLOT,
         'name': 'default',
-        'redundantAttribute': 'expr151',
-        'selector': '[expr151]'
+        'redundantAttribute': 'expr154',
+        'selector': '[expr154]'
       }]
     );
   },
