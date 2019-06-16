@@ -1,106 +1,300 @@
-riot.tag2('su-pagination', '<div class="ui pagination menu {opts.class}"> <a class="icon item {disabled: activePage <= 1}" onclick="{clickPage.bind(this,1)}"> <i aria-hidden="true" class="angle double left icon"></i> </a> <a class="icon item {disabled: activePage <= 1}" onclick="{clickPage.bind(this,activePage - 1)}"> <i class="angle left icon"></i> </a> <virtual each="{page in pages}"> <a class="item" onclick="{clickPage.bind(this,page.number)}" if="{!page.active && !page.disabled}"> {page.number} </a> <a class="active item" if="{page.active}">{page.number}</a> <div class="disabled icon item" if="{page.disabled}"> <i class="ellipsis horizontal icon"></i> </div> </virtual> <a class="icon item {disabled: activePage >= totalPages}" onclick="{clickPage.bind(this,activePage + 1)}"> <i class="angle right icon"></i> </a> <a class="icon item {disabled: activePage >= totalPages}" onclick="{clickPage.bind(this,totalPages )}"> <i aria-hidden="true" class="angle double right icon"></i> </a> </div>', '', '', function(opts) {
-    const tag = this
+// ===================================================================================
+//                                                                           Lifecycle
+//                                                                           =========
+function onBeforeMount() {
+  this.update({
+    pages: []
+  });
+}
 
-    tag.activePage = 1
-    tag.pages = []
-    tag.totalPages = 1
+function onUpdated(props, state) {
+  let needsRegenerate = false;
+  if (props.activePage != this.lastpropsActivePage) {
+    state.activePage = parseInt(props.activePage || 1);
+    this.lastpropsActivePage = state.activePage;
+    needsRegenerate = true;
+  }
+  if (props.totalPage != this.lastpropsTotalPage) {
+    state.totalPage = parseInt(props.totalPage || 1);
+    this.lastpropsTotalPage = state.totalPage;
+    needsRegenerate = true;
+  }
 
-    tag.clickPage = clickPage
-    tag.on('mount', onMount)
-    tag.on('update', onUpdate)
+  if (needsRegenerate) {
+    generatePagination(this);
+  }
+}
 
-    let lastActivePage = null
-    let lastOptsTotalPages = null
-    let lastOptsActivePage = null
-    let lastTotalPages = null
+// ===================================================================================
+//                                                                               Event
+//                                                                               =====
+function onClickPage(e, pageNum) {
+  e.preventDefault();
+  if (pageNum < 1 || pageNum > this.state.totalPage) {
+    return
+  }
+  this.update({
+    activePage: pageNum
+  });
+  this.dispatch('change', pageNum);
+}
 
-    function onMount() {
-      tag.update()
-    }
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+function generatePagination(tag) {
+  tag.state.pages = [];
+  const activePage = tag.state.activePage;
+  const totalPage = tag.state.totalPage;
+  const pageSize = calcPageSize(props.pageSize, totalPage);
+  const index = calcIndex(activePage, totalPage, pageSize);
 
-    function onUpdate() {
-      let needsRegenerate = false
-      if (opts.activePage != lastOptsActivePage) {
-        lastOptsActivePage = opts.activePage
-        tag.activePage = opts.activePage
-        lastActivePage = tag.activePage
-        needsRegenerate = true
-      } else if (tag.activePage != lastActivePage) {
-        lastActivePage = tag.activePage
-        needsRegenerate = true
-      }
-      if (opts.totalPages != lastOptsTotalPages) {
-        lastOptsTotalPages = opts.totalPages
-        tag.totalPages = opts.totalPages
-        lastTotalPages = tag.totalPages
-        needsRegenerate = true
-      } else if (tag.totalPages != lastTotalPages) {
-        lastTotalPages = tag.totalPages
-        opts.totalPages = tag.totalPages
-        lastOptsTotalPages = opts.totalPages
-        needsRegenerate = true
-      }
+  if (pageSize < 1) {
+    tag.update();
+    return
+  }
 
-      if (needsRegenerate) {
-        generatePagination()
-      }
-    }
+  for (let i = 0; i < pageSize; i++) {
+    tag.state.pages.push({
+      number: i + index,
+      active: i + index == activePage,
+    });
+  }
+  tag.state.pages[0].number = 1;
+  tag.state.pages[pageSize - 1].number = totalPage;
+  if (pageSize > 1) {
+    tag.state.pages[1].disabled = index != 1;
+  }
+  if (pageSize > 2) {
+    tag.state.pages[pageSize - 2].disabled = index != totalPage - pageSize + 1;
+  }
 
-    function clickPage(pageNum, e) {
-      e.preventDefault()
-      if (pageNum < 1 || pageNum > tag.totalPages) {
-        return
-      }
-      tag.activePage = pageNum
-      tag.update()
-      tag.trigger('change', pageNum)
-    }
+  tag.update();
+}
 
-    function generatePagination() {
-      tag.pages = []
-      const activePage = parseInt(tag.activePage || 1)
-      const totalPages = parseInt(tag.totalPages || 1)
-      const pageSize = calcPageSize()
-      const index = calcIndex(pageSize)
+function calcPageSize(pageSize = 7, totalPage = 1) {
+  pageSize = parseInt(pageSize);
+  return pageSize < totalPage ? pageSize : totalPage
+}
 
-      if (pageSize < 1) {
-        tag.update()
-        return
-      }
+function calcIndex(activePage, totalPage, pageSize) {
+  const prevPageSize = (pageSize - pageSize % 2) / 2;
+  if (activePage + prevPageSize > totalPage) {
+    return totalPage - pageSize + 1
+  }
+  if (activePage > prevPageSize) {
+    return activePage - prevPageSize
+  }
+  return 1
+}
 
-      for (let i = 0; i < pageSize; i++) {
-        tag.pages.push({
-          number: i + index,
-          active: i + index == activePage,
-        })
-      }
-      tag.pages[0].number = 1
-      tag.pages[pageSize - 1].number = totalPages
-      if (pageSize > 1) {
-        tag.pages[1].disabled = index != 1
-      }
-      if (pageSize > 2) {
-        tag.pages[pageSize - 2].disabled = index != totalPages - pageSize + 1
-      }
+var suPagination = {
+  'css': null,
 
-      tag.update()
-    }
+  'exports': {
+    state: {
+      activePage: 1,
+      pages: [],
+      totalPage: 1,
+    },
 
-    function calcPageSize() {
-      const pageSize = parseInt(opts.pageSize || 7)
-      return pageSize < tag.totalPages ? pageSize : tag.totalPages
-    }
+    lastpropsTotalPage: null,
+    lastpropsActivePage: null,
+    onBeforeMount,
+    onUpdated,
+    onClickPage
+  },
 
-    function calcIndex(pageSize) {
-      const activePage = parseInt(tag.activePage || 1)
-      const totalPages = parseInt(tag.totalPages || 1)
-      const prevPageSize = (pageSize - pageSize % 2) / 2
-      if (activePage + prevPageSize > totalPages) {
-        return totalPages - pageSize + 1
-      }
-      if (activePage > prevPageSize) {
-        return activePage - prevPageSize
-      }
-      return 1
-    }
-});
+  'template': function(template, expressionTypes, bindingTypes, getComponent) {
+    return template(
+      '<div expr62><a expr63><i aria-hidden="true" class="angle double left icon"></i></a><a expr64><i class="angle left icon"></i></a><virtual expr65></virtual><a expr69><i class="angle right icon"></i></a><a expr70><i aria-hidden="true" class="angle double right icon"></i></a></div>',
+      [{
+        'redundantAttribute': 'expr62',
+        'selector': '[expr62]',
+
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
+
+          'evaluate': function(scope) {
+            return ['ui pagination menu ', scope.props.class].join('');
+          }
+        }]
+      }, {
+        'redundantAttribute': 'expr63',
+        'selector': '[expr63]',
+
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
+
+          'evaluate': function(scope) {
+            return ['icon item ', scope.state.activePage <= 1 ? 'disabled' : ''].join('');
+          }
+        }, {
+          'type': expressionTypes.EVENT,
+          'name': 'onclick',
+
+          'evaluate': function(scope) {
+            return event => scope.onClickPage(scope,1);
+          }
+        }]
+      }, {
+        'redundantAttribute': 'expr64',
+        'selector': '[expr64]',
+
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
+
+          'evaluate': function(scope) {
+            return ['icon item ', scope.state.activePage <= 1 ? 'disabled' : ''].join('');
+          }
+        }, {
+          'type': expressionTypes.EVENT,
+          'name': 'onclick',
+
+          'evaluate': function(scope) {
+            return event => scope.onClickPage(scope,scope.state.activePage - 1);
+          }
+        }]
+      }, {
+        'type': bindingTypes.EACH,
+        'getKey': null,
+        'condition': null,
+
+        'template': template(null, [{
+          'type': bindingTypes.TAG,
+          'getComponent': getComponent,
+
+          'evaluate': function(scope) {
+            return 'virtual';
+          },
+
+          'slots': [{
+            'id': 'default',
+            'html': '<a expr66 class="item"></a><a expr67 class="active item"></a><div expr68 class="disabled icon item"></div>',
+
+            'bindings': [{
+              'type': bindingTypes.IF,
+
+              'evaluate': function(scope) {
+                return !scope.page.active && !scope.page.disabled;
+              },
+
+              'redundantAttribute': 'expr66',
+              'selector': '[expr66]',
+
+              'template': template('<!---->', [{
+                'expressions': [{
+                  'type': expressionTypes.TEXT,
+                  'childNodeIndex': 0,
+
+                  'evaluate': function(scope) {
+                    return ['\n        ', scope.page.number, '\n      '].join('');
+                  }
+                }, {
+                  'type': expressionTypes.EVENT,
+                  'name': 'onclick',
+
+                  'evaluate': function(scope) {
+                    return event => scope.onClickPage(scope,scope.page.number);
+                  }
+                }]
+              }])
+            }, {
+              'type': bindingTypes.IF,
+
+              'evaluate': function(scope) {
+                return scope.page.active;
+              },
+
+              'redundantAttribute': 'expr67',
+              'selector': '[expr67]',
+
+              'template': template('<!---->', [{
+                'expressions': [{
+                  'type': expressionTypes.TEXT,
+                  'childNodeIndex': 0,
+
+                  'evaluate': function(scope) {
+                    return scope.page.number;
+                  }
+                }]
+              }])
+            }, {
+              'type': bindingTypes.IF,
+
+              'evaluate': function(scope) {
+                return scope.page.disabled;
+              },
+
+              'redundantAttribute': 'expr68',
+              'selector': '[expr68]',
+              'template': template('<i class="ellipsis horizontal icon"></i>', [])
+            }]
+          }],
+
+          'attributes': []
+        }]),
+
+        'redundantAttribute': 'expr65',
+        'selector': '[expr65]',
+        'itemName': 'page',
+        'indexName': null,
+
+        'evaluate': function(scope) {
+          return scope.state.pages;
+        }
+      }, {
+        'redundantAttribute': 'expr69',
+        'selector': '[expr69]',
+
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
+
+          'evaluate': function(scope) {
+            return [
+              'icon item ',
+              scope.state.activePage >= scope.state.totalPage ? 'disabled' : ''
+            ].join('');
+          }
+        }, {
+          'type': expressionTypes.EVENT,
+          'name': 'onclick',
+
+          'evaluate': function(scope) {
+            return event => scope.onClickPage(scope,scope.state.activePage + 1);
+          }
+        }]
+      }, {
+        'redundantAttribute': 'expr70',
+        'selector': '[expr70]',
+
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
+
+          'evaluate': function(scope) {
+            return [
+              'icon item ',
+              scope.state.activePage >= scope.state.totalPage ? 'disabled' : ''
+            ].join('');
+          }
+        }, {
+          'type': expressionTypes.EVENT,
+          'name': 'onclick',
+
+          'evaluate': function(scope) {
+            return event => scope.onClickPage(scope,scope.state.totalPage );
+          }
+        }]
+      }]
+    );
+  },
+
+  'name': 'su-pagination'
+};
+
+export default suPagination;
