@@ -1,7 +1,7 @@
 // ===================================================================================
 //                                                                           Lifecycle
 //                                                                           =========
-function onBeforeMount() {
+function onMounted() {
   this.update({
     pages: []
   });
@@ -12,6 +12,10 @@ function onUpdated(props, state) {
   if (props.activePage != this.lastpropsActivePage) {
     state.activePage = parseInt(props.activePage || 1);
     this.lastpropsActivePage = state.activePage;
+    needsRegenerate = true;
+  }
+  if (state.activePage != this.lastActivePage) {
+    this.lastActivePage = state.activePage;
     needsRegenerate = true;
   }
   if (props.totalPage != this.lastpropsTotalPage) {
@@ -46,7 +50,7 @@ function generatePagination(tag) {
   tag.state.pages = [];
   const activePage = tag.state.activePage;
   const totalPage = tag.state.totalPage;
-  const pageSize = calcPageSize(props.pageSize, totalPage);
+  const pageSize = calcPageSize(tag.props.pageSize, totalPage);
   const index = calcIndex(activePage, totalPage, pageSize);
 
   if (pageSize < 1) {
@@ -100,17 +104,18 @@ var suPagination = {
 
     lastpropsTotalPage: null,
     lastpropsActivePage: null,
-    onBeforeMount,
+    lastActivePage: null,
+    onMounted,
     onUpdated,
     onClickPage
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr62><a expr63><i aria-hidden="true" class="angle double left icon"></i></a><a expr64><i class="angle left icon"></i></a><virtual expr65></virtual><a expr69><i class="angle right icon"></i></a><a expr70><i aria-hidden="true" class="angle double right icon"></i></a></div>',
+      '<div expr394><a expr395><i aria-hidden="true" class="angle double left icon"></i></a><a expr396><i class="angle left icon"></i></a><virtual expr397></virtual><a expr401><i class="angle right icon"></i></a><a expr402><i aria-hidden="true" class="angle double right icon"></i></a></div>',
       [{
-        'redundantAttribute': 'expr62',
-        'selector': '[expr62]',
+        'redundantAttribute': 'expr394',
+        'selector': '[expr394]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -121,41 +126,41 @@ var suPagination = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr63',
-        'selector': '[expr63]',
+        'redundantAttribute': 'expr395',
+        'selector': '[expr395]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
           'name': 'class',
 
           'evaluate': function(scope) {
-            return ['icon item ', scope.state.activePage <= 1 ? 'disabled' : ''].join('');
+            return ['angle icon item ', scope.state.activePage <= 1 ? 'disabled' : ''].join('');
           }
         }, {
           'type': expressionTypes.EVENT,
           'name': 'onclick',
 
           'evaluate': function(scope) {
-            return event => scope.onClickPage(scope,1);
+            return event => scope.onClickPage(event,1);
           }
         }]
       }, {
-        'redundantAttribute': 'expr64',
-        'selector': '[expr64]',
+        'redundantAttribute': 'expr396',
+        'selector': '[expr396]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
           'name': 'class',
 
           'evaluate': function(scope) {
-            return ['icon item ', scope.state.activePage <= 1 ? 'disabled' : ''].join('');
+            return ['angle icon item ', scope.state.activePage <= 1 ? 'disabled' : ''].join('');
           }
         }, {
           'type': expressionTypes.EVENT,
           'name': 'onclick',
 
           'evaluate': function(scope) {
-            return event => scope.onClickPage(scope,scope.state.activePage - 1);
+            return event => scope.onClickPage(event,scope.state.activePage - 1);
           }
         }]
       }, {
@@ -173,7 +178,7 @@ var suPagination = {
 
           'slots': [{
             'id': 'default',
-            'html': '<a expr66 class="item"></a><a expr67 class="active item"></a><div expr68 class="disabled icon item"></div>',
+            'html': '<a expr398 class="item"></a><a expr399 class="active item"></a><div expr400 class="disabled icon item"></div>',
 
             'bindings': [{
               'type': bindingTypes.IF,
@@ -182,8 +187,8 @@ var suPagination = {
                 return !scope.page.active && !scope.page.disabled;
               },
 
-              'redundantAttribute': 'expr66',
-              'selector': '[expr66]',
+              'redundantAttribute': 'expr398',
+              'selector': '[expr398]',
 
               'template': template('<!---->', [{
                 'expressions': [{
@@ -198,7 +203,7 @@ var suPagination = {
                   'name': 'onclick',
 
                   'evaluate': function(scope) {
-                    return event => scope.onClickPage(scope,scope.page.number);
+                    return event => scope.onClickPage(event,scope.page.number);
                   }
                 }]
               }])
@@ -209,8 +214,8 @@ var suPagination = {
                 return scope.page.active;
               },
 
-              'redundantAttribute': 'expr67',
-              'selector': '[expr67]',
+              'redundantAttribute': 'expr399',
+              'selector': '[expr399]',
 
               'template': template('<!---->', [{
                 'expressions': [{
@@ -229,8 +234,8 @@ var suPagination = {
                 return scope.page.disabled;
               },
 
-              'redundantAttribute': 'expr68',
-              'selector': '[expr68]',
+              'redundantAttribute': 'expr400',
+              'selector': '[expr400]',
               'template': template('<i class="ellipsis horizontal icon"></i>', [])
             }]
           }],
@@ -238,8 +243,8 @@ var suPagination = {
           'attributes': []
         }]),
 
-        'redundantAttribute': 'expr65',
-        'selector': '[expr65]',
+        'redundantAttribute': 'expr397',
+        'selector': '[expr397]',
         'itemName': 'page',
         'indexName': null,
 
@@ -247,8 +252,8 @@ var suPagination = {
           return scope.state.pages;
         }
       }, {
-        'redundantAttribute': 'expr69',
-        'selector': '[expr69]',
+        'redundantAttribute': 'expr401',
+        'selector': '[expr401]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -256,7 +261,7 @@ var suPagination = {
 
           'evaluate': function(scope) {
             return [
-              'icon item ',
+              'angle icon item ',
               scope.state.activePage >= scope.state.totalPage ? 'disabled' : ''
             ].join('');
           }
@@ -265,12 +270,12 @@ var suPagination = {
           'name': 'onclick',
 
           'evaluate': function(scope) {
-            return event => scope.onClickPage(scope,scope.state.activePage + 1);
+            return event => scope.onClickPage(event,scope.state.activePage + 1);
           }
         }]
       }, {
-        'redundantAttribute': 'expr70',
-        'selector': '[expr70]',
+        'redundantAttribute': 'expr402',
+        'selector': '[expr402]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -278,7 +283,7 @@ var suPagination = {
 
           'evaluate': function(scope) {
             return [
-              'icon item ',
+              'angle icon item ',
               scope.state.activePage >= scope.state.totalPage ? 'disabled' : ''
             ].join('');
           }
@@ -287,7 +292,7 @@ var suPagination = {
           'name': 'onclick',
 
           'evaluate': function(scope) {
-            return event => scope.onClickPage(scope,scope.state.totalPage );
+            return event => scope.onClickPage(event,scope.state.totalPage );
           }
         }]
       }]

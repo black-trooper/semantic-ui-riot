@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Semantic UI Riot su-checkbox</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.1/dist/semantic.min.css" />
+</head>
+
+<body>
+  <app />
+
+  <script data-src="./app.riot" type="riot"></script>
+  <script data-src="./checkbox/su-checkbox.riot" type="riot"></script>
+  <script data-src="./checkbox/su-checkbox-group.riot" type="riot"></script>
+  <script data-src="./radio/su-radio.riot" type="riot"></script>
+  <script data-src="./radio/su-radio-group.riot" type="riot"></script>
+  <script data-src="./modal/su-modal.riot" type="riot"></script>
+  <script data-src="./alert/su-alert.riot" type="riot"></script>
+  <script data-src="./dropdown/su-dropdown.riot" type="riot"></script>
+  <script data-src="./tab/su-tab.riot" type="riot"></script>
+  <script src="https://unpkg.com/riot@4.0.0-rc.8/riot+compiler.min.js"></script>
+  <script src="https://unpkg.com/riot-observable@3.0.0/dist/observable.js"></script>
+
+  <!-- include riot.js -->
+  <!-- <script src="https://unpkg.com/riot@4.0.0-rc.5/riot.js"></script> -->
+
+  <!-- mount the component -->
+  <!-- <script type="module">
+    // import the component javascript output generated via @riotjs/compiler
+    import Dropdown from '../dist/tags/dropdown/su-dropdown.js'
+
+    // register the riot component
+    riot.register('su-dropdown', Dropdown)
+
+    riot.mount('su-dropdown')
+  </script> -->
+
+  <script>
+    window.id = 0;
+    const obs = observable()
+    riot.install(function (component) {
+      component.obs = obs
+
+      component.dispatch = (name, data) => {
+        const eventName = `on${name}`
+        const callback = component.props[eventName]
+
+        // for native events
+        // component.root.dispatchEvent(new Event(name, data))
+
+        if (callback) callback(data);
+      }
+
+      component.showModal = (target) => {
+        component.obs.trigger(`${target.id}-show`)
+      }
+      component.hideModal = target => {
+        component.obs.trigger(`${target.id}-hide`)
+      }
+      component.suAlert = opts => {
+        component.obs.trigger(`su-alert-show`, opts)
+      }
+    })
+
+    riot.compile().then(() => {
+      riot.mount("app");
+    });
+
+  </script>
+</body>
+</html>
