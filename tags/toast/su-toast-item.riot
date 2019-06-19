@@ -76,58 +76,48 @@
   </style>
 
   <script>
-    const tag = this
-    // ===================================================================================
-    //                                                                      Tag Properties
-    //                                                                      ==============
-    tag.position = isRight() ? 'right' : 'left'
-    tag.direction = isRight() ? 'left' : 'right'
-    tag.icon = opts.icon
-    tag.progress = opts.progress
-    tag.className = opts.className
-    tag.transition = `transition animating in fade ${tag.direction}`
-    tag.title = opts.title
-    tag.messages = opts.messages
-
-    // ===================================================================================
-    //                                                                         Tag Methods
-    //                                                                         ===========
-    tag.close = close
-    tag.on('mount', onMount)
-
-    // ===================================================================================
-    //                                                                          Properties
-    //                                                                          ==========
-
-    // ===================================================================================
-    //                                                                             Methods
-    //                                                                             =======
-    function close() {
-      tag.hide = true
-      tag.update()
+    export default {
+      onMounted,
+      onClose,
     }
 
-    function onMount() {
+    // ===================================================================================
+    //                                                                           Lifecycle
+    //                                                                           =========
+    function onMount(props) {
+      const isRight = (props.position || '').indexOf('right') >= 0
+      const direction = isRight() ? 'left' : 'right'
+      this.position = isRight() ? 'right' : 'left'
+      this.transition = `transition animating in fade ${direction}`
+      this.icon = opts.icon
+      this.progress = opts.progress
+      this.className = opts.className
+      this.title = opts.title
+      this.messages = opts.messages
+
       setTimeout(() => {
-        tag.transition = ''
-        tag.update()
+        this.transition = ''
+        this.update()
       }, 300)
 
       setTimeout(() => {
-        tag.transition = `transition animating out fade ${tag.direction}`
-        tag.update()
+        this.transition = `transition animating out fade ${direction}`
+        this.update()
       }, 3000)
 
       setTimeout(() => {
-        tag.transition = 'transition hidden'
-        tag.hide = true
-        tag.update()
+        this.transition = 'transition hidden'
+        this.hide = true
+        this.update()
       }, 3500)
     }
 
-    function isRight() {
-      const position = opts.position || ''
-      return position.indexOf('right') >= 0
+    // ===================================================================================
+    //                                                                              Events
+    //                                                                              ======
+    function onClose() {
+      this.hide = true
+      this.update()
     }
   </script>
 </su-toast-item>

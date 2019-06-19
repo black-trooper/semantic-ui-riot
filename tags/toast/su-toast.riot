@@ -1,0 +1,107 @@
+<su-toast class="{ state.position }">
+  <div class="ui list">
+    <su-toast-item each="{ item in state.items }" icon="{ item.icon }" progress="{ item.progress }"
+      class-name="{ item.class }" title="{ item.title }" messages="{ item.messages }" position="{ position }" />
+  </div>
+
+  <style>
+    :host {
+      position: fixed;
+      padding: 1rem;
+      z-index: 3000;
+    }
+
+    :host.right {
+      right: 0;
+    }
+
+    :host.left {
+      left: 0;
+    }
+
+    :host.top {
+      top: 0;
+    }
+
+    :host.bottom {
+      bottom: 0;
+    }
+
+    :host.middle {
+      top: 50%;
+      margin-top: -35px;
+    }
+
+    :host.center {
+      left: 50%;
+      margin-left: 150px;
+    }
+
+    .ui.message {
+      min-width: 20rem;
+      position: relative;
+      padding-right: 2.5rem;
+    }
+
+    .ui.icon.message {
+      width: auto !important;
+    }
+  </style>
+
+  <script>
+    export default {
+      state: {
+        items: [],
+        position: '',
+      },
+
+      onMounted,
+      onUpdated,
+    }
+
+    // ===================================================================================
+    //                                                                           Lifecycle
+    //                                                                           =========
+    function onMounted() {
+      tag.update()
+
+      if (this.obs) {
+        this.obs.on('su-toast-show', option => {
+          showToast(this, option)
+        })
+      }
+    }
+
+    function onUpdated(props, state) {
+      state.position = props.position || 'bottom right'
+    }
+
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
+    function showToast(tag, param) {
+      const option = {
+        title: null,
+        message: null,
+        icon: null,
+        progress: null,
+        class: null,
+      }
+
+      if (typeof param === 'string') {
+        option.message = param
+      } else if (param) {
+        Object.assign(option, param)
+      }
+      option.message = Array.isArray(option.message) ? option.message : [option.message]
+
+      tag.state.items.push(item)
+      tag.update()
+
+      setTimeout(() => {
+        tag.state.items.shift()
+        tag.update()
+      }, 5000)
+    }
+  </script>
+</su-toast>
