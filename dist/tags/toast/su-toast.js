@@ -1,70 +1,143 @@
-riot.tag2('su-toast', '<div class="ui list"> <su-toast-item each="{item in items}" icon="{item.icon}" progress="{item.progress}" class-name="{item.class}" title="{item.title}" messages="{item.messages}" position="{position}"></su-toast-item> </div>', 'su-toast,[data-is="su-toast"]{ position: fixed; padding: 1rem; z-index: 3000; } su-toast.right,[data-is="su-toast"].right{ right: 0; } su-toast.left,[data-is="su-toast"].left{ left: 0; } su-toast.top,[data-is="su-toast"].top{ top: 0; } su-toast.bottom,[data-is="su-toast"].bottom{ bottom: 0; } su-toast.middle,[data-is="su-toast"].middle{ top: 50%; margin-top: -35px; } su-toast.center,[data-is="su-toast"].center{ left: 50%; margin-left: 150px; } su-toast .ui.message,[data-is="su-toast"] .ui.message{ min-width: 20rem; position: relative; padding-right: 2.5rem; } su-toast .ui.icon.message,[data-is="su-toast"] .ui.icon.message{ width: auto !important; }', 'class="{position}"', function(opts) {
-    const tag = this
+// ===================================================================================
+//                                                                           Lifecycle
+//                                                                           =========
+function onMounted() {
+  this.update();
 
-    tag.items = []
+  if (this.obs) {
+    this.obs.on('su-toast-show', option => {
+      showToast(this, option);
+    });
+  }
+}
 
-    tag.mixin('semantic-ui')
-    tag.observable.on('showToast', showToast)
-    tag.on('mount', onMount)
-    tag.on('update', onUpdate)
+function onUpdated(props, state) {
+  state.position = props.position || 'bottom right';
+}
 
-    riot.mixin({
-      suToast
-    })
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+function showToast(tag, param) {
+  const option = {
+    title: null,
+    message: null,
+    icon: null,
+    progress: null,
+    class: null,
+  };
 
-    function onMount() {
-      tag.update()
-    }
+  if (typeof param === 'string') {
+    option.message = param;
+  } else if (param) {
+    Object.assign(option, param);
+  }
+  option.message = Array.isArray(option.message) ? option.message : [option.message];
 
-    function onUpdate() {
-      tag.position = opts.position || 'bottom right'
-    }
+  tag.state.items.push(item);
+  tag.update();
 
-    function showToast(option) {
-      const item = {
-        title: option.title,
-        messages: Array.isArray(option.message) ? option.message : [option.message],
-        icon: option.icon,
-        progress: option.progress,
-        class: option.class
+  setTimeout(() => {
+    tag.state.items.shift();
+    tag.update();
+  }, 5000);
+}
+
+var suToast = {
+  'css': `su-toast,[is="su-toast"]{ position: fixed; padding: 1rem; z-index: 3000; } su-toast.right,[is="su-toast"].right{ right: 0; } su-toast.left,[is="su-toast"].left{ left: 0; } su-toast.top,[is="su-toast"].top{ top: 0; } su-toast.bottom,[is="su-toast"].bottom{ bottom: 0; } su-toast.middle,[is="su-toast"].middle{ top: 50%; margin-top: -35px; } su-toast.center,[is="su-toast"].center{ left: 50%; margin-left: 150px; } su-toast .ui.message,[is="su-toast"] .ui.message{ min-width: 20rem; position: relative; padding-right: 2.5rem; } su-toast .ui.icon.message,[is="su-toast"] .ui.icon.message{ width: auto !important; }`,
+
+  'exports': {
+    state: {
+      items: [],
+      position: '',
+    },
+
+    onMounted,
+    onUpdated
+  },
+
+  'template': function(template, expressionTypes, bindingTypes, getComponent) {
+    return template('<div class="ui list"><su-toast-item expr129></su-toast-item></div>', [{
+      'expressions': [{
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'class',
+
+        'evaluate': function(scope) {
+          return scope.state.position;
+        }
+      }]
+    }, {
+      'type': bindingTypes.EACH,
+      'getKey': null,
+      'condition': null,
+
+      'template': template(null, [{
+        'type': bindingTypes.TAG,
+        'getComponent': getComponent,
+
+        'evaluate': function(scope) {
+          return 'su-toast-item';
+        },
+
+        'slots': [],
+
+        'attributes': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'icon',
+
+          'evaluate': function(scope) {
+            return scope.item.icon;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'progress',
+
+          'evaluate': function(scope) {
+            return scope.item.progress;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class-name',
+
+          'evaluate': function(scope) {
+            return scope.item.class;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'title',
+
+          'evaluate': function(scope) {
+            return scope.item.title;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'messages',
+
+          'evaluate': function(scope) {
+            return scope.item.messages;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'position',
+
+          'evaluate': function(scope) {
+            return scope.position;
+          }
+        }]
+      }]),
+
+      'redundantAttribute': 'expr129',
+      'selector': '[expr129]',
+      'itemName': 'item',
+      'indexName': null,
+
+      'evaluate': function(scope) {
+        return scope.state.items;
       }
-      tag.items.push(item)
-      tag.update()
+    }]);
+  },
 
-      setTimeout(() => {
-        tag.items.shift()
-        tag.update()
-      }, 5000)
-    }
+  'name': 'su-toast'
+};
 
-    function suToast(param) {
-      const option = {
-        title: null,
-        message: null,
-        icon: null,
-        progress: null,
-        class: null,
-      }
-
-      if (typeof param === 'string') {
-        option.message = param
-      } else if (param) {
-        if (param.title) {
-          option.title = param.title
-        }
-        if (param.message) {
-          option.message = param.message
-        }
-        if (param.icon) {
-          option.icon = param.icon
-        }
-        if (param.progress) {
-          option.progress = param.progress
-        }
-        if (param.class) {
-          option.class = param.class
-        }
-      }
-      tag.observable.trigger('showToast', option)
-    }
-});
+export default suToast;

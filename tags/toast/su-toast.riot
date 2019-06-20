@@ -63,7 +63,7 @@
     //                                                                           Lifecycle
     //                                                                           =========
     function onMounted() {
-      tag.update()
+      this.update()
 
       if (this.obs) {
         this.obs.on('su-toast-show', option => {
