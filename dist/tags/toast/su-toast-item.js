@@ -3,14 +3,15 @@
 //                                                                           =========
 function onMounted(props) {
   const isRight = (props.position || '').indexOf('right') >= 0;
-  const direction = isRight() ? 'left' : 'right';
-  this.position = isRight() ? 'right' : 'left';
+  const direction = isRight ? 'left' : 'right';
+  this.position = isRight ? 'right' : 'left';
   this.transition = `transition animating in fade ${direction}`;
   this.icon = props.icon;
   this.progress = props.progress;
   this.className = props.className;
   this.title = props.title;
   this.messages = props.messages;
+  this.update();
 
   setTimeout(() => {
     this.transition = '';
@@ -46,7 +47,7 @@ var suToastItem = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<div expr121></div>', [{
+    return template('<div expr113></div>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -62,11 +63,11 @@ var suToastItem = {
         return !scope.hide;
       },
 
-      'redundantAttribute': 'expr121',
-      'selector': '[expr121]',
+      'redundantAttribute': 'expr113',
+      'selector': '[expr113]',
 
       'template': template(
-        '<div expr122></div><div expr123><i expr124 class="close icon"></i><i expr125></i><div class="content"><div expr126 class="header"></div><p expr127></p></div></div><div expr128></div>',
+        '<div expr114></div><div expr115><i expr116 class="close icon"></i><i expr117></i><div class="content"><div expr118 class="header"></div><p expr119></p></div></div><div expr120></div>',
         [{
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
@@ -83,8 +84,8 @@ var suToastItem = {
             return scope.progress == 'top';
           },
 
-          'redundantAttribute': 'expr122',
-          'selector': '[expr122]',
+          'redundantAttribute': 'expr114',
+          'selector': '[expr114]',
 
           'template': template('<div class="bar"></div>', [{
             'expressions': [{
@@ -97,8 +98,8 @@ var suToastItem = {
             }]
           }])
         }, {
-          'redundantAttribute': 'expr123',
-          'selector': '[expr123]',
+          'redundantAttribute': 'expr115',
+          'selector': '[expr115]',
 
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
@@ -115,15 +116,15 @@ var suToastItem = {
             }
           }]
         }, {
-          'redundantAttribute': 'expr124',
-          'selector': '[expr124]',
+          'redundantAttribute': 'expr116',
+          'selector': '[expr116]',
 
           'expressions': [{
             'type': expressionTypes.EVENT,
             'name': 'onclick',
 
             'evaluate': function(scope) {
-              return close;
+              return scope.onClose;
             }
           }]
         }, {
@@ -133,8 +134,8 @@ var suToastItem = {
             return scope.icon;
           },
 
-          'redundantAttribute': 'expr125',
-          'selector': '[expr125]',
+          'redundantAttribute': 'expr117',
+          'selector': '[expr117]',
 
           'template': template(null, [{
             'expressions': [{
@@ -153,8 +154,8 @@ var suToastItem = {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr126',
-          'selector': '[expr126]',
+          'redundantAttribute': 'expr118',
+          'selector': '[expr118]',
 
           'template': template('<!---->', [{
             'expressions': [{
@@ -182,8 +183,8 @@ var suToastItem = {
             }]
           }]),
 
-          'redundantAttribute': 'expr127',
-          'selector': '[expr127]',
+          'redundantAttribute': 'expr119',
+          'selector': '[expr119]',
           'itemName': 'message',
           'indexName': null,
 
@@ -197,8 +198,8 @@ var suToastItem = {
             return scope.progress == 'bottom';
           },
 
-          'redundantAttribute': 'expr128',
-          'selector': '[expr128]',
+          'redundantAttribute': 'expr120',
+          'selector': '[expr120]',
 
           'template': template('<div class="bar"></div>', [{
             'expressions': [{

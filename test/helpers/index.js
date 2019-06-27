@@ -46,6 +46,9 @@ export function init(riot) {
     component.suConfirm = opts => {
       component.obs.trigger(`su-confirm-show`, opts)
     }
+    component.suToast = opts => {
+      component.obs.trigger(`su-toast-show`, opts)
+    }
   })
 
   compiler.registerPostprocessor(function (code) {

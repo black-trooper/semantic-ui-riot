@@ -1,56 +1,60 @@
-require('../../../dist/tags/toast/su-toast.js')
-require('../../../dist/tags/toast/su-toast-item.js')
-
-riot.mixin('semantic-ui', {})
+import * as riot from 'riot'
+import { init, compile, fireEvent } from '../../helpers/'
+import TargetComponent from '../../../dist/tags/toast/su-toast.js'
+import TargetItemComponent from '../../../dist/tags/toast/su-toast-item.js'
 
 describe('su-toast-options', function () {
-  let tag
-  let app
-  let mount = opts => {
-    tag = riot.mount('su-toast', opts)[0]
-    app = riot.mount('app')[0]
+  let element, component
+  init(riot)
+
+  const mount = opts => {
+    element = document.createElement('app')
+    riot.register('su-toast', TargetComponent)
+    riot.register('su-toast-item', TargetItemComponent)
+    const AppComponent = compile(`
+      <app>
+        <su-toast position="{ props.position }">
+        </su-toast>
+      </app>`)
+    riot.register('app', AppComponent)
+    component = riot.mount(element, opts)[0]
   }
 
   beforeEach(function () {
     this.clock = sinon.useFakeTimers()
-    riot.mixin('semantic-ui', { observable: riot.observable() })
-    riot.tag('app')
-    $('body').append(`
-      <su-toast></su-toast>
-      <app></app>
-    `)
   })
 
   afterEach(function () {
+    riot.unregister('su-toast-item')
+    riot.unregister('su-toast')
+    riot.unregister('app')
     this.clock.restore()
-    tag.unmount()
-    app.unmount()
   })
 
   it('is mounted', function () {
     mount()
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 
   it('no option', function () {
     mount()
-    $('su-toast').hasClass('bottom').should.equal(true)
-    $('su-toast').hasClass('right').should.equal(true)
+    expect(component.$('su-toast').classList.contains('bottom')).to.equal(true)
+    expect(component.$('su-toast').classList.contains('right')).to.equal(true)
 
-    app.suToast('hello')
-    $('su-toast-item > div').hasClass('right').should.equal(true)
-    $('su-toast .progress.top').length.should.equal(0)
+    component.suToast('hello')
+    expect(component.$('su-toast-item > div').classList.contains('right')).to.equal(true)
+    expect(component.$('su-toast .progress.top')).to.be.undefined
   })
 
   it('option', function () {
     mount({
       'position': 'top left'
     })
-    $('su-toast').hasClass('top').should.equal(true)
-    $('su-toast').hasClass('left').should.equal(true)
+    expect(component.$('su-toast').classList.contains('top')).to.equal(true)
+    expect(component.$('su-toast').classList.contains('left')).to.equal(true)
 
-    app.suToast({ message: 'hello', progress: 'top' })
-    $('su-toast-item > div').hasClass('right').should.equal(false)
-    $('su-toast .progress.top').length.should.equal(1)
+    component.suToast({ message: 'hello', progress: 'top' })
+    expect(component.$('su-toast-item > div').classList.contains('right')).to.equal(false)
+    expect(component.$('su-toast .progress.top')).to.be.not.undefined
   })
 })

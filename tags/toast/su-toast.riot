@@ -1,7 +1,7 @@
 <su-toast class="{ state.position }">
   <div class="ui list">
     <su-toast-item each="{ item in state.items }" icon="{ item.icon }" progress="{ item.progress }"
-      class-name="{ item.class }" title="{ item.title }" messages="{ item.messages }" position="{ position }" />
+      class-name="{ item.class }" title="{ item.title }" messages="{ item.messages }" position="{ state.position }" />
   </div>
 
   <style>
@@ -55,24 +55,30 @@
         position: '',
       },
 
+      onBeforeMount,
       onMounted,
-      onUpdated,
+      onBeforeUpdate,
     }
 
     // ===================================================================================
     //                                                                           Lifecycle
     //                                                                           =========
+    function onBeforeMount(props, state) {
+      state.items = []
+    }
+
     function onMounted() {
       this.update()
 
       if (this.obs) {
+        this.obs.off('su-toast-show')
         this.obs.on('su-toast-show', option => {
           showToast(this, option)
         })
       }
     }
 
-    function onUpdated(props, state) {
+    function onBeforeUpdate(props, state) {
       state.position = props.position || 'bottom right'
     }
 
@@ -80,7 +86,7 @@
     //                                                                               Logic
     //                                                                               =====
     function showToast(tag, param) {
-      const option = {
+      const item = {
         title: null,
         message: null,
         icon: null,
@@ -89,11 +95,11 @@
       }
 
       if (typeof param === 'string') {
-        option.message = param
+        item.message = param
       } else if (param) {
-        Object.assign(option, param)
+        Object.assign(item, param)
       }
-      option.message = Array.isArray(option.message) ? option.message : [option.message]
+      item.messages = Array.isArray(item.message) ? item.message : [item.message]
 
       tag.state.items.push(item)
       tag.update()

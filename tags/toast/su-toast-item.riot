@@ -4,7 +4,7 @@
       <div class="bar"></div>
     </div>
     <div class="ui { icon ? 'icon' : '' } { className } floating compact message">
-      <i class="close icon" onclick="{ close }"></i>
+      <i class="close icon" onclick="{ onClose }"></i>
       <i class="{ icon } icon" if="{ icon }"></i>
       <div class="content">
         <div class="header" if="{ title }">
@@ -86,14 +86,15 @@
     //                                                                           =========
     function onMounted(props) {
       const isRight = (props.position || '').indexOf('right') >= 0
-      const direction = isRight() ? 'left' : 'right'
-      this.position = isRight() ? 'right' : 'left'
+      const direction = isRight ? 'left' : 'right'
+      this.position = isRight ? 'right' : 'left'
       this.transition = `transition animating in fade ${direction}`
       this.icon = props.icon
       this.progress = props.progress
       this.className = props.className
       this.title = props.title
       this.messages = props.messages
+      this.update()
 
       setTimeout(() => {
         this.transition = ''

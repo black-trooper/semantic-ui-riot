@@ -1,17 +1,22 @@
 // ===================================================================================
 //                                                                           Lifecycle
 //                                                                           =========
+function onBeforeMount(props, state) {
+  state.items = [];
+}
+
 function onMounted() {
   this.update();
 
   if (this.obs) {
+    this.obs.off('su-toast-show');
     this.obs.on('su-toast-show', option => {
       showToast(this, option);
     });
   }
 }
 
-function onUpdated(props, state) {
+function onBeforeUpdate(props, state) {
   state.position = props.position || 'bottom right';
 }
 
@@ -19,7 +24,7 @@ function onUpdated(props, state) {
 //                                                                               Logic
 //                                                                               =====
 function showToast(tag, param) {
-  const option = {
+  const item = {
     title: null,
     message: null,
     icon: null,
@@ -28,11 +33,11 @@ function showToast(tag, param) {
   };
 
   if (typeof param === 'string') {
-    option.message = param;
+    item.message = param;
   } else if (param) {
-    Object.assign(option, param);
+    Object.assign(item, param);
   }
-  option.message = Array.isArray(option.message) ? option.message : [option.message];
+  item.messages = Array.isArray(item.message) ? item.message : [item.message];
 
   tag.state.items.push(item);
   tag.update();
@@ -52,12 +57,13 @@ var suToast = {
       position: '',
     },
 
+    onBeforeMount,
     onMounted,
-    onUpdated
+    onBeforeUpdate
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<div class="ui list"><su-toast-item expr129></su-toast-item></div>', [{
+    return template('<div class="ui list"><su-toast-item expr126></su-toast-item></div>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -121,13 +127,13 @@ var suToast = {
           'name': 'position',
 
           'evaluate': function(scope) {
-            return scope.position;
+            return scope.state.position;
           }
         }]
       }]),
 
-      'redundantAttribute': 'expr129',
-      'selector': '[expr129]',
+      'redundantAttribute': 'expr126',
+      'selector': '[expr126]',
       'itemName': 'item',
       'indexName': null,
 
