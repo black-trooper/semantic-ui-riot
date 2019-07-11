@@ -1,0 +1,168 @@
+<su-select class="ui selection dropdown" value="{ state.value }">
+  <!-- <select onchange="{ onChange }" onblur="{ onBlur }" class="{ state.default ? 'default' : '' } text">
+    <option each="{ item in state.items }" value="{ item.value }" if="{ !item.items }">
+      { item.label }
+    </option>
+    <optgroup label="{ item.label }" each="{ item in state.items }" if="{ item.items }">
+      <option each="{ child in item.items }" value="{ child.value }">
+        { child.label }
+      </option>
+    </optgroup>
+  </select> -->
+  <i class="dropdown icon"></i>
+
+  <style>
+    :host.ui.selection.dropdown {
+      padding: 0;
+    }
+
+    :host.ui.selection.dropdown>select:focus {
+      outline: 0;
+      border-color: #96c8da;
+    }
+
+    :host.ui.selection.dropdown>select {
+      display: block !important;
+      padding: .78571429em 2.1em .78571429em 1em;
+      background: 0 0 !important;
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      border: none;
+      width: 100%;
+      z-index: 2;
+      font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    }
+
+    :host.ui.selection.dropdown>.dropdown.icon {
+      z-index: 1;
+    }
+  </style>
+
+  <script>
+    let index = 0
+    export default {
+      state: {
+        defaultValue: '',
+        value: '',
+        label: '',
+      },
+      onBeforeMount,
+      onMounted,
+      // onBeforeUpdate,
+      // onUpdated,
+
+      // onBlur,
+      // onChange,
+    }
+
+    // ===================================================================================
+    //                                                                           Lifecycle
+    //                                                                           =========
+    function onBeforeMount(props, state) {
+      this.su_id = `su-dropdown-${index++}`
+      this.obs.on(`${this.su_id}-reset`, () => { reset(this) })
+
+      if (props.items && props.items.length > 0) {
+        state.label = props.items[0].label
+        state.value = props.items[0].value
+        state.default = props.items[0].default
+      }
+    }
+
+    function onMounted(props, state) {
+      if (typeof props.value !== 'undefined') {
+        state.value = props.value
+        state.defaultValue = state.value
+      } else {
+        state.defaultValue = state.value
+      }
+      this.update()
+    }
+
+    function onBeforeUpdate(props, state) {
+      state.items = props.items || []
+    }
+
+    function onUpdated(props, state) {
+      if (state.items) {
+        let selected = state.items.filter(item => item.value === state.value)
+        if (!selected || selected.length == 0) {
+          const childItems = flatMap(state.items.filter(item => item.items), item => item.items)
+          selected = childItems.filter(item => item.value == state.value)
+        }
+
+        if (selected && selected.length > 0) {
+          const target = selected[0]
+          if (state.label !== target.label) {
+            changeValues(this, state.value, true)
+          }
+        } else if (state.items && state.items.length > 0) {
+          if (state.value != state.items[0].value) {
+            state.value = state.items[0].value
+          }
+          if (state.label != state.items[0].label) {
+            state.label = state.items[0].label
+            state.default = state.items[0].default
+          }
+        }
+        this.changed = state.value !== state.defaultValue
+      }
+    }
+
+    // ===================================================================================
+    //                                                                               Event
+    //                                                                               =====
+    function onBlur() {
+      this.dispatch('blur')
+    }
+
+    function onChange(target) {
+      // TODO これでtargetから値が取れるか確認
+      changeValues(this, target.target.value)
+    }
+
+    function reset(tag) {
+      tag.update({
+        value: tag.state.defaultValue
+      })
+    }
+
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
+    function changeValues(tag, value, updating) {
+      let item
+      if (tag.props.items.some(item => item.value == value || item.label == value)) {
+        item = tag.props.items.filter(item => item.value == value || item.label == value)[0]
+        tag.state.label = item.label
+        tag.state.value = item.value
+        tag.state.default = item.default
+      } else {
+        const childItems = flatMap(tag.props.items.filter(item => item.items), item => item.items)
+        if (childItems.some(item => item.value == value || item.label == value)) {
+          item = childItems.filter(item => item.value == value || item.label == value)[0]
+          tag.state.label = item.label
+          tag.state.value = item.value
+          tag.state.default = item.default
+        }
+      }
+
+      if (!updating) {
+        tag.update()
+        tag.dispatch('change', item)
+      }
+    }
+
+    function flatMap(xs, f) {
+      return xs.reduce(function (ys, x) {
+        return ys.concat(f(x))
+      }, [])
+    }
+  </script>
+</su-select>
