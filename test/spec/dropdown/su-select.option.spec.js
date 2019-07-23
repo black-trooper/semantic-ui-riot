@@ -55,7 +55,6 @@ describe('su-select-option', function () {
   it('default value', function () {
     mount('angular')
     expect(component.$('su-select').value).to.equal('angular')
-    // tag.value.should.deep.equal('angular')
-    // tag.label.should.deep.equal('Angular')
+    expect(component.$('su-select').getAttribute('label')).to.equal('Angular')
   })
 })

@@ -1,5 +1,6 @@
-<su-select class="ui selection dropdown" value="{ state.value }">
-  <!-- <select onchange="{ onChange }" onblur="{ onBlur }" class="{ state.default ? 'default' : '' } text">
+<su-select class="ui selection dropdown" value="{ state.value }" label="{ state.label }" changed="{ changed }"
+  id="{ su_id }">
+  <select onchange="{ onChange }" onblur="{ onBlur }" class="{ state.default ? 'default' : '' } text">
     <option each="{ item in state.items }" value="{ item.value }" if="{ !item.items }">
       { item.label }
     </option>
@@ -8,7 +9,7 @@
         { child.label }
       </option>
     </optgroup>
-  </select> -->
+  </select>
   <i class="dropdown icon"></i>
 
   <style>
@@ -52,13 +53,16 @@
         value: '',
         label: '',
       },
+      lastPropsValue: '',
+      lastValue: '',
+
       onBeforeMount,
       onMounted,
-      // onBeforeUpdate,
-      // onUpdated,
+      onBeforeUpdate,
+      onUpdated,
 
-      // onBlur,
-      // onChange,
+      onBlur,
+      onChange,
     }
 
     // ===================================================================================
@@ -78,40 +82,46 @@
     function onMounted(props, state) {
       if (typeof props.value !== 'undefined') {
         state.value = props.value
-        state.defaultValue = state.value
-      } else {
-        state.defaultValue = state.value
       }
+      this.lastPropsValue = props.value
+      this.lastValue = props.value
+      state.defaultValue = state.value
       this.update()
     }
 
     function onBeforeUpdate(props, state) {
       state.items = props.items || []
+      if (this.lastPropsValue != props.value) {
+        state.value = props.value
+        this.lastPropsValue = props.value
+        this.lastValue = props.value
+      }
+
+      let selected = state.items.filter(item => item.value === state.value)
+      if (!selected || selected.length == 0) {
+        const childItems = flatMap(state.items.filter(item => item.items), item => item.items)
+        selected = childItems.filter(item => item.value == state.value)
+      }
+
+      if (selected && selected.length > 0) {
+        const target = selected[0]
+        if (state.label !== target.label) {
+          changeValues(this, state.value, true)
+        }
+      } else if (state.items.length > 0) {
+        if (state.value != state.items[0].value) {
+          state.value = state.items[0].value
+        }
+        if (state.label != state.items[0].label) {
+          state.label = state.items[0].label
+          state.default = state.items[0].default
+        }
+      }
+      this.changed = state.value !== state.defaultValue
     }
 
     function onUpdated(props, state) {
       if (state.items) {
-        let selected = state.items.filter(item => item.value === state.value)
-        if (!selected || selected.length == 0) {
-          const childItems = flatMap(state.items.filter(item => item.items), item => item.items)
-          selected = childItems.filter(item => item.value == state.value)
-        }
-
-        if (selected && selected.length > 0) {
-          const target = selected[0]
-          if (state.label !== target.label) {
-            changeValues(this, state.value, true)
-          }
-        } else if (state.items && state.items.length > 0) {
-          if (state.value != state.items[0].value) {
-            state.value = state.items[0].value
-          }
-          if (state.label != state.items[0].label) {
-            state.label = state.items[0].label
-            state.default = state.items[0].default
-          }
-        }
-        this.changed = state.value !== state.defaultValue
       }
     }
 
@@ -123,8 +133,7 @@
     }
 
     function onChange(target) {
-      // TODO これでtargetから値が取れるか確認
-      changeValues(this, target.target.value)
+      changeValues(this, this.$('select').value)
     }
 
     function reset(tag) {
@@ -138,13 +147,13 @@
     //                                                                               =====
     function changeValues(tag, value, updating) {
       let item
-      if (tag.props.items.some(item => item.value == value || item.label == value)) {
-        item = tag.props.items.filter(item => item.value == value || item.label == value)[0]
+      if (tag.state.items.some(item => item.value == value || item.label == value)) {
+        item = tag.state.items.filter(item => item.value == value || item.label == value)[0]
         tag.state.label = item.label
         tag.state.value = item.value
         tag.state.default = item.default
       } else {
-        const childItems = flatMap(tag.props.items.filter(item => item.items), item => item.items)
+        const childItems = flatMap(tag.state.items.filter(item => item.items), item => item.items)
         if (childItems.some(item => item.value == value || item.label == value)) {
           item = childItems.filter(item => item.value == value || item.label == value)[0]
           tag.state.label = item.label

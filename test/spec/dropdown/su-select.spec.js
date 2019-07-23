@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import { init, fireEvent, fireKeyEvent, keys } from '../../helpers/'
+import { init, fireEvent, compile } from '../../helpers/'
 import TargetComponent from '../../../dist/tags/dropdown/su-select.js'
 
 describe('su-select', function () {
@@ -26,7 +26,17 @@ describe('su-select', function () {
 
   beforeEach(function () {
     riot.register('su-select', TargetComponent)
-    element = document.createElement('su-select')
+    const AppComponent = compile(`
+      <app>
+        <su-select items="{ items || props.items }"
+          value="{ value }"
+          onchange="{ props.onchange }"
+          onblur="{ props.onblur }"
+        />
+      </app>
+    `)
+    riot.register('app', AppComponent)
+    element = document.createElement('app')
     component = riot.mount(element, {
       'items': items,
       'onchange': spyOnChange,
@@ -38,110 +48,111 @@ describe('su-select', function () {
     spyOnChange.reset()
     spyOnBlur.reset()
     riot.unregister('su-select')
+    riot.unregister('app')
   })
 
-  // it('is mounted', function () {
-  //   expect(component).to.be.ok
-  // })
+  it('is mounted', function () {
+    expect(component).to.be.ok
+  })
 
-  // it('clicking default item', function () {
-  //   expect(component.$('su-select select').classList.contains('default')).to.equal(true)
-  //   component.$('su-select select').click()
+  it('clicking default item', function () {
+    expect(component.$('su-select select').classList.contains('default')).to.equal(true)
+    component.$('su-select select').click()
 
-  //   component.$('su-select option').click()
-  //   expect(component.$('su-select select').classList.contains('default')).to.equal(true)
-  //   expect(spyOnChange).callCount(0)
+    component.$('su-select option').click()
+    expect(component.$('su-select select').classList.contains('default')).to.equal(true)
+    expect(spyOnChange).callCount(0)
 
-  //   expect(element.getAttribute('value')).to.be.null
-  // })
+    expect(component.$('su-select').value).to.be.null
+  })
 
-  // it('clicking item', function () {
-  //   expect(component.$('su-select select').classList.contains('default')).to.equal(true)
-  //   component.$('su-select select').click()
+  it('clicking item', function () {
+    expect(component.$('su-select select').classList.contains('default')).to.equal(true)
+    component.$('su-select select').click()
 
-  //   // TODO riot の onchange イベントを呼び出せないので仕方なく changeValues を実行している
-  //   tag.changeValues(items[1].value)
-  //   expect(component.$('su-select select').classList.contains('default')).to.equal(false)
-  //   expect(spyOnChange).calledOnce
+    component.$('su-select select').value = items[1].value
+    component.$('su-select select').onchange()
+    expect(component.$('su-select select').classList.contains('default')).to.equal(false)
+    expect(spyOnChange).calledOnce
 
-  //   tag.value.should.deep.equal(items[1].value)
-  //   tag.label.should.deep.equal(items[1].label)
+    expect(component.$('su-select').value).to.equal(items[1].value)
+    expect(component.$('su-select').getAttribute('label')).to.equal(items[1].label)
 
-  //   fireEvent(component.$('su-select select'), 'blur')
-  //   expect(spyOnBlur).calledOnce
-  // })
+    fireEvent(component.$('su-select select'), 'blur')
+    expect(spyOnBlur).calledOnce
+  })
 
-  // it('update value', function () {
-  //   expect(tag.value).to.be.null
-  //   tag.value = items[1].value
-  //   tag.update()
-  //   tag.value.should.deep.equal(items[1].value)
-  //   tag.label.should.deep.equal(items[1].label)
-  // })
+  it('update value', function () {
+    expect(component.$('su-select').value).to.equal(items[0].value)
+    component.value = items[1].value
+    component.update()
+    expect(component.$('su-select').value).to.equal(items[1].value)
+    expect(component.$('su-select').getAttribute('label')).to.equal(items[1].label)
+  })
 
-  // it('update item value', function () {
-  //   tag.value = items[1].value
-  //   tag.update()
-  //   items[1].value = 'M'
-  //   tag.update()
-  //   expect(tag.value).to.be.null
-  // })
+  it('update item value', function () {
+    component.value = items[1].value
+    component.update()
 
-  // it('update items', function () {
-  //   $('su-select option').length.should.equal(3)
+    items[1].value = 'M'
+    component.items = items
+    component.update()
+    expect(component.$('su-select').value).to.equal(items[0].value)
+  })
 
-  //   tag.opts.items = [
-  //     {
-  //       label: 'Alphabet',
-  //       value: null,
-  //       default: true
-  //     },
-  //     {
-  //       label: 'A to C',
-  //       items: [
-  //         {
-  //           label: 'A',
-  //           value: 'a'
-  //         },
-  //         {
-  //           label: 'B',
-  //           value: 'b'
-  //         },
-  //         {
-  //           label: 'C',
-  //           value: 'c'
-  //         }]
-  //     }
-  //   ]
-  //   tag.update()
+  it('update items', function () {
+    expect(component.$$('su-select option').length).to.equal(3)
 
-  //   $('su-select option').length.should.equal(4)
-  //   expect(spyOnChange).callCount(0)
+    component.items = [
+      {
+        label: 'Alphabet',
+        value: null,
+        default: true
+      },
+      {
+        label: 'A to C',
+        items: [
+          {
+            label: 'A',
+            value: 'a'
+          },
+          {
+            label: 'B',
+            value: 'b'
+          },
+          {
+            label: 'C',
+            value: 'c'
+          }]
+      }
+    ]
+    component.update()
 
-  //   // TODO riot の onchange イベントを呼び出せないので仕方なく changeValues を実行している
-  //   tag.changeValues('a')
-  //   expect(component.$('su-select select').classList.contains('default')).to.equal(false)
-  //   expect(spyOnChange).calledOnce
+    expect(component.$$('su-select option').length).to.equal(4)
+    expect(spyOnChange).callCount(0)
 
-  //   tag.value.should.deep.equal('a')
-  //   tag.label.should.deep.equal('A')
-  // })
+    component.$('su-select select').value = component.items[1].items[0].value
+    component.$('su-select select').onchange()
+    expect(component.$('su-select select').classList.contains('default')).to.equal(false)
+    expect(spyOnChange).calledOnce
 
-  // it('reset value', function () {
-  //   expect(tag.value).to.be.null
-  //   expect(tag.defaultValue).to.be.null
-  //   tag.changed().should.deep.equal(false)
+    expect(component.$('su-select').value).to.equal('a')
+    expect(component.$('su-select').getAttribute('label')).to.equal('A')
+  })
 
-  //   // TODO riot の onchange イベントを呼び出せないので仕方なく changeValues を実行している
-  //   tag.changeValues(items[1].value)
+  it('reset value', function () {
+    expect(component.$('su-select').value).to.equal(items[0].value)
+    expect(component.$('su-select').getAttribute('changed')).to.be.null
 
-  //   tag.value.should.deep.equal(items[1].value)
-  //   tag.changed().should.deep.equal(true)
-  //   expect(tag.defaultValue).to.be.null
+    component.$('su-select select').value = items[1].value
+    component.$('su-select select').onchange()
 
-  //   tag.reset()
-  //   expect(tag.value).to.be.null
-  //   expect(tag.defaultValue).to.be.null
-  //   tag.changed().should.deep.equal(false)
-  // })
+    expect(component.$('su-select').value).to.equal(items[1].value)
+    expect(component.$('su-select').getAttribute('changed')).to.equal('changed')
+
+    // tag.reset()
+    component.obs.trigger(`${component.$('su-select').id}-reset`)
+    expect(component.$('su-select').value).to.equal(items[0].value)
+    expect(component.$('su-select').getAttribute('changed')).to.be.null
+  })
 })

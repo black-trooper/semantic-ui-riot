@@ -17,17 +17,95 @@ function onBeforeMount(props, state) {
 function onMounted(props, state) {
   if (typeof props.value !== 'undefined') {
     state.value = props.value;
-    state.defaultValue = state.value;
-  } else {
-    state.defaultValue = state.value;
   }
+  this.lastPropsValue = props.value;
+  this.lastValue = props.value;
+  state.defaultValue = state.value;
   this.update();
+}
+
+function onBeforeUpdate(props, state) {
+  state.items = props.items || [];
+  if (this.lastPropsValue != props.value) {
+    state.value = props.value;
+    this.lastPropsValue = props.value;
+    this.lastValue = props.value;
+  }
+
+  let selected = state.items.filter(item => item.value === state.value);
+  if (!selected || selected.length == 0) {
+    const childItems = flatMap(state.items.filter(item => item.items), item => item.items);
+    selected = childItems.filter(item => item.value == state.value);
+  }
+
+  if (selected && selected.length > 0) {
+    const target = selected[0];
+    if (state.label !== target.label) {
+      changeValues(this, state.value, true);
+    }
+  } else if (state.items.length > 0) {
+    if (state.value != state.items[0].value) {
+      state.value = state.items[0].value;
+    }
+    if (state.label != state.items[0].label) {
+      state.label = state.items[0].label;
+      state.default = state.items[0].default;
+    }
+  }
+  this.changed = state.value !== state.defaultValue;
+}
+
+function onUpdated(props, state) {
+  if (state.items) ;
+}
+
+// ===================================================================================
+//                                                                               Event
+//                                                                               =====
+function onBlur() {
+  this.dispatch('blur');
+}
+
+function onChange(target) {
+  changeValues(this, this.$('select').value);
 }
 
 function reset(tag) {
   tag.update({
     value: tag.state.defaultValue
   });
+}
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+function changeValues(tag, value, updating) {
+  let item;
+  if (tag.state.items.some(item => item.value == value || item.label == value)) {
+    item = tag.state.items.filter(item => item.value == value || item.label == value)[0];
+    tag.state.label = item.label;
+    tag.state.value = item.value;
+    tag.state.default = item.default;
+  } else {
+    const childItems = flatMap(tag.state.items.filter(item => item.items), item => item.items);
+    if (childItems.some(item => item.value == value || item.label == value)) {
+      item = childItems.filter(item => item.value == value || item.label == value)[0];
+      tag.state.label = item.label;
+      tag.state.value = item.value;
+      tag.state.default = item.default;
+    }
+  }
+
+  if (!updating) {
+    tag.update();
+    tag.dispatch('change', item);
+  }
+}
+
+function flatMap(xs, f) {
+  return xs.reduce(function (ys, x) {
+    return ys.concat(f(x))
+  }, [])
 }
 
 var suSelect = {
@@ -40,25 +118,166 @@ var suSelect = {
       label: '',
     },
 
+    lastPropsValue: '',
+    lastValue: '',
     onBeforeMount,
-
-    // onBeforeUpdate,
-    // onUpdated,
-    // onBlur,
-    // onChange,
-    onMounted
+    onMounted,
+    onBeforeUpdate,
+    onUpdated,
+    onBlur,
+    onChange
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<i class="dropdown icon"></i>', [{
-      'expressions': [{
-        'type': expressionTypes.VALUE,
+    return template(
+      '<select expr249><option expr250></option><optgroup expr251></optgroup></select><i class="dropdown icon"></i>',
+      [{
+        'expressions': [{
+          'type': expressionTypes.VALUE,
+
+          'evaluate': function(scope) {
+            return scope.state.value;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'label',
+
+          'evaluate': function(scope) {
+            return scope.state.label;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'changed',
+
+          'evaluate': function(scope) {
+            return scope.changed;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'id',
+
+          'evaluate': function(scope) {
+            return scope.su_id;
+          }
+        }]
+      }, {
+        'redundantAttribute': 'expr249',
+        'selector': '[expr249]',
+
+        'expressions': [{
+          'type': expressionTypes.EVENT,
+          'name': 'onchange',
+
+          'evaluate': function(scope) {
+            return scope.onChange;
+          }
+        }, {
+          'type': expressionTypes.EVENT,
+          'name': 'onblur',
+
+          'evaluate': function(scope) {
+            return scope.onBlur;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
+
+          'evaluate': function(scope) {
+            return [scope.state.default ? 'default' : '', ' text'].join('');
+          }
+        }]
+      }, {
+        'type': bindingTypes.EACH,
+        'getKey': null,
+
+        'condition': function(scope) {
+          return !scope.item.items;
+        },
+
+        'template': template('<!---->', [{
+          'expressions': [{
+            'type': expressionTypes.TEXT,
+            'childNodeIndex': 0,
+
+            'evaluate': function(scope) {
+              return ['\n      ', scope.item.label, '\n    '].join('');
+            }
+          }, {
+            'type': expressionTypes.VALUE,
+
+            'evaluate': function(scope) {
+              return scope.item.value;
+            }
+          }]
+        }]),
+
+        'redundantAttribute': 'expr250',
+        'selector': '[expr250]',
+        'itemName': 'item',
+        'indexName': null,
 
         'evaluate': function(scope) {
-          return scope.state.value;
+          return scope.state.items;
+        }
+      }, {
+        'type': bindingTypes.EACH,
+        'getKey': null,
+
+        'condition': function(scope) {
+          return scope.item.items;
+        },
+
+        'template': template('<option expr252></option>', [{
+          'expressions': [{
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'label',
+
+            'evaluate': function(scope) {
+              return scope.item.label;
+            }
+          }]
+        }, {
+          'type': bindingTypes.EACH,
+          'getKey': null,
+          'condition': null,
+
+          'template': template('<!---->', [{
+            'expressions': [{
+              'type': expressionTypes.TEXT,
+              'childNodeIndex': 0,
+
+              'evaluate': function(scope) {
+                return ['\n        ', scope.child.label, '\n      '].join('');
+              }
+            }, {
+              'type': expressionTypes.VALUE,
+
+              'evaluate': function(scope) {
+                return scope.child.value;
+              }
+            }]
+          }]),
+
+          'redundantAttribute': 'expr252',
+          'selector': '[expr252]',
+          'itemName': 'child',
+          'indexName': null,
+
+          'evaluate': function(scope) {
+            return scope.item.items;
+          }
+        }]),
+
+        'redundantAttribute': 'expr251',
+        'selector': '[expr251]',
+        'itemName': 'item',
+        'indexName': null,
+
+        'evaluate': function(scope) {
+          return scope.state.items;
         }
       }]
-    }]);
+    );
   },
 
   'name': 'su-select'
