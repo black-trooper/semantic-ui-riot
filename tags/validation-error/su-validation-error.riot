@@ -1,0 +1,37 @@
+<su-validation-error class="{ state.blockMessage ? 'ui error message' : '' }">
+  <div if="{ state.errors[props.name] }" class="ui basic pointing prompt label transition visible">
+    <div each="{ message in state.errors[props.name] }">{ message }</div>
+  </div>
+
+  <ul if="{ state.blockMessage }" class="list">
+    <virtual each="{ errors in Object.values(state.errors) }">
+      <li each="{ message in errors }">{ message }</li>
+    </virtual>
+  </ul>
+
+  <style>
+    :scope.ui.error.message {
+      display: block !important;
+    }
+  </style>
+
+  <script>
+    export default {
+      state: {
+        errors: {}
+      },
+
+      onMounted,
+      onBeforeUpdate,
+    }
+
+    function onMounted(props, state) {
+      this.update()
+    }
+
+    function onBeforeUpdate(props, state) {
+      state.errors = props.errors || {}
+      state.blockMessage = Object.keys(state.errors).length > 0 && !props.name
+    }
+  </script>
+</su-validation-error>

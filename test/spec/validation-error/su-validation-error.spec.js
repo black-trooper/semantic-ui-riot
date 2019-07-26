@@ -1,24 +1,24 @@
-require('../../../dist/tags/validation-error/su-validation-error.js')
+import * as riot from 'riot'
+import { init } from '../../helpers/'
+import TargetComponent from '../../../dist/tags/validation-error/su-validation-error.js'
 
 describe('su-validation-error', function () {
-  let tag
+  let element, component
+  init(riot)
+
   const mount = option => {
-    tag = riot.mount('su-validation-error', option)[0]
+    riot.register('su-validation-error', TargetComponent)
+    element = document.createElement('su-validation-error')
+    component = riot.mount(element, option)[0]
   }
 
-  beforeEach(function () {
-    $('body').append(`
-      <su-validation-error></su-validation-error>
-    `)
-  })
-
   afterEach(function () {
-    tag.unmount()
+    riot.unregister('su-validation-error')
   })
 
   it('is mounted', function () {
     mount()
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 
   it('inline error', function () {
@@ -28,10 +28,11 @@ describe('su-validation-error', function () {
         'address': ['The address field is required.']
       }
     })
-    const $error = $('su-validation-error .ui.pointing.prompt')
-    $('su-validation-error ul.list').length.should.equals(0)
-    $error.length.should.equal(1)
-    $error.text().trim().should.equal('The address field is required.')
+
+    const errors = component.$$('su-validation-error .ui.pointing.prompt div')
+    expect(component.$$('su-validation-error ul.list').length).to.equals(0)
+    expect(errors.length).to.equal(1)
+    expect(errors[0].innerText.trim()).to.equal('The address field is required.')
   })
 
   it('inline errors', function () {
@@ -41,11 +42,12 @@ describe('su-validation-error', function () {
         'address': ['Error message1', 'Error message2']
       }
     })
-    const $error = $('su-validation-error .ui.pointing.prompt div')
-    $('su-validation-error ul.list').length.should.equals(0)
-    $error.length.should.equal(2)
-    $($error[0]).text().should.equal('Error message1')
-    $($error[1]).text().should.equal('Error message2')
+
+    const errors = component.$$('su-validation-error .ui.pointing.prompt div')
+    expect(component.$$('su-validation-error ul.list').length).to.equals(0)
+    expect(errors.length).to.equal(2)
+    expect(errors[0].innerText.trim()).to.equal('Error message1')
+    expect(errors[1].innerText.trim()).to.equal('Error message2')
   })
 
   it('block errors', function () {
@@ -54,27 +56,31 @@ describe('su-validation-error', function () {
         'address': ['Error message1', 'Error message2']
       }
     })
-    $('su-validation-error .ui.pointing.prompt div').length.should.equals(0)
-    $('su-validation-error ul.list').length.should.equals(1)
-    $('su-validation-error').hasClass('message').should.equal(true)
-    const $error = $('su-validation-error li')
-    $($error[0]).text().should.equal('Error message1')
-    $($error[1]).text().should.equal('Error message2')
+
+    expect(component.$$('su-validation-error ul.list').length).to.equals(1)
+    expect(component.$$('su-validation-error .ui.pointing.prompt div').length).to.equal(0)
+
+    expect(element.classList.contains('message')).to.equal(true)
+    const errors = component.$$('su-validation-error li')
+    expect(errors[0].innerText).to.equal('Error message1')
+    expect(errors[1].innerText).to.equal('Error message2')
   })
 
   it('block none errors', function () {
     mount({
       errors: {}
     })
-    $('su-validation-error .ui.pointing.prompt div').length.should.equals(0)
-    $('su-validation-error ul.list').length.should.equals(0)
-    $('su-validation-error').hasClass('message').should.equal(false)
+
+    expect(component.$$('su-validation-error .ui.pointing.prompt div').length).to.equal(0)
+    expect(component.$$('su-validation-error ul.list').length).to.equals(0)
+    expect(element.classList.contains('message')).to.equal(false)
   })
 
   it('block undefined errors', function () {
     mount()
-    $('su-validation-error .ui.pointing.prompt div').length.should.equals(0)
-    $('su-validation-error ul.list').length.should.equals(0)
-    $('su-validation-error').hasClass('message').should.equal(false)
+
+    expect(component.$$('su-validation-error .ui.pointing.prompt div').length).to.equal(0)
+    expect(component.$$('su-validation-error ul.list').length).to.equals(0)
+    expect(element.classList.contains('message')).to.equal(false)
   })
 })
