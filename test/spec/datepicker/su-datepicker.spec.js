@@ -306,12 +306,6 @@ describe('su-datepicker', function () {
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
     expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2018')
     expect(component.$('su-datepicker').value).to.equal('2018/01/02')
-
-    // component.valueAsDate = new Date(2018, 0, 3)
-    // component.update()
-    // expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
-    // expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2018')
-    // expect(component.$('su-datepicker').value).to.equal('2018/01/03')
   })
 
   it('update value same day', function () {
@@ -329,18 +323,6 @@ describe('su-datepicker', function () {
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
     expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2018')
     expect(component.$('su-datepicker').value).to.equal('2018/01/01')
-
-    component.value = new Date(2018, 0, 1)
-    component.update()
-    expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
-    expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2018')
-    expect(component.$('su-datepicker').value).to.equal('2018/01/01')
-
-    // component.valueAsDate = new Date(2018, 0, 1)
-    // component.update()
-    // expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
-    // expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2018')
-    // expect(component.$('su-datepicker').value).to.equal('2018/01/01')
   })
 
   it('update value with pattern', function () {
@@ -364,12 +346,6 @@ describe('su-datepicker', function () {
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
     expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2018')
     expect(component.$('su-datepicker').value).to.equal('January 2, 2018')
-
-    // component.valueAsDate = new Date(2018, 0, 3)
-    // component.update()
-    // expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
-    // expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2018')
-    // expect(component.$('su-datepicker').value).to.equal('January 3, 2018')
   })
 
   it('read-only option', function () {

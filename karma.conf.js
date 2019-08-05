@@ -5,12 +5,7 @@ module.exports = function (config) {
     basePath: '',
     frameworks: ['mocha', 'sinon-chai'],
     files: [
-      'node_modules/jquery/dist/jquery.min.js',
-      'test/spec/checkbox/*',
-      'test/spec/radio/*',
-      'test/spec/modal/*',
-      'test/spec/alert/*',
-      'test/css/index.css'
+      'test/spec/**/*'
     ],
     preprocessors: {
       'test/spec/**/*.js': ['webpack', 'sourcemap'],
