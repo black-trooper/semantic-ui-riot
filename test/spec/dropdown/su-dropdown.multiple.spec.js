@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import { init, fireEvent, fireKeyEvent, keys } from '../../helpers/'
+import { init, compile, fireEvent, fireKeyEvent, keys } from '../../helpers/'
 import TargetComponent from '../../../dist/tags/dropdown/su-dropdown.js'
 
 describe('su-dropdown-multiple', function () {
@@ -38,8 +38,30 @@ describe('su-dropdown-multiple', function () {
   ]
 
   beforeEach(function () {
+    element = document.createElement('app')
     riot.register('su-dropdown', TargetComponent)
-    element = document.createElement('su-dropdown')
+    const AppComponent = compile(`
+      <app>
+        <su-dropdown
+          value="{ value }"
+          multiple="{ props.multiple }"
+          items="{ props.items }"
+          onopen="{ () => dispatch('open') }"
+          onclose="{ () => dispatch('close') }"
+          onselect="{ () => dispatch('select') }"
+          onchange="{ () => dispatch('change') }"
+          onblur="{ () => dispatch('blur') }">
+        </su-dropdown>
+        <button id="reset" type="button" onclick="{ reset }">reset</button>
+        <script>
+          export default {
+            reset() {
+              this.obs.trigger(this.$('su-dropdown').id + '-reset')
+            }
+          }
+        </script>
+      </app>`)
+    riot.register('app', AppComponent)
     component = riot.mount(element, {
       'multiple': true,
       'items': items,
@@ -61,6 +83,7 @@ describe('su-dropdown-multiple', function () {
     this.clock.restore()
     component.unmount()
     riot.unregister('su-dropdown')
+    riot.unregister('app')
   })
 
   it('is mounted', function () {
@@ -68,7 +91,7 @@ describe('su-dropdown-multiple', function () {
   })
 
   it('clicking item', function () {
-    element.click()
+    fireEvent(component.$('su-dropdown'), 'click')
     this.clock.tick(310)
 
     component.$('.item').click()
@@ -80,18 +103,18 @@ describe('su-dropdown-multiple', function () {
     expect(component.$('.menu').classList.contains('visible')).to.equal(true)
     expect(spyOnClose).callCount(0)
 
-    fireEvent(element, 'blur')
+    fireEvent(component.$('su-dropdown'), 'blur')
   })
 
   it('clicking two items', function () {
-    element.click()
+    fireEvent(component.$('su-dropdown'), 'click')
     this.clock.tick(310)
 
     component.$('.item').click()
     component.$('.item').click()
     expect(component.$('.label').innerText.trim()).to.equal(items[1].label)
     expect(component.$$('.label')[1].innerText.trim()).to.equal(items[2].label)
-    expect(component.state.value).to.deep.equal(['angular', 'css'])
+    expect(component.$('su-dropdown').getAttribute('value')).to.equal('angular,css')
     expect(spyOnSelect).calledTwice
     expect(spyOnChange).calledTwice
 
@@ -99,18 +122,18 @@ describe('su-dropdown-multiple', function () {
     expect(component.$('.menu').classList.contains('visible')).to.equal(true)
     expect(spyOnClose).callCount(0)
 
-    fireEvent(element, 'blur')
+    fireEvent(component.$('su-dropdown'), 'blur')
   })
 
   it('unselect item', function () {
-    element.click()
+    fireEvent(component.$('su-dropdown'), 'click')
     this.clock.tick(310)
 
     component.$('.item').click()
     component.$('.item').click()
     component.$('.label .delete').click()
     expect(component.$('.label').innerText.trim()).to.equal(items[2].label)
-    expect(component.state.value).to.deep.equal(['css'])
+    expect(component.$('su-dropdown').getAttribute('value')).to.equal('css')
     expect(spyOnSelect).calledTwice
     expect(spyOnChange).calledTwice
 
@@ -118,15 +141,15 @@ describe('su-dropdown-multiple', function () {
     expect(component.$('.menu').classList.contains('visible')).to.equal(true)
     expect(spyOnClose).callCount(0)
 
-    fireEvent(element, 'blur')
+    fireEvent(component.$('su-dropdown'), 'blur')
   })
 
   it('pressing enter key on item', function () {
-    fireEvent(element, 'focus')
+    fireEvent(component.$('su-dropdown'), 'focus')
     this.clock.tick(310)
 
-    fireKeyEvent(element, 'keydown', keys.downArrow)
-    fireKeyEvent(element, 'keyup', keys.enter)
+    fireKeyEvent(component.$('su-dropdown'), 'keydown', keys.downArrow)
+    fireKeyEvent(component.$('su-dropdown'), 'keyup', keys.enter)
 
     expect(component.$('.label').innerText.trim()).to.equal(items[1].label)
     expect(component.$('.hover .text').innerText.trim()).to.equal(items[2].label)
@@ -137,19 +160,19 @@ describe('su-dropdown-multiple', function () {
     expect(component.$('.menu').classList.contains('visible')).to.equal(true)
     expect(spyOnClose).callCount(0)
 
-    fireEvent(element, 'blur')
+    fireEvent(component.$('su-dropdown'), 'blur')
     expect(spyOnBlur).calledOnce
   })
 
   it('pressing enter key on last item', function () {
-    fireEvent(element, 'focus')
+    fireEvent(component.$('su-dropdown'), 'focus')
     this.clock.tick(310)
 
     let length = items.length
     for (let i = 0; i < length; i++) {
-      fireKeyEvent(element, 'keydown', keys.downArrow)
+      fireKeyEvent(component.$('su-dropdown'), 'keydown', keys.downArrow)
     }
-    fireKeyEvent(element, 'keyup', keys.enter)
+    fireKeyEvent(component.$('su-dropdown'), 'keyup', keys.enter)
 
     expect(component.$('.label').innerText.trim()).to.equal(items[length - 1].label)
     expect(component.$('.hover .text').innerText.trim()).to.equal(items[length - 2].label)
@@ -160,25 +183,25 @@ describe('su-dropdown-multiple', function () {
     expect(component.$('.menu').classList.contains('visible')).to.equal(true)
     expect(spyOnClose).callCount(0)
 
-    fireEvent(element, 'blur')
+    fireEvent(component.$('su-dropdown'), 'blur')
     expect(spyOnBlur).calledOnce
   })
 
   it('reset value', function () {
-    expect(element.value).to.deep.equal([])
-    expect(element.getAttribute("changed")).to.be.not.ok
-    element.click()
+    expect(component.$('su-dropdown').getAttribute("value")).to.be.null
+    expect(component.$('su-dropdown').getAttribute("changed")).to.be.not.ok
+    fireEvent(component.$('su-dropdown'), 'click')
     this.clock.tick(310)
 
     component.$('.item').click()
     component.$('.item').click()
-    expect(element.value).to.deep.equal(['angular', 'css'])
-    expect(element.getAttribute("changed")).to.be.ok
+    expect(component.$('su-dropdown').getAttribute("value")).to.equal('angular,css')
+    expect(component.$('su-dropdown').getAttribute("changed")).to.be.ok
 
-    component.obs.trigger(`${element.id}-reset`)
-    expect(element.value).to.deep.equal([])
-    expect(element.getAttribute("changed")).to.be.not.ok
+    fireEvent(component.$('#reset'), 'click')
+    expect(component.$('su-dropdown').getAttribute("value")).to.be.null
+    expect(component.$('su-dropdown').getAttribute("changed")).to.be.not.ok
 
-    fireEvent(element, 'blur')
+    fireEvent(component.$('su-dropdown'), 'blur')
   })
 })

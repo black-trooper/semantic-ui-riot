@@ -2,7 +2,7 @@
   class="ui selection {props.class} { props.search && 'search' } { props.multiple && 'multiple'} dropdown { isActive() && 'active visible' } { upward && 'upward' }"
   onclick="{ onToggle }" onfocus="{ onFocus }" onmousedown="{ onMousedown }" onmouseup="{ onMouseup }"
   onblur="{ onBlur }" onkeydown="{ onKeydown }" onkeyup="{ onKeyup }" tabindex="{ props.search ? -1 : tabindex }"
-  value="{ state.value }" changed="{ changed }" id="{ su_id }">
+  value="{ props.multiple ? viewValue : state.value }" label="{ state.label }" changed="{ changed }" id="{ su_id }">
   <i class="dropdown icon"></i>
   <input class="search" autocomplete="off" tabindex="{ tabindex }" if="{ props.search }" oninput="{ onInput }"
     onclick="{ stopPropagation }" onfocus="{ onFocus }" onblur="{ onBlur }" readonly="{ readonly }" />
@@ -56,12 +56,12 @@
         transitionStatus: 'hidden',
         value: '',
       },
+      lastPropValue: '',
       changed: false,
       visibleFlg: false,
       onBeforeMount,
       onMounted,
       onBeforeUpdate,
-      onUpdated,
 
       onBlur,
       onFocus,
@@ -97,61 +97,66 @@
       if (props.multiple) {
       } else {
         if (props.items && props.items.length > 0) {
-          this.state.label = props.items[0].label
-          this.state.value = props.items[0].value
-          this.state.defaultFlg = props.items[0].default
+          state.label = props.items[0].label
+          state.value = props.items[0].value
+          state.defaultFlg = props.items[0].default
         }
       }
     }
 
     function onMounted(props, state) {
       if (typeof props.value !== 'undefined') {
-        this.state.value = props.value
+        state.value = props.value
+        this.lastPropValue = props.value
       }
       if (props.multiple) {
         props.items.forEach(item => item.selected = false)
         props.items
-          .filter(item => this.state.value && this.state.value.indexOf(item.value) >= 0)
+          .filter(item => state.value && state.value.indexOf(item.value) >= 0)
           .forEach(item => item.selected = true)
-        this.state.value = this.props.items.filter(item => item.selected).map(item => item.value)
+        state.value = this.props.items.filter(item => item.selected).map(item => item.value)
         this.selectedFlg = this.props.items.some(item => item.selected)
       }
-      this.state.defaultValue = this.state.value
+      state.defaultValue = state.value
       this.update()
     }
 
     function onBeforeUpdate(props, state) {
+      if (props.value && this.lastPropValue !== props.value) {
+        state.value = props.value
+        this.lastPropValue = props.value
+      }
+
       if (props.multiple) {
-        const value = this.state.value ? this.state.value : []
-        const defaultValue = this.state.defaultValue ? this.state.defaultValue : []
+        const value = state.value ? state.value : []
+        const defaultValue = state.defaultValue ? state.defaultValue : []
         this.changed = value.toString() !== defaultValue.toString()
       } else {
-        this.changed = this.state.value !== this.state.defaultValue
+        this.changed = state.value !== state.defaultValue
       }
       this.readonly = this.root.classList.contains('read-only')
       this.disabled = this.root.classList.contains('disabled')
       this.tabindex = props.tabindex || '0'
-    }
 
-    function onUpdated(props, state) {
       if (props.multiple) {
         props.items.forEach(item => item.selected = false)
-        props.items.filter(item => this.state.value && this.state.value.indexOf(item.value) >= 0).forEach(item => item.selected = true)
+        props.items.filter(item => state.value && state.value.indexOf(item.value) >= 0).forEach(item => item.selected = true)
         selectMultiTarget(this, true)
+        this.viewValue = state.value.join(',')
       } else if (props.items) {
-        const selected = props.items.filter(item => item.value === this.state.value)
+        const selected = props.items.filter(item => item.value === state.value)
         if (selected && selected.length > 0) {
           const target = selected[0]
-          if (this.state.label !== target.label) {
+          if (state.label !== target.label) {
             selectTarget(this, target, true)
           }
         } else if (props.items && props.items.length > 0) {
-          if (this.state.value != props.items[0].value) {
-            this.state.value = props.items[0].value
+          if (state.value != props.items[0].value) {
+            state.value = props.items[0].value
           }
-          if (this.state.label != props.items[0].label) {
-            this.state.label = props.items[0].label
-            this.state.defaultFlg = props.items[0].default
+          if (state.label != props.items[0].label) {
+            state.label = props.items[0].label
+            state.defaultFlg = props.items[0].default
           }
         }
       }

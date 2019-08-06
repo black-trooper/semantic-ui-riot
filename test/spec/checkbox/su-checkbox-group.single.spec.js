@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import { init } from '../../helpers/'
+import { init, compile } from '../../helpers/'
 import CheckboxGroupComponent from '../../../dist/tags/checkbox/su-checkbox-group.js'
 import CheckboxComponent from '../../../dist/tags/checkbox/su-checkbox.js'
 
@@ -9,17 +9,21 @@ describe('su-checkbox-group-single', function () {
   init(riot)
 
   beforeEach(function () {
+    element = document.createElement('app')
     riot.register('su-checkbox-group', CheckboxGroupComponent)
     riot.register('su-checkbox', CheckboxComponent)
-    element = document.createElement('su-checkbox-group')
-    const child1 = document.createElement('su-checkbox')
-    child1.setAttribute('value', '1')
-    element.appendChild(child1)
-
+    const AppComponent = compile(`
+      <app>
+        <su-checkbox-group
+          value="{ value }"
+          onchange="{ () => dispatch('change') }">
+          <su-checkbox value="1" />
+        </su-checkbox-group>
+      </app>`)
+    riot.register('app', AppComponent)
     component = riot.mount(element, {
       'onchange': spyOnChange
     })[0]
-    riot.mount(child1)
   })
 
   afterEach(function () {
@@ -27,6 +31,7 @@ describe('su-checkbox-group-single', function () {
     component.unmount()
     riot.unregister('su-checkbox')
     riot.unregister('su-checkbox-group')
+    riot.unregister('app')
   })
 
   it('is mounted', function () {
@@ -36,10 +41,12 @@ describe('su-checkbox-group-single', function () {
   it('update value', function () {
     expect(component.$('su-checkbox').getAttribute("checked")).to.be.not.ok
 
-    component.update({ value: '1' })
+    component.value = "1"
+    component.update()
     expect(component.$('su-checkbox').getAttribute("checked")).to.be.ok
 
-    component.update({ value: '2' })
+    component.value = "2"
+    component.update()
     expect(component.$('su-checkbox').getAttribute("checked")).to.be.not.ok
   })
 

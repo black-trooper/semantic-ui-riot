@@ -16,11 +16,11 @@ describe('su-select', function () {
     },
     {
       label: 'Male',
-      value: 1
+      value: '1'
     },
     {
       label: 'Female',
-      value: 2
+      value: '2'
     },
   ]
 
@@ -63,7 +63,7 @@ describe('su-select', function () {
     expect(component.$('su-select select').classList.contains('default')).to.equal(true)
     expect(spyOnChange).callCount(0)
 
-    expect(component.$('su-select').value).to.be.null
+    expect(component.$('su-select').getAttribute('value')).to.be.null
   })
 
   it('clicking item', function () {
@@ -75,7 +75,7 @@ describe('su-select', function () {
     expect(component.$('su-select select').classList.contains('default')).to.equal(false)
     expect(spyOnChange).calledOnce
 
-    expect(component.$('su-select').value).to.equal(items[1].value)
+    expect(component.$('su-select').getAttribute('value')).to.equal(items[1].value)
     expect(component.$('su-select').getAttribute('label')).to.equal(items[1].label)
 
     fireEvent(component.$('su-select select'), 'blur')
@@ -83,10 +83,10 @@ describe('su-select', function () {
   })
 
   it('update value', function () {
-    expect(component.$('su-select').value).to.equal(items[0].value)
+    expect(component.$('su-select').getAttribute('value')).to.equal(items[0].value)
     component.value = items[1].value
     component.update()
-    expect(component.$('su-select').value).to.equal(items[1].value)
+    expect(component.$('su-select').getAttribute('value')).to.equal(items[1].value)
     expect(component.$('su-select').getAttribute('label')).to.equal(items[1].label)
   })
 
@@ -97,7 +97,7 @@ describe('su-select', function () {
     items[1].value = 'M'
     component.items = items
     component.update()
-    expect(component.$('su-select').value).to.equal(items[0].value)
+    expect(component.$('su-select').getAttribute('value')).to.equal(items[0].value)
   })
 
   it('update items', function () {
@@ -136,23 +136,23 @@ describe('su-select', function () {
     expect(component.$('su-select select').classList.contains('default')).to.equal(false)
     expect(spyOnChange).calledOnce
 
-    expect(component.$('su-select').value).to.equal('a')
+    expect(component.$('su-select').getAttribute('value')).to.equal('a')
     expect(component.$('su-select').getAttribute('label')).to.equal('A')
   })
 
   it('reset value', function () {
-    expect(component.$('su-select').value).to.equal(items[0].value)
+    expect(component.$('su-select').getAttribute('value')).to.equal(items[0].value)
     expect(component.$('su-select').getAttribute('changed')).to.be.null
 
     component.$('su-select select').value = items[1].value
     component.$('su-select select').onchange()
 
-    expect(component.$('su-select').value).to.equal(items[1].value)
+    expect(component.$('su-select').getAttribute('value')).to.equal(items[1].value)
     expect(component.$('su-select').getAttribute('changed')).to.equal('changed')
 
     // tag.reset()
     component.obs.trigger(`${component.$('su-select').id}-reset`)
-    expect(component.$('su-select').value).to.equal(items[0].value)
+    expect(component.$('su-select').getAttribute('value')).to.equal(items[0].value)
     expect(component.$('su-select').getAttribute('changed')).to.be.null
   })
 })

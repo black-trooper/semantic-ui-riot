@@ -59,7 +59,6 @@
       onBeforeMount,
       onMounted,
       onBeforeUpdate,
-      onUpdated,
 
       onBlur,
       onChange,
@@ -118,11 +117,6 @@
         }
       }
       this.changed = state.value !== state.defaultValue
-    }
-
-    function onUpdated(props, state) {
-      if (state.items) {
-      }
     }
 
     // ===================================================================================

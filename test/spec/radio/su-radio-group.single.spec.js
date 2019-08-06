@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import { init } from '../../helpers/'
+import { init, compile } from '../../helpers/'
 import RadioGroupComponent from '../../../dist/tags/radio/su-radio-group.js'
 import RadioComponent from '../../../dist/tags/radio/su-radio.js'
 
@@ -8,21 +8,25 @@ describe('su-radio-group-single', function () {
   init(riot)
 
   beforeEach(function () {
+    element = document.createElement('app')
     riot.register('su-radio-group', RadioGroupComponent)
     riot.register('su-radio', RadioComponent)
-    element = document.createElement('su-radio-group')
-    const child1 = document.createElement('su-radio')
-    child1.setAttribute('value', '1')
-    element.appendChild(child1)
-
-    component = riot.mount(element)[0]
-    riot.mount(child1)
+    const AppComponent = compile(`
+      <app>
+        <su-radio-group
+          value="{ value }">
+          <su-radio value="1" />
+        </su-radio-group>
+      </app>`)
+    riot.register('app', AppComponent)
+    component = riot.mount(element, {})[0]
   })
 
   afterEach(function () {
     component.unmount()
     riot.unregister('su-radio')
     riot.unregister('su-radio-group')
+    riot.unregister('app')
   })
 
   it('is mounted', function () {
@@ -32,21 +36,11 @@ describe('su-radio-group-single', function () {
   it('update value', function () {
     expect(component.$('su-radio').checked).to.be.not.ok
 
-    component.update({ value: '1' })
-    expect(component.$('su-radio').checked).to.be.ok
-
-    component.update({ value: '2' })
-    expect(component.$('su-radio').checked).to.be.not.ok
-  })
-
-  it('update option', function () {
-    expect(component.$('su-radio').checked).to.be.not.ok
-
-    element.setAttribute('value', '1')
+    component.value = "1"
     component.update()
     expect(component.$('su-radio').checked).to.be.ok
 
-    element.setAttribute('value', '2')
+    component.value = "2"
     component.update()
     expect(component.$('su-radio').checked).to.be.not.ok
   })

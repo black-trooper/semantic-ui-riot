@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import { init, fireEvent, fireKeyEvent } from '../../helpers/'
+import { init, compile, fireEvent, fireKeyEvent } from '../../helpers/'
 import TargetComponent from '../../../dist/tags/dropdown/su-dropdown.js'
 
 describe('su-dropdown-multiple-option', function () {
@@ -33,8 +33,25 @@ describe('su-dropdown-multiple-option', function () {
   ]
 
   const mount = value => {
+    element = document.createElement('app')
     riot.register('su-dropdown', TargetComponent)
-    element = document.createElement('su-dropdown')
+    const AppComponent = compile(`
+      <app>
+        <su-dropdown
+          value="{ props.value }"
+          multiple="{ props.multiple }"
+          items="{ props.items }">
+        </su-dropdown>
+        <button id="reset" type="button" onclick="{ reset }">reset</button>
+        <script>
+          export default {
+            reset() {
+              this.obs.trigger(this.$('su-dropdown').id + '-reset')
+            }
+          }
+        </script>
+      </app>`)
+    riot.register('app', AppComponent)
     component = riot.mount(element, {
       'multiple': true,
       'items': items,
@@ -45,6 +62,7 @@ describe('su-dropdown-multiple-option', function () {
   afterEach(function () {
     component.unmount()
     riot.unregister('su-dropdown')
+    riot.unregister('app')
   })
 
   it('default value', function () {
@@ -75,17 +93,16 @@ describe('su-dropdown-multiple-option', function () {
 
   it('reset value', function () {
     mount('{[\'angular\', \'css\']}')
-    expect(element.value).to.deep.equal(['angular', 'css'])
-    expect(element.getAttribute("changed")).to.be.not.ok
+    expect(component.$('su-dropdown').getAttribute("value")).to.equal('angular,css')
+    expect(component.$('su-dropdown').getAttribute("changed")).to.be.not.ok
 
-    element.click()
     component.$('.label .delete').click()
     expect(component.$('.label').innerText.trim()).to.equal(items[2].label)
-    expect(element.value).to.deep.equal(['css'])
-    expect(element.getAttribute("changed")).to.be.ok
+    expect(component.$('su-dropdown').getAttribute("value")).to.equal('css')
+    expect(component.$('su-dropdown').getAttribute("changed")).to.be.ok
 
-    component.obs.trigger(`${element.id}-reset`)
-    expect(element.value).to.deep.equal(['angular', 'css'])
-    expect(element.getAttribute("changed")).to.be.not.ok
+    fireEvent(component.$('#reset'), 'click')
+    expect(component.$('su-dropdown').getAttribute("value")).to.equal('angular,css')
+    expect(component.$('su-dropdown').getAttribute("changed")).to.be.not.ok
   })
 })
