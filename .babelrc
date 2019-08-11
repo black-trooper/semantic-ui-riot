@@ -1,5 +1,13 @@
 {
   "presets": [
-    "es2015-riot"
+    [
+      "@babel/preset-env",
+      {
+        "modules": false,
+        "targets": [
+          "last 2 versions"
+        ]
+      }
+    ]
   ]
 }
