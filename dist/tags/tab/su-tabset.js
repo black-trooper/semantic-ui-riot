@@ -187,7 +187,7 @@ var suTabset = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<div expr104></div><slot expr106></slot><div expr107></div>', [{
+    return template('<div expr55></div><slot expr57></slot><div expr58></div>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'id',
@@ -203,10 +203,10 @@ var suTabset = {
         return !scope.isBottom() && scope.showMenu();
       },
 
-      'redundantAttribute': 'expr104',
-      'selector': '[expr104]',
+      'redundantAttribute': 'expr55',
+      'selector': '[expr55]',
 
-      'template': template('<a expr105></a>', [{
+      'template': template('<a expr56></a>', [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
           'name': 'class',
@@ -250,8 +250,8 @@ var suTabset = {
           }]
         }]),
 
-        'redundantAttribute': 'expr105',
-        'selector': '[expr105]',
+        'redundantAttribute': 'expr56',
+        'selector': '[expr56]',
         'itemName': 'tab',
         'indexName': null,
 
@@ -262,8 +262,8 @@ var suTabset = {
     }, {
       'type': bindingTypes.SLOT,
       'name': 'default',
-      'redundantAttribute': 'expr106',
-      'selector': '[expr106]'
+      'redundantAttribute': 'expr57',
+      'selector': '[expr57]'
     }, {
       'type': bindingTypes.IF,
 
@@ -271,10 +271,10 @@ var suTabset = {
         return scope.isBottom() && scope.showMenu();
       },
 
-      'redundantAttribute': 'expr107',
-      'selector': '[expr107]',
+      'redundantAttribute': 'expr58',
+      'selector': '[expr58]',
 
-      'template': template('<a expr108></a>', [{
+      'template': template('<a expr59></a>', [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
           'name': 'class',
@@ -318,8 +318,8 @@ var suTabset = {
           }]
         }]),
 
-        'redundantAttribute': 'expr108',
-        'selector': '[expr108]',
+        'redundantAttribute': 'expr59',
+        'selector': '[expr59]',
         'itemName': 'tab',
         'indexName': null,
 

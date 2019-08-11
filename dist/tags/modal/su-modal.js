@@ -139,7 +139,7 @@ var suModal = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr53><div expr54><i expr55 class="close icon"></i><div expr56></div><div expr58><slot expr59></slot></div><div class="actions"><button expr60 type="button"></button></div></div></div>',
+      '<div expr32><div expr33><i expr34 class="close icon"></i><div expr35></div><div expr37><slot expr38></slot></div><div class="actions"><button expr39 type="button"></button></div></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.EVENT,
@@ -157,8 +157,8 @@ var suModal = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr53',
-        'selector': '[expr53]',
+        'redundantAttribute': 'expr32',
+        'selector': '[expr32]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -169,8 +169,8 @@ var suModal = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr54',
-        'selector': '[expr54]',
+        'redundantAttribute': 'expr33',
+        'selector': '[expr33]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -194,8 +194,8 @@ var suModal = {
           return scope.closable && !scope.basic;
         },
 
-        'redundantAttribute': 'expr55',
-        'selector': '[expr55]',
+        'redundantAttribute': 'expr34',
+        'selector': '[expr34]',
 
         'template': template(null, [{
           'expressions': [{
@@ -214,10 +214,10 @@ var suModal = {
           return scope.header;
         },
 
-        'redundantAttribute': 'expr56',
-        'selector': '[expr56]',
+        'redundantAttribute': 'expr35',
+        'selector': '[expr35]',
 
-        'template': template('<i expr57></i><!---->', [{
+        'template': template('<i expr36></i><!---->', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 1,
@@ -240,8 +240,8 @@ var suModal = {
             return scope.header.icon;
           },
 
-          'redundantAttribute': 'expr57',
-          'selector': '[expr57]',
+          'redundantAttribute': 'expr36',
+          'selector': '[expr36]',
 
           'template': template(null, [{
             'expressions': [{
@@ -255,8 +255,8 @@ var suModal = {
           }])
         }])
       }, {
-        'redundantAttribute': 'expr58',
-        'selector': '[expr58]',
+        'redundantAttribute': 'expr37',
+        'selector': '[expr37]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -269,14 +269,14 @@ var suModal = {
       }, {
         'type': bindingTypes.SLOT,
         'name': 'default',
-        'redundantAttribute': 'expr59',
-        'selector': '[expr59]'
+        'redundantAttribute': 'expr38',
+        'selector': '[expr38]'
       }, {
         'type': bindingTypes.EACH,
         'getKey': null,
         'condition': null,
 
-        'template': template('<!----><i expr61></i>', [{
+        'template': template('<!----><i expr40></i>', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 0,
@@ -313,8 +313,8 @@ var suModal = {
             return scope.button.icon;
           },
 
-          'redundantAttribute': 'expr61',
-          'selector': '[expr61]',
+          'redundantAttribute': 'expr40',
+          'selector': '[expr40]',
 
           'template': template(null, [{
             'expressions': [{
@@ -328,8 +328,8 @@ var suModal = {
           }])
         }]),
 
-        'redundantAttribute': 'expr60',
-        'selector': '[expr60]',
+        'redundantAttribute': 'expr39',
+        'selector': '[expr39]',
         'itemName': 'button',
         'indexName': null,
 

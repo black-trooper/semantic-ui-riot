@@ -55,10 +55,6 @@ function onBeforeUpdate(props, state) {
   this.changed = state.value !== state.defaultValue;
 }
 
-function onUpdated(props, state) {
-  if (state.items) ;
-}
-
 // ===================================================================================
 //                                                                               Event
 //                                                                               =====
@@ -123,17 +119,17 @@ var suSelect = {
     onBeforeMount,
     onMounted,
     onBeforeUpdate,
-    onUpdated,
     onBlur,
     onChange
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<select expr249><option expr250></option><optgroup expr251></optgroup></select><i class="dropdown icon"></i>',
+      '<select expr24><option expr25></option><optgroup expr26></optgroup></select><i class="dropdown icon"></i>',
       [{
         'expressions': [{
-          'type': expressionTypes.VALUE,
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'value',
 
           'evaluate': function(scope) {
             return scope.state.value;
@@ -161,8 +157,8 @@ var suSelect = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr249',
-        'selector': '[expr249]',
+        'redundantAttribute': 'expr24',
+        'selector': '[expr24]',
 
         'expressions': [{
           'type': expressionTypes.EVENT,
@@ -203,7 +199,8 @@ var suSelect = {
               return ['\n      ', scope.item.label, '\n    '].join('');
             }
           }, {
-            'type': expressionTypes.VALUE,
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'value',
 
             'evaluate': function(scope) {
               return scope.item.value;
@@ -211,8 +208,8 @@ var suSelect = {
           }]
         }]),
 
-        'redundantAttribute': 'expr250',
-        'selector': '[expr250]',
+        'redundantAttribute': 'expr25',
+        'selector': '[expr25]',
         'itemName': 'item',
         'indexName': null,
 
@@ -227,7 +224,7 @@ var suSelect = {
           return scope.item.items;
         },
 
-        'template': template('<option expr252></option>', [{
+        'template': template('<option expr27></option>', [{
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
             'name': 'label',
@@ -250,7 +247,8 @@ var suSelect = {
                 return ['\n        ', scope.child.label, '\n      '].join('');
               }
             }, {
-              'type': expressionTypes.VALUE,
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'value',
 
               'evaluate': function(scope) {
                 return scope.child.value;
@@ -258,8 +256,8 @@ var suSelect = {
             }]
           }]),
 
-          'redundantAttribute': 'expr252',
-          'selector': '[expr252]',
+          'redundantAttribute': 'expr27',
+          'selector': '[expr27]',
           'itemName': 'child',
           'indexName': null,
 
@@ -268,8 +266,8 @@ var suSelect = {
           }
         }]),
 
-        'redundantAttribute': 'expr251',
-        'selector': '[expr251]',
+        'redundantAttribute': 'expr26',
+        'selector': '[expr26]',
         'itemName': 'item',
         'indexName': null,
 

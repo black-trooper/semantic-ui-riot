@@ -171,7 +171,7 @@ var suConfirm$1 = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<su-modal expr14 class="tiny"></su-modal>', [{
+    return template('<su-modal expr4 class="tiny"></su-modal>', [{
       'type': bindingTypes.TAG,
       'getComponent': getComponent,
 
@@ -181,7 +181,7 @@ var suConfirm$1 = {
 
       'slots': [{
         'id': 'default',
-        'html': '<div class="ui icon message"><i class="question circle outline icon"></i><div class="scrolling content"><div expr15 class="header"></div><p expr16></p></div></div>',
+        'html': '<div class="ui icon message"><i class="question circle outline icon"></i><div class="scrolling content"><div expr5 class="header"></div><p expr6></p></div></div>',
 
         'bindings': [{
           'type': bindingTypes.IF,
@@ -190,8 +190,8 @@ var suConfirm$1 = {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr15',
-          'selector': '[expr15]',
+          'redundantAttribute': 'expr5',
+          'selector': '[expr5]',
 
           'template': template('<!---->', [{
             'expressions': [{
@@ -219,8 +219,8 @@ var suConfirm$1 = {
             }]
           }]),
 
-          'redundantAttribute': 'expr16',
-          'selector': '[expr16]',
+          'redundantAttribute': 'expr6',
+          'selector': '[expr6]',
           'itemName': 'messsage',
           'indexName': null,
 
@@ -245,14 +245,14 @@ var suConfirm$1 = {
           return scope.modal;
         }
       }, {
-        'type': expressionTypes.ATTRIBUTE,
+        'type': expressionTypes.EVENT,
         'name': 'onok',
 
         'evaluate': function(scope) {
           return scope.onOk;
         }
       }, {
-        'type': expressionTypes.ATTRIBUTE,
+        'type': expressionTypes.EVENT,
         'name': 'oncancel',
 
         'evaluate': function(scope) {
@@ -260,8 +260,8 @@ var suConfirm$1 = {
         }
       }],
 
-      'redundantAttribute': 'expr14',
-      'selector': '[expr14]'
+      'redundantAttribute': 'expr4',
+      'selector': '[expr4]'
     }]);
   },
 

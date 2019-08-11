@@ -39,7 +39,7 @@ var suAccordion = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr0><i class="dropdown icon"></i><!----></div><div expr1><slot expr2></slot></div>',
+      '<div expr21><i class="dropdown icon"></i><!----></div><div expr22><slot expr23></slot></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -50,8 +50,8 @@ var suAccordion = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr0',
-        'selector': '[expr0]',
+        'redundantAttribute': 'expr21',
+        'selector': '[expr21]',
 
         'expressions': [{
           'type': expressionTypes.TEXT,
@@ -76,8 +76,8 @@ var suAccordion = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr1',
-        'selector': '[expr1]',
+        'redundantAttribute': 'expr22',
+        'selector': '[expr22]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -90,8 +90,8 @@ var suAccordion = {
       }, {
         'type': bindingTypes.SLOT,
         'name': 'default',
-        'redundantAttribute': 'expr2',
-        'selector': '[expr2]'
+        'redundantAttribute': 'expr23',
+        'selector': '[expr23]'
       }]
     );
   },

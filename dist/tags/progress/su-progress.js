@@ -104,7 +104,7 @@ var suProgress = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr96><div expr97 class="bar"><div expr98 class="progress"></div></div><div class="label"><slot expr99></slot></div></div>',
+      '<div expr28><div expr29 class="bar"><div expr30 class="progress"></div></div><div class="label"><slot expr31></slot></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -122,8 +122,8 @@ var suProgress = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr96',
-        'selector': '[expr96]',
+        'redundantAttribute': 'expr28',
+        'selector': '[expr28]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -141,8 +141,8 @@ var suProgress = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr97',
-        'selector': '[expr97]',
+        'redundantAttribute': 'expr29',
+        'selector': '[expr29]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -159,8 +159,8 @@ var suProgress = {
           return scope.isProgress();
         },
 
-        'redundantAttribute': 'expr98',
-        'selector': '[expr98]',
+        'redundantAttribute': 'expr30',
+        'selector': '[expr30]',
 
         'template': template('<!---->', [{
           'expressions': [{
@@ -175,8 +175,8 @@ var suProgress = {
       }, {
         'type': bindingTypes.SLOT,
         'name': 'default',
-        'redundantAttribute': 'expr99',
-        'selector': '[expr99]'
+        'redundantAttribute': 'expr31',
+        'selector': '[expr31]'
       }]
     );
   },

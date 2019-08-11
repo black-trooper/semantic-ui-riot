@@ -48,7 +48,7 @@ var suTh = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot expr78></slot>', [{
+    return template('<slot expr66></slot>', [{
       'expressions': [{
         'type': expressionTypes.EVENT,
         'name': 'onclick',
@@ -74,8 +74,8 @@ var suTh = {
     }, {
       'type': bindingTypes.SLOT,
       'name': 'default',
-      'redundantAttribute': 'expr78',
-      'selector': '[expr78]'
+      'redundantAttribute': 'expr66',
+      'selector': '[expr66]'
     }]);
   },
 
