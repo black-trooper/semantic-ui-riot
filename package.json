@@ -12,7 +12,7 @@
     "dev-watch": "webpack --mode development --watch --hot",
     "prod": "webpack --mode production",
     "clean": "rimraf ./coverage && rimraf ./dist/tags",
-    "compile": "npm run clean && riot -w tags --output dist/tags",
+    "compile": "npm run clean && riot tags --output dist/tags",
     "test": "npm run compile && karma start",
     "test-watch": "karma start --no-single-run",
     "build": "npm run test && npm run dev && npm run prod"
