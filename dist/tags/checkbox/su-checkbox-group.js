@@ -29,13 +29,15 @@ riot.tag2('su-checkbox-group', '<yield></yield>', '', '', function(opts) {
       lastOptsValue = tag.value
 
       let checkboxes = tag.tags['su-checkbox']
-      if (!Array.isArray(checkboxes)) {
-        checkboxes = [checkboxes]
+      if (checkboxes) {
+        if (!Array.isArray(checkboxes)) {
+          checkboxes = [checkboxes]
+        }
+        checkboxes.forEach(checkbox => {
+          initializeChild(checkbox)
+          updateState(checkbox)
+        })
       }
-      checkboxes.forEach(checkbox => {
-        initializeChild(checkbox)
-        updateState(checkbox)
-      })
 
       tag.defaultValue = tag.value
       parentUpdate()
@@ -60,13 +62,15 @@ riot.tag2('su-checkbox-group', '<yield></yield>', '', '', function(opts) {
 
       if (changed) {
         let checkboxes = tag.tags['su-checkbox']
-        if (!Array.isArray(checkboxes)) {
-          checkboxes = [checkboxes]
+        if (checkboxes) {
+          if (!Array.isArray(checkboxes)) {
+            checkboxes = [checkboxes]
+          }
+          checkboxes.forEach(checkbox => {
+            updateState(checkbox)
+          })
+          tag.trigger('change', tag.value)
         }
-        checkboxes.forEach(checkbox => {
-          updateState(checkbox)
-        })
-        tag.trigger('change', tag.value)
       }
     }
 
