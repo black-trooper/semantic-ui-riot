@@ -3028,12 +3028,15 @@ function onUpdate() {
     tag.value = tag.value.toString().split(/\s+/).join('').split(',');
   }
 
-  if (changed) {
-    var checkboxes = tag.tags['su-checkbox'];
-    if (checkboxes) {
-      if (!Array.isArray(checkboxes)) {
-        checkboxes = [checkboxes];
-      }
+  var checkboxes = tag.tags['su-checkbox'];
+  if (checkboxes) {
+    if (!Array.isArray(checkboxes)) {
+      checkboxes = [checkboxes];
+    }
+    checkboxes.forEach(function (checkbox) {
+      initializeChild(checkbox);
+    });
+    if (changed) {
       checkboxes.forEach(function (checkbox) {
         updateState(checkbox);
       });
@@ -3063,6 +3066,9 @@ function updateState(checkbox) {
 }
 
 function initializeChild(checkbox) {
+  if (checkbox.opts.name) {
+    return;
+  }
   checkbox.opts.name = getCheckboxName();
   checkbox.on('click', function () {
     var checkboxes = tag.tags['su-checkbox'];
@@ -5085,6 +5091,7 @@ function onUpdate() {
       radios = [radios];
     }
     radios.forEach(function (radio) {
+      initializeChild(radio);
       updateState(radio);
     });
   }
@@ -5113,6 +5120,9 @@ function updateState(radio) {
 }
 
 function initializeChild(radio) {
+  if (radio.opts.name) {
+    return;
+  }
   radio.opts.name = getRadioName();
   radio.on('click', function (value) {
     tag.value = value;
