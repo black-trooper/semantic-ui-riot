@@ -3078,7 +3078,7 @@ function initializeChild(checkbox) {
     tag.value = checkboxes.filter(function (_checkbox) {
       return _checkbox.checked;
     }).map(function (_checkbox) {
-      return _checkbox.opts.value;
+      return _checkbox.opts.riotValue || _checkbox.opts.value;
     });
     tag.update();
   });
@@ -5186,7 +5186,7 @@ function onMount() {
 
 function onUpdate() {
   tag.name = opts.name;
-  tag.value = opts.value;
+  tag.value = opts.riotValue || opts.value;
   if (lastChecked != tag.checked) {
     opts.checked = tag.checked;
     lastChecked = tag.checked;
