@@ -26,12 +26,14 @@ riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
       lastOptsValue = tag.value
 
       let radios = tag.tags['su-radio']
-      if (!Array.isArray(radios)) {
-        radios = [radios]
+      if (radios) {
+        if (!Array.isArray(radios)) {
+          radios = [radios]
+        }
+        radios.forEach(radio => {
+          initializeChild(radio)
+        })
       }
-      radios.forEach(radio => {
-        initializeChild(radio)
-      })
 
       tag.defaultValue = tag.value
       tag.update()
@@ -52,13 +54,14 @@ riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
       }
 
       let radios = tag.tags['su-radio']
-
-      if (!Array.isArray(radios)) {
-        radios = [radios]
+      if (radios) {
+        if (!Array.isArray(radios)) {
+          radios = [radios]
+        }
+        radios.forEach(radio => {
+          updateState(radio)
+        })
       }
-      radios.forEach(radio => {
-        updateState(radio)
-      })
 
       if (changed) {
         tag.trigger('change', tag.value)
