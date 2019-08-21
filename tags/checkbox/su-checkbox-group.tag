@@ -74,12 +74,15 @@
         tag.value = tag.value.toString().split(/\s+/).join('').split(',')
       }
 
-      if (changed) {
-        let checkboxes = tag.tags['su-checkbox']
-        if (checkboxes) {
-          if (!Array.isArray(checkboxes)) {
-            checkboxes = [checkboxes]
-          }
+      let checkboxes = tag.tags['su-checkbox']
+      if (checkboxes) {
+        if (!Array.isArray(checkboxes)) {
+          checkboxes = [checkboxes]
+        }
+        checkboxes.forEach(checkbox => {
+          initializeChild(checkbox)
+        })
+        if (changed) {
           checkboxes.forEach(checkbox => {
             updateState(checkbox)
           })
@@ -107,6 +110,9 @@
     }
 
     function initializeChild(checkbox) {
+      if (checkbox.opts.name) {
+        return
+      }
       checkbox.opts.name = getCheckboxName()
       checkbox.on('click', () => {
         let checkboxes = tag.tags['su-checkbox']

@@ -1,7 +1,7 @@
 require('../../../dist/tags/checkbox/su-checkbox-group.js')
 require('../../../dist/tags/checkbox/su-checkbox.js')
 
-describe('su-checkbox-group', function () {
+describe('su-checkbox-group-update', function () {
   let tag
   let spyOnChange = sinon.spy()
 
@@ -39,5 +39,25 @@ describe('su-checkbox-group', function () {
 
     tag.update({ items: null })
     expect(tag.tags['su-checkbox']).to.be.undefined
+  })
+
+  it('click checkbox', function () {
+    expect(tag.tags['su-checkbox']).to.be.undefined
+    tag.update({ items: [1, 2] })
+    tag.update()
+
+    tag.tags['su-checkbox'].length.should.equal(2)
+    tag.tags['su-checkbox'][0].checked.should.equal(false)
+    tag.tags['su-checkbox'][1].checked.should.equal(false)
+
+    $('su-checkbox:eq(0) input').click()
+    tag.tags['su-checkbox'][0].checked.should.equal(true)
+    tag.tags['su-checkbox'][1].checked.should.equal(false)
+    spyOnChange.should.have.been.calledOnce
+
+    $('su-checkbox:eq(1) input').click()
+    tag.tags['su-checkbox'][0].checked.should.equal(true)
+    tag.tags['su-checkbox'][1].checked.should.equal(true)
+    spyOnChange.should.have.been.calledTwice
   })
 })

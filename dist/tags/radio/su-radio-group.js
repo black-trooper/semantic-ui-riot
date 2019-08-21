@@ -59,6 +59,7 @@ riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
           radios = [radios]
         }
         radios.forEach(radio => {
+          initializeChild(radio)
           updateState(radio)
         })
       }
@@ -87,6 +88,9 @@ riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
     }
 
     function initializeChild(radio) {
+      if (radio.opts.name) {
+        return
+      }
       radio.opts.name = getRadioName()
       radio.on('click', value => {
         tag.value = value

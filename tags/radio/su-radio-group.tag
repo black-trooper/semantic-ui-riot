@@ -73,6 +73,7 @@
           radios = [radios]
         }
         radios.forEach(radio => {
+          initializeChild(radio)
           updateState(radio)
         })
       }
@@ -101,6 +102,9 @@
     }
 
     function initializeChild(radio) {
+      if (radio.opts.name) {
+        return
+      }
       radio.opts.name = getRadioName()
       radio.on('click', value => {
         tag.value = value
