@@ -55,7 +55,7 @@
 
     function onUpdate() {
       tag.name = opts.name
-      tag.value = opts.value
+      tag.value = opts.riotValue || opts.value
       if (lastChecked != tag.checked) {
         opts.checked = tag.checked
         lastChecked = tag.checked

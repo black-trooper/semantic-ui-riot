@@ -119,7 +119,7 @@
         if (!Array.isArray(checkboxes)) {
           checkboxes = [checkboxes]
         }
-        tag.value = checkboxes.filter(_checkbox => _checkbox.checked).map(_checkbox => _checkbox.opts.value)
+        tag.value = checkboxes.filter(_checkbox => _checkbox.checked).map(_checkbox => _checkbox.opts.riotValue || _checkbox.opts.value)
         tag.update()
       })
     }
