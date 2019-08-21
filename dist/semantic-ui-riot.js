@@ -2997,13 +2997,15 @@ function onMount() {
   lastOptsValue = tag.value;
 
   var checkboxes = tag.tags['su-checkbox'];
-  if (!Array.isArray(checkboxes)) {
-    checkboxes = [checkboxes];
+  if (checkboxes) {
+    if (!Array.isArray(checkboxes)) {
+      checkboxes = [checkboxes];
+    }
+    checkboxes.forEach(function (checkbox) {
+      initializeChild(checkbox);
+      updateState(checkbox);
+    });
   }
-  checkboxes.forEach(function (checkbox) {
-    initializeChild(checkbox);
-    updateState(checkbox);
-  });
 
   tag.defaultValue = tag.value;
   parentUpdate();
@@ -3028,13 +3030,15 @@ function onUpdate() {
 
   if (changed) {
     var checkboxes = tag.tags['su-checkbox'];
-    if (!Array.isArray(checkboxes)) {
-      checkboxes = [checkboxes];
+    if (checkboxes) {
+      if (!Array.isArray(checkboxes)) {
+        checkboxes = [checkboxes];
+      }
+      checkboxes.forEach(function (checkbox) {
+        updateState(checkbox);
+      });
+      tag.trigger('change', tag.value);
     }
-    checkboxes.forEach(function (checkbox) {
-      updateState(checkbox);
-    });
-    tag.trigger('change', tag.value);
   }
 }
 
@@ -5048,12 +5052,14 @@ function onMount() {
   lastOptsValue = tag.value;
 
   var radios = tag.tags['su-radio'];
-  if (!Array.isArray(radios)) {
-    radios = [radios];
+  if (radios) {
+    if (!Array.isArray(radios)) {
+      radios = [radios];
+    }
+    radios.forEach(function (radio) {
+      initializeChild(radio);
+    });
   }
-  radios.forEach(function (radio) {
-    initializeChild(radio);
-  });
 
   tag.defaultValue = tag.value;
   tag.update();
@@ -5074,13 +5080,14 @@ function onUpdate() {
   }
 
   var radios = tag.tags['su-radio'];
-
-  if (!Array.isArray(radios)) {
-    radios = [radios];
+  if (radios) {
+    if (!Array.isArray(radios)) {
+      radios = [radios];
+    }
+    radios.forEach(function (radio) {
+      updateState(radio);
+    });
   }
-  radios.forEach(function (radio) {
-    updateState(radio);
-  });
 
   if (changed) {
     tag.trigger('change', tag.value);
