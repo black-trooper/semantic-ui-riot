@@ -6,7 +6,7 @@
         <i class="icon { opts.modal.header.icon }" if="{ opts.modal.header.icon }"></i>
         { getTitle() }
       </div>
-      <div class="content { image: isImageContent() }" ref="content">
+      <div class="content { image: isImageContent() } { scrolling: isScrollingContent() }" ref="content">
         <yield />
       </div>
       <div class="actions">
@@ -64,6 +64,7 @@
     tag.hide = hide
     tag.isBasic = isBasic
     tag.isImageContent = isImageContent
+    tag.isScrollingContent = isScrollingContent
     tag.show = show
     tag.on('before-mount', onBeforeMount)
     tag.on('mount', onMount)
@@ -73,6 +74,7 @@
     //                                                                          Properties
     //                                                                          ==========
     let image_content = false
+    let scrolling_content = false
     let openning, closing, visible
 
     // ===================================================================================
@@ -91,9 +93,8 @@
     }
 
     function onUpdate() {
-      if (tag.refs.content.getElementsByTagName('img').length > 0) {
-        image_content = true
-      }
+      image_content = tag.refs.content.getElementsByTagName('img').length > 0
+      scrolling_content = hasClass('scrolling')
     }
 
     function show() {
@@ -183,6 +184,14 @@
 
     function isImageContent() {
       return image_content
+    }
+
+    function isScrollingContent() {
+      return scrolling_content
+    }
+
+    function hasClass(className) {
+      return tag.root.classList.contains(className)
     }
   </script>
 </su-modal>

@@ -210,6 +210,23 @@ describe('su-modal', function () {
 
     const content = $('su-modal .content')
     content.hasClass('image').should.equal(true)
+    content.hasClass('scrolling').should.equal(false)
+  })
+
+  it('scrolling content', function () {
+    $('body').append(`
+      <su-modal class="scrolling">modal</su-modal>
+    `)
+    const modal = {
+    }
+    mount({ modal: modal })
+    tag.show()
+    this.clock.tick(510)
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
+
+    const content = $('su-modal .content')
+    content.hasClass('image').should.equal(false)
+    content.hasClass('scrolling').should.equal(true)
   })
 
   it('full screen', function () {
