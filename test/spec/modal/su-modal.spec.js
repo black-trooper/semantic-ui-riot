@@ -219,6 +219,18 @@ describe('su-modal', function () {
 
     const content = component.$('.content')
     expect(content.classList.contains('image')).to.equal(true)
+    expect(content.classList.contains('scrolling')).to.equal(false)
+  })
+
+  it('scrolling content', function () {
+    mount({ class: 'scrolling' })
+    component.suShowModal(element)
+    this.clock.tick(510)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
+
+    const content = component.$('.content')
+    expect(content.classList.contains('image')).to.equal(false)
+    expect(content.classList.contains('scrolling')).to.equal(true)
   })
 
   it('full screen', function () {

@@ -1,4 +1,4 @@
-<su-modal onclick="{ onClickDimmer }" id="{ su_id }">
+<su-modal onclick="{ onClickDimmer }" id="{ su_id }" class="{ props.class }">
   <div class="ui dimmer modals page transition { state.transition }">
     <div class="ui modal transition visible active {props.class}" onclick="{ onClickModal }">
       <i class="close icon" if="{ closable && !basic }" onclick="{ onClickHide }"></i>
@@ -84,7 +84,7 @@
 
     function onBeforeUpdate(props, state) {
       this.basic = this.root.classList.contains('basic')
-      this.contentClass = this.$('img') ? 'image' : ''
+      this.contentClass = getContentClass(this)
 
       if (props.modal) {
         this.closable = typeof props.modal.closable === 'undefined' || props.modal.closable
@@ -180,6 +180,17 @@
         const text = tag.buttons.filter(button => button.default)[0].text
         tag.$(`[ref='button_${text}']`).focus()
       }
+    }
+
+    function getContentClass(tag) {
+      const classes = []
+      if (tag.$('img')) {
+        classes.push('image')
+      }
+      if (tag.root.classList.contains('scrolling')) {
+        classes.push('scrolling')
+      }
+      return classes.join(' ')
     }
   </script>
 </su-modal>
