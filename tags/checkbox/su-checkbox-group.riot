@@ -37,6 +37,7 @@
         updateState(checkbox)
       })
       this.obs.on(`${this.su_id}-checkbox-click`, () => {
+        checkboxes = this.$$('su-checkbox')
         this.update({
           value: checkboxes.filter(_checkbox => _checkbox.checked).map(_checkbox => {
             return _checkbox.getAttribute('value')
@@ -67,8 +68,11 @@
         state.value = state.value.toString().split(/\s+/).join('').split(',')
       }
 
+      let checkboxes = this.$$('su-checkbox')
+      checkboxes.forEach(checkbox => {
+        initializeChild(checkbox, this.su_id)
+      })
       if (changed) {
-        let checkboxes = this.$$('su-checkbox')
         checkboxes.forEach(checkbox => {
           updateState(checkbox, state.value)
         })
