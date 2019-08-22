@@ -58,6 +58,7 @@
       }
 
       this.$$('su-radio').forEach(radio => {
+        initializeChild(radio, this.su_id)
         updateState(radio, state.value)
       })
 
