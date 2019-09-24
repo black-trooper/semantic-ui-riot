@@ -1,4 +1,4 @@
-<su-checkbox-group value="{ state.value }" changed="{ changed }" id="{ su_id }">
+<su-checkbox-group value="{ viewValue }" changed="{ changed }" id="{ su_id }">
   <slot />
 
   <script>
@@ -76,6 +76,7 @@
         checkboxes.forEach(checkbox => {
           updateState(checkbox, state.value)
         })
+        this.viewValue = Array.isArray(state.value) ? state.value.join(',') : state.value
         this.dispatch('change', state.value)
       }
     }
