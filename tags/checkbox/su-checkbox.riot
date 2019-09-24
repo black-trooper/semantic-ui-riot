@@ -1,7 +1,7 @@
 <su-checkbox class="ui checkbox { props.class }" checked="{ state.checked }" changed="{ changed }" id="{ su_id }">
   <input type="checkbox" checked="{ state.checked }" onclick="{ onClick }" disabled="{ disabled }" id="{ su_id }-input" />
-  <label if="{ !props.label }" for="{ su_id }"><slot /></label>
-  <label if="{ props.label }" for="{ su_id }">{ props.label }</label>
+  <label if="{ !props.label }" for="{ su_id }-input"><slot /></label>
+  <label if="{ props.label }" for="{ su_id }-input">{ props.label }</label>
 
   <style>
     :host.ui.checkbox label {
