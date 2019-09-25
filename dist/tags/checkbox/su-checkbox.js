@@ -50,6 +50,7 @@ function onClick() {
     checked: !this.state.checked
   });
   this.dispatch('click', this.checked);
+  this.obs.trigger(`${this.props.suParentId}-update`);
   if (this.obs && this.root.getAttribute('name')) {
     this.obs.trigger(`${this.root.getAttribute('name')}-click`, this.props.value);
   }
@@ -163,11 +164,12 @@ var suCheckbox = {
             'name': 'for',
 
             'evaluate': function(scope) {
-              return scope.su_id;
+              return [scope.su_id, '-input'].join('');
             }
           }]
         }, {
           'type': bindingTypes.SLOT,
+          'attributes': [],
           'name': 'default',
           'redundantAttribute': 'expr2',
           'selector': '[expr2]'
@@ -182,7 +184,7 @@ var suCheckbox = {
         'redundantAttribute': 'expr3',
         'selector': '[expr3]',
 
-        'template': template('<!---->', [{
+        'template': template(' ', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 0,
@@ -195,7 +197,7 @@ var suCheckbox = {
             'name': 'for',
 
             'evaluate': function(scope) {
-              return scope.su_id;
+              return [scope.su_id, '-input'].join('');
             }
           }]
         }])

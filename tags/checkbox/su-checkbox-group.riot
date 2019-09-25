@@ -43,6 +43,7 @@
             return _checkbox.getAttribute('value')
           })
         })
+        this.update()
       })
 
       this.defaultValue = state.value
@@ -78,6 +79,7 @@
         })
         this.viewValue = Array.isArray(state.value) ? state.value.join(',') : state.value
         this.dispatch('change', state.value)
+        this.obs.trigger(`${props.suParentId}-update`)
       }
     }
 
@@ -104,14 +106,6 @@
     function initializeChild(checkbox, uid) {
       checkbox.setAttribute('name', `${uid}-checkbox`)
     }
-
-    // function parentUpdate() {
-    //   if (this.parent) {
-    //     this.parent.update()
-    //   } else {
-    //     this.update()
-    //   }
-    // }
 
     function normalizeValue(value) {
       if (typeof value === 'undefined') {

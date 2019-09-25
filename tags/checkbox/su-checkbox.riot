@@ -81,6 +81,7 @@
         checked: !this.state.checked
       })
       this.dispatch('click', this.checked)
+      this.obs.trigger(`${this.props.suParentId}-update`)
       if (this.obs && this.root.getAttribute('name')) {
         this.obs.trigger(`${this.root.getAttribute('name')}-click`, this.props.value)
       }

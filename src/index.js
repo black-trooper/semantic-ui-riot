@@ -25,6 +25,7 @@ import SuTh from '../tags/table/su-th.riot'
 import SuToast from '../tags/toast/su-toast.riot'
 import SuToastItem from '../tags/toast/su-toast-item.riot'
 import SuValidationError from '../tags/validation-error/su-validation-error.riot'
+import uuid from 'uuid/v1'
 
 riot.register('su-accordion', SuAccordion)
 riot.register('su-accordionset', SuAccordionset)
@@ -63,6 +64,7 @@ const options = {}
 
 const obs = observable()
 riot.install(function (component) {
+  component.suUuid = uuid()
   component.obs = obs
   component.defaultOptions = options
   component.Q = {
@@ -75,7 +77,22 @@ riot.install(function (component) {
     if (callback) callback(data)
   }
 
-  component.suShowModal = (target) => {
+  const { onMounted } = component
+
+  component.onMounted = (props, state) => {
+    onMounted.apply(component, [props, state])
+
+    component.$$('su-checkbox-group, su-checkbox').forEach(target => {
+      if (!target.hasAttribute('su-parent-id')) {
+        target.setAttribute('su-parent-id', component.suUuid)
+      }
+    })
+    component.obs.on(`${component.suUuid}-update`, () => {
+      component.update()
+    })
+  }
+
+  component.suShowModal = target => {
     component.obs.trigger(`${target.id}-show`)
   }
   component.suHideModal = target => {

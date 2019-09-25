@@ -70,6 +70,7 @@
     "riotjs-loader": "^4.0.0",
     "sinon": "^2.1.0",
     "sinon-chai": "^2.13.0",
+    "uuid": "^3.3.3",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6",
     "webpack-date-fns-externals": "^1.0.2"

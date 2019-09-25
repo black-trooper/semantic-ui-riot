@@ -71,13 +71,15 @@ describe('su-checkbox-group', function () {
     expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.not.ok
 
     component.$$('su-checkbox input')[0].click()
-    // expect(component.$$('su-checkbox')[0].getAttribute("checked")).to.be.ok
-    // expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.not.ok
+    console.log(component.$('su-checkbox-group').value)
+    console.log(component.$('su-checkbox-group').getAttribute("value"))
+    expect(component.$$('su-checkbox')[0].getAttribute("checked")).to.be.ok
+    expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.not.ok
     spyOnChange.should.have.been.calledOnce
 
     component.$$('su-checkbox input')[1].click()
-    // expect(component.$$('su-checkbox')[0].getAttribute("checked")).to.be.ok
-    // expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.ok
+    expect(component.$$('su-checkbox')[0].getAttribute("checked")).to.be.ok
+    expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.ok
     spyOnChange.should.have.been.calledTwice
   })
 })

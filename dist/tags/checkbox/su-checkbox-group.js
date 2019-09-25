@@ -21,11 +21,13 @@ function onMounted(props, state) {
     updateState(checkbox);
   });
   this.obs.on(`${this.su_id}-checkbox-click`, () => {
+    checkboxes = this.$$('su-checkbox');
     this.update({
       value: checkboxes.filter(_checkbox => _checkbox.checked).map(_checkbox => {
         return _checkbox.getAttribute('value')
       })
     });
+    this.update();
   });
 
   this.defaultValue = state.value;
@@ -51,12 +53,17 @@ function onUpdated(props, state) {
     state.value = state.value.toString().split(/\s+/).join('').split(',');
   }
 
-  if (changed) {
     let checkboxes = this.$$('su-checkbox');
+  checkboxes.forEach(checkbox => {
+    initializeChild(checkbox, this.su_id);
+  });
+  if (changed) {
     checkboxes.forEach(checkbox => {
       updateState(checkbox, state.value);
     });
+    this.viewValue = Array.isArray(state.value) ? state.value.join(',') : state.value;
     this.dispatch('change', state.value);
+    this.obs.trigger(`${props.suParentId}-update`);
   }
 }
 
@@ -83,14 +90,6 @@ function updateState(checkbox, value) {
 function initializeChild(checkbox, uid) {
   checkbox.setAttribute('name', `${uid}-checkbox`);
 }
-
-// function parentUpdate() {
-//   if (this.parent) {
-//     this.parent.update()
-//   } else {
-//     this.update()
-//   }
-// }
 
 function normalizeValue(value) {
   if (typeof value === 'undefined') {
@@ -126,7 +125,7 @@ var suCheckboxGroup = {
         'name': 'value',
 
         'evaluate': function(scope) {
-          return scope.state.value;
+          return scope.viewValue;
         }
       }, {
         'type': expressionTypes.ATTRIBUTE,
@@ -145,6 +144,7 @@ var suCheckboxGroup = {
       }]
     }, {
       'type': bindingTypes.SLOT,
+      'attributes': [],
       'name': 'default',
       'redundantAttribute': 'expr11',
       'selector': '[expr11]'
