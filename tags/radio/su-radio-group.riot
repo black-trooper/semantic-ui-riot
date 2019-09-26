@@ -64,6 +64,7 @@
 
       if (changed) {
         this.dispatch('change', state.value)
+        this.obs.trigger(`${props.suParentId}-update`)
       }
     }
 

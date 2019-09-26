@@ -42,11 +42,13 @@ function onUpdated(props, state) {
   }
 
   this.$$('su-radio').forEach(radio => {
+    initializeChild(radio, this.su_id);
     updateState(radio, state.value);
   });
 
   if (changed) {
     this.dispatch('change', state.value);
+    this.obs.trigger(`${props.suParentId}-update`);
   }
 }
 
