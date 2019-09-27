@@ -34,14 +34,14 @@ describe('su-radio-group-single', function () {
   })
 
   it('update value', function () {
-    expect(component.$('su-radio').checked).to.be.not.ok
+    expect(component.$('su-radio').hasAttribute("checked")).to.be.not.ok
 
     component.value = "1"
     component.update()
-    expect(component.$('su-radio').checked).to.be.ok
+    expect(component.$('su-radio').getAttribute("checked")).to.be.ok
 
     component.value = "2"
     component.update()
-    expect(component.$('su-radio').checked).to.be.not.ok
+    expect(component.$('su-radio').hasAttribute("checked")).to.be.not.ok
   })
 })

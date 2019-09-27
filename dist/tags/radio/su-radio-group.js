@@ -65,7 +65,12 @@ function updateState(radio, value) {
   if (typeof radio.getAttribute('value') === 'undefined' || typeof value === 'undefined') {
     return
   }
-  radio.checked = value == radio.getAttribute('value');
+
+  if (value == radio.getAttribute('value')) {
+    radio.setAttribute('checked', true);
+  } else {
+    radio.removeAttribute('checked');
+  }
 }
 
 function initializeChild(radio, uid) {

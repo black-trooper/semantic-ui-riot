@@ -43,19 +43,19 @@ describe('su-radio-group', function () {
     component.items = [1, 2]
     component.update()
 
-    expect(component.$$('su-radio')[0].checked).to.be.not.ok
-    expect(component.$$('su-radio')[1].checked).to.be.not.ok
+    expect(component.$$('su-radio')[0].hasAttribute("checked")).to.be.not.ok
+    expect(component.$$('su-radio')[1].hasAttribute("checked")).to.be.not.ok
 
     component.value = "1"
     component.update()
-    expect(component.$$('su-radio')[0].checked).to.be.ok
-    expect(component.$$('su-radio')[1].checked).to.be.not.ok
+    expect(component.$$('su-radio')[0].getAttribute("checked")).to.be.ok
+    expect(component.$$('su-radio')[1].hasAttribute("checked")).to.be.not.ok
     spyOnChange.should.have.been.calledOnce
 
     component.value = "2"
     component.update()
-    expect(component.$$('su-radio')[0].checked).to.be.not.ok
-    expect(component.$$('su-radio')[1].checked).to.be.ok
+    expect(component.$$('su-radio')[0].hasAttribute("checked")).to.be.not.ok
+    expect(component.$$('su-radio')[1].getAttribute("checked")).to.be.ok
     spyOnChange.should.have.been.calledTwice
 
     component.items = null
@@ -68,17 +68,17 @@ describe('su-radio-group', function () {
     component.items = [1, 2]
     component.update()
 
-    expect(component.$$('su-radio')[0].checked).to.be.not.ok
-    expect(component.$$('su-radio')[1].checked).to.be.not.ok
+    expect(component.$$('su-radio')[0].hasAttribute("checked")).to.be.not.ok
+    expect(component.$$('su-radio')[1].hasAttribute("checked")).to.be.not.ok
 
     component.$$('su-radio input')[0].click()
-    expect(component.$$('su-radio')[0].checked).to.be.ok
-    expect(component.$$('su-radio')[1].checked).to.be.not.ok
+    expect(component.$$('su-radio')[0].getAttribute("checked")).to.be.ok
+    expect(component.$$('su-radio')[1].hasAttribute("checked")).to.be.not.ok
     spyOnChange.should.have.been.calledOnce
 
     component.$$('su-radio input')[1].click()
-    expect(component.$$('su-radio')[0].checked).to.be.not.ok
-    expect(component.$$('su-radio')[1].checked).to.be.ok
+    expect(component.$$('su-radio')[0].hasAttribute("checked")).to.be.not.ok
+    expect(component.$$('su-radio')[1].getAttribute("checked")).to.be.ok
     spyOnChange.should.have.been.calledTwice
   })
 })
