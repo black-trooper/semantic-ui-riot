@@ -186,22 +186,4 @@ describe('su-dropdown-multiple', function () {
     fireEvent(component.$('su-dropdown'), 'blur')
     expect(spyOnBlur).calledOnce
   })
-
-  it('reset value', function () {
-    expect(component.$('su-dropdown').getAttribute("value")).to.be.null
-    expect(component.$('su-dropdown').getAttribute("changed")).to.be.not.ok
-    fireEvent(component.$('su-dropdown'), 'click')
-    this.clock.tick(310)
-
-    component.$('.item').click()
-    component.$('.item').click()
-    expect(component.$('su-dropdown').getAttribute("value")).to.equal('angular,css')
-    expect(component.$('su-dropdown').getAttribute("changed")).to.be.ok
-
-    fireEvent(component.$('#reset'), 'click')
-    expect(component.$('su-dropdown').getAttribute("value")).to.be.null
-    expect(component.$('su-dropdown').getAttribute("changed")).to.be.not.ok
-
-    fireEvent(component.$('su-dropdown'), 'blur')
-  })
 })

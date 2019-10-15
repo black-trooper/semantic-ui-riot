@@ -90,19 +90,4 @@ describe('su-dropdown-multiple-option', function () {
     expect(component.$('.label').innerText.trim()).to.equal(items[1].label)
     expect(component.$$('.label')[1].innerText.trim()).to.equal(items[2].label)
   })
-
-  it('reset value', function () {
-    mount('{[\'angular\', \'css\']}')
-    expect(component.$('su-dropdown').getAttribute("value")).to.equal('angular,css')
-    expect(component.$('su-dropdown').getAttribute("changed")).to.be.not.ok
-
-    component.$('.label .delete').click()
-    expect(component.$('.label').innerText.trim()).to.equal(items[2].label)
-    expect(component.$('su-dropdown').getAttribute("value")).to.equal('css')
-    expect(component.$('su-dropdown').getAttribute("changed")).to.be.ok
-
-    fireEvent(component.$('#reset'), 'click')
-    expect(component.$('su-dropdown').getAttribute("value")).to.equal('angular,css')
-    expect(component.$('su-dropdown').getAttribute("changed")).to.be.not.ok
-  })
 })

@@ -270,19 +270,4 @@ describe('su-dropdown', function () {
   //   expect(spyOnSelect).callCount(0)
   //   expect(spyOnChange).callCount(0)
   // })
-
-  it('reset value', function () {
-    expect(component.$('su-dropdown').getAttribute('value')).to.be.null
-    expect(component.$('su-dropdown').getAttribute("changed")).to.be.not.ok
-    fireEvent(component.$('su-dropdown'), 'click')
-    this.clock.tick(310)
-
-    component.$$('.item')[1].click()
-    expect(component.$('su-dropdown').getAttribute('value')).to.equal(items[1].value)
-    expect(component.$('su-dropdown').getAttribute("changed")).to.equal('changed')
-
-    fireEvent(component.$('#reset'), 'click')
-    expect(component.$('su-dropdown').getAttribute('value')).to.be.null
-    expect(component.$('su-dropdown').getAttribute("changed")).to.be.not.ok
-  })
 })

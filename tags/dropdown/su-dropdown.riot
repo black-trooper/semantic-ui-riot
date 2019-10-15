@@ -92,7 +92,6 @@
     //                                                                           =========
     function onBeforeMount(props, state) {
       this.su_id = `su-dropdown-${index++}`
-      this.obs.on(`${this.su_id}-reset`, () => { reset(this) })
 
       if (props.multiple) {
       } else {
@@ -160,12 +159,6 @@
           }
         }
       }
-    }
-
-    function reset(tag) {
-      tag.update({
-        value: tag.state.defaultValue
-      })
     }
 
     // ===================================================================================
