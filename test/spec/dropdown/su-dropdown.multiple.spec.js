@@ -8,7 +8,6 @@ describe('su-dropdown-multiple', function () {
   let spyOnClose = sinon.spy()
   let spyOnSelect = sinon.spy()
   let spyOnChange = sinon.spy()
-  let spyOnBlur = sinon.spy()
   init(riot)
 
   let items = [
@@ -69,7 +68,6 @@ describe('su-dropdown-multiple', function () {
       'onclose': spyOnClose,
       'onselect': spyOnSelect,
       'onchange': spyOnChange,
-      'onblur': spyOnBlur,
     })[0]
     this.clock = sinon.useFakeTimers()
   })
@@ -79,7 +77,6 @@ describe('su-dropdown-multiple', function () {
     spyOnClose.reset()
     spyOnSelect.reset()
     spyOnChange.reset()
-    spyOnBlur.reset()
     this.clock.restore()
     component.unmount()
     riot.unregister('su-dropdown')
@@ -161,7 +158,6 @@ describe('su-dropdown-multiple', function () {
     expect(spyOnClose).callCount(0)
 
     fireEvent(component.$('su-dropdown'), 'blur')
-    expect(spyOnBlur).calledOnce
   })
 
   it('pressing enter key on last item', function () {
@@ -184,6 +180,5 @@ describe('su-dropdown-multiple', function () {
     expect(spyOnClose).callCount(0)
 
     fireEvent(component.$('su-dropdown'), 'blur')
-    expect(spyOnBlur).calledOnce
   })
 })

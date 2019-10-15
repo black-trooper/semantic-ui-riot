@@ -186,10 +186,6 @@
 
     function onBlur() {
       if (!this.itemActivated) {
-        if (!this.closing && this.visibleFlg) {
-          const target = this.props.multiple ? this.props.items.filter(item => item.selected) : { value: this.state.value, label: this.state.label, default: this.state.defaultFlg }
-          this.dispatch('blur', target)
-        }
         close(this)
       }
     }

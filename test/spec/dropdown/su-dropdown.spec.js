@@ -8,7 +8,6 @@ describe('su-dropdown', function () {
   let spyOnClose = sinon.spy()
   let spyOnSelect = sinon.spy()
   let spyOnChange = sinon.spy()
-  let spyOnBlur = sinon.spy()
   init(riot)
 
   let items = [
@@ -36,7 +35,6 @@ describe('su-dropdown', function () {
   //     'onclose': spyOnClose,
   //     'onselect': spyOnSelect,
   //     'onchange': spyOnChange,
-  //     'onblur': spyOnBlur,
   //   })[0]
   //   this.clock = sinon.useFakeTimers()
   // })
@@ -71,7 +69,6 @@ describe('su-dropdown', function () {
       'onclose': spyOnClose,
       'onselect': spyOnSelect,
       'onchange': spyOnChange,
-      'onblur': spyOnBlur,
     })[0]
     this.clock = sinon.useFakeTimers()
   })
@@ -82,7 +79,6 @@ describe('su-dropdown', function () {
     spyOnClose.reset()
     spyOnSelect.reset()
     spyOnChange.reset()
-    spyOnBlur.reset()
     component.unmount()
     riot.unregister('su-dropdown')
     riot.unregister('app')
@@ -122,7 +118,6 @@ describe('su-dropdown', function () {
     this.clock.tick(310)
     expect(component.$('.menu').classList.contains('visible')).to.equal(false)
     expect(spyOnClose).calledOnce
-    expect(spyOnBlur).calledOnce
   })
 
   it('clicking default item', function () {
