@@ -130,18 +130,13 @@
     }
 
     function onBeforeUpdate(props, state) {
-      if (props.value && this.lastPropValue !== props.value) {
+      if (this.lastPropValue !== props.value) {
         state.value = props.value
         this.lastPropValue = props.value
       }
 
-      if (props.multiple) {
-        const value = state.value ? state.value : []
-        const defaultValue = state.defaultValue ? state.defaultValue : []
-        this.changed = value.toString() !== defaultValue.toString()
-      } else {
-        this.changed = state.value !== state.defaultValue
-      }
+      state.classes = prepareClasses(this)
+      prepareItemClasses(props.items, this.value, this.filtered)
       this.readonly = this.root.classList.contains('read-only')
       this.disabled = this.root.classList.contains('disabled')
       this.tabindex = props.tabindex || '0'
@@ -152,21 +147,29 @@
         selectMultiTarget(this, true)
         this.viewValue = state.value.join(',')
       } else if (props.items) {
-        const selected = props.items.filter(item => item.value === state.value)
+        const selected = props.items.filter(item => item.value == state.value)
         if (selected && selected.length > 0) {
           const target = selected[0]
           if (state.label !== target.label) {
             selectTarget(this, target, true)
           }
         } else if (props.items && props.items.length > 0) {
-          if (state.value != props.items[0].value) {
+          if (state.value !== props.items[0].value) {
             state.value = props.items[0].value
+            state.defaultFlg = props.items[0].default
           }
           if (state.label != props.items[0].label) {
             state.label = props.items[0].label
-            state.defaultFlg = props.items[0].default
           }
         }
+      }
+
+      if (props.multiple) {
+        const value = state.value ? state.value : []
+        const defaultValue = state.defaultValue ? state.defaultValue : []
+        this.changed = value.toString() !== defaultValue.toString()
+      } else {
+        this.changed = state.value !== state.defaultValue
       }
     }
 
@@ -372,9 +375,9 @@
     }
 
     function selectTarget(tag, target, updating) {
-      if (tag.state.value === target.value &&
-        tag.state.label === target.label &&
-        tag.state.defaultFlg === target.default) {
+      if (tag.state.value == target.value &&
+        tag.state.label == target.label &&
+        tag.state.defaultFlg == target.default) {
         if (!updating) {
           tag.dispatch('select', target)
         }
@@ -443,7 +446,7 @@
 
     function parentUpdate(tag) {
       tag.obs.trigger(`${tag.props.suParentId}-update`)
-      }
+    }
 
     function prepareClasses(tag) {
       const classes = tag.props.class.split(' ').filter(propClass => !reservedClasses.includes(propClass))
@@ -482,7 +485,7 @@
           classes.push('hover')
         }
         if (item.value == value) {
-          classes.push('active slected')
+          classes.push('active selected')
         }
         if (item.disabled) {
           classes.push('disabled')

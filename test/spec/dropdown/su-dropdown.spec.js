@@ -26,19 +26,6 @@ describe('su-dropdown', function () {
     },
   ]
 
-  // beforeEach(function () {
-  //   riot.register('su-dropdown', TargetComponent)
-  //   element = document.createElement('su-dropdown')
-  //   component = riot.mount(element, {
-  //     'items': items,
-  //     'onopen': spyOnOpen,
-  //     'onclose': spyOnClose,
-  //     'onselect': spyOnSelect,
-  //     'onchange': spyOnChange,
-  //   })[0]
-  //   this.clock = sinon.useFakeTimers()
-  // })
-
   beforeEach(function () {
     element = document.createElement('app')
     riot.register('su-dropdown', TargetComponent)
