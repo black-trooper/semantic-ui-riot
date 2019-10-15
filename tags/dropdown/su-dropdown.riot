@@ -1,8 +1,7 @@
-<su-dropdown
-  class="ui selection {props.class} { props.search && 'search' } { props.multiple && 'multiple'} dropdown { isActive() && 'active visible' } { upward && 'upward' }"
-  onclick="{ onToggle }" onfocus="{ onFocus }" onmousedown="{ onMousedown }" onmouseup="{ onMouseup }"
-  onblur="{ onBlur }" onkeydown="{ onKeydown }" onkeyup="{ onKeyup }" tabindex="{ props.search ? -1 : tabindex }"
-  value="{ props.multiple ? viewValue : state.value }" label="{ state.label }" changed="{ changed }" id="{ su_id }">
+<su-dropdown class="ui selection dropdown { state.classes }" onclick="{ onToggle }" onfocus="{ onFocus }"
+  onmousedown="{ onMousedown }" onmouseup="{ onMouseup }" onblur="{ onBlur }" onkeydown="{ onKeydown }"
+  onkeyup="{ onKeyup }" tabindex="{ props.search ? -1 : tabindex }" value="{ props.multiple ? viewValue : state.value }"
+  label="{ state.label }" changed="{ changed }" id="{ su_id }">
   <i class="dropdown icon"></i>
   <input class="search" autocomplete="off" tabindex="{ tabindex }" if="{ props.search }" oninput="{ onInput }"
     onclick="{ stopPropagation }" onfocus="{ onFocus }" onblur="{ onBlur }" readonly="{ readonly }" />
@@ -19,9 +18,8 @@
   <div class="menu transition { state.transitionStatus }" onmousedown="{ onMousedown }" onmouseup="{ onMouseup }"
     onblur="{ onBlur }" tabindex="-1">
     <div each="{item in props.items}" value="{ item.value }" default="{ item.default }" onmousedown="{ onMousedown }"
-      onmouseup="{ onMouseup }"
-      class="{ isItem(item) && 'item' } { item.header && !filtered && 'header' } { item.divider && !filtered && 'divider' } { item.default && 'default'  } { item.active && 'hover'  } { item.value == value && 'active selected'  }"
-      onclick="{ event => onItemClick(event, item) }" if="{ isVisible(item) }">
+      onmouseup="{ onMouseup }" class="{ item.classes }" onclick="{ event => onItemClick(event, item) }"
+      if="{ isVisible(item) }">
       <i class="{ item.icon } icon" if="{ item.icon }"></i>
       <img class="ui avatar image" src="{ item.image }" if="{ item.image }" />
       <span class="description" if="{ item.description }">{ item.description }</span>
@@ -55,6 +53,7 @@
         selectedFlg: false,
         transitionStatus: 'hidden',
         value: '',
+        classes: '',
       },
       lastPropValue: '',
       changed: false,
@@ -75,7 +74,6 @@
       onUnselect,
       stopPropagation,
 
-      isActive,
       isItem,
       isVisible,
     }
@@ -86,6 +84,17 @@
       upArrow: 38,
       downArrow: 40,
     }
+
+    const reservedClasses = [
+      'ui',
+      'selection',
+      'dropdown',
+      'search',
+      'multiple',
+      'active',
+      'visible',
+      'upward',
+    ]
 
     // ===================================================================================
     //                                                                           Lifecycle
@@ -435,6 +444,51 @@
     function parentUpdate(tag) {
       tag.obs.trigger(`${tag.props.suParentId}-update`)
       }
+
+    function prepareClasses(tag) {
+      const classes = tag.props.class.split(' ').filter(propClass => !reservedClasses.includes(propClass))
+      if (tag.props.search) {
+        classes.push('search')
+      }
+      if (tag.props.multiple) {
+        classes.push('multiple')
+      }
+      if (isActive(tag)) {
+        classes.push('active visible')
+      }
+      if (tag.upward) {
+        classes.push('upward')
+      }
+      return classes.join(' ')
+    }
+
+    function prepareItemClasses(items, value, filtered) {
+      items.forEach(item => {
+        const classes = []
+
+        if (isItem(item)) {
+          classes.push('item')
+        }
+        if (item.header && !filtered) {
+          classes.push('header')
+        }
+        if (item.divider && !filtered) {
+          classes.push('divider')
+        }
+        if (item.default) {
+          classes.push('default')
+        }
+        if (item.active) {
+          classes.push('hover')
+        }
+        if (item.value == value) {
+          classes.push('active slected')
+        }
+        if (item.disabled) {
+          classes.push('disabled')
+        }
+        item.classes = classes.join(' ')
+      })
     }
 
     function isUpward(tag) {
@@ -463,11 +517,11 @@
       return item.searched && !item.header && !item.divider
     }
 
-    function isActive() {
-      if (this.closing) {
+    function isActive(tag) {
+      if (tag.closing) {
         return false
       }
-      return this.openning || this.visibleFlg
+      return tag.openning || tag.visibleFlg
     }
 
     function isVisible(item) {
