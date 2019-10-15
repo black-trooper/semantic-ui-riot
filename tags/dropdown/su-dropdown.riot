@@ -16,7 +16,7 @@
     { state.label }
   </div>
 
-  <div class="menu transition { transitionStatus }" onmousedown="{ onMousedown }" onmouseup="{ onMouseup }"
+  <div class="menu transition { state.transitionStatus }" onmousedown="{ onMousedown }" onmouseup="{ onMouseup }"
     onblur="{ onBlur }" tabindex="-1">
     <div each="{item in props.items}" value="{ item.value }" default="{ item.default }" onmousedown="{ onMousedown }"
       onmouseup="{ onMouseup }"
@@ -319,12 +319,12 @@
       tag.openning = true
       search(tag, '')
       tag.upward = isUpward(tag)
-      tag.transitionStatus = `visible animating in slide ${tag.upward ? 'up' : 'down'}`
+      tag.state.transitionStatus = `visible animating in slide ${tag.upward ? 'up' : 'down'}`
       tag.props.items.forEach(item => item.active = false)
       setTimeout(() => {
         tag.openning = false
         tag.visibleFlg = true
-        tag.transitionStatus = 'visible'
+        tag.state.transitionStatus = 'visible'
         tag.update()
       }, 300)
 
@@ -341,11 +341,11 @@
         return
       }
       tag.closing = true
-      tag.transitionStatus = `visible animating out slide ${tag.upward ? 'up' : 'down'}`
+      tag.state.transitionStatus = `visible animating out slide ${tag.upward ? 'up' : 'down'}`
       setTimeout(() => {
         tag.closing = false
         tag.visibleFlg = false
-        tag.transitionStatus = 'hidden'
+        tag.state.transitionStatus = 'hidden'
         tag.update()
       }, 300)
 
