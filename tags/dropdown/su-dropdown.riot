@@ -306,7 +306,7 @@
       this.state.value = this.props.items.filter(item => item.selected).map(item => item.value)
       this.selectedFlg = this.props.items.some(item => item.selected)
       this.update()
-      // parentUpdate()
+      parentUpdate(this)
     }
 
     // ===================================================================================
@@ -380,7 +380,7 @@
       }
       if (!updating) {
         tag.update()
-        // parentUpdate()
+        parentUpdate(tag)
         tag.dispatch('select', target)
         tag.dispatch('change', target)
       }
@@ -398,7 +398,7 @@
       tag.selectedFlg = tag.props.items.some(item => item.selected)
       if (!updating) {
         tag.update()
-        // parentUpdate()
+        parentUpdate(tag)
         tag.dispatch('select', tag.props.items.filter(item => item.selected))
         tag.dispatch('change', tag.props.items.filter(item => item.selected))
       }
@@ -433,8 +433,7 @@
     }
 
     function parentUpdate(tag) {
-      if (tag.parent) {
-        tag.parent.update()
+      tag.obs.trigger(`${tag.props.suParentId}-update`)
       }
     }
 
