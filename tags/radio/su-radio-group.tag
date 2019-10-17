@@ -92,10 +92,11 @@
     }
 
     function updateState(radio) {
-      if (typeof radio.opts.value === 'undefined') {
+      if (typeof radio.opts.value === 'undefined' && typeof radio.opts.riotValue === 'undefined') {
         return
       }
-      radio.checked = tag.value == radio.opts.value
+      const value = typeof radio.opts.value === 'undefined' ? radio.opts.riotValue : radio.opts.value
+      radio.checked = tag.value == value
       if (radio.checked) {
         tag.label = radio.root.getElementsByTagName('label')[0].innerText
       }

@@ -86,10 +86,11 @@ riot.tag2('su-checkbox-group', '<yield></yield>', '', '', function(opts) {
     }
 
     function updateState(checkbox) {
-      if (typeof checkbox.opts.value === 'undefined' || typeof tag.value === 'undefined') {
+      if (typeof checkbox.opts.value === 'undefined' && checkbox.opts.riotValue === 'undefined' || typeof tag.value === 'undefined') {
         return
       }
-      checkbox.checked = tag.value.some(v => v == checkbox.opts.value)
+      const value = typeof checkbox.opts.value === 'undefined' ? checkbox.opts.riotValue : checkbox.opts.value
+      checkbox.checked = tag.value.some(v => v == value)
       if (checkbox.checked) {
         tag.label = checkbox.root.getElementsByTagName('label')[0].innerText
       }
