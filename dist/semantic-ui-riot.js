@@ -3054,11 +3054,12 @@ function changed() {
 }
 
 function updateState(checkbox) {
-  if (typeof checkbox.opts.value === 'undefined' || typeof tag.value === 'undefined') {
+  if (typeof checkbox.opts.value === 'undefined' && checkbox.opts.riotValue === 'undefined' || typeof tag.value === 'undefined') {
     return;
   }
+  var value = typeof checkbox.opts.value === 'undefined' ? checkbox.opts.riotValue : checkbox.opts.value;
   checkbox.checked = tag.value.some(function (v) {
-    return v == checkbox.opts.value;
+    return v == value;
   });
   if (checkbox.checked) {
     tag.label = checkbox.root.getElementsByTagName('label')[0].innerText;
@@ -5119,10 +5120,11 @@ function changed() {
 }
 
 function updateState(radio) {
-  if (typeof radio.opts.value === 'undefined') {
+  if (typeof radio.opts.value === 'undefined' && typeof radio.opts.riotValue === 'undefined') {
     return;
   }
-  radio.checked = tag.value == radio.opts.value;
+  var value = typeof radio.opts.value === 'undefined' ? radio.opts.riotValue : radio.opts.value;
+  radio.checked = tag.value == value;
   if (radio.checked) {
     tag.label = radio.root.getElementsByTagName('label')[0].innerText;
   }
