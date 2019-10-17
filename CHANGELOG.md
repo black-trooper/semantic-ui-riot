@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.24.1] - 2019-10-17
+### Fixed
+- Add support for riotValue in su-checkbox-group and su-radio-group
+
 ## [0.24.0] - 2019-08-22
 ### Added
 - Add support scrolling modal
@@ -188,7 +192,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - Add su-rating
 
-[Unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.24.0...HEAD
+[Unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.24.1...HEAD
+[0.24.1]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.24.0...v0.24.1
 [0.24.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.23.5...v0.24.0
 [0.23.5]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.23.4...v0.23.5
 [0.23.4]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.23.0...v0.23.4
