@@ -1,5 +1,5 @@
-<su-popup onmouseover="{ onMouseOver }" onmouseout="{ onMouseOut }">
-  <div id="{ su_id }" onmouseover="{ stopPropagation }" onmouseout="{ stopPropagation }"
+<su-popup>
+  <div id="{ su_id }" onmouseover="{ onMouseOver }" onmouseout="{ onMouseOut }"
     class="ui popup { state.position } { state.dataVariation } transition { state.transitionStatus } { state.nowrap }">
     <div class="header" if="{props.dataTitle}">{props.dataTitle}</div>
     <div class="content"></div>
@@ -171,7 +171,6 @@
       onBeforeUpdate,
       onMouseOver,
       onMouseOut,
-      stopPropagation,
     }
 
     // ===================================================================================
@@ -207,10 +206,6 @@
     function onMouseOut() {
       this.update({ transitionStatus: 'hidden' })
       this.dispatch('mouseout')
-    }
-
-    function stopPropagation(event) {
-      event.stopPropagation()
     }
   </script>
 </su-popup>
