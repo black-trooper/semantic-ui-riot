@@ -71,7 +71,7 @@ describe('su-select', function () {
     component.$('su-select select').click()
 
     component.$('su-select select').value = items[1].value
-    component.$('su-select select').onchange()
+    fireEvent(component.$('su-select select'), 'change')
     expect(component.$('su-select select').classList.contains('default')).to.equal(false)
     expect(spyOnChange).calledOnce
 
@@ -132,7 +132,7 @@ describe('su-select', function () {
     expect(spyOnChange).callCount(0)
 
     component.$('su-select select').value = component.items[1].items[0].value
-    component.$('su-select select').onchange()
+    fireEvent(component.$('su-select select'), 'change')
     expect(component.$('su-select select').classList.contains('default')).to.equal(false)
     expect(spyOnChange).calledOnce
 
@@ -145,7 +145,7 @@ describe('su-select', function () {
     expect(component.$('su-select').getAttribute('changed')).to.be.null
 
     component.$('su-select select').value = items[1].value
-    component.$('su-select select').onchange()
+    fireEvent(component.$('su-select select'), 'change')
 
     expect(component.$('su-select').getAttribute('value')).to.equal(items[1].value)
     expect(component.$('su-select').getAttribute('changed')).to.equal('changed')
