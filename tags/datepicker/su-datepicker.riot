@@ -1,4 +1,4 @@
-<su-datepicker value="{ state.value }" changed="{ changed }" id="{ su_id }">
+<su-datepicker value="{ state.value }" formated-value="{ state.formatedValue }" changed="{ changed }" id="{ su_id }">
   <div class="ui { props.popup ? 'dropdown' : '' } { upward ? 'upward' : '' }">
     <div class="ui action input { disabled }" if="{ props.popup }">
       <input type="text" placeholder="{ props.placeholder }" tabindex="{ tabIndex }" readonly="{ readOnly }"
@@ -161,7 +161,6 @@
         currentDate: null,
         defaultValue: null,
         value: null,
-        valueAsDate: null,
         weeks: [],
       },
 
@@ -215,19 +214,22 @@
     }
 
     function onMounted(props, state) {
-      if (!state.valueAsDate) {
-        state.valueAsDate = copyDate(state.value || props.value)
+      if (!state.value) {
+        state.value = copyDate(props.value)
       }
-      setValueFromValueAsDate(this)
+      if (state.value) {
+        state.value = format(copyDate(state.value), 'YYYY-MM-DD')
+      }
+      state.formatedValue = formatViewDate(this, state.value)
       if (props.popup) {
-        this.$('input').value = state.value
+        this.$('input').value = state.formatedValue
       }
-      this.lastValue = copyDate(state.valueAsDate)
+      this.lastValue = copyDate(state.value)
       this.lastPropsValue = copyDate(props.value)
 
       state.currentDate = copyDate(props.currentDate)
-      if (state.valueAsDate) {
-        state.currentDate = copyDate(state.valueAsDate)
+      if (state.value) {
+        state.currentDate = copyDate(state.value)
       }
       if (!state.currentDate) {
         state.currentDate = new Date()
@@ -239,7 +241,7 @@
       if (props.startMode === 'year') {
         this.selectYear()
       }
-      state.defaultValue = state.valueAsDate
+      state.defaultValue = state.value
       this.update()
     }
 
@@ -249,25 +251,23 @@
 
       let changed = false
       if (!isEqualDay(this.lastValue, state.value)) {
-        state.valueAsDate = copyDate(state.value)
         this.lastValue = copyDate(state.value)
         changed = true
-      } else if (!isEqualDay(this.lastValue, state.valueAsDate)) {
-        this.lastValue = copyDate(state.valueAsDate)
-        changed = true
-      } else if (!isEqualDay(this.lastPropsValue, props.value)) {
-        state.valueAsDate = copyDate(props.value)
+      } else if (this.lastPropsValue !== props.value) {
+        state.value = props.value ? format(copyDate(props.value), 'YYYY-MM-DD') : null
         this.lastPropsValue = copyDate(props.value)
         this.lastValue = copyDate(props.value)
         changed = true
       }
-      setValueFromValueAsDate(this)
-      if (changed && props.popup) {
-        this.$('input').value = state.value
+      if (changed) {
+        state.formatedValue = formatViewDate(this, state.value)
+        if (props.popup) {
+          this.$('input').value = state.formatedValue
+        }
       }
 
-      if (changed && state.valueAsDate) {
-        state.currentDate = copyDate(state.valueAsDate)
+      if (changed && state.value) {
+        state.currentDate = copyDate(state.value)
       }
       if (!isEqualDay(this.lastPropsCurrentDate, props.currentDate)) {
         state.currentDate = copyDate(props.currentDate)
@@ -277,12 +277,11 @@
         this.lastCurrentDate = copyDate(state.currentDate)
         generate(this)
       }
-      this.changed = !isEqualDay(state.valueAsDate, state.defaultValue)
+      this.changed = !isEqualDay(state.value, state.defaultValue)
     }
 
     function reset(tag) {
-      tag.state.valueAsDate = tag.state.defaultValue
-      setValueFromValueAsDate(tag)
+      tag.state.value = tag.state.defaultValue
       tag.update()
     }
 
@@ -307,8 +306,8 @@
         return
       }
       setDate(this, day)
-      this.dispatch('click', this.state.valueAsDate)
       this.update()
+      this.dispatch('click', this.state.value)
     }
 
     function clickMonth(month) {
@@ -346,13 +345,13 @@
     function clickClear() {
       setDate(this, null)
       this.update()
-      this.dispatch('clear', this.state.valueAsDate)
+      this.dispatch('clear', this.state.value)
     }
 
     function clickToday() {
       setDate(this, new Date())
       this.update()
-      this.dispatch('today', this.state.valueAsDate)
+      this.dispatch('today', this.state.value)
     }
 
     // -----------------------------------------------------
@@ -411,7 +410,7 @@
     }
 
     function isActive(date) {
-      return isEqualDay(this.state.valueAsDate, date)
+      return isEqualDay(this.state.value, date)
     }
 
     // ===================================================================================
@@ -470,33 +469,28 @@
       tag.state.transitionStatus = 'visible'
       tag.visibleFlg = true
       tag.state.currentDate = copyDate(tag.props.currentDate)
-      if (tag.state.valueAsDate) {
-        tag.state.currentDate = copyDate(tag.state.valueAsDate)
+      if (tag.state.value) {
+        tag.state.currentDate = copyDate(tag.state.value)
       }
       if (!tag.state.currentDate) {
         tag.state.currentDate = new Date()
       }
-      tag.dispatch('open', tag.state.valueAsDate)
+      tag.dispatch('open', tag.state.value)
     }
 
     function close(tag) {
       tag.state.transitionStatus = 'hidden'
       tag.visibleFlg = false
-      tag.dispatch('close', tag.state.valueAsDate)
+      tag.dispatch('close', tag.state.value)
     }
 
     function setDate(tag, date) {
-      tag.state.valueAsDate = date
-      setValueFromValueAsDate(tag)
+      tag.state.value = date ? format(date, 'YYYY-MM-DD') : null
       if (tag.props.popup) {
         tag.$('input').value = tag.state.value
         close(tag)
       }
-      tag.dispatch('change', tag.state.valueAsDate)
-    }
-
-    function setValueFromValueAsDate(tag) {
-      tag.state.value = tag.state.valueAsDate ? format(tag.state.valueAsDate, tag.pattern, { locale: tag.locale }) : null
+      tag.dispatch('change', tag.state.value)
     }
 
     function isEqualDay(d1, d2) {
@@ -573,6 +567,11 @@
 
     function range(size, startAt = 0) {
       return Array.from(Array(size).keys()).map(i => i + startAt)
+    }
+
+    function formatViewDate(tag, value) {
+      const viewDate = copyDate(value)
+      return viewDate ? format(viewDate, tag.pattern, { locale: tag.locale }) : null
     }
   </script>
 </su-datepicker>
