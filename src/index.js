@@ -82,7 +82,7 @@ riot.install(function (component) {
   component.onMounted = (props, state) => {
     onMounted.apply(component, [props, state])
 
-    component.$$('su-checkbox-group, su-checkbox, su-radio-group').forEach(target => {
+    component.$$('su-checkbox-group, su-checkbox, su-radio-group, su-datepicker').forEach(target => {
       if (!target.hasAttribute('su-parent-id')) {
         target.setAttribute('su-parent-id', component.suUuid)
       }

@@ -243,6 +243,7 @@
       }
       state.defaultValue = state.value
       this.update()
+      parentUpdate(this)
     }
 
     function onBeforeUpdate(props, state) {
@@ -264,6 +265,7 @@
         if (props.popup) {
           this.$('input').value = state.formatedValue
         }
+        parentUpdate(this)
       }
 
       if (changed && state.value) {
@@ -283,6 +285,7 @@
     function reset(tag) {
       tag.state.value = tag.state.defaultValue
       tag.update()
+      parentUpdate(tag)
     }
 
     // ===================================================================================
@@ -307,6 +310,7 @@
       }
       setDate(this, day)
       this.update()
+      parentUpdate(this)
       this.dispatch('click', this.state.value)
     }
 
@@ -345,12 +349,14 @@
     function clickClear() {
       setDate(this, null)
       this.update()
+      parentUpdate(this)
       this.dispatch('clear', this.state.value)
     }
 
     function clickToday() {
       setDate(this, new Date())
       this.update()
+      parentUpdate(this)
       this.dispatch('today', this.state.value)
     }
 
@@ -572,6 +578,10 @@
     function formatViewDate(tag, value) {
       const viewDate = copyDate(value)
       return viewDate ? format(viewDate, tag.pattern, { locale: tag.locale }) : null
+    }
+
+    function parentUpdate(tag) {
+      tag.obs.trigger(`${tag.props.suParentId}-update`)
     }
   </script>
 </su-datepicker>
