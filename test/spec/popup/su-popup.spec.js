@@ -49,12 +49,12 @@ describe('su-popup', function () {
     expect(component.$('su-popup .ui.popup').classList.contains('nowrap')).to.equal(true)
 
     fireEvent(component.$('su-popup .ui.popup'), 'mouseover')
-    spyOnMouseover.should.have.been.calledOnce
+    expect(spyOnMouseover).to.have.been.calledOnce
     expect(component.$('su-popup .ui.popup').classList.contains('visible')).to.equal(true)
     expect(component.$('su-popup .ui.popup').classList.contains('hidden')).to.equal(false)
 
     fireEvent(component.$('su-popup .ui.popup'), 'mouseout')
-    spyOnMouseout.should.have.been.calledOnce
+    expect(spyOnMouseout).to.have.been.calledOnce
     expect(component.$('su-popup .ui.popup').classList.contains('visible')).to.equal(false)
     expect(component.$('su-popup .ui.popup').classList.contains('hidden')).to.equal(true)
   })

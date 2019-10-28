@@ -55,6 +55,6 @@ describe('su-checkbox-group-single', function () {
 
     component.$('su-checkbox input').click()
     expect(component.$('su-checkbox').getAttribute("checked")).to.be.ok
-    spyOnChange.should.have.been.calledOnce
+    expect(spyOnChange).to.have.been.calledOnce
   })
 })

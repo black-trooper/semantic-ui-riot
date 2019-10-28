@@ -67,13 +67,13 @@ describe('su-dropdown.option', function () {
     this.clock.tick(310)
     expect(component.$('.menu').classList.contains('visible')).to.equal(true)
     expect(element.classList.contains('upward')).to.equal(true)
-    spyOnOpen.should.have.been.calledOnce
+    expect(spyOnOpen).to.have.been.calledOnce
 
     element.click()
     this.clock.tick(310)
     expect(component.$('.menu').classList.contains('visible')).to.equal(false)
     expect(element.classList.contains('upward')).to.equal(true)
-    spyOnClose.should.have.been.calledOnce
+    expect(spyOnClose).to.have.been.calledOnce
   })
 
   it('downward', function () {
@@ -88,12 +88,12 @@ describe('su-dropdown.option', function () {
     this.clock.tick(310)
     expect(component.$('.menu').classList.contains('visible')).to.equal(true)
     expect(element.classList.contains('upward')).to.equal(false)
-    spyOnOpen.should.have.been.calledOnce
+    expect(spyOnOpen).to.have.been.calledOnce
 
     element.click()
     this.clock.tick(310)
     expect(component.$('.menu').classList.contains('visible')).to.equal(false)
     expect(element.classList.contains('upward')).to.equal(false)
-    spyOnClose.should.have.been.calledOnce
+    expect(spyOnClose).to.have.been.calledOnce
   })
 })

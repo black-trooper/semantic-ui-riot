@@ -107,8 +107,8 @@ describe('su-rating-options', function () {
     expect(component.$$('su-rating i')[2].classList.contains('selected')).to.equal(false)
     expect(component.$$('su-rating i')[3].classList.contains('selected')).to.equal(false)
 
-    spyOnClick.should.have.been.callCount(0)
-    spyOnChange.should.have.been.callCount(0)
+    expect(spyOnClick).to.have.been.callCount(0)
+    expect(spyOnChange).to.have.been.callCount(0)
   })
 
   it('reset value', function () {

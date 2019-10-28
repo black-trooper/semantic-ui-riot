@@ -55,13 +55,13 @@ describe('su-radio-group', function () {
     component.update()
     expect(component.$$('su-radio')[0].getAttribute("checked")).to.be.ok
     expect(component.$$('su-radio')[1].hasAttribute("checked")).to.be.not.ok
-    spyOnChange.should.have.been.calledOnce
+    expect(spyOnChange).to.have.been.calledOnce
 
     component.value = "2"
     component.update()
     expect(component.$$('su-radio')[0].hasAttribute("checked")).to.be.not.ok
     expect(component.$$('su-radio')[1].getAttribute("checked")).to.be.ok
-    spyOnChange.should.have.been.calledTwice
+    expect(spyOnChange).to.have.been.calledTwice
   })
 
   it('click radio', function () {
@@ -71,12 +71,12 @@ describe('su-radio-group', function () {
     component.$$('su-radio input')[0].click()
     expect(component.$$('su-radio')[0].getAttribute("checked")).to.be.ok
     expect(component.$$('su-radio')[1].hasAttribute("checked")).to.be.not.ok
-    spyOnChange.should.have.been.calledOnce
+    expect(spyOnChange).to.have.been.calledOnce
 
     component.$$('su-radio input')[1].click()
     expect(component.$$('su-radio')[0].hasAttribute("checked")).to.be.not.ok
     expect(component.$$('su-radio')[1].getAttribute("checked")).to.be.ok
-    spyOnChange.should.have.been.calledTwice
+    expect(spyOnChange).to.have.been.calledTwice
   })
 
   it('reset value', function () {

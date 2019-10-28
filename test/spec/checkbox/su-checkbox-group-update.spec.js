@@ -51,13 +51,13 @@ describe('su-checkbox-group', function () {
     component.update()
     expect(component.$$('su-checkbox')[0].getAttribute("checked")).to.be.ok
     expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.not.ok
-    spyOnChange.should.have.been.calledOnce
+    expect(spyOnChange).to.have.been.calledOnce
 
     component.value = "2"
     component.update()
     expect(component.$$('su-checkbox')[0].getAttribute("checked")).to.be.not.ok
     expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.ok
-    spyOnChange.should.have.been.calledTwice
+    expect(spyOnChange).to.have.been.calledTwice
   })
 
   it('click checkbox', function () {
@@ -75,11 +75,11 @@ describe('su-checkbox-group', function () {
     console.log(component.$('su-checkbox-group').getAttribute("value"))
     expect(component.$$('su-checkbox')[0].getAttribute("checked")).to.be.ok
     expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.not.ok
-    spyOnChange.should.have.been.calledOnce
+    expect(spyOnChange).to.have.been.calledOnce
 
     component.$$('su-checkbox input')[1].click()
     expect(component.$$('su-checkbox')[0].getAttribute("checked")).to.be.ok
     expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.ok
-    spyOnChange.should.have.been.calledTwice
+    expect(spyOnChange).to.have.been.calledTwice
   })
 })

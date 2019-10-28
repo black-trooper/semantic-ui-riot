@@ -53,12 +53,12 @@ describe('su-modal', function () {
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
 
     component.suShowModal(element)
-    spyOnShow.should.have.been.calledOnce
+    expect(spyOnShow).to.have.been.calledOnce
     this.clock.tick(510)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
     component.$('.ui.button').click()
-    spyOnHide.should.have.been.calledOnce
+    expect(spyOnHide).to.have.been.calledOnce
     this.clock.tick(310)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
   })
@@ -68,12 +68,12 @@ describe('su-modal', function () {
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
 
     component.suShowModal(element)
-    spyOnShow.should.have.been.calledOnce
+    expect(spyOnShow).to.have.been.calledOnce
     this.clock.tick(510)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
     element.click()
-    spyOnHide.should.have.been.calledOnce
+    expect(spyOnHide).to.have.been.calledOnce
     this.clock.tick(310)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
   })
@@ -91,13 +91,13 @@ describe('su-modal', function () {
 
     component.suShowModal(element)
     component.suShowModal(element)
-    spyOnShow.should.have.been.calledOnce
+    expect(spyOnShow).to.have.been.calledOnce
     this.clock.tick(510)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
     component.$('.ui.button').click()
     component.$('.ui.button').click()
-    spyOnHide.should.have.been.calledOnce
+    expect(spyOnHide).to.have.been.calledOnce
     this.clock.tick(310)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
   })
@@ -242,7 +242,7 @@ describe('su-modal', function () {
     expect(component.$$('i.close.icon')).to.have.lengthOf(1)
 
     component.$('i.close.icon').click()
-    spyOnHide.should.have.been.calledOnce
+    expect(spyOnHide).to.have.been.calledOnce
     this.clock.tick(310)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
   })
