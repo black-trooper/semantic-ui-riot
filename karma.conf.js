@@ -17,19 +17,6 @@ module.exports = function (config) {
       module: {
         rules: [
           {
-            test: /\.tag$/,
-            exclude: /node_modules/,
-            use: [
-              {
-                loader: '@riotjs/webpack-loader',
-                options: {
-                  type: 'es6', // transpile the riot tags using babel
-                  hot: true
-                }
-              }
-            ]
-          },
-          {
             test: /\.js$/,
             enforce: 'post',
             include: path.resolve('dist/tags/'),
@@ -50,6 +37,7 @@ module.exports = function (config) {
       reports: ['html', 'lcovonly', 'text-summary'],
     },
     browsers: ['ChromeHeadless'],
+    browserNoActivityTimeout: 30 * 60 * 1000,
     singleRun: true
   })
   if (process.env.TRAVIS) {
