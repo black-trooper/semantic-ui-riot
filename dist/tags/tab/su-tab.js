@@ -47,7 +47,7 @@ var suTab = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<span expr52></span>', [{
+    return template('<span expr58="expr58"></span>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -70,14 +70,24 @@ var suTab = {
         return scope.state.mounted;
       },
 
-      'redundantAttribute': 'expr52',
-      'selector': '[expr52]',
+      'redundantAttribute': 'expr58',
+      'selector': '[expr58]',
 
-      'template': template('<slot expr53></slot>', [{
+      'template': template('<slot expr59="expr59"></slot>', [{
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'expr58',
+
+          'evaluate': function(scope) {
+            return 'expr58';
+          }
+        }]
+      }, {
         'type': bindingTypes.SLOT,
+        'attributes': [],
         'name': 'default',
-        'redundantAttribute': 'expr53',
-        'selector': '[expr53]'
+        'redundantAttribute': 'expr59',
+        'selector': '[expr59]'
       }])
     }]);
   },

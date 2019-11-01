@@ -53,7 +53,7 @@ function onUpdated(props, state) {
     state.value = state.value.toString().split(/\s+/).join('').split(',');
   }
 
-    let checkboxes = this.$$('su-checkbox');
+  let checkboxes = this.$$('su-checkbox');
   checkboxes.forEach(checkbox => {
     initializeChild(checkbox, this.su_id);
   });
@@ -119,7 +119,7 @@ var suCheckboxGroup = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot expr11></slot>', [{
+    return template('<slot expr6="expr6"></slot>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'value',
@@ -146,8 +146,8 @@ var suCheckboxGroup = {
       'type': bindingTypes.SLOT,
       'attributes': [],
       'name': 'default',
-      'redundantAttribute': 'expr11',
-      'selector': '[expr11]'
+      'redundantAttribute': 'expr6',
+      'selector': '[expr6]'
     }]);
   },
 

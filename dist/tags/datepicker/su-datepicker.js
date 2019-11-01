@@ -19,19 +19,22 @@ function onBeforeMount(props, state) {
 }
 
 function onMounted(props, state) {
-  if (!state.valueAsDate) {
-    state.valueAsDate = copyDate(state.value || props.value);
+  if (!state.value) {
+    state.value = copyDate(props.value);
   }
-  setValueFromValueAsDate(this);
+  if (state.value) {
+    state.value = format(copyDate(state.value), 'YYYY-MM-DD');
+  }
+  state.formatedValue = formatViewDate(this, state.value);
   if (props.popup) {
-    this.$('input').value = state.value;
+    this.$('input').value = state.formatedValue;
   }
-  this.lastValue = copyDate(state.valueAsDate);
+  this.lastValue = copyDate(state.value);
   this.lastPropsValue = copyDate(props.value);
 
   state.currentDate = copyDate(props.currentDate);
-  if (state.valueAsDate) {
-    state.currentDate = copyDate(state.valueAsDate);
+  if (state.value) {
+    state.currentDate = copyDate(state.value);
   }
   if (!state.currentDate) {
     state.currentDate = new Date();
@@ -43,8 +46,9 @@ function onMounted(props, state) {
   if (props.startMode === 'year') {
     this.selectYear();
   }
-  state.defaultValue = state.valueAsDate;
+  state.defaultValue = state.value;
   this.update();
+  parentUpdate(this);
 }
 
 function onBeforeUpdate(props, state) {
@@ -53,25 +57,24 @@ function onBeforeUpdate(props, state) {
 
   let changed = false;
   if (!isEqualDay(this.lastValue, state.value)) {
-    state.valueAsDate = copyDate(state.value);
     this.lastValue = copyDate(state.value);
     changed = true;
-  } else if (!isEqualDay(this.lastValue, state.valueAsDate)) {
-    this.lastValue = copyDate(state.valueAsDate);
-    changed = true;
-  } else if (!isEqualDay(this.lastPropsValue, props.value)) {
-    state.valueAsDate = copyDate(props.value);
+  } else if (this.lastPropsValue !== props.value) {
+    state.value = props.value ? format(copyDate(props.value), 'YYYY-MM-DD') : null;
     this.lastPropsValue = copyDate(props.value);
     this.lastValue = copyDate(props.value);
     changed = true;
   }
-  setValueFromValueAsDate(this);
-  if (changed && props.popup) {
-    this.$('input').value = state.value;
+  if (changed) {
+    state.formatedValue = formatViewDate(this, state.value);
+    if (props.popup) {
+      this.$('input').value = state.formatedValue;
+    }
+    parentUpdate(this);
   }
 
-  if (changed && state.valueAsDate) {
-    state.currentDate = copyDate(state.valueAsDate);
+  if (changed && state.value) {
+    state.currentDate = copyDate(state.value);
   }
   if (!isEqualDay(this.lastPropsCurrentDate, props.currentDate)) {
     state.currentDate = copyDate(props.currentDate);
@@ -81,13 +84,13 @@ function onBeforeUpdate(props, state) {
     this.lastCurrentDate = copyDate(state.currentDate);
     generate(this);
   }
-  this.changed = !isEqualDay(state.valueAsDate, state.defaultValue);
+  this.changed = !isEqualDay(state.value, state.defaultValue);
 }
 
 function reset(tag) {
-  tag.state.valueAsDate = tag.state.defaultValue;
-  setValueFromValueAsDate(tag);
+  tag.state.value = tag.state.defaultValue;
   tag.update();
+  parentUpdate(tag);
 }
 
 // ===================================================================================
@@ -111,8 +114,9 @@ function clickDay(day) {
     return
   }
   setDate(this, day);
-  this.dispatch('click', this.state.valueAsDate);
   this.update();
+  parentUpdate(this);
+  this.dispatch('click', this.state.value);
 }
 
 function clickMonth(month) {
@@ -150,13 +154,15 @@ function clickNext() {
 function clickClear() {
   setDate(this, null);
   this.update();
-  this.dispatch('clear', this.state.valueAsDate);
+  parentUpdate(this);
+  this.dispatch('clear', this.state.value);
 }
 
 function clickToday() {
   setDate(this, new Date());
   this.update();
-  this.dispatch('today', this.state.valueAsDate);
+  parentUpdate(this);
+  this.dispatch('today', this.state.value);
 }
 
 // -----------------------------------------------------
@@ -215,7 +221,7 @@ function getCurrentMonth() {
 }
 
 function isActive(date) {
-  return isEqualDay(this.state.valueAsDate, date)
+  return isEqualDay(this.state.value, date)
 }
 
 // ===================================================================================
@@ -274,33 +280,28 @@ function open(tag) {
   tag.state.transitionStatus = 'visible';
   tag.visibleFlg = true;
   tag.state.currentDate = copyDate(tag.props.currentDate);
-  if (tag.state.valueAsDate) {
-    tag.state.currentDate = copyDate(tag.state.valueAsDate);
+  if (tag.state.value) {
+    tag.state.currentDate = copyDate(tag.state.value);
   }
   if (!tag.state.currentDate) {
     tag.state.currentDate = new Date();
   }
-  tag.dispatch('open', tag.state.valueAsDate);
+  tag.dispatch('open', tag.state.value);
 }
 
 function close(tag) {
   tag.state.transitionStatus = 'hidden';
   tag.visibleFlg = false;
-  tag.dispatch('close', tag.state.valueAsDate);
+  tag.dispatch('close', tag.state.value);
 }
 
 function setDate(tag, date) {
-  tag.state.valueAsDate = date;
-  setValueFromValueAsDate(tag);
+  tag.state.value = date ? format(date, 'YYYY-MM-DD') : null;
   if (tag.props.popup) {
     tag.$('input').value = tag.state.value;
     close(tag);
   }
-  tag.dispatch('change', tag.state.valueAsDate);
-}
-
-function setValueFromValueAsDate(tag) {
-  tag.state.value = tag.state.valueAsDate ? format(tag.state.valueAsDate, tag.pattern, { locale: tag.locale }) : null;
+  tag.dispatch('change', tag.state.value);
 }
 
 function isEqualDay(d1, d2) {
@@ -379,6 +380,15 @@ function range(size, startAt = 0) {
   return Array.from(Array(size).keys()).map(i => i + startAt)
 }
 
+function formatViewDate(tag, value) {
+  const viewDate = copyDate(value);
+  return viewDate ? format(viewDate, tag.pattern, { locale: tag.locale }) : null
+}
+
+function parentUpdate(tag) {
+  tag.obs.trigger(`${tag.props.suParentId}-update`);
+}
+
 var suDatepicker = {
   'css': `su-datepicker .ui.segment,[is="su-datepicker"] .ui.segment{ padding-top: 0.5rem; padding-bottom: 0.5rem; } su-datepicker .ui.dropdown .menu,[is="su-datepicker"] .ui.dropdown .menu{ display: block; } su-datepicker .ui.buttons.dp-navigation,[is="su-datepicker"] .ui.buttons.dp-navigation{ margin-bottom: 0.4rem; } su-datepicker .ui.dropdown,[is="su-datepicker"] .ui.dropdown{ display: block; } su-datepicker .dp-wrapper,[is="su-datepicker"] .dp-wrapper{ display: flex; } su-datepicker .dp-day,[is="su-datepicker"] .dp-day,su-datepicker .dp-month,[is="su-datepicker"] .dp-month{ cursor: pointer; } su-datepicker .dp-weekday,[is="su-datepicker"] .dp-weekday,su-datepicker .dp-day,[is="su-datepicker"] .dp-day,su-datepicker .dp-day .ui.button,[is="su-datepicker"] .dp-day .ui.button{ width: 2.5rem; } su-datepicker .dp-month,[is="su-datepicker"] .dp-month,su-datepicker .dp-month .ui.button,[is="su-datepicker"] .dp-month .ui.button{ width: 4.375rem; } su-datepicker .dp-day .ui.button,[is="su-datepicker"] .dp-day .ui.button,su-datepicker .dp-month .ui.button,[is="su-datepicker"] .dp-month .ui.button{ padding: 0; height: 2.5rem; font-weight: normal } su-datepicker .dp-day .ui.button.today,[is="su-datepicker"] .dp-day .ui.button.today{ font-weight: 700; } su-datepicker .dp-today .ui.button,[is="su-datepicker"] .dp-today .ui.button,su-datepicker .dp-clear .ui.button,[is="su-datepicker"] .dp-clear .ui.button,su-datepicker .dp-navigation .ui.button,[is="su-datepicker"] .dp-navigation .ui.button,su-datepicker .dp-month .ui.button,[is="su-datepicker"] .dp-month .ui.button,su-datepicker .dp-day .ui.button.non-active,[is="su-datepicker"] .dp-day .ui.button.non-active{ background-color: transparent; } su-datepicker .dp-today .ui.button:hover,[is="su-datepicker"] .dp-today .ui.button:hover,su-datepicker .dp-clear .ui.button:hover,[is="su-datepicker"] .dp-clear .ui.button:hover,su-datepicker .dp-navigation .ui.button:hover,[is="su-datepicker"] .dp-navigation .ui.button:hover,su-datepicker .dp-month .ui.button:hover,[is="su-datepicker"] .dp-month .ui.button:hover,su-datepicker .dp-day .ui.button.non-active:hover,[is="su-datepicker"] .dp-day .ui.button.non-active:hover{ background-color: #e0e1e2; } su-datepicker .dp-day .ui.button.disabled,[is="su-datepicker"] .dp-day .ui.button.disabled{ pointer-events: all !important; } su-datepicker .dp-navigation,[is="su-datepicker"] .dp-navigation{ width: 100%; } su-datepicker .dp-navigation .ui.button,[is="su-datepicker"] .dp-navigation .ui.button{ width: 20%; } su-datepicker .dp-navigation .ui.button.year,[is="su-datepicker"] .dp-navigation .ui.button.year,su-datepicker .dp-navigation .ui.button.month,[is="su-datepicker"] .dp-navigation .ui.button.month{ width: 30%; }`,
 
@@ -387,7 +397,6 @@ var suDatepicker = {
       currentDate: null,
       defaultValue: null,
       value: null,
-      valueAsDate: null,
       weeks: [],
     },
 
@@ -423,7 +432,7 @@ var suDatepicker = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr87><div expr88></div><div expr91><div class="ui compact segments"><div class="ui center aligned secondary segment"><div class="ui buttons dp-navigation"><button expr92 type="button"><i class="chevron left icon"></i></button><button expr93 type="button"><!----></button><button expr94 type="button"><!----></button><button expr95 type="button"><i class="chevron right icon"></i></button></div><div class="dp-wrapper"><div expr96 class="dp-weekday"></div></div></div><div expr97 class="ui center aligned segment"></div><div expr101 class="ui center aligned segment"></div><div expr104 class="ui center aligned segment"></div><div expr108 class="ui center aligned segment"></div></div></div></div>',
+      '<div expr87="expr87"><div expr88="expr88"></div><div expr91="expr91"><div class="ui compact segments"><div class="ui center aligned secondary segment"><div class="ui buttons dp-navigation"><button expr92="expr92" type="button"><i class="chevron left icon"></i></button><button expr93="expr93" type="button"> </button><button expr94="expr94" type="button"> </button><button expr95="expr95" type="button"><i class="chevron right icon"></i></button></div><div class="dp-wrapper"><div expr96="expr96" class="dp-weekday"></div></div></div><div expr97="expr97" class="ui center aligned segment"></div><div expr101="expr101" class="ui center aligned segment"></div><div expr104="expr104" class="ui center aligned segment"></div><div expr108="expr108" class="ui center aligned segment"></div></div></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -431,6 +440,13 @@ var suDatepicker = {
 
           'evaluate': function(scope) {
             return scope.state.value;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'formated-value',
+
+          'evaluate': function(scope) {
+            return scope.state.formatedValue;
           }
         }, {
           'type': expressionTypes.ATTRIBUTE,
@@ -475,9 +491,16 @@ var suDatepicker = {
         'selector': '[expr88]',
 
         'template': template(
-          '<input expr89 type="text"/><button expr90 type="button"><i class="calendar icon"></i></button>',
+          '<input expr89="expr89" type="text"/><button expr90="expr90" type="button"><i class="calendar icon"></i></button>',
           [{
             'expressions': [{
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'expr88',
+
+              'evaluate': function(scope) {
+                return 'expr88';
+              }
+            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -674,13 +697,27 @@ var suDatepicker = {
         'getKey': null,
         'condition': null,
 
-        'template': template('<!---->', [{
+        'template': template(' ', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 0,
 
             'evaluate': function(scope) {
               return scope.week;
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr96',
+
+            'evaluate': function(scope) {
+              return 'expr96';
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'class',
+
+            'evaluate': function(scope) {
+              return 'dp-weekday';
             }
           }]
         }]),
@@ -703,17 +740,65 @@ var suDatepicker = {
         'redundantAttribute': 'expr97',
         'selector': '[expr97]',
 
-        'template': template('<div expr98 class="dp-wrapper"></div>', [{
+        'template': template('<div expr98="expr98" class="dp-wrapper"></div>', [{
+          'expressions': [{
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr97',
+
+            'evaluate': function(scope) {
+              return 'expr97';
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'class',
+
+            'evaluate': function(scope) {
+              return 'ui center aligned segment';
+            }
+          }]
+        }, {
           'type': bindingTypes.EACH,
           'getKey': null,
           'condition': null,
 
-          'template': template('<div expr99 class="dp-day"></div>', [{
+          'template': template('<div expr99="expr99" class="dp-day"></div>', [{
+            'expressions': [{
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'expr98',
+
+              'evaluate': function(scope) {
+                return 'expr98';
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
+
+              'evaluate': function(scope) {
+                return 'dp-wrapper';
+              }
+            }]
+          }, {
             'type': bindingTypes.EACH,
             'getKey': null,
             'condition': null,
 
-            'template': template('<button expr100 type="button"><!----></button>', [{
+            'template': template('<button expr100="expr100" type="button"> </button>', [{
+              'expressions': [{
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'expr99',
+
+                'evaluate': function(scope) {
+                  return 'expr99';
+                }
+              }, {
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'class',
+
+                'evaluate': function(scope) {
+                  return 'dp-day';
+                }
+              }]
+            }, {
               'redundantAttribute': 'expr100',
               'selector': '[expr100]',
 
@@ -778,8 +863,24 @@ var suDatepicker = {
         'selector': '[expr101]',
 
         'template': template(
-          '<div class="ui two column grid"><div class="column dp-clear"><button expr102 type="button"><i class="times icon"></i></button></div><div class="column dp-today"><button expr103 type="button"><i class="calendar check icon"></i></button></div></div>',
+          '<div class="ui two column grid"><div class="column dp-clear"><button expr102="expr102" type="button"><i class="times icon"></i></button></div><div class="column dp-today"><button expr103="expr103" type="button"><i class="calendar check icon"></i></button></div></div>',
           [{
+            'expressions': [{
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'expr101',
+
+              'evaluate': function(scope) {
+                return 'expr101';
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
+
+              'evaluate': function(scope) {
+                return 'ui center aligned segment';
+              }
+            }]
+          }, {
             'redundantAttribute': 'expr102',
             'selector': '[expr102]',
 
@@ -829,17 +930,65 @@ var suDatepicker = {
         'redundantAttribute': 'expr104',
         'selector': '[expr104]',
 
-        'template': template('<div expr105 class="dp-wrapper"></div>', [{
+        'template': template('<div expr105="expr105" class="dp-wrapper"></div>', [{
+          'expressions': [{
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr104',
+
+            'evaluate': function(scope) {
+              return 'expr104';
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'class',
+
+            'evaluate': function(scope) {
+              return 'ui center aligned segment';
+            }
+          }]
+        }, {
           'type': bindingTypes.EACH,
           'getKey': null,
           'condition': null,
 
-          'template': template('<div expr106 class="dp-month"></div>', [{
+          'template': template('<div expr106="expr106" class="dp-month"></div>', [{
+            'expressions': [{
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'expr105',
+
+              'evaluate': function(scope) {
+                return 'expr105';
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
+
+              'evaluate': function(scope) {
+                return 'dp-wrapper';
+              }
+            }]
+          }, {
             'type': bindingTypes.EACH,
             'getKey': null,
             'condition': null,
 
-            'template': template('<button expr107 type="button"><!----></button>', [{
+            'template': template('<button expr107="expr107" type="button"> </button>', [{
+              'expressions': [{
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'expr106',
+
+                'evaluate': function(scope) {
+                  return 'expr106';
+                }
+              }, {
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'class',
+
+                'evaluate': function(scope) {
+                  return 'dp-month';
+                }
+              }]
+            }, {
               'redundantAttribute': 'expr107',
               'selector': '[expr107]',
 
@@ -896,17 +1045,65 @@ var suDatepicker = {
         'redundantAttribute': 'expr108',
         'selector': '[expr108]',
 
-        'template': template('<div expr109 class="dp-wrapper"></div>', [{
+        'template': template('<div expr109="expr109" class="dp-wrapper"></div>', [{
+          'expressions': [{
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr108',
+
+            'evaluate': function(scope) {
+              return 'expr108';
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'class',
+
+            'evaluate': function(scope) {
+              return 'ui center aligned segment';
+            }
+          }]
+        }, {
           'type': bindingTypes.EACH,
           'getKey': null,
           'condition': null,
 
-          'template': template('<div expr110 class="dp-month"></div>', [{
+          'template': template('<div expr110="expr110" class="dp-month"></div>', [{
+            'expressions': [{
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'expr109',
+
+              'evaluate': function(scope) {
+                return 'expr109';
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
+
+              'evaluate': function(scope) {
+                return 'dp-wrapper';
+              }
+            }]
+          }, {
             'type': bindingTypes.EACH,
             'getKey': null,
             'condition': null,
 
-            'template': template('<button expr111 type="button"><!----></button>', [{
+            'template': template('<button expr111="expr111" type="button"> </button>', [{
+              'expressions': [{
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'expr110',
+
+                'evaluate': function(scope) {
+                  return 'expr110';
+                }
+              }, {
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'class',
+
+                'evaluate': function(scope) {
+                  return 'dp-month';
+                }
+              }]
+            }, {
               'redundantAttribute': 'expr111',
               'selector': '[expr111]',
 

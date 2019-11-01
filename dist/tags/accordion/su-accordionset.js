@@ -51,7 +51,7 @@ var suAccordionset = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot expr10></slot>', [{
+    return template('<slot expr7="expr7"></slot>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -62,9 +62,10 @@ var suAccordionset = {
       }]
     }, {
       'type': bindingTypes.SLOT,
+      'attributes': [],
       'name': 'default',
-      'redundantAttribute': 'expr10',
-      'selector': '[expr10]'
+      'redundantAttribute': 'expr7',
+      'selector': '[expr7]'
     }]);
   },
 

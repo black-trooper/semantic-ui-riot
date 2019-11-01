@@ -104,7 +104,7 @@ var suProgress = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr28><div expr29 class="bar"><div expr30 class="progress"></div></div><div class="label"><slot expr31></slot></div></div>',
+      '<div expr41="expr41"><div expr42="expr42" class="bar"><div expr43="expr43" class="progress"></div></div><div class="label"><slot expr44="expr44"></slot></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -122,8 +122,8 @@ var suProgress = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr28',
-        'selector': '[expr28]',
+        'redundantAttribute': 'expr41',
+        'selector': '[expr41]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -141,8 +141,8 @@ var suProgress = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr29',
-        'selector': '[expr29]',
+        'redundantAttribute': 'expr42',
+        'selector': '[expr42]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -159,10 +159,10 @@ var suProgress = {
           return scope.isProgress();
         },
 
-        'redundantAttribute': 'expr30',
-        'selector': '[expr30]',
+        'redundantAttribute': 'expr43',
+        'selector': '[expr43]',
 
-        'template': template('<!---->', [{
+        'template': template(' ', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 0,
@@ -170,13 +170,28 @@ var suProgress = {
             'evaluate': function(scope) {
               return [scope.percent, '%'].join('');
             }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr43',
+
+            'evaluate': function(scope) {
+              return 'expr43';
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'class',
+
+            'evaluate': function(scope) {
+              return 'progress';
+            }
           }]
         }])
       }, {
         'type': bindingTypes.SLOT,
+        'attributes': [],
         'name': 'default',
-        'redundantAttribute': 'expr31',
-        'selector': '[expr31]'
+        'redundantAttribute': 'expr44',
+        'selector': '[expr44]'
       }]
     );
   },

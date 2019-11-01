@@ -63,84 +63,87 @@ var suToast = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<div class="ui list"><su-toast-item expr75></su-toast-item></div>', [{
-      'expressions': [{
-        'type': expressionTypes.ATTRIBUTE,
-        'name': 'class',
-
-        'evaluate': function(scope) {
-          return scope.state.position;
-        }
-      }]
-    }, {
-      'type': bindingTypes.EACH,
-      'getKey': null,
-      'condition': null,
-
-      'template': template(null, [{
-        'type': bindingTypes.TAG,
-        'getComponent': getComponent,
-
-        'evaluate': function(scope) {
-          return 'su-toast-item';
-        },
-
-        'slots': [],
-
-        'attributes': [{
+    return template(
+      '<div class="ui list"><su-toast-item expr70="expr70"></su-toast-item></div>',
+      [{
+        'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
-          'name': 'icon',
-
-          'evaluate': function(scope) {
-            return scope.item.icon;
-          }
-        }, {
-          'type': expressionTypes.ATTRIBUTE,
-          'name': 'progress',
-
-          'evaluate': function(scope) {
-            return scope.item.progress;
-          }
-        }, {
-          'type': expressionTypes.ATTRIBUTE,
-          'name': 'class-name',
-
-          'evaluate': function(scope) {
-            return scope.item.class;
-          }
-        }, {
-          'type': expressionTypes.ATTRIBUTE,
-          'name': 'title',
-
-          'evaluate': function(scope) {
-            return scope.item.title;
-          }
-        }, {
-          'type': expressionTypes.ATTRIBUTE,
-          'name': 'messages',
-
-          'evaluate': function(scope) {
-            return scope.item.messages;
-          }
-        }, {
-          'type': expressionTypes.ATTRIBUTE,
-          'name': 'position',
+          'name': 'class',
 
           'evaluate': function(scope) {
             return scope.state.position;
           }
         }]
-      }]),
+      }, {
+        'type': bindingTypes.EACH,
+        'getKey': null,
+        'condition': null,
 
-      'redundantAttribute': 'expr75',
-      'selector': '[expr75]',
-      'itemName': 'item',
-      'indexName': null,
+        'template': template(null, [{
+          'type': bindingTypes.TAG,
+          'getComponent': getComponent,
 
-      'evaluate': function(scope) {
-        return scope.state.items;
-      }
-    }]);
+          'evaluate': function(scope) {
+            return 'su-toast-item';
+          },
+
+          'slots': [],
+
+          'attributes': [{
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'icon',
+
+            'evaluate': function(scope) {
+              return scope.item.icon;
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'progress',
+
+            'evaluate': function(scope) {
+              return scope.item.progress;
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'class-name',
+
+            'evaluate': function(scope) {
+              return scope.item.class;
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'title',
+
+            'evaluate': function(scope) {
+              return scope.item.title;
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'messages',
+
+            'evaluate': function(scope) {
+              return scope.item.messages;
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'position',
+
+            'evaluate': function(scope) {
+              return scope.state.position;
+            }
+          }]
+        }]),
+
+        'redundantAttribute': 'expr70',
+        'selector': '[expr70]',
+        'itemName': 'item',
+        'indexName': null,
+
+        'evaluate': function(scope) {
+          return scope.state.items;
+        }
+      }]
+    );
   },
 
   'name': 'su-toast'

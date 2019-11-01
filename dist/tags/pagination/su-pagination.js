@@ -112,10 +112,10 @@ var suPagination = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr12><a expr13><i aria-hidden="true" class="angle double left icon"></i></a><a expr14><i class="angle left icon"></i></a><virtual expr15></virtual><a expr19><i class="angle right icon"></i></a><a expr20><i aria-hidden="true" class="angle double right icon"></i></a></div>',
+      '<div expr28="expr28"><a expr29="expr29"><i aria-hidden="true" class="angle double left icon"></i></a><a expr30="expr30"><i class="angle left icon"></i></a><virtual expr31="expr31"></virtual><a expr35="expr35"><i class="angle right icon"></i></a><a expr36="expr36"><i aria-hidden="true" class="angle double right icon"></i></a></div>',
       [{
-        'redundantAttribute': 'expr12',
-        'selector': '[expr12]',
+        'redundantAttribute': 'expr28',
+        'selector': '[expr28]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -126,8 +126,8 @@ var suPagination = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr13',
-        'selector': '[expr13]',
+        'redundantAttribute': 'expr29',
+        'selector': '[expr29]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -145,8 +145,8 @@ var suPagination = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr14',
-        'selector': '[expr14]',
+        'redundantAttribute': 'expr30',
+        'selector': '[expr30]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -178,7 +178,7 @@ var suPagination = {
 
           'slots': [{
             'id': 'default',
-            'html': '<a expr16 class="item"></a><a expr17 class="active item"></a><div expr18 class="disabled icon item"></div>',
+            'html': '<a expr32="expr32" class="item"></a><a expr33="expr33" class="active item"></a><div expr34="expr34" class="disabled icon item"></div>',
 
             'bindings': [{
               'type': bindingTypes.IF,
@@ -187,16 +187,30 @@ var suPagination = {
                 return !scope.page.active && !scope.page.disabled;
               },
 
-              'redundantAttribute': 'expr16',
-              'selector': '[expr16]',
+              'redundantAttribute': 'expr32',
+              'selector': '[expr32]',
 
-              'template': template('<!---->', [{
+              'template': template(' ', [{
                 'expressions': [{
                   'type': expressionTypes.TEXT,
                   'childNodeIndex': 0,
 
                   'evaluate': function(scope) {
-                    return ['\n        ', scope.page.number, '\n      '].join('');
+                    return [scope.page.number].join('');
+                  }
+                }, {
+                  'type': expressionTypes.ATTRIBUTE,
+                  'name': 'expr32',
+
+                  'evaluate': function(scope) {
+                    return 'expr32';
+                  }
+                }, {
+                  'type': expressionTypes.ATTRIBUTE,
+                  'name': 'class',
+
+                  'evaluate': function(scope) {
+                    return 'item';
                   }
                 }, {
                   'type': expressionTypes.EVENT,
@@ -214,16 +228,30 @@ var suPagination = {
                 return scope.page.active;
               },
 
-              'redundantAttribute': 'expr17',
-              'selector': '[expr17]',
+              'redundantAttribute': 'expr33',
+              'selector': '[expr33]',
 
-              'template': template('<!---->', [{
+              'template': template(' ', [{
                 'expressions': [{
                   'type': expressionTypes.TEXT,
                   'childNodeIndex': 0,
 
                   'evaluate': function(scope) {
                     return scope.page.number;
+                  }
+                }, {
+                  'type': expressionTypes.ATTRIBUTE,
+                  'name': 'expr33',
+
+                  'evaluate': function(scope) {
+                    return 'expr33';
+                  }
+                }, {
+                  'type': expressionTypes.ATTRIBUTE,
+                  'name': 'class',
+
+                  'evaluate': function(scope) {
+                    return 'active item';
                   }
                 }]
               }])
@@ -234,17 +262,34 @@ var suPagination = {
                 return scope.page.disabled;
               },
 
-              'redundantAttribute': 'expr18',
-              'selector': '[expr18]',
-              'template': template('<i class="ellipsis horizontal icon"></i>', [])
+              'redundantAttribute': 'expr34',
+              'selector': '[expr34]',
+
+              'template': template('<i class="ellipsis horizontal icon"></i>', [{
+                'expressions': [{
+                  'type': expressionTypes.ATTRIBUTE,
+                  'name': 'expr34',
+
+                  'evaluate': function(scope) {
+                    return 'expr34';
+                  }
+                }, {
+                  'type': expressionTypes.ATTRIBUTE,
+                  'name': 'class',
+
+                  'evaluate': function(scope) {
+                    return 'disabled icon item';
+                  }
+                }]
+              }])
             }]
           }],
 
           'attributes': []
         }]),
 
-        'redundantAttribute': 'expr15',
-        'selector': '[expr15]',
+        'redundantAttribute': 'expr31',
+        'selector': '[expr31]',
         'itemName': 'page',
         'indexName': null,
 
@@ -252,8 +297,8 @@ var suPagination = {
           return scope.state.pages;
         }
       }, {
-        'redundantAttribute': 'expr19',
-        'selector': '[expr19]',
+        'redundantAttribute': 'expr35',
+        'selector': '[expr35]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -274,8 +319,8 @@ var suPagination = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr20',
-        'selector': '[expr20]',
+        'redundantAttribute': 'expr36',
+        'selector': '[expr36]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,

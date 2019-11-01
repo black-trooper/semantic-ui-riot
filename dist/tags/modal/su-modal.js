@@ -18,7 +18,7 @@ function onMounted(props, state) {
 
 function onBeforeUpdate(props, state) {
   this.basic = this.root.classList.contains('basic');
-  this.contentClass = this.$('img') ? 'image' : '';
+  this.contentClass = getContentClass(this);
 
   if (props.modal) {
     this.closable = typeof props.modal.closable === 'undefined' || props.modal.closable;
@@ -116,6 +116,17 @@ function setDefaultFocus(tag) {
   }
 }
 
+function getContentClass(tag) {
+  const classes = [];
+  if (tag.$('img')) {
+    classes.push('image');
+  }
+  if (tag.root.classList.contains('scrolling')) {
+    classes.push('scrolling');
+  }
+  return classes.join(' ')
+}
+
 var suModal = {
   'css': `su-modal .ui.dimmer.visible.transition,[is="su-modal"] .ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; } su-modal .ui.fullscreen.modal,[is="su-modal"] .ui.fullscreen.modal{ left: 0 !important; } @media only screen and (min-width: 768px) { su-modal .ui.modal>.close,[is="su-modal"] .ui.modal>.close{ display: none; } su-modal .ui.fullscreen.modal>.close,[is="su-modal"] .ui.fullscreen.modal>.close{ display: inline; } }`,
 
@@ -139,7 +150,7 @@ var suModal = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr32><div expr33><i expr34 class="close icon"></i><div expr35></div><div expr37><slot expr38></slot></div><div class="actions"><button expr39 type="button"></button></div></div></div>',
+      '<div expr15="expr15"><div expr16="expr16"><i expr17="expr17" class="close icon"></i><div expr18="expr18"></div><div expr20="expr20"><slot expr21="expr21"></slot></div><div class="actions"><button expr22="expr22" type="button"></button></div></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.EVENT,
@@ -155,10 +166,17 @@ var suModal = {
           'evaluate': function(scope) {
             return scope.su_id;
           }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
+
+          'evaluate': function(scope) {
+            return scope.props.class;
+          }
         }]
       }, {
-        'redundantAttribute': 'expr32',
-        'selector': '[expr32]',
+        'redundantAttribute': 'expr15',
+        'selector': '[expr15]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -169,8 +187,8 @@ var suModal = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr33',
-        'selector': '[expr33]',
+        'redundantAttribute': 'expr16',
+        'selector': '[expr16]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -194,11 +212,25 @@ var suModal = {
           return scope.closable && !scope.basic;
         },
 
-        'redundantAttribute': 'expr34',
-        'selector': '[expr34]',
+        'redundantAttribute': 'expr17',
+        'selector': '[expr17]',
 
         'template': template(null, [{
           'expressions': [{
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr17',
+
+            'evaluate': function(scope) {
+              return 'expr17';
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'class',
+
+            'evaluate': function(scope) {
+              return 'close icon';
+            }
+          }, {
             'type': expressionTypes.EVENT,
             'name': 'onclick',
 
@@ -214,16 +246,23 @@ var suModal = {
           return scope.header;
         },
 
-        'redundantAttribute': 'expr35',
-        'selector': '[expr35]',
+        'redundantAttribute': 'expr18',
+        'selector': '[expr18]',
 
-        'template': template('<i expr36></i><!---->', [{
+        'template': template('<i expr19="expr19"></i> ', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 1,
 
             'evaluate': function(scope) {
-              return ['\n        ', scope.title, '\n      '].join('');
+              return [scope.title].join('');
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr18',
+
+            'evaluate': function(scope) {
+              return 'expr18';
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
@@ -240,11 +279,18 @@ var suModal = {
             return scope.header.icon;
           },
 
-          'redundantAttribute': 'expr36',
-          'selector': '[expr36]',
+          'redundantAttribute': 'expr19',
+          'selector': '[expr19]',
 
           'template': template(null, [{
             'expressions': [{
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'expr19',
+
+              'evaluate': function(scope) {
+                return 'expr19';
+              }
+            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -255,8 +301,8 @@ var suModal = {
           }])
         }])
       }, {
-        'redundantAttribute': 'expr37',
-        'selector': '[expr37]',
+        'redundantAttribute': 'expr20',
+        'selector': '[expr20]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -268,21 +314,29 @@ var suModal = {
         }]
       }, {
         'type': bindingTypes.SLOT,
+        'attributes': [],
         'name': 'default',
-        'redundantAttribute': 'expr38',
-        'selector': '[expr38]'
+        'redundantAttribute': 'expr21',
+        'selector': '[expr21]'
       }, {
         'type': bindingTypes.EACH,
         'getKey': null,
         'condition': null,
 
-        'template': template('<!----><i expr40></i>', [{
+        'template': template(' <i expr23="expr23"></i>', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 0,
 
             'evaluate': function(scope) {
-              return ['\n          ', scope.button.text, '\n          '].join('');
+              return [scope.button.text].join('');
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr22',
+
+            'evaluate': function(scope) {
+              return 'expr22';
             }
           }, {
             'type': expressionTypes.EVENT,
@@ -300,6 +354,13 @@ var suModal = {
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
+            'name': 'type',
+
+            'evaluate': function(scope) {
+              return 'button';
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
             'evaluate': function(scope) {
@@ -313,11 +374,18 @@ var suModal = {
             return scope.button.icon;
           },
 
-          'redundantAttribute': 'expr40',
-          'selector': '[expr40]',
+          'redundantAttribute': 'expr23',
+          'selector': '[expr23]',
 
           'template': template(null, [{
             'expressions': [{
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'expr23',
+
+              'evaluate': function(scope) {
+                return 'expr23';
+              }
+            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -328,8 +396,8 @@ var suModal = {
           }])
         }]),
 
-        'redundantAttribute': 'expr39',
-        'selector': '[expr39]',
+        'redundantAttribute': 'expr22',
+        'selector': '[expr22]',
         'itemName': 'button',
         'indexName': null,
 

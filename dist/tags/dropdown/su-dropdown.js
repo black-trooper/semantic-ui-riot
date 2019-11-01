@@ -7,12 +7,22 @@ const keys = {
   downArrow: 40,
 };
 
+const reservedClasses = [
+  'ui',
+  'selection',
+  'dropdown',
+  'search',
+  'multiple',
+  'active',
+  'visible',
+  'upward',
+];
+
 // ===================================================================================
 //                                                                           Lifecycle
 //                                                                           =========
 function onBeforeMount(props, state) {
   this.su_id = `su-dropdown-${index++}`;
-  this.obs.on(`${this.su_id}-reset`, () => { reset(this); });
 
   if (props.multiple) ; else {
     if (props.items && props.items.length > 0) {
@@ -41,18 +51,13 @@ function onMounted(props, state) {
 }
 
 function onBeforeUpdate(props, state) {
-  if (props.value && this.lastPropValue !== props.value) {
+  if (this.lastPropValue !== props.value) {
     state.value = props.value;
     this.lastPropValue = props.value;
   }
 
-  if (props.multiple) {
-    const value = state.value ? state.value : [];
-    const defaultValue = state.defaultValue ? state.defaultValue : [];
-    this.changed = value.toString() !== defaultValue.toString();
-  } else {
-    this.changed = state.value !== state.defaultValue;
-  }
+  state.classes = prepareClasses(this);
+  prepareItemClasses(props.items, this.value, this.filtered);
   this.readonly = this.root.classList.contains('read-only');
   this.disabled = this.root.classList.contains('disabled');
   this.tabindex = props.tabindex || '0';
@@ -63,28 +68,30 @@ function onBeforeUpdate(props, state) {
     selectMultiTarget(this, true);
     this.viewValue = state.value.join(',');
   } else if (props.items) {
-    const selected = props.items.filter(item => item.value === state.value);
+    const selected = props.items.filter(item => item.value == state.value);
     if (selected && selected.length > 0) {
       const target = selected[0];
       if (state.label !== target.label) {
         selectTarget(this, target, true);
       }
     } else if (props.items && props.items.length > 0) {
-      if (state.value != props.items[0].value) {
+      if (state.value !== props.items[0].value) {
         state.value = props.items[0].value;
+        state.defaultFlg = props.items[0].default;
       }
       if (state.label != props.items[0].label) {
         state.label = props.items[0].label;
-        state.defaultFlg = props.items[0].default;
       }
     }
   }
-}
 
-function reset(tag) {
-  tag.update({
-    value: tag.state.defaultValue
-  });
+  if (props.multiple) {
+    const value = state.value ? state.value : [];
+    const defaultValue = state.defaultValue ? state.defaultValue : [];
+    this.changed = value.toString() !== defaultValue.toString();
+  } else {
+    this.changed = state.value !== state.defaultValue;
+  }
 }
 
 // ===================================================================================
@@ -112,10 +119,6 @@ function onMouseup() {
 
 function onBlur() {
   if (!this.itemActivated) {
-    if (!this.closing && this.visibleFlg) {
-      const target = this.props.multiple ? this.props.items.filter(item => item.selected) : { value: this.state.value, label: this.state.label, default: this.state.defaultFlg };
-      this.dispatch('blur', target);
-    }
     close(this);
   }
 }
@@ -236,7 +239,7 @@ function onUnselect(event, target) {
   this.state.value = this.props.items.filter(item => item.selected).map(item => item.value);
   this.selectedFlg = this.props.items.some(item => item.selected);
   this.update();
-  // parentUpdate()
+  parentUpdate(this);
 }
 
 // ===================================================================================
@@ -249,12 +252,12 @@ function open(tag) {
   tag.openning = true;
   search(tag, '');
   tag.upward = isUpward(tag);
-  tag.transitionStatus = `visible animating in slide ${tag.upward ? 'up' : 'down'}`;
+  tag.state.transitionStatus = `visible animating in slide ${tag.upward ? 'up' : 'down'}`;
   tag.props.items.forEach(item => item.active = false);
   setTimeout(() => {
     tag.openning = false;
     tag.visibleFlg = true;
-    tag.transitionStatus = 'visible';
+    tag.state.transitionStatus = 'visible';
     tag.update();
   }, 300);
 
@@ -271,11 +274,11 @@ function close(tag) {
     return
   }
   tag.closing = true;
-  tag.transitionStatus = `visible animating out slide ${tag.upward ? 'up' : 'down'}`;
+  tag.state.transitionStatus = `visible animating out slide ${tag.upward ? 'up' : 'down'}`;
   setTimeout(() => {
     tag.closing = false;
     tag.visibleFlg = false;
-    tag.transitionStatus = 'hidden';
+    tag.state.transitionStatus = 'hidden';
     tag.update();
   }, 300);
 
@@ -293,9 +296,9 @@ function close(tag) {
 }
 
 function selectTarget(tag, target, updating) {
-  if (tag.state.value === target.value &&
-    tag.state.label === target.label &&
-    tag.state.defaultFlg === target.default) {
+  if (tag.state.value == target.value &&
+    tag.state.label == target.label &&
+    tag.state.defaultFlg == target.default) {
     if (!updating) {
       tag.dispatch('select', target);
     }
@@ -310,7 +313,7 @@ function selectTarget(tag, target, updating) {
   }
   if (!updating) {
     tag.update();
-    // parentUpdate()
+    parentUpdate(tag);
     tag.dispatch('select', target);
     tag.dispatch('change', target);
   }
@@ -328,7 +331,7 @@ function selectMultiTarget(tag, updating) {
   tag.selectedFlg = tag.props.items.some(item => item.selected);
   if (!updating) {
     tag.update();
-    // parentUpdate()
+    parentUpdate(tag);
     tag.dispatch('select', tag.props.items.filter(item => item.selected));
     tag.dispatch('change', tag.props.items.filter(item => item.selected));
   }
@@ -362,6 +365,56 @@ function scrollPosition(tag) {
   }
 }
 
+function parentUpdate(tag) {
+  tag.obs.trigger(`${tag.props.suParentId}-update`);
+}
+
+function prepareClasses(tag) {
+  const classes = tag.props.class.split(' ').filter(propClass => !reservedClasses.includes(propClass));
+  if (tag.props.search) {
+    classes.push('search');
+  }
+  if (tag.props.multiple) {
+    classes.push('multiple');
+  }
+  if (isActive(tag)) {
+    classes.push('active visible');
+  }
+  if (tag.upward) {
+    classes.push('upward');
+  }
+  return classes.join(' ')
+}
+
+function prepareItemClasses(items, value, filtered) {
+  items.forEach(item => {
+    const classes = [];
+
+    if (isItem(item)) {
+      classes.push('item');
+    }
+    if (item.header && !filtered) {
+      classes.push('header');
+    }
+    if (item.divider && !filtered) {
+      classes.push('divider');
+    }
+    if (item.default) {
+      classes.push('default');
+    }
+    if (item.active) {
+      classes.push('hover');
+    }
+    if (item.value == value) {
+      classes.push('active selected');
+    }
+    if (item.disabled) {
+      classes.push('disabled');
+    }
+    item.classes = classes.join(' ');
+  });
+}
+
 function isUpward(tag) {
   if (tag.props.direction == 'upward') {
     return true
@@ -388,11 +441,11 @@ function isItem(item) {
   return item.searched && !item.header && !item.divider
 }
 
-function isActive() {
-  if (this.closing) {
+function isActive(tag) {
+  if (tag.closing) {
     return false
   }
-  return this.openning || this.visibleFlg
+  return tag.openning || tag.visibleFlg
 }
 
 function isVisible(item) {
@@ -416,6 +469,7 @@ var suDropdown = {
       selectedFlg: false,
       transitionStatus: 'hidden',
       value: '',
+      classes: '',
     },
 
     lastPropValue: '',
@@ -435,32 +489,20 @@ var suDropdown = {
     onToggle,
     onUnselect,
     stopPropagation,
-    isActive,
     isItem,
     isVisible
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<i class="dropdown icon"></i><input expr76 class="search" autocomplete="off"/><a expr77 class="ui label transition visible" style="display: inline-block !important;"></a><div expr79></div><div expr80 tabindex="-1"><div expr81></div><div expr86 class="message"></div></div>',
+      '<i class="dropdown icon"></i><input expr76="expr76" class="search" autocomplete="off"/><a expr77="expr77" class="ui label transition visible" style="display: inline-block !important;"></a><div expr79="expr79"></div><div expr80="expr80" tabindex="-1"><div expr81="expr81"></div><div expr86="expr86" class="message"></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
           'name': 'class',
 
           'evaluate': function(scope) {
-            return [
-              'ui selection ',
-              scope.props.class,
-              ' ',
-              scope.props.search && 'search',
-              ' ',
-              scope.props.multiple && 'multiple',
-              ' dropdown ',
-              scope.isActive() && 'active visible',
-              ' ',
-              scope.upward && 'upward'
-            ].join('');
+            return ['ui selection dropdown ', scope.state.classes].join('');
           }
         }, {
           'type': expressionTypes.EVENT,
@@ -560,6 +602,27 @@ var suDropdown = {
         'template': template(null, [{
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr76',
+
+            'evaluate': function(scope) {
+              return 'expr76';
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'class',
+
+            'evaluate': function(scope) {
+              return 'search';
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'autocomplete',
+
+            'evaluate': function(scope) {
+              return 'off';
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
             'name': 'tabindex',
 
             'evaluate': function(scope) {
@@ -610,13 +673,34 @@ var suDropdown = {
           return scope.item.selected;
         },
 
-        'template': template('<!----><i expr78 class="delete icon"></i>', [{
+        'template': template(' <i expr78="expr78" class="delete icon"></i>', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 0,
 
             'evaluate': function(scope) {
-              return ['\n    ', scope.item.label, '\n    '].join('');
+              return [scope.item.label].join('');
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr77',
+
+            'evaluate': function(scope) {
+              return 'expr77';
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'class',
+
+            'evaluate': function(scope) {
+              return 'ui label transition visible';
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'style',
+
+            'evaluate': function(scope) {
+              return 'display: inline-block !important;';
             }
           }, {
             'type': expressionTypes.EVENT,
@@ -658,13 +742,20 @@ var suDropdown = {
         'redundantAttribute': 'expr79',
         'selector': '[expr79]',
 
-        'template': template('<!---->', [{
+        'template': template(' ', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 0,
 
             'evaluate': function(scope) {
-              return ['\n    ', scope.state.label, '\n  '].join('');
+              return [scope.state.label].join('');
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr79',
+
+            'evaluate': function(scope) {
+              return 'expr79';
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
@@ -688,7 +779,7 @@ var suDropdown = {
           'name': 'class',
 
           'evaluate': function(scope) {
-            return ['menu transition ', scope.transitionStatus].join('');
+            return ['menu transition ', scope.state.transitionStatus].join('');
           }
         }, {
           'type': expressionTypes.EVENT,
@@ -721,9 +812,16 @@ var suDropdown = {
         },
 
         'template': template(
-          '<i expr82></i><img expr83 class="ui avatar image"/><span expr84 class="description"></span><span expr85 class="text"><!----></span>',
+          '<i expr82="expr82"></i><img expr83="expr83" class="ui avatar image"/><span expr84="expr84" class="description"></span><span expr85="expr85" class="text"> </span>',
           [{
             'expressions': [{
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'expr81',
+
+              'evaluate': function(scope) {
+                return 'expr81';
+              }
+            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'value',
 
@@ -756,19 +854,7 @@ var suDropdown = {
               'name': 'class',
 
               'evaluate': function(scope) {
-                return [
-                  scope.isItem(scope.item) && 'item',
-                  ' ',
-                  scope.item.header && !scope.filtered && 'header',
-                  ' ',
-                  scope.item.divider && !scope.filtered && 'divider',
-                  ' ',
-                  scope.item.default && 'default',
-                  ' ',
-                  scope.item.active && 'hover',
-                  ' ',
-                  scope.item.value == scope.value && 'active selected'
-                ].join('');
+                return scope.item.classes;
               }
             }, {
               'type': expressionTypes.EVENT,
@@ -791,6 +877,13 @@ var suDropdown = {
             'template': template(null, [{
               'expressions': [{
                 'type': expressionTypes.ATTRIBUTE,
+                'name': 'expr82',
+
+                'evaluate': function(scope) {
+                  return 'expr82';
+                }
+              }, {
+                'type': expressionTypes.ATTRIBUTE,
                 'name': 'class',
 
                 'evaluate': function(scope) {
@@ -811,6 +904,20 @@ var suDropdown = {
             'template': template(null, [{
               'expressions': [{
                 'type': expressionTypes.ATTRIBUTE,
+                'name': 'expr83',
+
+                'evaluate': function(scope) {
+                  return 'expr83';
+                }
+              }, {
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'class',
+
+                'evaluate': function(scope) {
+                  return 'ui avatar image';
+                }
+              }, {
+                'type': expressionTypes.ATTRIBUTE,
                 'name': 'src',
 
                 'evaluate': function(scope) {
@@ -828,13 +935,27 @@ var suDropdown = {
             'redundantAttribute': 'expr84',
             'selector': '[expr84]',
 
-            'template': template('<!---->', [{
+            'template': template(' ', [{
               'expressions': [{
                 'type': expressionTypes.TEXT,
                 'childNodeIndex': 0,
 
                 'evaluate': function(scope) {
                   return scope.item.description;
+                }
+              }, {
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'expr84',
+
+                'evaluate': function(scope) {
+                  return 'expr84';
+                }
+              }, {
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'class',
+
+                'evaluate': function(scope) {
+                  return 'description';
                 }
               }]
             }])
@@ -870,7 +991,24 @@ var suDropdown = {
 
         'redundantAttribute': 'expr86',
         'selector': '[expr86]',
-        'template': template('No results found.', [])
+
+        'template': template('No results found.', [{
+          'expressions': [{
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr86',
+
+            'evaluate': function(scope) {
+              return 'expr86';
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'class',
+
+            'evaluate': function(scope) {
+              return 'message';
+            }
+          }]
+        }])
       }]
     );
   },

@@ -39,7 +39,7 @@ var suAccordion = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr21><i class="dropdown icon"></i><!----></div><div expr22><slot expr23></slot></div>',
+      '<div expr3="expr3"><i class="dropdown icon"></i> </div><div expr4="expr4"><slot expr5="expr5"></slot></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -50,15 +50,15 @@ var suAccordion = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr21',
-        'selector': '[expr21]',
+        'redundantAttribute': 'expr3',
+        'selector': '[expr3]',
 
         'expressions': [{
           'type': expressionTypes.TEXT,
           'childNodeIndex': 1,
 
           'evaluate': function(scope) {
-            return ['\n    ', scope.props.title, '\n  '].join('');
+            return [scope.props.title].join('');
           }
         }, {
           'type': expressionTypes.ATTRIBUTE,
@@ -76,8 +76,8 @@ var suAccordion = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr22',
-        'selector': '[expr22]',
+        'redundantAttribute': 'expr4',
+        'selector': '[expr4]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -89,9 +89,10 @@ var suAccordion = {
         }]
       }, {
         'type': bindingTypes.SLOT,
+        'attributes': [],
         'name': 'default',
-        'redundantAttribute': 'expr23',
-        'selector': '[expr23]'
+        'redundantAttribute': 'expr5',
+        'selector': '[expr5]'
       }]
     );
   },

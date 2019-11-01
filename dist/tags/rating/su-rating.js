@@ -106,7 +106,7 @@ var suRating = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<i expr54></i>', [{
+    return template('<i expr49="expr49"></i>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -144,6 +144,13 @@ var suRating = {
       'template': template(null, [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
+          'name': 'expr49',
+
+          'evaluate': function(scope) {
+            return 'expr49';
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
           'name': 'class',
 
           'evaluate': function(scope) {
@@ -178,8 +185,8 @@ var suRating = {
         }]
       }]),
 
-      'redundantAttribute': 'expr54',
-      'selector': '[expr54]',
+      'redundantAttribute': 'expr49',
+      'selector': '[expr49]',
       'itemName': 'item',
       'indexName': null,
 

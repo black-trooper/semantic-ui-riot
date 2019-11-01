@@ -84,7 +84,7 @@ var suCheckbox = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<input expr0 type="checkbox"/><label expr1></label><label expr3></label>',
+      '<input expr11="expr11" type="checkbox"/><label expr12="expr12"></label><label expr14="expr14"></label>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -116,8 +116,8 @@ var suCheckbox = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr0',
-        'selector': '[expr0]',
+        'redundantAttribute': 'expr11',
+        'selector': '[expr11]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -155,11 +155,18 @@ var suCheckbox = {
           return !scope.props.label;
         },
 
-        'redundantAttribute': 'expr1',
-        'selector': '[expr1]',
+        'redundantAttribute': 'expr12',
+        'selector': '[expr12]',
 
-        'template': template('<slot expr2></slot>', [{
+        'template': template('<slot expr13="expr13"></slot>', [{
           'expressions': [{
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr12',
+
+            'evaluate': function(scope) {
+              return 'expr12';
+            }
+          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'for',
 
@@ -171,8 +178,8 @@ var suCheckbox = {
           'type': bindingTypes.SLOT,
           'attributes': [],
           'name': 'default',
-          'redundantAttribute': 'expr2',
-          'selector': '[expr2]'
+          'redundantAttribute': 'expr13',
+          'selector': '[expr13]'
         }])
       }, {
         'type': bindingTypes.IF,
@@ -181,8 +188,8 @@ var suCheckbox = {
           return scope.props.label;
         },
 
-        'redundantAttribute': 'expr3',
-        'selector': '[expr3]',
+        'redundantAttribute': 'expr14',
+        'selector': '[expr14]',
 
         'template': template(' ', [{
           'expressions': [{
@@ -191,6 +198,13 @@ var suCheckbox = {
 
             'evaluate': function(scope) {
               return scope.props.label;
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr14',
+
+            'evaluate': function(scope) {
+              return 'expr14';
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,

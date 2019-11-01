@@ -125,9 +125,16 @@ var suSelect = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<select expr24><option expr25></option><optgroup expr26></optgroup></select><i class="dropdown icon"></i>',
+      '<select expr24="expr24"><option expr25="expr25"></option><optgroup expr26="expr26"></optgroup></select><i class="dropdown icon"></i>',
       [{
         'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
+
+          'evaluate': function(scope) {
+            return 'ui selection dropdown';
+          }
+        }, {
           'type': expressionTypes.ATTRIBUTE,
           'name': 'value',
 
@@ -190,13 +197,20 @@ var suSelect = {
           return !scope.item.items;
         },
 
-        'template': template('<!---->', [{
+        'template': template(' ', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 0,
 
             'evaluate': function(scope) {
-              return ['\n      ', scope.item.label, '\n    '].join('');
+              return [scope.item.label].join('');
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr25',
+
+            'evaluate': function(scope) {
+              return 'expr25';
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
@@ -224,8 +238,15 @@ var suSelect = {
           return scope.item.items;
         },
 
-        'template': template('<option expr27></option>', [{
+        'template': template('<option expr27="expr27"></option>', [{
           'expressions': [{
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr26',
+
+            'evaluate': function(scope) {
+              return 'expr26';
+            }
+          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'label',
 
@@ -238,13 +259,20 @@ var suSelect = {
           'getKey': null,
           'condition': null,
 
-          'template': template('<!---->', [{
+          'template': template(' ', [{
             'expressions': [{
               'type': expressionTypes.TEXT,
               'childNodeIndex': 0,
 
               'evaluate': function(scope) {
-                return ['\n        ', scope.child.label, '\n      '].join('');
+                return [scope.child.label].join('');
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'expr27',
+
+              'evaluate': function(scope) {
+                return 'expr27';
               }
             }, {
               'type': expressionTypes.ATTRIBUTE,

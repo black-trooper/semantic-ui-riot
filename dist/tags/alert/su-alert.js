@@ -109,7 +109,7 @@ var suAlert$1 = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<su-modal expr7 class="tiny"></su-modal>', [{
+    return template('<su-modal expr0="expr0" class="tiny"></su-modal>', [{
       'type': bindingTypes.TAG,
       'getComponent': getComponent,
 
@@ -119,7 +119,7 @@ var suAlert$1 = {
 
       'slots': [{
         'id': 'default',
-        'html': '<div class="ui icon message"><i class="info circle icon"></i><div class="scrolling content"><div expr8 class="header"></div><p expr9></p></div></div>',
+        'html': '<div class="ui icon message"><i class="info circle icon"></i><div class="scrolling content"><div expr1="expr1" class="header"></div><p expr2="expr2"></p></div></div>',
 
         'bindings': [{
           'type': bindingTypes.IF,
@@ -128,16 +128,30 @@ var suAlert$1 = {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr8',
-          'selector': '[expr8]',
+          'redundantAttribute': 'expr1',
+          'selector': '[expr1]',
 
-          'template': template('<!---->', [{
+          'template': template(' ', [{
             'expressions': [{
               'type': expressionTypes.TEXT,
               'childNodeIndex': 0,
 
               'evaluate': function(scope) {
-                return ['\n          ', scope.title, '\n        '].join('');
+                return [scope.title].join('');
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'expr1',
+
+              'evaluate': function(scope) {
+                return 'expr1';
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
+
+              'evaluate': function(scope) {
+                return 'header';
               }
             }]
           }])
@@ -146,7 +160,7 @@ var suAlert$1 = {
           'getKey': null,
           'condition': null,
 
-          'template': template('<!---->', [{
+          'template': template(' ', [{
             'expressions': [{
               'type': expressionTypes.TEXT,
               'childNodeIndex': 0,
@@ -154,11 +168,18 @@ var suAlert$1 = {
               'evaluate': function(scope) {
                 return scope.message;
               }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'expr2',
+
+              'evaluate': function(scope) {
+                return 'expr2';
+              }
             }]
           }]),
 
-          'redundantAttribute': 'expr9',
-          'selector': '[expr9]',
+          'redundantAttribute': 'expr2',
+          'selector': '[expr2]',
           'itemName': 'message',
           'indexName': null,
 
@@ -191,8 +212,8 @@ var suAlert$1 = {
         }
       }],
 
-      'redundantAttribute': 'expr7',
-      'selector': '[expr7]'
+      'redundantAttribute': 'expr0',
+      'selector': '[expr0]'
     }]);
   },
 

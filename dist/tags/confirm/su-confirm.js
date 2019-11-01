@@ -171,7 +171,7 @@ var suConfirm$1 = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<su-modal expr4 class="tiny"></su-modal>', [{
+    return template('<su-modal expr8="expr8" class="tiny"></su-modal>', [{
       'type': bindingTypes.TAG,
       'getComponent': getComponent,
 
@@ -181,7 +181,7 @@ var suConfirm$1 = {
 
       'slots': [{
         'id': 'default',
-        'html': '<div class="ui icon message"><i class="question circle outline icon"></i><div class="scrolling content"><div expr5 class="header"></div><p expr6></p></div></div>',
+        'html': '<div class="ui icon message"><i class="question circle outline icon"></i><div class="scrolling content"><div expr9="expr9" class="header"></div><p expr10="expr10"></p></div></div>',
 
         'bindings': [{
           'type': bindingTypes.IF,
@@ -190,16 +190,30 @@ var suConfirm$1 = {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr5',
-          'selector': '[expr5]',
+          'redundantAttribute': 'expr9',
+          'selector': '[expr9]',
 
-          'template': template('<!---->', [{
+          'template': template(' ', [{
             'expressions': [{
               'type': expressionTypes.TEXT,
               'childNodeIndex': 0,
 
               'evaluate': function(scope) {
-                return ['\n          ', scope.title, '\n        '].join('');
+                return [scope.title].join('');
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'expr9',
+
+              'evaluate': function(scope) {
+                return 'expr9';
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
+
+              'evaluate': function(scope) {
+                return 'header';
               }
             }]
           }])
@@ -208,7 +222,7 @@ var suConfirm$1 = {
           'getKey': null,
           'condition': null,
 
-          'template': template('<!---->', [{
+          'template': template(' ', [{
             'expressions': [{
               'type': expressionTypes.TEXT,
               'childNodeIndex': 0,
@@ -216,11 +230,18 @@ var suConfirm$1 = {
               'evaluate': function(scope) {
                 return scope.messsage;
               }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'expr10',
+
+              'evaluate': function(scope) {
+                return 'expr10';
+              }
             }]
           }]),
 
-          'redundantAttribute': 'expr6',
-          'selector': '[expr6]',
+          'redundantAttribute': 'expr10',
+          'selector': '[expr10]',
           'itemName': 'messsage',
           'indexName': null,
 
@@ -260,8 +281,8 @@ var suConfirm$1 = {
         }
       }],
 
-      'redundantAttribute': 'expr4',
-      'selector': '[expr4]'
+      'redundantAttribute': 'expr8',
+      'selector': '[expr8]'
     }]);
   },
 

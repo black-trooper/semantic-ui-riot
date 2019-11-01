@@ -187,147 +187,179 @@ var suTabset = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<div expr55></div><slot expr57></slot><div expr58></div>', [{
-      'expressions': [{
-        'type': expressionTypes.ATTRIBUTE,
-        'name': 'id',
-
-        'evaluate': function(scope) {
-          return scope.su_id;
-        }
-      }]
-    }, {
-      'type': bindingTypes.IF,
-
-      'evaluate': function(scope) {
-        return !scope.isBottom() && scope.showMenu();
-      },
-
-      'redundantAttribute': 'expr55',
-      'selector': '[expr55]',
-
-      'template': template('<a expr56></a>', [{
+    return template(
+      '<div expr53="expr53"></div><slot expr55="expr55"></slot><div expr56="expr56"></div>',
+      [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
-          'name': 'class',
+          'name': 'id',
 
           'evaluate': function(scope) {
-            return ['ui ', scope.props.class, ' ', scope.getClass(), ' menu'].join('');
+            return scope.su_id;
           }
         }]
       }, {
-        'type': bindingTypes.EACH,
-        'getKey': null,
-        'condition': null,
+        'type': bindingTypes.IF,
 
-        'template': template('<!---->', [{
+        'evaluate': function(scope) {
+          return !scope.isBottom() && scope.showMenu();
+        },
+
+        'redundantAttribute': 'expr53',
+        'selector': '[expr53]',
+
+        'template': template('<a expr54="expr54"></a>', [{
           'expressions': [{
-            'type': expressionTypes.TEXT,
-            'childNodeIndex': 0,
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr53',
 
             'evaluate': function(scope) {
-              return scope.tab.getAttribute('label');
+              return 'expr53';
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
             'evaluate': function(scope) {
-              return [
-                scope.tab.getAttribute('titleClass'),
-                ' ',
-                scope.tab.active && scope.state.active,
-                ' item'
-              ].join('');
-            }
-          }, {
-            'type': expressionTypes.EVENT,
-            'name': 'onclick',
-
-            'evaluate': function(scope) {
-              return () => scope.onClick(scope.tab);
+              return ['ui ', scope.props.class, ' ', scope.getClass(), ' menu'].join('');
             }
           }]
-        }]),
+        }, {
+          'type': bindingTypes.EACH,
+          'getKey': null,
+          'condition': null,
+
+          'template': template(' ', [{
+            'expressions': [{
+              'type': expressionTypes.TEXT,
+              'childNodeIndex': 0,
+
+              'evaluate': function(scope) {
+                return scope.tab.getAttribute('label');
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'expr54',
+
+              'evaluate': function(scope) {
+                return 'expr54';
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
+
+              'evaluate': function(scope) {
+                return [
+                  scope.tab.getAttribute('titleClass'),
+                  ' ',
+                  scope.tab.active && scope.state.active,
+                  ' item'
+                ].join('');
+              }
+            }, {
+              'type': expressionTypes.EVENT,
+              'name': 'onclick',
+
+              'evaluate': function(scope) {
+                return () => scope.onClick(scope.tab);
+              }
+            }]
+          }]),
+
+          'redundantAttribute': 'expr54',
+          'selector': '[expr54]',
+          'itemName': 'tab',
+          'indexName': null,
+
+          'evaluate': function(scope) {
+            return scope.tabs;
+          }
+        }])
+      }, {
+        'type': bindingTypes.SLOT,
+        'attributes': [],
+        'name': 'default',
+        'redundantAttribute': 'expr55',
+        'selector': '[expr55]'
+      }, {
+        'type': bindingTypes.IF,
+
+        'evaluate': function(scope) {
+          return scope.isBottom() && scope.showMenu();
+        },
 
         'redundantAttribute': 'expr56',
         'selector': '[expr56]',
-        'itemName': 'tab',
-        'indexName': null,
 
-        'evaluate': function(scope) {
-          return scope.tabs;
-        }
-      }])
-    }, {
-      'type': bindingTypes.SLOT,
-      'name': 'default',
-      'redundantAttribute': 'expr57',
-      'selector': '[expr57]'
-    }, {
-      'type': bindingTypes.IF,
-
-      'evaluate': function(scope) {
-        return scope.isBottom() && scope.showMenu();
-      },
-
-      'redundantAttribute': 'expr58',
-      'selector': '[expr58]',
-
-      'template': template('<a expr59></a>', [{
-        'expressions': [{
-          'type': expressionTypes.ATTRIBUTE,
-          'name': 'class',
-
-          'evaluate': function(scope) {
-            return ['ui ', scope.props.class, ' ', scope.getClass(), ' menu'].join('');
-          }
-        }]
-      }, {
-        'type': bindingTypes.EACH,
-        'getKey': null,
-        'condition': null,
-
-        'template': template('<!---->', [{
+        'template': template('<a expr57="expr57"></a>', [{
           'expressions': [{
-            'type': expressionTypes.TEXT,
-            'childNodeIndex': 0,
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'expr56',
 
             'evaluate': function(scope) {
-              return scope.tab.getAttribute('label');
+              return 'expr56';
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
             'evaluate': function(scope) {
-              return [
-                scope.tab.getAttribute('titleClass'),
-                ' ',
-                scope.tab.active && scope.state.active,
-                ' item'
-              ].join('');
-            }
-          }, {
-            'type': expressionTypes.EVENT,
-            'name': 'onclick',
-
-            'evaluate': function(scope) {
-              return () => scope.onClick(scope.tab);
+              return ['ui ', scope.props.class, ' ', scope.getClass(), ' menu'].join('');
             }
           }]
-        }]),
+        }, {
+          'type': bindingTypes.EACH,
+          'getKey': null,
+          'condition': null,
 
-        'redundantAttribute': 'expr59',
-        'selector': '[expr59]',
-        'itemName': 'tab',
-        'indexName': null,
+          'template': template(' ', [{
+            'expressions': [{
+              'type': expressionTypes.TEXT,
+              'childNodeIndex': 0,
 
-        'evaluate': function(scope) {
-          return scope.tabs;
-        }
-      }])
-    }]);
+              'evaluate': function(scope) {
+                return scope.tab.getAttribute('label');
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'expr57',
+
+              'evaluate': function(scope) {
+                return 'expr57';
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
+
+              'evaluate': function(scope) {
+                return [
+                  scope.tab.getAttribute('titleClass'),
+                  ' ',
+                  scope.tab.active && scope.state.active,
+                  ' item'
+                ].join('');
+              }
+            }, {
+              'type': expressionTypes.EVENT,
+              'name': 'onclick',
+
+              'evaluate': function(scope) {
+                return () => scope.onClick(scope.tab);
+              }
+            }]
+          }]),
+
+          'redundantAttribute': 'expr57',
+          'selector': '[expr57]',
+          'itemName': 'tab',
+          'indexName': null,
+
+          'evaluate': function(scope) {
+            return scope.tabs;
+          }
+        }])
+      }]
+    );
   },
 
   'name': 'su-tabset'
