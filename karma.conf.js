@@ -3,8 +3,9 @@ const path = require('path')
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: ['mocha', 'sinon-chai'],
+    frameworks: ['mocha'],
     files: [
+      'test/spec/globals.js',
       'test/spec/**/*'
     ],
     preprocessors: {

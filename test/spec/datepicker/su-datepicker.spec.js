@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import { init, fireEvent, compile } from '../../helpers/'
+import { init, compile } from '../../helpers/'
 import TargetComponent from '../../../dist/tags/datepicker/su-datepicker.js'
 
 describe('su-datepicker', function () {

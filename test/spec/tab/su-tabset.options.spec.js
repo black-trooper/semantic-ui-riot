@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import { init, fireEvent, compile } from '../../helpers/'
+import { init, compile } from '../../helpers/'
 import TabComponent from '../../../dist/tags/tab/su-tab.js'
 import TabsetComponent from '../../../dist/tags/tab/su-tabset.js'
 import TabHeaderComponent from '../../../dist/tags/tab/su-tab-header.js'

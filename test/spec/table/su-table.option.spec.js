@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import { init, fireEvent, compile } from '../../helpers/'
+import { init, compile } from '../../helpers/'
 import TableComponent from '../../../dist/tags/table/su-table.js'
 import ThComponent from '../../../dist/tags/table/su-th.js'
 

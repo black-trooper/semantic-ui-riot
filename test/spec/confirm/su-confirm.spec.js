@@ -39,11 +39,11 @@ describe('su-confirm', function () {
     expect(component.$('su-modal > .dimmer').classList.contains('visible')).to.equal(true)
 
     const btn_cancel = component.$('su-modal .ui.button')
-    btn_cancel.innerText.trim().should.equal('Cancel')
-    // btn_cancel.is(':focus').should.equal(false)
+    expect(btn_cancel.innerText.trim()).to.equal('Cancel')
+    // expect(btn_cancel.is(':focus')).to.equal(false)
     const btn_ok = component.$$('su-modal .ui.button')[1]
-    btn_ok.innerText.trim().should.equal('OK')
-    // btn_ok.is(':focus').should.equal(true)
+    expect(btn_ok.innerText.trim()).to.equal('OK')
+    // expect(btn_ok.is(':focus')).to.equal(true)
 
     component.$('su-modal').click()
     this.clock.tick(310)
@@ -64,13 +64,13 @@ describe('su-confirm', function () {
     expect(component.$('su-modal > .dimmer').classList.contains('visible')).to.equal(true)
 
     const btn_cancel = component.$('su-modal .ui.button')
-    btn_cancel.innerText.trim().should.equal('Cancel')
+    expect(btn_cancel.innerText.trim()).to.equal('Cancel')
     // TODO: focus
-    // btn_cancel.is(':focus').should.equal(false)
+    // expect(btn_cancel.is(':focus')).to.equal(false)
     const btn_ok = component.$$('su-modal .ui.button')[1]
-    btn_ok.innerText.trim().should.equal('OK')
+    expect(btn_ok.innerText.trim()).to.equal('OK')
     // TODO: focus
-    // btn_ok.is(':focus').should.equal(true)
+    // expect(btn_ok.is(':focus')).to.equal(true)
 
     component.$('su-modal').click()
     this.clock.tick(310)

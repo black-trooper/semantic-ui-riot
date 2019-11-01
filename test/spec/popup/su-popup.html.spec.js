@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import { init, compile, fireEvent } from '../../helpers/'
+import { init, compile } from '../../helpers/'
 import TargetComponent from '../../../dist/tags/popup/su-popup.js'
 
 describe('su-popup', function () {

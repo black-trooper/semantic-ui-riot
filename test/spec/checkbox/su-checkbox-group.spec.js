@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import { init, fireEvent, compile } from '../../helpers/'
+import { init, compile } from '../../helpers/'
 import CheckboxGroupComponent from '../../../dist/tags/checkbox/su-checkbox-group.js'
 import CheckboxComponent from '../../../dist/tags/checkbox/su-checkbox.js'
 

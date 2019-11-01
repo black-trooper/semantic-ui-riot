@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import { init, fireEvent, compile } from '../../helpers/'
+import { init, compile } from '../../helpers/'
 import CheckboxGroupComponent from '../../../dist/tags/checkbox/su-checkbox-group.js'
 import CheckboxComponent from '../../../dist/tags/checkbox/su-checkbox.js'
 
@@ -71,8 +71,6 @@ describe('su-checkbox-group', function () {
     expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.not.ok
 
     component.$$('su-checkbox input')[0].click()
-    console.log(component.$('su-checkbox-group').value)
-    console.log(component.$('su-checkbox-group').getAttribute("value"))
     expect(component.$$('su-checkbox')[0].getAttribute("checked")).to.be.ok
     expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.not.ok
     expect(spyOnChange).to.have.been.calledOnce

@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import { init, fireEvent, compile } from '../../helpers/'
+import { init, compile } from '../../helpers/'
 import AccordionsetComponent from '../../../dist/tags/accordion/su-accordionset.js'
 import AccordionComponent from '../../../dist/tags/accordion/su-accordion.js'
 

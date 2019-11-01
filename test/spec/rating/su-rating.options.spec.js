@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import { init, fireEvent, compile } from '../../helpers/'
+import { init, compile } from '../../helpers/'
 import TargetComponent from '../../../dist/tags/rating/su-rating.js'
 
 describe('su-rating-options', function () {

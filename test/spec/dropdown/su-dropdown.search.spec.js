@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import { init, fireEvent, fireKeyEvent, keys } from '../../helpers/'
+import { init } from '../../helpers/'
 import TargetComponent from '../../../dist/tags/dropdown/su-dropdown.js'
 
 describe('su-dropdown-search', function () {

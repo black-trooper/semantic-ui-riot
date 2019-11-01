@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import { init, fireEvent, compile } from '../../helpers/'
+import { init, compile } from '../../helpers/'
 import RadioGroupComponent from '../../../dist/tags/radio/su-radio-group.js'
 import RadioComponent from '../../../dist/tags/radio/su-radio.js'
 

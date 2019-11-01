@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import { init, compile, fireEvent, fireKeyEvent } from '../../helpers/'
+import { init, compile } from '../../helpers/'
 import TargetComponent from '../../../dist/tags/dropdown/su-dropdown.js'
 
 describe('su-dropdown-multiple-option', function () {
