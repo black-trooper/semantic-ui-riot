@@ -125,7 +125,7 @@ var suSelect = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<select expr24="expr24"><option expr25="expr25"></option><optgroup expr26="expr26"></optgroup></select><i class="dropdown icon"></i>',
+      '<select expr15="expr15"><option expr16="expr16"></option><optgroup expr17="expr17"></optgroup></select><i class="dropdown icon"></i>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -164,8 +164,8 @@ var suSelect = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr24',
-        'selector': '[expr24]',
+        'redundantAttribute': 'expr15',
+        'selector': '[expr15]',
 
         'expressions': [{
           'type': expressionTypes.EVENT,
@@ -207,13 +207,6 @@ var suSelect = {
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr25',
-
-            'evaluate': function(scope) {
-              return 'expr25';
-            }
-          }, {
-            'type': expressionTypes.ATTRIBUTE,
             'name': 'value',
 
             'evaluate': function(scope) {
@@ -222,8 +215,8 @@ var suSelect = {
           }]
         }]),
 
-        'redundantAttribute': 'expr25',
-        'selector': '[expr25]',
+        'redundantAttribute': 'expr16',
+        'selector': '[expr16]',
         'itemName': 'item',
         'indexName': null,
 
@@ -238,15 +231,8 @@ var suSelect = {
           return scope.item.items;
         },
 
-        'template': template('<option expr27="expr27"></option>', [{
+        'template': template('<option expr18="expr18"></option>', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr26',
-
-            'evaluate': function(scope) {
-              return 'expr26';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'label',
 
@@ -269,13 +255,6 @@ var suSelect = {
               }
             }, {
               'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr27',
-
-              'evaluate': function(scope) {
-                return 'expr27';
-              }
-            }, {
-              'type': expressionTypes.ATTRIBUTE,
               'name': 'value',
 
               'evaluate': function(scope) {
@@ -284,8 +263,8 @@ var suSelect = {
             }]
           }]),
 
-          'redundantAttribute': 'expr27',
-          'selector': '[expr27]',
+          'redundantAttribute': 'expr18',
+          'selector': '[expr18]',
           'itemName': 'child',
           'indexName': null,
 
@@ -294,8 +273,8 @@ var suSelect = {
           }
         }]),
 
-        'redundantAttribute': 'expr26',
-        'selector': '[expr26]',
+        'redundantAttribute': 'expr17',
+        'selector': '[expr17]',
         'itemName': 'item',
         'indexName': null,
 

@@ -47,7 +47,7 @@ var suToastItem = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<div expr61="expr61"></div>', [{
+    return template('<div expr60="expr60"></div>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -63,20 +63,13 @@ var suToastItem = {
         return !scope.hide;
       },
 
-      'redundantAttribute': 'expr61',
-      'selector': '[expr61]',
+      'redundantAttribute': 'expr60',
+      'selector': '[expr60]',
 
       'template': template(
-        '<div expr62="expr62"></div><div expr63="expr63"><i expr64="expr64" class="close icon"></i><i expr65="expr65"></i><div class="content"><div expr66="expr66" class="header"></div><p expr67="expr67"></p></div></div><div expr68="expr68"></div>',
+        '<div expr61="expr61"></div><div expr62="expr62"><i expr63="expr63" class="close icon"></i><i expr64="expr64"></i><div class="content"><div expr65="expr65" class="header"></div><p expr66="expr66"></p></div></div><div expr67="expr67"></div>',
         [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr61',
-
-            'evaluate': function(scope) {
-              return 'expr61';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
@@ -91,18 +84,11 @@ var suToastItem = {
             return scope.progress == 'top';
           },
 
-          'redundantAttribute': 'expr62',
-          'selector': '[expr62]',
+          'redundantAttribute': 'expr61',
+          'selector': '[expr61]',
 
           'template': template('<div class="bar"></div>', [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr62',
-
-              'evaluate': function(scope) {
-                return 'expr62';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -112,8 +98,8 @@ var suToastItem = {
             }]
           }])
         }, {
-          'redundantAttribute': 'expr63',
-          'selector': '[expr63]',
+          'redundantAttribute': 'expr62',
+          'selector': '[expr62]',
 
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
@@ -130,8 +116,8 @@ var suToastItem = {
             }
           }]
         }, {
-          'redundantAttribute': 'expr64',
-          'selector': '[expr64]',
+          'redundantAttribute': 'expr63',
+          'selector': '[expr63]',
 
           'expressions': [{
             'type': expressionTypes.EVENT,
@@ -148,18 +134,11 @@ var suToastItem = {
             return scope.icon;
           },
 
-          'redundantAttribute': 'expr65',
-          'selector': '[expr65]',
+          'redundantAttribute': 'expr64',
+          'selector': '[expr64]',
 
           'template': template(null, [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr65',
-
-              'evaluate': function(scope) {
-                return 'expr65';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -175,8 +154,8 @@ var suToastItem = {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr66',
-          'selector': '[expr66]',
+          'redundantAttribute': 'expr65',
+          'selector': '[expr65]',
 
           'template': template(' ', [{
             'expressions': [{
@@ -185,13 +164,6 @@ var suToastItem = {
 
               'evaluate': function(scope) {
                 return [scope.title].join('');
-              }
-            }, {
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr66',
-
-              'evaluate': function(scope) {
-                return 'expr66';
               }
             }, {
               'type': expressionTypes.ATTRIBUTE,
@@ -215,18 +187,11 @@ var suToastItem = {
               'evaluate': function(scope) {
                 return scope.message;
               }
-            }, {
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr67',
-
-              'evaluate': function(scope) {
-                return 'expr67';
-              }
             }]
           }]),
 
-          'redundantAttribute': 'expr67',
-          'selector': '[expr67]',
+          'redundantAttribute': 'expr66',
+          'selector': '[expr66]',
           'itemName': 'message',
           'indexName': null,
 
@@ -240,18 +205,11 @@ var suToastItem = {
             return scope.progress == 'bottom';
           },
 
-          'redundantAttribute': 'expr68',
-          'selector': '[expr68]',
+          'redundantAttribute': 'expr67',
+          'selector': '[expr67]',
 
           'template': template('<div class="bar"></div>', [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr68',
-
-              'evaluate': function(scope) {
-                return 'expr68';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 

@@ -169,7 +169,7 @@ var suConfirm$1 = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<su-modal expr145="expr145" class="tiny"></su-modal>', [{
+    return template('<su-modal expr12="expr12" class="tiny"></su-modal>', [{
       'type': bindingTypes.TAG,
       'getComponent': getComponent,
 
@@ -179,7 +179,7 @@ var suConfirm$1 = {
 
       'slots': [{
         'id': 'default',
-        'html': '<div class="ui icon message"><i class="question circle outline icon"></i><div class="scrolling content"><div expr146="expr146" class="header"></div><p expr147="expr147"></p></div></div>',
+        'html': '<div class="ui icon message"><i class="question circle outline icon"></i><div class="scrolling content"><div expr13="expr13" class="header"></div><p expr14="expr14"></p></div></div>',
 
         'bindings': [{
           'type': bindingTypes.IF,
@@ -188,8 +188,8 @@ var suConfirm$1 = {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr146',
-          'selector': '[expr146]',
+          'redundantAttribute': 'expr13',
+          'selector': '[expr13]',
 
           'template': template(' ', [{
             'expressions': [{
@@ -198,13 +198,6 @@ var suConfirm$1 = {
 
               'evaluate': function(scope) {
                 return [scope.title].join('');
-              }
-            }, {
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr146',
-
-              'evaluate': function(scope) {
-                return 'expr146';
               }
             }, {
               'type': expressionTypes.ATTRIBUTE,
@@ -228,18 +221,11 @@ var suConfirm$1 = {
               'evaluate': function(scope) {
                 return scope.messsage;
               }
-            }, {
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr147',
-
-              'evaluate': function(scope) {
-                return 'expr147';
-              }
             }]
           }]),
 
-          'redundantAttribute': 'expr147',
-          'selector': '[expr147]',
+          'redundantAttribute': 'expr14',
+          'selector': '[expr14]',
           'itemName': 'messsage',
           'indexName': null,
 
@@ -279,8 +265,8 @@ var suConfirm$1 = {
         }
       }],
 
-      'redundantAttribute': 'expr145',
-      'selector': '[expr145]'
+      'redundantAttribute': 'expr12',
+      'selector': '[expr12]'
     }]);
   },
 

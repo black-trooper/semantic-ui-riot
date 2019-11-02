@@ -119,7 +119,7 @@ var suCheckboxGroup = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot expr6="expr6"></slot>', [{
+    return template('<slot expr7="expr7"></slot>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'value',
@@ -146,8 +146,8 @@ var suCheckboxGroup = {
       'type': bindingTypes.SLOT,
       'attributes': [],
       'name': 'default',
-      'redundantAttribute': 'expr6',
-      'selector': '[expr6]'
+      'redundantAttribute': 'expr7',
+      'selector': '[expr7]'
     }]);
   },
 

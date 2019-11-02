@@ -37,7 +37,7 @@ var suTabTitle = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<a expr51="expr51"><slot expr52="expr52"></slot></a>', [{
+    return template('<a expr56="expr56"><slot expr57="expr57"></slot></a>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'id',
@@ -47,8 +47,8 @@ var suTabTitle = {
         }
       }]
     }, {
-      'redundantAttribute': 'expr51',
-      'selector': '[expr51]',
+      'redundantAttribute': 'expr56',
+      'selector': '[expr56]',
 
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
@@ -69,8 +69,8 @@ var suTabTitle = {
       'type': bindingTypes.SLOT,
       'attributes': [],
       'name': 'default',
-      'redundantAttribute': 'expr52',
-      'selector': '[expr52]'
+      'redundantAttribute': 'expr57',
+      'selector': '[expr57]'
     }]);
   },
 

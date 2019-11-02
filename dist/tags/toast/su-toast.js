@@ -64,7 +64,7 @@ var suToast = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div class="ui list"><su-toast-item expr70="expr70"></su-toast-item></div>',
+      '<div class="ui list"><su-toast-item expr68="expr68"></su-toast-item></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -134,8 +134,8 @@ var suToast = {
           }]
         }]),
 
-        'redundantAttribute': 'expr70',
-        'selector': '[expr70]',
+        'redundantAttribute': 'expr68',
+        'selector': '[expr68]',
         'itemName': 'item',
         'indexName': null,
 

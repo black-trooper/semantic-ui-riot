@@ -73,7 +73,7 @@ var suRadio = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<input expr45="expr45" type="radio"/><label expr46="expr46"></label><label expr48="expr48"></label>',
+      '<input expr43="expr43" type="radio"/><label expr44="expr44"></label><label expr46="expr46"></label>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -84,8 +84,8 @@ var suRadio = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr45',
-        'selector': '[expr45]',
+        'redundantAttribute': 'expr43',
+        'selector': '[expr43]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -129,18 +129,11 @@ var suRadio = {
           return !scope.props.label;
         },
 
-        'redundantAttribute': 'expr46',
-        'selector': '[expr46]',
+        'redundantAttribute': 'expr44',
+        'selector': '[expr44]',
 
-        'template': template('<slot expr47="expr47"></slot>', [{
+        'template': template('<slot expr45="expr45"></slot>', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr46',
-
-            'evaluate': function(scope) {
-              return 'expr46';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'for',
 
@@ -152,8 +145,8 @@ var suRadio = {
           'type': bindingTypes.SLOT,
           'attributes': [],
           'name': 'default',
-          'redundantAttribute': 'expr47',
-          'selector': '[expr47]'
+          'redundantAttribute': 'expr45',
+          'selector': '[expr45]'
         }])
       }, {
         'type': bindingTypes.IF,
@@ -162,8 +155,8 @@ var suRadio = {
           return scope.props.label;
         },
 
-        'redundantAttribute': 'expr48',
-        'selector': '[expr48]',
+        'redundantAttribute': 'expr46',
+        'selector': '[expr46]',
 
         'template': template(' ', [{
           'expressions': [{
@@ -172,13 +165,6 @@ var suRadio = {
 
             'evaluate': function(scope) {
               return scope.props.label;
-            }
-          }, {
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr48',
-
-            'evaluate': function(scope) {
-              return 'expr48';
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,

@@ -104,7 +104,7 @@ var suProgress = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr41="expr41"><div expr42="expr42" class="bar"><div expr43="expr43" class="progress"></div></div><div class="label"><slot expr44="expr44"></slot></div></div>',
+      '<div expr38="expr38"><div expr39="expr39" class="bar"><div expr40="expr40" class="progress"></div></div><div class="label"><slot expr41="expr41"></slot></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -122,8 +122,8 @@ var suProgress = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr41',
-        'selector': '[expr41]',
+        'redundantAttribute': 'expr38',
+        'selector': '[expr38]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -141,8 +141,8 @@ var suProgress = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr42',
-        'selector': '[expr42]',
+        'redundantAttribute': 'expr39',
+        'selector': '[expr39]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -159,8 +159,8 @@ var suProgress = {
           return scope.isProgress();
         },
 
-        'redundantAttribute': 'expr43',
-        'selector': '[expr43]',
+        'redundantAttribute': 'expr40',
+        'selector': '[expr40]',
 
         'template': template(' ', [{
           'expressions': [{
@@ -169,13 +169,6 @@ var suProgress = {
 
             'evaluate': function(scope) {
               return [scope.percent, '%'].join('');
-            }
-          }, {
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr43',
-
-            'evaluate': function(scope) {
-              return 'expr43';
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
@@ -190,8 +183,8 @@ var suProgress = {
         'type': bindingTypes.SLOT,
         'attributes': [],
         'name': 'default',
-        'redundantAttribute': 'expr44',
-        'selector': '[expr44]'
+        'redundantAttribute': 'expr41',
+        'selector': '[expr41]'
       }]
     );
   },

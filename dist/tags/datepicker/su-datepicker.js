@@ -432,7 +432,7 @@ var suDatepicker = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr87="expr87"><div expr88="expr88"></div><div expr91="expr91"><div class="ui compact segments"><div class="ui center aligned secondary segment"><div class="ui buttons dp-navigation"><button expr92="expr92" type="button"><i class="chevron left icon"></i></button><button expr93="expr93" type="button"> </button><button expr94="expr94" type="button"> </button><button expr95="expr95" type="button"><i class="chevron right icon"></i></button></div><div class="dp-wrapper"><div expr96="expr96" class="dp-weekday"></div></div></div><div expr97="expr97" class="ui center aligned segment"></div><div expr101="expr101" class="ui center aligned segment"></div><div expr104="expr104" class="ui center aligned segment"></div><div expr108="expr108" class="ui center aligned segment"></div></div></div></div>',
+      '<div expr85="expr85"><div expr86="expr86"></div><div expr89="expr89"><div class="ui compact segments"><div class="ui center aligned secondary segment"><div class="ui buttons dp-navigation"><button expr90="expr90" type="button"><i class="chevron left icon"></i></button><button expr91="expr91" type="button"> </button><button expr92="expr92" type="button"> </button><button expr93="expr93" type="button"><i class="chevron right icon"></i></button></div><div class="dp-wrapper"><div expr94="expr94" class="dp-weekday"></div></div></div><div expr95="expr95" class="ui center aligned segment"></div><div expr99="expr99" class="ui center aligned segment"></div><div expr102="expr102" class="ui center aligned segment"></div><div expr106="expr106" class="ui center aligned segment"></div></div></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -464,8 +464,8 @@ var suDatepicker = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr87',
-        'selector': '[expr87]',
+        'redundantAttribute': 'expr85',
+        'selector': '[expr85]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -487,20 +487,13 @@ var suDatepicker = {
           return scope.props.popup;
         },
 
-        'redundantAttribute': 'expr88',
-        'selector': '[expr88]',
+        'redundantAttribute': 'expr86',
+        'selector': '[expr86]',
 
         'template': template(
-          '<input expr89="expr89" type="text"/><button expr90="expr90" type="button"><i class="calendar icon"></i></button>',
+          '<input expr87="expr87" type="text"/><button expr88="expr88" type="button"><i class="calendar icon"></i></button>',
           [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr88',
-
-              'evaluate': function(scope) {
-                return 'expr88';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -509,8 +502,8 @@ var suDatepicker = {
               }
             }]
           }, {
-            'redundantAttribute': 'expr89',
-            'selector': '[expr89]',
+            'redundantAttribute': 'expr87',
+            'selector': '[expr87]',
 
             'expressions': [{
               'type': expressionTypes.ATTRIBUTE,
@@ -535,8 +528,8 @@ var suDatepicker = {
               }
             }]
           }, {
-            'redundantAttribute': 'expr90',
-            'selector': '[expr90]',
+            'redundantAttribute': 'expr88',
+            'selector': '[expr88]',
 
             'expressions': [{
               'type': expressionTypes.ATTRIBUTE,
@@ -563,8 +556,8 @@ var suDatepicker = {
           }]
         )
       }, {
-        'redundantAttribute': 'expr91',
-        'selector': '[expr91]',
+        'redundantAttribute': 'expr89',
+        'selector': '[expr89]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -603,8 +596,8 @@ var suDatepicker = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr92',
-        'selector': '[expr92]',
+        'redundantAttribute': 'expr90',
+        'selector': '[expr90]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -622,8 +615,8 @@ var suDatepicker = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr93',
-        'selector': '[expr93]',
+        'redundantAttribute': 'expr91',
+        'selector': '[expr91]',
 
         'expressions': [{
           'type': expressionTypes.TEXT,
@@ -648,8 +641,8 @@ var suDatepicker = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr94',
-        'selector': '[expr94]',
+        'redundantAttribute': 'expr92',
+        'selector': '[expr92]',
 
         'expressions': [{
           'type': expressionTypes.TEXT,
@@ -674,8 +667,8 @@ var suDatepicker = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr95',
-        'selector': '[expr95]',
+        'redundantAttribute': 'expr93',
+        'selector': '[expr93]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -707,13 +700,6 @@ var suDatepicker = {
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr96',
-
-            'evaluate': function(scope) {
-              return 'expr96';
-            }
-          }, {
-            'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
             'evaluate': function(scope) {
@@ -722,8 +708,8 @@ var suDatepicker = {
           }]
         }]),
 
-        'redundantAttribute': 'expr96',
-        'selector': '[expr96]',
+        'redundantAttribute': 'expr94',
+        'selector': '[expr94]',
         'itemName': 'week',
         'indexName': null,
 
@@ -737,18 +723,11 @@ var suDatepicker = {
           return !scope.yearSelecting && !scope.monthSelecting;
         },
 
-        'redundantAttribute': 'expr97',
-        'selector': '[expr97]',
+        'redundantAttribute': 'expr95',
+        'selector': '[expr95]',
 
-        'template': template('<div expr98="expr98" class="dp-wrapper"></div>', [{
+        'template': template('<div expr96="expr96" class="dp-wrapper"></div>', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr97',
-
-            'evaluate': function(scope) {
-              return 'expr97';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
@@ -761,15 +740,8 @@ var suDatepicker = {
           'getKey': null,
           'condition': null,
 
-          'template': template('<div expr99="expr99" class="dp-day"></div>', [{
+          'template': template('<div expr97="expr97" class="dp-day"></div>', [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr98',
-
-              'evaluate': function(scope) {
-                return 'expr98';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -782,15 +754,8 @@ var suDatepicker = {
             'getKey': null,
             'condition': null,
 
-            'template': template('<button expr100="expr100" type="button"> </button>', [{
+            'template': template('<button expr98="expr98" type="button"> </button>', [{
               'expressions': [{
-                'type': expressionTypes.ATTRIBUTE,
-                'name': 'expr99',
-
-                'evaluate': function(scope) {
-                  return 'expr99';
-                }
-              }, {
                 'type': expressionTypes.ATTRIBUTE,
                 'name': 'class',
 
@@ -799,8 +764,8 @@ var suDatepicker = {
                 }
               }]
             }, {
-              'redundantAttribute': 'expr100',
-              'selector': '[expr100]',
+              'redundantAttribute': 'expr98',
+              'selector': '[expr98]',
 
               'expressions': [{
                 'type': expressionTypes.TEXT,
@@ -833,8 +798,8 @@ var suDatepicker = {
               }]
             }]),
 
-            'redundantAttribute': 'expr99',
-            'selector': '[expr99]',
+            'redundantAttribute': 'expr97',
+            'selector': '[expr97]',
             'itemName': 'day',
             'indexName': null,
 
@@ -843,8 +808,8 @@ var suDatepicker = {
             }
           }]),
 
-          'redundantAttribute': 'expr98',
-          'selector': '[expr98]',
+          'redundantAttribute': 'expr96',
+          'selector': '[expr96]',
           'itemName': 'week',
           'indexName': null,
 
@@ -859,20 +824,13 @@ var suDatepicker = {
           return !scope.yearSelecting && !scope.monthSelecting;
         },
 
-        'redundantAttribute': 'expr101',
-        'selector': '[expr101]',
+        'redundantAttribute': 'expr99',
+        'selector': '[expr99]',
 
         'template': template(
-          '<div class="ui two column grid"><div class="column dp-clear"><button expr102="expr102" type="button"><i class="times icon"></i></button></div><div class="column dp-today"><button expr103="expr103" type="button"><i class="calendar check icon"></i></button></div></div>',
+          '<div class="ui two column grid"><div class="column dp-clear"><button expr100="expr100" type="button"><i class="times icon"></i></button></div><div class="column dp-today"><button expr101="expr101" type="button"><i class="calendar check icon"></i></button></div></div>',
           [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr101',
-
-              'evaluate': function(scope) {
-                return 'expr101';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -881,8 +839,8 @@ var suDatepicker = {
               }
             }]
           }, {
-            'redundantAttribute': 'expr102',
-            'selector': '[expr102]',
+            'redundantAttribute': 'expr100',
+            'selector': '[expr100]',
 
             'expressions': [{
               'type': expressionTypes.ATTRIBUTE,
@@ -900,8 +858,8 @@ var suDatepicker = {
               }
             }]
           }, {
-            'redundantAttribute': 'expr103',
-            'selector': '[expr103]',
+            'redundantAttribute': 'expr101',
+            'selector': '[expr101]',
 
             'expressions': [{
               'type': expressionTypes.ATTRIBUTE,
@@ -927,18 +885,11 @@ var suDatepicker = {
           return scope.monthSelecting;
         },
 
-        'redundantAttribute': 'expr104',
-        'selector': '[expr104]',
+        'redundantAttribute': 'expr102',
+        'selector': '[expr102]',
 
-        'template': template('<div expr105="expr105" class="dp-wrapper"></div>', [{
+        'template': template('<div expr103="expr103" class="dp-wrapper"></div>', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr104',
-
-            'evaluate': function(scope) {
-              return 'expr104';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
@@ -951,15 +902,8 @@ var suDatepicker = {
           'getKey': null,
           'condition': null,
 
-          'template': template('<div expr106="expr106" class="dp-month"></div>', [{
+          'template': template('<div expr104="expr104" class="dp-month"></div>', [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr105',
-
-              'evaluate': function(scope) {
-                return 'expr105';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -972,15 +916,8 @@ var suDatepicker = {
             'getKey': null,
             'condition': null,
 
-            'template': template('<button expr107="expr107" type="button"> </button>', [{
+            'template': template('<button expr105="expr105" type="button"> </button>', [{
               'expressions': [{
-                'type': expressionTypes.ATTRIBUTE,
-                'name': 'expr106',
-
-                'evaluate': function(scope) {
-                  return 'expr106';
-                }
-              }, {
                 'type': expressionTypes.ATTRIBUTE,
                 'name': 'class',
 
@@ -989,8 +926,8 @@ var suDatepicker = {
                 }
               }]
             }, {
-              'redundantAttribute': 'expr107',
-              'selector': '[expr107]',
+              'redundantAttribute': 'expr105',
+              'selector': '[expr105]',
 
               'expressions': [{
                 'type': expressionTypes.TEXT,
@@ -1016,8 +953,8 @@ var suDatepicker = {
               }]
             }]),
 
-            'redundantAttribute': 'expr106',
-            'selector': '[expr106]',
+            'redundantAttribute': 'expr104',
+            'selector': '[expr104]',
             'itemName': 'month',
             'indexName': null,
 
@@ -1026,8 +963,8 @@ var suDatepicker = {
             }
           }]),
 
-          'redundantAttribute': 'expr105',
-          'selector': '[expr105]',
+          'redundantAttribute': 'expr103',
+          'selector': '[expr103]',
           'itemName': 'element',
           'indexName': null,
 
@@ -1042,18 +979,11 @@ var suDatepicker = {
           return scope.yearSelecting;
         },
 
-        'redundantAttribute': 'expr108',
-        'selector': '[expr108]',
+        'redundantAttribute': 'expr106',
+        'selector': '[expr106]',
 
-        'template': template('<div expr109="expr109" class="dp-wrapper"></div>', [{
+        'template': template('<div expr107="expr107" class="dp-wrapper"></div>', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr108',
-
-            'evaluate': function(scope) {
-              return 'expr108';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
@@ -1066,15 +996,8 @@ var suDatepicker = {
           'getKey': null,
           'condition': null,
 
-          'template': template('<div expr110="expr110" class="dp-month"></div>', [{
+          'template': template('<div expr108="expr108" class="dp-month"></div>', [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr109',
-
-              'evaluate': function(scope) {
-                return 'expr109';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -1087,15 +1010,8 @@ var suDatepicker = {
             'getKey': null,
             'condition': null,
 
-            'template': template('<button expr111="expr111" type="button"> </button>', [{
+            'template': template('<button expr109="expr109" type="button"> </button>', [{
               'expressions': [{
-                'type': expressionTypes.ATTRIBUTE,
-                'name': 'expr110',
-
-                'evaluate': function(scope) {
-                  return 'expr110';
-                }
-              }, {
                 'type': expressionTypes.ATTRIBUTE,
                 'name': 'class',
 
@@ -1104,8 +1020,8 @@ var suDatepicker = {
                 }
               }]
             }, {
-              'redundantAttribute': 'expr111',
-              'selector': '[expr111]',
+              'redundantAttribute': 'expr109',
+              'selector': '[expr109]',
 
               'expressions': [{
                 'type': expressionTypes.TEXT,
@@ -1131,8 +1047,8 @@ var suDatepicker = {
               }]
             }]),
 
-            'redundantAttribute': 'expr110',
-            'selector': '[expr110]',
+            'redundantAttribute': 'expr108',
+            'selector': '[expr108]',
             'itemName': 'year',
             'indexName': null,
 
@@ -1141,8 +1057,8 @@ var suDatepicker = {
             }
           }]),
 
-          'redundantAttribute': 'expr109',
-          'selector': '[expr109]',
+          'redundantAttribute': 'expr107',
+          'selector': '[expr107]',
           'itemName': 'element',
           'indexName': null,
 
