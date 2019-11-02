@@ -65,6 +65,10 @@ function isProgress() {
   return hasClass(this, 'progress')
 }
 
+function isIndicating() {
+  return hasClass(this, 'indicating')
+}
+
 // ===================================================================================
 //                                                                               Logic
 //                                                                               =====
@@ -99,12 +103,13 @@ var suProgress = {
     onBeforeUpdate,
     getClass,
     getStates,
-    isProgress
+    isProgress,
+    isIndicating
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr38="expr38"><div expr39="expr39" class="bar"><div expr40="expr40" class="progress"></div></div><div class="label"><slot expr41="expr41"></slot></div></div>',
+      '<div expr150="expr150"><div expr151="expr151" class="bar"><div expr152="expr152" class="progress"></div></div><div class="label"><template expr153="expr153"></template><slot expr154="expr154"></slot></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -120,10 +125,17 @@ var suProgress = {
           'evaluate': function(scope) {
             return scope.percent;
           }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'value',
+
+          'evaluate': function(scope) {
+            return scope.state.value;
+          }
         }]
       }, {
-        'redundantAttribute': 'expr38',
-        'selector': '[expr38]',
+        'redundantAttribute': 'expr150',
+        'selector': '[expr150]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -141,8 +153,8 @@ var suProgress = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr39',
-        'selector': '[expr39]',
+        'redundantAttribute': 'expr151',
+        'selector': '[expr151]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -159,8 +171,8 @@ var suProgress = {
           return scope.isProgress();
         },
 
-        'redundantAttribute': 'expr40',
-        'selector': '[expr40]',
+        'redundantAttribute': 'expr152',
+        'selector': '[expr152]',
 
         'template': template(' ', [{
           'expressions': [{
@@ -180,11 +192,31 @@ var suProgress = {
           }]
         }])
       }, {
+        'type': bindingTypes.IF,
+
+        'evaluate': function(scope) {
+          return scope.isIndicating();
+        },
+
+        'redundantAttribute': 'expr153',
+        'selector': '[expr153]',
+
+        'template': template(' ', [{
+          'expressions': [{
+            'type': expressionTypes.TEXT,
+            'childNodeIndex': 0,
+
+            'evaluate': function(scope) {
+              return [scope.percent, '%'].join('');
+            }
+          }]
+        }])
+      }, {
         'type': bindingTypes.SLOT,
         'attributes': [],
         'name': 'default',
-        'redundantAttribute': 'expr41',
-        'selector': '[expr41]'
+        'redundantAttribute': 'expr154',
+        'selector': '[expr154]'
       }]
     );
   },

@@ -4,6 +4,7 @@
       <div if="{ isProgress() }" class="progress">{ percent }%</div>
     </div>
     <div class="label">
+      <template if="{ isIndicating() }">{ percent }%</template>
       <slot />
     </div>
   </div>
@@ -50,6 +51,7 @@
       getClass,
       getStates,
       isProgress,
+      isIndicating,
     }
 
     // ===================================================================================
@@ -117,6 +119,10 @@
 
     function isProgress() {
       return hasClass(this, 'progress')
+    }
+
+    function isIndicating() {
+      return hasClass(this, 'indicating')
     }
 
     // ===================================================================================
