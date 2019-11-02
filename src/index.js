@@ -99,10 +99,20 @@ riot.install(function (component) {
     component.obs.trigger(`${target.id}-hide`)
   }
   component.suAlert = opts => {
-    component.obs.trigger('su-alert-show', opts)
+    return new Promise(resolve => {
+      component.obs.trigger('su-alert-show', opts)
+      component.obs.on('su-alert-close', () => {
+        return resolve()
+      })
+    })
   }
   component.suConfirm = opts => {
-    component.obs.trigger('su-confirm-show', opts)
+    return Q.Promise((resolve, reject) => {
+      component.obs.trigger('su-confirm-show', opts)
+      component.obs.on('su-confirm-close', result => {
+        return result ? resolve() : reject()
+      })
+    })
   }
   component.suToast = opts => {
     component.obs.trigger('su-toast-show', opts)

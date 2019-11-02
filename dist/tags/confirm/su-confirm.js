@@ -134,13 +134,11 @@ function suConfirm(tag, param) {
     }
   }
 
-  return new Promise((resolve, reject) => {
-    showConfirm(tag, option);
-    tag.observable.on('callbackConfirm', result => {
-      tag.suHideModal(tag.$('su-modal'));
-      return result ? resolve() : reject()
-    });
-  })
+  showConfirm(tag, option);
+  tag.obs.on('callbackConfirm', result => {
+    tag.suHideModal(tag.$('su-modal'));
+    tag.obs.trigger('su-confirm-close', result);
+  });
 }
 
 var suConfirm$1 = {
@@ -171,7 +169,7 @@ var suConfirm$1 = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<su-modal expr8="expr8" class="tiny"></su-modal>', [{
+    return template('<su-modal expr145="expr145" class="tiny"></su-modal>', [{
       'type': bindingTypes.TAG,
       'getComponent': getComponent,
 
@@ -181,7 +179,7 @@ var suConfirm$1 = {
 
       'slots': [{
         'id': 'default',
-        'html': '<div class="ui icon message"><i class="question circle outline icon"></i><div class="scrolling content"><div expr9="expr9" class="header"></div><p expr10="expr10"></p></div></div>',
+        'html': '<div class="ui icon message"><i class="question circle outline icon"></i><div class="scrolling content"><div expr146="expr146" class="header"></div><p expr147="expr147"></p></div></div>',
 
         'bindings': [{
           'type': bindingTypes.IF,
@@ -190,8 +188,8 @@ var suConfirm$1 = {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr9',
-          'selector': '[expr9]',
+          'redundantAttribute': 'expr146',
+          'selector': '[expr146]',
 
           'template': template(' ', [{
             'expressions': [{
@@ -203,10 +201,10 @@ var suConfirm$1 = {
               }
             }, {
               'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr9',
+              'name': 'expr146',
 
               'evaluate': function(scope) {
-                return 'expr9';
+                return 'expr146';
               }
             }, {
               'type': expressionTypes.ATTRIBUTE,
@@ -232,16 +230,16 @@ var suConfirm$1 = {
               }
             }, {
               'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr10',
+              'name': 'expr147',
 
               'evaluate': function(scope) {
-                return 'expr10';
+                return 'expr147';
               }
             }]
           }]),
 
-          'redundantAttribute': 'expr10',
-          'selector': '[expr10]',
+          'redundantAttribute': 'expr147',
+          'selector': '[expr147]',
           'itemName': 'messsage',
           'indexName': null,
 
@@ -281,8 +279,8 @@ var suConfirm$1 = {
         }
       }],
 
-      'redundantAttribute': 'expr8',
-      'selector': '[expr8]'
+      'redundantAttribute': 'expr145',
+      'selector': '[expr145]'
     }]);
   },
 

@@ -82,13 +82,11 @@ function suAlert(tag, param) {
     }
   }
 
-  return new Promise(resolve => {
-    showAlert(tag, option);
-    tag.obs.on('callbackConfirm', () => {
-      tag.suHideModal(tag.$('su-modal'));
-      return resolve()
-    });
-  })
+  showAlert(tag, option);
+  tag.obs.on('callbackConfirm', () => {
+    tag.suHideModal(tag.$('su-modal'));
+    tag.obs.trigger('su-alert-close');
+  });
 }
 
 var suAlert$1 = {
@@ -109,7 +107,7 @@ var suAlert$1 = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<su-modal expr0="expr0" class="tiny"></su-modal>', [{
+    return template('<su-modal expr127="expr127" class="tiny"></su-modal>', [{
       'type': bindingTypes.TAG,
       'getComponent': getComponent,
 
@@ -119,7 +117,7 @@ var suAlert$1 = {
 
       'slots': [{
         'id': 'default',
-        'html': '<div class="ui icon message"><i class="info circle icon"></i><div class="scrolling content"><div expr1="expr1" class="header"></div><p expr2="expr2"></p></div></div>',
+        'html': '<div class="ui icon message"><i class="info circle icon"></i><div class="scrolling content"><div expr128="expr128" class="header"></div><p expr129="expr129"></p></div></div>',
 
         'bindings': [{
           'type': bindingTypes.IF,
@@ -128,8 +126,8 @@ var suAlert$1 = {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr1',
-          'selector': '[expr1]',
+          'redundantAttribute': 'expr128',
+          'selector': '[expr128]',
 
           'template': template(' ', [{
             'expressions': [{
@@ -141,10 +139,10 @@ var suAlert$1 = {
               }
             }, {
               'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr1',
+              'name': 'expr128',
 
               'evaluate': function(scope) {
-                return 'expr1';
+                return 'expr128';
               }
             }, {
               'type': expressionTypes.ATTRIBUTE,
@@ -170,16 +168,16 @@ var suAlert$1 = {
               }
             }, {
               'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr2',
+              'name': 'expr129',
 
               'evaluate': function(scope) {
-                return 'expr2';
+                return 'expr129';
               }
             }]
           }]),
 
-          'redundantAttribute': 'expr2',
-          'selector': '[expr2]',
+          'redundantAttribute': 'expr129',
+          'selector': '[expr129]',
           'itemName': 'message',
           'indexName': null,
 
@@ -212,8 +210,8 @@ var suAlert$1 = {
         }
       }],
 
-      'redundantAttribute': 'expr0',
-      'selector': '[expr0]'
+      'redundantAttribute': 'expr127',
+      'selector': '[expr127]'
     }]);
   },
 
