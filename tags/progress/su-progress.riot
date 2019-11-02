@@ -1,4 +1,4 @@
-<su-progress class="{ props.class }" percent="{ percent }">
+<su-progress class="{ props.class }" percent="{ percent }" value="{ state.value }">
   <div class="ui progress { getClass() } { getStates() }" data-percent="{ percent }">
     <div class="bar" style="transition-duration: 300ms; width: { percent }%;">
       <div if="{ isProgress() }" class="progress">{ percent }%</div>
