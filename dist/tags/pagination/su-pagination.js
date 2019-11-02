@@ -112,10 +112,10 @@ var suPagination = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr28="expr28"><a expr29="expr29"><i aria-hidden="true" class="angle double left icon"></i></a><a expr30="expr30"><i class="angle left icon"></i></a><virtual expr31="expr31"></virtual><a expr35="expr35"><i class="angle right icon"></i></a><a expr36="expr36"><i aria-hidden="true" class="angle double right icon"></i></a></div>',
+      '<div expr110="expr110"><a expr111="expr111"><i aria-hidden="true" class="angle double left icon"></i></a><a expr112="expr112"><i class="angle left icon"></i></a><template expr113="expr113"></template><a expr117="expr117"><i class="angle right icon"></i></a><a expr118="expr118"><i aria-hidden="true" class="angle double right icon"></i></a></div>',
       [{
-        'redundantAttribute': 'expr28',
-        'selector': '[expr28]',
+        'redundantAttribute': 'expr110',
+        'selector': '[expr110]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -126,8 +126,8 @@ var suPagination = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr29',
-        'selector': '[expr29]',
+        'redundantAttribute': 'expr111',
+        'selector': '[expr111]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -145,8 +145,8 @@ var suPagination = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr30',
-        'selector': '[expr30]',
+        'redundantAttribute': 'expr112',
+        'selector': '[expr112]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -168,128 +168,94 @@ var suPagination = {
         'getKey': null,
         'condition': null,
 
-        'template': template(null, [{
-          'type': bindingTypes.TAG,
-          'getComponent': getComponent,
+        'template': template(
+          '<a expr114="expr114" class="item"></a><a expr115="expr115" class="active item"></a><div expr116="expr116" class="disabled icon item"></div>',
+          [{
+            'type': bindingTypes.IF,
 
-          'evaluate': function(scope) {
-            return 'virtual';
-          },
+            'evaluate': function(scope) {
+              return !scope.page.active && !scope.page.disabled;
+            },
 
-          'slots': [{
-            'id': 'default',
-            'html': '<a expr32="expr32" class="item"></a><a expr33="expr33" class="active item"></a><div expr34="expr34" class="disabled icon item"></div>',
+            'redundantAttribute': 'expr114',
+            'selector': '[expr114]',
 
-            'bindings': [{
-              'type': bindingTypes.IF,
+            'template': template(' ', [{
+              'expressions': [{
+                'type': expressionTypes.TEXT,
+                'childNodeIndex': 0,
 
-              'evaluate': function(scope) {
-                return !scope.page.active && !scope.page.disabled;
-              },
+                'evaluate': function(scope) {
+                  return [scope.page.number].join('');
+                }
+              }, {
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'class',
 
-              'redundantAttribute': 'expr32',
-              'selector': '[expr32]',
+                'evaluate': function(scope) {
+                  return 'item';
+                }
+              }, {
+                'type': expressionTypes.EVENT,
+                'name': 'onclick',
 
-              'template': template(' ', [{
-                'expressions': [{
-                  'type': expressionTypes.TEXT,
-                  'childNodeIndex': 0,
+                'evaluate': function(scope) {
+                  return event => scope.onClickPage(event,scope.page.number);
+                }
+              }]
+            }])
+          }, {
+            'type': bindingTypes.IF,
 
-                  'evaluate': function(scope) {
-                    return [scope.page.number].join('');
-                  }
-                }, {
-                  'type': expressionTypes.ATTRIBUTE,
-                  'name': 'expr32',
+            'evaluate': function(scope) {
+              return scope.page.active;
+            },
 
-                  'evaluate': function(scope) {
-                    return 'expr32';
-                  }
-                }, {
-                  'type': expressionTypes.ATTRIBUTE,
-                  'name': 'class',
+            'redundantAttribute': 'expr115',
+            'selector': '[expr115]',
 
-                  'evaluate': function(scope) {
-                    return 'item';
-                  }
-                }, {
-                  'type': expressionTypes.EVENT,
-                  'name': 'onclick',
+            'template': template(' ', [{
+              'expressions': [{
+                'type': expressionTypes.TEXT,
+                'childNodeIndex': 0,
 
-                  'evaluate': function(scope) {
-                    return event => scope.onClickPage(event,scope.page.number);
-                  }
-                }]
-              }])
-            }, {
-              'type': bindingTypes.IF,
+                'evaluate': function(scope) {
+                  return scope.page.number;
+                }
+              }, {
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'class',
 
-              'evaluate': function(scope) {
-                return scope.page.active;
-              },
+                'evaluate': function(scope) {
+                  return 'active item';
+                }
+              }]
+            }])
+          }, {
+            'type': bindingTypes.IF,
 
-              'redundantAttribute': 'expr33',
-              'selector': '[expr33]',
+            'evaluate': function(scope) {
+              return scope.page.disabled;
+            },
 
-              'template': template(' ', [{
-                'expressions': [{
-                  'type': expressionTypes.TEXT,
-                  'childNodeIndex': 0,
+            'redundantAttribute': 'expr116',
+            'selector': '[expr116]',
 
-                  'evaluate': function(scope) {
-                    return scope.page.number;
-                  }
-                }, {
-                  'type': expressionTypes.ATTRIBUTE,
-                  'name': 'expr33',
+            'template': template('<i class="ellipsis horizontal icon"></i>', [{
+              'expressions': [{
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'class',
 
-                  'evaluate': function(scope) {
-                    return 'expr33';
-                  }
-                }, {
-                  'type': expressionTypes.ATTRIBUTE,
-                  'name': 'class',
+                'evaluate': function(scope) {
+                  return 'disabled icon item';
+                }
+              }]
+            }])
+          }]
+        ),
 
-                  'evaluate': function(scope) {
-                    return 'active item';
-                  }
-                }]
-              }])
-            }, {
-              'type': bindingTypes.IF,
-
-              'evaluate': function(scope) {
-                return scope.page.disabled;
-              },
-
-              'redundantAttribute': 'expr34',
-              'selector': '[expr34]',
-
-              'template': template('<i class="ellipsis horizontal icon"></i>', [{
-                'expressions': [{
-                  'type': expressionTypes.ATTRIBUTE,
-                  'name': 'expr34',
-
-                  'evaluate': function(scope) {
-                    return 'expr34';
-                  }
-                }, {
-                  'type': expressionTypes.ATTRIBUTE,
-                  'name': 'class',
-
-                  'evaluate': function(scope) {
-                    return 'disabled icon item';
-                  }
-                }]
-              }])
-            }]
-          }],
-
-          'attributes': []
-        }]),
-
-        'redundantAttribute': 'expr31',
-        'selector': '[expr31]',
+        'redundantAttribute': 'expr113',
+        'selector': '[expr113]',
         'itemName': 'page',
         'indexName': null,
 
@@ -297,8 +263,8 @@ var suPagination = {
           return scope.state.pages;
         }
       }, {
-        'redundantAttribute': 'expr35',
-        'selector': '[expr35]',
+        'redundantAttribute': 'expr117',
+        'selector': '[expr117]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -319,8 +285,8 @@ var suPagination = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr36',
-        'selector': '[expr36]',
+        'redundantAttribute': 'expr118',
+        'selector': '[expr118]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,

@@ -21,7 +21,7 @@ var suValidationError = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr71="expr71" class="ui basic pointing prompt label transition visible"></div><ul expr73="expr73" class="list"></ul>',
+      '<div expr69="expr69" class="ui basic pointing prompt label transition visible"></div><ul expr71="expr71" class="list"></ul>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -38,18 +38,11 @@ var suValidationError = {
           return scope.state.errors[scope.props.name];
         },
 
-        'redundantAttribute': 'expr71',
-        'selector': '[expr71]',
+        'redundantAttribute': 'expr69',
+        'selector': '[expr69]',
 
-        'template': template('<div expr72="expr72"></div>', [{
+        'template': template('<div expr70="expr70"></div>', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr71',
-
-            'evaluate': function(scope) {
-              return 'expr71';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
@@ -70,18 +63,11 @@ var suValidationError = {
               'evaluate': function(scope) {
                 return scope.message;
               }
-            }, {
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr72',
-
-              'evaluate': function(scope) {
-                return 'expr72';
-              }
             }]
           }]),
 
-          'redundantAttribute': 'expr72',
-          'selector': '[expr72]',
+          'redundantAttribute': 'expr70',
+          'selector': '[expr70]',
           'itemName': 'message',
           'indexName': null,
 
@@ -96,18 +82,11 @@ var suValidationError = {
           return scope.state.blockMessage;
         },
 
-        'redundantAttribute': 'expr73',
-        'selector': '[expr73]',
+        'redundantAttribute': 'expr71',
+        'selector': '[expr71]',
 
-        'template': template('<virtual expr74="expr74"></virtual>', [{
+        'template': template('<template expr72="expr72"></template>', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr73',
-
-            'evaluate': function(scope) {
-              return 'expr73';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
@@ -120,57 +99,34 @@ var suValidationError = {
           'getKey': null,
           'condition': null,
 
-          'template': template(null, [{
-            'type': bindingTypes.TAG,
-            'getComponent': getComponent,
+          'template': template('<li expr73="expr73"></li>', [{
+            'type': bindingTypes.EACH,
+            'getKey': null,
+            'condition': null,
 
-            'evaluate': function(scope) {
-              return 'virtual';
-            },
-
-            'slots': [{
-              'id': 'default',
-              'html': '<li expr75="expr75"></li>',
-
-              'bindings': [{
-                'type': bindingTypes.EACH,
-                'getKey': null,
-                'condition': null,
-
-                'template': template(' ', [{
-                  'expressions': [{
-                    'type': expressionTypes.TEXT,
-                    'childNodeIndex': 0,
-
-                    'evaluate': function(scope) {
-                      return scope.message;
-                    }
-                  }, {
-                    'type': expressionTypes.ATTRIBUTE,
-                    'name': 'expr75',
-
-                    'evaluate': function(scope) {
-                      return 'expr75';
-                    }
-                  }]
-                }]),
-
-                'redundantAttribute': 'expr75',
-                'selector': '[expr75]',
-                'itemName': 'message',
-                'indexName': null,
+            'template': template(' ', [{
+              'expressions': [{
+                'type': expressionTypes.TEXT,
+                'childNodeIndex': 0,
 
                 'evaluate': function(scope) {
-                  return scope.errors;
+                  return scope.message;
                 }
               }]
-            }],
+            }]),
 
-            'attributes': []
+            'redundantAttribute': 'expr73',
+            'selector': '[expr73]',
+            'itemName': 'message',
+            'indexName': null,
+
+            'evaluate': function(scope) {
+              return scope.errors;
+            }
           }]),
 
-          'redundantAttribute': 'expr74',
-          'selector': '[expr74]',
+          'redundantAttribute': 'expr72',
+          'selector': '[expr72]',
           'itemName': 'errors',
           'indexName': null,
 

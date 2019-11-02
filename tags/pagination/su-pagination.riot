@@ -7,7 +7,10 @@
       <i class='angle left icon' />
     </a>
 
-    <virtual each="{ page in state.pages }">
+    <template each="{ page in state.pages }">
+      <!-- <a class="item { page.active ? 'active':''} { page.disabled ? 'disabled icon':''}">
+        {page.number}
+      </a> -->
       <a class="item" onclick="{ event => onClickPage(event,page.number) }" if="{ !page.active && !page.disabled }">
         { page.number }
       </a>
@@ -15,7 +18,7 @@
       <div class="disabled icon item" if="{ page.disabled }">
         <i class='ellipsis horizontal icon' />
       </div>
-    </virtual>
+    </template>
 
     <a class="angle icon item { state.activePage >= state.totalPage ? 'disabled' : '' }" onclick="{ event => onClickPage(event,state.activePage + 1) }">
       <i class='angle right icon' />
