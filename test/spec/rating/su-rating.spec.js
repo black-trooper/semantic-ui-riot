@@ -115,6 +115,7 @@ describe('su-rating', function () {
     expect(component.$('su-rating').getAttribute('changed')).to.be.not.ok
 
     fireEvent(component.$$('su-rating i')[2], 'click')
+    component.update()
     expect(component.$('su-rating').getAttribute('value')).to.equal('3')
     expect(component.$('su-rating').getAttribute('changed')).to.be.ok
 

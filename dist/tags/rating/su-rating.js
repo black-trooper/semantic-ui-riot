@@ -14,6 +14,10 @@ function onMounted(props, state) {
 }
 
 function onBeforeUpdate(props, state) {
+  if (this.lastValue != props.value) {
+    this.lastValue = props.value;
+    this.state.value = props.value;
+  }
   this.readOnly = this.root.classList.contains('read-only');
   this.changed = state.value != state.defaultValue;
   updateView(this);
@@ -66,6 +70,7 @@ function onMouseout() {
 //                                                                               Logic
 //                                                                               =====
 function init(tag, max = 5, value = 0) {
+  tag.lastValue = value;
   tag.state.value = value;
   tag.state.defaultValue = value;
   tag.state.items.length = 0;
@@ -93,6 +98,8 @@ var suRating = {
   'exports': {
     state: {
       items: [],
+      value: null,
+      lastValue: null,
       defaultValue: null,
     },
 
@@ -106,7 +113,7 @@ var suRating = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<i expr47="expr47"></i>', [{
+    return template('<i expr173="expr173"></i>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -178,8 +185,8 @@ var suRating = {
         }]
       }]),
 
-      'redundantAttribute': 'expr47',
-      'selector': '[expr47]',
+      'redundantAttribute': 'expr173',
+      'selector': '[expr173]',
       'itemName': 'item',
       'indexName': null,
 

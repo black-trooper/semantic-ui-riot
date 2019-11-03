@@ -7,6 +7,8 @@
     export default {
       state: {
         items: [],
+        value: null,
+        lastValue: null,
         defaultValue: null,
       },
       changed: false,
@@ -33,6 +35,10 @@
     }
 
     function onBeforeUpdate(props, state) {
+      if (this.lastValue != props.value) {
+        this.lastValue = props.value
+        this.state.value = props.value
+      }
       this.readOnly = this.root.classList.contains('read-only')
       this.changed = state.value != state.defaultValue
       updateView(this)
@@ -85,6 +91,7 @@
     //                                                                               Logic
     //                                                                               =====
     function init(tag, max = 5, value = 0) {
+      tag.lastValue = value
       tag.state.value = value
       tag.state.defaultValue = value
       tag.state.items.length = 0
