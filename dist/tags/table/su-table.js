@@ -7,7 +7,7 @@ function onBeforeMount(props, state) {
 }
 
 function onMounted(props, state) {
-  this.headers = this.$$('su-th');
+  this.headers = this.$$('su-th, [is="su-th"]');
 
   this.headers.forEach(th => {
     this.obs.on(`${th.id}-click`, field => {
@@ -121,12 +121,12 @@ var suTable = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot expr58="expr58"></slot>', [{
+    return template('<slot expr51="expr51"></slot>', [{
       'type': bindingTypes.SLOT,
       'attributes': [],
       'name': 'default',
-      'redundantAttribute': 'expr58',
-      'selector': '[expr58]'
+      'redundantAttribute': 'expr51',
+      'selector': '[expr51]'
     }]);
   },
 

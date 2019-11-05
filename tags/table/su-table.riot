@@ -23,7 +23,7 @@
     }
 
     function onMounted(props, state) {
-      this.headers = this.$$('su-th')
+      this.headers = this.$$('su-th, [is="su-th"]')
 
       this.headers.forEach(th => {
         this.obs.on(`${th.id}-click`, field => {
