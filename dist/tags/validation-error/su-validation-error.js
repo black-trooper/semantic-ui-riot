@@ -8,7 +8,7 @@ function onBeforeUpdate(props, state) {
 }
 
 var suValidationError = {
-  'css': `su-validation-error :scope.ui.error.message,[is="su-validation-error"] :scope.ui.error.message{ display: block !important; }`,
+  'css': `su-validation-error.ui.error.message,[is="su-validation-error"].ui.error.message{ display: block !important; }`,
 
   'exports': {
     state: {
@@ -21,7 +21,7 @@ var suValidationError = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr69="expr69" class="ui basic pointing prompt label transition visible"></div><ul expr71="expr71" class="list"></ul>',
+      '<div expr185="expr185" class="ui basic pointing prompt label transition visible"></div><ul expr187="expr187" class="list"></ul>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -38,10 +38,10 @@ var suValidationError = {
           return scope.state.errors[scope.props.name];
         },
 
-        'redundantAttribute': 'expr69',
-        'selector': '[expr69]',
+        'redundantAttribute': 'expr185',
+        'selector': '[expr185]',
 
-        'template': template('<div expr70="expr70"></div>', [{
+        'template': template('<div expr186="expr186"></div>', [{
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
@@ -66,8 +66,8 @@ var suValidationError = {
             }]
           }]),
 
-          'redundantAttribute': 'expr70',
-          'selector': '[expr70]',
+          'redundantAttribute': 'expr186',
+          'selector': '[expr186]',
           'itemName': 'message',
           'indexName': null,
 
@@ -82,10 +82,10 @@ var suValidationError = {
           return scope.state.blockMessage;
         },
 
-        'redundantAttribute': 'expr71',
-        'selector': '[expr71]',
+        'redundantAttribute': 'expr187',
+        'selector': '[expr187]',
 
-        'template': template('<template expr72="expr72"></template>', [{
+        'template': template('<template expr188="expr188"></template>', [{
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
@@ -99,7 +99,7 @@ var suValidationError = {
           'getKey': null,
           'condition': null,
 
-          'template': template('<li expr73="expr73"></li>', [{
+          'template': template('<li expr189="expr189"></li>', [{
             'type': bindingTypes.EACH,
             'getKey': null,
             'condition': null,
@@ -115,8 +115,8 @@ var suValidationError = {
               }]
             }]),
 
-            'redundantAttribute': 'expr73',
-            'selector': '[expr73]',
+            'redundantAttribute': 'expr189',
+            'selector': '[expr189]',
             'itemName': 'message',
             'indexName': null,
 
@@ -125,8 +125,8 @@ var suValidationError = {
             }
           }]),
 
-          'redundantAttribute': 'expr72',
-          'selector': '[expr72]',
+          'redundantAttribute': 'expr188',
+          'selector': '[expr188]',
           'itemName': 'errors',
           'indexName': null,
 
