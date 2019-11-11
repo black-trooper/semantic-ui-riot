@@ -6,7 +6,7 @@ function onBeforeMount() {
 }
 
 function onMounted() {
-  this.accordions = this.$$('su-accordion');
+  this.accordions = this.$$(':scope > su-accordion');
 
   let defaultActive = false;
   this.accordions.forEach(accordion => {
