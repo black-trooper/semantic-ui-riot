@@ -72,7 +72,7 @@ riot.install(function (component) {
   }
 
   component.dispatch = (name, data) => {
-    const eventName = `on${name}`
+    const eventName = `on${name.replace(/[- ](.)/g, (match, group1) => group1.toUpperCase())}`
     const callback = component.props[eventName]
     if (callback) callback(data)
   }
