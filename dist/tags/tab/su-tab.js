@@ -53,7 +53,13 @@ var suTab = {
         'name': 'class',
 
         'evaluate': function(scope) {
-          return ['ui ', scope.state.classes, ' ', scope.state.active && 'active', ' tab'].join('');
+          return [
+            'ui ',
+            scope.state.classes,
+            ' ',
+            scope.state.active ? 'active' : '',
+            ' tab'
+          ].join('');
         }
       }, {
         'type': expressionTypes.ATTRIBUTE,

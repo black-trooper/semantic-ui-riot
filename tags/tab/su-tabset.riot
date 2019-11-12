@@ -1,10 +1,10 @@
 <su-tabset id="{ su_id }">
   <div class="ui { props.class } { getClass() } menu" if="{ !isBottom() && showMenu() }">
-    <a each="{ tab in tabs }" class="{tab.getAttribute('titleClass')} { tab.active && state.active } item" onclick="{ () => onClick(tab) }">{ tab.getAttribute('label') }</a>
+    <a each="{ tab in tabs }" class="{tab.getAttribute('title-class')} { tab.getAttribute('label') == state.active ? 'active':'' } item" onclick="{ () => onClick(tab) }">{ tab.getAttribute('label') }</a>
   </div>
   <slot />
   <div class="ui { props.class } { getClass() } menu" if="{ isBottom() && showMenu() }">
-    <a each="{ tab in tabs }" class="{tab.getAttribute('titleClass')} { tab.active && state.active } item" onclick="{ () => onClick(tab) }">{ tab.getAttribute('label') }</a>
+    <a each="{ tab in tabs }" class="{tab.getAttribute('title-class')} { tab.getAttribute('label') == state.active ? 'active':'' } item" onclick="{ () => onClick(tab) }">{ tab.getAttribute('label') }</a>
   </div>
 
   <script>

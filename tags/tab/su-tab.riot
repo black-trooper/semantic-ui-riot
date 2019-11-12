@@ -1,4 +1,4 @@
-<su-tab class="ui { state.classes } { state.active && 'active' } tab" id="{ su_id }">
+<su-tab class="ui { state.classes } { state.active ? 'active' : '' } tab" id="{ su_id }">
   <span if="{ state.mounted }">
     <slot />
   </span>

@@ -236,9 +236,9 @@ var suTabset = {
 
               'evaluate': function(scope) {
                 return [
-                  scope.tab.getAttribute('titleClass'),
+                  scope.tab.getAttribute('title-class'),
                   ' ',
-                  scope.tab.active && scope.state.active,
+                  scope.tab.getAttribute('label') == scope.state.active ? 'active':'',
                   ' item'
                 ].join('');
               }
@@ -305,9 +305,9 @@ var suTabset = {
 
               'evaluate': function(scope) {
                 return [
-                  scope.tab.getAttribute('titleClass'),
+                  scope.tab.getAttribute('title-class'),
                   ' ',
-                  scope.tab.active && scope.state.active,
+                  scope.tab.getAttribute('label') == scope.state.active ? 'active':'',
                   ' item'
                 ].join('');
               }
