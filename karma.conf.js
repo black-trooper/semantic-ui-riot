@@ -14,6 +14,9 @@ module.exports = function (config) {
     webpack: {
       devtool: 'inline-source-map',
       mode: 'development',
+      node: {
+        fs: "empty"
+      },
       module: {
         rules: [
           {
@@ -29,10 +32,15 @@ module.exports = function (config) {
           }
         ]
       },
-
+    },
+    webpackMiddleware: {
+      stats: 'errors-only',
     },
     logLevel: config.LOG_ERROR,
     reporters: ['mocha', 'coverage-istanbul'],
+    mochaReporter: {
+      output: 'minimal',
+    },
     coverageIstanbulReporter: {
       reports: ['html', 'lcovonly', 'text-summary'],
     },
