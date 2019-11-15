@@ -77,21 +77,6 @@ riot.install(function (component) {
     if (callback) callback(data)
   }
 
-  const { onMounted } = component
-
-  component.onMounted = (props, state) => {
-    onMounted.apply(component, [props, state])
-
-    component.$$('su-checkbox-group, su-checkbox, su-radio-group, su-datepicker').forEach(target => {
-      if (!target.hasAttribute('su-parent-id')) {
-        target.setAttribute('su-parent-id', component.suUuid)
-      }
-    })
-    component.obs.on(`${component.suUuid}-update`, () => {
-      component.update()
-    })
-  }
-
   component.suShowModal = target => {
     component.obs.trigger(`${target.id}-show`)
   }
