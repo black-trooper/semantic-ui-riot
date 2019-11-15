@@ -10700,25 +10700,11 @@ riot.install(function (component) {
   };
 
   component.dispatch = function (name, data) {
-    var eventName = 'on' + name;
+    var eventName = 'on' + name.replace(/[- ](.)/g, function (match, group1) {
+      return group1.toUpperCase();
+    });
     var callback = component.props[eventName];
     if (callback) callback(data);
-  };
-
-  var onMounted = component.onMounted;
-
-
-  component.onMounted = function (props, state) {
-    onMounted.apply(component, [props, state]);
-
-    component.$$('su-checkbox-group, su-checkbox, su-radio-group, su-datepicker').forEach(function (target) {
-      if (!target.hasAttribute('su-parent-id')) {
-        target.setAttribute('su-parent-id', component.suUuid);
-      }
-    });
-    component.obs.on(component.suUuid + '-update', function () {
-      component.update();
-    });
   };
 
   component.suShowModal = function (target) {
@@ -10728,10 +10714,20 @@ riot.install(function (component) {
     component.obs.trigger(target.id + '-hide');
   };
   component.suAlert = function (opts) {
-    component.obs.trigger('su-alert-show', opts);
+    return new Promise(function (resolve) {
+      component.obs.trigger('su-alert-show', opts);
+      component.obs.on('su-alert-close', function () {
+        return resolve();
+      });
+    });
   };
   component.suConfirm = function (opts) {
-    component.obs.trigger('su-confirm-show', opts);
+    return _q2.default.Promise(function (resolve, reject) {
+      component.obs.trigger('su-confirm-show', opts);
+      component.obs.on('su-confirm-close', function (result) {
+        return result ? resolve() : reject();
+      });
+    });
   };
   component.suToast = function (opts) {
     component.obs.trigger('su-toast-show', opts);
@@ -10790,7 +10786,7 @@ function onClick() {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr47="expr47"><i class="dropdown icon"></i> </div><div expr48="expr48"><slot expr49="expr49"></slot></div>',
+      '<div expr21="expr21"><i class="dropdown icon"></i> </div><div expr22="expr22"><slot expr23="expr23"></slot></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -10801,8 +10797,8 @@ function onClick() {
           }
         }]
       }, {
-        'redundantAttribute': 'expr47',
-        'selector': '[expr47]',
+        'redundantAttribute': 'expr21',
+        'selector': '[expr21]',
 
         'expressions': [{
           'type': expressionTypes.TEXT,
@@ -10827,8 +10823,8 @@ function onClick() {
           }
         }]
       }, {
-        'redundantAttribute': 'expr48',
-        'selector': '[expr48]',
+        'redundantAttribute': 'expr22',
+        'selector': '[expr22]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -10842,8 +10838,8 @@ function onClick() {
         'type': bindingTypes.SLOT,
         'attributes': [],
         'name': 'default',
-        'redundantAttribute': 'expr49',
-        'selector': '[expr49]'
+        'redundantAttribute': 'expr23',
+        'selector': '[expr23]'
       }]
     );
   },
@@ -10872,7 +10868,7 @@ function onBeforeMount() {
 }
 
 function onMounted() {
-  this.accordions = this.$$('su-accordion')
+  this.accordions = this.$$(':scope > su-accordion')
 
   let defaultActive = false
   this.accordions.forEach(accordion => {
@@ -10917,7 +10913,7 @@ function initializeChild(tag, child) {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot expr11="expr11"></slot>', [{
+    return template('<slot expr3="expr3"></slot>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -10930,8 +10926,8 @@ function initializeChild(tag, child) {
       'type': bindingTypes.SLOT,
       'attributes': [],
       'name': 'default',
-      'redundantAttribute': 'expr11',
-      'selector': '[expr11]'
+      'redundantAttribute': 'expr3',
+      'selector': '[expr3]'
     }]);
   },
 
@@ -11035,12 +11031,10 @@ function suAlert(tag, param) {
     }
   }
 
-  return new Promise(resolve => {
-    showAlert(tag, option)
-    tag.obs.on('callbackConfirm', () => {
-      tag.suHideModal(tag.$('su-modal'))
-      return resolve()
-    })
+  showAlert(tag, option)
+  tag.obs.on('callbackConfirm', () => {
+    tag.suHideModal(tag.$('su-modal'))
+    tag.obs.trigger('su-alert-close')
   })
 }
 
@@ -11062,7 +11056,7 @@ function suAlert(tag, param) {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<su-modal expr8="expr8" class="tiny"></su-modal>', [{
+    return template('<su-modal expr0="expr0" class="tiny"></su-modal>', [{
       'type': bindingTypes.TAG,
       'getComponent': getComponent,
 
@@ -11072,7 +11066,7 @@ function suAlert(tag, param) {
 
       'slots': [{
         'id': 'default',
-        'html': '<div class="ui icon message"><i class="info circle icon"></i><div class="scrolling content"><div expr9="expr9" class="header"></div><p expr10="expr10"></p></div></div>',
+        'html': '<div class="ui icon message"><i class="info circle icon"></i><div class="scrolling content"><div expr1="expr1" class="header"></div><p expr2="expr2"></p></div></div>',
 
         'bindings': [{
           'type': bindingTypes.IF,
@@ -11081,8 +11075,8 @@ function suAlert(tag, param) {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr9',
-          'selector': '[expr9]',
+          'redundantAttribute': 'expr1',
+          'selector': '[expr1]',
 
           'template': template(' ', [{
             'expressions': [{
@@ -11091,13 +11085,6 @@ function suAlert(tag, param) {
 
               'evaluate': function(scope) {
                 return [scope.title].join('');
-              }
-            }, {
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr9',
-
-              'evaluate': function(scope) {
-                return 'expr9';
               }
             }, {
               'type': expressionTypes.ATTRIBUTE,
@@ -11121,18 +11108,11 @@ function suAlert(tag, param) {
               'evaluate': function(scope) {
                 return scope.message;
               }
-            }, {
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr10',
-
-              'evaluate': function(scope) {
-                return 'expr10';
-              }
             }]
           }]),
 
-          'redundantAttribute': 'expr10',
-          'selector': '[expr10]',
+          'redundantAttribute': 'expr2',
+          'selector': '[expr2]',
           'itemName': 'message',
           'indexName': null,
 
@@ -11165,8 +11145,8 @@ function suAlert(tag, param) {
         }
       }],
 
-      'redundantAttribute': 'expr8',
-      'selector': '[expr8]'
+      'redundantAttribute': 'expr0',
+      'selector': '[expr0]'
     }]);
   },
 
@@ -11307,7 +11287,7 @@ function normalizeValue(value) {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot expr3="expr3"></slot>', [{
+    return template('<slot expr4="expr4"></slot>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'value',
@@ -11334,8 +11314,8 @@ function normalizeValue(value) {
       'type': bindingTypes.SLOT,
       'attributes': [],
       'name': 'default',
-      'redundantAttribute': 'expr3',
-      'selector': '[expr3]'
+      'redundantAttribute': 'expr4',
+      'selector': '[expr4]'
     }]);
   },
 
@@ -11441,7 +11421,7 @@ function normalizeOptChecked(checked) {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<input expr4="expr4" type="checkbox"/><label expr5="expr5"></label><label expr7="expr7"></label>',
+      '<input expr42="expr42" type="checkbox"/><label expr43="expr43"></label><label expr45="expr45"></label>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -11473,8 +11453,8 @@ function normalizeOptChecked(checked) {
           }
         }]
       }, {
-        'redundantAttribute': 'expr4',
-        'selector': '[expr4]',
+        'redundantAttribute': 'expr42',
+        'selector': '[expr42]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -11512,18 +11492,11 @@ function normalizeOptChecked(checked) {
           return !scope.props.label;
         },
 
-        'redundantAttribute': 'expr5',
-        'selector': '[expr5]',
+        'redundantAttribute': 'expr43',
+        'selector': '[expr43]',
 
-        'template': template('<slot expr6="expr6"></slot>', [{
+        'template': template('<slot expr44="expr44"></slot>', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr5',
-
-            'evaluate': function(scope) {
-              return 'expr5';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'for',
 
@@ -11535,8 +11508,8 @@ function normalizeOptChecked(checked) {
           'type': bindingTypes.SLOT,
           'attributes': [],
           'name': 'default',
-          'redundantAttribute': 'expr6',
-          'selector': '[expr6]'
+          'redundantAttribute': 'expr44',
+          'selector': '[expr44]'
         }])
       }, {
         'type': bindingTypes.IF,
@@ -11545,8 +11518,8 @@ function normalizeOptChecked(checked) {
           return scope.props.label;
         },
 
-        'redundantAttribute': 'expr7',
-        'selector': '[expr7]',
+        'redundantAttribute': 'expr45',
+        'selector': '[expr45]',
 
         'template': template(' ', [{
           'expressions': [{
@@ -11555,13 +11528,6 @@ function normalizeOptChecked(checked) {
 
             'evaluate': function(scope) {
               return scope.props.label;
-            }
-          }, {
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr7',
-
-            'evaluate': function(scope) {
-              return 'expr7';
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
@@ -11728,12 +11694,10 @@ function suConfirm(tag, param) {
     }
   }
 
-  return new Promise((resolve, reject) => {
-    showConfirm(tag, option)
-    tag.observable.on('callbackConfirm', result => {
-      tag.suHideModal(tag.$('su-modal'))
-      return result ? resolve() : reject()
-    })
+  showConfirm(tag, option)
+  tag.obs.on('callbackConfirm', result => {
+    tag.suHideModal(tag.$('su-modal'))
+    tag.obs.trigger('su-confirm-close', result)
   })
 }
 
@@ -11765,7 +11729,7 @@ function suConfirm(tag, param) {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<su-modal expr0="expr0" class="tiny"></su-modal>', [{
+    return template('<su-modal expr5="expr5" class="tiny"></su-modal>', [{
       'type': bindingTypes.TAG,
       'getComponent': getComponent,
 
@@ -11775,7 +11739,7 @@ function suConfirm(tag, param) {
 
       'slots': [{
         'id': 'default',
-        'html': '<div class="ui icon message"><i class="question circle outline icon"></i><div class="scrolling content"><div expr1="expr1" class="header"></div><p expr2="expr2"></p></div></div>',
+        'html': '<div class="ui icon message"><i class="question circle outline icon"></i><div class="scrolling content"><div expr6="expr6" class="header"></div><p expr7="expr7"></p></div></div>',
 
         'bindings': [{
           'type': bindingTypes.IF,
@@ -11784,8 +11748,8 @@ function suConfirm(tag, param) {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr1',
-          'selector': '[expr1]',
+          'redundantAttribute': 'expr6',
+          'selector': '[expr6]',
 
           'template': template(' ', [{
             'expressions': [{
@@ -11794,13 +11758,6 @@ function suConfirm(tag, param) {
 
               'evaluate': function(scope) {
                 return [scope.title].join('');
-              }
-            }, {
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr1',
-
-              'evaluate': function(scope) {
-                return 'expr1';
               }
             }, {
               'type': expressionTypes.ATTRIBUTE,
@@ -11824,18 +11781,11 @@ function suConfirm(tag, param) {
               'evaluate': function(scope) {
                 return scope.messsage;
               }
-            }, {
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr2',
-
-              'evaluate': function(scope) {
-                return 'expr2';
-              }
             }]
           }]),
 
-          'redundantAttribute': 'expr2',
-          'selector': '[expr2]',
+          'redundantAttribute': 'expr7',
+          'selector': '[expr7]',
           'itemName': 'messsage',
           'indexName': null,
 
@@ -11875,8 +11825,8 @@ function suConfirm(tag, param) {
         }
       }],
 
-      'redundantAttribute': 'expr0',
-      'selector': '[expr0]'
+      'redundantAttribute': 'expr5',
+      'selector': '[expr5]'
     }]);
   },
 
@@ -12331,7 +12281,7 @@ function parentUpdate(tag) {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr87="expr87"><div expr88="expr88"></div><div expr91="expr91"><div class="ui compact segments"><div class="ui center aligned secondary segment"><div class="ui buttons dp-navigation"><button expr92="expr92" type="button"><i class="chevron left icon"></i></button><button expr93="expr93" type="button"> </button><button expr94="expr94" type="button"> </button><button expr95="expr95" type="button"><i class="chevron right icon"></i></button></div><div class="dp-wrapper"><div expr96="expr96" class="dp-weekday"></div></div></div><div expr97="expr97" class="ui center aligned segment"></div><div expr101="expr101" class="ui center aligned segment"></div><div expr104="expr104" class="ui center aligned segment"></div><div expr108="expr108" class="ui center aligned segment"></div></div></div></div>',
+      '<div expr77="expr77"><div expr78="expr78"></div><div expr81="expr81"><div class="ui compact segments"><div class="ui center aligned secondary segment"><div class="ui buttons dp-navigation"><button expr82="expr82" type="button"><i class="chevron left icon"></i></button><button expr83="expr83" type="button"> </button><button expr84="expr84" type="button"> </button><button expr85="expr85" type="button"><i class="chevron right icon"></i></button></div><div class="dp-wrapper"><div expr86="expr86" class="dp-weekday"></div></div></div><div expr87="expr87" class="ui center aligned segment"></div><div expr91="expr91" class="ui center aligned segment"></div><div expr94="expr94" class="ui center aligned segment"></div><div expr98="expr98" class="ui center aligned segment"></div></div></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -12363,8 +12313,8 @@ function parentUpdate(tag) {
           }
         }]
       }, {
-        'redundantAttribute': 'expr87',
-        'selector': '[expr87]',
+        'redundantAttribute': 'expr77',
+        'selector': '[expr77]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -12386,20 +12336,13 @@ function parentUpdate(tag) {
           return scope.props.popup;
         },
 
-        'redundantAttribute': 'expr88',
-        'selector': '[expr88]',
+        'redundantAttribute': 'expr78',
+        'selector': '[expr78]',
 
         'template': template(
-          '<input expr89="expr89" type="text"/><button expr90="expr90" type="button"><i class="calendar icon"></i></button>',
+          '<input expr79="expr79" type="text"/><button expr80="expr80" type="button"><i class="calendar icon"></i></button>',
           [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr88',
-
-              'evaluate': function(scope) {
-                return 'expr88';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -12408,8 +12351,8 @@ function parentUpdate(tag) {
               }
             }]
           }, {
-            'redundantAttribute': 'expr89',
-            'selector': '[expr89]',
+            'redundantAttribute': 'expr79',
+            'selector': '[expr79]',
 
             'expressions': [{
               'type': expressionTypes.ATTRIBUTE,
@@ -12434,8 +12377,8 @@ function parentUpdate(tag) {
               }
             }]
           }, {
-            'redundantAttribute': 'expr90',
-            'selector': '[expr90]',
+            'redundantAttribute': 'expr80',
+            'selector': '[expr80]',
 
             'expressions': [{
               'type': expressionTypes.ATTRIBUTE,
@@ -12462,8 +12405,8 @@ function parentUpdate(tag) {
           }]
         )
       }, {
-        'redundantAttribute': 'expr91',
-        'selector': '[expr91]',
+        'redundantAttribute': 'expr81',
+        'selector': '[expr81]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -12502,8 +12445,8 @@ function parentUpdate(tag) {
           }
         }]
       }, {
-        'redundantAttribute': 'expr92',
-        'selector': '[expr92]',
+        'redundantAttribute': 'expr82',
+        'selector': '[expr82]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -12521,8 +12464,8 @@ function parentUpdate(tag) {
           }
         }]
       }, {
-        'redundantAttribute': 'expr93',
-        'selector': '[expr93]',
+        'redundantAttribute': 'expr83',
+        'selector': '[expr83]',
 
         'expressions': [{
           'type': expressionTypes.TEXT,
@@ -12547,8 +12490,8 @@ function parentUpdate(tag) {
           }
         }]
       }, {
-        'redundantAttribute': 'expr94',
-        'selector': '[expr94]',
+        'redundantAttribute': 'expr84',
+        'selector': '[expr84]',
 
         'expressions': [{
           'type': expressionTypes.TEXT,
@@ -12573,8 +12516,8 @@ function parentUpdate(tag) {
           }
         }]
       }, {
-        'redundantAttribute': 'expr95',
-        'selector': '[expr95]',
+        'redundantAttribute': 'expr85',
+        'selector': '[expr85]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -12606,13 +12549,6 @@ function parentUpdate(tag) {
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr96',
-
-            'evaluate': function(scope) {
-              return 'expr96';
-            }
-          }, {
-            'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
             'evaluate': function(scope) {
@@ -12621,8 +12557,8 @@ function parentUpdate(tag) {
           }]
         }]),
 
-        'redundantAttribute': 'expr96',
-        'selector': '[expr96]',
+        'redundantAttribute': 'expr86',
+        'selector': '[expr86]',
         'itemName': 'week',
         'indexName': null,
 
@@ -12636,18 +12572,11 @@ function parentUpdate(tag) {
           return !scope.yearSelecting && !scope.monthSelecting;
         },
 
-        'redundantAttribute': 'expr97',
-        'selector': '[expr97]',
+        'redundantAttribute': 'expr87',
+        'selector': '[expr87]',
 
-        'template': template('<div expr98="expr98" class="dp-wrapper"></div>', [{
+        'template': template('<div expr88="expr88" class="dp-wrapper"></div>', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr97',
-
-            'evaluate': function(scope) {
-              return 'expr97';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
@@ -12660,15 +12589,8 @@ function parentUpdate(tag) {
           'getKey': null,
           'condition': null,
 
-          'template': template('<div expr99="expr99" class="dp-day"></div>', [{
+          'template': template('<div expr89="expr89" class="dp-day"></div>', [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr98',
-
-              'evaluate': function(scope) {
-                return 'expr98';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -12681,15 +12603,8 @@ function parentUpdate(tag) {
             'getKey': null,
             'condition': null,
 
-            'template': template('<button expr100="expr100" type="button"> </button>', [{
+            'template': template('<button expr90="expr90" type="button"> </button>', [{
               'expressions': [{
-                'type': expressionTypes.ATTRIBUTE,
-                'name': 'expr99',
-
-                'evaluate': function(scope) {
-                  return 'expr99';
-                }
-              }, {
                 'type': expressionTypes.ATTRIBUTE,
                 'name': 'class',
 
@@ -12698,8 +12613,8 @@ function parentUpdate(tag) {
                 }
               }]
             }, {
-              'redundantAttribute': 'expr100',
-              'selector': '[expr100]',
+              'redundantAttribute': 'expr90',
+              'selector': '[expr90]',
 
               'expressions': [{
                 'type': expressionTypes.TEXT,
@@ -12732,8 +12647,8 @@ function parentUpdate(tag) {
               }]
             }]),
 
-            'redundantAttribute': 'expr99',
-            'selector': '[expr99]',
+            'redundantAttribute': 'expr89',
+            'selector': '[expr89]',
             'itemName': 'day',
             'indexName': null,
 
@@ -12742,8 +12657,8 @@ function parentUpdate(tag) {
             }
           }]),
 
-          'redundantAttribute': 'expr98',
-          'selector': '[expr98]',
+          'redundantAttribute': 'expr88',
+          'selector': '[expr88]',
           'itemName': 'week',
           'indexName': null,
 
@@ -12758,20 +12673,13 @@ function parentUpdate(tag) {
           return !scope.yearSelecting && !scope.monthSelecting;
         },
 
-        'redundantAttribute': 'expr101',
-        'selector': '[expr101]',
+        'redundantAttribute': 'expr91',
+        'selector': '[expr91]',
 
         'template': template(
-          '<div class="ui two column grid"><div class="column dp-clear"><button expr102="expr102" type="button"><i class="times icon"></i></button></div><div class="column dp-today"><button expr103="expr103" type="button"><i class="calendar check icon"></i></button></div></div>',
+          '<div class="ui two column grid"><div class="column dp-clear"><button expr92="expr92" type="button"><i class="times icon"></i></button></div><div class="column dp-today"><button expr93="expr93" type="button"><i class="calendar check icon"></i></button></div></div>',
           [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr101',
-
-              'evaluate': function(scope) {
-                return 'expr101';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -12780,8 +12688,8 @@ function parentUpdate(tag) {
               }
             }]
           }, {
-            'redundantAttribute': 'expr102',
-            'selector': '[expr102]',
+            'redundantAttribute': 'expr92',
+            'selector': '[expr92]',
 
             'expressions': [{
               'type': expressionTypes.ATTRIBUTE,
@@ -12799,8 +12707,8 @@ function parentUpdate(tag) {
               }
             }]
           }, {
-            'redundantAttribute': 'expr103',
-            'selector': '[expr103]',
+            'redundantAttribute': 'expr93',
+            'selector': '[expr93]',
 
             'expressions': [{
               'type': expressionTypes.ATTRIBUTE,
@@ -12826,18 +12734,11 @@ function parentUpdate(tag) {
           return scope.monthSelecting;
         },
 
-        'redundantAttribute': 'expr104',
-        'selector': '[expr104]',
+        'redundantAttribute': 'expr94',
+        'selector': '[expr94]',
 
-        'template': template('<div expr105="expr105" class="dp-wrapper"></div>', [{
+        'template': template('<div expr95="expr95" class="dp-wrapper"></div>', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr104',
-
-            'evaluate': function(scope) {
-              return 'expr104';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
@@ -12850,15 +12751,8 @@ function parentUpdate(tag) {
           'getKey': null,
           'condition': null,
 
-          'template': template('<div expr106="expr106" class="dp-month"></div>', [{
+          'template': template('<div expr96="expr96" class="dp-month"></div>', [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr105',
-
-              'evaluate': function(scope) {
-                return 'expr105';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -12871,15 +12765,8 @@ function parentUpdate(tag) {
             'getKey': null,
             'condition': null,
 
-            'template': template('<button expr107="expr107" type="button"> </button>', [{
+            'template': template('<button expr97="expr97" type="button"> </button>', [{
               'expressions': [{
-                'type': expressionTypes.ATTRIBUTE,
-                'name': 'expr106',
-
-                'evaluate': function(scope) {
-                  return 'expr106';
-                }
-              }, {
                 'type': expressionTypes.ATTRIBUTE,
                 'name': 'class',
 
@@ -12888,8 +12775,8 @@ function parentUpdate(tag) {
                 }
               }]
             }, {
-              'redundantAttribute': 'expr107',
-              'selector': '[expr107]',
+              'redundantAttribute': 'expr97',
+              'selector': '[expr97]',
 
               'expressions': [{
                 'type': expressionTypes.TEXT,
@@ -12915,8 +12802,8 @@ function parentUpdate(tag) {
               }]
             }]),
 
-            'redundantAttribute': 'expr106',
-            'selector': '[expr106]',
+            'redundantAttribute': 'expr96',
+            'selector': '[expr96]',
             'itemName': 'month',
             'indexName': null,
 
@@ -12925,8 +12812,8 @@ function parentUpdate(tag) {
             }
           }]),
 
-          'redundantAttribute': 'expr105',
-          'selector': '[expr105]',
+          'redundantAttribute': 'expr95',
+          'selector': '[expr95]',
           'itemName': 'element',
           'indexName': null,
 
@@ -12941,18 +12828,11 @@ function parentUpdate(tag) {
           return scope.yearSelecting;
         },
 
-        'redundantAttribute': 'expr108',
-        'selector': '[expr108]',
+        'redundantAttribute': 'expr98',
+        'selector': '[expr98]',
 
-        'template': template('<div expr109="expr109" class="dp-wrapper"></div>', [{
+        'template': template('<div expr99="expr99" class="dp-wrapper"></div>', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr108',
-
-            'evaluate': function(scope) {
-              return 'expr108';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
@@ -12965,15 +12845,8 @@ function parentUpdate(tag) {
           'getKey': null,
           'condition': null,
 
-          'template': template('<div expr110="expr110" class="dp-month"></div>', [{
+          'template': template('<div expr100="expr100" class="dp-month"></div>', [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr109',
-
-              'evaluate': function(scope) {
-                return 'expr109';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -12986,15 +12859,8 @@ function parentUpdate(tag) {
             'getKey': null,
             'condition': null,
 
-            'template': template('<button expr111="expr111" type="button"> </button>', [{
+            'template': template('<button expr101="expr101" type="button"> </button>', [{
               'expressions': [{
-                'type': expressionTypes.ATTRIBUTE,
-                'name': 'expr110',
-
-                'evaluate': function(scope) {
-                  return 'expr110';
-                }
-              }, {
                 'type': expressionTypes.ATTRIBUTE,
                 'name': 'class',
 
@@ -13003,8 +12869,8 @@ function parentUpdate(tag) {
                 }
               }]
             }, {
-              'redundantAttribute': 'expr111',
-              'selector': '[expr111]',
+              'redundantAttribute': 'expr101',
+              'selector': '[expr101]',
 
               'expressions': [{
                 'type': expressionTypes.TEXT,
@@ -13030,8 +12896,8 @@ function parentUpdate(tag) {
               }]
             }]),
 
-            'redundantAttribute': 'expr110',
-            'selector': '[expr110]',
+            'redundantAttribute': 'expr100',
+            'selector': '[expr100]',
             'itemName': 'year',
             'indexName': null,
 
@@ -13040,8 +12906,8 @@ function parentUpdate(tag) {
             }
           }]),
 
-          'redundantAttribute': 'expr109',
-          'selector': '[expr109]',
+          'redundantAttribute': 'expr99',
+          'selector': '[expr99]',
           'itemName': 'element',
           'indexName': null,
 
@@ -13567,7 +13433,7 @@ function isVisible(item) {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<i class="dropdown icon"></i><input expr76="expr76" class="search" autocomplete="off"/><a expr77="expr77" class="ui label transition visible" style="display: inline-block !important;"></a><div expr79="expr79"></div><div expr80="expr80" tabindex="-1"><div expr81="expr81"></div><div expr86="expr86" class="message"></div></div>',
+      '<i class="dropdown icon"></i><input expr102="expr102" class="search" autocomplete="off"/><a expr103="expr103" class="ui label transition visible" style="display: inline-block !important;"></a><div expr105="expr105"></div><div expr106="expr106" tabindex="-1"><div expr107="expr107"></div><div expr112="expr112" class="message"></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -13668,18 +13534,11 @@ function isVisible(item) {
           return scope.props.search;
         },
 
-        'redundantAttribute': 'expr76',
-        'selector': '[expr76]',
+        'redundantAttribute': 'expr102',
+        'selector': '[expr102]',
 
         'template': template(null, [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr76',
-
-            'evaluate': function(scope) {
-              return 'expr76';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
@@ -13745,20 +13604,13 @@ function isVisible(item) {
           return scope.item.selected;
         },
 
-        'template': template(' <i expr78="expr78" class="delete icon"></i>', [{
+        'template': template(' <i expr104="expr104" class="delete icon"></i>', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 0,
 
             'evaluate': function(scope) {
               return [scope.item.label].join('');
-            }
-          }, {
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr77',
-
-            'evaluate': function(scope) {
-              return 'expr77';
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
@@ -13783,8 +13635,8 @@ function isVisible(item) {
             }
           }]
         }, {
-          'redundantAttribute': 'expr78',
-          'selector': '[expr78]',
+          'redundantAttribute': 'expr104',
+          'selector': '[expr104]',
 
           'expressions': [{
             'type': expressionTypes.EVENT,
@@ -13796,8 +13648,8 @@ function isVisible(item) {
           }]
         }]),
 
-        'redundantAttribute': 'expr77',
-        'selector': '[expr77]',
+        'redundantAttribute': 'expr103',
+        'selector': '[expr103]',
         'itemName': 'item',
         'indexName': null,
 
@@ -13811,8 +13663,8 @@ function isVisible(item) {
           return !scope.props.multiple || !scope.selectedFlg;
         },
 
-        'redundantAttribute': 'expr79',
-        'selector': '[expr79]',
+        'redundantAttribute': 'expr105',
+        'selector': '[expr105]',
 
         'template': template(' ', [{
           'expressions': [{
@@ -13821,13 +13673,6 @@ function isVisible(item) {
 
             'evaluate': function(scope) {
               return [scope.state.label].join('');
-            }
-          }, {
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr79',
-
-            'evaluate': function(scope) {
-              return 'expr79';
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
@@ -13843,8 +13688,8 @@ function isVisible(item) {
           }]
         }])
       }, {
-        'redundantAttribute': 'expr80',
-        'selector': '[expr80]',
+        'redundantAttribute': 'expr106',
+        'selector': '[expr106]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -13884,16 +13729,9 @@ function isVisible(item) {
         },
 
         'template': template(
-          '<i expr82="expr82"></i><img expr83="expr83" class="ui avatar image"/><span expr84="expr84" class="description"></span><span expr85="expr85" class="text"> </span>',
+          '<i expr108="expr108"></i><img expr109="expr109" class="ui avatar image"/><span expr110="expr110" class="description"></span><span expr111="expr111" class="text"> </span>',
           [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr81',
-
-              'evaluate': function(scope) {
-                return 'expr81';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'value',
 
@@ -13943,18 +13781,11 @@ function isVisible(item) {
               return scope.item.icon;
             },
 
-            'redundantAttribute': 'expr82',
-            'selector': '[expr82]',
+            'redundantAttribute': 'expr108',
+            'selector': '[expr108]',
 
             'template': template(null, [{
               'expressions': [{
-                'type': expressionTypes.ATTRIBUTE,
-                'name': 'expr82',
-
-                'evaluate': function(scope) {
-                  return 'expr82';
-                }
-              }, {
                 'type': expressionTypes.ATTRIBUTE,
                 'name': 'class',
 
@@ -13970,18 +13801,11 @@ function isVisible(item) {
               return scope.item.image;
             },
 
-            'redundantAttribute': 'expr83',
-            'selector': '[expr83]',
+            'redundantAttribute': 'expr109',
+            'selector': '[expr109]',
 
             'template': template(null, [{
               'expressions': [{
-                'type': expressionTypes.ATTRIBUTE,
-                'name': 'expr83',
-
-                'evaluate': function(scope) {
-                  return 'expr83';
-                }
-              }, {
                 'type': expressionTypes.ATTRIBUTE,
                 'name': 'class',
 
@@ -14004,8 +13828,8 @@ function isVisible(item) {
               return scope.item.description;
             },
 
-            'redundantAttribute': 'expr84',
-            'selector': '[expr84]',
+            'redundantAttribute': 'expr110',
+            'selector': '[expr110]',
 
             'template': template(' ', [{
               'expressions': [{
@@ -14017,13 +13841,6 @@ function isVisible(item) {
                 }
               }, {
                 'type': expressionTypes.ATTRIBUTE,
-                'name': 'expr84',
-
-                'evaluate': function(scope) {
-                  return 'expr84';
-                }
-              }, {
-                'type': expressionTypes.ATTRIBUTE,
                 'name': 'class',
 
                 'evaluate': function(scope) {
@@ -14032,8 +13849,8 @@ function isVisible(item) {
               }]
             }])
           }, {
-            'redundantAttribute': 'expr85',
-            'selector': '[expr85]',
+            'redundantAttribute': 'expr111',
+            'selector': '[expr111]',
 
             'expressions': [{
               'type': expressionTypes.TEXT,
@@ -14046,8 +13863,8 @@ function isVisible(item) {
           }]
         ),
 
-        'redundantAttribute': 'expr81',
-        'selector': '[expr81]',
+        'redundantAttribute': 'expr107',
+        'selector': '[expr107]',
         'itemName': 'item',
         'indexName': null,
 
@@ -14061,18 +13878,11 @@ function isVisible(item) {
           return scope.filtered && scope.filteredItems.length == 0;
         },
 
-        'redundantAttribute': 'expr86',
-        'selector': '[expr86]',
+        'redundantAttribute': 'expr112',
+        'selector': '[expr112]',
 
         'template': template('No results found.', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr86',
-
-            'evaluate': function(scope) {
-              return 'expr86';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
@@ -14228,7 +14038,7 @@ function flatMap(xs, f) {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<select expr21="expr21"><option expr22="expr22"></option><optgroup expr23="expr23"></optgroup></select><i class="dropdown icon"></i>',
+      '<select expr8="expr8"><option expr9="expr9"></option><optgroup expr10="expr10"></optgroup></select><i class="dropdown icon"></i>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -14267,8 +14077,8 @@ function flatMap(xs, f) {
           }
         }]
       }, {
-        'redundantAttribute': 'expr21',
-        'selector': '[expr21]',
+        'redundantAttribute': 'expr8',
+        'selector': '[expr8]',
 
         'expressions': [{
           'type': expressionTypes.EVENT,
@@ -14310,13 +14120,6 @@ function flatMap(xs, f) {
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr22',
-
-            'evaluate': function(scope) {
-              return 'expr22';
-            }
-          }, {
-            'type': expressionTypes.ATTRIBUTE,
             'name': 'value',
 
             'evaluate': function(scope) {
@@ -14325,8 +14128,8 @@ function flatMap(xs, f) {
           }]
         }]),
 
-        'redundantAttribute': 'expr22',
-        'selector': '[expr22]',
+        'redundantAttribute': 'expr9',
+        'selector': '[expr9]',
         'itemName': 'item',
         'indexName': null,
 
@@ -14341,15 +14144,8 @@ function flatMap(xs, f) {
           return scope.item.items;
         },
 
-        'template': template('<option expr24="expr24"></option>', [{
+        'template': template('<option expr11="expr11"></option>', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr23',
-
-            'evaluate': function(scope) {
-              return 'expr23';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'label',
 
@@ -14372,13 +14168,6 @@ function flatMap(xs, f) {
               }
             }, {
               'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr24',
-
-              'evaluate': function(scope) {
-                return 'expr24';
-              }
-            }, {
-              'type': expressionTypes.ATTRIBUTE,
               'name': 'value',
 
               'evaluate': function(scope) {
@@ -14387,8 +14176,8 @@ function flatMap(xs, f) {
             }]
           }]),
 
-          'redundantAttribute': 'expr24',
-          'selector': '[expr24]',
+          'redundantAttribute': 'expr11',
+          'selector': '[expr11]',
           'itemName': 'child',
           'indexName': null,
 
@@ -14397,8 +14186,8 @@ function flatMap(xs, f) {
           }
         }]),
 
-        'redundantAttribute': 'expr23',
-        'selector': '[expr23]',
+        'redundantAttribute': 'expr10',
+        'selector': '[expr10]',
         'itemName': 'item',
         'indexName': null,
 
@@ -14577,7 +14366,7 @@ function getContentClass(tag) {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr26="expr26"><div expr27="expr27"><i expr28="expr28" class="close icon"></i><div expr29="expr29"></div><div expr31="expr31"><slot expr32="expr32"></slot></div><div class="actions"><button expr33="expr33" type="button"></button></div></div></div>',
+      '<div expr12="expr12"><div expr13="expr13"><i expr14="expr14" class="close icon"></i><div expr15="expr15"></div><div expr17="expr17"><slot expr18="expr18"></slot></div><div class="actions"><button expr19="expr19" type="button"></button></div></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.EVENT,
@@ -14602,8 +14391,8 @@ function getContentClass(tag) {
           }
         }]
       }, {
-        'redundantAttribute': 'expr26',
-        'selector': '[expr26]',
+        'redundantAttribute': 'expr12',
+        'selector': '[expr12]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -14614,8 +14403,8 @@ function getContentClass(tag) {
           }
         }]
       }, {
-        'redundantAttribute': 'expr27',
-        'selector': '[expr27]',
+        'redundantAttribute': 'expr13',
+        'selector': '[expr13]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -14639,18 +14428,11 @@ function getContentClass(tag) {
           return scope.closable && !scope.basic;
         },
 
-        'redundantAttribute': 'expr28',
-        'selector': '[expr28]',
+        'redundantAttribute': 'expr14',
+        'selector': '[expr14]',
 
         'template': template(null, [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr28',
-
-            'evaluate': function(scope) {
-              return 'expr28';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
@@ -14673,23 +14455,16 @@ function getContentClass(tag) {
           return scope.header;
         },
 
-        'redundantAttribute': 'expr29',
-        'selector': '[expr29]',
+        'redundantAttribute': 'expr15',
+        'selector': '[expr15]',
 
-        'template': template('<i expr30="expr30"></i> ', [{
+        'template': template('<i expr16="expr16"></i> ', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 1,
 
             'evaluate': function(scope) {
               return [scope.title].join('');
-            }
-          }, {
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr29',
-
-            'evaluate': function(scope) {
-              return 'expr29';
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
@@ -14706,18 +14481,11 @@ function getContentClass(tag) {
             return scope.header.icon;
           },
 
-          'redundantAttribute': 'expr30',
-          'selector': '[expr30]',
+          'redundantAttribute': 'expr16',
+          'selector': '[expr16]',
 
           'template': template(null, [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr30',
-
-              'evaluate': function(scope) {
-                return 'expr30';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -14728,8 +14496,8 @@ function getContentClass(tag) {
           }])
         }])
       }, {
-        'redundantAttribute': 'expr31',
-        'selector': '[expr31]',
+        'redundantAttribute': 'expr17',
+        'selector': '[expr17]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -14743,27 +14511,20 @@ function getContentClass(tag) {
         'type': bindingTypes.SLOT,
         'attributes': [],
         'name': 'default',
-        'redundantAttribute': 'expr32',
-        'selector': '[expr32]'
+        'redundantAttribute': 'expr18',
+        'selector': '[expr18]'
       }, {
         'type': bindingTypes.EACH,
         'getKey': null,
         'condition': null,
 
-        'template': template(' <i expr34="expr34"></i>', [{
+        'template': template(' <i expr20="expr20"></i>', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 0,
 
             'evaluate': function(scope) {
               return [scope.button.text].join('');
-            }
-          }, {
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr33',
-
-            'evaluate': function(scope) {
-              return 'expr33';
             }
           }, {
             'type': expressionTypes.EVENT,
@@ -14801,18 +14562,11 @@ function getContentClass(tag) {
             return scope.button.icon;
           },
 
-          'redundantAttribute': 'expr34',
-          'selector': '[expr34]',
+          'redundantAttribute': 'expr20',
+          'selector': '[expr20]',
 
           'template': template(null, [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr34',
-
-              'evaluate': function(scope) {
-                return 'expr34';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -14823,8 +14577,8 @@ function getContentClass(tag) {
           }])
         }]),
 
-        'redundantAttribute': 'expr33',
-        'selector': '[expr33]',
+        'redundantAttribute': 'expr19',
+        'selector': '[expr19]',
         'itemName': 'button',
         'indexName': null,
 
@@ -14965,10 +14719,10 @@ function calcIndex(activePage, totalPage, pageSize) {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr12="expr12"><a expr13="expr13"><i aria-hidden="true" class="angle double left icon"></i></a><a expr14="expr14"><i class="angle left icon"></i></a><virtual expr15="expr15"></virtual><a expr19="expr19"><i class="angle right icon"></i></a><a expr20="expr20"><i aria-hidden="true" class="angle double right icon"></i></a></div>',
+      '<div expr24="expr24"><a expr25="expr25"><i aria-hidden="true" class="angle double left icon"></i></a><a expr26="expr26"><i class="angle left icon"></i></a><template expr27="expr27"></template><a expr31="expr31"><i class="angle right icon"></i></a><a expr32="expr32"><i aria-hidden="true" class="angle double right icon"></i></a></div>',
       [{
-        'redundantAttribute': 'expr12',
-        'selector': '[expr12]',
+        'redundantAttribute': 'expr24',
+        'selector': '[expr24]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -14979,8 +14733,8 @@ function calcIndex(activePage, totalPage, pageSize) {
           }
         }]
       }, {
-        'redundantAttribute': 'expr13',
-        'selector': '[expr13]',
+        'redundantAttribute': 'expr25',
+        'selector': '[expr25]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -14998,8 +14752,8 @@ function calcIndex(activePage, totalPage, pageSize) {
           }
         }]
       }, {
-        'redundantAttribute': 'expr14',
-        'selector': '[expr14]',
+        'redundantAttribute': 'expr26',
+        'selector': '[expr26]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -15021,128 +14775,94 @@ function calcIndex(activePage, totalPage, pageSize) {
         'getKey': null,
         'condition': null,
 
-        'template': template(null, [{
-          'type': bindingTypes.TAG,
-          'getComponent': getComponent,
+        'template': template(
+          '<a expr28="expr28" class="item"></a><a expr29="expr29" class="active item"></a><div expr30="expr30" class="disabled icon item"></div>',
+          [{
+            'type': bindingTypes.IF,
 
-          'evaluate': function(scope) {
-            return 'virtual';
-          },
+            'evaluate': function(scope) {
+              return !scope.page.active && !scope.page.disabled;
+            },
 
-          'slots': [{
-            'id': 'default',
-            'html': '<a expr16="expr16" class="item"></a><a expr17="expr17" class="active item"></a><div expr18="expr18" class="disabled icon item"></div>',
+            'redundantAttribute': 'expr28',
+            'selector': '[expr28]',
 
-            'bindings': [{
-              'type': bindingTypes.IF,
+            'template': template(' ', [{
+              'expressions': [{
+                'type': expressionTypes.TEXT,
+                'childNodeIndex': 0,
 
-              'evaluate': function(scope) {
-                return !scope.page.active && !scope.page.disabled;
-              },
+                'evaluate': function(scope) {
+                  return [scope.page.number].join('');
+                }
+              }, {
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'class',
 
-              'redundantAttribute': 'expr16',
-              'selector': '[expr16]',
+                'evaluate': function(scope) {
+                  return 'item';
+                }
+              }, {
+                'type': expressionTypes.EVENT,
+                'name': 'onclick',
 
-              'template': template(' ', [{
-                'expressions': [{
-                  'type': expressionTypes.TEXT,
-                  'childNodeIndex': 0,
+                'evaluate': function(scope) {
+                  return event => scope.onClickPage(event,scope.page.number);
+                }
+              }]
+            }])
+          }, {
+            'type': bindingTypes.IF,
 
-                  'evaluate': function(scope) {
-                    return [scope.page.number].join('');
-                  }
-                }, {
-                  'type': expressionTypes.ATTRIBUTE,
-                  'name': 'expr16',
+            'evaluate': function(scope) {
+              return scope.page.active;
+            },
 
-                  'evaluate': function(scope) {
-                    return 'expr16';
-                  }
-                }, {
-                  'type': expressionTypes.ATTRIBUTE,
-                  'name': 'class',
+            'redundantAttribute': 'expr29',
+            'selector': '[expr29]',
 
-                  'evaluate': function(scope) {
-                    return 'item';
-                  }
-                }, {
-                  'type': expressionTypes.EVENT,
-                  'name': 'onclick',
+            'template': template(' ', [{
+              'expressions': [{
+                'type': expressionTypes.TEXT,
+                'childNodeIndex': 0,
 
-                  'evaluate': function(scope) {
-                    return event => scope.onClickPage(event,scope.page.number);
-                  }
-                }]
-              }])
-            }, {
-              'type': bindingTypes.IF,
+                'evaluate': function(scope) {
+                  return scope.page.number;
+                }
+              }, {
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'class',
 
-              'evaluate': function(scope) {
-                return scope.page.active;
-              },
+                'evaluate': function(scope) {
+                  return 'active item';
+                }
+              }]
+            }])
+          }, {
+            'type': bindingTypes.IF,
 
-              'redundantAttribute': 'expr17',
-              'selector': '[expr17]',
+            'evaluate': function(scope) {
+              return scope.page.disabled;
+            },
 
-              'template': template(' ', [{
-                'expressions': [{
-                  'type': expressionTypes.TEXT,
-                  'childNodeIndex': 0,
+            'redundantAttribute': 'expr30',
+            'selector': '[expr30]',
 
-                  'evaluate': function(scope) {
-                    return scope.page.number;
-                  }
-                }, {
-                  'type': expressionTypes.ATTRIBUTE,
-                  'name': 'expr17',
+            'template': template('<i class="ellipsis horizontal icon"></i>', [{
+              'expressions': [{
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'class',
 
-                  'evaluate': function(scope) {
-                    return 'expr17';
-                  }
-                }, {
-                  'type': expressionTypes.ATTRIBUTE,
-                  'name': 'class',
+                'evaluate': function(scope) {
+                  return 'disabled icon item';
+                }
+              }]
+            }])
+          }]
+        ),
 
-                  'evaluate': function(scope) {
-                    return 'active item';
-                  }
-                }]
-              }])
-            }, {
-              'type': bindingTypes.IF,
-
-              'evaluate': function(scope) {
-                return scope.page.disabled;
-              },
-
-              'redundantAttribute': 'expr18',
-              'selector': '[expr18]',
-
-              'template': template('<i class="ellipsis horizontal icon"></i>', [{
-                'expressions': [{
-                  'type': expressionTypes.ATTRIBUTE,
-                  'name': 'expr18',
-
-                  'evaluate': function(scope) {
-                    return 'expr18';
-                  }
-                }, {
-                  'type': expressionTypes.ATTRIBUTE,
-                  'name': 'class',
-
-                  'evaluate': function(scope) {
-                    return 'disabled icon item';
-                  }
-                }]
-              }])
-            }]
-          }],
-
-          'attributes': []
-        }]),
-
-        'redundantAttribute': 'expr15',
-        'selector': '[expr15]',
+        'redundantAttribute': 'expr27',
+        'selector': '[expr27]',
         'itemName': 'page',
         'indexName': null,
 
@@ -15150,8 +14870,8 @@ function calcIndex(activePage, totalPage, pageSize) {
           return scope.state.pages;
         }
       }, {
-        'redundantAttribute': 'expr19',
-        'selector': '[expr19]',
+        'redundantAttribute': 'expr31',
+        'selector': '[expr31]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -15172,8 +14892,8 @@ function calcIndex(activePage, totalPage, pageSize) {
           }
         }]
       }, {
-        'redundantAttribute': 'expr20',
-        'selector': '[expr20]',
+        'redundantAttribute': 'expr32',
+        'selector': '[expr32]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -15267,10 +14987,10 @@ function onMouseOut() {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr35="expr35"><div expr36="expr36" class="header"></div><div class="content"></div></div><slot expr37="expr37"></slot>',
+      '<div expr33="expr33"><div expr34="expr34" class="header"></div><div class="content"></div></div><slot expr35="expr35"></slot>',
       [{
-        'redundantAttribute': 'expr35',
-        'selector': '[expr35]',
+        'redundantAttribute': 'expr33',
+        'selector': '[expr33]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -15317,8 +15037,8 @@ function onMouseOut() {
           return scope.props.dataTitle;
         },
 
-        'redundantAttribute': 'expr36',
-        'selector': '[expr36]',
+        'redundantAttribute': 'expr34',
+        'selector': '[expr34]',
 
         'template': template(' ', [{
           'expressions': [{
@@ -15327,13 +15047,6 @@ function onMouseOut() {
 
             'evaluate': function(scope) {
               return scope.props.dataTitle;
-            }
-          }, {
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr36',
-
-            'evaluate': function(scope) {
-              return 'expr36';
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
@@ -15348,8 +15061,8 @@ function onMouseOut() {
         'type': bindingTypes.SLOT,
         'attributes': [],
         'name': 'default',
-        'redundantAttribute': 'expr37',
-        'selector': '[expr37]'
+        'redundantAttribute': 'expr35',
+        'selector': '[expr35]'
       }]
     );
   },
@@ -15437,6 +15150,10 @@ function isProgress() {
   return hasClass(this, 'progress')
 }
 
+function isIndicating() {
+  return hasClass(this, 'indicating')
+}
+
 // ===================================================================================
 //                                                                               Logic
 //                                                                               =====
@@ -15471,12 +15188,13 @@ function hasClass(tag, className) {
     onBeforeUpdate,
     getClass,
     getStates,
-    isProgress
+    isProgress,
+    isIndicating
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr38="expr38"><div expr39="expr39" class="bar"><div expr40="expr40" class="progress"></div></div><div class="label"><slot expr41="expr41"></slot></div></div>',
+      '<div expr37="expr37"><div expr38="expr38" class="bar"><div expr39="expr39" class="progress"></div></div><div class="label"><template expr40="expr40"></template><slot expr41="expr41"></slot></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -15492,10 +15210,17 @@ function hasClass(tag, className) {
           'evaluate': function(scope) {
             return scope.percent;
           }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'value',
+
+          'evaluate': function(scope) {
+            return scope.state.value;
+          }
         }]
       }, {
-        'redundantAttribute': 'expr38',
-        'selector': '[expr38]',
+        'redundantAttribute': 'expr37',
+        'selector': '[expr37]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -15513,8 +15238,8 @@ function hasClass(tag, className) {
           }
         }]
       }, {
-        'redundantAttribute': 'expr39',
-        'selector': '[expr39]',
+        'redundantAttribute': 'expr38',
+        'selector': '[expr38]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -15531,8 +15256,8 @@ function hasClass(tag, className) {
           return scope.isProgress();
         },
 
-        'redundantAttribute': 'expr40',
-        'selector': '[expr40]',
+        'redundantAttribute': 'expr39',
+        'selector': '[expr39]',
 
         'template': template(' ', [{
           'expressions': [{
@@ -15544,17 +15269,30 @@ function hasClass(tag, className) {
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr40',
-
-            'evaluate': function(scope) {
-              return 'expr40';
-            }
-          }, {
-            'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
             'evaluate': function(scope) {
               return 'progress';
+            }
+          }]
+        }])
+      }, {
+        'type': bindingTypes.IF,
+
+        'evaluate': function(scope) {
+          return scope.isIndicating();
+        },
+
+        'redundantAttribute': 'expr40',
+        'selector': '[expr40]',
+
+        'template': template(' ', [{
+          'expressions': [{
+            'type': expressionTypes.TEXT,
+            'childNodeIndex': 0,
+
+            'evaluate': function(scope) {
+              return [scope.percent, '%'].join('');
             }
           }]
         }])
@@ -15681,7 +15419,7 @@ function initializeChild(radio, uid) {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot expr25="expr25"></slot>', [{
+    return template('<slot expr36="expr36"></slot>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'value',
@@ -15708,8 +15446,8 @@ function initializeChild(radio, uid) {
       'type': bindingTypes.SLOT,
       'attributes': [],
       'name': 'default',
-      'redundantAttribute': 'expr25',
-      'selector': '[expr25]'
+      'redundantAttribute': 'expr36',
+      'selector': '[expr36]'
     }]);
   },
 
@@ -15804,7 +15542,7 @@ function normalizeOptChecked(checked) {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<input expr42="expr42" type="radio"/><label expr43="expr43"></label><label expr45="expr45"></label>',
+      '<input expr46="expr46" type="radio"/><label expr47="expr47"></label><label expr49="expr49"></label>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -15815,8 +15553,8 @@ function normalizeOptChecked(checked) {
           }
         }]
       }, {
-        'redundantAttribute': 'expr42',
-        'selector': '[expr42]',
+        'redundantAttribute': 'expr46',
+        'selector': '[expr46]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -15860,18 +15598,11 @@ function normalizeOptChecked(checked) {
           return !scope.props.label;
         },
 
-        'redundantAttribute': 'expr43',
-        'selector': '[expr43]',
+        'redundantAttribute': 'expr47',
+        'selector': '[expr47]',
 
-        'template': template('<slot expr44="expr44"></slot>', [{
+        'template': template('<slot expr48="expr48"></slot>', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr43',
-
-            'evaluate': function(scope) {
-              return 'expr43';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'for',
 
@@ -15883,8 +15614,8 @@ function normalizeOptChecked(checked) {
           'type': bindingTypes.SLOT,
           'attributes': [],
           'name': 'default',
-          'redundantAttribute': 'expr44',
-          'selector': '[expr44]'
+          'redundantAttribute': 'expr48',
+          'selector': '[expr48]'
         }])
       }, {
         'type': bindingTypes.IF,
@@ -15893,8 +15624,8 @@ function normalizeOptChecked(checked) {
           return scope.props.label;
         },
 
-        'redundantAttribute': 'expr45',
-        'selector': '[expr45]',
+        'redundantAttribute': 'expr49',
+        'selector': '[expr49]',
 
         'template': template(' ', [{
           'expressions': [{
@@ -15903,13 +15634,6 @@ function normalizeOptChecked(checked) {
 
             'evaluate': function(scope) {
               return scope.props.label;
-            }
-          }, {
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr45',
-
-            'evaluate': function(scope) {
-              return 'expr45';
             }
           }, {
             'type': expressionTypes.ATTRIBUTE,
@@ -15956,6 +15680,10 @@ function onMounted(props, state) {
 }
 
 function onBeforeUpdate(props, state) {
+  if (this.lastValue != props.value) {
+    this.lastValue = props.value
+    this.state.value = props.value
+  }
   this.readOnly = this.root.classList.contains('read-only')
   this.changed = state.value != state.defaultValue
   updateView(this)
@@ -16008,6 +15736,7 @@ function onMouseout() {
 //                                                                               Logic
 //                                                                               =====
 function init(tag, max = 5, value = 0) {
+  tag.lastValue = value
   tag.state.value = value
   tag.state.defaultValue = value
   tag.state.items.length = 0
@@ -16035,6 +15764,8 @@ function updateView(tag) {
   'exports': {
     state: {
       items: [],
+      value: null,
+      lastValue: null,
       defaultValue: null,
     },
 
@@ -16048,7 +15779,7 @@ function updateView(tag) {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<i expr46="expr46"></i>', [{
+    return template('<i expr50="expr50"></i>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -16086,13 +15817,6 @@ function updateView(tag) {
       'template': template(null, [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
-          'name': 'expr46',
-
-          'evaluate': function(scope) {
-            return 'expr46';
-          }
-        }, {
-          'type': expressionTypes.ATTRIBUTE,
           'name': 'class',
 
           'evaluate': function(scope) {
@@ -16127,8 +15851,8 @@ function updateView(tag) {
         }]
       }]),
 
-      'redundantAttribute': 'expr46',
-      'selector': '[expr46]',
+      'redundantAttribute': 'expr50',
+      'selector': '[expr50]',
       'itemName': 'item',
       'indexName': null,
 
@@ -16173,7 +15897,7 @@ function onMounted(props, state) {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot expr53="expr53"></slot>', [{
+    return template('<slot expr58="expr58"></slot>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -16193,8 +15917,8 @@ function onMounted(props, state) {
       'type': bindingTypes.SLOT,
       'attributes': [],
       'name': 'default',
-      'redundantAttribute': 'expr53',
-      'selector': '[expr53]'
+      'redundantAttribute': 'expr58',
+      'selector': '[expr58]'
     }]);
   },
 
@@ -16253,7 +15977,7 @@ function onClick() {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<a expr54="expr54"><slot expr55="expr55"></slot></a>', [{
+    return template('<a expr51="expr51"><slot expr52="expr52"></slot></a>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'id',
@@ -16263,8 +15987,8 @@ function onClick() {
         }
       }]
     }, {
-      'redundantAttribute': 'expr54',
-      'selector': '[expr54]',
+      'redundantAttribute': 'expr51',
+      'selector': '[expr51]',
 
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
@@ -16285,8 +16009,8 @@ function onClick() {
       'type': bindingTypes.SLOT,
       'attributes': [],
       'name': 'default',
-      'redundantAttribute': 'expr55',
-      'selector': '[expr55]'
+      'redundantAttribute': 'expr52',
+      'selector': '[expr52]'
     }]);
   },
 
@@ -16355,13 +16079,19 @@ function onBeforeUpdate(props, state) {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<span expr51="expr51"></span>', [{
+    return template('<span expr53="expr53"></span>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
 
         'evaluate': function(scope) {
-          return ['ui ', scope.state.classes, ' ', scope.state.active && 'active', ' tab'].join('');
+          return [
+            'ui ',
+            scope.state.classes,
+            ' ',
+            scope.state.active ? 'active' : '',
+            ' tab'
+          ].join('');
         }
       }, {
         'type': expressionTypes.ATTRIBUTE,
@@ -16378,24 +16108,15 @@ function onBeforeUpdate(props, state) {
         return scope.state.mounted;
       },
 
-      'redundantAttribute': 'expr51',
-      'selector': '[expr51]',
+      'redundantAttribute': 'expr53',
+      'selector': '[expr53]',
 
-      'template': template('<slot expr52="expr52"></slot>', [{
-        'expressions': [{
-          'type': expressionTypes.ATTRIBUTE,
-          'name': 'expr51',
-
-          'evaluate': function(scope) {
-            return 'expr51';
-          }
-        }]
-      }, {
+      'template': template('<slot expr54="expr54"></slot>', [{
         'type': bindingTypes.SLOT,
         'attributes': [],
         'name': 'default',
-        'redundantAttribute': 'expr52',
-        'selector': '[expr52]'
+        'redundantAttribute': 'expr54',
+        'selector': '[expr54]'
       }])
     }]);
   },
@@ -16606,7 +16327,7 @@ function hasClass(tag, className) {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr56="expr56"></div><slot expr58="expr58"></slot><div expr59="expr59"></div>',
+      '<div expr72="expr72"></div><slot expr74="expr74"></slot><div expr75="expr75"></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -16623,18 +16344,11 @@ function hasClass(tag, className) {
           return !scope.isBottom() && scope.showMenu();
         },
 
-        'redundantAttribute': 'expr56',
-        'selector': '[expr56]',
+        'redundantAttribute': 'expr72',
+        'selector': '[expr72]',
 
-        'template': template('<a expr57="expr57"></a>', [{
+        'template': template('<a expr73="expr73"></a>', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr56',
-
-            'evaluate': function(scope) {
-              return 'expr56';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
@@ -16657,20 +16371,13 @@ function hasClass(tag, className) {
               }
             }, {
               'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr57',
-
-              'evaluate': function(scope) {
-                return 'expr57';
-              }
-            }, {
-              'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
               'evaluate': function(scope) {
                 return [
-                  scope.tab.getAttribute('titleClass'),
+                  scope.tab.getAttribute('title-class'),
                   ' ',
-                  scope.tab.active && scope.state.active,
+                  scope.tab.getAttribute('label') == scope.state.active ? 'active':'',
                   ' item'
                 ].join('');
               }
@@ -16684,8 +16391,8 @@ function hasClass(tag, className) {
             }]
           }]),
 
-          'redundantAttribute': 'expr57',
-          'selector': '[expr57]',
+          'redundantAttribute': 'expr73',
+          'selector': '[expr73]',
           'itemName': 'tab',
           'indexName': null,
 
@@ -16697,8 +16404,8 @@ function hasClass(tag, className) {
         'type': bindingTypes.SLOT,
         'attributes': [],
         'name': 'default',
-        'redundantAttribute': 'expr58',
-        'selector': '[expr58]'
+        'redundantAttribute': 'expr74',
+        'selector': '[expr74]'
       }, {
         'type': bindingTypes.IF,
 
@@ -16706,18 +16413,11 @@ function hasClass(tag, className) {
           return scope.isBottom() && scope.showMenu();
         },
 
-        'redundantAttribute': 'expr59',
-        'selector': '[expr59]',
+        'redundantAttribute': 'expr75',
+        'selector': '[expr75]',
 
-        'template': template('<a expr60="expr60"></a>', [{
+        'template': template('<a expr76="expr76"></a>', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr59',
-
-            'evaluate': function(scope) {
-              return 'expr59';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
@@ -16740,20 +16440,13 @@ function hasClass(tag, className) {
               }
             }, {
               'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr60',
-
-              'evaluate': function(scope) {
-                return 'expr60';
-              }
-            }, {
-              'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
               'evaluate': function(scope) {
                 return [
-                  scope.tab.getAttribute('titleClass'),
+                  scope.tab.getAttribute('title-class'),
                   ' ',
-                  scope.tab.active && scope.state.active,
+                  scope.tab.getAttribute('label') == scope.state.active ? 'active':'',
                   ' item'
                 ].join('');
               }
@@ -16767,8 +16460,8 @@ function hasClass(tag, className) {
             }]
           }]),
 
-          'redundantAttribute': 'expr60',
-          'selector': '[expr60]',
+          'redundantAttribute': 'expr76',
+          'selector': '[expr76]',
           'itemName': 'tab',
           'indexName': null,
 
@@ -16805,7 +16498,7 @@ function onBeforeMount(props, state) {
 }
 
 function onMounted(props, state) {
-  this.headers = this.$$('su-th')
+  this.headers = this.$$('su-th, [is="su-th"]')
 
   this.headers.forEach(th => {
     this.obs.on(`${th.id}-click`, field => {
@@ -16919,12 +16612,12 @@ function addIndexField(tag) {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot expr62="expr62"></slot>', [{
+    return template('<slot expr57="expr57"></slot>', [{
       'type': bindingTypes.SLOT,
       'attributes': [],
       'name': 'default',
-      'redundantAttribute': 'expr62',
-      'selector': '[expr62]'
+      'redundantAttribute': 'expr57',
+      'selector': '[expr57]'
     }]);
   },
 
@@ -16994,7 +16687,7 @@ function onClick() {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot expr61="expr61"></slot>', [{
+    return template('<slot expr55="expr55"></slot>', [{
       'expressions': [{
         'type': expressionTypes.EVENT,
         'name': 'onclick',
@@ -17021,8 +16714,8 @@ function onClick() {
       'type': bindingTypes.SLOT,
       'attributes': [],
       'name': 'default',
-      'redundantAttribute': 'expr61',
-      'selector': '[expr61]'
+      'redundantAttribute': 'expr55',
+      'selector': '[expr55]'
     }]);
   },
 
@@ -17091,7 +16784,7 @@ function onClose() {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<div expr63="expr63"></div>', [{
+    return template('<div expr64="expr64"></div>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -17107,20 +16800,13 @@ function onClose() {
         return !scope.hide;
       },
 
-      'redundantAttribute': 'expr63',
-      'selector': '[expr63]',
+      'redundantAttribute': 'expr64',
+      'selector': '[expr64]',
 
       'template': template(
-        '<div expr64="expr64"></div><div expr65="expr65"><i expr66="expr66" class="close icon"></i><i expr67="expr67"></i><div class="content"><div expr68="expr68" class="header"></div><p expr69="expr69"></p></div></div><div expr70="expr70"></div>',
+        '<div expr65="expr65"></div><div expr66="expr66"><i expr67="expr67" class="close icon"></i><i expr68="expr68"></i><div class="content"><div expr69="expr69" class="header"></div><p expr70="expr70"></p></div></div><div expr71="expr71"></div>',
         [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr63',
-
-            'evaluate': function(scope) {
-              return 'expr63';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
@@ -17135,18 +16821,11 @@ function onClose() {
             return scope.progress == 'top';
           },
 
-          'redundantAttribute': 'expr64',
-          'selector': '[expr64]',
+          'redundantAttribute': 'expr65',
+          'selector': '[expr65]',
 
           'template': template('<div class="bar"></div>', [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr64',
-
-              'evaluate': function(scope) {
-                return 'expr64';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -17156,8 +16835,8 @@ function onClose() {
             }]
           }])
         }, {
-          'redundantAttribute': 'expr65',
-          'selector': '[expr65]',
+          'redundantAttribute': 'expr66',
+          'selector': '[expr66]',
 
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
@@ -17174,8 +16853,8 @@ function onClose() {
             }
           }]
         }, {
-          'redundantAttribute': 'expr66',
-          'selector': '[expr66]',
+          'redundantAttribute': 'expr67',
+          'selector': '[expr67]',
 
           'expressions': [{
             'type': expressionTypes.EVENT,
@@ -17192,18 +16871,11 @@ function onClose() {
             return scope.icon;
           },
 
-          'redundantAttribute': 'expr67',
-          'selector': '[expr67]',
+          'redundantAttribute': 'expr68',
+          'selector': '[expr68]',
 
           'template': template(null, [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr67',
-
-              'evaluate': function(scope) {
-                return 'expr67';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -17219,8 +16891,8 @@ function onClose() {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr68',
-          'selector': '[expr68]',
+          'redundantAttribute': 'expr69',
+          'selector': '[expr69]',
 
           'template': template(' ', [{
             'expressions': [{
@@ -17229,13 +16901,6 @@ function onClose() {
 
               'evaluate': function(scope) {
                 return [scope.title].join('');
-              }
-            }, {
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr68',
-
-              'evaluate': function(scope) {
-                return 'expr68';
               }
             }, {
               'type': expressionTypes.ATTRIBUTE,
@@ -17259,18 +16924,11 @@ function onClose() {
               'evaluate': function(scope) {
                 return scope.message;
               }
-            }, {
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr69',
-
-              'evaluate': function(scope) {
-                return 'expr69';
-              }
             }]
           }]),
 
-          'redundantAttribute': 'expr69',
-          'selector': '[expr69]',
+          'redundantAttribute': 'expr70',
+          'selector': '[expr70]',
           'itemName': 'message',
           'indexName': null,
 
@@ -17284,18 +16942,11 @@ function onClose() {
             return scope.progress == 'bottom';
           },
 
-          'redundantAttribute': 'expr70',
-          'selector': '[expr70]',
+          'redundantAttribute': 'expr71',
+          'selector': '[expr71]',
 
           'template': template('<div class="bar"></div>', [{
             'expressions': [{
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr70',
-
-              'evaluate': function(scope) {
-                return 'expr70';
-              }
-            }, {
               'type': expressionTypes.ATTRIBUTE,
               'name': 'class',
 
@@ -17391,7 +17042,7 @@ function showToast(tag, param) {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div class="ui list"><su-toast-item expr50="expr50"></su-toast-item></div>',
+      '<div class="ui list"><su-toast-item expr56="expr56"></su-toast-item></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -17461,8 +17112,8 @@ function showToast(tag, param) {
           }]
         }]),
 
-        'redundantAttribute': 'expr50',
-        'selector': '[expr50]',
+        'redundantAttribute': 'expr56',
+        'selector': '[expr56]',
         'itemName': 'item',
         'indexName': null,
 
@@ -17499,7 +17150,7 @@ function onBeforeUpdate(props, state) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  'css': `su-validation-error :scope.ui.error.message,[is="su-validation-error"] :scope.ui.error.message{ display: block !important; }`,
+  'css': `su-validation-error.ui.error.message,[is="su-validation-error"].ui.error.message{ display: block !important; }`,
 
   'exports': {
     state: {
@@ -17512,7 +17163,7 @@ function onBeforeUpdate(props, state) {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr71="expr71" class="ui basic pointing prompt label transition visible"></div><ul expr73="expr73" class="list"></ul>',
+      '<div expr59="expr59" class="ui basic pointing prompt label transition visible"></div><ul expr61="expr61" class="list"></ul>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -17529,18 +17180,11 @@ function onBeforeUpdate(props, state) {
           return scope.state.errors[scope.props.name];
         },
 
-        'redundantAttribute': 'expr71',
-        'selector': '[expr71]',
+        'redundantAttribute': 'expr59',
+        'selector': '[expr59]',
 
-        'template': template('<div expr72="expr72"></div>', [{
+        'template': template('<div expr60="expr60"></div>', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr71',
-
-            'evaluate': function(scope) {
-              return 'expr71';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
@@ -17561,18 +17205,11 @@ function onBeforeUpdate(props, state) {
               'evaluate': function(scope) {
                 return scope.message;
               }
-            }, {
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'expr72',
-
-              'evaluate': function(scope) {
-                return 'expr72';
-              }
             }]
           }]),
 
-          'redundantAttribute': 'expr72',
-          'selector': '[expr72]',
+          'redundantAttribute': 'expr60',
+          'selector': '[expr60]',
           'itemName': 'message',
           'indexName': null,
 
@@ -17587,18 +17224,11 @@ function onBeforeUpdate(props, state) {
           return scope.state.blockMessage;
         },
 
-        'redundantAttribute': 'expr73',
-        'selector': '[expr73]',
+        'redundantAttribute': 'expr61',
+        'selector': '[expr61]',
 
-        'template': template('<virtual expr74="expr74"></virtual>', [{
+        'template': template('<template expr62="expr62"></template>', [{
           'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'expr73',
-
-            'evaluate': function(scope) {
-              return 'expr73';
-            }
-          }, {
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
 
@@ -17611,57 +17241,34 @@ function onBeforeUpdate(props, state) {
           'getKey': null,
           'condition': null,
 
-          'template': template(null, [{
-            'type': bindingTypes.TAG,
-            'getComponent': getComponent,
+          'template': template('<li expr63="expr63"></li>', [{
+            'type': bindingTypes.EACH,
+            'getKey': null,
+            'condition': null,
 
-            'evaluate': function(scope) {
-              return 'virtual';
-            },
-
-            'slots': [{
-              'id': 'default',
-              'html': '<li expr75="expr75"></li>',
-
-              'bindings': [{
-                'type': bindingTypes.EACH,
-                'getKey': null,
-                'condition': null,
-
-                'template': template(' ', [{
-                  'expressions': [{
-                    'type': expressionTypes.TEXT,
-                    'childNodeIndex': 0,
-
-                    'evaluate': function(scope) {
-                      return scope.message;
-                    }
-                  }, {
-                    'type': expressionTypes.ATTRIBUTE,
-                    'name': 'expr75',
-
-                    'evaluate': function(scope) {
-                      return 'expr75';
-                    }
-                  }]
-                }]),
-
-                'redundantAttribute': 'expr75',
-                'selector': '[expr75]',
-                'itemName': 'message',
-                'indexName': null,
+            'template': template(' ', [{
+              'expressions': [{
+                'type': expressionTypes.TEXT,
+                'childNodeIndex': 0,
 
                 'evaluate': function(scope) {
-                  return scope.errors;
+                  return scope.message;
                 }
               }]
-            }],
+            }]),
 
-            'attributes': []
+            'redundantAttribute': 'expr63',
+            'selector': '[expr63]',
+            'itemName': 'message',
+            'indexName': null,
+
+            'evaluate': function(scope) {
+              return scope.errors;
+            }
           }]),
 
-          'redundantAttribute': 'expr74',
-          'selector': '[expr74]',
+          'redundantAttribute': 'expr62',
+          'selector': '[expr62]',
           'itemName': 'errors',
           'indexName': null,
 

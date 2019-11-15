@@ -495,7 +495,7 @@ var suDropdown = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<i class="dropdown icon"></i><input expr74="expr74" class="search" autocomplete="off"/><a expr75="expr75" class="ui label transition visible" style="display: inline-block !important;"></a><div expr77="expr77"></div><div expr78="expr78" tabindex="-1"><div expr79="expr79"></div><div expr84="expr84" class="message"></div></div>',
+      '<i class="dropdown icon"></i><input expr102="expr102" class="search" autocomplete="off"/><a expr103="expr103" class="ui label transition visible" style="display: inline-block !important;"></a><div expr105="expr105"></div><div expr106="expr106" tabindex="-1"><div expr107="expr107"></div><div expr112="expr112" class="message"></div></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -596,8 +596,8 @@ var suDropdown = {
           return scope.props.search;
         },
 
-        'redundantAttribute': 'expr74',
-        'selector': '[expr74]',
+        'redundantAttribute': 'expr102',
+        'selector': '[expr102]',
 
         'template': template(null, [{
           'expressions': [{
@@ -666,7 +666,7 @@ var suDropdown = {
           return scope.item.selected;
         },
 
-        'template': template(' <i expr76="expr76" class="delete icon"></i>', [{
+        'template': template(' <i expr104="expr104" class="delete icon"></i>', [{
           'expressions': [{
             'type': expressionTypes.TEXT,
             'childNodeIndex': 0,
@@ -697,8 +697,8 @@ var suDropdown = {
             }
           }]
         }, {
-          'redundantAttribute': 'expr76',
-          'selector': '[expr76]',
+          'redundantAttribute': 'expr104',
+          'selector': '[expr104]',
 
           'expressions': [{
             'type': expressionTypes.EVENT,
@@ -710,8 +710,8 @@ var suDropdown = {
           }]
         }]),
 
-        'redundantAttribute': 'expr75',
-        'selector': '[expr75]',
+        'redundantAttribute': 'expr103',
+        'selector': '[expr103]',
         'itemName': 'item',
         'indexName': null,
 
@@ -725,8 +725,8 @@ var suDropdown = {
           return !scope.props.multiple || !scope.selectedFlg;
         },
 
-        'redundantAttribute': 'expr77',
-        'selector': '[expr77]',
+        'redundantAttribute': 'expr105',
+        'selector': '[expr105]',
 
         'template': template(' ', [{
           'expressions': [{
@@ -750,8 +750,8 @@ var suDropdown = {
           }]
         }])
       }, {
-        'redundantAttribute': 'expr78',
-        'selector': '[expr78]',
+        'redundantAttribute': 'expr106',
+        'selector': '[expr106]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -791,7 +791,7 @@ var suDropdown = {
         },
 
         'template': template(
-          '<i expr80="expr80"></i><img expr81="expr81" class="ui avatar image"/><span expr82="expr82" class="description"></span><span expr83="expr83" class="text"> </span>',
+          '<i expr108="expr108"></i><img expr109="expr109" class="ui avatar image"/><span expr110="expr110" class="description"></span><span expr111="expr111" class="text"> </span>',
           [{
             'expressions': [{
               'type': expressionTypes.ATTRIBUTE,
@@ -843,8 +843,8 @@ var suDropdown = {
               return scope.item.icon;
             },
 
-            'redundantAttribute': 'expr80',
-            'selector': '[expr80]',
+            'redundantAttribute': 'expr108',
+            'selector': '[expr108]',
 
             'template': template(null, [{
               'expressions': [{
@@ -863,8 +863,8 @@ var suDropdown = {
               return scope.item.image;
             },
 
-            'redundantAttribute': 'expr81',
-            'selector': '[expr81]',
+            'redundantAttribute': 'expr109',
+            'selector': '[expr109]',
 
             'template': template(null, [{
               'expressions': [{
@@ -890,8 +890,8 @@ var suDropdown = {
               return scope.item.description;
             },
 
-            'redundantAttribute': 'expr82',
-            'selector': '[expr82]',
+            'redundantAttribute': 'expr110',
+            'selector': '[expr110]',
 
             'template': template(' ', [{
               'expressions': [{
@@ -911,8 +911,8 @@ var suDropdown = {
               }]
             }])
           }, {
-            'redundantAttribute': 'expr83',
-            'selector': '[expr83]',
+            'redundantAttribute': 'expr111',
+            'selector': '[expr111]',
 
             'expressions': [{
               'type': expressionTypes.TEXT,
@@ -925,8 +925,8 @@ var suDropdown = {
           }]
         ),
 
-        'redundantAttribute': 'expr79',
-        'selector': '[expr79]',
+        'redundantAttribute': 'expr107',
+        'selector': '[expr107]',
         'itemName': 'item',
         'indexName': null,
 
@@ -940,8 +940,8 @@ var suDropdown = {
           return scope.filtered && scope.filteredItems.length == 0;
         },
 
-        'redundantAttribute': 'expr84',
-        'selector': '[expr84]',
+        'redundantAttribute': 'expr112',
+        'selector': '[expr112]',
 
         'template': template('No results found.', [{
           'expressions': [{

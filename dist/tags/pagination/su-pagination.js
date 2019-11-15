@@ -112,10 +112,10 @@ var suPagination = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr110="expr110"><a expr111="expr111"><i aria-hidden="true" class="angle double left icon"></i></a><a expr112="expr112"><i class="angle left icon"></i></a><template expr113="expr113"></template><a expr117="expr117"><i class="angle right icon"></i></a><a expr118="expr118"><i aria-hidden="true" class="angle double right icon"></i></a></div>',
+      '<div expr15="expr15"><a expr16="expr16"><i aria-hidden="true" class="angle double left icon"></i></a><a expr17="expr17"><i class="angle left icon"></i></a><template expr18="expr18"></template><a expr22="expr22"><i class="angle right icon"></i></a><a expr23="expr23"><i aria-hidden="true" class="angle double right icon"></i></a></div>',
       [{
-        'redundantAttribute': 'expr110',
-        'selector': '[expr110]',
+        'redundantAttribute': 'expr15',
+        'selector': '[expr15]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -126,8 +126,8 @@ var suPagination = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr111',
-        'selector': '[expr111]',
+        'redundantAttribute': 'expr16',
+        'selector': '[expr16]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -145,8 +145,8 @@ var suPagination = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr112',
-        'selector': '[expr112]',
+        'redundantAttribute': 'expr17',
+        'selector': '[expr17]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -169,7 +169,7 @@ var suPagination = {
         'condition': null,
 
         'template': template(
-          '<a expr114="expr114" class="item"></a><a expr115="expr115" class="active item"></a><div expr116="expr116" class="disabled icon item"></div>',
+          '<a expr19="expr19" class="item"></a><a expr20="expr20" class="active item"></a><div expr21="expr21" class="disabled icon item"></div>',
           [{
             'type': bindingTypes.IF,
 
@@ -177,8 +177,8 @@ var suPagination = {
               return !scope.page.active && !scope.page.disabled;
             },
 
-            'redundantAttribute': 'expr114',
-            'selector': '[expr114]',
+            'redundantAttribute': 'expr19',
+            'selector': '[expr19]',
 
             'template': template(' ', [{
               'expressions': [{
@@ -211,8 +211,8 @@ var suPagination = {
               return scope.page.active;
             },
 
-            'redundantAttribute': 'expr115',
-            'selector': '[expr115]',
+            'redundantAttribute': 'expr20',
+            'selector': '[expr20]',
 
             'template': template(' ', [{
               'expressions': [{
@@ -238,8 +238,8 @@ var suPagination = {
               return scope.page.disabled;
             },
 
-            'redundantAttribute': 'expr116',
-            'selector': '[expr116]',
+            'redundantAttribute': 'expr21',
+            'selector': '[expr21]',
 
             'template': template('<i class="ellipsis horizontal icon"></i>', [{
               'expressions': [{
@@ -254,8 +254,8 @@ var suPagination = {
           }]
         ),
 
-        'redundantAttribute': 'expr113',
-        'selector': '[expr113]',
+        'redundantAttribute': 'expr18',
+        'selector': '[expr18]',
         'itemName': 'page',
         'indexName': null,
 
@@ -263,8 +263,8 @@ var suPagination = {
           return scope.state.pages;
         }
       }, {
-        'redundantAttribute': 'expr117',
-        'selector': '[expr117]',
+        'redundantAttribute': 'expr22',
+        'selector': '[expr22]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -285,8 +285,8 @@ var suPagination = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr118',
-        'selector': '[expr118]',
+        'redundantAttribute': 'expr23',
+        'selector': '[expr23]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
