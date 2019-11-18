@@ -1,3 +1,5 @@
+require('../../../dist/tags/loading/su-loading.js')
+
 describe('su-loading', function () {
   let tag
   let app
@@ -7,7 +9,6 @@ describe('su-loading', function () {
   }
 
   beforeEach(function () {
-    this.clock = sinon.useFakeTimers()
     riot.mixin('semantic-ui', { observable: riot.observable() })
     riot.tag('app')
     $('body').append(`
@@ -17,7 +18,6 @@ describe('su-loading', function () {
   })
 
   afterEach(function () {
-    this.clock.restore()
     tag.unmount()
     app.unmount()
   })
