@@ -8,23 +8,39 @@
     }
   </style>
   <script>
-    const self = this
-    self.counter = 0
-    this.mixin('semantic-ui')
+    const tag = this
+    // ===================================================================================
+    //                                                                      Tag Properties
+    //                                                                      ==============
+    tag.counter = 0
 
-    this.observable.on('showLoading', visible => {
-      if (visible) {
-        self.counter++
-      } else {
-        self.counter--
-      }
-      this.update()
-    })
+    // ===================================================================================
+    //                                                                         Tag Methods
+    //                                                                         ===========
+    tag.mixin('semantic-ui')
+    tag.observable.on('showLoading', showLoading)
 
+    // ===================================================================================
+    //                                                                          Properties
+    //                                                                          ==========
     riot.mixin({
-      suLoading(visible) {
-        self.observable.trigger('showLoading', visible)
-      }
+      suLoading
     })
+
+    // ===================================================================================
+    //                                                                             Methods
+    //                                                                             =======
+    function showLoading(visible) {
+      if (visible) {
+        tag.counter++
+      } else {
+        tag.counter--
+      }
+      tag.update()
+    }
+
+    function suLoading(visible) {
+      tag.observable.trigger('showLoading', visible)
+    }
   </script>
 </su-loading>
