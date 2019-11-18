@@ -32,11 +32,17 @@ describe('su-loading', function () {
     $('su-loading > .dimmer').is(':visible').should.equal(false)
 
     app.suLoading(true)
-    this.clock.tick(510)
     $('su-loading > .dimmer').is(':visible').should.equal(true)
 
     app.suLoading(false)
-    this.clock.tick(310)
+    $('su-loading > .dimmer').is(':visible').should.equal(false)
+
+    app.suLoading(true)
+    app.suLoading(true)
+    $('su-loading > .dimmer').is(':visible').should.equal(true)
+    app.suLoading(false)
+    $('su-loading > .dimmer').is(':visible').should.equal(true)
+    app.suLoading(false)
     $('su-loading > .dimmer').is(':visible').should.equal(false)
   })
 })
