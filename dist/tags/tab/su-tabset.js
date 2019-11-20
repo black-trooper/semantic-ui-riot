@@ -188,7 +188,7 @@ var suTabset = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr55="expr55"></div><slot expr57="expr57"></slot><div expr58="expr58"></div>',
+      '<div expr58="expr58"></div><slot expr60="expr60"></slot><div expr61="expr61"></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -203,75 +203,6 @@ var suTabset = {
 
         'evaluate': function(scope) {
           return !scope.isBottom() && scope.showMenu();
-        },
-
-        'redundantAttribute': 'expr55',
-        'selector': '[expr55]',
-
-        'template': template('<a expr56="expr56"></a>', [{
-          'expressions': [{
-            'type': expressionTypes.ATTRIBUTE,
-            'name': 'class',
-
-            'evaluate': function(scope) {
-              return ['ui ', scope.props.class, ' ', scope.getClass(), ' menu'].join('');
-            }
-          }]
-        }, {
-          'type': bindingTypes.EACH,
-          'getKey': null,
-          'condition': null,
-
-          'template': template(' ', [{
-            'expressions': [{
-              'type': expressionTypes.TEXT,
-              'childNodeIndex': 0,
-
-              'evaluate': function(scope) {
-                return scope.tab.getAttribute('label');
-              }
-            }, {
-              'type': expressionTypes.ATTRIBUTE,
-              'name': 'class',
-
-              'evaluate': function(scope) {
-                return [
-                  scope.tab.getAttribute('title-class'),
-                  ' ',
-                  scope.tab.getAttribute('label') == scope.state.active ? 'active':'',
-                  ' item'
-                ].join('');
-              }
-            }, {
-              'type': expressionTypes.EVENT,
-              'name': 'onclick',
-
-              'evaluate': function(scope) {
-                return () => scope.onClick(scope.tab);
-              }
-            }]
-          }]),
-
-          'redundantAttribute': 'expr56',
-          'selector': '[expr56]',
-          'itemName': 'tab',
-          'indexName': null,
-
-          'evaluate': function(scope) {
-            return scope.tabs;
-          }
-        }])
-      }, {
-        'type': bindingTypes.SLOT,
-        'attributes': [],
-        'name': 'default',
-        'redundantAttribute': 'expr57',
-        'selector': '[expr57]'
-      }, {
-        'type': bindingTypes.IF,
-
-        'evaluate': function(scope) {
-          return scope.isBottom() && scope.showMenu();
         },
 
         'redundantAttribute': 'expr58',
@@ -323,6 +254,75 @@ var suTabset = {
 
           'redundantAttribute': 'expr59',
           'selector': '[expr59]',
+          'itemName': 'tab',
+          'indexName': null,
+
+          'evaluate': function(scope) {
+            return scope.tabs;
+          }
+        }])
+      }, {
+        'type': bindingTypes.SLOT,
+        'attributes': [],
+        'name': 'default',
+        'redundantAttribute': 'expr60',
+        'selector': '[expr60]'
+      }, {
+        'type': bindingTypes.IF,
+
+        'evaluate': function(scope) {
+          return scope.isBottom() && scope.showMenu();
+        },
+
+        'redundantAttribute': 'expr61',
+        'selector': '[expr61]',
+
+        'template': template('<a expr62="expr62"></a>', [{
+          'expressions': [{
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'class',
+
+            'evaluate': function(scope) {
+              return ['ui ', scope.props.class, ' ', scope.getClass(), ' menu'].join('');
+            }
+          }]
+        }, {
+          'type': bindingTypes.EACH,
+          'getKey': null,
+          'condition': null,
+
+          'template': template(' ', [{
+            'expressions': [{
+              'type': expressionTypes.TEXT,
+              'childNodeIndex': 0,
+
+              'evaluate': function(scope) {
+                return scope.tab.getAttribute('label');
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
+
+              'evaluate': function(scope) {
+                return [
+                  scope.tab.getAttribute('title-class'),
+                  ' ',
+                  scope.tab.getAttribute('label') == scope.state.active ? 'active':'',
+                  ' item'
+                ].join('');
+              }
+            }, {
+              'type': expressionTypes.EVENT,
+              'name': 'onclick',
+
+              'evaluate': function(scope) {
+                return () => scope.onClick(scope.tab);
+              }
+            }]
+          }]),
+
+          'redundantAttribute': 'expr62',
+          'selector': '[expr62]',
           'itemName': 'tab',
           'indexName': null,
 

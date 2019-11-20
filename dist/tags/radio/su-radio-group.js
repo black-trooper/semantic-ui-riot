@@ -95,7 +95,7 @@ var suRadioGroup = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot expr19="expr19"></slot>', [{
+    return template('<slot expr48="expr48"></slot>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'value',
@@ -122,8 +122,8 @@ var suRadioGroup = {
       'type': bindingTypes.SLOT,
       'attributes': [],
       'name': 'default',
-      'redundantAttribute': 'expr19',
-      'selector': '[expr19]'
+      'redundantAttribute': 'expr48',
+      'selector': '[expr48]'
     }]);
   },
 

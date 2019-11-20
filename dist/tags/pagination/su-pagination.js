@@ -112,10 +112,10 @@ var suPagination = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr24="expr24"><a expr25="expr25"><i aria-hidden="true" class="angle double left icon"></i></a><a expr26="expr26"><i class="angle left icon"></i></a><template expr27="expr27"></template><a expr31="expr31"><i class="angle right icon"></i></a><a expr32="expr32"><i aria-hidden="true" class="angle double right icon"></i></a></div>',
+      '<div expr34="expr34"><a expr35="expr35"><i aria-hidden="true" class="angle double left icon"></i></a><a expr36="expr36"><i class="angle left icon"></i></a><template expr37="expr37"></template><a expr41="expr41"><i class="angle right icon"></i></a><a expr42="expr42"><i aria-hidden="true" class="angle double right icon"></i></a></div>',
       [{
-        'redundantAttribute': 'expr24',
-        'selector': '[expr24]',
+        'redundantAttribute': 'expr34',
+        'selector': '[expr34]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -126,8 +126,8 @@ var suPagination = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr25',
-        'selector': '[expr25]',
+        'redundantAttribute': 'expr35',
+        'selector': '[expr35]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -145,8 +145,8 @@ var suPagination = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr26',
-        'selector': '[expr26]',
+        'redundantAttribute': 'expr36',
+        'selector': '[expr36]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -169,7 +169,7 @@ var suPagination = {
         'condition': null,
 
         'template': template(
-          '<a expr28="expr28" class="item"></a><a expr29="expr29" class="active item"></a><div expr30="expr30" class="disabled icon item"></div>',
+          '<a expr38="expr38" class="item"></a><a expr39="expr39" class="active item"></a><div expr40="expr40" class="disabled icon item"></div>',
           [{
             'type': bindingTypes.IF,
 
@@ -177,8 +177,8 @@ var suPagination = {
               return !scope.page.active && !scope.page.disabled;
             },
 
-            'redundantAttribute': 'expr28',
-            'selector': '[expr28]',
+            'redundantAttribute': 'expr38',
+            'selector': '[expr38]',
 
             'template': template(' ', [{
               'expressions': [{
@@ -211,8 +211,8 @@ var suPagination = {
               return scope.page.active;
             },
 
-            'redundantAttribute': 'expr29',
-            'selector': '[expr29]',
+            'redundantAttribute': 'expr39',
+            'selector': '[expr39]',
 
             'template': template(' ', [{
               'expressions': [{
@@ -238,8 +238,8 @@ var suPagination = {
               return scope.page.disabled;
             },
 
-            'redundantAttribute': 'expr30',
-            'selector': '[expr30]',
+            'redundantAttribute': 'expr40',
+            'selector': '[expr40]',
 
             'template': template('<i class="ellipsis horizontal icon"></i>', [{
               'expressions': [{
@@ -254,8 +254,8 @@ var suPagination = {
           }]
         ),
 
-        'redundantAttribute': 'expr27',
-        'selector': '[expr27]',
+        'redundantAttribute': 'expr37',
+        'selector': '[expr37]',
         'itemName': 'page',
         'indexName': null,
 
@@ -263,8 +263,8 @@ var suPagination = {
           return scope.state.pages;
         }
       }, {
-        'redundantAttribute': 'expr31',
-        'selector': '[expr31]',
+        'redundantAttribute': 'expr41',
+        'selector': '[expr41]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -285,8 +285,8 @@ var suPagination = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr32',
-        'selector': '[expr32]',
+        'redundantAttribute': 'expr42',
+        'selector': '[expr42]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
