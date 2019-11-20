@@ -6,10 +6,20 @@
 [![GitHub license](https://img.shields.io/github/license/black-trooper/semantic-ui-riot.svg)](https://github.com/black-trooper/semantic-ui-riot/blob/master/LICENSE)
 [![npm](https://img.shields.io/npm/dm/semantic-ui-riot.svg)](https://www.npmtrends.com/semantic-ui-riot)
 
-Semantic UI module for Riot.
+Semantic UI Riot is a set of [Riot](https://riot.js.org) components based on [Semantic UI](https://semantic-ui.com/) markup and CSS.
+As a result no dependency on jQuery or Semantic UI's JavaScript is required.
+
+Here is a list of minimal required versions of Riot and Semantic UI for semantic-ui-riot:
+
+semantic-ui-riot |Riot |Semantic UI
+-----------------|-----|------------
+0.x.x	| 3.0.0	| 2.3.0
+1.x.x	| 3.0.0	| 2.3.0
+2.x.x	| 4.0.0	| 2.3.0
+
 
 ## Demo
-https://black-trooper.github.io/semantic-ui-riot-docs/
+https://semantic-ui-riot.web.app/
 
 ## Getting started
 
@@ -20,16 +30,19 @@ index.html
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.3/dist/semantic.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
+  <script src="https://unpkg.com/riot@4.6.6/riot+compiler.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/semantic-ui-riot@2.0.0/dist/semantic-ui-riot.js"></script>
 </head>
+
 <body>
   <sample></sample>
-  <script type="riot/tag" src="sample.tag"></script>
-  <script src="https://cdn.jsdelivr.net/npm/riot@3.9/riot+compiler.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/date-fns/1.29.0/date_fns.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/semantic-ui-riot/dist/semantic-ui-riot.min.js"></script>
+
+  <script type="riot" data-src="./app/sample.riot"></script>
   <script>
-    riot.mount('sample');
+    riot.compile().then(() => {
+      riot.mount("sample");
+    });
   </script>
 </body>
 </html>
@@ -47,10 +60,11 @@ npm install --save semantic-ui-riot
 ```
 index.js
 ```javascript
-import riot from 'riot'
+import {component} from 'riot'
 import 'semantic-ui-riot'
-import './app.tag'
-riot.mount('app')
+import Sample from './sample.riot'
+
+component(Sample)(document.getElementById('app'))
 ```
 webpack.config.js
 ```javascript
@@ -58,31 +72,27 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tag$/,
+        test: /\.riot$/,
         exclude: /node_modules/,
-        use: 'riot-tag-loader'
+        use: [{
+          loader: '@riotjs/webpack-loader'
+        }]
       }
     ]
-  },
-  plugins: [
-    new webpack.LoaderOptionsPlugin({ options: {} }),
-    new webpack.ProvidePlugin({
-      riot: 'riot',
-    })
-  ]
+  }
 };
 ```
 index.html
 ```html
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.3/dist/semantic.min.css">
-  </head>
-  <body>
-    <sample></sample>
-    <script src="main.js"></script>
-  </body>
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script src="main.js"></script>
+</body>
 </html>
 ```
 sample.tag
