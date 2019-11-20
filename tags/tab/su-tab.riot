@@ -1,0 +1,65 @@
+<su-tab class="ui { state.classes } { state.active ? 'active' : '' } tab" id="{ su_id }">
+  <span if="{ state.mounted }">
+    <slot />
+  </span>
+
+  <style>
+    :host.ui.segment {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    :host.ui.segment.top.attached {
+      margin-top: 0
+    }
+
+    :host.ui.segment.bottom.attached {
+      margin-bottom: 0
+    }
+  </style>
+
+  <script>
+    let index = 0
+    export default {
+      state: {
+        active: false,
+        mounted: false,
+      },
+      onMounted,
+      onBeforeUpdate,
+    }
+
+    // ===================================================================================
+    //                                                                           Lifecycle
+    //                                                                           =========
+    function onMounted(props, state) {
+      this.su_id = `su-tab-${index++}`
+      this.update({
+        classes: props.class,
+        active: props.active
+      })
+
+      this.obs.on(`${this.su_id}-toggle-active`, active => {
+        this.update({
+          active
+        })
+      })
+      this.obs.on(`${this.su_id}-add-class`, classes => {
+        this.update({
+          classes
+        })
+      })
+      this.obs.on(`${this.su_id}-mount`, () => {
+        this.update({
+          mounted: true
+        })
+      })
+    }
+
+    function onBeforeUpdate(props, state) {
+      if (state.active && !state.mounted) {
+        state.mounted = true
+      }
+    }
+  </script>
+</su-tab>

@@ -1,13 +1,13 @@
-const fireEvent = require('../../helpers').fireEvent
-const fireKeyEvent = require('../../helpers').fireKeyEvent
-const keys = require('../../helpers').keys
-require('../../../dist/tags/dropdown/su-dropdown.js')
+import * as riot from 'riot'
+import { init } from '../../helpers/'
+import TargetComponent from '../../../dist/tags/dropdown/su-dropdown.js'
 
 describe('su-dropdown-search', function () {
-  let tag
+  let element, component
   let spyOnOpen = sinon.spy()
   let spyOnClose = sinon.spy()
   let spyOnSearch = sinon.spy()
+  init(riot)
 
   let items = [
     {
@@ -69,13 +69,15 @@ describe('su-dropdown-search', function () {
   ]
 
   beforeEach(function () {
-    $('body').append('<su-dropdown search="true" tabindex="1"></su-dropdown>')
-    tag = riot.mount('su-dropdown', {
-      items
+    riot.register('su-dropdown', TargetComponent)
+    element = document.createElement('su-dropdown')
+    component = riot.mount(element, {
+      'items': items,
+      'search': true,
+      'onopen': spyOnOpen,
+      'onclose': spyOnClose,
+      'onsearch': spyOnSearch,
     })[0]
-    tag.on('open', spyOnOpen)
-      .on('close', spyOnClose)
-      .on('search', spyOnSearch)
     this.clock = sinon.useFakeTimers()
   })
 
@@ -84,75 +86,74 @@ describe('su-dropdown-search', function () {
     spyOnClose.reset()
     spyOnSearch.reset()
     this.clock.restore()
-    tag.unmount()
+    component.unmount()
+    riot.unregister('su-dropdown')
   })
 
   it('is mounted', function () {
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 
   it('text input is exist', function () {
-    should.exist($('su-dropdown .search'))
+    expect(component.$$('.search')).to.have.lengthOf(1)
   })
 
   it('opens the menu on focus', function () {
-    $('su-dropdown .menu').css('visibility').should.equal('hidden')
+    expect(component.$('.menu').classList.contains('visible')).to.equal(false)
 
-    $('su-dropdown .search').click()
-    $('su-dropdown .search').focus()
+    fireEvent(component.$('.search'), 'click')
+    fireEvent(component.$('.search'), 'focus')
     this.clock.tick(310)
-    $('su-dropdown .menu').css('visibility').should.equal('visible')
+    expect(component.$('.menu').classList.contains('visible')).to.equal(true)
 
-    fireEvent($('su-dropdown')[0], 'blur')
+    fireEvent(element, 'blur')
   })
 
   it('adding text to box filters the options list', function () {
-    $('su-dropdown .menu').css('visibility').should.equal('hidden')
+    expect(component.$('.menu').classList.contains('visible')).to.equal(false)
 
-    $('su-dropdown .search').focus()
-    spyOnSearch.should.have.been.calledOnce
-    $('su-dropdown .menu').css('visibility').should.equal('visible')
-    $('su-dropdown .menu div').length.should.equal(52)
-    $('su-dropdown .item').length.should.equal(52)
-    spyOnOpen.should.have.been.calledOnce
+    fireEvent(component.$('.search'), 'focus')
+    expect(spyOnSearch).calledOnce
+    expect(component.$('.menu').classList.contains('visible')).to.equal(true)
+    expect(component.$$('.menu div')).to.have.lengthOf(52)
+    expect(component.$$('.item')).to.have.lengthOf(52)
+    expect(spyOnOpen).calledOnce
 
-    $('su-dropdown .search').val('m')
-    fireEvent($('su-dropdown .search')[0], 'input')
-    $('su-dropdown .menu div').length.should.equal(15)
-    $('su-dropdown .item').length.should.equal(15)
-    spyOnSearch.should.have.been.calledTwice
+    component.$('.search').value = 'm'
+    fireEvent(component.$('.search'), 'input')
+    expect(component.$$('.menu div')).to.have.lengthOf(15)
+    expect(component.$$('.item')).to.have.lengthOf(15)
+    expect(spyOnSearch).calledTwice
   })
 
   it('pressing key down will active item', function () {
-    $('su-dropdown').focus()
+    fireEvent(element, 'focus')
     this.clock.tick(310)
-    $('su-dropdown .search').val('m')
-    fireEvent($('su-dropdown .search')[0], 'input')
-    $('su-dropdown .item').length.should.equal(15)
+    component.$('.search').value = 'm'
+    fireEvent(component.$('.search'), 'input')
+    expect(component.$$('.item')).to.have.lengthOf(15)
 
-    let dropdown = $('su-dropdown')[0]
-    fireKeyEvent(dropdown, 'keydown', keys.downArrow)
-    $('su-dropdown .hover .text').text().should.equal(items[1].label)
+    fireKeyEvent(element, 'keydown', keys.downArrow)
+    expect(component.$('.hover .text').innerText).to.equal(items[1].label)
 
-    fireKeyEvent(dropdown, 'keydown', keys.downArrow)
-    $('su-dropdown .hover .text').text().should.equal(items[9].label)
+    fireKeyEvent(element, 'keydown', keys.downArrow)
+    expect(component.$('.hover .text').innerText).to.equal(items[9].label)
 
-    fireKeyEvent(dropdown, 'keydown', keys.downArrow)
-    $('su-dropdown .hover .text').text().should.equal(items[20].label)
+    fireKeyEvent(element, 'keydown', keys.downArrow)
+    expect(component.$('.hover .text').innerText).to.equal(items[20].label)
 
-    fireEvent($('su-dropdown')[0], 'blur')
+    fireEvent(element, 'blur')
   })
 
   it('pressing key down when no item', function () {
-    $('su-dropdown').focus()
-    $('su-dropdown .search').val('xxxxx')
-    fireEvent($('su-dropdown .search')[0], 'input')
-    $('su-dropdown .item').length.should.equal(0)
+    fireEvent(element, 'focus')
+    component.$('.search').value = 'xxxxx'
+    fireEvent(component.$('.search'), 'input')
+    expect(component.$$('.item')).to.have.lengthOf(0)
 
-    let dropdown = $('su-dropdown')[0]
-    fireKeyEvent(dropdown, 'keydown', keys.downArrow)
-    $('su-dropdown .hover .text').length.should.equal(0)
+    fireKeyEvent(element, 'keydown', keys.downArrow)
+    expect(component.$$('.hover .text')).to.have.lengthOf(0)
 
-    fireKeyEvent(dropdown, 'keyup', keys.enter)
+    fireKeyEvent(element, 'keyup', keys.enter)
   })
 })

@@ -1,0 +1,41 @@
+<su-tab-title id="{ su_id }">
+  <a class="{props.class} {state.active && 'active'} item" onclick="{ onClick }">
+    <slot />
+  </a>
+
+  <script>
+    export default {
+      state: {
+        active: false,
+      },
+      onMounted,
+      onClick
+    }
+
+    let index = 0
+
+    // ===================================================================================
+    //                                                                           Lifecycle
+    //                                                                           =========
+    function onMounted(props, state) {
+      this.su_id = `su-tab-title-${index++}`
+      this.update()
+
+      this.obs.on(`${this.su_id}-toggle-active`, active => {
+        this.update({
+          active
+        })
+      })
+      this.obs.on(`${this.su_id}-add-tabset-id`, suTabsetId => {
+        this.suTabsetId = suTabsetId
+      })
+    }
+
+    // ===================================================================================
+    //                                                                              Events
+    //                                                                              ======
+    function onClick() {
+      this.obs.trigger(`${this.suTabsetId}-title-clicked`, this.$('a.item').innerText.trim())
+    }
+  </script>
+</su-tab-title>

@@ -1,18 +1,95 @@
-riot.tag2('su-tab', '<virtual if="{mounted}"><yield></yield></virtual>', 'su-tab.ui.segment,[data-is="su-tab"].ui.segment{ margin-top: 0; margin-bottom: 0; } su-tab.ui.segment.top.attached,[data-is="su-tab"].ui.segment.top.attached{ margin-top: 0 } su-tab.ui.segment.bottom.attached,[data-is="su-tab"].ui.segment.bottom.attached{ margin-bottom: 0 }', 'class="ui {opts.class} {active: active} tab"', function(opts) {
-    const tag = this
+let index = 0;
 
-    tag.active = false
-    tag.mounted = false
+// ===================================================================================
+//                                                                           Lifecycle
+//                                                                           =========
+function onMounted(props, state) {
+  this.su_id = `su-tab-${index++}`;
+  this.update({
+    classes: props.class,
+    active: props.active
+  });
 
-    tag.on('mount', onMount)
-    tag.on('update', onUpdate)
+  this.obs.on(`${this.su_id}-toggle-active`, active => {
+    this.update({
+      active
+    });
+  });
+  this.obs.on(`${this.su_id}-add-class`, classes => {
+    this.update({
+      classes
+    });
+  });
+  this.obs.on(`${this.su_id}-mount`, () => {
+    this.update({
+      mounted: true
+    });
+  });
+}
 
-    function onMount() {
-      tag.update()
-    }
-    function onUpdate() {
-      if (tag.active && !tag.mounted) {
-        tag.mounted = true
-      }
-    }
-});
+function onBeforeUpdate(props, state) {
+  if (state.active && !state.mounted) {
+    state.mounted = true;
+  }
+}
+
+var suTab = {
+  'css': `su-tab.ui.segment,[is="su-tab"].ui.segment{ margin-top: 0; margin-bottom: 0; } su-tab.ui.segment.top.attached,[is="su-tab"].ui.segment.top.attached{ margin-top: 0 } su-tab.ui.segment.bottom.attached,[is="su-tab"].ui.segment.bottom.attached{ margin-bottom: 0 }`,
+
+  'exports': {
+    state: {
+      active: false,
+      mounted: false,
+    },
+
+    onMounted,
+    onBeforeUpdate
+  },
+
+  'template': function(template, expressionTypes, bindingTypes, getComponent) {
+    return template('<span expr60="expr60"></span>', [{
+      'expressions': [{
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'class',
+
+        'evaluate': function(scope) {
+          return [
+            'ui ',
+            scope.state.classes,
+            ' ',
+            scope.state.active ? 'active' : '',
+            ' tab'
+          ].join('');
+        }
+      }, {
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'id',
+
+        'evaluate': function(scope) {
+          return scope.su_id;
+        }
+      }]
+    }, {
+      'type': bindingTypes.IF,
+
+      'evaluate': function(scope) {
+        return scope.state.mounted;
+      },
+
+      'redundantAttribute': 'expr60',
+      'selector': '[expr60]',
+
+      'template': template('<slot expr61="expr61"></slot>', [{
+        'type': bindingTypes.SLOT,
+        'attributes': [],
+        'name': 'default',
+        'redundantAttribute': 'expr61',
+        'selector': '[expr61]'
+      }])
+    }]);
+  },
+
+  'name': 'su-tab'
+};
+
+export default suTab;

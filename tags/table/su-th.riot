@@ -1,0 +1,50 @@
+<su-th onclick="{ onClick }" class="{ clazz }" id="{ su_id }">
+  <slot />
+
+  <script>
+    export default {
+      state: {
+        sorted: false,
+        reverse: false,
+      },
+      clazz: '',
+      onMounted,
+      onBeforeUpdate,
+      onClick
+    }
+
+    let index = 0
+
+    // ===================================================================================
+    //                                                                           Lifecycle
+    //                                                                           =========
+    function onMounted(props, state) {
+      this.su_id = `su-th-${index++}`
+      this.update()
+
+      this.obs.on(`${this.su_id}-set-condition`, condition => {
+        this.update({
+          sorted: props.field == condition.field,
+          reverse: condition.reverse
+        })
+      })
+    }
+
+    function onBeforeUpdate(props, state) {
+      const classList = []
+      if (state.sorted) {
+        classList.push('sorted ')
+        classList.push(state.reverse ? 'descending' : 'ascending')
+      }
+      this.clazz = classList.join(' ')
+      state.field = props.field
+    }
+
+    // ===================================================================================
+    //                                                                              Events
+    //                                                                              ======
+    function onClick() {
+      this.obs.trigger(`${this.su_id}-click`, this.state.field)
+    }
+  </script>
+</su-th>

@@ -1,0 +1,147 @@
+<su-progress class="{ props.class }" percent="{ percent }" value="{ state.value }">
+  <div class="ui progress { getClass() } { getStates() }" data-percent="{ percent }">
+    <div class="bar" style="transition-duration: 300ms; width: { percent }%;">
+      <div if="{ isProgress() }" class="progress">{ percent }%</div>
+    </div>
+    <div class="label">
+      <template if="{ isIndicating() }">{ percent }%</template>
+      <slot />
+    </div>
+  </div>
+
+  <style>
+    .ui.progress:last-child {
+      margin: 0 0 2.5em;
+    }
+
+    :host.attached {
+      display: block;
+      height: 0.2rem;
+      padding: 0px;
+      overflow: hidden;
+      border-radius: 0em 0em 0.28571429rem 0.28571429rem;
+      position: absolute;
+      left: 0;
+      width: 100%;
+    }
+
+    :host.top.attached {
+      top: 0px;
+      bottom: 100%;
+      border-radius: 0.28571429rem 0.28571429rem 0em 0em;
+    }
+
+    :host.bottom.attached {
+      top: 100%;
+      bottom: auto;
+    }
+  </style>
+
+  <script>
+    export default {
+      state: {
+        value: null,
+      },
+      lastPropsValue: null,
+      lastValue: null,
+      total: 100,
+
+      onMounted,
+      onBeforeUpdate,
+      getClass,
+      getStates,
+      isProgress,
+      isIndicating,
+    }
+
+    // ===================================================================================
+    //                                                                           Lifecycle
+    //                                                                           =========
+    function onMounted(props, state) {
+      this.state.value = props.value || 0
+      if (props.total > 0) {
+        this.total = props.total
+      }
+      this.percent = getPercent(this)
+      this.lastValue = this.state.value
+      this.lastPropsValue = props.value
+      this.update()
+    }
+
+    function onBeforeUpdate(props, state) {
+      let changed = false
+      if (this.state.value >= this.total) {
+        this.state.value = this.total
+      }
+      if (this.state.value <= 0) {
+        this.state.value = 0
+      }
+      let propsValue = props.value
+      if (propsValue >= this.total) {
+        propsValue = this.total
+      }
+      if (propsValue <= 0) {
+        propsValue = 0
+      }
+      if (this.lastValue != this.state.value) {
+        this.lastValue = this.state.value
+        changed = true
+      } else if (this.lastPropsValue != propsValue) {
+        this.state.value = propsValue
+        this.lastPropsValue = propsValue
+        this.lastValue = propsValue
+        changed = true
+      }
+
+      if (changed) {
+        this.percent = getPercent(this)
+      }
+    }
+
+    // ===================================================================================
+    //                                                                              Helper
+    //                                                                              ======
+    function getClass() {
+      const excludeClasses = ['progress', 'active']
+      return Array.apply(null, this.root.classList).filter(clazz => {
+        return !excludeClasses.some(excludeClass => excludeClass == clazz)
+      }).join(' ')
+    }
+
+    function getStates() {
+      if (isSuccess(this)) {
+        return 'success'
+      }
+      if (isActive(this)) {
+        return 'active'
+      }
+    }
+
+    function isProgress() {
+      return hasClass(this, 'progress')
+    }
+
+    function isIndicating() {
+      return hasClass(this, 'indicating')
+    }
+
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
+    function getPercent(tag) {
+      return parseInt(tag.state.value / tag.total * 100) + ''
+    }
+
+    function isActive(tag) {
+      return hasClass(tag, 'active') && tag.percent > 0 && tag.percent < 100
+    }
+
+    function isSuccess(tag) {
+      return tag.percent == 100
+    }
+
+    function hasClass(tag, className) {
+      return tag.root.classList.contains(className)
+    }
+  </script>
+</su-progress>

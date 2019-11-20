@@ -1,14 +1,14 @@
-const fireKeyEvent = require('../../helpers').fireKeyEvent
-const keys = require('../../helpers').keys
-require('../../../dist/tags/dropdown/su-dropdown.js')
+import * as riot from 'riot'
+import { init, compile } from '../../helpers/'
+import TargetComponent from '../../../dist/tags/dropdown/su-dropdown.js'
 
 describe('su-dropdown-multiple', function () {
-  let tag
+  let element, component
   let spyOnOpen = sinon.spy()
   let spyOnClose = sinon.spy()
   let spyOnSelect = sinon.spy()
   let spyOnChange = sinon.spy()
-  let spyOnBlur = sinon.spy()
+  init(riot)
 
   let items = [
     {
@@ -37,15 +37,38 @@ describe('su-dropdown-multiple', function () {
   ]
 
   beforeEach(function () {
-    $('body').append('<su-dropdown multiple="true"></su-dropdown>')
-    tag = riot.mount('su-dropdown', {
-      items
+    element = document.createElement('app')
+    riot.register('su-dropdown', TargetComponent)
+    const AppComponent = compile(`
+      <app>
+        <su-dropdown
+          value="{ value }"
+          multiple="{ props.multiple }"
+          items="{ props.items }"
+          onopen="{ () => dispatch('open') }"
+          onclose="{ () => dispatch('close') }"
+          onselect="{ () => dispatch('select') }"
+          onchange="{ () => dispatch('change') }"
+          onblur="{ () => dispatch('blur') }">
+        </su-dropdown>
+        <button id="reset" type="button" onclick="{ reset }">reset</button>
+        <script>
+          export default {
+            reset() {
+              this.obs.trigger(this.$('su-dropdown').id + '-reset')
+            }
+          }
+        </script>
+      </app>`)
+    riot.register('app', AppComponent)
+    component = riot.mount(element, {
+      'multiple': true,
+      'items': items,
+      'onopen': spyOnOpen,
+      'onclose': spyOnClose,
+      'onselect': spyOnSelect,
+      'onchange': spyOnChange,
     })[0]
-    tag.on('open', spyOnOpen)
-      .on('close', spyOnClose)
-      .on('select', spyOnSelect)
-      .on('change', spyOnChange)
-      .on('blur', spyOnBlur)
     this.clock = sinon.useFakeTimers()
   })
 
@@ -54,133 +77,108 @@ describe('su-dropdown-multiple', function () {
     spyOnClose.reset()
     spyOnSelect.reset()
     spyOnChange.reset()
-    spyOnBlur.reset()
     this.clock.restore()
-    tag.unmount()
+    component.unmount()
+    riot.unregister('su-dropdown')
+    riot.unregister('app')
   })
 
   it('is mounted', function () {
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 
   it('clicking item', function () {
-    $('su-dropdown').click()
+    fireEvent(component.$('su-dropdown'), 'click')
     this.clock.tick(310)
 
-    $('su-dropdown .item:eq(0)').click()
-    $('su-dropdown > .label').text().trim().should.equal(items[1].label)
-    spyOnSelect.should.have.been.calledOnce
-    spyOnChange.should.have.been.calledOnce
+    component.$('.item').click()
+    expect(component.$('.label').innerText.trim()).to.equal(items[1].label)
+    expect(spyOnSelect).calledOnce
+    expect(spyOnChange).calledOnce
 
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(true)
-    spyOnClose.should.have.been.callCount(0)
+    expect(component.$('.menu').classList.contains('visible')).to.equal(true)
+    expect(spyOnClose).callCount(0)
 
-    $('su-dropdown').blur()
+    fireEvent(component.$('su-dropdown'), 'blur')
   })
 
   it('clicking two items', function () {
-    $('su-dropdown').click()
+    fireEvent(component.$('su-dropdown'), 'click')
     this.clock.tick(310)
 
-    $('su-dropdown .item:first').click()
-    $('su-dropdown .item:first').click()
-    $('su-dropdown > .label:first').text().trim().should.equal(items[1].label)
-    $('su-dropdown > .label:eq(1)').text().trim().should.equal(items[2].label)
-    tag.value.should.deep.equal(['angular', 'css'])
-    spyOnSelect.should.have.been.calledTwice
-    spyOnChange.should.have.been.calledTwice
+    component.$('.item').click()
+    component.$('.item').click()
+    expect(component.$('.label').innerText.trim()).to.equal(items[1].label)
+    expect(component.$$('.label')[1].innerText.trim()).to.equal(items[2].label)
+    expect(component.$('su-dropdown').getAttribute('value')).to.equal('angular,css')
+    expect(spyOnSelect).calledTwice
+    expect(spyOnChange).calledTwice
 
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(true)
-    spyOnClose.should.have.been.callCount(0)
+    expect(component.$('.menu').classList.contains('visible')).to.equal(true)
+    expect(spyOnClose).callCount(0)
 
-    $('su-dropdown').blur()
+    fireEvent(component.$('su-dropdown'), 'blur')
   })
 
   it('unselect item', function () {
-    $('su-dropdown').click()
+    fireEvent(component.$('su-dropdown'), 'click')
     this.clock.tick(310)
 
-    $('su-dropdown .item:first').click()
-    $('su-dropdown .item:first').click()
-    $('su-dropdown > .label:first .delete').click()
-    $('su-dropdown > .label:first').text().trim().should.equal(items[2].label)
-    tag.value.should.deep.equal(['css'])
-    spyOnSelect.should.have.been.calledTwice
-    spyOnChange.should.have.been.calledTwice
+    component.$('.item').click()
+    component.$('.item').click()
+    component.$('.label .delete').click()
+    expect(component.$('.label').innerText.trim()).to.equal(items[2].label)
+    expect(component.$('su-dropdown').getAttribute('value')).to.equal('css')
+    expect(spyOnSelect).calledTwice
+    expect(spyOnChange).calledTwice
 
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(true)
-    spyOnClose.should.have.been.callCount(0)
+    expect(component.$('.menu').classList.contains('visible')).to.equal(true)
+    expect(spyOnClose).callCount(0)
 
-    $('su-dropdown').blur()
+    fireEvent(component.$('su-dropdown'), 'blur')
   })
 
   it('pressing enter key on item', function () {
-    $('su-dropdown').focus()
+    fireEvent(component.$('su-dropdown'), 'focus')
     this.clock.tick(310)
 
-    let dropdown = $('su-dropdown')[0]
-    fireKeyEvent(dropdown, 'keydown', keys.downArrow)
-    fireKeyEvent(dropdown, 'keyup', keys.enter)
+    fireKeyEvent(component.$('su-dropdown'), 'keydown', keys.downArrow)
+    fireKeyEvent(component.$('su-dropdown'), 'keyup', keys.enter)
 
-    $('su-dropdown > .label').text().trim().should.equal(items[1].label)
-    $('su-dropdown .hover .text').text().should.equal(items[2].label)
-    spyOnSelect.should.have.been.calledOnce
-    spyOnChange.should.have.been.calledOnce
+    expect(component.$('.label').innerText.trim()).to.equal(items[1].label)
+    expect(component.$('.hover .text').innerText.trim()).to.equal(items[2].label)
+    expect(spyOnSelect).calledOnce
+    expect(spyOnChange).calledOnce
 
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(true)
-    spyOnClose.should.have.been.callCount(0)
+    expect(component.$('.menu').classList.contains('visible')).to.equal(true)
+    expect(spyOnClose).callCount(0)
 
-    $('su-dropdown').blur()
-    spyOnBlur.should.have.been.calledOnce
+    fireEvent(component.$('su-dropdown'), 'blur')
   })
 
   it('pressing enter key on last item', function () {
-    $('su-dropdown').focus()
+    fireEvent(component.$('su-dropdown'), 'focus')
     this.clock.tick(310)
 
     let length = items.length
-    let dropdown = $('su-dropdown')[0]
     for (let i = 0; i < length; i++) {
-      fireKeyEvent(dropdown, 'keydown', keys.downArrow)
+      fireKeyEvent(component.$('su-dropdown'), 'keydown', keys.downArrow)
     }
-    fireKeyEvent(dropdown, 'keyup', keys.enter)
+    fireKeyEvent(component.$('su-dropdown'), 'keyup', keys.enter)
 
-    $('su-dropdown > .label').text().trim().should.equal(items[length - 1].label)
-    $('su-dropdown .hover .text').text().should.equal(items[length - 2].label)
-    spyOnSelect.should.have.been.calledOnce
-    spyOnChange.should.have.been.calledOnce
+    expect(component.$('.label').innerText.trim()).to.equal(items[length - 1].label)
+    expect(component.$('.hover .text').innerText.trim()).to.equal(items[length - 2].label)
+    expect(spyOnSelect).calledOnce
+    expect(spyOnChange).calledOnce
 
     this.clock.tick(310)
-    $('su-dropdown .menu').is(':visible').should.equal(true)
-    spyOnClose.should.have.been.callCount(0)
+    expect(component.$('.menu').classList.contains('visible')).to.equal(true)
+    expect(spyOnClose).callCount(0)
 
-    $('su-dropdown').blur()
-    spyOnBlur.should.have.been.calledOnce
-  })
-
-  it('reset value', function () {
-    expect(tag.value).to.be.null
-    expect(tag.defaultValue).to.be.null
-    tag.changed().should.deep.equal(false)
-    $('su-dropdown').click()
-    this.clock.tick(310)
-
-    $('su-dropdown .item:first').click()
-    $('su-dropdown .item:first').click()
-
-    tag.value.should.deep.equal(['angular', 'css'])
-    expect(tag.defaultValue).to.be.null
-    tag.changed().should.deep.equal(true)
-
-    tag.reset()
-    expect(tag.value).to.be.null
-    expect(tag.defaultValue).to.be.null
-    tag.changed().should.deep.equal(false)
-
-    $('su-dropdown').blur()
+    fireEvent(component.$('su-dropdown'), 'blur')
   })
 })

@@ -1,11 +1,13 @@
-<su-popup onmouseover="{ mouseover }" onmouseout="{ mouseout }">
-  <div id="{ getId() }" onmouseover="{ stopPropagation }" onmouseout="{ stopPropagation }"
-    class="ui popup { position } { dataVariation } transition { transitionStatus } { nowrap: isNowrap() }">
+<su-popup>
+  <div id="{ su_id }" onmouseover="{ onMouseOver }" onmouseout="{ onMouseOut }"
+    class="ui popup { state.position } { state.dataVariation } transition { state.transitionStatus } { state.nowrap }">
+    <div class="header" if="{props.dataTitle}">{props.dataTitle}</div>
+    <div class="content"></div>
   </div>
-  <yield />
+  <slot />
 
   <style>
-    :scope {
+    :host {
       position: relative;
     }
 
@@ -159,74 +161,51 @@
   </style>
 
   <script>
-    const tag = this
-    // ===================================================================================
-    //                                                                      Tag Properties
-    //                                                                      ==============
-    tag.content = ''
-    tag.dataVariation = opts.dataVariation || ''
+    let index = 0
+    export default {
+      state: {
+        dataVariation: '',
+        content: '',
+      },
+      onMounted,
+      onBeforeUpdate,
+      onMouseOver,
+      onMouseOut,
+    }
 
     // ===================================================================================
-    //                                                                         Tag Methods
-    //                                                                         ===========
-    tag.getId = getId
-    tag.isNowrap = isNowrap
-    tag.mouseover = mouseover
-    tag.mouseout = mouseout
-    tag.on('mount', onMount)
-    tag.on('update', onUpdate)
-    tag.stopPropagation = stopPropagation
-
-    // ===================================================================================
-    //                                                                          Properties
-    //                                                                          ==========
-
-    // ===================================================================================
-    //                                                                             Methods
-    //                                                                             =======
-    function onMount() {
-      if (opts.tooltip) {
-        if (opts.dataTitle) {
-          tag.content = `<div class="header">${opts.dataTitle}</div><div class="content">${opts.tooltip}</div>`
-        } else {
-          tag.content = opts.tooltip
-        }
+    //                                                                           Lifecycle
+    //                                                                           =========
+    function onMounted(props, state) {
+      this.su_id = `su-popup-${index++}`
+      if (props.tooltip) {
+        state.content = props.tooltip
       }
-      else if (tag.tags['su-popup-content']) {
-        tag.content = tag.tags['su-popup-content'].root.innerHTML
-        tag.tags['su-popup-content'].unmount()
+      else if (this.$('su-popup-content')) {
+        state.content = this.$('su-popup-content').innerHTML
+        this.root.removeChild(this.$('su-popup-content'))
       }
-      document.getElementById(tag.getId()).innerHTML = tag.content
-      tag.update()
+      this.update()
+      this.$('.content').innerHTML = state.content
     }
 
-    function onUpdate() {
-      tag.position = opts.position || 'top left'
+    function onBeforeUpdate(props, state) {
+      state.dataVariation = props.dataVariation || ''
+      state.nowrap = state.dataVariation.indexOf('wide') < 0 ? 'nowrap' : ''
+      state.position = props.position || 'top left'
     }
 
-    function mouseover() {
-      tag.transitionStatus = 'scale in visible'
-      tag.trigger('mouseover')
+    // ===================================================================================
+    //                                                                               Event
+    //                                                                               =====
+    function onMouseOver() {
+      this.update({ transitionStatus: 'scale in visible' })
+      this.dispatch('mouseover')
     }
 
-    function mouseout() {
-      tag.transitionStatus = 'hidden'
-      tag.trigger('mouseout')
-    }
-
-    function stopPropagation(event) {
-      event.stopPropagation()
-    }
-
-    function isNowrap() {
-      if (tag.dataVariation.indexOf('wide') >= 0) {
-        return false
-      }
-      return true
-    }
-
-    function getId() {
-      return `su-popup-${tag._riot_id}`
+    function onMouseOut() {
+      this.update({ transitionStatus: 'hidden' })
+      this.dispatch('mouseout')
     }
   </script>
 </su-popup>

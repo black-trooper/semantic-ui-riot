@@ -1,105 +1,133 @@
-riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
-    const tag = this
+let index = 0;
 
-    tag.defaultValue = ''
-    tag.label = ''
-    tag.value = ''
+// ===================================================================================
+//                                                                           Lifecycle
+//                                                                           =========
+function onMounted(props, state) {
+  this.su_id = `su-radio-group-${index++}`;
+  this.obs.on(`${this.su_id}-reset`, () => { reset(this); });
+  if (!state.value) {
+    state.value = props.value;
+  }
+  state.lastValue = state.value;
+  state.lastOptsValue = state.value;
 
-    tag.changed = changed
-    tag.on('mount', onMount)
-    tag.on('update', onUpdate)
-    tag.reset = reset
+  this.$$('su-radio').forEach(radio => {
+    initializeChild(radio, this.su_id);
+  });
+  this.obs.on(`${this.su_id}-radio-click`, value => {
+    this.update({
+      value
+    });
+  });
 
-    let lastOptsValue
-    let lastValue
+  this.defaultValue = state.value;
+  this.update();
+}
 
-    function onMount() {
-      if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
-        opts.riotValue = opts.value
-      }
-      if (tag.value) {
-        opts.riotValue = tag.value
-      } else {
-        tag.value = opts.riotValue
-      }
-      lastValue = tag.value
-      lastOptsValue = tag.value
+function onBeforeUpdate(props, state) {
+  this.changed = state.value !== this.defaultValue;
 
-      let radios = tag.tags['su-radio']
-      if (radios) {
-        if (!Array.isArray(radios)) {
-          radios = [radios]
+  if (state.lastOptsValue != props.value) {
+    state.value = props.value;
+    state.lastOptsValue = props.value;
+  }
+}
+
+function onUpdated(props, state) {
+  let changed = false;
+  if (state.lastValue != state.value) {
+    state.lastValue = state.value;
+    changed = true;
+  }
+
+  this.$$('su-radio').forEach(radio => {
+    initializeChild(radio, this.su_id);
+    updateState(radio, state.value);
+  });
+
+  if (changed) {
+    this.dispatch('change', state.value);
+    this.obs.trigger(`${props.suParentId}-update`);
+  }
+}
+
+function reset(tag) {
+  tag.update({
+    value: tag.defaultValue
+  });
+}
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+function updateState(radio, value) {
+  if (typeof radio.getAttribute('value') === 'undefined' || typeof value === 'undefined') {
+    return
+  }
+
+  if (value == radio.getAttribute('value')) {
+    radio.setAttribute('checked', true);
+  } else {
+    radio.removeAttribute('checked');
+  }
+}
+
+function initializeChild(radio, uid) {
+  radio.setAttribute('name', `${uid}-radio`);
+}
+
+var suRadioGroup = {
+  'css': null,
+
+  'exports': {
+    state: {
+      value: '',
+      lastValue: '',
+      lastOptsValue: '',
+    },
+
+    changed: false,
+    defaultValue: '',
+    onBeforeUpdate,
+    onMounted,
+    onUpdated
+  },
+
+  'template': function(template, expressionTypes, bindingTypes, getComponent) {
+    return template('<slot expr19="expr19"></slot>', [{
+      'expressions': [{
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'value',
+
+        'evaluate': function(scope) {
+          return scope.state.value;
         }
-        radios.forEach(radio => {
-          initializeChild(radio)
-        })
-      }
+      }, {
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'changed',
 
-      tag.defaultValue = tag.value
-      tag.update()
-    }
-
-    function onUpdate() {
-      let changed = false
-      if (lastValue != tag.value) {
-        opts.riotValue = tag.value
-        lastOptsValue = tag.value
-        lastValue = tag.value
-        changed = true
-      } else if (lastOptsValue != opts.riotValue) {
-        tag.value = opts.riotValue
-        lastOptsValue = opts.riotValue
-        lastValue = opts.riotValue
-        changed = true
-      }
-
-      let radios = tag.tags['su-radio']
-      if (radios) {
-        if (!Array.isArray(radios)) {
-          radios = [radios]
+        'evaluate': function(scope) {
+          return scope.changed;
         }
-        radios.forEach(radio => {
-          initializeChild(radio)
-          updateState(radio)
-        })
-      }
+      }, {
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'id',
 
-      if (changed) {
-        tag.trigger('change', tag.value)
-      }
-    }
+        'evaluate': function(scope) {
+          return scope.su_id;
+        }
+      }]
+    }, {
+      'type': bindingTypes.SLOT,
+      'attributes': [],
+      'name': 'default',
+      'redundantAttribute': 'expr19',
+      'selector': '[expr19]'
+    }]);
+  },
 
-    function reset() {
-      tag.value = tag.defaultValue
-    }
+  'name': 'su-radio-group'
+};
 
-    function changed() {
-      return tag.value !== tag.defaultValue
-    }
-
-    function updateState(radio) {
-      if (typeof radio.opts.value === 'undefined' && typeof radio.opts.riotValue === 'undefined') {
-        return
-      }
-      const value = typeof radio.opts.value === 'undefined' ? radio.opts.riotValue : radio.opts.value
-      radio.checked = tag.value == value
-      if (radio.checked) {
-        tag.label = radio.root.getElementsByTagName('label')[0].innerText
-      }
-    }
-
-    function initializeChild(radio) {
-      if (radio.opts.name) {
-        return
-      }
-      radio.opts.name = getRadioName()
-      radio.on('click', value => {
-        tag.value = value
-        tag.update()
-      })
-    }
-
-    function getRadioName() {
-      return `su-radio-name-${tag._riot_id}`
-    }
-});
+export default suRadioGroup;

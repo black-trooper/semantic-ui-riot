@@ -1,7 +1,10 @@
-require('../../../dist/tags/dropdown/su-select.js')
+import * as riot from 'riot'
+import { init, compile } from '../../helpers/'
+import TargetComponent from '../../../dist/tags/dropdown/su-select.js'
 
-describe('su-select', function () {
-  let tag
+describe('su-select-option', function () {
+  let element, component
+  init(riot)
 
   let items = [
     {
@@ -29,26 +32,29 @@ describe('su-select', function () {
     { value: 'ux', label: 'User Experience' }
   ]
 
-  const mount = html => {
-    $('body').append(html)
-    tag = riot.mount('su-select', {
-      items
-    })[0]
+  const mount = value => {
+    const option = {
+      'items': items,
+      'value': value,
+    }
+    element = document.createElement('app')
+    riot.register('su-select', TargetComponent)
+    const AppComponent = compile(`
+      <app>
+        <su-select value="{ value || props.value }" items="{ props.items }"></su-select>
+      </app>`)
+    riot.register('app', AppComponent)
+    component = riot.mount(element, option)[0]
   }
 
   afterEach(function () {
-    tag.unmount()
+    riot.unregister('su-select')
+    riot.unregister('app')
   })
 
   it('default value', function () {
-    mount('<su-select value="angular"></su-select>')
-    tag.value.should.deep.equal('angular')
-    tag.label.should.deep.equal('Angular')
-  })
-
-  it('default riotValue', function () {
-    mount('<su-select value="{\'angular\'}"></su-select>')
-    tag.value.should.deep.equal('angular')
-    tag.label.should.deep.equal('Angular')
+    mount('angular')
+    expect(component.$('su-select').getAttribute('value')).to.equal('angular')
+    expect(component.$('su-select').getAttribute('label')).to.equal('Angular')
   })
 })

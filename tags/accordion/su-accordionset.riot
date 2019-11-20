@@ -1,0 +1,94 @@
+<su-accordionset class="ui accordion { props.class }">
+
+  <slot />
+
+  <style>
+    :host {
+      display: block;
+    }
+
+    :host.ui.accordion .title~.content:not(.ui).close {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .content.close * {
+      line-height: 0 !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      min-height: 0 !important;
+      transition: all 300ms 0s linear !important;
+    }
+
+    .content.close .dropdown.icon {
+      height: 0 !important;
+      transition: height 300ms 0s linear !important;
+    }
+
+    .content.open * {
+      line-height: 1.4285;
+      opacity: 1;
+      visibility: visible;
+      transition: all 300ms 0s linear !important;
+    }
+
+    .content.open .dropdown.icon {
+      height: 1.4285 !important;
+      transition: height 300ms 0s linear !important;
+    }
+  </style>
+
+  <script>
+    export default {
+      state: {
+      },
+      accordions: [],
+      onBeforeMount,
+      onMounted,
+    }
+
+    // ===================================================================================
+    //                                                                           Lifecycle
+    //                                                                           =========
+    function onBeforeMount() {
+      this.accordions = []
+    }
+
+    function onMounted() {
+      this.accordions = this.$$(':not(su-accordionset) su-accordion')
+
+      let defaultActive = false
+      this.accordions.forEach(accordion => {
+        initializeChild(this, accordion)
+        if (accordion.getAttribute('active')) {
+          defaultActive = true
+          this.obs.trigger(`${accordion.id}-toggle-active`, true)
+        }
+      })
+      if (!defaultActive) {
+        this.obs.trigger(`${this.accordions[0].id}-toggle-active`, true)
+      }
+
+      this.update()
+    }
+
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
+    function initializeChild(tag, child) {
+      tag.obs.on(`${child.id}-click`, target => {
+        const active = target.active
+        tag.accordions.forEach(accordion => {
+          tag.obs.trigger(`${accordion.id}-toggle-active`, false)
+        })
+        tag.obs.trigger(`${target.id}-toggle-active`, !active)
+        tag.update()
+        tag.dispatch('click', target)
+      })
+    }
+  </script>
+</su-accordionset>

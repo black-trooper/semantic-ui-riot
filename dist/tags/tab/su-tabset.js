@@ -1,181 +1,340 @@
-riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.label}</a> </div> <yield></yield> <div class="ui {opts.class} {getClass()} menu" if="{isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.label}</a> </div>', '', '', function(opts) {
-    const tag = this
+let index = 0;
 
-    tag.tabs = []
+// ===================================================================================
+//                                                                           Lifecycle
+//                                                                           =========
+function onMounted(props, state) {
+  this.su_id = `su-tabset-${index++}`;
 
-    tag.click = click
-    tag.clickForTitle = clickForTitle
-    tag.getClass = getClass
-    tag.hasTitle = hasTitle
-    tag.isBottom = isBottom
-    tag.on('mount', onMount)
-    tag.on('update', onUpdate)
+  const tabHeader = this.$('su-tab-header');
+  if (tabHeader) {
+    this.obs.trigger(`${tabHeader.id}-add-class`, getTitleClass(this));
+  }
+  this.$$('su-tab-title').forEach(title => {
+    this.obs.trigger(`${title.id}-add-tabset-id`, this.su_id);
+  });
+  this.obs.on(`${this.su_id}-title-clicked`, title => {
+    onClickForTitle(this, title);
+  });
 
-    let lastOptsActive, lastActive, active
-    let shownMessage = false
+  this.tabs = this.$$('su-tab');
+  if (this.tabs.length == 0) {
+    return
+  }
 
-    function onMount() {
-      if (tag.tags['su-tab-header']) {
-        tag.tags['su-tab-header'].opts.class = getTitleClass()
-      }
-
-      tag.tabs = tag.tags['su-tab']
-      if (typeof tag.tabs === 'undefined') {
-        return
-      }
-      if (!Array.isArray(tag.tabs)) {
-        tag.tabs = [tag.tabs]
-      }
-      supportTraditionalOptions()
-
-      if (typeof opts.active === 'undefined') {
-        const titles = tag.hasTitle()
-        if (titles) {
-          opts.active = titles[0].root.innerText.trim()
-        } else {
-          opts.active = tag.tabs[0].opts.label
-        }
-      }
-
-      tag.tabs.forEach(tab => {
-        initializeChild(tab)
-      })
-
-      tag.update()
+  if (typeof props.active === 'undefined') {
+    const titles = hasTitle(this);
+    if (titles.length > 0) {
+      state.active = titles[0].innerText.trim();
+    } else {
+      state.active = this.tabs[0].getAttribute('label');
     }
+  }
 
-    function onUpdate() {
-      supportTraditionalOptions()
-      let changed = false
-      if (lastOptsActive != opts.active) {
-        lastOptsActive = opts.active
-        active = opts.active
-        changed = true
-      }
-      if (lastActive != active) {
-        lastActive = active
-        changed = true
-      }
+  this.tabs.forEach(tab => {
+    initializeChild(this, tab);
+  });
 
-      if (changed) {
-        const titles = tag.hasTitle()
-        if (titles) {
-          let index
-          titles.forEach((title, i) => {
-            title.active = false
-            if (title.root.innerText.trim() === active.trim()) {
-              title.active = true
-              index = i
+  this.update();
+}
+
+function onUpdated(props, state) {
+  let changed = false;
+  if (this.lastOptsActive != props.active) {
+    this.lastOptsActive = props.active;
+    state.active = props.active;
+    changed = true;
+  }
+  if (this.lastActive != state.active) {
+    this.lastActive = state.$$;
+    changed = true;
+  }
+
+  if (changed) {
+    const titles = hasTitle(this);
+    if (titles.length > 0) {
+      let index;
+      titles.forEach((title, i) => {
+        this.obs.trigger(`${title.id}-toggle-active`, false);
+        if (title.innerText.trim() === state.active.trim()) {
+          this.obs.trigger(`${title.id}-toggle-active`, true);
+          index = i;
+        }
+      });
+      if (!index) {
+        this.obs.trigger(`${titles[0].id}-toggle-active`, true);
+        index = 0;
+      }
+      this.tabs.forEach((tab, i) => {
+        this.obs.trigger(`${tab.id}-toggle-active`, index == i);
+      });
+    } else {
+      this.tabs.forEach(tab => {
+        this.obs.trigger(`${tab.id}-toggle-active`, tab.getAttribute('label') == state.active);
+      });
+      if (!this.tabs.some(tab => tab.classList.contains('active'))) {
+        this.obs.trigger(`${this.tabs[0].id}-toggle-active`, true);
+      }
+    }
+  }
+}
+
+// ===================================================================================
+//                                                                              Events
+//                                                                              ======
+function onClick(item) {
+  this.state.active = item.getAttribute('label');
+  this.update();
+  this.dispatch('click', this.state.active);
+}
+
+function onClickForTitle(tag, title) {
+  tag.state.active = title;
+  tag.update();
+  tag.dispatch('click', tag.state.active);
+}
+
+
+// ===================================================================================
+//                                                                              Helper
+//                                                                              ======
+function isBottom() {
+  return hasClass(this, 'bottom')
+}
+
+function showMenu() {
+  return !hasTitle(this)
+}
+
+function getClass() {
+  if (hasClass(this, 'tabular') && !hasClass(this, 'attached')) {
+    return 'attached'
+  }
+}
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+function initializeChild(tag, tab) {
+  if (!tag.props.lazyMount) {
+    tag.obs.trigger(`${tab.id}-mount`);
+  }
+  if (Array.from(tab.classList.values()).some(clazz => {
+    return clazz != 'ui' && clazz != 'tab' && clazz != 'active'
+  })) {
+    return
+  }
+  let classList = hasClass(tag, 'no-segment') ? [] : ['segment'];
+  if (hasClass(tag, 'tabular')) {
+    classList.push('tabular');
+  }
+  if ((hasClass(tag, 'attached') || hasClass(tag, 'tabular')) && !hasClass(tag, 'left') && !hasClass(tag, 'right')) {
+    if (hasClass(tag, 'bottom')) {
+      classList.push('top');
+    } else {
+      classList.push('bottom');
+    }
+    classList.push('attached');
+  }
+  tag.obs.trigger(`${tab.id}-add-class`, classList.join(' '));
+}
+
+function hasTitle(tag) {
+  if (!tag.$('su-tab-header')) {
+    return false
+  }
+  return tag.$$('su-tab-header su-tab-title')
+}
+
+function getTitleClass(tag) {
+  const classList = [];
+  if (hasClass(tag, 'left') || hasClass(tag, 'right')) {
+    classList.push('vertical');
+    classList.push('fluid');
+  }
+  if (hasClass(tag, 'left')) {
+    classList.push('left');
+  }
+  if (hasClass(tag, 'right')) {
+    classList.push('right');
+  }
+  if (hasClass(tag, 'tabular')) {
+    classList.push('tabular');
+  }
+  return classList.join(' ')
+}
+
+function hasClass(tag, className) {
+  return tag.root.classList.contains(className)
+}
+
+var suTabset = {
+  'css': null,
+
+  'exports': {
+    state: {
+      active: false,
+    },
+
+    lastOptsActive: null,
+    lastActive: null,
+    onMounted,
+    onUpdated,
+    onClick,
+    getClass,
+    showMenu,
+    isBottom
+  },
+
+  'template': function(template, expressionTypes, bindingTypes, getComponent) {
+    return template(
+      '<div expr55="expr55"></div><slot expr57="expr57"></slot><div expr58="expr58"></div>',
+      [{
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'id',
+
+          'evaluate': function(scope) {
+            return scope.su_id;
+          }
+        }]
+      }, {
+        'type': bindingTypes.IF,
+
+        'evaluate': function(scope) {
+          return !scope.isBottom() && scope.showMenu();
+        },
+
+        'redundantAttribute': 'expr55',
+        'selector': '[expr55]',
+
+        'template': template('<a expr56="expr56"></a>', [{
+          'expressions': [{
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'class',
+
+            'evaluate': function(scope) {
+              return ['ui ', scope.props.class, ' ', scope.getClass(), ' menu'].join('');
             }
-          })
-          if (!titles.some(title => title.active)) {
-            titles[0].active = true
-            index = 0
+          }]
+        }, {
+          'type': bindingTypes.EACH,
+          'getKey': null,
+          'condition': null,
+
+          'template': template(' ', [{
+            'expressions': [{
+              'type': expressionTypes.TEXT,
+              'childNodeIndex': 0,
+
+              'evaluate': function(scope) {
+                return scope.tab.getAttribute('label');
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
+
+              'evaluate': function(scope) {
+                return [
+                  scope.tab.getAttribute('title-class'),
+                  ' ',
+                  scope.tab.getAttribute('label') == scope.state.active ? 'active':'',
+                  ' item'
+                ].join('');
+              }
+            }, {
+              'type': expressionTypes.EVENT,
+              'name': 'onclick',
+
+              'evaluate': function(scope) {
+                return () => scope.onClick(scope.tab);
+              }
+            }]
+          }]),
+
+          'redundantAttribute': 'expr56',
+          'selector': '[expr56]',
+          'itemName': 'tab',
+          'indexName': null,
+
+          'evaluate': function(scope) {
+            return scope.tabs;
           }
-          tag.tabs.forEach((tab, i) => {
-            tab.active = index == i
-          })
-        } else {
-          tag.tabs.forEach(tab => {
-            tab.active = tab.opts.label == active
-          })
-          if (!tag.tabs.some(tab => tab.active)) {
-            tag.tabs[0].active = true
+        }])
+      }, {
+        'type': bindingTypes.SLOT,
+        'attributes': [],
+        'name': 'default',
+        'redundantAttribute': 'expr57',
+        'selector': '[expr57]'
+      }, {
+        'type': bindingTypes.IF,
+
+        'evaluate': function(scope) {
+          return scope.isBottom() && scope.showMenu();
+        },
+
+        'redundantAttribute': 'expr58',
+        'selector': '[expr58]',
+
+        'template': template('<a expr59="expr59"></a>', [{
+          'expressions': [{
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'class',
+
+            'evaluate': function(scope) {
+              return ['ui ', scope.props.class, ' ', scope.getClass(), ' menu'].join('');
+            }
+          }]
+        }, {
+          'type': bindingTypes.EACH,
+          'getKey': null,
+          'condition': null,
+
+          'template': template(' ', [{
+            'expressions': [{
+              'type': expressionTypes.TEXT,
+              'childNodeIndex': 0,
+
+              'evaluate': function(scope) {
+                return scope.tab.getAttribute('label');
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
+
+              'evaluate': function(scope) {
+                return [
+                  scope.tab.getAttribute('title-class'),
+                  ' ',
+                  scope.tab.getAttribute('label') == scope.state.active ? 'active':'',
+                  ' item'
+                ].join('');
+              }
+            }, {
+              'type': expressionTypes.EVENT,
+              'name': 'onclick',
+
+              'evaluate': function(scope) {
+                return () => scope.onClick(scope.tab);
+              }
+            }]
+          }]),
+
+          'redundantAttribute': 'expr59',
+          'selector': '[expr59]',
+          'itemName': 'tab',
+          'indexName': null,
+
+          'evaluate': function(scope) {
+            return scope.tabs;
           }
-        }
-      }
-    }
+        }])
+      }]
+    );
+  },
 
-    function click(event) {
-      active = event.item.tab.opts.label
-      tag.update()
-      tag.trigger('click', active)
-    }
+  'name': 'su-tabset'
+};
 
-    function clickForTitle(title) {
-      active = title
-      tag.update()
-      tag.trigger('click', active)
-    }
-
-    function isBottom() {
-      return hasClass('bottom')
-    }
-
-    function hasTitle() {
-      if (!tag.tags['su-tab-header']) {
-        return false
-      }
-      const titles = tag.tags['su-tab-header'].tags['su-tab-title']
-      if (!titles) {
-        return false
-      }
-
-      if (!Array.isArray(titles)) {
-        return [titles]
-      }
-      return titles
-    }
-
-    function getClass() {
-      if (hasClass('tabular') && !hasClass('attached')) {
-        return 'attached'
-      }
-    }
-
-    function initializeChild(tab) {
-      tab.mounted = !opts.lazyMount
-      if (tab.opts.class) {
-        return
-      }
-      let classList = hasClass('no-segment') ? [] : ['segment']
-      if (hasClass('tabular')) {
-        classList.push('tabular')
-      }
-      if ((hasClass('attached') || hasClass('tabular')) && !hasClass('left') && !hasClass('right')) {
-        if (hasClass('bottom')) {
-          classList.push('top')
-        } else {
-          classList.push('bottom')
-        }
-        classList.push('attached')
-      }
-      tab.opts.class = classList.join(' ')
-    }
-
-    function getTitleClass() {
-      const classList = []
-      if (hasClass('left') || hasClass('right')) {
-        classList.push('vertical')
-        classList.push('fluid')
-      }
-      if (hasClass('left')) {
-        classList.push('left')
-      }
-      if (hasClass('right')) {
-        classList.push('right')
-      }
-      if (hasClass('tabular')) {
-        classList.push('tabular')
-      }
-      return classList.join(' ')
-    }
-
-    function hasClass(className) {
-
-      return tag.root.classList.contains(className)
-    }
-
-    function supportTraditionalOptions() {
-      tag.tabs.forEach(tab => {
-        if (typeof tab.opts.title !== 'undefined') {
-          if (!shownMessage) {
-            console.warn('\'title\' attribute is deprecated. Please use \'label\'.')
-          }
-          shownMessage = true
-          tab.opts.label = tab.opts.title
-          tab.opts.title = undefined
-        }
-      })
-    }
-});
+export default suTabset;

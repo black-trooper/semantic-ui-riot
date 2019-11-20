@@ -1,97 +1,211 @@
-riot.tag2('su-checkbox', '<input type="checkbox" checked="{checked}" onclick="{click}" ref="target" disabled="{isDisabled()}" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', 'su-checkbox.ui.checkbox label,[data-is="su-checkbox"].ui.checkbox label{ cursor: pointer; } su-checkbox.ui.read-only input[type="checkbox"],[data-is="su-checkbox"].ui.read-only input[type="checkbox"],su-checkbox.ui.disabled input[type="checkbox"],[data-is="su-checkbox"].ui.disabled input[type="checkbox"]{ cursor: default !important; }', 'class="ui checkbox {opts.class}"', function(opts) {
-    const tag = this
+let index = 0;
 
-    tag.checked = false
-    tag.defaultChecked = false
+// ===================================================================================
+//                                                                           Lifecycle
+//                                                                           =========
+function onMounted(props, state) {
+  this.su_id = `su-checkbox-${index++}`;
+  this.obs.on(`${this.su_id}-reset`, () => { reset(this); });
+  state.checked = normalizeOptChecked(props.checked);
+  state.lastChecked = state.checked;
+  state.lastOptsChecked = state.checked;
+  state.defaultChecked = state.checked;
+  this.update();
+}
 
-    tag.changed = changed
-    tag.click = click
-    tag.getId = getId
-    tag.isDisabled = isDisabled
-    tag.on('mount', onMount)
-    tag.on('update', onUpdate)
-    tag.reset = reset
+function onBeforeUpdate(props, state) {
+  this.readOnly = this.root.classList.contains('read-only');
+  this.disabled = this.root.classList.contains('disabled');
+  this.changed = state.checked !== state.defaultChecked;
 
-    let lastChecked
-    let lastOptsChecked
-    let shownMessage = false
+  if (state.lastOptsChecked != normalizeOptChecked(props.checked)) {
+    state.checked = normalizeOptChecked(props.checked);
+    state.lastOptsChecked = state.checked;
+  }
+}
 
-    function onMount() {
-      supportTraditionalOptions()
-      if (tag.checked) {
-        opts.checked = tag.checked
-      } else {
-        tag.checked = normalizeOptChecked()
-      }
-      lastChecked = tag.checked
-      lastOptsChecked = tag.checked
-      tag.defaultChecked = tag.checked
-      tag.update()
-    }
+function onUpdated(props, state) {
+  if (state.lastChecked != state.checked) {
+    state.lastChecked = state.checked;
+    state.lastOptsChecked = state.checked;
+  }
+}
 
-    function onUpdate() {
-      supportTraditionalOptions()
-      if (lastChecked != tag.checked) {
-        opts.checked = tag.checked
-        lastChecked = tag.checked
-        lastOptsChecked = tag.checked
-        parentUpdate()
-      } else if (lastOptsChecked != normalizeOptChecked()) {
-        tag.checked = normalizeOptChecked()
-        lastChecked = tag.checked
-        lastOptsChecked = tag.checked
-        parentUpdate()
-      }
-    }
+function reset(tag) {
+  tag.update({
+    checked: tag.state.defaultChecked
+  });
+}
 
-    function reset() {
-      tag.checked = tag.defaultChecked
-    }
+// ===================================================================================
+//                                                                              Events
+//                                                                              ======
+function onClick() {
+  if (this.readOnly || this.disabled) {
+    event.preventDefault();
+    return
+  }
 
-    function changed() {
-      return tag.checked !== tag.defaultChecked
-    }
+  this.update({
+    checked: !this.state.checked
+  });
+  this.dispatch('click', this.checked);
+  this.obs.trigger(`${this.props.suParentId}-update`);
+  if (this.obs && this.root.getAttribute('name')) {
+    this.obs.trigger(`${this.root.getAttribute('name')}-click`, this.props.value);
+  }
+}
 
-    function click() {
-      if (isReadOnly() || tag.isDisabled()) {
-        event.preventDefault()
-        return
-      }
-      tag.checked = !tag.checked
-      parentUpdate()
-      tag.trigger('click', tag.checked)
-    }
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+function normalizeOptChecked(checked) {
+  return checked === true || checked === 'checked' || checked === 'true'
+}
 
-    function getId() {
-      return `su-checkbox-${tag._riot_id}`
-    }
+var suCheckbox = {
+  'css': `su-checkbox.ui.checkbox label,[is="su-checkbox"].ui.checkbox label{ cursor: pointer; } su-checkbox.ui.read-only input[type="checkbox"],[is="su-checkbox"].ui.read-only input[type="checkbox"],su-checkbox.ui.disabled input[type="checkbox"],[is="su-checkbox"].ui.disabled input[type="checkbox"]{ cursor: default !important; }`,
 
-    function isDisabled() {
-      return tag.root.classList.contains('disabled')
-    }
+  'exports': {
+    state: {
+      checked: false,
+      defaultChecked: false,
+      observable: null,
+      lastChecked: false,
+      lastOptsChecked: false,
+    },
 
-    function isReadOnly() {
-      return tag.root.classList.contains('read-only')
-    }
+    changed: false,
+    onBeforeUpdate,
+    onMounted,
+    onUpdated,
+    onClick
+  },
 
-    function parentUpdate() {
-      if (tag.parent) {
-        tag.parent.update()
-      }
-    }
+  'template': function(template, expressionTypes, bindingTypes, getComponent) {
+    return template(
+      '<input expr5="expr5" type="checkbox"/><label expr6="expr6"></label><label expr8="expr8"></label>',
+      [{
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
 
-    function supportTraditionalOptions() {
-      if (typeof opts.check !== 'undefined') {
-        if (!shownMessage) {
-          console.warn('\'check\' attribute is deprecated. Please use \'checked\'.')
-        }
-        shownMessage = true
-        opts.checked = opts.check
-        opts.check = undefined
-      }
-    }
+          'evaluate': function(scope) {
+            return ['ui checkbox ', scope.props.class].join('');
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'checked',
 
-    function normalizeOptChecked() {
-      return opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
-    }
-});
+          'evaluate': function(scope) {
+            return scope.state.checked;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'changed',
+
+          'evaluate': function(scope) {
+            return scope.changed;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'id',
+
+          'evaluate': function(scope) {
+            return scope.su_id;
+          }
+        }]
+      }, {
+        'redundantAttribute': 'expr5',
+        'selector': '[expr5]',
+
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'checked',
+
+          'evaluate': function(scope) {
+            return scope.state.checked;
+          }
+        }, {
+          'type': expressionTypes.EVENT,
+          'name': 'onclick',
+
+          'evaluate': function(scope) {
+            return scope.onClick;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'disabled',
+
+          'evaluate': function(scope) {
+            return scope.disabled;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'id',
+
+          'evaluate': function(scope) {
+            return [scope.su_id, '-input'].join('');
+          }
+        }]
+      }, {
+        'type': bindingTypes.IF,
+
+        'evaluate': function(scope) {
+          return !scope.props.label;
+        },
+
+        'redundantAttribute': 'expr6',
+        'selector': '[expr6]',
+
+        'template': template('<slot expr7="expr7"></slot>', [{
+          'expressions': [{
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'for',
+
+            'evaluate': function(scope) {
+              return [scope.su_id, '-input'].join('');
+            }
+          }]
+        }, {
+          'type': bindingTypes.SLOT,
+          'attributes': [],
+          'name': 'default',
+          'redundantAttribute': 'expr7',
+          'selector': '[expr7]'
+        }])
+      }, {
+        'type': bindingTypes.IF,
+
+        'evaluate': function(scope) {
+          return scope.props.label;
+        },
+
+        'redundantAttribute': 'expr8',
+        'selector': '[expr8]',
+
+        'template': template(' ', [{
+          'expressions': [{
+            'type': expressionTypes.TEXT,
+            'childNodeIndex': 0,
+
+            'evaluate': function(scope) {
+              return scope.props.label;
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'for',
+
+            'evaluate': function(scope) {
+              return [scope.su_id, '-input'].join('');
+            }
+          }]
+        }])
+      }]
+    );
+  },
+
+  'name': 'su-checkbox'
+};
+
+export default suCheckbox;

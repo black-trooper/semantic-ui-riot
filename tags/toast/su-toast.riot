@@ -1,0 +1,113 @@
+<su-toast class="{ state.position }">
+  <div class="ui list">
+    <su-toast-item each="{ item in state.items }" icon="{ item.icon }" progress="{ item.progress }"
+      class-name="{ item.class }" title="{ item.title }" messages="{ item.messages }" position="{ state.position }" />
+  </div>
+
+  <style>
+    :host {
+      position: fixed;
+      padding: 1rem;
+      z-index: 3000;
+    }
+
+    :host.right {
+      right: 0;
+    }
+
+    :host.left {
+      left: 0;
+    }
+
+    :host.top {
+      top: 0;
+    }
+
+    :host.bottom {
+      bottom: 0;
+    }
+
+    :host.middle {
+      top: 50%;
+      margin-top: -35px;
+    }
+
+    :host.center {
+      left: 50%;
+      margin-left: 150px;
+    }
+
+    .ui.message {
+      min-width: 20rem;
+      position: relative;
+      padding-right: 2.5rem;
+    }
+
+    .ui.icon.message {
+      width: auto !important;
+    }
+  </style>
+
+  <script>
+    export default {
+      state: {
+        items: [],
+        position: '',
+      },
+
+      onBeforeMount,
+      onMounted,
+      onBeforeUpdate,
+    }
+
+    // ===================================================================================
+    //                                                                           Lifecycle
+    //                                                                           =========
+    function onBeforeMount(props, state) {
+      state.items = []
+    }
+
+    function onMounted() {
+      this.update()
+
+      if (this.obs) {
+        this.obs.off('su-toast-show')
+        this.obs.on('su-toast-show', option => {
+          showToast(this, option)
+        })
+      }
+    }
+
+    function onBeforeUpdate(props, state) {
+      state.position = props.position || 'bottom right'
+    }
+
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
+    function showToast(tag, param) {
+      const item = {
+        title: null,
+        message: null,
+        icon: null,
+        progress: null,
+        class: null,
+      }
+
+      if (typeof param === 'string') {
+        item.message = param
+      } else if (param) {
+        Object.assign(item, param)
+      }
+      item.messages = Array.isArray(item.message) ? item.message : [item.message]
+
+      tag.state.items.push(item)
+      tag.update()
+
+      setTimeout(() => {
+        tag.state.items.shift()
+        tag.update()
+      }, 5000)
+    }
+  </script>
+</su-toast>

@@ -1,399 +1,1076 @@
-import addDays from 'date-fns/add_days'
-import addMonths from 'date-fns/add_months'
-import format from 'date-fns/format'
-import isSameDay from 'date-fns/is_same_day'
-import isToday from 'date-fns/is_today'
-import parse from 'date-fns/parse'
-import startOfMonth from 'date-fns/start_of_month'
-riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward}"> <div class="ui action input {disabled: isDisabled()}" if="{opts.popup}"> <input type="text" placeholder="{opts.placeholder}" ref="input" tabindex="{getTabindex()}" readonly="{isReadOnly()}"> <button class="ui icon button {disabled: isDisabled()}" onclick="{toggle}" onblur="{blur}" type="button"> <i class="calendar icon"></i> </button> </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="{getTabindex()}"> <div class="ui compact segments"> <div class="ui center aligned secondary segment"> <div class="ui buttons dp-navigation"> <button class="icon tiny ui button {disabled: isDisabled()} prev" onclick="{clickPrevious}" type="button"> <i class="chevron left icon"></i> </button> <button class="ui button {disabled: isDisabled()} month" onclick="{selectMonth}" type="button">{getCurrentMonthView()}</button> <button class="ui button {disabled: isDisabled()} year" onclick="{selectYear}" type="button">{getCurrentYear()}</button> <button class="icon tiny ui button {disabled: isDisabled()} next" onclick="{clickNext}" type="button"> <i class="chevron right icon"></i> </button> </div> <div class="dp-wrapper"> <div each="{week in getWeekNames()}" class="dp-weekday">{week}</div> </div> </div> <div class="ui center aligned segment" if="{!yearSelecting && !monthSelecting}"> <div each="{week in weeks}" class="dp-wrapper"> <div each="{day in week.days}" class="dp-day"> <button class="ui button {today: isToday(day)} {primary: isActive(day)} {non-active: !isActive(day)} {disabled: day.getMonth() != getCurrentMonth() || isDisabled()}" onclick="{clickDay}" type="button">{day.getDate()}</button> </div> </div> </div> <div class="ui center aligned segment" if="{!yearSelecting && !monthSelecting}"> <div class="ui two column grid"> <div class="column dp-clear"> <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{clickClear}" type="button"><i class="times icon"></i></button> </div> <div class="column dp-today"> <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{clickToday}" type="button"><i class="calendar check icon"></i></button> </div> </div> </div> <div class="ui center aligned segment" if="{monthSelecting}"> <div each="{element in months}" class="dp-wrapper"> <div each="{month in element}" class="dp-month"> <button class="ui button {disabled : isDisabled()}" onclick="{clickMonth}" type="button">{month.label}</button> </div> </div> </div> <div class="ui center aligned segment" if="{yearSelecting}"> <div each="{element in years}" class="dp-wrapper"> <div each="{year in element}" class="dp-month"> <button class="ui button {disabled : isDisabled()}" onclick="{clickYear}" type="button">{year}</button> </div> </div> </div> </div> </div> </div>', 'su-datepicker .ui.segment,[data-is="su-datepicker"] .ui.segment{ padding-top: 0.5rem; padding-bottom: 0.5rem; } su-datepicker .ui.dropdown .menu,[data-is="su-datepicker"] .ui.dropdown .menu{ display: block; } su-datepicker .ui.buttons.dp-navigation,[data-is="su-datepicker"] .ui.buttons.dp-navigation{ margin-bottom: 0.4rem; } su-datepicker .ui.dropdown,[data-is="su-datepicker"] .ui.dropdown{ display: block; } su-datepicker .dp-wrapper,[data-is="su-datepicker"] .dp-wrapper{ display: flex; } su-datepicker .dp-day,[data-is="su-datepicker"] .dp-day,su-datepicker .dp-month,[data-is="su-datepicker"] .dp-month{ cursor: pointer; } su-datepicker .dp-weekday,[data-is="su-datepicker"] .dp-weekday,su-datepicker .dp-day,[data-is="su-datepicker"] .dp-day,su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button{ width: 2.5rem; } su-datepicker .dp-month,[data-is="su-datepicker"] .dp-month,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ width: 4.375rem; } su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ padding: 0; height: 2.5rem; font-weight: normal } su-datepicker .dp-day .ui.button.today,[data-is="su-datepicker"] .dp-day .ui.button.today{ font-weight: 700; } su-datepicker .dp-today .ui.button,[data-is="su-datepicker"] .dp-today .ui.button,su-datepicker .dp-clear .ui.button,[data-is="su-datepicker"] .dp-clear .ui.button,su-datepicker .dp-navigation .ui.button,[data-is="su-datepicker"] .dp-navigation .ui.button,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button,su-datepicker .dp-day .ui.button.non-active,[data-is="su-datepicker"] .dp-day .ui.button.non-active{ background-color: transparent; } su-datepicker .dp-today .ui.button:hover,[data-is="su-datepicker"] .dp-today .ui.button:hover,su-datepicker .dp-clear .ui.button:hover,[data-is="su-datepicker"] .dp-clear .ui.button:hover,su-datepicker .dp-navigation .ui.button:hover,[data-is="su-datepicker"] .dp-navigation .ui.button:hover,su-datepicker .dp-month .ui.button:hover,[data-is="su-datepicker"] .dp-month .ui.button:hover,su-datepicker .dp-day .ui.button.non-active:hover,[data-is="su-datepicker"] .dp-day .ui.button.non-active:hover{ background-color: #e0e1e2; } su-datepicker .dp-day .ui.button.disabled,[data-is="su-datepicker"] .dp-day .ui.button.disabled{ pointer-events: all !important; } su-datepicker .dp-navigation,[data-is="su-datepicker"] .dp-navigation{ width: 100%; } su-datepicker .dp-navigation .ui.button,[data-is="su-datepicker"] .dp-navigation .ui.button{ width: 20%; } su-datepicker .dp-navigation .ui.button.year,[data-is="su-datepicker"] .dp-navigation .ui.button.year,su-datepicker .dp-navigation .ui.button.month,[data-is="su-datepicker"] .dp-navigation .ui.button.month{ width: 30%; }', '', function(opts) {
+import { isToday, format, addMonths, startOfMonth, addDays, isSameDay, parse } from 'date-fns';
 
-    const tag = this
+let index = 0;
 
-    tag.currentDate = null
-    tag.defaultValue = null
-    tag.transitionStatus = opts.popup ? 'hidden' : 'visible'
-    tag.value = null
-    tag.valueAsDate = null
-    tag.weeks = []
+// tag.mixin('semantic-ui')
 
-    tag.mixin('semantic-ui')
-    tag.on('mount', onMount)
-    tag.on('update', onUpdate)
-    tag.reset = reset
-    tag.changed = changed
-    tag.selectMonth = selectMonth
-    tag.selectYear = selectYear
-    tag.clickDay = clickDay
-    tag.clickMonth = clickMonth
-    tag.clickYear = clickYear
-    tag.clickPrevious = clickPrevious
-    tag.clickNext = clickNext
-    tag.clickClear = clickClear
-    tag.clickToday = clickToday
-    tag.toggle = toggle
-    tag.mousedown = mousedown
-    tag.mouseup = mouseup
-    tag.blur = blur
-    tag.getCurrentYear = getCurrentYear
-    tag.getCurrentMonthView = getCurrentMonthView
-    tag.getCurrentMonth = getCurrentMonth
-    tag.getWeekNames = getWeekNames
-    tag.isActive = isActive
-    tag.isToday = isToday
-    tag.getTabindex = getTabindex
-    tag.isReadOnly = isReadOnly
-    tag.isDisabled = isDisabled
+// ===================================================================================
+//                                                                           Lifecycle
+//                                                                           =========
+function onBeforeMount(props, state) {
+  this.state.transitionStatus = props.popup ? 'hidden' : 'visible';
+  this.weeks = [];
+  this.pattern = getPattern(this);
+  this.locale = getLocale(this);
+  this.tabIndex = getTabindex(this);
+  this.weekNames = getWeekNames(this);
+  this.su_id = `su-datepicker-${index++}`;
+  this.obs.on(`${this.su_id}-reset`, () => { reset(this); });
+}
 
-    let visibleFlg = false
-    let itemActivated = false
-    let lastValue = null
-    let lastOptsValue = null
-    let lastCurrentDate = null
-    let lastOptsCurrentDate = null
-    let yearRange = 20
+function onMounted(props, state) {
+  if (!state.value) {
+    state.value = copyDate(props.value);
+  }
+  if (state.value) {
+    state.value = format(copyDate(state.value), 'YYYY-MM-DD');
+  }
+  state.formatedValue = formatViewDate(this, state.value);
+  if (props.popup) {
+    this.$('input').value = state.formatedValue;
+  }
+  this.lastValue = copyDate(state.value);
+  this.lastPropsValue = copyDate(props.value);
 
-    function onMount() {
-      if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
-        opts.riotValue = opts.value
-      }
-      if (!tag.valueAsDate) {
-        tag.valueAsDate = copyDate(tag.value || opts.riotValue)
-      }
-      setValueFromValueAsDate()
-      if (tag.refs.input) {
-        tag.refs.input.value = tag.value
-      }
-      lastValue = copyDate(tag.valueAsDate)
-      lastOptsValue = copyDate(opts.riotValue)
+  state.currentDate = copyDate(props.currentDate);
+  if (state.value) {
+    state.currentDate = copyDate(state.value);
+  }
+  if (!state.currentDate) {
+    state.currentDate = new Date();
+  }
+  state.months = getMonthes(this);
+  if (props.yearRange && !isNaN(props.yearRange) && props.yearRange > 20) {
+    this.yearRange = props.yearRange;
+  }
+  if (props.startMode === 'year') {
+    this.selectYear();
+  }
+  state.defaultValue = state.value;
+  this.update();
+  parentUpdate(this);
+}
 
-      tag.currentDate = copyDate(opts.currentDate)
-      if (tag.valueAsDate) {
-        tag.currentDate = copyDate(tag.valueAsDate)
-      }
-      if (!tag.currentDate) {
-        tag.currentDate = new Date()
-      }
-      tag.months = getMonthes()
-      if (opts.yearRange && !isNaN(opts.yearRange) && opts.yearRange > 20) {
-        yearRange = opts.yearRange
-      }
-      if (opts.startMode === 'year') {
-        tag.selectYear()
-      }
-      tag.update()
-      tag.defaultValue = tag.valueAsDate
+function onBeforeUpdate(props, state) {
+  this.readOnly = this.root.classList.contains('read-only') ? "read-only" : '';
+  this.disabled = this.root.classList.contains('disabled') ? 'disabled' : '';
+
+  let changed = false;
+  if (!isEqualDay(this.lastValue, state.value)) {
+    this.lastValue = copyDate(state.value);
+    changed = true;
+  } else if (this.lastPropsValue !== props.value) {
+    state.value = props.value ? format(copyDate(props.value), 'YYYY-MM-DD') : null;
+    this.lastPropsValue = copyDate(props.value);
+    this.lastValue = copyDate(props.value);
+    changed = true;
+  }
+  if (changed) {
+    state.formatedValue = formatViewDate(this, state.value);
+    if (props.popup) {
+      this.$('input').value = state.formatedValue;
     }
+    parentUpdate(this);
+  }
 
-    function onUpdate() {
-      let changed = false
-      if (!isEqualDay(lastValue, tag.value)) {
-        tag.valueAsDate = copyDate(tag.value)
-        lastValue = copyDate(tag.value)
-        changed = true
-      } else if (!isEqualDay(lastValue, tag.valueAsDate)) {
-        lastValue = copyDate(tag.valueAsDate)
-        changed = true
-      } else if (!isEqualDay(lastOptsValue, opts.riotValue)) {
-        tag.valueAsDate = copyDate(opts.riotValue)
-        lastOptsValue = copyDate(opts.riotValue)
-        lastValue = copyDate(opts.riotValue)
-        changed = true
-      }
-      setValueFromValueAsDate()
-      if (changed && tag.refs.input) {
-        tag.refs.input.value = tag.value
-      }
+  if (changed && state.value) {
+    state.currentDate = copyDate(state.value);
+  }
+  if (!isEqualDay(this.lastPropsCurrentDate, props.currentDate)) {
+    state.currentDate = copyDate(props.currentDate);
+    this.lastPropsCurrentDate = copyDate(props.currentDate);
+  }
+  if (!isEqualDay(this.lastCurrentDate, state.currentDate)) {
+    this.lastCurrentDate = copyDate(state.currentDate);
+    generate(this);
+  }
+  this.changed = !isEqualDay(state.value, state.defaultValue);
+}
 
-      if (changed && tag.valueAsDate) {
-        tag.currentDate = copyDate(tag.valueAsDate)
-      }
-      if (!isEqualDay(lastOptsCurrentDate, opts.currentDate)) {
-        tag.currentDate = copyDate(opts.currentDate)
-        lastOptsCurrentDate = copyDate(opts.currentDate)
-      }
-      if (!isEqualDay(lastCurrentDate, tag.currentDate)) {
-        lastCurrentDate = copyDate(tag.currentDate)
-        generate()
-      }
+function reset(tag) {
+  tag.state.value = tag.state.defaultValue;
+  tag.update();
+  parentUpdate(tag);
+}
+
+// ===================================================================================
+//                                                                               Event
+//                                                                               =====
+function selectMonth() {
+  this.yearSelecting = false;
+  this.monthSelecting = !this.monthSelecting;
+  this.update();
+}
+
+function selectYear() {
+  this.state.years = getYears(this);
+  this.monthSelecting = false;
+  this.yearSelecting = !this.yearSelecting;
+  this.update();
+}
+
+function clickDay(day) {
+  if (this.readOnly || this.disabled) {
+    return
+  }
+  setDate(this, day);
+  this.update();
+  parentUpdate(this);
+  this.dispatch('click', this.state.value);
+}
+
+function clickMonth(month) {
+  this.state.currentDate.setMonth(month.value);
+  this.monthSelecting = false;
+  this.update();
+}
+
+function clickYear(year) {
+  this.state.currentDate.setYear(year);
+  this.selectMonth();
+  this.update();
+}
+
+function clickPrevious() {
+  if (this.yearSelecting) {
+    this.state.years = addYear(this.state.years, -this.yearRange);
+  } else {
+    this.monthSelecting = false;
+    this.state.currentDate = addMonths(this.state.currentDate, -1);
+  }
+  this.update();
+}
+
+function clickNext() {
+  if (this.yearSelecting) {
+    this.state.years = addYear(this.state.years, this.yearRange);
+  } else {
+    this.monthSelecting = false;
+    this.state.currentDate = addMonths(this.state.currentDate, 1);
+  }
+  this.update();
+}
+
+function clickClear() {
+  setDate(this, null);
+  this.update();
+  parentUpdate(this);
+  this.dispatch('clear', this.state.value);
+}
+
+function clickToday() {
+  setDate(this, new Date());
+  this.update();
+  parentUpdate(this);
+  this.dispatch('today', this.state.value);
+}
+
+// -----------------------------------------------------
+//                                          popup option
+//                                          ------------
+function toggle() {
+  if (this.readOnly || this.disabled) {
+    return
+  }
+  if (!this.visibleFlg) {
+    if (this.props.startMode === 'year') {
+      this.selectYear();
+      this.yearSelecting = true;
     }
+    open(this);
+  } else {
+    close(this);
+  }
+  this.update();
+}
 
-    function reset() {
-      tag.valueAsDate = tag.defaultValue
-      setValueFromValueAsDate()
+function onMouseDown() {
+  this.itemActivated = true;
+  this.update();
+}
+
+function onMouseUp() {
+  this.itemActivated = false;
+  this.update();
+}
+
+function onBlur() {
+  if (this.props.popup && !this.itemActivated) {
+    close(this);
+    this.update();
+  }
+}
+
+// ===================================================================================
+//                                                                              Helper
+//                                                                              ======
+function getCurrentYear() {
+  if (this.state.currentDate) {
+    return this.state.currentDate.getFullYear()
+  }
+}
+
+function getCurrentMonthView() {
+  if (this.state.currentDate) {
+    return format(this.state.currentDate, 'MMM', { locale: this.locale })
+  }
+}
+
+function getCurrentMonth() {
+  return this.state.currentDate.getMonth()
+}
+
+function isActive(date) {
+  return isEqualDay(this.state.value, date)
+}
+
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+function generate(tag) {
+  const startDate = startOfMonth(tag.state.currentDate);
+  const baseDate = addDays(startDate, - startDate.getDay());
+  let i = 0;
+  tag.weeks = [];
+
+  for (let r = 0; r < 6; r++) {
+    const days = [];
+    for (let c = 0; c < 7; c++) {
+      days.push(addDays(baseDate, i++));
     }
+    tag.weeks.push({ days });
+  }
+}
 
-    function changed() {
-      return !isEqualDay(tag.valueAsDate, tag.defaultValue)
-    }
+function addYear(years, range) {
+  return years.map(values => {
+    values = values.map(value => {
+      return value + parseInt(range)
+    });
+    return values
+  })
+}
 
-    function selectMonth() {
-      tag.yearSelecting = false
-      tag.monthSelecting = !tag.monthSelecting
-    }
+function getYears(tag) {
+  const rowSize = ((tag.yearRange - tag.yearRange % 4) / 4) + ((tag.yearRange % 4 != 0) ? 1 : 0);
+  const years = new Array();
+  for (let index = 0; index < rowSize; index++) {
+    years.push([]);
+  }
+  for (let index = 0; index < tag.yearRange; index++) {
+    years[(index - index % 4) / 4][index % 4] = tag.state.currentDate.getFullYear() + index - ((tag.yearRange - tag.yearRange % 2) / 2 - 1);
+  }
+  return years
+}
 
-    function selectYear() {
-      tag.years = getYears()
-      tag.monthSelecting = false
-      tag.yearSelecting = !tag.yearSelecting
-    }
+function getMonthes(tag) {
+  const months = [[], [], []];
+  const monthNames = range(12).map(month => format(new Date(2018, month, 1), 'MMM', { locale: tag.locale }));
+  monthNames.forEach((month, index) => {
+    months[(index - index % 4) / 4][index % 4] = {
+      label: month,
+      value: index
+    };
+  });
+  return months
+}
 
-    function clickDay(event) {
-      if (tag.isReadOnly() || tag.isDisabled()) {
-        return
-      }
-      setDate(event.item.day)
-      tag.trigger('click', tag.valueAsDate)
-    }
+function open(tag) {
+  tag.upward = isUpward(tag);
+  tag.state.transitionStatus = 'visible';
+  tag.visibleFlg = true;
+  tag.state.currentDate = copyDate(tag.props.currentDate);
+  if (tag.state.value) {
+    tag.state.currentDate = copyDate(tag.state.value);
+  }
+  if (!tag.state.currentDate) {
+    tag.state.currentDate = new Date();
+  }
+  tag.dispatch('open', tag.state.value);
+}
 
-    function clickMonth(event) {
-      tag.currentDate.setMonth(event.item.month.value)
-      tag.monthSelecting = false
-    }
+function close(tag) {
+  tag.state.transitionStatus = 'hidden';
+  tag.visibleFlg = false;
+  tag.dispatch('close', tag.state.value);
+}
 
-    function clickYear(event) {
-      tag.currentDate.setYear(event.item.year)
-      tag.selectMonth()
-    }
+function setDate(tag, date) {
+  tag.state.value = date ? format(date, 'YYYY-MM-DD') : null;
+  if (tag.props.popup) {
+    tag.$('input').value = tag.state.value;
+    close(tag);
+  }
+  tag.dispatch('change', tag.state.value);
+}
 
-    function clickPrevious() {
-      if (tag.yearSelecting) {
-        addYear(-yearRange)
-      } else {
-        tag.monthSelecting = false
-        tag.currentDate = addMonths(tag.currentDate, -1)
-      }
-    }
+function isEqualDay(d1, d2) {
+  if (d1 == d2) {
+    return true
+  }
+  if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
+    return false
+  }
+  return isSameDay(d1, d2)
+}
 
-    function clickNext() {
-      if (tag.yearSelecting) {
-        addYear(yearRange)
-      } else {
-        tag.monthSelecting = false
-        tag.currentDate = addMonths(tag.currentDate, 1)
-      }
-    }
+function copyDate(date) {
+  if (!date) {
+    return date
+  }
+  return parse(date)
+}
 
-    function clickClear() {
-      setDate(null)
-      tag.trigger('clear', tag.valueAsDate)
-    }
+function isUpward(tag) {
+  if (tag.props.direction == 'upward') {
+    return true
+  }
+  if (tag.props.direction == 'downward') {
+    return false
+  }
+  const inputField = tag.root.getBoundingClientRect();
+  const windowHeight = document.documentElement.offsetHeight || document.body.offsetHeight;
+  const menuHeight = tag.root.querySelector('.menu').getBoundingClientRect().height;
+  const above = menuHeight <= inputField.top;
+  const below = windowHeight >= inputField.top + inputField.height + menuHeight;
 
-    function clickToday() {
-      setDate(new Date())
-      tag.trigger('today', tag.valueAsDate)
-    }
+  if (below) {
+    return false
+  }
+  if (!below && !above) {
+    return false
+  }
+  return true
+}
 
-    function toggle() {
-      if (tag.isReadOnly() || tag.isDisabled()) {
-        return
-      }
-      if (!visibleFlg) {
-        if (opts.startMode === 'year') {
-          tag.selectYear()
-          tag.yearSelecting = true
+function getWeekNames(tag) {
+  return range(7, 1).map(day => format(new Date(2018, 6, day), 'dd', { locale: tag.locale }))
+}
+
+function getTabindex(tag) {
+  if (!tag.props.popup) {
+    return false
+  }
+  if (tag.props.tabindex) {
+    return tag.props.tabindex
+  }
+  return 0
+}
+
+function getPattern(tag) {
+  if (tag.props.pattern) {
+    return tag.props.pattern
+  }
+  if (tag.defaultOptions && tag.defaultOptions.pattern) {
+    return tag.defaultOptions.pattern
+  }
+  return 'YYYY-MM-DD'
+}
+
+function getLocale(tag) {
+  if (tag.props.locale) {
+    return tag.props.locale
+  }
+  if (tag.defaultOptions && tag.defaultOptions.locale) {
+    return tag.defaultOptions.locale
+  }
+}
+
+function range(size, startAt = 0) {
+  return Array.from(Array(size).keys()).map(i => i + startAt)
+}
+
+function formatViewDate(tag, value) {
+  const viewDate = copyDate(value);
+  return viewDate ? format(viewDate, tag.pattern, { locale: tag.locale }) : null
+}
+
+function parentUpdate(tag) {
+  tag.obs.trigger(`${tag.props.suParentId}-update`);
+}
+
+var suDatepicker = {
+  'css': `su-datepicker .ui.segment,[is="su-datepicker"] .ui.segment{ padding-top: 0.5rem; padding-bottom: 0.5rem; } su-datepicker .ui.dropdown .menu,[is="su-datepicker"] .ui.dropdown .menu{ display: block; } su-datepicker .ui.buttons.dp-navigation,[is="su-datepicker"] .ui.buttons.dp-navigation{ margin-bottom: 0.4rem; } su-datepicker .ui.dropdown,[is="su-datepicker"] .ui.dropdown{ display: block; } su-datepicker .dp-wrapper,[is="su-datepicker"] .dp-wrapper{ display: flex; } su-datepicker .dp-day,[is="su-datepicker"] .dp-day,su-datepicker .dp-month,[is="su-datepicker"] .dp-month{ cursor: pointer; } su-datepicker .dp-weekday,[is="su-datepicker"] .dp-weekday,su-datepicker .dp-day,[is="su-datepicker"] .dp-day,su-datepicker .dp-day .ui.button,[is="su-datepicker"] .dp-day .ui.button{ width: 2.5rem; } su-datepicker .dp-month,[is="su-datepicker"] .dp-month,su-datepicker .dp-month .ui.button,[is="su-datepicker"] .dp-month .ui.button{ width: 4.375rem; } su-datepicker .dp-day .ui.button,[is="su-datepicker"] .dp-day .ui.button,su-datepicker .dp-month .ui.button,[is="su-datepicker"] .dp-month .ui.button{ padding: 0; height: 2.5rem; font-weight: normal } su-datepicker .dp-day .ui.button.today,[is="su-datepicker"] .dp-day .ui.button.today{ font-weight: 700; } su-datepicker .dp-today .ui.button,[is="su-datepicker"] .dp-today .ui.button,su-datepicker .dp-clear .ui.button,[is="su-datepicker"] .dp-clear .ui.button,su-datepicker .dp-navigation .ui.button,[is="su-datepicker"] .dp-navigation .ui.button,su-datepicker .dp-month .ui.button,[is="su-datepicker"] .dp-month .ui.button,su-datepicker .dp-day .ui.button.non-active,[is="su-datepicker"] .dp-day .ui.button.non-active{ background-color: transparent; } su-datepicker .dp-today .ui.button:hover,[is="su-datepicker"] .dp-today .ui.button:hover,su-datepicker .dp-clear .ui.button:hover,[is="su-datepicker"] .dp-clear .ui.button:hover,su-datepicker .dp-navigation .ui.button:hover,[is="su-datepicker"] .dp-navigation .ui.button:hover,su-datepicker .dp-month .ui.button:hover,[is="su-datepicker"] .dp-month .ui.button:hover,su-datepicker .dp-day .ui.button.non-active:hover,[is="su-datepicker"] .dp-day .ui.button.non-active:hover{ background-color: #e0e1e2; } su-datepicker .dp-day .ui.button.disabled,[is="su-datepicker"] .dp-day .ui.button.disabled{ pointer-events: all !important; } su-datepicker .dp-navigation,[is="su-datepicker"] .dp-navigation{ width: 100%; } su-datepicker .dp-navigation .ui.button,[is="su-datepicker"] .dp-navigation .ui.button{ width: 20%; } su-datepicker .dp-navigation .ui.button.year,[is="su-datepicker"] .dp-navigation .ui.button.year,su-datepicker .dp-navigation .ui.button.month,[is="su-datepicker"] .dp-navigation .ui.button.month{ width: 30%; }`,
+
+  'exports': {
+    state: {
+      currentDate: null,
+      defaultValue: null,
+      value: null,
+      weeks: [],
+    },
+
+    visibleFlg: false,
+    itemActivated: false,
+    lastValue: null,
+    lastPropsValue: null,
+    lastCurrentDate: null,
+    lastPropsCurrentDate: null,
+    yearRange: 20,
+    onBeforeMount,
+    onMounted,
+    onBeforeUpdate,
+    clickDay,
+    clickMonth,
+    clickYear,
+    clickPrevious,
+    clickNext,
+    clickClear,
+    clickToday,
+    selectMonth,
+    selectYear,
+    toggle,
+    onMouseDown,
+    onMouseUp,
+    onBlur,
+    getCurrentYear,
+    getCurrentMonthView,
+    getCurrentMonth,
+    isActive,
+    isToday
+  },
+
+  'template': function(template, expressionTypes, bindingTypes, getComponent) {
+    return template(
+      '<div expr89="expr89"><div expr90="expr90"></div><div expr93="expr93"><div class="ui compact segments"><div class="ui center aligned secondary segment"><div class="ui buttons dp-navigation"><button expr94="expr94" type="button"><i class="chevron left icon"></i></button><button expr95="expr95" type="button"> </button><button expr96="expr96" type="button"> </button><button expr97="expr97" type="button"><i class="chevron right icon"></i></button></div><div class="dp-wrapper"><div expr98="expr98" class="dp-weekday"></div></div></div><div expr99="expr99" class="ui center aligned segment"></div><div expr103="expr103" class="ui center aligned segment"></div><div expr106="expr106" class="ui center aligned segment"></div><div expr110="expr110" class="ui center aligned segment"></div></div></div></div>',
+      [{
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'value',
+
+          'evaluate': function(scope) {
+            return scope.state.value;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'formated-value',
+
+          'evaluate': function(scope) {
+            return scope.state.formatedValue;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'changed',
+
+          'evaluate': function(scope) {
+            return scope.changed;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'id',
+
+          'evaluate': function(scope) {
+            return scope.su_id;
+          }
+        }]
+      }, {
+        'redundantAttribute': 'expr89',
+        'selector': '[expr89]',
+
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
+
+          'evaluate': function(scope) {
+            return [
+              'ui ',
+              scope.props.popup ? 'dropdown' : '',
+              ' ',
+              scope.upward ? 'upward' : ''
+            ].join('');
+          }
+        }]
+      }, {
+        'type': bindingTypes.IF,
+
+        'evaluate': function(scope) {
+          return scope.props.popup;
+        },
+
+        'redundantAttribute': 'expr90',
+        'selector': '[expr90]',
+
+        'template': template(
+          '<input expr91="expr91" type="text"/><button expr92="expr92" type="button"><i class="calendar icon"></i></button>',
+          [{
+            'expressions': [{
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
+
+              'evaluate': function(scope) {
+                return ['ui action input ', scope.disabled].join('');
+              }
+            }]
+          }, {
+            'redundantAttribute': 'expr91',
+            'selector': '[expr91]',
+
+            'expressions': [{
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'placeholder',
+
+              'evaluate': function(scope) {
+                return scope.props.placeholder;
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'tabindex',
+
+              'evaluate': function(scope) {
+                return scope.tabIndex;
+              }
+            }, {
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'readonly',
+
+              'evaluate': function(scope) {
+                return scope.readOnly;
+              }
+            }]
+          }, {
+            'redundantAttribute': 'expr92',
+            'selector': '[expr92]',
+
+            'expressions': [{
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
+
+              'evaluate': function(scope) {
+                return ['ui icon button ', scope.disabled].join('');
+              }
+            }, {
+              'type': expressionTypes.EVENT,
+              'name': 'onclick',
+
+              'evaluate': function(scope) {
+                return scope.toggle;
+              }
+            }, {
+              'type': expressionTypes.EVENT,
+              'name': 'onblur',
+
+              'evaluate': function(scope) {
+                return scope.onBlur;
+              }
+            }]
+          }]
+        )
+      }, {
+        'redundantAttribute': 'expr93',
+        'selector': '[expr93]',
+
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
+
+          'evaluate': function(scope) {
+            return ['menu transition ', scope.state.transitionStatus].join('');
+          }
+        }, {
+          'type': expressionTypes.EVENT,
+          'name': 'onmousedown',
+
+          'evaluate': function(scope) {
+            return scope.onMouseDown;
+          }
+        }, {
+          'type': expressionTypes.EVENT,
+          'name': 'onmouseup',
+
+          'evaluate': function(scope) {
+            return scope.onMouseUp;
+          }
+        }, {
+          'type': expressionTypes.EVENT,
+          'name': 'onblur',
+
+          'evaluate': function(scope) {
+            return scope.onBlur;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'tabindex',
+
+          'evaluate': function(scope) {
+            return scope.tabIndex;
+          }
+        }]
+      }, {
+        'redundantAttribute': 'expr94',
+        'selector': '[expr94]',
+
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
+
+          'evaluate': function(scope) {
+            return ['icon tiny ui button ', scope.disabled, ' prev'].join('');
+          }
+        }, {
+          'type': expressionTypes.EVENT,
+          'name': 'onclick',
+
+          'evaluate': function(scope) {
+            return scope.clickPrevious;
+          }
+        }]
+      }, {
+        'redundantAttribute': 'expr95',
+        'selector': '[expr95]',
+
+        'expressions': [{
+          'type': expressionTypes.TEXT,
+          'childNodeIndex': 0,
+
+          'evaluate': function(scope) {
+            return scope.getCurrentMonthView();
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
+
+          'evaluate': function(scope) {
+            return ['ui button ', scope.disabled, ' month'].join('');
+          }
+        }, {
+          'type': expressionTypes.EVENT,
+          'name': 'onclick',
+
+          'evaluate': function(scope) {
+            return scope.selectMonth;
+          }
+        }]
+      }, {
+        'redundantAttribute': 'expr96',
+        'selector': '[expr96]',
+
+        'expressions': [{
+          'type': expressionTypes.TEXT,
+          'childNodeIndex': 0,
+
+          'evaluate': function(scope) {
+            return scope.getCurrentYear();
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
+
+          'evaluate': function(scope) {
+            return ['ui button ', scope.disabled, ' year'].join('');
+          }
+        }, {
+          'type': expressionTypes.EVENT,
+          'name': 'onclick',
+
+          'evaluate': function(scope) {
+            return scope.selectYear;
+          }
+        }]
+      }, {
+        'redundantAttribute': 'expr97',
+        'selector': '[expr97]',
+
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
+
+          'evaluate': function(scope) {
+            return ['icon tiny ui button ', scope.disabled, ' next'].join('');
+          }
+        }, {
+          'type': expressionTypes.EVENT,
+          'name': 'onclick',
+
+          'evaluate': function(scope) {
+            return scope.clickNext;
+          }
+        }]
+      }, {
+        'type': bindingTypes.EACH,
+        'getKey': null,
+        'condition': null,
+
+        'template': template(' ', [{
+          'expressions': [{
+            'type': expressionTypes.TEXT,
+            'childNodeIndex': 0,
+
+            'evaluate': function(scope) {
+              return scope.week;
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'class',
+
+            'evaluate': function(scope) {
+              return 'dp-weekday';
+            }
+          }]
+        }]),
+
+        'redundantAttribute': 'expr98',
+        'selector': '[expr98]',
+        'itemName': 'week',
+        'indexName': null,
+
+        'evaluate': function(scope) {
+          return scope.weekNames;
         }
-        open()
-      } else {
-        close()
-      }
-    }
+      }, {
+        'type': bindingTypes.IF,
 
-    function mousedown() {
-      itemActivated = true
-    }
+        'evaluate': function(scope) {
+          return !scope.yearSelecting && !scope.monthSelecting;
+        },
 
-    function mouseup() {
-      itemActivated = false
-    }
+        'redundantAttribute': 'expr99',
+        'selector': '[expr99]',
 
-    function blur() {
-      if (opts.popup && !itemActivated) {
-        close()
-      }
-    }
+        'template': template('<div expr100="expr100" class="dp-wrapper"></div>', [{
+          'expressions': [{
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'class',
 
-    function generate() {
-      const startDate = startOfMonth(tag.currentDate)
-      const baseDate = addDays(startDate, - startDate.getDay())
-      let i = 0
-      tag.weeks = []
+            'evaluate': function(scope) {
+              return 'ui center aligned segment';
+            }
+          }]
+        }, {
+          'type': bindingTypes.EACH,
+          'getKey': null,
+          'condition': null,
 
-      for (let r = 0; r < 6; r++) {
-        const days = []
-        for (let c = 0; c < 7; c++) {
-          days.push(addDays(baseDate, i++))
-        }
-        tag.weeks.push({ days })
-      }
-    }
+          'template': template('<div expr101="expr101" class="dp-day"></div>', [{
+            'expressions': [{
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
 
-    function addYear(year) {
-      tag.years = tag.years.map(values => {
-        values = values.map(value => {
-          return value + parseInt(year)
-        })
-        return values
-      })
-    }
+              'evaluate': function(scope) {
+                return 'dp-wrapper';
+              }
+            }]
+          }, {
+            'type': bindingTypes.EACH,
+            'getKey': null,
+            'condition': null,
 
-    function getYears() {
-      const rowSize = ((yearRange - yearRange % 4) / 4) + ((yearRange % 4 != 0) ? 1 : 0)
-      const years = new Array()
-      for (let index = 0; index < rowSize; index++) {
-        years.push([])
-      }
-      for (let index = 0; index < yearRange; index++) {
-        years[(index - index % 4) / 4][index % 4] = tag.currentDate.getFullYear() + index - ((yearRange - yearRange % 2) / 2 - 1)
-      }
-      return years
-    }
+            'template': template('<button expr102="expr102" type="button"> </button>', [{
+              'expressions': [{
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'class',
 
-    function getMonthes() {
-      const months = [[], [], []]
-      const monthNames = range(12).map(month => format(new Date(2018, month, 1), 'MMM', { locale: getLocale() }))
-      monthNames.forEach((month, index) => {
-        months[(index - index % 4) / 4][index % 4] = {
-          label: month,
-          value: index
-        }
-      })
-      return months
-    }
+                'evaluate': function(scope) {
+                  return 'dp-day';
+                }
+              }]
+            }, {
+              'redundantAttribute': 'expr102',
+              'selector': '[expr102]',
 
-    function open() {
-      tag.upward = isUpward()
-      tag.transitionStatus = 'visible'
-      visibleFlg = true
-      tag.currentDate = copyDate(opts.currentDate)
-      if (tag.valueAsDate) {
-        tag.currentDate = copyDate(tag.valueAsDate)
-      }
-      if (!tag.currentDate) {
-        tag.currentDate = new Date()
-      }
-      tag.trigger('open', tag.valueAsDate)
-    }
+              'expressions': [{
+                'type': expressionTypes.TEXT,
+                'childNodeIndex': 0,
 
-    function close() {
-      tag.transitionStatus = 'hidden'
-      visibleFlg = false
-      tag.trigger('close', tag.valueAsDate)
-    }
+                'evaluate': function(scope) {
+                  return scope.day.getDate();
+                }
+              }, {
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'class',
 
-    function setDate(date) {
-      tag.valueAsDate = date
-      setValueFromValueAsDate()
-      if (tag.refs.input) {
-        tag.refs.input.value = tag.value
-        close()
-      }
-      tag.trigger('change', tag.valueAsDate)
-    }
+                'evaluate': function(scope) {
+                  return [
+                    'ui button ',
+                    scope.isToday(scope.day) ? 'today' : '',
+                    ' ',
+                    scope.isActive(scope.day) ? 'primary' : 'non-active',
+                    ' ',
+                    scope.day.getMonth() != scope.getCurrentMonth() || scope.disabled ? 'disabled' : ''
+                  ].join('');
+                }
+              }, {
+                'type': expressionTypes.EVENT,
+                'name': 'onclick',
 
-    function setValueFromValueAsDate() {
-      tag.value = tag.valueAsDate ? format(tag.valueAsDate, getPattern(), { locale: getLocale() }) : null
-    }
+                'evaluate': function(scope) {
+                  return () => scope.clickDay(scope.day);
+                }
+              }]
+            }]),
 
-    function isEqualDay(d1, d2) {
-      if (d1 == d2) {
-        return true
-      }
-      if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
-        return false
-      }
-      return isSameDay(d1, d2)
-    }
+            'redundantAttribute': 'expr101',
+            'selector': '[expr101]',
+            'itemName': 'day',
+            'indexName': null,
 
-    function copyDate(date) {
-      if (!date) {
-        return date
-      }
-      return parse(date)
-    }
+            'evaluate': function(scope) {
+              return scope.week.days;
+            }
+          }]),
 
-    function isUpward() {
-      if (opts.direction == 'upward') {
-        return true
-      }
-      if (opts.direction == 'downward') {
-        return false
-      }
-      const inputField = tag.root.getBoundingClientRect()
-      const windowHeight = document.documentElement.offsetHeight || document.body.offsetHeight
-      const menuHeight = tag.root.querySelector('.menu').getBoundingClientRect().height
-      const above = menuHeight <= inputField.top
-      const below = windowHeight >= inputField.top + inputField.height + menuHeight
+          'redundantAttribute': 'expr100',
+          'selector': '[expr100]',
+          'itemName': 'week',
+          'indexName': null,
 
-      if (below) {
-        return false
-      }
-      if (!below && !above) {
-        return false
-      }
-      return true
-    }
+          'evaluate': function(scope) {
+            return scope.weeks;
+          }
+        }])
+      }, {
+        'type': bindingTypes.IF,
 
-    function getCurrentYear() {
-      if (tag.currentDate) {
-        return tag.currentDate.getFullYear()
-      }
-    }
+        'evaluate': function(scope) {
+          return !scope.yearSelecting && !scope.monthSelecting;
+        },
 
-    function getCurrentMonthView() {
-      if (tag.currentDate) {
-        return format(tag.currentDate, 'MMM', { locale: getLocale() })
-      }
-    }
+        'redundantAttribute': 'expr103',
+        'selector': '[expr103]',
 
-    function getCurrentMonth() {
-      return tag.currentDate.getMonth()
-    }
+        'template': template(
+          '<div class="ui two column grid"><div class="column dp-clear"><button expr104="expr104" type="button"><i class="times icon"></i></button></div><div class="column dp-today"><button expr105="expr105" type="button"><i class="calendar check icon"></i></button></div></div>',
+          [{
+            'expressions': [{
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
 
-    function getWeekNames() {
-      return range(7, 1).map(day => format(new Date(2018, 6, day), 'dd', { locale: getLocale() }))
-    }
+              'evaluate': function(scope) {
+                return 'ui center aligned segment';
+              }
+            }]
+          }, {
+            'redundantAttribute': 'expr104',
+            'selector': '[expr104]',
 
-    function isActive(date) {
-      return isEqualDay(tag.valueAsDate, date)
-    }
+            'expressions': [{
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
 
-    function getTabindex() {
-      if (!opts.popup) {
-        return false
-      }
-      if (opts.tabindex) {
-        return opts.tabindex
-      }
-      return 0
-    }
+              'evaluate': function(scope) {
+                return ['ui icon fluid button ', scope.disabled].join('');
+              }
+            }, {
+              'type': expressionTypes.EVENT,
+              'name': 'onclick',
 
-    function isReadOnly() {
-      return tag.root.classList.contains('read-only')
-    }
-    function isDisabled() {
-      return tag.root.classList.contains('disabled')
-    }
+              'evaluate': function(scope) {
+                return scope.clickClear;
+              }
+            }]
+          }, {
+            'redundantAttribute': 'expr105',
+            'selector': '[expr105]',
 
-    function getPattern() {
-      if (opts.pattern) {
-        return opts.pattern
-      }
-      if (tag.defaultOptions && tag.defaultOptions.pattern) {
-        return tag.defaultOptions.pattern
-      }
-      return 'YYYY-MM-DD'
-    }
+            'expressions': [{
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
 
-    function getLocale() {
-      if (opts.locale) {
-        return opts.locale
-      }
-      if (tag.defaultOptions && tag.defaultOptions.locale) {
-        return tag.defaultOptions.locale
-      }
-    }
+              'evaluate': function(scope) {
+                return ['ui icon fluid button ', scope.disabled].join('');
+              }
+            }, {
+              'type': expressionTypes.EVENT,
+              'name': 'onclick',
 
-    function range(size, startAt = 0) {
-      return Array.from(Array(size).keys()).map(i => i + startAt)
-    }
-});
+              'evaluate': function(scope) {
+                return scope.clickToday;
+              }
+            }]
+          }]
+        )
+      }, {
+        'type': bindingTypes.IF,
+
+        'evaluate': function(scope) {
+          return scope.monthSelecting;
+        },
+
+        'redundantAttribute': 'expr106',
+        'selector': '[expr106]',
+
+        'template': template('<div expr107="expr107" class="dp-wrapper"></div>', [{
+          'expressions': [{
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'class',
+
+            'evaluate': function(scope) {
+              return 'ui center aligned segment';
+            }
+          }]
+        }, {
+          'type': bindingTypes.EACH,
+          'getKey': null,
+          'condition': null,
+
+          'template': template('<div expr108="expr108" class="dp-month"></div>', [{
+            'expressions': [{
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
+
+              'evaluate': function(scope) {
+                return 'dp-wrapper';
+              }
+            }]
+          }, {
+            'type': bindingTypes.EACH,
+            'getKey': null,
+            'condition': null,
+
+            'template': template('<button expr109="expr109" type="button"> </button>', [{
+              'expressions': [{
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'class',
+
+                'evaluate': function(scope) {
+                  return 'dp-month';
+                }
+              }]
+            }, {
+              'redundantAttribute': 'expr109',
+              'selector': '[expr109]',
+
+              'expressions': [{
+                'type': expressionTypes.TEXT,
+                'childNodeIndex': 0,
+
+                'evaluate': function(scope) {
+                  return scope.month.label;
+                }
+              }, {
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'class',
+
+                'evaluate': function(scope) {
+                  return ['ui button ', scope.disabled].join('');
+                }
+              }, {
+                'type': expressionTypes.EVENT,
+                'name': 'onclick',
+
+                'evaluate': function(scope) {
+                  return () => scope.clickMonth(scope.month);
+                }
+              }]
+            }]),
+
+            'redundantAttribute': 'expr108',
+            'selector': '[expr108]',
+            'itemName': 'month',
+            'indexName': null,
+
+            'evaluate': function(scope) {
+              return scope.element;
+            }
+          }]),
+
+          'redundantAttribute': 'expr107',
+          'selector': '[expr107]',
+          'itemName': 'element',
+          'indexName': null,
+
+          'evaluate': function(scope) {
+            return scope.state.months;
+          }
+        }])
+      }, {
+        'type': bindingTypes.IF,
+
+        'evaluate': function(scope) {
+          return scope.yearSelecting;
+        },
+
+        'redundantAttribute': 'expr110',
+        'selector': '[expr110]',
+
+        'template': template('<div expr111="expr111" class="dp-wrapper"></div>', [{
+          'expressions': [{
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'class',
+
+            'evaluate': function(scope) {
+              return 'ui center aligned segment';
+            }
+          }]
+        }, {
+          'type': bindingTypes.EACH,
+          'getKey': null,
+          'condition': null,
+
+          'template': template('<div expr112="expr112" class="dp-month"></div>', [{
+            'expressions': [{
+              'type': expressionTypes.ATTRIBUTE,
+              'name': 'class',
+
+              'evaluate': function(scope) {
+                return 'dp-wrapper';
+              }
+            }]
+          }, {
+            'type': bindingTypes.EACH,
+            'getKey': null,
+            'condition': null,
+
+            'template': template('<button expr113="expr113" type="button"> </button>', [{
+              'expressions': [{
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'class',
+
+                'evaluate': function(scope) {
+                  return 'dp-month';
+                }
+              }]
+            }, {
+              'redundantAttribute': 'expr113',
+              'selector': '[expr113]',
+
+              'expressions': [{
+                'type': expressionTypes.TEXT,
+                'childNodeIndex': 0,
+
+                'evaluate': function(scope) {
+                  return scope.year;
+                }
+              }, {
+                'type': expressionTypes.ATTRIBUTE,
+                'name': 'class',
+
+                'evaluate': function(scope) {
+                  return ['ui button ', scope.disabled].join('');
+                }
+              }, {
+                'type': expressionTypes.EVENT,
+                'name': 'onclick',
+
+                'evaluate': function(scope) {
+                  return () =>scope.clickYear(scope.year);
+                }
+              }]
+            }]),
+
+            'redundantAttribute': 'expr112',
+            'selector': '[expr112]',
+            'itemName': 'year',
+            'indexName': null,
+
+            'evaluate': function(scope) {
+              return scope.element;
+            }
+          }]),
+
+          'redundantAttribute': 'expr111',
+          'selector': '[expr111]',
+          'itemName': 'element',
+          'indexName': null,
+
+          'evaluate': function(scope) {
+            return scope.state.years;
+          }
+        }])
+      }]
+    );
+  },
+
+  'name': 'su-datepicker'
+};
+
+export default suDatepicker;

@@ -1,48 +1,45 @@
-require('../../../dist/tags/loading/su-loading.js')
+import * as riot from 'riot'
+import { init } from '../../helpers/'
+import TargetComponent from '../../../dist/tags/loading/su-loading.js'
 
 describe('su-loading', function () {
-  let tag
-  let app
-  let mount = () => {
-    tag = riot.mount('su-loading')[0]
-    app = riot.mount('app')[0]
+  let element, component
+  init(riot)
+
+  const mount = () => {
+    component = riot.mount(element)[0]
   }
 
   beforeEach(function () {
-    riot.mixin('semantic-ui', { observable: riot.observable() })
-    riot.tag('app')
-    $('body').append(`
-      <su-loading></su-loading>
-      <app></app>
-    `)
+    riot.register('su-loading', TargetComponent)
+    element = document.createElement('su-loading')
   })
 
   afterEach(function () {
-    tag.unmount()
-    app.unmount()
+    riot.unregister('su-loading')
   })
 
   it('is mounted', function () {
     mount()
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 
   it('opens/closes loading', function () {
     mount()
-    $('su-loading > .dimmer').is(':visible').should.equal(false)
+    expect(component.$('.dimmer').classList.contains('active')).to.equal(false)
 
-    app.suLoading(true)
-    $('su-loading > .dimmer').is(':visible').should.equal(true)
+    component.suLoading(true)
+    expect(component.$('.dimmer').classList.contains('active')).to.equal(true)
 
-    app.suLoading(false)
-    $('su-loading > .dimmer').is(':visible').should.equal(false)
+    component.suLoading(false)
+    expect(component.$('.dimmer').classList.contains('active')).to.equal(false)
 
-    app.suLoading(true)
-    app.suLoading(true)
-    $('su-loading > .dimmer').is(':visible').should.equal(true)
-    app.suLoading(false)
-    $('su-loading > .dimmer').is(':visible').should.equal(true)
-    app.suLoading(false)
-    $('su-loading > .dimmer').is(':visible').should.equal(false)
+    component.suLoading(true)
+    component.suLoading(true)
+    expect(component.$('.dimmer').classList.contains('active')).to.equal(true)
+    component.suLoading(false)
+    expect(component.$('.dimmer').classList.contains('active')).to.equal(true)
+    component.suLoading(false)
+    expect(component.$('.dimmer').classList.contains('active')).to.equal(false)
   })
 })

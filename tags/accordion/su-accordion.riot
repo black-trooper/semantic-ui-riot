@@ -1,0 +1,45 @@
+<su-accordion id="{ su_id }">
+  <div class="title { state.active ? 'active' : '' }" onclick="{ onClick }">
+    <i class="dropdown icon"></i>
+    { props.title }
+  </div>
+  <div class="content active { state.active ? 'open' : 'close'}">
+    <slot />
+  </div>
+
+  <script>
+    let index = 0
+    export default {
+      state: {
+        active: false,
+      },
+      onMounted,
+      onClick,
+    }
+
+    // ===================================================================================
+    //                                                                           Lifecycle
+    //                                                                           =========
+    function onMounted(props, state) {
+      this.su_id = `su-accordion-${index++}`
+      this.update()
+
+      this.obs.on(`${this.su_id}-toggle-active`, active => {
+        this.update({
+          active
+        })
+      })
+    }
+
+    // ===================================================================================
+    //                                                                              Events
+    //                                                                              ======
+    function onClick() {
+      this.obs.trigger(`${this.su_id}-click`, {
+        id: this.su_id,
+        active: this.state.active,
+        label: this.props.title
+      })
+    }
+  </script>
+</su-accordion>

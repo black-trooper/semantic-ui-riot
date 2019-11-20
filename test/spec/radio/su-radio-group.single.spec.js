@@ -1,45 +1,47 @@
-require('../../../dist/tags/radio/su-radio.js')
-require('../../../dist/tags/radio/su-radio-group.js')
+import * as riot from 'riot'
+import { init, compile } from '../../helpers/'
+import RadioGroupComponent from '../../../dist/tags/radio/su-radio-group.js'
+import RadioComponent from '../../../dist/tags/radio/su-radio.js'
 
 describe('su-radio-group-single', function () {
-  let tag
+  let element, component
+  init(riot)
 
   beforeEach(function () {
-    const group = $('<su-radio-group></su-radio-group>')
-    group.append('<su-radio value="1">Radio choice1</su-radio>')
-    $('body').append(group)
-    tag = riot.mount('su-radio-group')[0]
+    element = document.createElement('app')
+    riot.register('su-radio-group', RadioGroupComponent)
+    riot.register('su-radio', RadioComponent)
+    const AppComponent = compile(`
+      <app>
+        <su-radio-group
+          value="{ value }">
+          <su-radio value="1" />
+        </su-radio-group>
+      </app>`)
+    riot.register('app', AppComponent)
+    component = riot.mount(element, {})[0]
   })
 
   afterEach(function () {
-    tag.unmount()
+    component.unmount()
+    riot.unregister('su-radio')
+    riot.unregister('su-radio-group')
+    riot.unregister('app')
   })
 
   it('is mounted', function () {
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 
   it('update value', function () {
-    tag.tags['su-radio'].checked.should.equal(false)
+    expect(component.$('su-radio').hasAttribute("checked")).to.be.not.ok
 
-    tag.value = '1'
-    tag.update()
-    tag.tags['su-radio'].checked.should.equal(true)
+    component.value = "1"
+    component.update()
+    expect(component.$('su-radio').getAttribute("checked")).to.be.ok
 
-    tag.value = '2'
-    tag.update()
-    tag.tags['su-radio'].checked.should.equal(false)
-  })
-
-  it('update option', function () {
-    tag.tags['su-radio'].checked.should.equal(false)
-
-    tag.opts.riotValue = '1'
-    tag.update()
-    tag.tags['su-radio'].checked.should.equal(true)
-
-    tag.opts.riotValue = '2'
-    tag.update()
-    tag.tags['su-radio'].checked.should.equal(false)
+    component.value = "2"
+    component.update()
+    expect(component.$('su-radio').hasAttribute("checked")).to.be.not.ok
   })
 })

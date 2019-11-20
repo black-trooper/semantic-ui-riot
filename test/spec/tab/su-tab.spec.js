@@ -1,31 +1,39 @@
+import * as riot from 'riot'
+import { init } from '../../helpers/'
+import TargetComponent from '../../../dist/tags/tab/su-tab.js'
+
 describe('su-tab', function () {
-  let tag
+  let element, component
+  init(riot)
 
   beforeEach(function () {
-    $('body').append('<su-tab>tab content</su-tab>')
-    tag = riot.mount('su-tab', {
-      class: 'orange'
+    element = document.createElement('su-tab')
+    element.innerHTML = 'tab content'
+    riot.register('su-tab', TargetComponent)
+    component = riot.mount(element, {
+      'class': 'orange'
     })[0]
   })
 
   afterEach(function () {
-    tag.unmount()
+    component.unmount()
+    riot.unregister('su-tab')
   })
 
   it('is mounted', function () {
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 
   it('change active', function () {
-    tag.active.should.equal(false)
-    tag.root.innerText.should.equal('')
-    tag.root.classList.contains('active').should.equal(false)
-    tag.root.classList.contains('orange').should.equal(true)
+    expect(component.state.active).to.be.not.ok
+    expect(component.root.innerText).to.equal('tab content')
+    expect(component.root.classList.contains('active')).to.equal(false)
+    expect(component.root.classList.contains('orange')).to.equal(true)
 
-    tag.active = true
-    tag.update()
-    tag.active.should.equal(true)
-    tag.root.innerText.should.equal('tab content')
-    tag.root.classList.contains('active').should.equal(true)
+    component.state.active = true
+    component.update()
+    expect(component.state.active).to.equal(true)
+    expect(component.root.innerText).to.equal('tab content')
+    expect(component.root.classList.contains('active')).to.equal(true)
   })
 })

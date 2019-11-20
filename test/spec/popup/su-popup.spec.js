@@ -1,47 +1,62 @@
-const fireEvent = require('../../helpers').fireEvent
-require('../../../dist/tags/popup/su-popup.js')
+import * as riot from 'riot'
+import { init, compile } from '../../helpers/'
+import TargetComponent from '../../../dist/tags/popup/su-popup.js'
 
 describe('su-popup', function () {
-  let tag
+  let element, component
   const spyOnMouseover = sinon.spy()
   const spyOnMouseout = sinon.spy()
+  init(riot)
 
   const mount = opts => {
-    tag = riot.mount('su-popup', opts)[0]
-    tag.on('mouseover', spyOnMouseover)
-    tag.on('mouseout', spyOnMouseout)
+    const option = Object.assign({
+      'onmouseover': spyOnMouseover,
+      'onmouseout': spyOnMouseout,
+    }, opts)
+    element = document.createElement('app')
+    riot.register('su-popup', TargetComponent)
+    const AppComponent = compile(`
+      <app>
+        <su-popup
+          tooltip="{ props.tooltip }"
+          data-title="{ props.dataTitle }"
+          data-variation="{ props.dataVariation }"
+          onmouseover="{ () => dispatch('mouseover') }"
+          onmouseout="{ () => dispatch('mouseout') }"
+        ><i class="add icon"></i></su-popup>
+      </app>`)
+    riot.register('app', AppComponent)
+    component = riot.mount(element, option)[0]
   }
-
-
-  beforeEach(function () {
-    $('body').append('<su-popup><i class="add icon"></i></su-popup>')
-  })
 
   afterEach(function () {
     spyOnMouseover.reset()
     spyOnMouseout.reset()
-    tag.unmount()
+    riot.unregister('su-popup')
+    riot.unregister('app')
   })
 
   it('is mounted', function () {
     mount()
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 
   it('show and hide popup', function () {
     mount({
       tooltip: 'Add users to your feed'
     })
-    tag.content.should.equal('Add users to your feed')
-    tag.isNowrap().should.equal(true)
+    expect(component.$('.content').innerHTML).to.equal('Add users to your feed')
+    expect(component.$('su-popup .ui.popup').classList.contains('nowrap')).to.equal(true)
 
-    fireEvent($('su-popup')[0], 'mouseover')
-    spyOnMouseover.should.have.been.calledOnce
-    $('su-popup .ui.popup').is(':visible').should.equal(true)
+    fireEvent(component.$('su-popup .ui.popup'), 'mouseover')
+    expect(spyOnMouseover).to.have.been.calledOnce
+    expect(component.$('su-popup .ui.popup').classList.contains('visible')).to.equal(true)
+    expect(component.$('su-popup .ui.popup').classList.contains('hidden')).to.equal(false)
 
-    fireEvent($('su-popup')[0], 'mouseout')
-    spyOnMouseout.should.have.been.calledOnce
-    $('su-popup .ui.popup').is(':visible').should.equal(false)
+    fireEvent(component.$('su-popup .ui.popup'), 'mouseout')
+    expect(spyOnMouseout).to.have.been.calledOnce
+    expect(component.$('su-popup .ui.popup').classList.contains('visible')).to.equal(false)
+    expect(component.$('su-popup .ui.popup').classList.contains('hidden')).to.equal(true)
   })
 
   it('header', function () {
@@ -50,9 +65,8 @@ describe('su-popup', function () {
       dataTitle: 'Title'
     })
 
-    const div = $(`<div>${tag.content}</div>`)
-    div.find('.header').html().should.equal('Title')
-    div.find('.content').html().should.equal('Add users to your feed')
+    expect(component.$('.header').innerHTML).to.equal('Title')
+    expect(component.$('.content').innerHTML).to.equal('Add users to your feed')
   })
 
   it('wide', function () {
@@ -61,7 +75,7 @@ describe('su-popup', function () {
       dataVariation: 'wide'
     })
 
-    $(tag.root).find('.popup').hasClass('wide').should.equal(true)
-    tag.isNowrap().should.equal(false)
+    expect(component.$('su-popup .ui.popup').classList.contains('wide')).to.equal(true)
+    expect(component.$('su-popup .ui.popup').classList.contains('nowrap')).to.equal(false)
   })
 })

@@ -3,10 +3,9 @@ const path = require('path')
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: ['mocha', 'sinon-chai', 'riot'],
+    frameworks: ['mocha'],
     files: [
-      'node_modules/jquery/dist/jquery.min.js',
-      'test/css/index.css',
+      'test/spec/globals.js',
       'test/spec/**/*'
     ],
     preprocessors: {
@@ -15,6 +14,9 @@ module.exports = function (config) {
     webpack: {
       devtool: 'inline-source-map',
       mode: 'development',
+      node: {
+        fs: "empty"
+      },
       module: {
         rules: [
           {
@@ -30,14 +32,20 @@ module.exports = function (config) {
           }
         ]
       },
-
+    },
+    webpackMiddleware: {
+      stats: 'errors-only',
     },
     logLevel: config.LOG_ERROR,
     reporters: ['mocha', 'coverage-istanbul'],
+    mochaReporter: {
+      output: 'minimal',
+    },
     coverageIstanbulReporter: {
       reports: ['html', 'lcovonly', 'text-summary'],
     },
     browsers: ['ChromeHeadless'],
+    browserNoActivityTimeout: 30 * 60 * 1000,
     singleRun: true
   })
   if (process.env.TRAVIS) {

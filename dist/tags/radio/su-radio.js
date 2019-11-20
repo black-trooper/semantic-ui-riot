@@ -1,64 +1,185 @@
-riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', 'su-radio.ui.checkbox label,[data-is="su-radio"].ui.checkbox label{ cursor: pointer; } su-radio.ui.read-only input[type="radio"],[data-is="su-radio"].ui.read-only input[type="radio"],su-radio.ui.disabled input[type="radio"],[data-is="su-radio"].ui.disabled input[type="radio"]{ cursor: default !important; }', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
-    const tag = this
+let index = 0;
 
-    tag.checked = false
-    tag.name = ''
+// ===================================================================================
+//                                                                           Lifecycle
+//                                                                           =========
+function onMounted(props, state) {
+  this.su_id = `su-radio-${index++}`;
+  state.checked = normalizeOptChecked(props.checked);
+  state.lastChecked = state.checked;
+  state.lastOptsChecked = state.checked;
+  this.update();
+}
 
-    tag.click = click
-    tag.getId = getId
-    tag.isDisabled = isDisabled
-    tag.isRadio = isRadio
-    tag.on('mount', onMount)
-    tag.on('update', onUpdate)
+function onBeforeUpdate(props, state) {
+  this.readOnly = this.root.classList.contains('read-only');
+  this.disabled = this.root.classList.contains('disabled');
+  this.radio = this.root.classList.contains('slider') ? '' : 'radio';
+  this.radioName = this.root.getAttribute('name');
 
-    let lastChecked
-    let lastOptsCheck
+  if (state.lastOptsChecked != normalizeOptChecked(props.checked)) {
+    state.checked = normalizeOptChecked(props.checked);
+    state.lastOptsChecked = state.checked;
+  }
+}
 
-    function onMount() {
-      if (tag.checked) {
-        opts.checked = tag.checked
-      } else {
-        tag.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
-      }
-      lastChecked = tag.checked
-      lastOptsCheck = opts.checked
-      tag.update()
-    }
+function onUpdated(props, state) {
+  if (state.lastChecked != state.checked) {
+    state.lastChecked = state.checked;
+  }
+}
 
-    function onUpdate() {
-      tag.name = opts.name
-      tag.value = opts.riotValue || opts.value
-      if (lastChecked != tag.checked) {
-        opts.checked = tag.checked
-        lastChecked = tag.checked
-      } else if (lastOptsCheck != opts.checked) {
-        tag.checked = opts.checked
-        lastOptsCheck = opts.checked
-      }
-    }
+// ===================================================================================
+//                                                                              Events
+//                                                                              ======
+function onClick(event) {
+  if (this.readOnly || this.disabled) {
+    event.preventDefault();
+    return
+  }
 
-    function click(event) {
-      if (isReadOnly() || tag.isDisabled()) {
-        event.preventDefault()
-        return
-      }
-      tag.checked = event.target.checked
-      tag.trigger('click', event.target.value)
-    }
+  this.update({
+    checked: event.target.checked
+  });
+  this.dispatch('click', event.target.value);
+  if (this.obs && this.root.getAttribute('name')) {
+    this.obs.trigger(`${this.root.getAttribute('name')}-click`, this.props.value);
+  }
+}
 
-    function isReadOnly() {
-      return tag.root.classList.contains('read-only')
-    }
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+function normalizeOptChecked(checked) {
+  return checked === true || checked === 'checked' || checked === 'true'
+}
 
-    function getId() {
-      return `su-radio-${tag._riot_id}`
-    }
+var suRadio = {
+  'css': `su-radio.ui.checkbox label,[is="su-radio"].ui.checkbox label{ cursor: pointer; } su-radio.ui.read-only input[type="radio"],[is="su-radio"].ui.read-only input[type="radio"],su-radio.ui.disabled input[type="radio"],[is="su-radio"].ui.disabled input[type="radio"]{ cursor: default !important; }`,
 
-    function isDisabled() {
-      return tag.root.classList.contains('disabled')
-    }
+  'exports': {
+    state: {
+      checked: false,
+      lastChecked: false,
+      lastOptsChecked: false,
+    },
 
-    function isRadio() {
-      return !tag.root.classList.contains('slider')
-    }
-});
+    radio: 'radio',
+    onMounted,
+    onBeforeUpdate,
+    onUpdated,
+    onClick
+  },
+
+  'template': function(template, expressionTypes, bindingTypes, getComponent) {
+    return template(
+      '<input expr20="expr20" type="radio"/><label expr21="expr21"></label><label expr23="expr23"></label>',
+      [{
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
+
+          'evaluate': function(scope) {
+            return ['ui ', scope.radio, ' checkbox ', scope.props.class].join('');
+          }
+        }]
+      }, {
+        'redundantAttribute': 'expr20',
+        'selector': '[expr20]',
+
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'name',
+
+          'evaluate': function(scope) {
+            return scope.radioName;
+          }
+        }, {
+          'type': expressionTypes.VALUE,
+
+          'evaluate': function(scope) {
+            return scope.value;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'checked',
+
+          'evaluate': function(scope) {
+            return scope.state.checked;
+          }
+        }, {
+          'type': expressionTypes.EVENT,
+          'name': 'onclick',
+
+          'evaluate': function(scope) {
+            return scope.onClick;
+          }
+        }, {
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'id',
+
+          'evaluate': function(scope) {
+            return scope.su_id;
+          }
+        }]
+      }, {
+        'type': bindingTypes.IF,
+
+        'evaluate': function(scope) {
+          return !scope.props.label;
+        },
+
+        'redundantAttribute': 'expr21',
+        'selector': '[expr21]',
+
+        'template': template('<slot expr22="expr22"></slot>', [{
+          'expressions': [{
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'for',
+
+            'evaluate': function(scope) {
+              return scope.su_id;
+            }
+          }]
+        }, {
+          'type': bindingTypes.SLOT,
+          'attributes': [],
+          'name': 'default',
+          'redundantAttribute': 'expr22',
+          'selector': '[expr22]'
+        }])
+      }, {
+        'type': bindingTypes.IF,
+
+        'evaluate': function(scope) {
+          return scope.props.label;
+        },
+
+        'redundantAttribute': 'expr23',
+        'selector': '[expr23]',
+
+        'template': template(' ', [{
+          'expressions': [{
+            'type': expressionTypes.TEXT,
+            'childNodeIndex': 0,
+
+            'evaluate': function(scope) {
+              return scope.props.label;
+            }
+          }, {
+            'type': expressionTypes.ATTRIBUTE,
+            'name': 'for',
+
+            'evaluate': function(scope) {
+              return scope.su_id;
+            }
+          }]
+        }])
+      }]
+    );
+  },
+
+  'name': 'su-radio'
+};
+
+export default suRadio;

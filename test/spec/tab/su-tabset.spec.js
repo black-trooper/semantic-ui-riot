@@ -1,45 +1,68 @@
-const fireEvent = require('../../helpers').fireEvent
-require('../../../dist/tags/tab/su-tab.js')
-require('../../../dist/tags/tab/su-tab-header.js')
-require('../../../dist/tags/tab/su-tab-title.js')
-require('../../../dist/tags/tab/su-tabset.js')
+import * as riot from 'riot'
+import { init, compile } from '../../helpers/'
+import TabComponent from '../../../dist/tags/tab/su-tab.js'
+import TabsetComponent from '../../../dist/tags/tab/su-tabset.js'
 
 describe('su-tabset', function () {
-  let tag
+  let element, component
   let spyOnClick = sinon.spy()
+  init(riot)
 
   beforeEach(function () {
-    const group = $('<su-tabset></su-tabset>')
-    group.append('<su-tab label="Home">Home content</su-tab>')
-      .append('<su-tab label="Message">Messages content</su-tab>')
-    $('body').append(group)
-    tag = riot.mount('su-tabset')[0]
-    tag.on('click', spyOnClick)
+    element = document.createElement('app')
+    const AppComponent = compile(`
+      <app>
+        <su-tabset onclick="{ label => onClick(label) }">
+          <su-tab label="Home">Home content</su-tab>
+          <su-tab label="Messages">Messages content</su-tab>
+        </su-tabset>
+
+        <script>
+          export default {
+            onClick
+          }
+          function onClick(label) {
+            this.dispatch('click', label)
+          }
+        </script>
+      </app>
+    `)
+    riot.register('app', AppComponent)
+    riot.register('su-tabset', TabsetComponent)
+    riot.register('su-tab', TabComponent)
+    component = riot.mount(element, {
+      'onclick': spyOnClick
+    })[0]
+    this.clock = sinon.useFakeTimers()
   })
 
   afterEach(function () {
     spyOnClick.reset()
-    tag.unmount()
+    this.clock.restore()
+    riot.unregister('su-tab')
+    riot.unregister('su-tabset')
+    riot.unregister('app')
   })
 
   it('is mounted', function () {
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 
   it('change active', function () {
-    tag.tags['su-tab'][0].active.should.equal(true)
-    tag.tags['su-tab'][1].active.should.equal(false)
-    tag.tags['su-tab'][0].root.innerText.should.equal('Home content')
-    tag.tags['su-tab'][1].root.innerText.should.equal('Messages content')
+    this.clock.tick(510)
+    expect(component.$$('su-tab')[0].classList.contains('active')).to.equal(true)
+    expect(component.$$('su-tab')[1].classList.contains('active')).to.equal(false)
+    expect(component.$$('su-tab')[0].innerText).to.equal('Home content')
+    expect(component.$$('su-tab')[1].innerText).to.equal('Messages content')
 
-    fireEvent($('a.item:eq(1)')[0], 'click')
-    tag.tags['su-tab'][0].active.should.equal(false)
-    tag.tags['su-tab'][1].active.should.equal(true)
-    spyOnClick.should.have.been.calledOnce
+    fireEvent(component.$$('a.item')[1], 'click')
+    expect(component.$$('su-tab')[0].classList.contains('active')).to.equal(false)
+    expect(component.$$('su-tab')[1].classList.contains('active')).to.equal(true)
+    expect(spyOnClick).to.have.been.calledOnce
 
-    fireEvent($('a.item:eq(0)')[0], 'click')
-    tag.tags['su-tab'][0].active.should.equal(true)
-    tag.tags['su-tab'][1].active.should.equal(false)
-    spyOnClick.should.have.been.calledTwice
+    fireEvent(component.$$('a.item')[0], 'click')
+    expect(component.$$('su-tab')[0].classList.contains('active')).to.equal(true)
+    expect(component.$$('su-tab')[1].classList.contains('active')).to.equal(false)
+    expect(spyOnClick).to.have.been.calledTwice
   })
 })

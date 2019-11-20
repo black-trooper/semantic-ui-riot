@@ -16,38 +16,38 @@ module.exports = (env, argv) => {
     module: {
       rules: [
         {
-          test: /\.tag$/,
+          test: /\.riot$/,
           exclude: /node_modules/,
           use: [
             {
-              loader: 'riotjs-loader',
+              loader: '@riotjs/webpack-loader',
               options: {
                 type: 'es6', // transpile the riot tags using babel
                 hot: true
               }
             },
-            {
-              loader: 'eslint-loader',
-              options: {
-                fix: true,
-                emitWarning: true,
-              }
-            },
+            // {
+            //   loader: 'eslint-loader',
+            //   options: {
+            //     fix: true,
+            //     emitWarning: true,
+            //   }
+            // },
             {
               loader: 'htmlhint-loader',
-              options: {
-                customRules: htmlhintRiotRules(),
-                // 'file-line-limit': 100,
-                'tag-name-include-hyphen': true,
-                'use-script-inside-tag': true,
-                'tag-expressions-simple': 15,
-                // 'tag-options-primitive': true,
-                'assign-this-to-tag': { force: true },
-                'properties-and-methods-order': { alphabetize: false },
-                'fake-es6-syntax-disabled': true,
-                'tag-parent-disabled': true,
-                'use-each-in-syntax': true
-              }
+              // options: {
+              //   customRules: htmlhintRiotRules(),
+              //   // 'file-line-limit': 100,
+              //   'tag-name-include-hyphen': true,
+              //   'use-script-inside-tag': true,
+              //   'tag-expressions-simple': 15,
+              //   // 'tag-options-primitive': true,
+              //   'assign-this-to-tag': { force: true },
+              //   'properties-and-methods-order': { alphabetize: false },
+              //   'fake-es6-syntax-disabled': true,
+              //   'tag-parent-disabled': true,
+              //   'use-each-in-syntax': true
+              // }
             }
           ]
 

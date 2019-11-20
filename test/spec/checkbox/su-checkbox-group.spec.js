@@ -1,110 +1,94 @@
-require('../../../dist/tags/checkbox/su-checkbox-group.js')
-require('../../../dist/tags/checkbox/su-checkbox.js')
+import * as riot from 'riot'
+import { init, compile } from '../../helpers/'
+import CheckboxGroupComponent from '../../../dist/tags/checkbox/su-checkbox-group.js'
+import CheckboxComponent from '../../../dist/tags/checkbox/su-checkbox.js'
 
 describe('su-checkbox-group', function () {
-  let tag
+  let element, component
   let spyOnChange = sinon.spy()
+  init(riot)
 
   beforeEach(function () {
-    const group = $('<su-checkbox-group></su-checkbox-group>')
-    group.append('<su-checkbox value="1">Checkbox choice1</su-checkbox>')
-      .append('<su-checkbox value="2">Checkbox choice2</su-checkbox>')
-    $('body').append(group)
-    tag = riot.mount('su-checkbox-group')[0]
-    tag.on('change', spyOnChange)
+    element = document.createElement('app')
+    riot.register('su-checkbox-group', CheckboxGroupComponent)
+    riot.register('su-checkbox', CheckboxComponent)
+    const AppComponent = compile(`
+      <app>
+        <su-checkbox-group
+          value="{ value }"
+          onchange="{ () => dispatch('change') }">
+          <su-checkbox value="1" />
+          <su-checkbox value="2" />
+        </su-checkbox-group>
+        <button id="reset" type="button" onclick="{ reset }">reset</button>
+        <script>
+          export default {
+            reset() {
+              this.obs.trigger(this.$('su-checkbox-group').id + '-reset')
+            }
+          }
+        </script>
+      </app>`)
+    riot.register('app', AppComponent)
+    component = riot.mount(element, {
+      'onchange': spyOnChange
+    })[0]
   })
 
   afterEach(function () {
     spyOnChange.reset()
-    tag.unmount()
+    component.unmount()
+    riot.unregister('su-checkbox')
+    riot.unregister('su-checkbox-group')
+    riot.unregister('app')
   })
 
   it('is mounted', function () {
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 
   it('update value', function () {
-    tag.tags['su-checkbox'][0].checked.should.equal(false)
-    tag.tags['su-checkbox'][1].checked.should.equal(false)
+    expect(component.$$('su-checkbox')[0].getAttribute("checked")).to.be.not.ok
+    expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.not.ok
 
-    tag.value = '1'
-    tag.update()
-    tag.tags['su-checkbox'][0].checked.should.equal(true)
-    tag.tags['su-checkbox'][1].checked.should.equal(false)
-    spyOnChange.should.have.been.calledOnce
+    component.value = "1"
+    component.update()
+    expect(component.$$('su-checkbox')[0].getAttribute("checked")).to.be.ok
+    expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.not.ok
+    expect(spyOnChange).to.have.been.calledOnce
 
-    tag.value = '2'
-    tag.update()
-    tag.tags['su-checkbox'][0].checked.should.equal(false)
-    tag.tags['su-checkbox'][1].checked.should.equal(true)
-    spyOnChange.should.have.been.calledTwice
-  })
-
-  it('update option', function () {
-    tag.tags['su-checkbox'][0].checked.should.equal(false)
-    tag.tags['su-checkbox'][1].checked.should.equal(false)
-
-    tag.opts.riotValue = '1'
-    tag.update()
-    tag.tags['su-checkbox'][0].checked.should.equal(true)
-    tag.tags['su-checkbox'][1].checked.should.equal(false)
-    spyOnChange.should.have.been.calledOnce
-
-    tag.opts.riotValue = '2'
-    tag.update()
-    tag.tags['su-checkbox'][0].checked.should.equal(false)
-    tag.tags['su-checkbox'][1].checked.should.equal(true)
-    spyOnChange.should.have.been.calledTwice
-
-    tag.opts.riotValue = 1
-    tag.update()
-    tag.tags['su-checkbox'][0].checked.should.equal(true)
-    tag.tags['su-checkbox'][1].checked.should.equal(false)
-
-    tag.opts.riotValue = 2
-    tag.update()
-    tag.tags['su-checkbox'][0].checked.should.equal(false)
-    tag.tags['su-checkbox'][1].checked.should.equal(true)
-
-    tag.opts.riotValue = '1, 2'
-    tag.update()
-    tag.tags['su-checkbox'][0].checked.should.equal(true)
-    tag.tags['su-checkbox'][1].checked.should.equal(true)
-
-    tag.opts.riotValue = [1, 2]
-    tag.update()
-    tag.tags['su-checkbox'][0].checked.should.equal(true)
-    tag.tags['su-checkbox'][1].checked.should.equal(true)
+    component.value = "2"
+    component.update()
+    expect(component.$$('su-checkbox')[0].getAttribute("checked")).to.be.not.ok
+    expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.ok
+    expect(spyOnChange).to.have.been.calledTwice
   })
 
   it('click checkbox', function () {
-    tag.tags['su-checkbox'][0].checked.should.equal(false)
-    tag.tags['su-checkbox'][1].checked.should.equal(false)
+    expect(component.$$('su-checkbox')[0].getAttribute("checked")).to.be.not.ok
+    expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.not.ok
 
-    $('su-checkbox:eq(0) input').click()
-    tag.tags['su-checkbox'][0].checked.should.equal(true)
-    tag.tags['su-checkbox'][1].checked.should.equal(false)
-    spyOnChange.should.have.been.calledOnce
+    component.$$('su-checkbox input')[0].click()
+    expect(component.$$('su-checkbox')[0].getAttribute("checked")).to.be.ok
+    expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.not.ok
+    expect(spyOnChange).to.have.been.calledOnce
 
-    $('su-checkbox:eq(1) input').click()
-    tag.tags['su-checkbox'][0].checked.should.equal(true)
-    tag.tags['su-checkbox'][1].checked.should.equal(true)
-    spyOnChange.should.have.been.calledTwice
+    component.$$('su-checkbox input')[1].click()
+    expect(component.$$('su-checkbox')[0].getAttribute("checked")).to.be.ok
+    expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.ok
+    expect(spyOnChange).to.have.been.calledTwice
   })
 
   it('reset value', function () {
-    expect(tag.value).to.be.undefined
-    expect(tag.defaultValue).to.be.undefined
-    tag.changed().should.equal(false)
+    expect(component.$('su-checkbox-group').value).to.be.undefined
+    expect(component.$('su-checkbox-group').getAttribute('changed')).to.be.not.ok
 
-    $('su-checkbox:eq(0) input').click()
-    tag.value.toString().should.equal([tag.tags['su-checkbox'][0].opts.value].toString())
-    expect(tag.defaultValue).to.be.undefined
-    tag.changed().should.equal(true)
+    component.$$('su-checkbox input')[0].click()
+    expect(component.$('su-checkbox-group').value).to.equal(component.$('su-checkbox').value)
+    expect(component.$('su-checkbox-group').getAttribute('changed')).to.be.ok
 
-    tag.reset()
-    expect(tag.value).to.be.undefined
-    expect(tag.defaultValue).to.be.undefined
-    tag.changed().should.equal(false)
+    fireEvent(component.$('#reset'), 'click')
+    expect(component.$('su-checkbox-group').value).to.be.undefined
+    expect(component.$('su-checkbox-group').getAttribute('changed')).to.be.not.ok
   })
 })

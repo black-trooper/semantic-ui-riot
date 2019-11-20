@@ -1,0 +1,39 @@
+<su-loading>
+  <div class="ui page dimmer inverted {counter > 0 ? 'active' : ''}">
+    <div class="ui huge text loader">Loading</div>
+  </div>
+  <style>
+    .ui.dimmer {
+      z-index: 20000
+    }
+  </style>
+  <script>
+    export default {
+      counter: 0,
+      onMounted
+    }
+
+    // ===================================================================================
+    //                                                                           Lifecycle
+    //                                                                           =========
+    function onMounted(props, state) {
+      if (this.obs) {
+        this.obs.on('su-loading', visible => {
+          suLoading(this, visible)
+        })
+      }
+    }
+
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
+    function suLoading(tag, visible) {
+      if (visible) {
+        tag.counter++
+      } else {
+        tag.counter--
+      }
+      tag.update()
+    }
+  </script>
+</su-loading>

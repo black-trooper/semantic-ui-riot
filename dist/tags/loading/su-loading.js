@@ -1,25 +1,54 @@
-riot.tag2('su-loading', '<div class="ui page dimmer inverted {active: counter > 0}"> <div class="ui huge text loader">Loading</div> </div>', 'su-loading .ui.dimmer,[data-is="su-loading"] .ui.dimmer{ z-index: 20000 }', '', function(opts) {
-    const tag = this
+// ===================================================================================
+//                                                                           Lifecycle
+//                                                                           =========
+function onMounted(props, state) {
+  if (this.obs) {
+    this.obs.on('su-loading', visible => {
+      suLoading(this, visible);
+    });
+  }
+}
 
-    tag.counter = 0
+// ===================================================================================
+//                                                                               Logic
+//                                                                               =====
+function suLoading(tag, visible) {
+  if (visible) {
+    tag.counter++;
+  } else {
+    tag.counter--;
+  }
+  tag.update();
+}
 
-    tag.mixin('semantic-ui')
-    tag.observable.on('showLoading', showLoading)
+var suLoading$1 = {
+  'css': `su-loading .ui.dimmer,[is="su-loading"] .ui.dimmer{ z-index: 20000 }`,
 
-    riot.mixin({
-      suLoading
-    })
+  'exports': {
+    counter: 0,
+    onMounted
+  },
 
-    function showLoading(visible) {
-      if (visible) {
-        tag.counter++
-      } else {
-        tag.counter--
-      }
-      tag.update()
-    }
+  'template': function(template, expressionTypes, bindingTypes, getComponent) {
+    return template(
+      '<div expr9="expr9"><div class="ui huge text loader">Loading</div></div>',
+      [{
+        'redundantAttribute': 'expr9',
+        'selector': '[expr9]',
 
-    function suLoading(visible) {
-      tag.observable.trigger('showLoading', visible)
-    }
-});
+        'expressions': [{
+          'type': expressionTypes.ATTRIBUTE,
+          'name': 'class',
+
+          'evaluate': function(scope) {
+            return ['ui page dimmer inverted ', scope.counter > 0 ? 'active' : ''].join('');
+          }
+        }]
+      }]
+    );
+  },
+
+  'name': 'su-loading'
+};
+
+export default suLoading$1;

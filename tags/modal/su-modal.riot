@@ -1,0 +1,196 @@
+<su-modal onclick="{ onClickDimmer }" id="{ su_id }" class="{ props.class }">
+  <div class="ui dimmer modals page transition { state.transition }">
+    <div class="ui modal transition visible active {props.class}" onclick="{ onClickModal }">
+      <i class="close icon" if="{ closable && !basic }" onclick="{ onClickHide }"></i>
+      <div class="ui header { headerClass }" if="{ header }">
+        <i class="icon { header.icon }" if="{ header.icon }"></i>
+        { title }
+      </div>
+      <div class="content { contentClass }">
+        <slot />
+      </div>
+      <div class="actions">
+        <button each="{ button in buttons }" onclick="{ () => onClickButton(button) }" ref="button_{ button.text }" type="button"
+          class="ui button { button.type } { button.class }">
+          { button.text }
+          <i class="icon { button.icon }" if="{ button.icon }"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <style>
+    .ui.dimmer.visible.transition {
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ui.modal {
+      top: auto;
+      left: auto;
+      position: relative;
+      margin: 0 !important;
+    }
+
+    .ui.fullscreen.modal {
+      left: 0 !important;
+    }
+
+    @media only screen and (min-width: 768px) {
+      .ui.modal>.close {
+        display: none;
+      }
+
+      .ui.fullscreen.modal>.close {
+        display: inline;
+      }
+    }
+  </style>
+
+  <script>
+    let index = 0
+    export default {
+      state: {
+        transition: '',
+      },
+      image_content: false,
+      openning: false,
+      closing: false,
+      closable: true,
+      visible: false,
+      onMounted,
+      onBeforeUpdate,
+      onClickModal,
+      onClickButton,
+      onClickHide,
+      onClickDimmer,
+    }
+
+    // ===================================================================================
+    //                                                                           Lifecycle
+    //                                                                           =========
+    function onMounted(props, state) {
+      this.su_id = `su-modal-${index++}`
+      this.update()
+      if (this.obs) {
+        this.obs.on(`${this.su_id}-show`, () => {
+          show(this)
+        })
+        this.obs.on(`${this.su_id}-hide`, () => {
+          hide(this)
+        })
+      }
+    }
+
+    function onBeforeUpdate(props, state) {
+      this.basic = this.root.classList.contains('basic')
+      this.contentClass = getContentClass(this)
+
+      if (props.modal) {
+        this.closable = typeof props.modal.closable === 'undefined' || props.modal.closable
+        if (props.modal.header) {
+          this.header = props.modal.header
+          this.headerClass = props.modal.header.icon ? 'icon' : ''
+          this.title = props.modal.header.text ? props.modal.header.text : props.modal.header
+        }
+
+        this.buttons = props.modal.buttons
+        this.buttons && this.buttons.forEach(button => {
+          const classes = []
+          if (button.icon && button.text) classes.push('labeled')
+          if (button.icon) classes.push('icon')
+          if (this.basic) classes.push('inverted')
+          if (button.disabled) classes.push('disabled')
+          button.class = classes.join(' ')
+        })
+      }
+    }
+
+    // ===================================================================================
+    //                                                                              Events
+    //                                                                              ======
+    function onClickButton(item) {
+      this.dispatch(item.action || item.text)
+      if (typeof item.closable === 'undefined' || item.closable) {
+        hide(this)
+      }
+    }
+
+    function onClickDimmer() {
+      if (this.closable && !this.basic) {
+        hide(this)
+      }
+    }
+
+    function onClickModal(event) {
+      event.stopPropagation()
+    }
+
+    function onClickHide() {
+      hide(this)
+    }
+
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
+    function show(tag) {
+      if (tag.openning || tag.closing || tag.visible) {
+        return
+      }
+      tag.openning = true
+      tag.state.transition = 'animating fade in visible'
+      tag.dispatch('show')
+      tag.update()
+      setDefaultFocus(tag)
+
+      setTimeout(() => {
+        tag.openning = false
+        tag.visible = true
+        tag.update({
+          transition: 'visible active'
+        })
+      }, 500)
+    }
+
+    function hide(tag) {
+      if (tag.openning || tag.closing || !tag.visible) {
+        return
+      }
+      tag.closing = true
+      tag.update({
+        transition: 'animating fade out visible active'
+      })
+      tag.dispatch('hide')
+      tag.update()
+
+      setTimeout(() => {
+        tag.closing = false
+        tag.visible = false
+        tag.update({
+          transition: ''
+        })
+      }, 300)
+    }
+
+    function setDefaultFocus(tag) {
+      if (!tag.buttons || tag.buttons.length == 0) {
+        return
+      }
+      if (tag.buttons.some(button => button.default)) {
+        const text = tag.buttons.filter(button => button.default)[0].text
+        tag.$(`[ref='button_${text}']`).focus()
+      }
+    }
+
+    function getContentClass(tag) {
+      const classes = []
+      if (tag.$('img')) {
+        classes.push('image')
+      }
+      if (tag.root.classList.contains('scrolling')) {
+        classes.push('scrolling')
+      }
+      return classes.join(' ')
+    }
+  </script>
+</su-modal>

@@ -1,0 +1,97 @@
+<su-checkbox class="ui checkbox { props.class }" checked="{ state.checked }" changed="{ changed }" id="{ su_id }">
+  <input type="checkbox" checked="{ state.checked }" onclick="{ onClick }" disabled="{ disabled }" id="{ su_id }-input" />
+  <label if="{ !props.label }" for="{ su_id }-input"><slot /></label>
+  <label if="{ props.label }" for="{ su_id }-input">{ props.label }</label>
+
+  <style>
+    :host.ui.checkbox label {
+      cursor: pointer;
+    }
+
+    :host.ui.read-only input[type="checkbox"],
+    :host.ui.disabled input[type="checkbox"] {
+      cursor: default !important;
+    }
+  </style>
+
+  <script>
+    let index = 0
+    export default {
+      state: {
+        checked: false,
+        defaultChecked: false,
+        observable: null,
+        lastChecked: false,
+        lastOptsChecked: false,
+      },
+      changed: false,
+      onBeforeUpdate,
+      onMounted,
+      onUpdated,
+      onClick,
+    }
+
+    // ===================================================================================
+    //                                                                           Lifecycle
+    //                                                                           =========
+    function onMounted(props, state) {
+      this.su_id = `su-checkbox-${index++}`
+      this.obs.on(`${this.su_id}-reset`, () => { reset(this) })
+      state.checked = normalizeOptChecked(props.checked)
+      state.lastChecked = state.checked
+      state.lastOptsChecked = state.checked
+      state.defaultChecked = state.checked
+      this.update()
+    }
+
+    function onBeforeUpdate(props, state) {
+      this.readOnly = this.root.classList.contains('read-only')
+      this.disabled = this.root.classList.contains('disabled')
+      this.changed = state.checked !== state.defaultChecked
+
+      if (state.lastOptsChecked != normalizeOptChecked(props.checked)) {
+        state.checked = normalizeOptChecked(props.checked)
+        state.lastOptsChecked = state.checked
+      }
+    }
+
+    function onUpdated(props, state) {
+      if (state.lastChecked != state.checked) {
+        state.lastChecked = state.checked
+        state.lastOptsChecked = state.checked
+      }
+    }
+
+    function reset(tag) {
+      tag.update({
+        checked: tag.state.defaultChecked
+      })
+    }
+
+    // ===================================================================================
+    //                                                                              Events
+    //                                                                              ======
+    function onClick() {
+      if (this.readOnly || this.disabled) {
+        event.preventDefault()
+        return
+      }
+
+      this.update({
+        checked: !this.state.checked
+      })
+      this.dispatch('click', this.checked)
+      this.obs.trigger(`${this.props.suParentId}-update`)
+      if (this.obs && this.root.getAttribute('name')) {
+        this.obs.trigger(`${this.root.getAttribute('name')}-click`, this.props.value)
+      }
+    }
+
+    // ===================================================================================
+    //                                                                               Logic
+    //                                                                               =====
+    function normalizeOptChecked(checked) {
+      return checked === true || checked === 'checked' || checked === 'true'
+    }
+  </script>
+</su-checkbox>

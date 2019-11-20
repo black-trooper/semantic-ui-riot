@@ -1,10 +1,12 @@
-const fireEvent = require('../../helpers').fireEvent
-require('../../../dist/tags/dropdown/su-select.js')
+import * as riot from 'riot'
+import { init, compile } from '../../helpers/'
+import TargetComponent from '../../../dist/tags/dropdown/su-select.js'
 
 describe('su-select', function () {
-  let tag
+  let element, component
   let spyOnChange = sinon.spy()
   let spyOnBlur = sinon.spy()
+  init(riot)
 
   let items = [
     {
@@ -14,81 +16,94 @@ describe('su-select', function () {
     },
     {
       label: 'Male',
-      value: 1
+      value: '1'
     },
     {
       label: 'Female',
-      value: 2
+      value: '2'
     },
   ]
 
   beforeEach(function () {
-    $('body').append('<su-select></su-select>')
-    tag = riot.mount('su-select', {
-      items
+    riot.register('su-select', TargetComponent)
+    const AppComponent = compile(`
+      <app>
+        <su-select items="{ items || props.items }"
+          value="{ value }"
+          onchange="{ props.onchange }"
+          onblur="{ props.onblur }"
+        />
+      </app>
+    `)
+    riot.register('app', AppComponent)
+    element = document.createElement('app')
+    component = riot.mount(element, {
+      'items': items,
+      'onchange': spyOnChange,
+      'onblur': spyOnBlur,
     })[0]
-    tag
-      .on('change', spyOnChange)
-      .on('blur', spyOnBlur)
   })
 
   afterEach(function () {
     spyOnChange.reset()
     spyOnBlur.reset()
-    tag.unmount()
+    riot.unregister('su-select')
+    riot.unregister('app')
   })
 
   it('is mounted', function () {
-    tag.isMounted.should.be.true
+    expect(component).to.be.ok
   })
 
   it('clicking default item', function () {
-    $('su-select select').hasClass('default').should.equal(true)
-    $('su-select select').click()
+    expect(component.$('su-select select').classList.contains('default')).to.equal(true)
+    component.$('su-select select').click()
 
-    $('su-select option:first-child').click()
-    $('su-select select').hasClass('default').should.equal(true)
-    spyOnChange.should.have.been.callCount(0)
+    component.$('su-select option').click()
+    expect(component.$('su-select select').classList.contains('default')).to.equal(true)
+    expect(spyOnChange).callCount(0)
 
-    expect(tag.value).to.be.null
+    expect(component.$('su-select').getAttribute('value')).to.be.null
   })
 
   it('clicking item', function () {
-    $('su-select select').hasClass('default').should.equal(true)
-    $('su-select select').click()
+    expect(component.$('su-select select').classList.contains('default')).to.equal(true)
+    component.$('su-select select').click()
 
-    // TODO riot の onchange イベントを呼び出せないので仕方なく changeValues を実行している
-    tag.changeValues(items[1].value)
-    $('su-select select').hasClass('default').should.equal(false)
-    spyOnChange.should.have.been.calledOnce
+    component.$('su-select select').value = items[1].value
+    fireEvent(component.$('su-select select'), 'change')
+    expect(component.$('su-select select').classList.contains('default')).to.equal(false)
+    expect(spyOnChange).calledOnce
 
-    tag.value.should.deep.equal(items[1].value)
-    tag.label.should.deep.equal(items[1].label)
+    expect(component.$('su-select').getAttribute('value')).to.equal(items[1].value)
+    expect(component.$('su-select').getAttribute('label')).to.equal(items[1].label)
 
-    fireEvent($('su-select select')[0], 'blur')
-    spyOnBlur.should.have.been.calledOnce
+    fireEvent(component.$('su-select select'), 'blur')
+    expect(spyOnBlur).calledOnce
   })
 
   it('update value', function () {
-    expect(tag.value).to.be.null
-    tag.value = items[1].value
-    tag.update()
-    tag.value.should.deep.equal(items[1].value)
-    tag.label.should.deep.equal(items[1].label)
+    expect(component.$('su-select').getAttribute('value')).to.equal(items[0].value)
+    component.value = items[1].value
+    component.update()
+    expect(component.$('su-select').getAttribute('value')).to.equal(items[1].value)
+    expect(component.$('su-select').getAttribute('label')).to.equal(items[1].label)
   })
 
   it('update item value', function () {
-    tag.value = items[1].value
-    tag.update()
+    component.value = items[1].value
+    component.update()
+
     items[1].value = 'M'
-    tag.update()
-    expect(tag.value).to.be.null
+    component.items = items
+    component.update()
+    expect(component.$('su-select').getAttribute('value')).to.equal(items[0].value)
   })
 
   it('update items', function () {
-    $('su-select option').length.should.equal(3)
+    expect(component.$$('su-select option').length).to.equal(3)
 
-    tag.opts.items = [
+    component.items = [
       {
         label: 'Alphabet',
         value: null,
@@ -111,35 +126,33 @@ describe('su-select', function () {
           }]
       }
     ]
-    tag.update()
+    component.update()
 
-    $('su-select option').length.should.equal(4)
-    spyOnChange.should.have.been.callCount(0)
+    expect(component.$$('su-select option').length).to.equal(4)
+    expect(spyOnChange).callCount(0)
 
-    // TODO riot の onchange イベントを呼び出せないので仕方なく changeValues を実行している
-    tag.changeValues('a')
-    $('su-select select').hasClass('default').should.equal(false)
-    spyOnChange.should.have.been.calledOnce
+    component.$('su-select select').value = component.items[1].items[0].value
+    fireEvent(component.$('su-select select'), 'change')
+    expect(component.$('su-select select').classList.contains('default')).to.equal(false)
+    expect(spyOnChange).calledOnce
 
-    tag.value.should.deep.equal('a')
-    tag.label.should.deep.equal('A')
+    expect(component.$('su-select').getAttribute('value')).to.equal('a')
+    expect(component.$('su-select').getAttribute('label')).to.equal('A')
   })
 
   it('reset value', function () {
-    expect(tag.value).to.be.null
-    expect(tag.defaultValue).to.be.null
-    tag.changed().should.deep.equal(false)
+    expect(component.$('su-select').getAttribute('value')).to.equal(items[0].value)
+    expect(component.$('su-select').getAttribute('changed')).to.be.null
 
-    // TODO riot の onchange イベントを呼び出せないので仕方なく changeValues を実行している
-    tag.changeValues(items[1].value)
+    component.$('su-select select').value = items[1].value
+    fireEvent(component.$('su-select select'), 'change')
 
-    tag.value.should.deep.equal(items[1].value)
-    tag.changed().should.deep.equal(true)
-    expect(tag.defaultValue).to.be.null
+    expect(component.$('su-select').getAttribute('value')).to.equal(items[1].value)
+    expect(component.$('su-select').getAttribute('changed')).to.equal('changed')
 
-    tag.reset()
-    expect(tag.value).to.be.null
-    expect(tag.defaultValue).to.be.null
-    tag.changed().should.deep.equal(false)
+    // tag.reset()
+    component.obs.trigger(`${component.$('su-select').id}-reset`)
+    expect(component.$('su-select').getAttribute('value')).to.equal(items[0].value)
+    expect(component.$('su-select').getAttribute('changed')).to.be.null
   })
 })
