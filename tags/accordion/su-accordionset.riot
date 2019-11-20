@@ -59,7 +59,7 @@
     }
 
     function onMounted() {
-      this.accordions = this.$$(':scope > su-accordion')
+      this.accordions = this.$$(':not(su-accordionset) su-accordion')
 
       let defaultActive = false
       this.accordions.forEach(accordion => {

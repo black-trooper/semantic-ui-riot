@@ -50,4 +50,21 @@ describe('su-accordionset-options', function () {
 
     expect(component.$$('su-accordion div.title')[0].classList.contains('active')).to.equal(true)
   })
+
+  it('accordion menu', function () {
+    mount(`
+      <app>
+        <su-accordionset class="vertical menu">
+          <div class="item">
+            <su-accordion title="Home">Home content</su-accordion>
+          </div>
+          <div class="item">
+            <su-accordion title="Message">Messages content</su-accordion>
+          </div>
+        </su-accordionset>
+      </app>`)
+
+    expect(component.$$('su-accordion div.title')[0].classList.contains('active')).to.equal(true)
+    expect(component.$$('su-accordion div.title')[1].classList.contains('active')).to.equal(false)
+  })
 })
