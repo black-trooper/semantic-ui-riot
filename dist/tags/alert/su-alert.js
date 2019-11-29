@@ -24,6 +24,8 @@ function onMounted(props, state) {
 //                                                                              Events
 //                                                                              ======
 function onClose() {
+  this.show = false;
+  this.update();
   this.obs.trigger('callbackConfirm');
 }
 
@@ -52,8 +54,8 @@ function showAlert(tag, option = {}) {
   tag.title = option.title;
   tag.messages = Array.isArray(option.message) ? option.message : [option.message];
   setButton(tag, option);
+  tag.show = true;
   tag.update();
-  tag.suShowModal(tag.$('su-modal'));
 }
 
 function suAlert(tag, param) {
@@ -101,6 +103,7 @@ var suAlert$1 = {
       buttons: []
     },
 
+    show: false,
     button: {},
     onMounted,
     onClose
@@ -179,6 +182,13 @@ var suAlert$1 = {
 
         'evaluate': function() {
           return 'tiny';
+        }
+      }, {
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'show',
+
+        'evaluate': function(scope) {
+          return scope.show;
         }
       }, {
         'type': expressionTypes.ATTRIBUTE,

@@ -31,10 +31,10 @@ var suLoading$1 = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr37="expr37"><div class="ui huge text loader">Loading</div></div>',
+      '<div expr15="expr15"><div class="ui huge text loader">Loading</div></div>',
       [{
-        'redundantAttribute': 'expr37',
-        'selector': '[expr37]',
+        'redundantAttribute': 'expr15',
+        'selector': '[expr15]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,

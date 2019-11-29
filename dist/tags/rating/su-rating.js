@@ -113,7 +113,7 @@ var suRating = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<i expr46="expr46"></i>', [{
+    return template('<i expr45="expr45"></i>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -185,8 +185,8 @@ var suRating = {
         }]
       }]),
 
-      'redundantAttribute': 'expr46',
-      'selector': '[expr46]',
+      'redundantAttribute': 'expr45',
+      'selector': '[expr45]',
       'itemName': 'item',
       'indexName': null,
 

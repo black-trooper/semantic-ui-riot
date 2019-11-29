@@ -45,10 +45,14 @@ function onMounted(props, state) {
 //                                                                              Events
 //                                                                              ======
 function onOk() {
+  this.show = false;
+  this.update();
   this.obs.trigger('callbackConfirm', true);
 }
 
 function onCancel() {
+  this.show = false;
+  this.update();
   this.obs.trigger('callbackConfirm', false);
 }
 
@@ -88,8 +92,8 @@ function showConfirm(tag, option = {}) {
   tag.messages = Array.isArray(option.message) ? option.message : [option.message];
   // kokookasii
   setButtons(tag, option);
+  tag.show = true;
   tag.update();
-  tag.suShowModal(tag.$('su-modal'));
 }
 
 function suConfirm(tag, param) {
@@ -153,6 +157,7 @@ var suConfirm$1 = {
       buttons: []
     },
 
+    show: false,
     reverse: false,
 
     cancelButton: {
@@ -241,6 +246,13 @@ var suConfirm$1 = {
 
         'evaluate': function() {
           return 'tiny';
+        }
+      }, {
+        'type': expressionTypes.ATTRIBUTE,
+        'name': 'show',
+
+        'evaluate': function(scope) {
+          return scope.show;
         }
       }, {
         'type': expressionTypes.ATTRIBUTE,
