@@ -47,7 +47,7 @@ index.html
 </body>
 </html>
 ```
-sample.tag
+sample.riot
 ```html
 <sample>
   <su-checkbox>Make my profile visible</su-checkbox>
