@@ -1,5 +1,5 @@
 <su-alert>
-  <su-modal class="tiny" modal="{ modal }" onclose="{ onClose }">
+  <su-modal class="tiny" show="{ show }" modal="{ modal }" onclose="{ onClose }">
     <div class="ui icon message">
       <i class="info circle icon"></i>
       <div class="scrolling content">
@@ -38,6 +38,7 @@
         closable: false,
         buttons: []
       },
+      show: false,
       button: {},
       onMounted,
       onClose
@@ -69,6 +70,8 @@
     //                                                                              Events
     //                                                                              ======
     function onClose() {
+      this.show = false
+      this.update()
       this.obs.trigger('callbackConfirm')
     }
 
@@ -97,8 +100,8 @@
       tag.title = option.title
       tag.messages = Array.isArray(option.message) ? option.message : [option.message]
       setButton(tag, option)
+      tag.show = true
       tag.update()
-      tag.suShowModal(tag.$('su-modal'))
     }
 
     function suAlert(tag, param) {

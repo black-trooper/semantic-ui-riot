@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import { init } from '../../helpers/'
+import { init, compile } from '../../helpers/'
 import TargetComponent from '../../../dist/tags/modal/su-modal.js'
 
 describe('su-modal', function () {
@@ -8,12 +8,25 @@ describe('su-modal', function () {
   const spyOnHide = sinon.spy()
   init(riot)
 
-  const mount = opts => {
-    const option = Object.assign({
+  const mount = option => {
+    const AppComponent = compile(`
+      <app>
+        <su-modal class="${option.class}" modal="{ modal }" show="{ show }" onshow="{ props.onshow }" onhide="{ props.onhide }">
+          ${option.html}
+        </su-modal>
+        <script>
+          export default {
+            modal: ${JSON.stringify(option.modal)},
+            show: true
+          }
+        </script>
+      </app>
+    `)
+    riot.register('app', AppComponent)
+    component = riot.mount(element, {
       'onshow': spyOnShow,
       'onhide': spyOnHide
-    }, opts)
-    component = riot.mount(element, option)[0]
+    })[0]
   }
 
   // TODO: isFocus
@@ -24,9 +37,8 @@ describe('su-modal', function () {
   // }
 
   beforeEach(function () {
+    element = document.createElement('app')
     riot.register('su-modal', TargetComponent)
-    element = document.createElement('su-modal')
-    element.innerText = 'modal'
     this.clock = sinon.useFakeTimers()
   })
 
@@ -35,10 +47,11 @@ describe('su-modal', function () {
     spyOnHide.reset()
     this.clock.restore()
     riot.unregister('su-modal')
+    riot.unregister('app')
   })
 
   it('is mounted', function () {
-    mount()
+    mount({})
     expect(component).to.be.ok
   })
 
@@ -52,7 +65,8 @@ describe('su-modal', function () {
     })
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
 
-    component.suShowModal(element)
+    component.show = true
+    component.update()
     expect(spyOnShow).to.have.been.calledOnce
     this.clock.tick(510)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
@@ -64,15 +78,16 @@ describe('su-modal', function () {
   })
 
   it('dimmer close', function () {
-    mount()
+    mount({})
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
 
-    component.suShowModal(element)
+    component.show = true
+    component.update()
     expect(spyOnShow).to.have.been.calledOnce
     this.clock.tick(510)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
-    element.click()
+    component.$('.dimmer').click()
     expect(spyOnHide).to.have.been.calledOnce
     this.clock.tick(310)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
@@ -89,8 +104,10 @@ describe('su-modal', function () {
     })
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
 
-    component.suShowModal(element)
-    component.suShowModal(element)
+    component.show = true
+    component.update()
+    component.show = true
+    component.update()
     expect(spyOnShow).to.have.been.calledOnce
     this.clock.tick(510)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
@@ -113,7 +130,8 @@ describe('su-modal', function () {
       }]
     }
     mount({ modal })
-    component.suShowModal(element)
+    component.show = true
+    component.update()
     this.clock.tick(510)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
@@ -149,7 +167,8 @@ describe('su-modal', function () {
       }]
     }
     mount({ modal })
-    component.suShowModal(element)
+    component.show = true
+    component.update()
     this.clock.tick(510)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
@@ -173,8 +192,9 @@ describe('su-modal', function () {
     const modal = {
       header: 'modal header'
     }
-    mount({ modal: modal })
-    component.suShowModal(element)
+    mount({ modal })
+    component.show = true
+    component.update()
     this.clock.tick(510)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
@@ -191,7 +211,8 @@ describe('su-modal', function () {
       }
     }
     mount({ modal })
-    component.suShowModal(element)
+    component.show = true
+    component.update()
     this.clock.tick(510)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
@@ -201,7 +222,7 @@ describe('su-modal', function () {
   })
 
   it('image content', function () {
-    element.innerHTML = `
+    const html = `
         <div class="ui medium image">
           <img src="./images/avatar2/large/rachel.png" />
         </div>
@@ -212,8 +233,9 @@ describe('su-modal', function () {
           <p>Is it okay to use this photo?</p>
         </div>
     `
-    mount()
-    component.suShowModal(element)
+    mount({ html })
+    component.show = true
+    component.update()
     this.clock.tick(510)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
@@ -224,7 +246,8 @@ describe('su-modal', function () {
 
   it('scrolling content', function () {
     mount({ class: 'scrolling' })
-    component.suShowModal(element)
+    component.show = true
+    component.update()
     this.clock.tick(510)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 
@@ -235,7 +258,8 @@ describe('su-modal', function () {
 
   it('full screen', function () {
     mount({ class: 'fullscreen' })
-    component.suShowModal(element)
+    component.show = true
+    component.update()
     this.clock.tick(510)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
 

@@ -10,7 +10,7 @@
         <slot />
       </div>
       <div class="actions">
-        <button each="{ button in buttons }" onclick="{ () => onClickButton(button) }" ref="button_{ button.text }" type="button"
+        <button each="{ button in buttons }" onclick="{ () => onClickButton(button) }" name="button_{ button.text }" type="button"
           class="ui button { button.type } { button.class }">
           { button.text }
           <i class="icon { button.icon }" if="{ button.icon }"></i>
@@ -58,7 +58,6 @@
       closing: false,
       closable: true,
       visible: false,
-      onMounted,
       onBeforeUpdate,
       onClickModal,
       onClickButton,
@@ -69,19 +68,6 @@
     // ===================================================================================
     //                                                                           Lifecycle
     //                                                                           =========
-    function onMounted(props, state) {
-      this.su_id = `su-modal-${index++}`
-      this.update()
-      if (this.obs) {
-        this.obs.on(`${this.su_id}-show`, () => {
-          show(this)
-        })
-        this.obs.on(`${this.su_id}-hide`, () => {
-          hide(this)
-        })
-      }
-    }
-
     function onBeforeUpdate(props, state) {
       this.basic = this.root.classList.contains('basic')
       this.contentClass = getContentClass(this)
@@ -103,6 +89,14 @@
           if (button.disabled) classes.push('disabled')
           button.class = classes.join(' ')
         })
+      }
+      if (props.show != this.lastShow) {
+        this.lastShow = props.show
+        if (props.show) {
+          show(this)
+        } else {
+          hide(this)
+        }
       }
     }
 
@@ -178,7 +172,7 @@
       }
       if (tag.buttons.some(button => button.default)) {
         const text = tag.buttons.filter(button => button.default)[0].text
-        tag.$(`[ref='button_${text}']`).focus()
+        tag.$(`[name='button_${text}']`).focus()
       }
     }
 

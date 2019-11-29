@@ -1,5 +1,5 @@
 <su-confirm>
-  <su-modal class="tiny" modal="{ modal }" onok="{ onOk }" oncancel="{ onCancel }">
+  <su-modal class="tiny" show="{ show }" modal="{ modal }" onok="{ onOk }" oncancel="{ onCancel }">
     <div class="ui icon message">
       <i class="question circle outline icon"></i>
       <div class="scrolling content">
@@ -34,6 +34,7 @@
         closable: false,
         buttons: []
       },
+      show: false,
       reverse: false,
       cancelButton: {
         action: 'negativeAction'
@@ -93,10 +94,14 @@
     //                                                                              Events
     //                                                                              ======
     function onOk() {
+      this.show = false
+      this.update()
       this.obs.trigger('callbackConfirm', true)
     }
 
     function onCancel() {
+      this.show = false
+      this.update()
       this.obs.trigger('callbackConfirm', false)
     }
 
@@ -136,8 +141,8 @@
       tag.messages = Array.isArray(option.message) ? option.message : [option.message]
       // kokookasii
       setButtons(tag, option)
+      tag.show = true
       tag.update()
-      tag.suShowModal(tag.$('su-modal'))
     }
 
     function suConfirm(tag, param) {

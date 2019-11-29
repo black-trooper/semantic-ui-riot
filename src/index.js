@@ -79,12 +79,6 @@ riot.install(function (component) {
     if (callback) callback(data)
   }
 
-  component.suShowModal = target => {
-    component.obs.trigger(`${target.id}-show`)
-  }
-  component.suHideModal = target => {
-    component.obs.trigger(`${target.id}-hide`)
-  }
   component.suAlert = opts => {
     return new Promise(resolve => {
       component.obs.trigger('su-alert-show', opts)
