@@ -173,7 +173,7 @@ var suConfirm$1 = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<su-modal expr12="expr12" class="tiny"></su-modal>', [{
+    return template('<su-modal expr6="expr6" class="tiny"></su-modal>', [{
       'type': bindingTypes.TAG,
       'getComponent': getComponent,
 
@@ -183,7 +183,7 @@ var suConfirm$1 = {
 
       'slots': [{
         'id': 'default',
-        'html': '<div class="ui icon message"><i class="question circle outline icon"></i><div class="scrolling content"><div expr13="expr13" class="header"></div><p expr14="expr14"></p></div></div>',
+        'html': '<div class="ui icon message"><i class="question circle outline icon"></i><div class="scrolling content"><div expr7="expr7" class="header"></div><p expr8="expr8"></p></div></div>',
 
         'bindings': [{
           'type': bindingTypes.IF,
@@ -192,8 +192,8 @@ var suConfirm$1 = {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr13',
-          'selector': '[expr13]',
+          'redundantAttribute': 'expr7',
+          'selector': '[expr7]',
 
           'template': template(' ', [{
             'expressions': [{
@@ -228,8 +228,8 @@ var suConfirm$1 = {
             }]
           }]),
 
-          'redundantAttribute': 'expr14',
-          'selector': '[expr14]',
+          'redundantAttribute': 'expr8',
+          'selector': '[expr8]',
           'itemName': 'messsage',
           'indexName': null,
 
@@ -276,8 +276,8 @@ var suConfirm$1 = {
         }
       }],
 
-      'redundantAttribute': 'expr12',
-      'selector': '[expr12]'
+      'redundantAttribute': 'expr6',
+      'selector': '[expr6]'
     }]);
   },
 
