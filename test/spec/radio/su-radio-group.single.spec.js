@@ -5,6 +5,7 @@ import RadioComponent from '../../../dist/tags/radio/su-radio.js'
 
 describe('su-radio-group-single', function () {
   let element, component
+  let spyOnChange = sinon.spy()
   init(riot)
 
   beforeEach(function () {
@@ -14,15 +15,19 @@ describe('su-radio-group-single', function () {
     const AppComponent = compile(`
       <app>
         <su-radio-group
-          value="{ value }">
+          value="{ value }"
+          onchange="{ () => dispatch('change') }">
           <su-radio value="1" />
         </su-radio-group>
       </app>`)
     riot.register('app', AppComponent)
-    component = riot.mount(element, {})[0]
+    component = riot.mount(element, {
+      'onchange': spyOnChange
+    })[0]
   })
 
   afterEach(function () {
+    spyOnChange.reset()
     component.unmount()
     riot.unregister('su-radio')
     riot.unregister('su-radio-group')
@@ -39,9 +44,11 @@ describe('su-radio-group-single', function () {
     component.value = "1"
     component.update()
     expect(component.$('su-radio').getAttribute("checked")).to.be.ok
+    expect(spyOnChange).to.have.been.calledOnce
 
     component.value = "2"
     component.update()
     expect(component.$('su-radio').hasAttribute("checked")).to.be.not.ok
+    expect(spyOnChange).to.have.been.calledTwice
   })
 })
