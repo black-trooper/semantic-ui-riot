@@ -109,7 +109,7 @@ var suAlert$1 = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<su-modal expr9="expr9" class="tiny"></su-modal>', [{
+    return template('<su-modal expr0="expr0" class="tiny"></su-modal>', [{
       'type': bindingTypes.TAG,
       'getComponent': getComponent,
 
@@ -119,7 +119,7 @@ var suAlert$1 = {
 
       'slots': [{
         'id': 'default',
-        'html': '<div class="ui icon message"><i class="info circle icon"></i><div class="scrolling content"><div expr10="expr10" class="header"></div><p expr11="expr11"></p></div></div>',
+        'html': '<div class="ui icon message"><i class="info circle icon"></i><div class="scrolling content"><div expr1="expr1" class="header"></div><p expr2="expr2"></p></div></div>',
 
         'bindings': [{
           'type': bindingTypes.IF,
@@ -128,8 +128,8 @@ var suAlert$1 = {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr10',
-          'selector': '[expr10]',
+          'redundantAttribute': 'expr1',
+          'selector': '[expr1]',
 
           'template': template(' ', [{
             'expressions': [{
@@ -164,8 +164,8 @@ var suAlert$1 = {
             }]
           }]),
 
-          'redundantAttribute': 'expr11',
-          'selector': '[expr11]',
+          'redundantAttribute': 'expr2',
+          'selector': '[expr2]',
           'itemName': 'message',
           'indexName': null,
 
@@ -205,8 +205,8 @@ var suAlert$1 = {
         }
       }],
 
-      'redundantAttribute': 'expr9',
-      'selector': '[expr9]'
+      'redundantAttribute': 'expr0',
+      'selector': '[expr0]'
     }]);
   },
 
