@@ -1,5 +1,5 @@
 import * as riot from 'riot'
-import observable from 'riot-observable'
+import observable from '@riotjs/observable'
 import Q from 'q'
 import SuAccordion from '../tags/accordion/su-accordion.riot'
 import SuAccordionset from '../tags/accordion/su-accordionset.riot'
