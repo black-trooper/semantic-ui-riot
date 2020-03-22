@@ -73,7 +73,7 @@ var suRadio = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<input expr41="expr41" type="radio"/><label expr42="expr42"></label><label expr44="expr44"></label>',
+      '<input expr83="expr83" type="radio"/><label expr84="expr84"></label><label expr86="expr86"></label>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -84,8 +84,8 @@ var suRadio = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr41',
-        'selector': '[expr41]',
+        'redundantAttribute': 'expr83',
+        'selector': '[expr83]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -129,10 +129,10 @@ var suRadio = {
           return !scope.props.label;
         },
 
-        'redundantAttribute': 'expr42',
-        'selector': '[expr42]',
+        'redundantAttribute': 'expr84',
+        'selector': '[expr84]',
 
-        'template': template('<slot expr43="expr43"></slot>', [{
+        'template': template('<slot expr85="expr85"></slot>', [{
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
             'name': 'for',
@@ -145,8 +145,8 @@ var suRadio = {
           'type': bindingTypes.SLOT,
           'attributes': [],
           'name': 'default',
-          'redundantAttribute': 'expr43',
-          'selector': '[expr43]'
+          'redundantAttribute': 'expr85',
+          'selector': '[expr85]'
         }])
       }, {
         'type': bindingTypes.IF,
@@ -155,8 +155,8 @@ var suRadio = {
           return scope.props.label;
         },
 
-        'redundantAttribute': 'expr44',
-        'selector': '[expr44]',
+        'redundantAttribute': 'expr86',
+        'selector': '[expr86]',
 
         'template': template(' ', [{
           'expressions': [{

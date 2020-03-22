@@ -47,7 +47,7 @@ var suToastItem = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<div expr62="expr62"></div>', [{
+    return template('<div expr106="expr106"></div>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -63,11 +63,11 @@ var suToastItem = {
         return !scope.hide;
       },
 
-      'redundantAttribute': 'expr62',
-      'selector': '[expr62]',
+      'redundantAttribute': 'expr106',
+      'selector': '[expr106]',
 
       'template': template(
-        '<div expr63="expr63"></div><div expr64="expr64"><i expr65="expr65" class="close icon"></i><i expr66="expr66"></i><div class="content"><div expr67="expr67" class="header"></div><p expr68="expr68"></p></div></div><div expr69="expr69"></div>',
+        '<div expr107="expr107"></div><div expr108="expr108"><i expr109="expr109" class="close icon"></i><i expr110="expr110"></i><div class="content"><div expr111="expr111" class="header"></div><p expr112="expr112"></p></div></div><div expr113="expr113"></div>',
         [{
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
@@ -84,8 +84,8 @@ var suToastItem = {
             return scope.progress == 'top';
           },
 
-          'redundantAttribute': 'expr63',
-          'selector': '[expr63]',
+          'redundantAttribute': 'expr107',
+          'selector': '[expr107]',
 
           'template': template('<div class="bar"></div>', [{
             'expressions': [{
@@ -98,8 +98,8 @@ var suToastItem = {
             }]
           }])
         }, {
-          'redundantAttribute': 'expr64',
-          'selector': '[expr64]',
+          'redundantAttribute': 'expr108',
+          'selector': '[expr108]',
 
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
@@ -116,8 +116,8 @@ var suToastItem = {
             }
           }]
         }, {
-          'redundantAttribute': 'expr65',
-          'selector': '[expr65]',
+          'redundantAttribute': 'expr109',
+          'selector': '[expr109]',
 
           'expressions': [{
             'type': expressionTypes.EVENT,
@@ -134,8 +134,8 @@ var suToastItem = {
             return scope.icon;
           },
 
-          'redundantAttribute': 'expr66',
-          'selector': '[expr66]',
+          'redundantAttribute': 'expr110',
+          'selector': '[expr110]',
 
           'template': template(null, [{
             'expressions': [{
@@ -154,8 +154,8 @@ var suToastItem = {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr67',
-          'selector': '[expr67]',
+          'redundantAttribute': 'expr111',
+          'selector': '[expr111]',
 
           'template': template(' ', [{
             'expressions': [{
@@ -190,8 +190,8 @@ var suToastItem = {
             }]
           }]),
 
-          'redundantAttribute': 'expr68',
-          'selector': '[expr68]',
+          'redundantAttribute': 'expr112',
+          'selector': '[expr112]',
           'itemName': 'message',
           'indexName': null,
 
@@ -205,8 +205,8 @@ var suToastItem = {
             return scope.progress == 'bottom';
           },
 
-          'redundantAttribute': 'expr69',
-          'selector': '[expr69]',
+          'redundantAttribute': 'expr113',
+          'selector': '[expr113]',
 
           'template': template('<div class="bar"></div>', [{
             'expressions': [{

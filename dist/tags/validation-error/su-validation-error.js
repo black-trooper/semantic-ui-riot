@@ -21,7 +21,7 @@ var suValidationError = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr73="expr73" class="ui basic pointing prompt label transition visible"></div><ul expr75="expr75" class="list"></ul>',
+      '<div expr101="expr101" class="ui basic pointing prompt label transition visible"></div><ul expr103="expr103" class="list"></ul>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -38,10 +38,10 @@ var suValidationError = {
           return scope.state.errors[scope.props.name];
         },
 
-        'redundantAttribute': 'expr73',
-        'selector': '[expr73]',
+        'redundantAttribute': 'expr101',
+        'selector': '[expr101]',
 
-        'template': template('<div expr74="expr74"></div>', [{
+        'template': template('<div expr102="expr102"></div>', [{
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
@@ -66,8 +66,8 @@ var suValidationError = {
             }]
           }]),
 
-          'redundantAttribute': 'expr74',
-          'selector': '[expr74]',
+          'redundantAttribute': 'expr102',
+          'selector': '[expr102]',
           'itemName': 'message',
           'indexName': null,
 
@@ -82,10 +82,10 @@ var suValidationError = {
           return scope.state.blockMessage;
         },
 
-        'redundantAttribute': 'expr75',
-        'selector': '[expr75]',
+        'redundantAttribute': 'expr103',
+        'selector': '[expr103]',
 
-        'template': template('<template expr76="expr76"></template>', [{
+        'template': template('<template expr104="expr104"></template>', [{
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
@@ -99,7 +99,7 @@ var suValidationError = {
           'getKey': null,
           'condition': null,
 
-          'template': template('<li expr77="expr77"></li>', [{
+          'template': template('<li expr105="expr105"></li>', [{
             'type': bindingTypes.EACH,
             'getKey': null,
             'condition': null,
@@ -115,8 +115,8 @@ var suValidationError = {
               }]
             }]),
 
-            'redundantAttribute': 'expr77',
-            'selector': '[expr77]',
+            'redundantAttribute': 'expr105',
+            'selector': '[expr105]',
             'itemName': 'message',
             'indexName': null,
 
@@ -125,8 +125,8 @@ var suValidationError = {
             }
           }]),
 
-          'redundantAttribute': 'expr76',
-          'selector': '[expr76]',
+          'redundantAttribute': 'expr104',
+          'selector': '[expr104]',
           'itemName': 'errors',
           'indexName': null,
 

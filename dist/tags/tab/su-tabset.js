@@ -188,7 +188,7 @@ var suTabset = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr57="expr57"></div><slot expr59="expr59"></slot><div expr60="expr60"></div>',
+      '<div expr91="expr91"></div><slot expr93="expr93"></slot><div expr94="expr94"></div>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -205,10 +205,10 @@ var suTabset = {
           return !scope.isBottom() && scope.showMenu();
         },
 
-        'redundantAttribute': 'expr57',
-        'selector': '[expr57]',
+        'redundantAttribute': 'expr91',
+        'selector': '[expr91]',
 
-        'template': template('<a expr58="expr58"></a>', [{
+        'template': template('<a expr92="expr92"></a>', [{
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
@@ -252,8 +252,8 @@ var suTabset = {
             }]
           }]),
 
-          'redundantAttribute': 'expr58',
-          'selector': '[expr58]',
+          'redundantAttribute': 'expr92',
+          'selector': '[expr92]',
           'itemName': 'tab',
           'indexName': null,
 
@@ -265,8 +265,8 @@ var suTabset = {
         'type': bindingTypes.SLOT,
         'attributes': [],
         'name': 'default',
-        'redundantAttribute': 'expr59',
-        'selector': '[expr59]'
+        'redundantAttribute': 'expr93',
+        'selector': '[expr93]'
       }, {
         'type': bindingTypes.IF,
 
@@ -274,10 +274,10 @@ var suTabset = {
           return scope.isBottom() && scope.showMenu();
         },
 
-        'redundantAttribute': 'expr60',
-        'selector': '[expr60]',
+        'redundantAttribute': 'expr94',
+        'selector': '[expr94]',
 
-        'template': template('<a expr61="expr61"></a>', [{
+        'template': template('<a expr95="expr95"></a>', [{
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
             'name': 'class',
@@ -321,8 +321,8 @@ var suTabset = {
             }]
           }]),
 
-          'redundantAttribute': 'expr61',
-          'selector': '[expr61]',
+          'redundantAttribute': 'expr95',
+          'selector': '[expr95]',
           'itemName': 'tab',
           'indexName': null,
 
