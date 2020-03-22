@@ -37,10 +37,10 @@
     "url": "https://github.com/black-trooper/semantic-ui-riot/issues"
   },
   "dependencies": {
+    "@riotjs/observable": "^4.0.4",
     "date-fns": "^1.29.0",
     "q": "^1.5.1",
-    "riot": "4.6.6",
-    "riot-observable": "^3.0.0"
+    "riot": "4.6.6"
   },
   "devDependencies": {
     "@riotjs/cli": "^4.0.2",
