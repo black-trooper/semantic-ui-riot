@@ -132,7 +132,6 @@
 
       showAlert(tag, option)
       tag.obs.on('callbackConfirm', () => {
-        tag.suHideModal(tag.$('su-modal'))
         tag.obs.trigger('su-alert-close')
       })
     }
