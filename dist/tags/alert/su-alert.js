@@ -86,7 +86,6 @@ function suAlert(tag, param) {
 
   showAlert(tag, option);
   tag.obs.on('callbackConfirm', () => {
-    tag.suHideModal(tag.$('su-modal'));
     tag.obs.trigger('su-alert-close');
   });
 }
@@ -110,7 +109,7 @@ var suAlert$1 = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<su-modal expr12="expr12" class="tiny"></su-modal>', [{
+    return template('<su-modal expr0="expr0" class="tiny"></su-modal>', [{
       'type': bindingTypes.TAG,
       'getComponent': getComponent,
 
@@ -120,7 +119,7 @@ var suAlert$1 = {
 
       'slots': [{
         'id': 'default',
-        'html': '<div class="ui icon message"><i class="info circle icon"></i><div class="scrolling content"><div expr13="expr13" class="header"></div><p expr14="expr14"></p></div></div>',
+        'html': '<div class="ui icon message"><i class="info circle icon"></i><div class="scrolling content"><div expr1="expr1" class="header"></div><p expr2="expr2"></p></div></div>',
 
         'bindings': [{
           'type': bindingTypes.IF,
@@ -129,8 +128,8 @@ var suAlert$1 = {
             return scope.title;
           },
 
-          'redundantAttribute': 'expr13',
-          'selector': '[expr13]',
+          'redundantAttribute': 'expr1',
+          'selector': '[expr1]',
 
           'template': template(' ', [{
             'expressions': [{
@@ -165,8 +164,8 @@ var suAlert$1 = {
             }]
           }]),
 
-          'redundantAttribute': 'expr14',
-          'selector': '[expr14]',
+          'redundantAttribute': 'expr2',
+          'selector': '[expr2]',
           'itemName': 'message',
           'indexName': null,
 
@@ -206,8 +205,8 @@ var suAlert$1 = {
         }
       }],
 
-      'redundantAttribute': 'expr12',
-      'selector': '[expr12]'
+      'redundantAttribute': 'expr0',
+      'selector': '[expr0]'
     }]);
   },
 

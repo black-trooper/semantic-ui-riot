@@ -189,7 +189,6 @@
 
       showConfirm(tag, option)
       tag.obs.on('callbackConfirm', result => {
-        tag.suHideModal(tag.$('su-modal'))
         tag.obs.trigger('su-confirm-close', result)
       })
     }
