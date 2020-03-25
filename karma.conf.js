@@ -57,7 +57,7 @@ module.exports = function (config) {
         }
       },
       browsers: ['chromeTravisCi'],
-      reporters: ['coverage-istanbul', 'coveralls'],
+      reporters: ['coverage-istanbul', 'coverage'],
       coverageIstanbulReporter: {
         reports: ['lcov'],
       },
