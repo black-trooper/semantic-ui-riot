@@ -1,4 +1,4 @@
-import observable from 'riot-observable'
+import observable from '@riotjs/observable'
 import * as compiler from '@riotjs/compiler'
 
 const GLOBAL_REGISTRY = '__riot_registry__'
