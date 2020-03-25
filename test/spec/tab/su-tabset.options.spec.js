@@ -7,10 +7,11 @@ import TabTitleComponent from '../../../dist/tags/tab/su-tab-title.js'
 
 describe('su-tabset-options', function () {
   let element, component
-  let spyOnClick = sinon.spy()
+  let spyOnClick
   init(riot)
 
   beforeEach(function () {
+    spyOnClick = sinon.spy()
     element = document.createElement('app')
     riot.register('su-tab-title', TabTitleComponent)
     riot.register('su-tab-header', TabHeaderComponent)
@@ -28,7 +29,6 @@ describe('su-tabset-options', function () {
   }
 
   afterEach(function () {
-    spyOnClick.reset()
     this.clock.restore()
     riot.unregister('su-tab-title')
     riot.unregister('su-tab-header')

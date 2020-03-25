@@ -4,7 +4,7 @@ import TargetComponent from '../../../dist/tags/pagination/su-pagination.js'
 
 describe('su-pagination', function () {
   let element, component
-  const spyOnChange = sinon.spy()
+  let spyOnChange
   init(riot)
 
   const mount = opts => {
@@ -25,8 +25,11 @@ describe('su-pagination', function () {
     component = riot.mount(element, option)[0]
   }
 
+  beforeEach(function () {
+    spyOnChange = sinon.spy()
+  })
+
   afterEach(function () {
-    spyOnChange.reset()
     riot.unregister('su-pagination')
     riot.unregister('app')
   })

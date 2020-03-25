@@ -4,9 +4,7 @@ import TargetComponent from '../../../dist/tags/dropdown/su-dropdown.js'
 
 describe('su-dropdown-search', function () {
   let element, component
-  let spyOnOpen = sinon.spy()
-  let spyOnClose = sinon.spy()
-  let spyOnSearch = sinon.spy()
+  let spyOnOpen, spyOnClose, spyOnSearch
   init(riot)
 
   let items = [
@@ -69,6 +67,9 @@ describe('su-dropdown-search', function () {
   ]
 
   beforeEach(function () {
+    spyOnOpen = sinon.spy()
+    spyOnClose = sinon.spy()
+    spyOnSearch = sinon.spy()
     riot.register('su-dropdown', TargetComponent)
     element = document.createElement('su-dropdown')
     component = riot.mount(element, {
@@ -82,9 +83,6 @@ describe('su-dropdown-search', function () {
   })
 
   afterEach(function () {
-    spyOnOpen.reset()
-    spyOnClose.reset()
-    spyOnSearch.reset()
     this.clock.restore()
     component.unmount()
     riot.unregister('su-dropdown')

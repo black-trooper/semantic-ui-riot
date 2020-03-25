@@ -4,8 +4,7 @@ import TargetComponent from '../../../dist/tags/modal/su-modal.js'
 
 describe('su-modal', function () {
   let element, component
-  const spyOnShow = sinon.spy()
-  const spyOnHide = sinon.spy()
+  let spyOnShow, spyOnHide
   init(riot)
 
   const mount = option => {
@@ -37,14 +36,14 @@ describe('su-modal', function () {
   // }
 
   beforeEach(function () {
+    spyOnShow = sinon.spy()
+    spyOnHide = sinon.spy()
     element = document.createElement('app')
     riot.register('su-modal', TargetComponent)
     this.clock = sinon.useFakeTimers()
   })
 
   afterEach(function () {
-    spyOnShow.reset()
-    spyOnHide.reset()
     this.clock.restore()
     riot.unregister('su-modal')
     riot.unregister('app')

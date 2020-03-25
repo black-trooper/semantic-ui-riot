@@ -4,8 +4,7 @@ import TargetComponent from '../../../dist/tags/dropdown/su-select.js'
 
 describe('su-select', function () {
   let element, component
-  let spyOnChange = sinon.spy()
-  let spyOnBlur = sinon.spy()
+  let spyOnChange, spyOnBlur
   init(riot)
 
   let items = [
@@ -25,6 +24,8 @@ describe('su-select', function () {
   ]
 
   beforeEach(function () {
+    spyOnChange = sinon.spy()
+    spyOnBlur = sinon.spy()
     riot.register('su-select', TargetComponent)
     const AppComponent = compile(`
       <app>
@@ -45,8 +46,6 @@ describe('su-select', function () {
   })
 
   afterEach(function () {
-    spyOnChange.reset()
-    spyOnBlur.reset()
     riot.unregister('su-select')
     riot.unregister('app')
   })

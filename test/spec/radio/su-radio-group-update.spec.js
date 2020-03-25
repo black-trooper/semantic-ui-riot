@@ -5,10 +5,11 @@ import RadioComponent from '../../../dist/tags/radio/su-radio.js'
 
 describe('su-radio-group-update', function () {
   let element, component
-  let spyOnChange = sinon.spy()
+  let spyOnChange
   init(riot)
 
   beforeEach(function () {
+    spyOnChange = sinon.spy()
     element = document.createElement('app')
     riot.register('su-radio-group', RadioGroupComponent)
     riot.register('su-radio', RadioComponent)
@@ -27,7 +28,6 @@ describe('su-radio-group-update', function () {
   })
 
   afterEach(function () {
-    spyOnChange.reset()
     component.unmount()
     riot.unregister('su-radio')
     riot.unregister('su-radio-group')

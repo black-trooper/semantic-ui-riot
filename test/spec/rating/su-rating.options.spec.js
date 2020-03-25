@@ -4,8 +4,7 @@ import TargetComponent from '../../../dist/tags/rating/su-rating.js'
 
 describe('su-rating-options', function () {
   let element, component
-  const spyOnClick = sinon.spy()
-  const spyOnChange = sinon.spy()
+  let spyOnClick, spyOnChange
   init(riot)
 
   const mount = opts => {
@@ -37,9 +36,12 @@ describe('su-rating-options', function () {
     component = riot.mount(element, option)[0]
   }
 
+  beforeEach(function () {
+    spyOnClick = sinon.spy()
+    spyOnChange = sinon.spy()
+  })
+
   afterEach(function () {
-    spyOnClick.reset()
-    spyOnChange.reset()
     riot.unregister('su-rating')
     riot.unregister('app')
   })

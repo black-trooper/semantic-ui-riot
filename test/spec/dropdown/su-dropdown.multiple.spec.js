@@ -4,10 +4,7 @@ import TargetComponent from '../../../dist/tags/dropdown/su-dropdown.js'
 
 describe('su-dropdown-multiple', function () {
   let element, component
-  let spyOnOpen = sinon.spy()
-  let spyOnClose = sinon.spy()
-  let spyOnSelect = sinon.spy()
-  let spyOnChange = sinon.spy()
+  let spyOnOpen, spyOnClose, spyOnSelect, spyOnChange
   init(riot)
 
   let items = [
@@ -37,6 +34,10 @@ describe('su-dropdown-multiple', function () {
   ]
 
   beforeEach(function () {
+    spyOnOpen = sinon.spy()
+    spyOnClose = sinon.spy()
+    spyOnSelect = sinon.spy()
+    spyOnChange = sinon.spy()
     element = document.createElement('app')
     riot.register('su-dropdown', TargetComponent)
     const AppComponent = compile(`
@@ -73,10 +74,6 @@ describe('su-dropdown-multiple', function () {
   })
 
   afterEach(function () {
-    spyOnOpen.reset()
-    spyOnClose.reset()
-    spyOnSelect.reset()
-    spyOnChange.reset()
     this.clock.restore()
     component.unmount()
     riot.unregister('su-dropdown')

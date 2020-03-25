@@ -4,11 +4,7 @@ import TargetComponent from '../../../dist/tags/dropdown/su-dropdown.js'
 
 describe('su-dropdown.option', function () {
   let element, component
-  let spyOnOpen = sinon.spy()
-  let spyOnClose = sinon.spy()
-  let spyOnSelect = sinon.spy()
-  let spyOnChange = sinon.spy()
-  let spyOnBlur = sinon.spy()
+  let spyOnOpen, spyOnClose, spyOnSelect, spyOnChange, spyOnBlur
   init(riot)
 
   const mount = opts => {
@@ -39,17 +35,17 @@ describe('su-dropdown.option', function () {
   ]
 
   beforeEach(function () {
+    spyOnOpen = sinon.spy()
+    spyOnClose = sinon.spy()
+    spyOnSelect = sinon.spy()
+    spyOnChange = sinon.spy()
+    spyOnBlur = sinon.spy()
     riot.register('su-dropdown', TargetComponent)
     element = document.createElement('su-dropdown')
     this.clock = sinon.useFakeTimers()
   })
 
   afterEach(function () {
-    spyOnOpen.reset()
-    spyOnClose.reset()
-    spyOnSelect.reset()
-    spyOnChange.reset()
-    spyOnBlur.reset()
     this.clock.restore()
     component.unmount()
     riot.unregister('su-dropdown')

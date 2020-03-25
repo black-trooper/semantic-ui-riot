@@ -4,10 +4,7 @@ import TargetComponent from '../../../dist/tags/datepicker/su-datepicker.js'
 
 describe('su-datepicker', function () {
   let element, component
-  let spyOnOpen = sinon.spy()
-  let spyOnClose = sinon.spy()
-  let spyOnClick = sinon.spy()
-  let spyOnChange = sinon.spy()
+  let spyOnOpen, spyOnClose, spyOnClick, spyOnChange
   init(riot)
 
   const mount = opts => {
@@ -55,11 +52,14 @@ describe('su-datepicker', function () {
     return ('0' + num).slice(-2);
   }
 
+  beforeEach(function () {
+    spyOnOpen = sinon.spy()
+    spyOnClose = sinon.spy()
+    spyOnClick = sinon.spy()
+    spyOnChange = sinon.spy()
+  })
+
   afterEach(function () {
-    spyOnOpen.reset()
-    spyOnClose.reset()
-    spyOnClick.reset()
-    spyOnChange.reset()
     riot.unregister('su-datepicker')
     riot.unregister('app')
   })

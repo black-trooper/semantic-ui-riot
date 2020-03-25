@@ -4,15 +4,9 @@ import TargetComponent from '../../../dist/tags/popup/su-popup.js'
 
 describe('su-popup', function () {
   let element, component
-  const spyOnMouseover = sinon.spy()
-  const spyOnMouseout = sinon.spy()
   init(riot)
 
-  const mount = opts => {
-    const option = Object.assign({
-      'onmouseover': spyOnMouseover,
-      'onmouseout': spyOnMouseout,
-    }, opts)
+  const mount = option => {
     element = document.createElement('app')
     riot.register('su-popup', TargetComponent)
     const AppComponent = compile(`
@@ -35,8 +29,6 @@ describe('su-popup', function () {
   }
 
   afterEach(function () {
-    spyOnMouseover.reset()
-    spyOnMouseout.reset()
     riot.unregister('su-popup')
     riot.unregister('app')
   })

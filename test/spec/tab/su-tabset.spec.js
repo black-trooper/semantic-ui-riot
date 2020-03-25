@@ -5,10 +5,11 @@ import TabsetComponent from '../../../dist/tags/tab/su-tabset.js'
 
 describe('su-tabset', function () {
   let element, component
-  let spyOnClick = sinon.spy()
+  let spyOnClick
   init(riot)
 
   beforeEach(function () {
+    spyOnClick = sinon.spy()
     element = document.createElement('app')
     const AppComponent = compile(`
       <app>
@@ -37,7 +38,6 @@ describe('su-tabset', function () {
   })
 
   afterEach(function () {
-    spyOnClick.reset()
     this.clock.restore()
     riot.unregister('su-tab')
     riot.unregister('su-tabset')

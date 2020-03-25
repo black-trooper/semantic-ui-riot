@@ -4,7 +4,7 @@ import TargetComponent from '../../../dist/tags/checkbox/su-checkbox.js'
 
 describe('su-checkbox-options', function () {
   let element, component
-  let spyOnClick = sinon.spy()
+  let spyOnClick
   init(riot)
 
   let mount = opts => {
@@ -15,12 +15,12 @@ describe('su-checkbox-options', function () {
   }
 
   beforeEach(function () {
+    spyOnClick = sinon.spy()
     riot.register('su-checkbox', TargetComponent)
     element = document.createElement('su-checkbox')
   })
 
   afterEach(function () {
-    spyOnClick.reset()
     component.unmount()
     riot.unregister('su-checkbox')
   })

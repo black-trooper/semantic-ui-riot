@@ -69,7 +69,7 @@
     "karma-webpack": "^4.0.2",
     "riot": "4.6.6",
     "mocha": "^4.0.1",
-    "sinon": "^2.1.0",
+    "sinon": "^9.0.1",
     "sinon-chai": "^2.13.0",
     "uuid": "^3.3.3",
     "webpack": "^4.39.1",

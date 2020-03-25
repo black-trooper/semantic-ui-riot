@@ -5,10 +5,11 @@ import AccordionComponent from '../../../dist/tags/accordion/su-accordion.js'
 
 describe('su-accordionset', function () {
   let element, component
-  let spyOnClick = sinon.spy()
+  let spyOnClick
   init(riot)
 
   beforeEach(function () {
+    spyOnClick = sinon.spy()
     element = document.createElement('app')
     riot.register('su-accordionset', AccordionsetComponent)
     riot.register('su-accordion', AccordionComponent)
@@ -27,7 +28,6 @@ describe('su-accordionset', function () {
   })
 
   afterEach(function () {
-    spyOnClick.reset()
     riot.unregister('su-accordion')
     riot.unregister('su-accordionset')
     riot.unregister('app')

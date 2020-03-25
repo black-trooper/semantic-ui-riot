@@ -4,15 +4,9 @@ import TargetComponent from '../../../dist/tags/progress/su-progress.js'
 
 describe('su-progress', function () {
   let element, component
-  const spyOnMouseover = sinon.spy()
-  const spyOnMouseout = sinon.spy()
   init(riot)
 
-  const mount = opts => {
-    const option = Object.assign({
-      'onmouseover': spyOnMouseover,
-      'onmouseout': spyOnMouseout,
-    }, opts)
+  const mount = option => {
     element = document.createElement('app')
     riot.register('su-progress', TargetComponent)
     const AppComponent = compile(`
@@ -30,8 +24,6 @@ describe('su-progress', function () {
   }
 
   afterEach(function () {
-    spyOnMouseover.reset()
-    spyOnMouseout.reset()
     riot.unregister('su-progress')
     riot.unregister('app')
   })

@@ -5,10 +5,11 @@ import CheckboxComponent from '../../../dist/tags/checkbox/su-checkbox.js'
 
 describe('su-checkbox-group', function () {
   let element, component
-  let spyOnChange = sinon.spy()
+  let spyOnChange
   init(riot)
 
   beforeEach(function () {
+    spyOnChange = sinon.spy()
     element = document.createElement('app')
     riot.register('su-checkbox-group', CheckboxGroupComponent)
     riot.register('su-checkbox', CheckboxComponent)
@@ -36,7 +37,6 @@ describe('su-checkbox-group', function () {
   })
 
   afterEach(function () {
-    spyOnChange.reset()
     component.unmount()
     riot.unregister('su-checkbox')
     riot.unregister('su-checkbox-group')

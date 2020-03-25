@@ -4,10 +4,11 @@ import TargetComponent from '../../../dist/tags/radio/su-radio.js'
 
 describe('su-radio', function () {
   let element, component
-  let spyOnClick = sinon.spy()
+  let spyOnClick
   init(riot)
 
   beforeEach(function () {
+    spyOnClick = sinon.spy()
     riot.register('su-radio', TargetComponent)
     element = document.createElement('su-radio')
     component = riot.mount(element, {
@@ -16,7 +17,6 @@ describe('su-radio', function () {
   })
 
   afterEach(function () {
-    spyOnClick.reset()
     component.unmount()
     riot.unregister('su-radio')
   })
