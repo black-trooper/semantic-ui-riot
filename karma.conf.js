@@ -23,7 +23,12 @@ module.exports = function (config) {
             test: /\.js$/,
             enforce: 'post',
             include: path.resolve('dist/tags/'),
-            use: ['istanbul-instrumenter-loader']
+            use: {
+              loader: 'istanbul-instrumenter-loader',
+              options: {
+                esModules: true
+              }
+            }
           },
           {
             test: /\.js$/,
