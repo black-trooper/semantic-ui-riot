@@ -17,7 +17,7 @@ var suTabHeader = {
   },
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
-    return template('<slot expr92="expr92"></slot>', [{
+    return template('<slot expr56="expr56"></slot>', [{
       'expressions': [{
         'type': expressionTypes.ATTRIBUTE,
         'name': 'class',
@@ -37,8 +37,8 @@ var suTabHeader = {
       'type': bindingTypes.SLOT,
       'attributes': [],
       'name': 'default',
-      'redundantAttribute': 'expr92',
-      'selector': '[expr92]'
+      'redundantAttribute': 'expr56',
+      'selector': '[expr56]'
     }]);
   },
 

@@ -125,7 +125,7 @@ var suSelect = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<select expr49="expr49"><option expr50="expr50"></option><optgroup expr51="expr51"></optgroup></select><i class="dropdown icon"></i>',
+      '<select expr24="expr24"><option expr25="expr25"></option><optgroup expr26="expr26"></optgroup></select><i class="dropdown icon"></i>',
       [{
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -164,8 +164,8 @@ var suSelect = {
           }
         }]
       }, {
-        'redundantAttribute': 'expr49',
-        'selector': '[expr49]',
+        'redundantAttribute': 'expr24',
+        'selector': '[expr24]',
 
         'expressions': [{
           'type': expressionTypes.EVENT,
@@ -215,8 +215,8 @@ var suSelect = {
           }]
         }]),
 
-        'redundantAttribute': 'expr50',
-        'selector': '[expr50]',
+        'redundantAttribute': 'expr25',
+        'selector': '[expr25]',
         'itemName': 'item',
         'indexName': null,
 
@@ -231,7 +231,7 @@ var suSelect = {
           return scope.item.items;
         },
 
-        'template': template('<option expr52="expr52"></option>', [{
+        'template': template('<option expr27="expr27"></option>', [{
           'expressions': [{
             'type': expressionTypes.ATTRIBUTE,
             'name': 'label',
@@ -263,8 +263,8 @@ var suSelect = {
             }]
           }]),
 
-          'redundantAttribute': 'expr52',
-          'selector': '[expr52]',
+          'redundantAttribute': 'expr27',
+          'selector': '[expr27]',
           'itemName': 'child',
           'indexName': null,
 
@@ -273,8 +273,8 @@ var suSelect = {
           }
         }]),
 
-        'redundantAttribute': 'expr51',
-        'selector': '[expr51]',
+        'redundantAttribute': 'expr26',
+        'selector': '[expr26]',
         'itemName': 'item',
         'indexName': null,
 

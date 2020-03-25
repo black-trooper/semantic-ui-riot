@@ -52,10 +52,10 @@ var suPopup = {
 
   'template': function(template, expressionTypes, bindingTypes, getComponent) {
     return template(
-      '<div expr64="expr64"><div expr65="expr65" class="header"></div><div class="content"></div></div><slot expr66="expr66"></slot>',
+      '<div expr42="expr42"><div expr43="expr43" class="header"></div><div class="content"></div></div><slot expr44="expr44"></slot>',
       [{
-        'redundantAttribute': 'expr64',
-        'selector': '[expr64]',
+        'redundantAttribute': 'expr42',
+        'selector': '[expr42]',
 
         'expressions': [{
           'type': expressionTypes.ATTRIBUTE,
@@ -102,8 +102,8 @@ var suPopup = {
           return scope.props.dataTitle;
         },
 
-        'redundantAttribute': 'expr65',
-        'selector': '[expr65]',
+        'redundantAttribute': 'expr43',
+        'selector': '[expr43]',
 
         'template': template(' ', [{
           'expressions': [{
@@ -126,8 +126,8 @@ var suPopup = {
         'type': bindingTypes.SLOT,
         'attributes': [],
         'name': 'default',
-        'redundantAttribute': 'expr66',
-        'selector': '[expr66]'
+        'redundantAttribute': 'expr44',
+        'selector': '[expr44]'
       }]
     );
   },
