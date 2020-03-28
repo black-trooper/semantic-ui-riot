@@ -58,6 +58,12 @@ describe('su-checkbox-group-update', function () {
     expect(component.$$('su-checkbox')[0].getAttribute("checked")).to.be.not.ok
     expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.ok
     expect(spyOnChange).to.have.been.calledTwice
+
+    component.value = "1,2"
+    component.update()
+    expect(component.$$('su-checkbox')[0].getAttribute("checked")).to.be.ok
+    expect(component.$$('su-checkbox')[1].getAttribute("checked")).to.be.ok
+    expect(spyOnChange).to.have.been.callCount(3)
   })
 
   it('click checkbox', function () {

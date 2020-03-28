@@ -39,7 +39,7 @@
       this.obs.on(`${this.su_id}-checkbox-click`, () => {
         checkboxes = this.$$('su-checkbox')
         this.update({
-          value: checkboxes.filter(_checkbox => _checkbox.checked).map(_checkbox => {
+          value: checkboxes.filter(_checkbox => _checkbox.getAttribute('checked')).map(_checkbox => {
             return _checkbox.getAttribute('value')
           })
         })

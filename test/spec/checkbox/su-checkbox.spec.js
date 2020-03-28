@@ -55,38 +55,6 @@ describe('su-checkbox', function () {
     expect(spyOnClick).to.have.been.not.called
   })
 
-  it('update props', function () {
-    expect(component.state.checked).to.equal(false)
-    expect(element.getAttribute("checked")).to.be.not.ok
-
-    element.setAttribute('checked', 'true')
-    component.update()
-    expect(component.state.checked).to.equal(true)
-    expect(element.getAttribute("checked")).to.be.ok
-
-    element.setAttribute('checked', 'false')
-    component.update()
-    expect(component.state.checked).to.equal(false)
-    expect(element.getAttribute("checked")).to.be.not.ok
-
-    element.setAttribute('checked', true)
-    component.update()
-    expect(component.state.checked).to.equal(true)
-    expect(element.getAttribute("checked")).to.be.ok
-
-    element.setAttribute('checked', false)
-    component.update()
-    expect(component.state.checked).to.equal(false)
-    expect(element.getAttribute("checked")).to.be.not.ok
-
-    element.removeAttribute('checked')
-    component.update()
-    expect(component.state.checked).to.equal(false)
-    expect(element.getAttribute("checked")).to.be.not.ok
-
-    expect(spyOnClick).to.have.been.not.called
-  })
-
   it('reset value', function () {
     expect(element.getAttribute("checked")).to.be.not.ok
     expect(element.getAttribute("changed")).to.be.not.ok

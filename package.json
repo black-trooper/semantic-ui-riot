@@ -41,15 +41,15 @@
     "q": "^1.5.1"
   },
   "peerDependencies": {
-    "riot": ">=4.0.0 <4.8.3",
+    "riot": ">=4.11.0",
     "@riotjs/observable": "^4.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
-    "@riotjs/cli": "^4.0.2",
-    "@riotjs/compiler": "4.5.2",
+    "@riotjs/cli": "^4.0.3",
+    "@riotjs/compiler": "4.8.2",
     "@riotjs/observable": "^4.0.4",
-    "@riotjs/webpack-loader": "^4.0.1",
+    "@riotjs/webpack-loader": "^4.0.3",
     "babel-loader": "^8.1.0",
     "chai": "^4.1.2",
     "eslint": "^6.8.0",
@@ -66,9 +66,10 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^4.0.2",
     "mocha": "^7.1.1",
-    "riot": "4.8.2",
+    "riot": "^4.11.0",
     "sinon": "^9.0.1",
     "sinon-chai": "^3.5.0",
+    "uuid": "^7.0.2",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
     "webpack-date-fns-externals": "^1.0.2"

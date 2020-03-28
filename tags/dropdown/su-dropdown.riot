@@ -449,7 +449,7 @@
     }
 
     function prepareClasses(tag) {
-      const classes = tag.props.class.split(' ').filter(propClass => !reservedClasses.includes(propClass))
+      const classes = tag.props.class ? tag.props.class.split(' ').filter(propClass => !reservedClasses.includes(propClass)) : []
       if (tag.props.search) {
         classes.push('search')
       }

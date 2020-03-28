@@ -35,8 +35,8 @@
     }
 
     function onBeforeUpdate(props, state) {
-      if (this.lastValue != props.value) {
-        this.lastValue = props.value
+      if (this.state.lastValue != props.value) {
+        this.state.lastValue = props.value
         this.state.value = props.value
       }
       this.readOnly = this.root.classList.contains('read-only')
