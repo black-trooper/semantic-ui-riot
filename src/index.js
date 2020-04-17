@@ -27,7 +27,7 @@ import SuTh from '../tags/table/su-th.riot'
 import SuToast from '../tags/toast/su-toast.riot'
 import SuToastItem from '../tags/toast/su-toast-item.riot'
 import SuValidationError from '../tags/validation-error/su-validation-error.riot'
-import uuid from 'uuid/v1'
+import { v1 as uuid } from 'uuid'
 
 riot.register('su-accordion', SuAccordion)
 riot.register('su-accordionset', SuAccordionset)

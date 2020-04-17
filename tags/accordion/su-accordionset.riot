@@ -59,7 +59,7 @@
     }
 
     function onMounted() {
-      this.accordions = this.$$(':not(su-accordionset) su-accordion')
+      this.accordions = this.$$(':scope > su-accordion, :scope > .item > su-accordion')
 
       let defaultActive = false
       this.accordions.forEach(accordion => {
@@ -69,7 +69,7 @@
           this.obs.trigger(`${accordion.id}-toggle-active`, true)
         }
       })
-      if (!defaultActive) {
+      if (!defaultActive && this.accordions.length) {
         this.obs.trigger(`${this.accordions[0].id}-toggle-active`, true)
       }
 
