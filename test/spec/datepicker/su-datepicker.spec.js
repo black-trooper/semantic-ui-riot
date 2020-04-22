@@ -422,6 +422,76 @@ describe('su-datepicker', function () {
     $('su-datepicker .ui.dropdown').hasClass('upward').should.equal(false)
   })
 
+  it('datetime option', function () {
+    $('body').append('<su-datepicker />')
+    mount({
+      datetime: true,
+      currentDate: new Date(2017, 11, 1),
+    })
+
+    $('su-datepicker .dp-day .button').length.should.equal(7 * 6)
+    $('su-datepicker .dp-month').length.should.equal(0)
+    $('su-datepicker .dp-time .button').length.should.equal(48)
+    $('su-datepicker .dp-time .button:first').text().trim().should.equal('00:00')
+    $('su-datepicker .dp-time .button.primary').length.should.equal(0)
+    expect(tag.milliseconds).to.be.undefined
+
+    fireEvent($('su-datepicker .dp-day .button:eq(7)')[0], 'click')
+    tag.valueAsDate.getTime().should.equal(new Date(2017, 11, 3, 0, 0).getTime())
+    $('su-datepicker .dp-time .button.primary').length.should.equal(0)
+    expect(tag.milliseconds).to.be.undefined
+
+    fireEvent($('su-datepicker .dp-time .button:eq(1)')[0], 'click')
+    tag.valueAsDate.getTime().should.equal(new Date(2017, 11, 3, 0, 30).getTime())
+    $('su-datepicker .dp-time .button.primary').text().trim().should.equal('00:30')
+
+    fireEvent($('su-datepicker .dp-day .button:eq(8)')[0], 'click')
+    tag.valueAsDate.getTime().should.equal(new Date(2017, 11, 4, 0, 30).getTime())
+  })
+
+  it('datetime option before time click', function () {
+    $('body').append('<su-datepicker />')
+    mount({
+      datetime: true,
+      currentDate: new Date(2017, 11, 1),
+    })
+
+    $('su-datepicker .dp-day .button').length.should.equal(7 * 6)
+    $('su-datepicker .dp-month').length.should.equal(0)
+    $('su-datepicker .dp-time .button').length.should.equal(48)
+    $('su-datepicker .dp-time .button:first').text().trim().should.equal('00:00')
+    $('su-datepicker .dp-time .button.primary').length.should.equal(0)
+    expect(tag.milliseconds).to.be.undefined
+
+    fireEvent($('su-datepicker .dp-time .button:eq(1)')[0], 'click')
+    expect(tag.valueAsDate).to.be.undefined
+
+    fireEvent($('su-datepicker .dp-day .button:eq(7)')[0], 'click')
+    tag.valueAsDate.getTime().should.equal(new Date(2017, 11, 3, 0, 30).getTime())
+    $('su-datepicker .dp-time .button.primary').text().trim().should.equal('00:30')
+
+    fireEvent($('su-datepicker .dp-day .button:eq(8)')[0], 'click')
+    tag.valueAsDate.getTime().should.equal(new Date(2017, 11, 4, 0, 30).getTime())
+  })
+
+  it('datetime option readonly', function () {
+    $('body').append('<su-datepicker class="read-only" />')
+    mount({
+      datetime: true,
+    })
+
+    $('su-datepicker .dp-day .button').length.should.equal(7 * 6)
+    $('su-datepicker .dp-month').length.should.equal(0)
+    $('su-datepicker .dp-time .button').length.should.equal(48)
+    $('su-datepicker .dp-time .button:first').text().trim().should.equal('00:00')
+
+    fireEvent($('su-datepicker .dp-day .button:eq(7)')[0], 'click')
+    expect(tag.valueAsDate).to.be.undefined
+
+    fireEvent($('su-datepicker .dp-time .button:eq(1)')[0], 'click')
+    expect(tag.valueAsDate).to.be.undefined
+  })
+
   it('reset value', function () {
     $('body').append('<su-datepicker />')
     mount()

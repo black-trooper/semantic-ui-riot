@@ -8,7 +8,7 @@
     </div>
     <div class="menu transition { transitionStatus }" onmousedown="{ mousedown }" onmouseup="{ mouseup }"
       onblur="{ blur }" tabindex="{ getTabindex() }">
-      <div class="ui center aligned segment date-picker">
+      <div class="ui center aligned segment date-picker { datetime-picker : opts.datetime }">
         <!-- header -->
         <div class="ui buttons dp-navigation">
           <button class="icon tiny ui button { disabled: isDisabled() } prev" onclick="{ clickPrevious }" type="button">
@@ -26,35 +26,53 @@
         </div>
         <!-- date -->
         <div if="{ !yearSelecting && !monthSelecting }">
-          <!-- week -->
-          <div class="ui seven column padded grid dp-weekday">
-            <div each="{week in getWeekNames()}" class="column">{ week }</div>
-          </div>
-          <div class="ui divider"></div>
-          <!-- day -->
-          <div class="ui seven column padded grid dp-day">
-            <div each="{ day in days}" class="column">
-              <button
-                class="fluid ui button { today: isToday(day) && ! isActive(day) } { primary: isActive(day) } { non-active: !isActive(day) } { disabled: day.getMonth() != getCurrentMonth() || isDisabled() }"
-                onclick="{ clickDay }"
-                type="button"
-              >
-                {day.getDate()}
-              </button>
+          <div class="ui grid">
+            <div class="{ opts.datetime ? 'ten' : 'sixteen' } wide column">
+              <!-- week -->
+              <div class="ui seven column padded grid dp-weekday">
+                <div each="{week in getWeekNames()}" class="column">{ week }</div>
+              </div>
+              <div class="ui divider"></div>
+              <!-- day -->
+              <div class="ui seven column padded grid dp-day">
+                <div each="{ day in days}" class="column">
+                  <button
+                    class="fluid ui button { today: isToday(day) && ! isActive(day) } { primary: isActive(day) } { non-active: !isActive(day) } { disabled: day.getMonth() != getCurrentMonth() || isDisabled() }"
+                    onclick="{ clickDay }"
+                    type="button"
+                  >
+                    {day.getDate()}
+                  </button>
+                </div>
+              </div>
+              <!-- footer -->
+              <div class="ui divider"></div>
+              <div class="ui two column grid">
+                <div class="column dp-clear">
+                  <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{ clickClear }" type="button">
+                    <i class="times icon"></i>
+                  </button>
+                </div>
+                <div class="column dp-today">
+                  <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{ clickToday }" type="button">
+                    <i class="calendar check icon"></i>
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
-          <!-- footer -->
-          <div class="ui divider"></div>
-          <div class="ui two column grid">
-            <div class="column dp-clear">
-              <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{ clickClear }" type="button">
-                <i class="times icon"></i>
-              </button>
-            </div>
-            <div class="column dp-today">
-              <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{ clickToday }" type="button">
-                <i class="calendar check icon"></i>
-              </button>
+            <!-- time -->
+            <div class="six wide column" if="{ opts.datetime }">
+              <div class="ui two column padded grid dp-time">
+                <div class="column" each="{ hour, index in hours }">
+                  <button
+                    class="fluid ui  button { nearly-time: isNearlyTime(index) && ! isActiveTime(index) } { primary: isActiveTime(index)} { disabled: isDisabled() }"
+                    onclick="{ clickHour }"
+                    type="button"
+                  >
+                    { hour }
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -107,8 +125,24 @@
       width: 20rem;
     }
 
+    .datetime-picker {
+      width: 28rem;
+    }
+
     .dp-weekday {
       color: rgba(0, 0, 0, 0.6);
+    }
+
+    .dp-time {
+      height: 25rem;
+      overflow-y: auto;
+      padding-right: 0.2rem;
+    }
+
+    .dp-time .ui.button {
+      padding: 0;
+      height: 2rem;
+      font-weight: normal;
     }
 
     .dp-day .ui.button,
@@ -118,6 +152,7 @@
       font-weight: normal;
     }
 
+    .ui.button.nearly-time,
     .dp-day .ui.button.today {
       background: transparent none;
       color: rgba(0, 0, 0, 0.6);
@@ -129,23 +164,16 @@
       box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.15) inset;
     }
 
-    .dp-today .ui.button,
-    .dp-clear .ui.button,
-    .dp-navigation .ui.button,
-    .dp-month .ui.button,
-    .dp-day .ui.button.non-active {
+    .date-picker .ui.button:not(.primary) {
       background-color: transparent;
     }
 
-    .dp-today .ui.button:hover,
-    .dp-clear .ui.button:hover,
-    .dp-navigation .ui.button:hover,
-    .dp-month .ui.button:hover,
-    .dp-day .ui.button.non-active:hover {
+    .date-picker .ui.button:not(.primary):hover {
       background-color: #e0e1e2;
     }
 
-    .dp-day .ui.button.disabled {
+    .dp-day .ui.button.disabled,
+    .dp-time .ui.button.disabled {
       pointer-events: all !important;
     }
 
@@ -165,13 +193,21 @@
   </style>
 
   <script>
-    import addDays from 'date-fns/add_days'
-    import addMonths from 'date-fns/add_months'
-    import format from 'date-fns/format'
-    import isSameDay from 'date-fns/is_same_day'
-    import isToday from 'date-fns/is_today'
-    import parse from 'date-fns/parse'
-    import startOfMonth from 'date-fns/start_of_month'
+    import {
+      addDays,
+      addMilliseconds,
+      addMinutes,
+      addMonths,
+      differenceInMilliseconds,
+      format,
+      isSameDay,
+      isSameHour,
+      isSameMinute,
+      isToday,
+      parse,
+      startOfDay,
+      startOfMonth,
+    } from 'date-fns'
 
     const tag = this
     // ===================================================================================
@@ -183,6 +219,7 @@
     tag.value = null
     tag.valueAsDate = null
     tag.days = []
+    tag.hours = range(48).map(index => format(addMinutes(new Date(2020, 3, 22), index * 30), 'HH:mm'))
 
     // ===================================================================================
     //                                                                         Tag Methods
@@ -201,6 +238,7 @@
     tag.clickNext = clickNext
     tag.clickClear = clickClear
     tag.clickToday = clickToday
+    tag.clickHour = clickHour
     tag.toggle = toggle
     tag.mousedown = mousedown
     tag.mouseup = mouseup
@@ -210,7 +248,9 @@
     tag.getCurrentMonth = getCurrentMonth
     tag.getWeekNames = getWeekNames
     tag.isActive = isActive
+    tag.isActiveTime = isActiveTime
     tag.isToday = isToday
+    tag.isNearlyTime = isNearlyTime
     tag.getTabindex = getTabindex
     tag.isReadOnly = isReadOnly
     tag.isDisabled = isDisabled
@@ -263,14 +303,14 @@
 
     function onUpdate() {
       let changed = false
-      if (!isEqualDay(lastValue, tag.value)) {
+      if (!isEqualDatetime(lastValue, tag.value)) {
         tag.valueAsDate = copyDate(tag.value)
         lastValue = copyDate(tag.value)
         changed = true
-      } else if (!isEqualDay(lastValue, tag.valueAsDate)) {
+      } else if (!isEqualDatetime(lastValue, tag.valueAsDate)) {
         lastValue = copyDate(tag.valueAsDate)
         changed = true
-      } else if (!isEqualDay(lastOptsValue, opts.riotValue)) {
+      } else if (!isEqualDatetime(lastOptsValue, opts.riotValue)) {
         tag.valueAsDate = copyDate(opts.riotValue)
         lastOptsValue = copyDate(opts.riotValue)
         lastValue = copyDate(opts.riotValue)
@@ -284,11 +324,11 @@
       if (changed && tag.valueAsDate) {
         tag.currentDate = copyDate(tag.valueAsDate)
       }
-      if (!isEqualDay(lastOptsCurrentDate, opts.currentDate)) {
+      if (!isEqualDatetime(lastOptsCurrentDate, opts.currentDate)) {
         tag.currentDate = copyDate(opts.currentDate)
         lastOptsCurrentDate = copyDate(opts.currentDate)
       }
-      if (!isEqualDay(lastCurrentDate, tag.currentDate)) {
+      if (!isEqualDatetime(lastCurrentDate, tag.currentDate)) {
         lastCurrentDate = copyDate(tag.currentDate)
         generate()
       }
@@ -300,7 +340,7 @@
     }
 
     function changed() {
-      return !isEqualDay(tag.valueAsDate, tag.defaultValue)
+      return !isEqualDatetime(tag.valueAsDate, tag.defaultValue)
     }
 
     function selectMonth() {
@@ -318,7 +358,12 @@
       if (tag.isReadOnly() || tag.isDisabled()) {
         return
       }
-      setDate(event.item.day)
+
+      let date = event.item.day
+      if (tag.milliseconds) {
+        date = addMilliseconds(startOfDay(date), tag.milliseconds)
+      }
+      setDate(date)
       tag.trigger('click', tag.valueAsDate)
     }
 
@@ -351,13 +396,29 @@
     }
 
     function clickClear() {
+      tag.milliseconds = undefined
       setDate(null)
       tag.trigger('clear', tag.valueAsDate)
     }
 
     function clickToday() {
-      setDate(new Date())
+      const today = new Date()
+      tag.milliseconds = differenceInMilliseconds(today, startOfDay(today))
+      setDate(today)
       tag.trigger('today', tag.valueAsDate)
+    }
+
+    function clickHour(event) {
+      if (tag.isReadOnly() || tag.isDisabled()) {
+        return
+      }
+
+      tag.milliseconds = getMilliseconds(event.item.index)
+      if (tag.valueAsDate) {
+        const date = addMilliseconds(startOfDay(tag.valueAsDate), tag.milliseconds)
+        setDate(date)
+      }
+      tag.trigger('click', tag.valueAsDate)
     }
 
     // -----------------------------------------------------
@@ -443,7 +504,7 @@
     function setDate(date) {
       tag.valueAsDate = date
       setValueFromValueAsDate()
-      if (tag.refs.input) {
+      if (tag.refs.input && !opts.datetime) {
         tag.refs.input.value = tag.value
         close()
       }
@@ -454,6 +515,10 @@
       tag.value = tag.valueAsDate ? format(tag.valueAsDate, getPattern(), { locale: getLocale() }) : null
     }
 
+    function isEqualDatetime(d1, d2) {
+      return isEqualDay(d1, d2) && isEqualTime(d1, d2)
+    }
+
     function isEqualDay(d1, d2) {
       if (d1 == d2) {
         return true
@@ -462,6 +527,16 @@
         return false
       }
       return isSameDay(d1, d2)
+    }
+
+    function isEqualTime(d1, d2) {
+      if (d1 == d2) {
+        return true
+      }
+      if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
+        return false
+      }
+      return isSameHour(d1, d2) && isSameMinute(d1, d2)
     }
 
     function copyDate(date) {
@@ -517,6 +592,22 @@
       return isEqualDay(tag.valueAsDate, date)
     }
 
+    function isActiveTime(index) {
+      return isEqualTime(tag.milliseconds, getMilliseconds(index))
+    }
+
+    function isNearlyTime(index) {
+      const target = getMilliseconds(index)
+      if (typeof tag.milliseconds === 'undefined' || tag.milliseconds > target) {
+        return false
+      }
+      return target - tag.milliseconds < 30 * 60 * 1000
+    }
+
+    function getMilliseconds(index) {
+      return index * 30 * 60 * 1000
+    }
+
     function getTabindex() {
       if (!opts.popup) {
         return false
@@ -541,7 +632,7 @@
       if (tag.defaultOptions && tag.defaultOptions.pattern) {
         return tag.defaultOptions.pattern
       }
-      return 'YYYY-MM-DD'
+      return opts.datetime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
     }
 
     function getLocale() {
