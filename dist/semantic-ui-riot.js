@@ -10960,6 +10960,7 @@ tag.defaultValue = null;
 tag.transitionStatus = opts.popup ? 'hidden' : 'visible';
 tag.value = null;
 tag.valueAsDate = null;
+tag.milliseconds = null;
 tag.days = [];
 tag.hours = range(48).map(function (index) {
   return (0, _dateFns.format)((0, _dateFns.addMinutes)(new Date(2020, 3, 22), index * 30), 'HH:mm');
@@ -11258,7 +11259,13 @@ function setDate(date) {
 }
 
 function setValueFromValueAsDate() {
-  tag.value = tag.valueAsDate ? (0, _dateFns.format)(tag.valueAsDate, getPattern(), { locale: getLocale() }) : null;
+  if (tag.valueAsDate) {
+    tag.value = (0, _dateFns.format)(tag.valueAsDate, getPattern(), { locale: getLocale() });
+    tag.milliseconds = (0, _dateFns.differenceInMilliseconds)(tag.valueAsDate, (0, _dateFns.startOfDay)(tag.valueAsDate));
+  } else {
+    tag.value = null;
+    tag.milliseconds = null;
+  }
 }
 
 function isEqualDatetime(d1, d2) {

@@ -22,6 +22,7 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
     tag.transitionStatus = opts.popup ? 'hidden' : 'visible'
     tag.value = null
     tag.valueAsDate = null
+    tag.milliseconds = null
     tag.days = []
     tag.hours = range(48).map(index => format(addMinutes(new Date(2020, 3, 22), index * 30), 'HH:mm'))
 
@@ -304,7 +305,13 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
     }
 
     function setValueFromValueAsDate() {
-      tag.value = tag.valueAsDate ? format(tag.valueAsDate, getPattern(), { locale: getLocale() }) : null
+      if (tag.valueAsDate) {
+        tag.value = format(tag.valueAsDate, getPattern(), { locale: getLocale() })
+        tag.milliseconds = differenceInMilliseconds(tag.valueAsDate, startOfDay(tag.valueAsDate))
+      } else {
+        tag.value = null
+        tag.milliseconds = null
+      }
     }
 
     function isEqualDatetime(d1, d2) {
