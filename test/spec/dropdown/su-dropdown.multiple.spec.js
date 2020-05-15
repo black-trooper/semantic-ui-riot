@@ -107,8 +107,8 @@ describe('su-dropdown-multiple', function () {
     $('su-dropdown > .label:first .delete').click()
     $('su-dropdown > .label:first').text().trim().should.equal(items[2].label)
     tag.value.should.deep.equal(['css'])
-    spyOnSelect.should.have.been.calledTwice
-    spyOnChange.should.have.been.calledTwice
+    spyOnSelect.should.have.been.calledThrice
+    spyOnChange.should.have.been.calledThrice
 
     this.clock.tick(310)
     $('su-dropdown .menu').is(':visible').should.equal(true)

@@ -235,9 +235,7 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
     function unselect(event) {
       event.stopPropagation()
       event.item.item.selected = false
-      tag.value = opts.items.filter(item => item.selected).map(item => item.value)
-      tag.selectedFlg = opts.items.some(item => item.selected)
-      parentUpdate()
+      selectMultiTarget()
     }
 
     function open() {

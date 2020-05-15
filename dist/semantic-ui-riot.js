@@ -11697,15 +11697,7 @@ function input(event) {
 function unselect(event) {
   event.stopPropagation();
   event.item.item.selected = false;
-  tag.value = opts.items.filter(function (item) {
-    return item.selected;
-  }).map(function (item) {
-    return item.value;
-  });
-  tag.selectedFlg = opts.items.some(function (item) {
-    return item.selected;
-  });
-  parentUpdate();
+  selectMultiTarget();
 }
 
 function open() {
