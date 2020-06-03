@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.1.3] - 2020-06-03
+
+### Fixed
+
+- Fix the problem where the change of input field value is not reflected
+
 ## [1.1.2] - 2020-05-15
 
 ### Fixed
@@ -297,8 +303,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Add su-rating
 
-[unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.2...HEAD
-[1.1.2]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.2...v1.1.2
+[unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.3...HEAD
+[1.1.3]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.2...v1.1.3
+[1.1.2]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.1...v1.1.2
 [1.1.1]: https://githu1.1om/black-trooper/semantic-ui-riot/compare/v1.0.0...v1.1.1
 [1.0.0]: https://github.0om/black-trooper/semantic-ui-riot/compare/v0.24.1...v1.0.0
 [0.24.1]: https://github.com/black-trooper/semantic-ui-riot/compare/v0.24.0...v0.24.1
