@@ -349,6 +349,19 @@ describe('su-datepicker', function () {
     $('su-datepicker .dp-navigation .year').text().trim().should.equal('2018')
   })
 
+  it('popup datepicker update input value', function () {
+    $('body').append('<su-datepicker />')
+    mount({
+      popup: true,
+      pattern: 'YYYY/MM/DD',
+      value: '2017/12/01',
+    })
+    $('su-datepicker input')[0].value = '2017/12/02'
+    fireEvent($('su-datepicker input')[0], 'change')
+    tag.value.should.equal('2017/12/02')
+    tag.refs.input.value.should.equal('2017/12/02')
+  })
+
   it('read-only option', function () {
     $('body').append('<su-datepicker class="read-only" />')
     mount()

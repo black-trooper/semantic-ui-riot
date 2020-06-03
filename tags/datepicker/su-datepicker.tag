@@ -1,7 +1,7 @@
 <su-datepicker>
   <div class="ui { dropdown:opts.popup } { upward: upward }">
     <div class="ui action input { disabled: isDisabled() }" if="{ opts.popup }">
-      <input type="text" placeholder="{ opts.placeholder }" ref="input" tabindex="{ getTabindex() }" readonly="{ isReadOnly() }" />
+      <input type="text" placeholder="{ opts.placeholder }" ref="input" onchange="{ changeInput }" tabindex="{ getTabindex() }" readonly="{ isReadOnly() }" />
       <button class="ui icon button { disabled: isDisabled() }" onclick="{ toggle }" onblur="{ blur }" type="button">
         <i class="calendar icon"></i>
       </button>
@@ -244,6 +244,7 @@
     tag.mousedown = mousedown
     tag.mouseup = mouseup
     tag.blur = blur
+    tag.changeInput = changeInput
     tag.getCurrentYear = getCurrentYear
     tag.getCurrentMonthView = getCurrentMonthView
     tag.getCurrentMonth = getCurrentMonth
@@ -452,6 +453,11 @@
       if (opts.popup && !itemActivated) {
         close()
       }
+    }
+
+    function changeInput() {
+      tag.value = tag.refs.input.value
+      tag.update()
     }
 
     function generate() {
