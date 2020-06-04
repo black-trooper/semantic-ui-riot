@@ -360,6 +360,25 @@ describe('su-datepicker', function () {
     fireEvent($('su-datepicker input')[0], 'change')
     tag.value.should.equal('2017/12/02')
     tag.refs.input.value.should.equal('2017/12/02')
+    spyOnChange.should.have.been.calledOnce
+
+    $('su-datepicker input')[0].value = '2017-12-00'
+    fireEvent($('su-datepicker input')[0], 'change')
+    tag.value.should.equal('2017/11/30')
+    tag.refs.input.value.should.equal('2017/11/30')
+    spyOnChange.should.have.been.calledTwice
+
+    $('su-datepicker input')[0].value = '2017/11/00'
+    fireEvent($('su-datepicker input')[0], 'change')
+    tag.value.should.equal('2017/10/31')
+    tag.refs.input.value.should.equal('2017/10/31')
+    spyOnChange.should.have.been.callCount(3)
+
+    $('su-datepicker input')[0].value = '2017-12-aa'
+    fireEvent($('su-datepicker input')[0], 'change')
+    tag.value.should.equal('2017/10/31')
+    tag.refs.input.value.should.equal('2017/10/31')
+    spyOnChange.should.have.been.callCount(3)
   })
 
   it('read-only option', function () {

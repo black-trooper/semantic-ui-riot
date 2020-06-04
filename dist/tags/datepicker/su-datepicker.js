@@ -248,8 +248,13 @@ riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward
     }
 
     function changeInput() {
-      tag.value = tag.refs.input.value
-      tag.update()
+      const value = parse(tag.refs.input.value.replace(/\//g, '-'))
+      if (value != 'Invalid Date') {
+        setDate(value)
+      } else {
+        tag.refs.input.value = tag.value
+        tag.update()
+      }
     }
 
     function generate() {
