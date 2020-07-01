@@ -456,7 +456,7 @@
     }
 
     function changeInput() {
-      const value = parse(tag.refs.input.value.replace(/\//g, '-'))
+      const value = tag.refs.input.value ? parse(tag.refs.input.value.replace(/\//g, '-')) : ''
       if (value != 'Invalid Date') {
         setDate(value)
       } else {

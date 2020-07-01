@@ -381,6 +381,26 @@ describe('su-datepicker', function () {
     spyOnChange.should.have.been.callCount(3)
   })
 
+  it('popup datepicker clear input value', function () {
+    $('body').append('<su-datepicker />')
+    mount({
+      popup: true,
+      pattern: 'YYYY/MM/DD',
+      value: '2017/12/01',
+    })
+    $('su-datepicker input')[0].value = ''
+    fireEvent($('su-datepicker input')[0], 'change')
+    expect(tag.value).to.be.null
+    tag.refs.input.value.should.equal('')
+    spyOnChange.should.have.been.calledOnce
+
+    $('su-datepicker input')[0].value = '2017/12/02'
+    fireEvent($('su-datepicker input')[0], 'change')
+    tag.value.should.equal('2017/12/02')
+    tag.refs.input.value.should.equal('2017/12/02')
+    spyOnChange.should.have.been.calledTwice
+  })
+
   it('read-only option', function () {
     $('body').append('<su-datepicker class="read-only" />')
     mount()

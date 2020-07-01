@@ -11244,7 +11244,7 @@ function blur() {
 }
 
 function changeInput() {
-  var value = (0, _dateFns.parse)(tag.refs.input.value.replace(/\//g, '-'));
+  var value = tag.refs.input.value ? (0, _dateFns.parse)(tag.refs.input.value.replace(/\//g, '-')) : '';
   if (value != 'Invalid Date') {
     setDate(value);
   } else {
