@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.1.6] - 2020-07-04
+
+### Fixed
+
+- Fix the problem what change event does not fire when input field value is cleared
+
 ## [1.1.5] - 2020-06-04
 
 ### Fixed
@@ -309,7 +315,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Add su-rating
 
-[unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.5...HEAD
+[unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.6...HEAD
+[1.1.6]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.5...v1.1.6
 [1.1.5]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.2...v1.1.4
 [1.1.2]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.1...v1.1.2
