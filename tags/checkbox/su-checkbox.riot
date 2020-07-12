@@ -58,7 +58,7 @@
     function onUpdated(props, state) {
       if (state.lastChecked != state.checked) {
         state.lastChecked = state.checked
-        state.lastOptsChecked = state.checked
+        state.lastOptsChecked = normalizeOptChecked(props.checked)
       }
     }
 

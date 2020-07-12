@@ -57,14 +57,18 @@
         changed = true
       }
 
-      this.$$('su-radio').forEach(radio => {
+      const radios = this.$$('su-radio')
+      radios.forEach(radio => {
         initializeChild(radio, this.su_id)
-        updateState(radio, state.value)
       })
 
       if (changed) {
+        radios.forEach(radio => {
+          updateState(radio, state.value)
+        })
         this.dispatch('change', state.value)
         this.obs.trigger(`${props.suParentId}-update`)
+        this.update()
       }
     }
 
@@ -77,16 +81,12 @@
     // ===================================================================================
     //                                                                               Logic
     //                                                                               =====
-    function updateState(radio, value) {
-      if (typeof radio.getAttribute('value') === 'undefined' || typeof value === 'undefined') {
+    function updateState(element, value) {
+      if (typeof element.getAttribute('value') === 'undefined' || typeof value === 'undefined') {
         return
       }
-
-      if (value == radio.getAttribute('value')) {
-        radio.setAttribute('checked', true)
-      } else {
-        radio.removeAttribute('checked')
-      }
+      const radio = element[Object.getOwnPropertySymbols(element).find(symbol => symbol.toString() === "Symbol(riot-component)")];
+      radio.state.checked = value == element.getAttribute('value')
     }
 
     function initializeChild(radio, uid) {

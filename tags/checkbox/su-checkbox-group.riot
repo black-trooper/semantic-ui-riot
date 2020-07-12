@@ -13,7 +13,6 @@
       defaultValue: '',
       onMounted,
       onBeforeUpdate,
-      onUpdated,
     }
 
     // ===================================================================================
@@ -57,9 +56,6 @@
         state.value = props.value
         state.lastOptsValue = props.value
       }
-    }
-
-    function onUpdated(props, state) {
       let changed = false
       if (normalizeValue(state.lastValue) != normalizeValue(state.value)) {
         state.lastValue = state.value
@@ -92,15 +88,12 @@
     // ===================================================================================
     //                                                                               Logic
     //                                                                               =====
-    function updateState(checkbox, value) {
-      if (typeof checkbox.getAttribute('value') === 'undefined' || typeof value === 'undefined') {
+    function updateState(element, value) {
+      if (typeof element.getAttribute('value') === 'undefined' || typeof value === 'undefined') {
         return
       }
-      if (value.some(v => v == checkbox.getAttribute('value'))) {
-        checkbox.setAttribute('checked', true)
-      } else {
-        checkbox.removeAttribute('checked')
-      }
+      const checkbox = element[Object.getOwnPropertySymbols(element).find(symbol => symbol.toString() === "Symbol(riot-component)")];
+      checkbox.state.checked = value.some(v => v == element.getAttribute('value'))
     }
 
     function initializeChild(checkbox, uid) {
