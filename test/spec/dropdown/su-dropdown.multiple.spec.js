@@ -128,8 +128,8 @@ describe('su-dropdown-multiple', function () {
     component.$('.label .delete').click()
     expect(component.$('.label').innerText.trim()).to.equal(items[2].label)
     expect(component.$('su-dropdown').getAttribute('value')).to.equal('css')
-    expect(spyOnSelect).calledTwice
-    expect(spyOnChange).calledTwice
+    expect(spyOnSelect).calledThrice
+    expect(spyOnChange).calledThrice
 
     this.clock.tick(310)
     expect(component.$('.menu').classList.contains('visible')).to.equal(true)

@@ -104,12 +104,12 @@
 
       if (props.multiple) {
       } else {
-        if (props.items && props.items.length > 0) {
-          state.label = props.items[0].label
-          state.value = props.items[0].value
-          state.defaultFlg = props.items[0].default
-        }
+      if (props.items && props.items.length > 0) {
+        state.label = props.items[0].label
+        state.value = props.items[0].value
+        state.defaultFlg = props.items[0].default
       }
+    }
     }
 
     function onMounted(props, state) {
@@ -315,10 +315,7 @@
     function onUnselect(event, target) {
       event.stopPropagation()
       target.selected = false
-      this.state.value = this.props.items.filter(item => item.selected).map(item => item.value)
-      this.selectedFlg = this.props.items.some(item => item.selected)
-      this.update()
-      parentUpdate(this)
+      selectMultiTarget(this)
     }
 
     // ===================================================================================
