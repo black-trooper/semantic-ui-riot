@@ -11,7 +11,7 @@
     <i class="delete icon" onclick="{ event => onUnselect(event, item) }"></i>
   </a>
   <div class="{ state.defaultFlg && 'default'} text { filtered && 'filtered' }"
-    if="{ !props.multiple || !selectedFlg }">
+    if="{ !props.multiple || !state.selectedFlg }">
     { state.label }
   </div>
 
@@ -102,14 +102,11 @@
     function onBeforeMount(props, state) {
       this.su_id = `su-dropdown-${index++}`
 
-      if (props.multiple) {
-      } else {
       if (props.items && props.items.length > 0) {
         state.label = props.items[0].label
         state.value = props.items[0].value
         state.defaultFlg = props.items[0].default
       }
-    }
     }
 
     function onMounted(props, state) {
@@ -123,7 +120,7 @@
           .filter(item => state.value && state.value.indexOf(item.value) >= 0)
           .forEach(item => item.selected = true)
         state.value = this.props.items.filter(item => item.selected).map(item => item.value)
-        this.selectedFlg = this.props.items.some(item => item.selected)
+        this.state.selectedFlg = this.props.items.some(item => item.selected)
       }
       state.defaultValue = state.value
       this.update()
@@ -397,14 +394,14 @@
 
     function selectMultiTarget(tag, updating) {
       if (JSON.stringify(tag.state.value) == JSON.stringify(tag.props.items.filter(item => item.selected).map(item => item.value))
-        && tag.selectedFlg == tag.props.items.some(item => item.selected)) {
+        && tag.state.selectedFlg == tag.props.items.some(item => item.selected)) {
         if (!updating) {
           tag.dispatch('select', tag.props.items.filter(item => item.selected))
         }
         return
       }
       tag.state.value = tag.props.items.filter(item => item.selected).map(item => item.value)
-      tag.selectedFlg = tag.props.items.some(item => item.selected)
+      tag.state.selectedFlg = tag.props.items.some(item => item.selected)
       if (!updating) {
         tag.update()
         parentUpdate(tag)

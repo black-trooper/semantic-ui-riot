@@ -82,6 +82,7 @@ describe('su-dropdown-multiple', function () {
 
   it('is mounted', function () {
     expect(component).to.be.ok
+    expect(component.$('.default').innerText.trim()).to.equal(items[0].label)
   })
 
   it('clicking item', function () {
