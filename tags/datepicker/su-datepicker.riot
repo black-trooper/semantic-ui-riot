@@ -1,7 +1,7 @@
 <su-datepicker value="{ state.value }" formated-value="{ state.formatedValue }" changed="{ changed }" id="{ su_id }">
   <div class="ui { props.popup ? 'dropdown' : '' } { upward ? 'upward' : '' }">
     <div class="ui action input { disabled }" if="{ props.popup }">
-      <input type="text" placeholder="{ props.placeholder }" tabindex="{ tabIndex }" readonly="{ readOnly }"
+      <input type="text" placeholder="{ props.placeholder }" onchange="{ onChangeInput }" tabindex="{ tabIndex }" readonly="{ readOnly }"
       />
       <button class="ui icon button { disabled }" onclick="{ toggle }" onblur="{ onBlur }" type="button">
         <i class="calendar icon"></i>
@@ -189,6 +189,7 @@
       onMouseDown,
       onMouseUp,
       onBlur,
+      onChangeInput,
 
       getCurrentYear,
       getCurrentMonthView,
@@ -394,6 +395,16 @@
         close(this)
         this.update()
       }
+    }
+
+    function onChangeInput() {
+      const value = this.$('input').value ? parse(this.$('input').value.replace(/\//g, '-')) : ''
+      if (value != 'Invalid Date') {
+        setDate(this, value)
+      } else {
+        this.$('input').value = this.state.value
+      }
+      this.update()
     }
 
     // ===================================================================================

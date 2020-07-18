@@ -356,6 +356,50 @@ describe('su-datepicker', function () {
     expect(component.$('su-datepicker').getAttribute('formated-value')).to.equal('January 2, 2018')
   })
 
+  it('popup datepicker update input value', function () {
+    mount({
+      popup: true,
+      pattern: 'YYYY/MM/DD',
+      value: '2017/12/01',
+    })
+    component.$('input').value = '2017/12/02'
+    fireEvent(component.$('input'), 'change')
+    expect(component.$('su-datepicker').getAttribute('value')).to.equal('2017-12-02')
+    expect(component.$('input').value).to.equal('2017/12/02')
+    expect(spyOnChange).to.have.been.calledOnce
+
+    component.$('input').value = '2017-12-00'
+    fireEvent(component.$('input'), 'change')
+    expect(component.$('su-datepicker').getAttribute('value')).to.equal('2017-11-30')
+    expect(component.$('input').value).to.equal('2017/11/30')
+    expect(spyOnChange).to.have.been.calledTwice
+
+    component.$('input').value = '2017/11/00'
+    fireEvent(component.$('input'), 'change')
+    expect(component.$('su-datepicker').getAttribute('value')).to.equal('2017-10-31')
+    expect(component.$('input').value).to.equal('2017/10/31')
+    expect(spyOnChange).to.have.been.callCount(3)
+  })
+
+  it('popup datepicker clear input value', function () {
+    mount({
+      popup: true,
+      pattern: 'YYYY/MM/DD',
+      value: '2017/12/01',
+    })
+    component.$('input').value = ''
+    fireEvent(component.$('input'), 'change')
+    expect(component.$('su-datepicker').getAttribute('value')).to.be.null
+    expect(component.$('input').value).to.equal('')
+    expect(spyOnChange).to.have.been.calledOnce
+
+    component.$('input').value = '2017/12/02'
+    fireEvent(component.$('input'), 'change')
+    expect(component.$('su-datepicker').getAttribute('value')).to.equal('2017-12-02')
+    expect(component.$('input').value).to.equal('2017/12/02')
+    expect(spyOnChange).to.have.been.calledTwice
+  })
+
   it('read-only option', function () {
     mount({
       class: 'read-only'
