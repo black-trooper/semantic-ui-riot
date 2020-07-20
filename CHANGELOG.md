@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.2.0] - 2020-07-20
+
+### Added
+
+- Add deter-parent-update option to su-checkbox
+
 ## [1.1.6] - 2020-07-04
 
 ### Fixed
@@ -315,7 +321,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Add su-rating
 
-[unreleased]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.6...HEAD
+[1.2.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.6...v1.2.0
 [1.1.6]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.5...v1.1.6
 [1.1.5]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.4...v1.1.5
 [1.1.4]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.2...v1.1.4
