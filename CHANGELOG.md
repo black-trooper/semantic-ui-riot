@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.2.4] - 2020-07-20
+
+### Fixed
+
+- Fix the problem where the change of input field value is not reflected
+- Fix the problem where the event did not fire when deleted with the dropdown of multiple options
+
 ## [2.2.3] - 2020-07-12
 
 ### Fixed
