@@ -9,52 +9,77 @@
     </div>
     <div class="menu transition { state.transitionStatus }" onmousedown="{ onMouseDown }" onmouseup="{ onMouseUp }"
       onblur="{ onBlur }" tabindex="{ tabIndex }">
-      <div class="ui compact segments">
-        <div class="ui center aligned secondary segment">
-          <div class="ui buttons dp-navigation">
-            <button class="icon tiny ui button { disabled } prev" onclick="{ clickPrevious }" type="button">
-                <i class="chevron left icon"></i>
-              </button>
-            <button class="ui button { disabled } month" onclick="{ selectMonth }" type="button">{ getCurrentMonthView() }</button>
-            <button class="ui button { disabled } year" onclick="{ selectYear }" type="button">{ getCurrentYear() }</button>
-            <button class="icon tiny ui button { disabled } next" onclick="{ clickNext }" type="button">
-              <i class="chevron right icon"></i>
-            </button>
+      <div class="ui center aligned segment date-picker { props.datetime ? 'datetime-picker' : '' }">
+        <!-- header -->
+        <div class="ui buttons dp-navigation">
+          <button class="icon tiny ui button { disabled } prev" onclick="{ clickPrevious }" type="button">
+            <i class="chevron left icon"></i>
+          </button>
+          <button class="ui button { disabled } month" onclick="{ selectMonth }" type="button">{ getCurrentMonthView() }</button>
+          <button class="ui button { disabled } year" onclick="{ selectYear }" type="button">{ getCurrentYear() }</button>
+          <button class="icon tiny ui button { disabled } next" onclick="{ clickNext }" type="button">
+            <i class="chevron right icon"></i>
+          </button>
+        </div>
+        <!-- date -->
+        <div if="{ !yearSelecting && !monthSelecting }">
+          <div class="ui grid">
+            <div class="{ props.datetime ? 'ten' : 'sixteen' } wide column">
+              <!-- week -->
+              <div class="ui seven column padded grid dp-weekday">
+                <div each="{week in weekNames}" class="column">{ week }</div>
+              </div>
+              <div class="ui divider"></div>
+              <!-- day -->
+              <div class="ui seven column padded grid dp-day">
+                <div each="{ day in state.days}" class="column">
+                  <button
+                    class="fluid ui button { isToday(day) ? 'today' : ''  } { isActive(day) ? 'primary' : 'non-active' } { day.getMonth() != getCurrentMonth() || disabled ? 'disabled' : '' }"
+                    onclick="{ () => clickDay(day) }" type="button">{day.getDate()}</button>
+                </div>
+              </div>
+            </div>
+            <!-- footer -->
+            <div class="ui divider"></div>
+            <div class="ui two column grid">
+              <div class="column dp-clear">
+                <button class="ui icon fluid button { disabled }" onclick="{ clickClear }" type="button"><i class="times icon"></i></button>
+              </div>
+              <div class="column dp-today">
+                <button class="ui icon fluid button { disabled }" onclick="{ clickToday }" type="button"><i class="calendar check icon"></i></button>
+              </div>
+            </div>
           </div>
-          <div class="dp-wrapper">
-            <div each="{week in weekNames}" class="dp-weekday">{ week }</div>
+          <!-- time -->
+          <div class="six wide column" if="{ props.datetime }">
+            <div class="ui two column padded grid dp-time">
+              <div class="column" each="{ (hour, index) in state.hours }">
+                <button
+                  class="fluid ui  button { isNearlyTime(index) && ! isActiveTime(index) ? 'nearly-time' : '' } { isActiveTime(index) ? 'primary': '' } { disabled }"
+                  onclick="{ clickHour }"
+                  type="button">
+                  { hour }
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="ui center aligned segment" if="{ !yearSelecting && !monthSelecting }">
-          <div each="{week in weeks}" class="dp-wrapper">
-            <div each="{day in week.days}" class="dp-day">
-              <button class="ui button { isToday(day) ? 'today' : ''  } { isActive(day) ? 'primary' : 'non-active' } { day.getMonth() != getCurrentMonth() || disabled ? 'disabled' : '' }"
-                onclick="{ () => clickDay(day) }" type="button">{day.getDate()}</button>
-            </div>
+      </div>
+      <!-- month -->
+      <div if="{ monthSelecting }">
+        <div class="ui divider"></div>
+        <div class="ui four column padded grid dp-month">
+          <div each="{ month in state.months}" class="column">
+            <button class="fluid ui button { disabled }" onclick="{ () => clickMonth(month) }" type="button">{month.label}</button>
           </div>
         </div>
-        <div class="ui center aligned segment" if="{ !yearSelecting && !monthSelecting }">
-          <div class="ui two column grid">
-            <div class="column dp-clear">
-              <button class="ui icon fluid button { disabled }" onclick="{ clickClear }" type="button"><i class="times icon"></i></button>
-            </div>
-            <div class="column dp-today">
-              <button class="ui icon fluid button { disabled }" onclick="{ clickToday }" type="button"><i class="calendar check icon"></i></button>
-            </div>
-          </div>
-        </div>
-        <div class="ui center aligned segment" if="{ monthSelecting }">
-          <div each="{ element in state.months }" class="dp-wrapper">
-            <div each="{ month in element}" class="dp-month">
-              <button class="ui button { disabled }" onclick="{ () => clickMonth(month) }" type="button">{month.label}</button>
-            </div>
-          </div>
-        </div>
-        <div class="ui center aligned segment" if="{ yearSelecting }">
-          <div each="{ element in state.years }" class="dp-wrapper">
-            <div each="{ year in element}" class="dp-month">
-              <button class="ui button { disabled }" onclick="{ () =>clickYear(year) }" type="button">{year}</button>
-            </div>
+      </div>
+      <!-- year -->
+      <div if="{ yearSelecting }">
+        <div class="ui divider"></div>
+        <div class="ui four column padded grid dp-month">
+          <div each="{ year in state.years}" class="column">
+            <button class="fluid ui button { disabled }" onclick="{ () => clickYear(year) }" type="button">{year}</button>
           </div>
         </div>
       </div>
@@ -71,67 +96,74 @@
       display: block;
     }
 
-    .ui.buttons.dp-navigation {
-      margin-bottom: 0.4rem;
-    }
-
     .ui.dropdown {
       display: block;
     }
 
-    .dp-wrapper {
-      display: flex;
+    .ui.padded.grid>.column:not(.row) {
+      padding: 0;
     }
 
-    .dp-day,
-    .dp-month {
-      cursor: pointer;
+    /* datepicker */
+    .date-picker {
+      width: 20rem;
     }
 
-    .dp-weekday,
-    .dp-day,
-    .dp-day .ui.button {
-      width: 2.5rem;
+    .datetime-picker {
+      width: 28rem;
     }
 
-    .dp-month,
-    .dp-month .ui.button {
-      width: 4.375rem;
+    .dp-weekday {
+      color: rgba(0, 0, 0, 0.6);
+    }
+
+    .dp-time {
+      height: 25rem;
+      overflow-y: auto;
+      padding-right: 0.2rem;
+    }
+
+    .dp-time .ui.button {
+      padding: 0;
+      height: 2rem;
+      font-weight: normal;
     }
 
     .dp-day .ui.button,
     .dp-month .ui.button {
       padding: 0;
       height: 2.5rem;
-      font-weight: normal
+      font-weight: normal;
     }
 
+    .ui.button.nearly-time,
     .dp-day .ui.button.today {
-      font-weight: 700;
+      background: transparent none;
+      color: rgba(0, 0, 0, 0.6);
+      font-weight: 400;
+      border-radius: 0.28571429rem;
+      text-transform: none;
+      text-shadow: none !important;
+      -webkit-box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.15) inset;
+      box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.15) inset;
     }
 
-    .dp-today .ui.button,
-    .dp-clear .ui.button,
-    .dp-navigation .ui.button,
-    .dp-month .ui.button,
-    .dp-day .ui.button.non-active {
+    .date-picker .ui.button:not(.primary) {
       background-color: transparent;
     }
 
-    .dp-today .ui.button:hover,
-    .dp-clear .ui.button:hover,
-    .dp-navigation .ui.button:hover,
-    .dp-month .ui.button:hover,
-    .dp-day .ui.button.non-active:hover {
+    .date-picker .ui.button:not(.primary):hover {
       background-color: #e0e1e2;
     }
 
-    .dp-day .ui.button.disabled {
+    .dp-day .ui.button.disabled,
+    .dp-time .ui.button.disabled {
       pointer-events: all !important;
     }
 
     .dp-navigation {
       width: 100%;
+      margin-bottom: 0.4rem !important;
     }
 
     .dp-navigation .ui.button {
@@ -148,12 +180,18 @@
     let index = 0
     import {
       addDays,
+      addMilliseconds,
+      addMinutes,
       addMonths,
+      differenceInMilliseconds,
       format,
       isSameDay,
+      isSameHour,
+      isSameMinute,
       isToday,
       parse,
-      startOfMonth
+      startOfDay,
+      startOfMonth,
     } from 'date-fns'
 
     export default {
@@ -161,7 +199,9 @@
         currentDate: null,
         defaultValue: null,
         value: null,
-        weeks: [],
+        milliseconds: null,
+        days: [],
+        hours: range(48).map(index => format(addMinutes(new Date(2020, 3, 22), index * 30), 'HH:mm')),
       },
 
       visibleFlg: false,
@@ -183,6 +223,7 @@
       clickNext,
       clickClear,
       clickToday,
+      clickHour,
       selectMonth,
       selectYear,
       toggle,
@@ -195,7 +236,9 @@
       getCurrentMonthView,
       getCurrentMonth,
       isActive,
+      isActiveTime,
       isToday,
+      isNearlyTime,
     }
 
     // tag.mixin('semantic-ui')
@@ -252,7 +295,7 @@
       this.disabled = this.root.classList.contains('disabled') ? 'disabled' : ''
 
       let changed = false
-      if (!isEqualDay(this.lastValue, state.value)) {
+      if (!isEqualDatetime(this.lastValue, state.value)) {
         this.lastValue = copyDate(state.value)
         changed = true
       } else if (this.lastPropsValue !== props.value) {
@@ -272,15 +315,15 @@
       if (changed && state.value) {
         state.currentDate = copyDate(state.value)
       }
-      if (!isEqualDay(this.lastPropsCurrentDate, props.currentDate)) {
+      if (!isEqualDatetime(this.lastPropsCurrentDate, props.currentDate)) {
         state.currentDate = copyDate(props.currentDate)
         this.lastPropsCurrentDate = copyDate(props.currentDate)
       }
-      if (!isEqualDay(this.lastCurrentDate, state.currentDate)) {
+      if (!isEqualDatetime(this.lastCurrentDate, state.currentDate)) {
         this.lastCurrentDate = copyDate(state.currentDate)
         generate(this)
       }
-      this.changed = !isEqualDay(state.value, state.defaultValue)
+      this.changed = !isEqualDatetime(state.value, state.defaultValue)
     }
 
     function reset(tag) {
@@ -309,7 +352,13 @@
       if (this.readOnly || this.disabled) {
         return
       }
-      setDate(this, day)
+
+      let date = day
+      if (this.state.milliseconds) {
+        date = addMilliseconds(startOfDay(date), this.state.milliseconds)
+      }
+      setDate(this, date)
+
       this.update()
       parentUpdate(this)
       this.dispatch('click', this.state.value)
@@ -348,6 +397,7 @@
     }
 
     function clickClear() {
+      this.state.milliseconds = undefined
       setDate(this, null)
       this.update()
       parentUpdate(this)
@@ -355,7 +405,25 @@
     }
 
     function clickToday() {
-      setDate(this, new Date())
+      const today = new Date()
+      this.state.milliseconds = differenceInMilliseconds(today, startOfDay(today))
+      setDate(this, today)
+      this.update()
+      parentUpdate(this)
+      this.dispatch('today', this.state.value)
+    }
+
+
+    function clickHour(event) {
+      if (this.readOnly || this.disabled) {
+        return
+      }
+
+      this.state.milliseconds = getMilliseconds(event.item.index)
+      if (this.state.value) {
+        const date = addMilliseconds(startOfDay(this.state.value), this.state.milliseconds)
+        setDate(this, date)
+      }
       this.update()
       parentUpdate(this)
       this.dispatch('today', this.state.value)
@@ -430,55 +498,51 @@
       return isEqualDay(this.state.value, date)
     }
 
+    function isActiveTime(index) {
+      return isEqualTime(tag.milliseconds, getMilliseconds(index))
+    }
+
+    function isNearlyTime(index) {
+      const target = getMilliseconds(index)
+      if (typeof tag.milliseconds === 'undefined' || tag.milliseconds > target) {
+        return false
+      }
+      return target - tag.milliseconds < 30 * 60 * 1000
+    }
+
+    function getMilliseconds(index) {
+      return index * 30 * 60 * 1000
+    }
+
     // ===================================================================================
     //                                                                               Logic
     //                                                                               =====
     function generate(tag) {
       const startDate = startOfMonth(tag.state.currentDate)
       const baseDate = addDays(startDate, - startDate.getDay())
-      let i = 0
-      tag.weeks = []
-
-      for (let r = 0; r < 6; r++) {
-        const days = []
-        for (let c = 0; c < 7; c++) {
-          days.push(addDays(baseDate, i++))
-        }
-        tag.weeks.push({ days })
-      }
+      tag.state.days = range(42).map((index) => addDays(baseDate, index))
     }
 
     function addYear(years, range) {
-      return years.map(values => {
-        values = values.map(value => {
-          return value + parseInt(range)
-        })
-        return values
+      return years.map(value => {
+        return value + parseInt(range)
       })
     }
 
     function getYears(tag) {
-      const rowSize = ((tag.yearRange - tag.yearRange % 4) / 4) + ((tag.yearRange % 4 != 0) ? 1 : 0)
-      const years = new Array()
-      for (let index = 0; index < rowSize; index++) {
-        years.push([])
-      }
-      for (let index = 0; index < tag.yearRange; index++) {
-        years[(index - index % 4) / 4][index % 4] = tag.state.currentDate.getFullYear() + index - ((tag.yearRange - tag.yearRange % 2) / 2 - 1)
-      }
-      return years
+      const startAt = tag.state.currentDate.getFullYear() - ((tag.yearRange - (tag.yearRange % 2)) / 2 - 1)
+      return range(parseInt(tag.yearRange), startAt)
     }
 
     function getMonthes(tag) {
-      const months = [[], [], []]
-      const monthNames = range(12).map(month => format(new Date(2018, month, 1), 'MMM', { locale: tag.locale }))
-      monthNames.forEach((month, index) => {
-        months[(index - index % 4) / 4][index % 4] = {
-          label: month,
-          value: index
+      return range(12).map(month => {
+        return {
+          label: format(new Date(2018, month, 1), 'MMM', {
+            locale: getLocale(tag),
+          }),
+          value: month,
         }
       })
-      return months
     }
 
     function open(tag) {
@@ -503,11 +567,15 @@
 
     function setDate(tag, date) {
       tag.state.value = date ? format(date, 'YYYY-MM-DD') : null
-      if (tag.props.popup) {
+      if (tag.props.popup && !tag.props.datetime) {
         tag.$('input').value = tag.state.value
         close(tag)
       }
       tag.dispatch('change', tag.state.value)
+    }
+
+    function isEqualDatetime(d1, d2) {
+      return isEqualDay(d1, d2) && isEqualTime(d1, d2)
     }
 
     function isEqualDay(d1, d2) {
@@ -518,6 +586,16 @@
         return false
       }
       return isSameDay(d1, d2)
+    }
+
+    function isEqualTime(d1, d2) {
+      if (d1 == d2) {
+        return true
+      }
+      if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
+        return false
+      }
+      return isSameHour(d1, d2) && isSameMinute(d1, d2)
     }
 
     function copyDate(date) {
@@ -570,7 +648,7 @@
       if (tag.defaultOptions && tag.defaultOptions.pattern) {
         return tag.defaultOptions.pattern
       }
-      return 'YYYY-MM-DD'
+      return tag.props.datetime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
     }
 
     function getLocale(tag) {
