@@ -103,7 +103,7 @@
     }
 
     function parentUpdate() {
-      if (tag.parent) {
+      if (tag.parent && !tag.opts.deterParentUpdate) {
         tag.parent.update()
       }
     }

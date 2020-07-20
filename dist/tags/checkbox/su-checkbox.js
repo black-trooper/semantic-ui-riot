@@ -75,7 +75,7 @@ riot.tag2('su-checkbox', '<input type="checkbox" checked="{checked}" onclick="{c
     }
 
     function parentUpdate() {
-      if (tag.parent) {
+      if (tag.parent && !tag.opts.deterParentUpdate) {
         tag.parent.update()
       }
     }
