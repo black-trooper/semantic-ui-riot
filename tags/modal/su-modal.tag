@@ -96,6 +96,7 @@
       right: 0;
       bottom: -6px;
       padding-bottom: 1rem;
+      z-index: 1000;
     }
   </style>
 
@@ -155,7 +156,7 @@
     function onUpdate() {
       image_content = tag.refs.content.getElementsByTagName('img').length > 0
       scrolling_content = hasClass('scrolling')
-      modeless = !tag.opts.modal.closbale && hasClass('modeless')
+      modeless = hasClass('modeless')
     }
 
     function show() {
@@ -261,11 +262,11 @@
     }
 
     function isModeless() {
-      return modeless
+      return !opts.modal.closable && modeless
     }
 
     function isDimmerModeless() {
-      return modeless && !tag.minimized && !tag.maximized
+      return isModeless() && !tag.minimized && !tag.maximized
     }
 
     function isScrollingContent() {
