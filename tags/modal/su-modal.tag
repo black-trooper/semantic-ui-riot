@@ -1,11 +1,16 @@
 <su-modal onclick="{ dimmerClose }">
-  <div class="ui dimmer modals page transition { transitionStatus }">
+  <div class="ui dimmer modals page transition { transitionStatus } { modeless: isDimmerModeless() }">
     <div class="ui modal transition visible active {opts.class}" onclick="{ clickModal }" id="{ getId() }">
-      <i class="close icon" if="{ opts.modal.closable && !isBasic() }" onclick="{ hide }"></i>
       <div class="ui header { icon: opts.modal.header.icon }" if="{ opts.modal.header }">
         <i class="icon { opts.modal.header.icon }" if="{ opts.modal.header.icon }"></i>
         { getTitle() }
       </div>
+      <virtual if="{ isModeless() && !isBasic() }">
+        <i class="window minimize icon" onclick="{ toggleMinimize }"></i>
+        <i class="window restore icon" if="{ maximized }" onclick="{ toggleSize }"></i>
+        <i class="window maximize icon" if="{ !maximized }" onclick="{ toggleSize }"></i>
+      </virtual>
+      <i class="close icon" if="{ opts.modal.closable && !isBasic() }" onclick="{ hide }"></i>
       <div class="content { image: isImageContent() } { scrolling: isScrollingContent() }" ref="content">
         <yield />
       </div>
@@ -18,6 +23,11 @@
       </div>
     </div>
   </div>
+  <a class="ui grey big label unminimize" if="{ minimized }" onclick="{ toggleMinimize }">
+    <i class="angle double up icon"></i>
+    { opts.modal.header }
+  </a>
+
   <style>
     .ui.dimmer.visible.transition {
       display: flex !important;
@@ -45,6 +55,48 @@
         display: inline;
       }
     }
+
+    /* modeless */
+    .ui.dimmer.modeless {
+      visibility: hidden !important;
+      display: block !important;
+    }
+
+    .ui.dimmer.modeless>.ui.modal {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
+
+    .ui.modal.modeless>.restore,
+    .ui.modal.modeless>.maximize {
+      right: 1rem;
+    }
+
+    .ui.modal.modeless>.minimize {
+      right: 4rem;
+    }
+
+    .ui.modal.modeless>.icon {
+      display: inline;
+      top: 1.0535rem;
+      color: rgba(0, 0, 0, .87);
+      cursor: pointer;
+      position: absolute;
+      z-index: 1;
+      opacity: 0.8;
+      font-size: 1.25em;
+      width: 2.25rem;
+      height: 2.25rem;
+      padding: 0.625rem 0rem 0rem 0rem;
+    }
+
+    .unminimize.label {
+      position: fixed;
+      right: 0;
+      bottom: -6px;
+      padding-bottom: 1rem;
+    }
   </style>
 
   <script>
@@ -52,6 +104,9 @@
     // ===================================================================================
     //                                                                      Tag Properties
     //                                                                      ==============
+    tag.transitionStatus = ''
+    tag.minimized = false
+    tag.maximized = true
 
     // ===================================================================================
     //                                                                         Tag Methods
@@ -64,7 +119,11 @@
     tag.hide = hide
     tag.isBasic = isBasic
     tag.isImageContent = isImageContent
+    tag.isModeless = isModeless
+    tag.isDimmerModeless = isDimmerModeless
     tag.isScrollingContent = isScrollingContent
+    tag.toggleSize = toggleSize
+    tag.toggleMinimize = toggleMinimize
     tag.show = show
     tag.on('before-mount', onBeforeMount)
     tag.on('mount', onMount)
@@ -75,6 +134,7 @@
     //                                                                          ==========
     let image_content = false
     let scrolling_content = false
+    let modeless = false
     let openning, closing, visible
 
     // ===================================================================================
@@ -95,6 +155,7 @@
     function onUpdate() {
       image_content = tag.refs.content.getElementsByTagName('img').length > 0
       scrolling_content = hasClass('scrolling')
+      modeless = !tag.opts.modal.closbale && hasClass('modeless')
     }
 
     function show() {
@@ -149,6 +210,19 @@
       }, 300)
     }
 
+    function toggleSize() {
+      tag.maximized = !tag.maximized
+      tag.update()
+      tag.trigger('toggleSize', tag.maximized)
+    }
+
+    function toggleMinimize() {
+      tag.minimized = !tag.minimized
+      tag.transitionStatus = tag.minimized ? '' : 'visible active'
+      tag.update()
+      tag.trigger('toggleMinimize', tag.minimized)
+    }
+
     function isContainsClassName(className) {
       const modalElement = document.getElementById(tag.getId())
       if (!modalElement) {
@@ -184,6 +258,14 @@
 
     function isImageContent() {
       return image_content
+    }
+
+    function isModeless() {
+      return modeless
+    }
+
+    function isDimmerModeless() {
+      return modeless && !tag.minimized && !tag.maximized
     }
 
     function isScrollingContent() {

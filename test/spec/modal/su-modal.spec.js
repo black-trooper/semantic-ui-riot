@@ -1,13 +1,18 @@
+const fireEvent = require('../../helpers').fireEvent
 require('../../../dist/tags/modal/su-modal.js')
 
 describe('su-modal', function () {
   let tag
-  let spyOnShow = sinon.spy()
-  let spyOnHide = sinon.spy()
-  let mount = opts => {
+  const spyOnShow = sinon.spy()
+  const spyOnHide = sinon.spy()
+  const spyOnToggleSize = sinon.spy()
+  const spyOnToggleMinimize = sinon.spy()
+  const mount = opts => {
     tag = riot.mount('su-modal', opts)[0]
     tag.on('show', spyOnShow)
       .on('hide', spyOnHide)
+      .on('toggleSize', spyOnToggleSize)
+      .on('toggleMinimize', spyOnToggleMinimize)
   }
 
   beforeEach(function () {
@@ -242,5 +247,65 @@ describe('su-modal', function () {
     spyOnHide.should.have.been.calledOnce
     this.clock.tick(310)
     $('su-modal > .dimmer').is(':visible').should.equal(false)
+  })
+
+  it('modeless', function () {
+    $('body').append(`
+      <su-modal class="modeless">modal</su-modal>
+    `)
+    const modal = {
+      closable: false
+    }
+    mount({ modal: modal })
+    tag.show()
+    this.clock.tick(510)
+    $('su-modal i.close.icon').length.should.equal(0)
+
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
+    $('su-modal > .dimmer').css('visibility').should.equal('visible')
+    $('su-modal i.minimize.icon').length.should.equal(1)
+    $('su-modal i.restore.icon').length.should.equal(1)
+    $('su-modal i.maximize.icon').length.should.equal(0)
+    $('su-modal a.label.minimized').length.should.equal(0)
+
+    fireEvent($('su-modal i.restore.icon')[0], 'click')
+    spyOnToggleSize.should.have.been.calledOnce
+    this.clock.tick(310)
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
+    $('su-modal > .dimmer').css('visibility').should.equal('hidden')
+    $('su-modal i.minimize.icon').length.should.equal(1)
+    $('su-modal i.restore.icon').length.should.equal(0)
+    $('su-modal i.maximize.icon').length.should.equal(1)
+    $('su-modal a.label.minimized').length.should.equal(0)
+
+    fireEvent($('su-modal i.maximize.icon')[0], 'click')
+    spyOnToggleSize.should.have.been.calledTwice
+    this.clock.tick(310)
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
+    $('su-modal > .dimmer').css('visibility').should.equal('visible')
+    $('su-modal i.minimize.icon').length.should.equal(1)
+    $('su-modal i.restore.icon').length.should.equal(1)
+    $('su-modal i.maximize.icon').length.should.equal(0)
+    $('su-modal a.label.minimized').length.should.equal(0)
+
+    fireEvent($('su-modal i.minimize.icon')[0], 'click')
+    spyOnToggleMinimize.should.have.been.calledOnce
+    this.clock.tick(310)
+    $('su-modal > .dimmer').is(':visible').should.equal(false)
+    $('su-modal > .dimmer').css('visibility').should.equal('visible')
+    $('su-modal i.minimize.icon').length.should.equal(1)
+    $('su-modal i.restore.icon').length.should.equal(1)
+    $('su-modal i.maximize.icon').length.should.equal(0)
+    $('su-modal a.label.unminimize').length.should.equal(1)
+
+    fireEvent($('su-modal a.label.unminimize')[0], 'click')
+    spyOnToggleMinimize.should.have.been.calledTwice
+    this.clock.tick(310)
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
+    $('su-modal > .dimmer').css('visibility').should.equal('visible')
+    $('su-modal i.minimize.icon').length.should.equal(1)
+    $('su-modal i.restore.icon').length.should.equal(1)
+    $('su-modal i.maximize.icon').length.should.equal(0)
+    $('su-modal a.label.unminimize').length.should.equal(0)
   })
 })
