@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.3.0] - 2021-03-16
+
+### Added
+
+- Add modeless option to su-modal
+
 ## [1.2.0] - 2020-07-20
 
 ### Added
@@ -321,6 +327,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Add su-rating
 
+[1.3.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.6...v1.2.0
 [1.1.6]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.5...v1.1.6
 [1.1.5]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.4...v1.1.5
