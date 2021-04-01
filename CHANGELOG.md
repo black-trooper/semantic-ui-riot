@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.3.2] - 2021-04-01
+
+### Changed
+
+- Change the modeless specification method
+
+### Fixed
+
+- Fix the problem where hidden DOM remained after closing modeless
+
 ## [1.3.1] - 2021-03-16
 
 ### Added
@@ -327,6 +337,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Add su-rating
 
+[1.3.2]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.3.1...v1.3.2
 [1.3.1]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.2.0...v1.3.1
 [1.2.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.6...v1.2.0
 [1.1.6]: https://github.com/black-trooper/semantic-ui-riot/compare/v1.1.5...v1.1.6
