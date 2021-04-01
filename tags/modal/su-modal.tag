@@ -1,14 +1,14 @@
 <su-modal onclick="{ dimmerClose }">
   <div class="ui dimmer modals page transition { transitionStatus } { modeless: isDimmerModeless() }">
-    <div class="ui modal transition visible active {opts.class}" onclick="{ clickModal }" id="{ getId() }">
+    <div class="ui modal transition visible active { getClass() }" onclick="{ clickModal }" id="{ getId() }">
       <div class="ui header { icon: opts.modal.header.icon }" if="{ opts.modal.header }">
         <i class="icon { opts.modal.header.icon }" if="{ opts.modal.header.icon }"></i>
         { getTitle() }
       </div>
       <virtual if="{ isModeless() && !isBasic() }">
-        <i class="window minimize icon" onclick="{ toggleMinimize }"></i>
-        <i class="window restore icon" if="{ maximized }" onclick="{ toggleSize }"></i>
-        <i class="window maximize icon" if="{ !maximized }" onclick="{ toggleSize }"></i>
+        <i class="window minimize icon" if="{ isMinimizeable() }" onclick="{ toggleMinimize }"></i>
+        <i class="window restore icon" if="{ isResizeable() && maximized }" onclick="{ toggleSize }"></i>
+        <i class="window maximize icon" if="{ isResizeable() && !maximized }" onclick="{ toggleSize }"></i>
       </virtual>
       <i class="close icon" if="{ opts.modal.closable && !isBasic() }" onclick="{ hide }"></i>
       <div class="content { image: isImageContent() } { scrolling: isScrollingContent() }" ref="content">
@@ -24,9 +24,9 @@
     </div>
   </div>
   <a class="ui grey big label unminimize" if="{ minimized }" onclick="{ toggleMinimize }">
-    <i class="angle double up icon"></i>
-    { opts.modal.header }
-  </a>
+        <i class="angle double up icon"></i>
+        { opts.modal.header }
+    </a>
 
   <style>
     .ui.dimmer.visible.transition {
@@ -115,6 +115,7 @@
     tag.click = click
     tag.clickModal = clickModal
     tag.dimmerClose = dimmerClose
+    tag.getClass = getClass
     tag.getId = getId
     tag.getTitle = getTitle
     tag.hide = hide
@@ -122,6 +123,8 @@
     tag.isImageContent = isImageContent
     tag.isModeless = isModeless
     tag.isDimmerModeless = isDimmerModeless
+    tag.isMinimizeable = isMinimizeable
+    tag.isResizeable = isResizeable
     tag.isScrollingContent = isScrollingContent
     tag.toggleSize = toggleSize
     tag.toggleMinimize = toggleMinimize
@@ -135,7 +138,6 @@
     //                                                                          ==========
     let image_content = false
     let scrolling_content = false
-    let modeless = false
     let openning, closing, visible
 
     // ===================================================================================
@@ -151,12 +153,22 @@
       if (typeof opts.modal.closable === 'undefined') {
         opts.modal.closable = true
       }
+      if (opts.modal.modeless === true) {
+        opts.modal.modeless = {}
+      }
+      if (opts.modal.modeless) {
+        if (typeof opts.modal.modeless.minimize === 'undefined') {
+          opts.modal.modeless.minimize = true
+        }
+        if (typeof opts.modal.modeless.resize === 'undefined') {
+          opts.modal.modeless.resize = true
+        }
+      }
     }
 
     function onUpdate() {
       image_content = tag.refs.content.getElementsByTagName('img').length > 0
       scrolling_content = hasClass('scrolling')
-      modeless = hasClass('modeless')
     }
 
     function show() {
@@ -242,6 +254,13 @@
       }
     }
 
+    function getClass() {
+      if (!tag.maximized && isModeless() && opts.modal.modeless.class) {
+        return opts.modal.modeless.class
+      }
+      return opts.class
+    }
+
     function getTitle() {
       if (opts.modal.header.text) {
         return opts.modal.header.text
@@ -262,14 +281,25 @@
     }
 
     function isModeless() {
-      return !opts.modal.closable && modeless
+      return !tag.opts.modal.closable && tag.opts.modal.modeless
     }
 
     function isDimmerModeless() {
       return isModeless() && !tag.minimized && !tag.maximized
     }
 
+    function isMinimizeable() {
+      return tag.opts.modal.modeless.minimize
+    }
+
+    function isResizeable() {
+      return tag.opts.modal.modeless.resize
+    }
+
     function isScrollingContent() {
+      if (!tag.maximized && isModeless() && opts.modal.modeless.class) {
+        return isContainsClassName('scrolling')
+      }
       return scrolling_content
     }
 

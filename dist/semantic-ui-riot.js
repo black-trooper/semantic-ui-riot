@@ -12130,7 +12130,7 @@ function suLoading(visible) {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionStatus} {modeless: isDimmerModeless()}"> <div class="ui modal transition visible active {opts.class}" onclick="{clickModal}" id="{getId()}"> <div class="ui header {icon: opts.modal.header.icon}" if="{opts.modal.header}"> <i class="icon {opts.modal.header.icon}" if="{opts.modal.header.icon}"></i> {getTitle()} </div> <virtual if="{isModeless() && !isBasic()}"> <i class="window minimize icon" onclick="{toggleMinimize}"></i> <i class="window restore icon" if="{maximized}" onclick="{toggleSize}"></i> <i class="window maximize icon" if="{!maximized}" onclick="{toggleSize}"></i> </virtual> <i class="close icon" if="{opts.modal.closable && !isBasic()}" onclick="{hide}"></i> <div class="content {image: isImageContent()} {scrolling: isScrollingContent()}" ref="content"> <yield></yield> </div> <div class="actions"> <button each="{button in opts.modal.buttons}" onclick="{click.bind(this, button)}" ref="button_{button.text}" type="button" class="ui button {button.type} {labeled: button.icon && button.text} {icon: button.icon} {inverted: isBasic()} {disabled: button.disabled}"> {button.text} <i class="icon {button.icon}" if="{button.icon}"></i> </button> </div> </div> </div> <a class="ui grey big label unminimize" if="{minimized}" onclick="{toggleMinimize}"> <i class="angle double up icon"></i> {opts.modal.header} </a>', 'su-modal .ui.dimmer.visible.transition,[data-is="su-modal"] .ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; } su-modal .ui.fullscreen.modal,[data-is="su-modal"] .ui.fullscreen.modal{ left: 0 !important; } @media only screen and (min-width: 768px) { su-modal .ui.modal>.close,[data-is="su-modal"] .ui.modal>.close{ display: none; } su-modal .ui.fullscreen.modal>.close,[data-is="su-modal"] .ui.fullscreen.modal>.close{ display: inline; } } su-modal .ui.dimmer.modeless,[data-is="su-modal"] .ui.dimmer.modeless{ visibility: hidden !important; display: block !important; } su-modal .ui.dimmer.modeless>.ui.modal,[data-is="su-modal"] .ui.dimmer.modeless>.ui.modal{ position: absolute; right: 0; bottom: 0; } su-modal .ui.modal.modeless>.restore,[data-is="su-modal"] .ui.modal.modeless>.restore,su-modal .ui.modal.modeless>.maximize,[data-is="su-modal"] .ui.modal.modeless>.maximize{ right: 1rem; } su-modal .ui.modal.modeless>.minimize,[data-is="su-modal"] .ui.modal.modeless>.minimize{ right: 4rem; } su-modal .ui.modal.modeless>.icon,[data-is="su-modal"] .ui.modal.modeless>.icon{ display: inline; top: 1.0535rem; color: rgba(0, 0, 0, .87); cursor: pointer; position: absolute; z-index: 1; opacity: 0.8; font-size: 1.25em; width: 2.25rem; height: 2.25rem; padding: 0.625rem 0rem 0rem 0rem; } su-modal .unminimize.label,[data-is="su-modal"] .unminimize.label{ position: fixed; right: 0; bottom: -6px; padding-bottom: 1rem; z-index: 1000; }', 'onclick="{dimmerClose}"', function(opts) {
+riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionStatus} {modeless: isDimmerModeless()}"> <div class="ui modal transition visible active {getClass()}" onclick="{clickModal}" id="{getId()}"> <div class="ui header {icon: opts.modal.header.icon}" if="{opts.modal.header}"> <i class="icon {opts.modal.header.icon}" if="{opts.modal.header.icon}"></i> {getTitle()} </div> <virtual if="{isModeless() && !isBasic()}"> <i class="window minimize icon" if="{isMinimizeable()}" onclick="{toggleMinimize}"></i> <i class="window restore icon" if="{isResizeable() && maximized}" onclick="{toggleSize}"></i> <i class="window maximize icon" if="{isResizeable() && !maximized}" onclick="{toggleSize}"></i> </virtual> <i class="close icon" if="{opts.modal.closable && !isBasic()}" onclick="{hide}"></i> <div class="content {image: isImageContent()} {scrolling: isScrollingContent()}" ref="content"> <yield></yield> </div> <div class="actions"> <button each="{button in opts.modal.buttons}" onclick="{click.bind(this, button)}" ref="button_{button.text}" type="button" class="ui button {button.type} {labeled: button.icon && button.text} {icon: button.icon} {inverted: isBasic()} {disabled: button.disabled}"> {button.text} <i class="icon {button.icon}" if="{button.icon}"></i> </button> </div> </div> </div> <a class="ui grey big label unminimize" if="{minimized}" onclick="{toggleMinimize}"> <i class="angle double up icon"></i> {opts.modal.header} </a>', 'su-modal .ui.dimmer.visible.transition,[data-is="su-modal"] .ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; } su-modal .ui.fullscreen.modal,[data-is="su-modal"] .ui.fullscreen.modal{ left: 0 !important; } @media only screen and (min-width: 768px) { su-modal .ui.modal>.close,[data-is="su-modal"] .ui.modal>.close{ display: none; } su-modal .ui.fullscreen.modal>.close,[data-is="su-modal"] .ui.fullscreen.modal>.close{ display: inline; } } su-modal .ui.dimmer.modeless.visible.transition,[data-is="su-modal"] .ui.dimmer.modeless.visible.transition{ visibility: hidden !important; display: block !important; } su-modal .ui.dimmer.modeless>.ui.modal,[data-is="su-modal"] .ui.dimmer.modeless>.ui.modal{ position: absolute; right: 0; bottom: 0; } su-modal .ui.modal>.restore,[data-is="su-modal"] .ui.modal>.restore,su-modal .ui.modal>.maximize,[data-is="su-modal"] .ui.modal>.maximize{ right: 1rem; } su-modal .ui.modal>.minimize,[data-is="su-modal"] .ui.modal>.minimize{ right: 4rem; } su-modal .ui.modal>.icon,[data-is="su-modal"] .ui.modal>.icon{ display: inline; top: 1.0535rem; color: rgba(0, 0, 0, .87); cursor: pointer; position: absolute; z-index: 1; opacity: 0.8; font-size: 1.25em; width: 2.25rem; height: 2.25rem; padding: 0.625rem 0rem 0rem 0rem; } su-modal .unminimize.label,[data-is="su-modal"] .unminimize.label{ position: fixed; right: 0; bottom: -6px; padding-bottom: 1rem; z-index: 1000; }', 'onclick="{dimmerClose}"', function(opts) {
 'use strict';
 
 var tag = this;
@@ -12147,6 +12147,7 @@ tag.maximized = true;
 tag.click = click;
 tag.clickModal = clickModal;
 tag.dimmerClose = dimmerClose;
+tag.getClass = getClass;
 tag.getId = getId;
 tag.getTitle = getTitle;
 tag.hide = hide;
@@ -12154,6 +12155,8 @@ tag.isBasic = isBasic;
 tag.isImageContent = isImageContent;
 tag.isModeless = isModeless;
 tag.isDimmerModeless = isDimmerModeless;
+tag.isMinimizeable = isMinimizeable;
+tag.isResizeable = isResizeable;
 tag.isScrollingContent = isScrollingContent;
 tag.toggleSize = toggleSize;
 tag.toggleMinimize = toggleMinimize;
@@ -12167,7 +12170,6 @@ tag.on('update', onUpdate);
 //                                                                          ==========
 var image_content = false;
 var scrolling_content = false;
-var modeless = false;
 var openning = void 0,
     closing = void 0,
     visible = void 0;
@@ -12185,12 +12187,22 @@ function onMount() {
   if (typeof opts.modal.closable === 'undefined') {
     opts.modal.closable = true;
   }
+  if (opts.modal.modeless === true) {
+    opts.modal.modeless = {};
+  }
+  if (opts.modal.modeless) {
+    if (typeof opts.modal.modeless.minimize === 'undefined') {
+      opts.modal.modeless.minimize = true;
+    }
+    if (typeof opts.modal.modeless.resize === 'undefined') {
+      opts.modal.modeless.resize = true;
+    }
+  }
 }
 
 function onUpdate() {
   image_content = tag.refs.content.getElementsByTagName('img').length > 0;
   scrolling_content = hasClass('scrolling');
-  modeless = hasClass('modeless');
 }
 
 function show() {
@@ -12280,6 +12292,13 @@ function setDefaultFocus() {
   }
 }
 
+function getClass() {
+  if (!tag.maximized && isModeless() && opts.modal.modeless.class) {
+    return opts.modal.modeless.class;
+  }
+  return opts.class;
+}
+
 function getTitle() {
   if (opts.modal.header.text) {
     return opts.modal.header.text;
@@ -12300,14 +12319,25 @@ function isImageContent() {
 }
 
 function isModeless() {
-  return !opts.modal.closable && modeless;
+  return !tag.opts.modal.closable && tag.opts.modal.modeless;
 }
 
 function isDimmerModeless() {
   return isModeless() && !tag.minimized && !tag.maximized;
 }
 
+function isMinimizeable() {
+  return tag.opts.modal.modeless.minimize;
+}
+
+function isResizeable() {
+  return tag.opts.modal.modeless.resize;
+}
+
 function isScrollingContent() {
+  if (!tag.maximized && isModeless() && opts.modal.modeless.class) {
+    return isContainsClassName('scrolling');
+  }
   return scrolling_content;
 }
 

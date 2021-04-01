@@ -253,10 +253,11 @@ describe('su-modal', function () {
 
   it('modeless', function () {
     $('body').append(`
-      <su-modal class="modeless">modal</su-modal>
+      <su-modal>modal</su-modal>
     `)
     const modal = {
       closable: false,
+      modeless: true,
       buttons: [{
         text: 'Ok',
         closable: true
@@ -321,6 +322,70 @@ describe('su-modal', function () {
     $('su-modal .ui.button:first').click()
     this.clock.tick(310)
     $('su-modal > .dimmer').is(':visible').should.equal(false)
+  })
+
+  it('modeless class option', function () {
+    $('body').append(`
+      <su-modal>modal</su-modal>
+    `)
+    const modal = {
+      closable: false,
+      modeless: {
+        class: 'tiny scrolling'
+      }
+    }
+    mount({ modal: modal })
+    tag.show()
+    this.clock.tick(510)
+    $('su-modal i.close.icon').length.should.equal(0)
+
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
+    $('su-modal > .dimmer').css('visibility').should.equal('visible')
+    $('su-modal i.minimize.icon').length.should.equal(1)
+    $('su-modal i.restore.icon').length.should.equal(1)
+    $('su-modal i.maximize.icon').length.should.equal(0)
+    $('su-modal a.label.minimized').length.should.equal(0)
+    const modalElemnt = $('su-modal .ui.modal')
+    const content = $('su-modal .content')
+    modalElemnt.hasClass('tiny').should.equal(false)
+    content.hasClass('scrolling').should.equal(false)
+
+    fireEvent($('su-modal i.restore.icon')[0], 'click')
+    spyOnToggleSize.should.have.been.calledOnce
+    this.clock.tick(310)
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
+    $('su-modal > .dimmer').css('visibility').should.equal('hidden')
+    $('su-modal i.minimize.icon').length.should.equal(1)
+    $('su-modal i.restore.icon').length.should.equal(0)
+    $('su-modal i.maximize.icon').length.should.equal(1)
+    $('su-modal a.label.minimized').length.should.equal(0)
+
+    modalElemnt.hasClass('tiny').should.equal(true)
+    content.hasClass('scrolling').should.equal(true)
+  })
+
+  it('modeless resize option', function () {
+    $('body').append(`
+      <su-modal>modal</su-modal>
+    `)
+    const modal = {
+      closable: false,
+      modeless: {
+        minimize: false,
+        resize: false,
+      }
+    }
+    mount({ modal: modal })
+    tag.show()
+    this.clock.tick(510)
+    $('su-modal i.close.icon').length.should.equal(0)
+
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
+    $('su-modal > .dimmer').css('visibility').should.equal('visible')
+    $('su-modal i.minimize.icon').length.should.equal(0)
+    $('su-modal i.restore.icon').length.should.equal(0)
+    $('su-modal i.maximize.icon').length.should.equal(0)
+    $('su-modal a.label.minimized').length.should.equal(0)
   })
 
   it('modeless with closable', function () {
