@@ -57,7 +57,7 @@
     }
 
     /* modeless */
-    .ui.dimmer.modeless {
+    .ui.dimmer.modeless.visible.transition {
       visibility: hidden !important;
       display: block !important;
     }
@@ -68,16 +68,16 @@
       bottom: 0;
     }
 
-    .ui.modal.modeless>.restore,
-    .ui.modal.modeless>.maximize {
+    .ui.modal>.restore,
+    .ui.modal>.maximize {
       right: 1rem;
     }
 
-    .ui.modal.modeless>.minimize {
+    .ui.modal>.minimize {
       right: 4rem;
     }
 
-    .ui.modal.modeless>.icon {
+    .ui.modal>.icon {
       display: inline;
       top: 1.0535rem;
       color: rgba(0, 0, 0, .87);

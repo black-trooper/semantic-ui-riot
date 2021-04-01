@@ -22,6 +22,8 @@ describe('su-modal', function () {
   afterEach(function () {
     spyOnShow.reset()
     spyOnHide.reset()
+    spyOnToggleSize.reset()
+    spyOnToggleMinimize.reset()
     this.clock.restore()
     tag.unmount()
   })
@@ -254,7 +256,11 @@ describe('su-modal', function () {
       <su-modal class="modeless">modal</su-modal>
     `)
     const modal = {
-      closable: false
+      closable: false,
+      buttons: [{
+        text: 'Ok',
+        closable: true
+      }]
     }
     mount({ modal: modal })
     tag.show()
@@ -307,6 +313,14 @@ describe('su-modal', function () {
     $('su-modal i.restore.icon').length.should.equal(1)
     $('su-modal i.maximize.icon').length.should.equal(0)
     $('su-modal a.label.unminimize').length.should.equal(0)
+
+    fireEvent($('su-modal i.restore.icon')[0], 'click')
+    this.clock.tick(310)
+    $('su-modal > .dimmer').is(':visible').should.equal(true)
+
+    $('su-modal .ui.button:first').click()
+    this.clock.tick(310)
+    $('su-modal > .dimmer').is(':visible').should.equal(false)
   })
 
   it('modeless with closable', function () {
