@@ -11477,11 +11477,13 @@ var keys = {
   escape: 27,
   upArrow: 38,
   downArrow: 40
+};
+var compositionStarted = false;
 
-  // ===================================================================================
-  //                                                                             Methods
-  //                                                                             =======
-};function onBeforeMount() {
+// ===================================================================================
+//                                                                             Methods
+//                                                                             =======
+function onBeforeMount() {
   if (opts.items && opts.items.length > 0) {
     tag.label = opts.items[0].label;
     tag.value = opts.items[0].value;
@@ -11500,6 +11502,15 @@ function onMount() {
     parentUpdate();
   } else {
     tag.defaultValue = tag.value;
+  }
+
+  if (tag.refs.condition) {
+    tag.refs.condition.addEventListener('compositionstart', function () {
+      return compositionStarted = true;
+    });
+    tag.refs.condition.addEventListener('compositionend', function () {
+      return compositionStarted = false;
+    });
   }
 }
 
@@ -11605,7 +11616,7 @@ function keydown(event) {
     open();
   }
   if (keyCode != keys.upArrow && keyCode != keys.downArrow) {
-    return true;
+    return;
   }
 
   event.preventDefault();
@@ -11619,13 +11630,13 @@ function keydown(event) {
     return true;
   });
   if (searchedItems.length == 0) {
-    return true;
+    return;
   }
   if (searchedItems.every(function (item) {
     return !item.active;
   })) {
     searchedItems[0].active = true;
-    return true;
+    return;
   }
 
   var activeIndex = parseInt(searchedItems.map(function (item, index) {
@@ -11657,7 +11668,7 @@ function keydown(event) {
 
 function keyup(event) {
   var keyCode = event.keyCode;
-  if (keyCode != keys.enter) {
+  if (keyCode != keys.enter || compositionStarted) {
     return;
   }
   var searchedItems = opts.items.filter(function (item) {
@@ -11697,7 +11708,7 @@ function stopPropagation(event) {
 //                                         search option
 //                                         -------------
 function input(event) {
-  var value = event.target.value.toLowerCase();
+  var value = event.target.value;
   tag.filtered = value.length > 0;
   search(value);
 }
@@ -11712,10 +11723,10 @@ function unselect(event) {
 }
 
 function open() {
-  if (tag.openning || tag.closing || visibleFlg || tag.isReadOnly() || tag.isDisabled()) {
+  if (tag.opening || tag.closing || visibleFlg || tag.isReadOnly() || tag.isDisabled()) {
     return;
   }
-  tag.openning = true;
+  tag.opening = true;
   search('');
   tag.upward = isUpward();
   tag.transitionStatus = 'visible animating in slide ' + (tag.upward ? 'up' : 'down');
@@ -11723,7 +11734,7 @@ function open() {
     return item.active = false;
   });
   setTimeout(function () {
-    tag.openning = false;
+    tag.opening = false;
     visibleFlg = true;
     tag.transitionStatus = 'visible';
     tag.update();
@@ -11821,14 +11832,20 @@ function selectMultiTarget(updating) {
 }
 
 function search(target) {
+  var convert = opts.searchKeyConvert || toLowerCase;
   opts.items.forEach(function (item) {
-    item.searched = item.label && item.label.toLowerCase().indexOf(target) >= 0;
+    var searchKey = item.searchKey || item.label || '';
+    item.searched = convert(searchKey).indexOf(convert(target)) >= 0;
   });
   tag.filteredItems = opts.items.filter(function (item) {
     return item.searched;
   });
   tag.update();
   tag.trigger('search');
+}
+
+function toLowerCase(target) {
+  return target.toLowerCase();
 }
 
 function scrollPosition() {
@@ -11884,7 +11901,7 @@ function isActive() {
   if (tag.closing) {
     return false;
   }
-  return tag.openning || visibleFlg;
+  return tag.opening || visibleFlg;
 }
 
 function getTabindex() {

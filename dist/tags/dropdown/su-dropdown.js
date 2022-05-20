@@ -159,7 +159,7 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
         open()
       }
       if (keyCode != keys.upArrow && keyCode != keys.downArrow) {
-        return true
+        return
       }
 
       event.preventDefault()
@@ -173,11 +173,11 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
         return true
       })
       if (searchedItems.length == 0) {
-        return true
+        return
       }
       if (searchedItems.every(item => !item.active)) {
         searchedItems[0].active = true
-        return true
+        return
       }
 
       const activeIndex = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0))
@@ -245,16 +245,16 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
     }
 
     function open() {
-      if (tag.openning || tag.closing || visibleFlg || tag.isReadOnly() || tag.isDisabled()) {
+      if (tag.opening || tag.closing || visibleFlg || tag.isReadOnly() || tag.isDisabled()) {
         return
       }
-      tag.openning = true
+      tag.opening = true
       search('')
       tag.upward = isUpward()
       tag.transitionStatus = `visible animating in slide ${tag.upward ? 'up' : 'down'}`
       opts.items.forEach(item => item.active = false)
       setTimeout(() => {
-        tag.openning = false
+        tag.opening = false
         visibleFlg = true
         tag.transitionStatus = 'visible'
         tag.update()
@@ -337,10 +337,10 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
     }
 
     function search(target) {
-    const convert = opts.searchKeyConvert || toLowerCase
+      const convert = opts.searchKeyConvert || toLowerCase
       opts.items.forEach(item => {
-      const searchKey = item.searchKey || item.label || ''
-      item.searched = convert(searchKey).indexOf(convert(target)) >= 0
+        const searchKey = item.searchKey || item.label || ''
+        item.searched = convert(searchKey).indexOf(convert(target)) >= 0
       })
       tag.filteredItems = opts.items.filter(item => {
         return item.searched
@@ -349,9 +349,9 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
       tag.trigger('search')
     }
 
-  function toLowerCase(target) {
-    return target.toLowerCase()
-  }
+    function toLowerCase(target) {
+      return target.toLowerCase()
+    }
 
     function scrollPosition() {
       const menu = tag.root.querySelector('.menu')
@@ -406,7 +406,7 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
       if (tag.closing) {
         return false
       }
-      return tag.openning || visibleFlg
+      return tag.opening || visibleFlg
     }
 
     function getTabindex() {

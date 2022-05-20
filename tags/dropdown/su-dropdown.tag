@@ -214,7 +214,7 @@
         open()
       }
       if (keyCode != keys.upArrow && keyCode != keys.downArrow) {
-        return true
+        return
       }
 
       event.preventDefault()
@@ -228,11 +228,11 @@
         return true
       })
       if (searchedItems.length == 0) {
-        return true
+        return
       }
       if (searchedItems.every(item => !item.active)) {
         searchedItems[0].active = true
-        return true
+        return
       }
 
       const activeIndex = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0))
@@ -306,16 +306,16 @@
     }
 
     function open() {
-      if (tag.openning || tag.closing || visibleFlg || tag.isReadOnly() || tag.isDisabled()) {
+      if (tag.opening || tag.closing || visibleFlg || tag.isReadOnly() || tag.isDisabled()) {
         return
       }
-      tag.openning = true
+      tag.opening = true
       search('')
       tag.upward = isUpward()
       tag.transitionStatus = `visible animating in slide ${tag.upward ? 'up' : 'down'}`
       opts.items.forEach(item => item.active = false)
       setTimeout(() => {
-        tag.openning = false
+        tag.opening = false
         visibleFlg = true
         tag.transitionStatus = 'visible'
         tag.update()
@@ -467,7 +467,7 @@
       if (tag.closing) {
         return false
       }
-      return tag.openning || visibleFlg
+      return tag.opening || visibleFlg
     }
 
     function getTabindex() {
