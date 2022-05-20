@@ -90,6 +90,7 @@
       upArrow: 38,
       downArrow: 40,
     }
+    let compositionStarted = false
 
     // ===================================================================================
     //                                                                             Methods
@@ -113,6 +114,11 @@
         parentUpdate()
       } else {
         tag.defaultValue = tag.value
+      }
+
+      if (tag.refs.condition) {
+        tag.refs.condition.addEventListener('compositionstart', () => compositionStarted = true)
+        tag.refs.condition.addEventListener('compositionend', () => compositionStarted = false)
       }
     }
 
@@ -251,7 +257,7 @@
 
     function keyup(event) {
       const keyCode = event.keyCode
-      if (keyCode != keys.enter) {
+      if (keyCode != keys.enter || compositionStarted) {
         return
       }
       const searchedItems = opts.items.filter(item => item.searched && !item.selected)

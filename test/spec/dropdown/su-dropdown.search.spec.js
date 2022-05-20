@@ -155,4 +155,31 @@ describe('su-dropdown-search', function () {
 
     fireKeyEvent(dropdown, 'keyup', keys.enter)
   })
+
+  it('pressing enter after composition started', function () {
+    $('su-dropdown').focus()
+    this.clock.tick(310)
+    $('su-dropdown .search').val('m')
+    fireEvent($('su-dropdown .search')[0], 'input')
+    $('su-dropdown .item').length.should.equal(15)
+
+    let dropdown = $('su-dropdown')[0]
+    fireKeyEvent(dropdown, 'keydown', keys.downArrow)
+    $('su-dropdown .hover .text').text().should.equal(items[1].label)
+
+    let dropdownSearch = $('su-dropdown .search')[0]
+    fireCompositionEvent(dropdownSearch, 'compositionstart')
+    fireKeyEvent(dropdown, 'keyup', keys.enter)
+    fireCompositionEvent(dropdownSearch, 'compositionend')
+    expect(tag.value).to.be.null
+
+    fireKeyEvent(dropdown, 'keyup', keys.enter)
+    tag.value.should.deep.equal(items[1].value)
+  })
+
+  function fireCompositionEvent(el, name) {
+    let eventObj = document.createEvent("CompositionEvent")
+    eventObj.initEvent(name, true, true)
+    el.dispatchEvent(eventObj)
+  }
 })
