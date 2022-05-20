@@ -233,7 +233,7 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
     }
 
     function input(event) {
-      const value = event.target.value.toLowerCase()
+      const value = event.target.value
       tag.filtered = value.length > 0
       search(value)
     }
@@ -337,8 +337,10 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
     }
 
     function search(target) {
+    const convert = opts.searchKeyConvert || toLowerCase
       opts.items.forEach(item => {
-        item.searched = item.label && item.label.toLowerCase().indexOf(target) >= 0
+      const searchKey = item.label || ''
+      item.searched = convert(searchKey).indexOf(convert(target)) >= 0
       })
       tag.filteredItems = opts.items.filter(item => {
         return item.searched
@@ -346,6 +348,10 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
       tag.update()
       tag.trigger('search')
     }
+
+  function toLowerCase(target) {
+    return target.toLowerCase()
+  }
 
     function scrollPosition() {
       const menu = tag.root.querySelector('.menu')
