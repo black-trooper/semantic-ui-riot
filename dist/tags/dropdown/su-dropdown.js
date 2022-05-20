@@ -339,7 +339,7 @@ riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" au
     function search(target) {
     const convert = opts.searchKeyConvert || toLowerCase
       opts.items.forEach(item => {
-      const searchKey = item.label || ''
+      const searchKey = item.searchKey || item.label || ''
       item.searched = convert(searchKey).indexOf(convert(target)) >= 0
       })
       tag.filteredItems = opts.items.filter(item => {
