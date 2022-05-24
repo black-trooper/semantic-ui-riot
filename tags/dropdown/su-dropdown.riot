@@ -306,7 +306,7 @@
     //                                         search option
     //                                         -------------
     function onInput(event) {
-      const value = event.target.value.toLowerCase()
+      const value = event.target.value
       this.filtered = value.length > 0
       search(this, value)
     }
@@ -416,14 +416,30 @@
     }
 
     function search(tag, target) {
+      const convert = tag.props.searchKeyConvert || toLowerCase
       tag.props.items.forEach(item => {
-        item.searched = item.label && item.label.toLowerCase().indexOf(target) >= 0
+        const searchKeys = prepareSearchKey(item)
+        item.searched = searchKeys.some(key => convert(key).indexOf(convert(target)) >= 0)
       })
       tag.filteredItems = tag.props.items.filter(item => {
         return item.searched
       })
       tag.update()
       tag.dispatch('search')
+    }
+
+    function prepareSearchKey(item) {
+      if (typeof item.searchKey === 'undefined') {
+        return [item.label]
+      }
+      if (Array.isArray(item.searchKey)) {
+        return [item.label, ...item.searchKey]
+      }
+      return [item.label, item.searchKey]
+    }
+
+    function toLowerCase(target) {
+      return target.toLowerCase()
     }
 
     function scrollPosition(tag) {
