@@ -1,8 +1,6 @@
 # semantic-ui-riot
 
 [![npm version](https://badge.fury.io/js/semantic-ui-riot.svg)](https://badge.fury.io/js/semantic-ui-riot)
-[![Build Status](https://travis-ci.org/black-trooper/semantic-ui-riot.svg?branch=master)](https://travis-ci.org/black-trooper/semantic-ui-riot)
-[![Coverage Status](https://coveralls.io/repos/github/black-trooper/semantic-ui-riot/badge.svg)](https://coveralls.io/github/black-trooper/semantic-ui-riot)
 [![GitHub license](https://img.shields.io/github/license/black-trooper/semantic-ui-riot.svg)](https://github.com/black-trooper/semantic-ui-riot/blob/master/LICENSE)
 [![npm](https://img.shields.io/npm/dm/semantic-ui-riot.svg)](https://www.npmtrends.com/semantic-ui-riot)
 
