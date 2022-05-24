@@ -154,4 +154,31 @@ describe('su-dropdown-search', function () {
 
     fireKeyEvent(element, 'keyup', keys.enter)
   })
+
+  it('pressing enter after composition started', function () {
+    fireEvent(element, 'focus')
+    this.clock.tick(310)
+    component.$('.search').value = 'm'
+    fireEvent(component.$('.search'), 'input')
+    expect(component.$$('.item')).to.have.lengthOf(15)
+
+    fireKeyEvent(element, 'keydown', keys.downArrow)
+    expect(component.$('.hover .text').innerText).to.equal(items[1].label)
+
+    let dropdownSearch = component.$('.search')
+    fireCompositionEvent(dropdownSearch, 'compositionstart')
+    fireKeyEvent(element, 'keyup', keys.enter)
+    fireCompositionEvent(dropdownSearch, 'compositionend')
+    expect(element.getAttribute('value')).to.null
+
+    fireKeyEvent(element, 'keyup', keys.enter)
+    expect(element.getAttribute('value')).to.equal(items[1].value)
+  })
+
+  function fireCompositionEvent(el, name) {
+    let eventObj = document.createEvent("CompositionEvent")
+    eventObj.initEvent(name, true, true)
+    el.dispatchEvent(eventObj)
+  }
 })
+

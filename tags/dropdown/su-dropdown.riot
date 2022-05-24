@@ -58,6 +58,7 @@
       lastPropValue: '',
       changed: false,
       visibleFlg: false,
+      compositionStarted: false,
       onBeforeMount,
       onMounted,
       onBeforeUpdate,
@@ -123,6 +124,10 @@
         this.state.selectedFlg = this.props.items.some(item => item.selected)
       }
       state.defaultValue = state.value
+      if (props.search) {
+        this.$('.search').addEventListener('compositionstart', () => this.compositionStarted = true)
+        this.$('.search').addEventListener('compositionend', () => this.compositionStarted = false)
+      }
       this.update()
     }
 
@@ -267,7 +272,7 @@
 
     function onKeyup(event) {
       const keyCode = event.keyCode
-      if (keyCode != keys.enter) {
+      if (keyCode != keys.enter || this.compositionStarted) {
         return
       }
       const searchedItems = this.props.items.filter(item => item.searched && !item.selected)
