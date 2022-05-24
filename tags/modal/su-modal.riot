@@ -1,11 +1,16 @@
-<su-modal onclick="{ onClickDimmer }" id="{ su_id }" class="{ props.class }">
-  <div class="ui dimmer modals page transition { state.transition }">
-    <div class="ui modal transition visible active {props.class}" onclick="{ onClickModal }">
-      <i class="close icon" if="{ closable && !basic }" onclick="{ onClickHide }"></i>
+<su-modal onclick="{ onClickDimmer }" id="{ su_id }" class="{ modalClass }">
+  <div class="ui dimmer modals page transition { state.transition } { dimmerClass }">
+    <div class="ui modal transition visible active { modalClass }" onclick="{ onClickModal }">
       <div class="ui header { headerClass }" if="{ header }">
         <i class="icon { header.icon }" if="{ header.icon }"></i>
         { title }
       </div>
+      <virtual if="{ modeless && !basic }">
+        <i class="window minimize icon" if="{ minimizable }" onclick="{ onToggleMinimize }"></i>
+        <i class="window restore icon" if="{ resizable && maximized }" onclick="{ onToggleSize }"></i>
+        <i class="window maximize icon" if="{ resizable && !maximized }" onclick="{ onToggleSize }"></i>
+      </virtual>
+      <i class="close icon" if="{ closable && !basic }" onclick="{ onClickHide }"></i>
       <div class="content { contentClass }">
         <slot />
       </div>
@@ -18,6 +23,11 @@
       </div>
     </div>
   </div>
+  <a class="ui grey big label unminimize" if="{ minimized }" onclick="{ onToggleMinimize }">
+    <i class="angle double up icon"></i>
+    { title }
+  </a>
+
   <style>
     .ui.dimmer.visible.transition {
       display: flex !important;
@@ -45,6 +55,49 @@
         display: inline;
       }
     }
+
+    /* modeless */
+    .ui.dimmer.modeless.visible.transition {
+      visibility: hidden !important;
+      display: block !important;
+    }
+
+    .ui.dimmer.modeless>.ui.modal {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
+
+    .ui.modal>.restore,
+    .ui.modal>.maximize {
+      right: 1rem;
+    }
+
+    .ui.modal>.minimize {
+      right: 4rem;
+    }
+
+    .ui.modal>.icon {
+      display: inline;
+      top: 1.0535rem;
+      color: rgba(0, 0, 0, .87);
+      cursor: pointer;
+      position: absolute;
+      z-index: 1;
+      opacity: 0.8;
+      font-size: 1.25em;
+      width: 2.25rem;
+      height: 2.25rem;
+      padding: 0.625rem 0rem 0rem 0rem;
+    }
+
+    .unminimize.label {
+      position: fixed;
+      right: 0;
+      bottom: -6px;
+      padding-bottom: 1rem;
+      z-index: 1000;
+    }
   </style>
 
   <script>
@@ -53,16 +106,19 @@
       state: {
         transition: '',
       },
-      image_content: false,
       openning: false,
       closing: false,
       closable: true,
       visible: false,
+      minimized: false,
+      maximized: true,
       onBeforeUpdate,
       onClickModal,
       onClickButton,
       onClickHide,
       onClickDimmer,
+      onToggleSize,
+      onToggleMinimize,
     }
 
     // ===================================================================================
@@ -70,7 +126,6 @@
     //                                                                           =========
     function onBeforeUpdate(props, state) {
       this.basic = this.root.classList.contains('basic')
-      this.contentClass = getContentClass(this)
 
       if (props.modal) {
         this.closable = typeof props.modal.closable === 'undefined' || props.modal.closable
@@ -78,6 +133,17 @@
           this.header = props.modal.header
           this.headerClass = props.modal.header.icon ? 'icon' : ''
           this.title = props.modal.header.text ? props.modal.header.text : props.modal.header
+        }
+        if (props.modal.modeless === true) {
+          props.modal.modeless = {}
+        }
+        if (props.modal.modeless) {
+          if (typeof props.modal.modeless.minimize === 'undefined') {
+            props.modal.modeless.minimize = true
+          }
+          if (typeof props.modal.modeless.resize === 'undefined') {
+            props.modal.modeless.resize = true
+          }
         }
 
         this.buttons = props.modal.buttons
@@ -90,6 +156,15 @@
           button.class = classes.join(' ')
         })
       }
+      this.modeless = isModeless(this)
+      this.modalClass = getModalClass(this)
+      this.contentClass = getContentClass(this)
+      this.dimmerClass = isDimmerModeless(this) ? 'modeless' : ''
+      if (this.modeless) {
+        this.minimizable = props.modal.modeless.minimize
+        this.resizable = props.modal.modeless.resize
+      }
+
       if (props.show != this.lastShow) {
         this.lastShow = props.show
         if (props.show) {
@@ -122,6 +197,21 @@
 
     function onClickHide() {
       hide(this)
+    }
+
+    function onToggleSize() {
+      this.maximized = !this.maximized
+      this.update()
+      this.dispatch('toggleSize', this.maximized)
+    }
+
+    function onToggleMinimize() {
+      this.minimized = !this.minimized
+      this.update({
+        transition: this.minimized ? '' : 'visible active'
+      })
+      this.update()
+      this.dispatch('toggleMinimize', this.minimized)
     }
 
     // ===================================================================================
@@ -176,15 +266,31 @@
       }
     }
 
+    function getModalClass(tag) {
+      if (!tag.maximized && isModeless(tag) && tag.props.modal.modeless.class) {
+        return tag.props.modal.modeless.class
+      }
+      return tag.props.class
+    }
+
     function getContentClass(tag) {
       const classes = []
       if (tag.$('img')) {
         classes.push('image')
       }
-      if (tag.root.classList.contains('scrolling')) {
+      const modelessClass = isModeless(tag) && tag.props.modal.modeless.class || ''
+      if (tag.root.classList.contains('scrolling') || !tag.maximized && isModeless(tag) && tag.props.modal.modeless.class) {
         classes.push('scrolling')
       }
       return classes.join(' ')
+    }
+
+    function isModeless(tag) {
+      return !tag.closable && tag.props.modal.modeless
+    }
+
+    function isDimmerModeless(tag) {
+      return isModeless(tag) && !tag.minimized && !tag.maximized
     }
   </script>
 </su-modal>

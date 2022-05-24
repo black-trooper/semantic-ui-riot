@@ -4,13 +4,13 @@ import TargetComponent from '../../../dist/tags/modal/su-modal.js'
 
 describe('su-modal', function () {
   let element, component
-  let spyOnShow, spyOnHide
+  let spyOnShow, spyOnHide, spyOnToggleSize, spyOnToggleMinimize
   init(riot)
 
   const mount = option => {
     const AppComponent = compile(`
       <app>
-        <su-modal class="${option.class}" modal="{ modal }" show="{ show }" onshow="{ props.onshow }" onhide="{ props.onhide }">
+        <su-modal class="${option.class}" modal="{ modal }" show="{ show }" onshow="{ props.onshow }" onhide="{ props.onhide }" ontoggleSize="{ props.ontogglesize }" ontoggleMinimize="{ props.ontoggleminimize }">
           ${option.html}
         </su-modal>
         <script>
@@ -24,7 +24,9 @@ describe('su-modal', function () {
     riot.register('app', AppComponent)
     component = riot.mount(element, {
       'onshow': spyOnShow,
-      'onhide': spyOnHide
+      'onhide': spyOnHide,
+      'ontogglesize': spyOnToggleSize,
+      'ontoggleminimize': spyOnToggleMinimize,
     })[0]
   }
 
@@ -38,6 +40,8 @@ describe('su-modal', function () {
   beforeEach(function () {
     spyOnShow = sinon.spy()
     spyOnHide = sinon.spy()
+    spyOnToggleSize = sinon.spy()
+    spyOnToggleMinimize = sinon.spy()
     element = document.createElement('app')
     riot.register('su-modal', TargetComponent)
     this.clock = sinon.useFakeTimers()
@@ -269,4 +273,144 @@ describe('su-modal', function () {
     this.clock.tick(310)
     expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
   })
+
+  it('modeless', function () {
+    const modal = {
+      closable: false,
+      modeless: true,
+      buttons: [{
+        text: 'Ok',
+        closable: true
+      }]
+    }
+    mount({ modal: modal })
+    component.show = true
+    component.update()
+    this.clock.tick(510)
+    expect(component.$$('i.close.icon')).to.have.lengthOf(0)
+
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
+    expect(component.$$('i.minimize.icon')).to.have.lengthOf(1)
+    expect(component.$$('i.restore.icon')).to.have.lengthOf(1)
+    expect(component.$$('i.maximize.icon')).to.have.lengthOf(0)
+    expect(component.$$('a.label.minimized')).to.have.lengthOf(0)
+
+    component.$('i.restore.icon').click()
+    expect(spyOnToggleSize).to.have.been.calledOnce
+    this.clock.tick(310)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
+    expect(component.$$('i.minimize.icon')).to.have.lengthOf(1)
+    expect(component.$$('i.restore.icon')).to.have.lengthOf(0)
+    expect(component.$$('i.maximize.icon')).to.have.lengthOf(1)
+    expect(component.$$('a.label.minimized')).to.have.lengthOf(0)
+
+    component.$('i.maximize.icon').click()
+    expect(spyOnToggleSize).to.have.been.calledTwice
+    this.clock.tick(310)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
+    expect(component.$$('i.minimize.icon')).to.have.lengthOf(1)
+    expect(component.$$('i.restore.icon')).to.have.lengthOf(1)
+    expect(component.$$('i.maximize.icon')).to.have.lengthOf(0)
+    expect(component.$$('a.label.minimized')).to.have.lengthOf(0)
+
+    component.$('i.minimize.icon').click()
+    expect(spyOnToggleMinimize).to.have.been.calledOnce
+    this.clock.tick(310)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
+    expect(component.$$('i.minimize.icon')).to.have.lengthOf(1)
+    expect(component.$$('i.restore.icon')).to.have.lengthOf(1)
+    expect(component.$$('i.maximize.icon')).to.have.lengthOf(0)
+    expect(component.$$('a.label.unminimize')).to.have.lengthOf(1)
+
+    component.$('a.label.unminimize').click()
+    expect(spyOnToggleMinimize).to.have.been.calledTwice
+    this.clock.tick(310)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
+    expect(component.$$('i.minimize.icon')).to.have.lengthOf(1)
+    expect(component.$$('i.restore.icon')).to.have.lengthOf(1)
+    expect(component.$$('i.maximize.icon')).to.have.lengthOf(0)
+    expect(component.$$('a.label.unminimize')).to.have.lengthOf(0)
+
+    component.$('i.restore.icon').click()
+    this.clock.tick(310)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
+
+    component.$('.ui.button').click()
+    this.clock.tick(310)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(false)
+  })
+
+  it('modeless class option', function () {
+    const modal = {
+      closable: false,
+      modeless: {
+        class: 'tiny scrolling'
+      }
+    }
+    mount({ modal: modal })
+    component.show = true
+    component.update()
+    this.clock.tick(510)
+    expect(component.$$('i.close.icon')).to.have.lengthOf(0)
+
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
+    expect(component.$$('i.minimize.icon')).to.have.lengthOf(1)
+    expect(component.$$('i.restore.icon')).to.have.lengthOf(1)
+    expect(component.$$('i.maximize.icon')).to.have.lengthOf(0)
+    expect(component.$$('a.label.minimized')).to.have.lengthOf(0)
+    expect(component.$('.ui.modal').classList.contains('tiny')).to.equal(false)
+    expect(component.$('.content').classList.contains('scrolling')).to.equal(false)
+
+    component.$('i.restore.icon').click()
+    expect(spyOnToggleSize).to.have.been.calledOnce
+    this.clock.tick(310)
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
+    expect(component.$$('i.minimize.icon')).to.have.lengthOf(1)
+    expect(component.$$('i.restore.icon')).to.have.lengthOf(0)
+    expect(component.$$('i.maximize.icon')).to.have.lengthOf(1)
+    expect(component.$$('a.label.minimized')).to.have.lengthOf(0)
+
+    expect(component.$('.ui.modal').classList.contains('tiny')).to.equal(true)
+    expect(component.$('.content').classList.contains('scrolling')).to.equal(true)
+  })
+
+  it('modeless resize option', function () {
+    const modal = {
+      closable: false,
+      modeless: {
+        minimize: false,
+        resize: false,
+      }
+    }
+    mount({ modal: modal })
+    component.show = true
+    component.update()
+    this.clock.tick(510)
+    expect(component.$$('i.close.icon')).to.have.lengthOf(0)
+
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
+    expect(component.$$('i.minimize.icon')).to.have.lengthOf(0)
+    expect(component.$$('i.restore.icon')).to.have.lengthOf(0)
+    expect(component.$$('i.maximize.icon')).to.have.lengthOf(0)
+    expect(component.$$('a.label.minimized')).to.have.lengthOf(0)
+  })
+
+  it('modeless with closable', function () {
+    const modal = {}
+    mount({
+      class: 'modeless',
+      modal: modal
+    })
+    component.show = true
+    component.update()
+    this.clock.tick(510)
+    expect(component.$$('i.close.icon')).to.have.lengthOf(1)
+
+    expect(component.$('.dimmer').classList.contains('visible')).to.equal(true)
+    expect(component.$$('i.minimize.icon')).to.have.lengthOf(0)
+    expect(component.$$('i.restore.icon')).to.have.lengthOf(0)
+    expect(component.$$('i.maximize.icon')).to.have.lengthOf(0)
+    expect(component.$$('a.label.minimized')).to.have.lengthOf(0)
+  })
 })
+
