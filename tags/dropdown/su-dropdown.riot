@@ -229,7 +229,7 @@
         open(this)
       }
       if (keyCode != keys.upArrow && keyCode != keys.downArrow) {
-        return true
+        return
       }
 
       event.preventDefault()
@@ -243,12 +243,12 @@
         return true
       })
       if (searchedItems.length == 0) {
-        return true
+        return
       }
       if (searchedItems.every(item => !item.active)) {
         searchedItems[0].active = true
         this.update()
-        return true
+        return
       }
 
       const activeIndex = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0))
@@ -324,16 +324,16 @@
     //                                                                               Logic
     //                                                                               =====
     function open(tag) {
-      if (tag.openning || tag.closing || tag.visibleFlg || tag.readonly || tag.disabled) {
+      if (tag.opening || tag.closing || tag.visibleFlg || tag.readonly || tag.disabled) {
         return
       }
-      tag.openning = true
+      tag.opening = true
       search(tag, '')
       tag.upward = isUpward(tag)
       tag.state.transitionStatus = `visible animating in slide ${tag.upward ? 'up' : 'down'}`
       tag.props.items.forEach(item => item.active = false)
       setTimeout(() => {
-        tag.openning = false
+        tag.opening = false
         tag.visibleFlg = true
         tag.state.transitionStatus = 'visible'
         tag.update()
@@ -539,7 +539,7 @@
       if (tag.closing) {
         return false
       }
-      return tag.openning || tag.visibleFlg
+      return tag.opening || tag.visibleFlg
     }
 
     function isVisible(item) {
