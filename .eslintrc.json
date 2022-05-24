@@ -39,7 +39,7 @@
   "settings": {
     "html/html-extensions": [
       ".html",
-      ".tag"
+      ".riot"
     ]
   },
   "globals": {

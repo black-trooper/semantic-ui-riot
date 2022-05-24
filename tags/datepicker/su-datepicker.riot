@@ -247,7 +247,7 @@
     //                                                                           Lifecycle
     //                                                                           =========
     function onBeforeMount(props, state) {
-      this.state.transitionStatus = props.popup ? 'hidden' : 'visible'
+      state.transitionStatus = props.popup ? 'hidden' : 'visible'
       this.weeks = []
       this.pattern = getPattern(this)
       this.locale = getLocale(this)
@@ -291,7 +291,7 @@
     }
 
     function onBeforeUpdate(props, state) {
-      this.readOnly = this.root.classList.contains('read-only') ? "read-only" : ''
+      this.readOnly = this.root.classList.contains('read-only') ? 'read-only' : ''
       this.disabled = this.root.classList.contains('disabled') ? 'disabled' : ''
 
       let changed = false
@@ -499,15 +499,15 @@
     }
 
     function isActiveTime(index) {
-      return isEqualTime(tag.milliseconds, getMilliseconds(index))
+      return isEqualTime(this.milliseconds, getMilliseconds(index))
     }
 
     function isNearlyTime(index) {
       const target = getMilliseconds(index)
-      if (typeof tag.milliseconds === 'undefined' || tag.milliseconds > target) {
+      if (typeof this.milliseconds === 'undefined' || this.milliseconds > target) {
         return false
       }
-      return target - tag.milliseconds < 30 * 60 * 1000
+      return target - this.milliseconds < 30 * 60 * 1000
     }
 
     function getMilliseconds(index) {

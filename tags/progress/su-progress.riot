@@ -58,23 +58,23 @@
     //                                                                           Lifecycle
     //                                                                           =========
     function onMounted(props, state) {
-      this.state.value = props.value || 0
+      state.value = props.value || 0
       if (props.total > 0) {
         this.total = props.total
       }
       this.percent = getPercent(this)
-      this.lastValue = this.state.value
+      this.lastValue = state.value
       this.lastPropsValue = props.value
       this.update()
     }
 
     function onBeforeUpdate(props, state) {
       let changed = false
-      if (this.state.value >= this.total) {
-        this.state.value = this.total
+      if (state.value >= this.total) {
+        state.value = this.total
       }
-      if (this.state.value <= 0) {
-        this.state.value = 0
+      if (state.value <= 0) {
+        state.value = 0
       }
       let propsValue = props.value
       if (propsValue >= this.total) {
@@ -83,11 +83,11 @@
       if (propsValue <= 0) {
         propsValue = 0
       }
-      if (this.lastValue != this.state.value) {
-        this.lastValue = this.state.value
+      if (this.lastValue != state.value) {
+        this.lastValue = state.value
         changed = true
       } else if (this.lastPropsValue != propsValue) {
-        this.state.value = propsValue
+        state.value = propsValue
         this.lastPropsValue = propsValue
         this.lastValue = propsValue
         changed = true

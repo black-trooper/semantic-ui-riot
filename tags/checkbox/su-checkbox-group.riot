@@ -92,7 +92,7 @@
       if (typeof element.getAttribute('value') === 'undefined' || typeof value === 'undefined') {
         return
       }
-      const checkbox = element[Object.getOwnPropertySymbols(element).find(symbol => symbol.toString() === "Symbol(riot-component)")];
+      const checkbox = element[Object.getOwnPropertySymbols(element).find(symbol => symbol.toString() === 'Symbol(riot-component)')]
       checkbox.state.checked = value.some(v => v == element.getAttribute('value'))
     }
 

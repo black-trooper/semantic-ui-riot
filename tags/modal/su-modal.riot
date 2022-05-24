@@ -101,7 +101,6 @@
   </style>
 
   <script>
-    let index = 0
     export default {
       state: {
         transition: '',
@@ -124,7 +123,7 @@
     // ===================================================================================
     //                                                                           Lifecycle
     //                                                                           =========
-    function onBeforeUpdate(props, state) {
+    function onBeforeUpdate(props) {
       this.basic = this.root.classList.contains('basic')
 
       if (props.modal) {
@@ -278,7 +277,6 @@
       if (tag.$('img')) {
         classes.push('image')
       }
-      const modelessClass = isModeless(tag) && tag.props.modal.modeless.class || ''
       if (tag.root.classList.contains('scrolling') || !tag.maximized && isModeless(tag) && tag.props.modal.modeless.class) {
         classes.push('scrolling')
       }

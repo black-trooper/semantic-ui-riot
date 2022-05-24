@@ -26,21 +26,6 @@ module.exports = (env, argv) => {
               }
             }
           ]
-
-        },
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          enforce: 'pre',
-          use: [
-            {
-              loader: 'eslint-loader',
-              options: {
-                fix: true,
-                emitWarning: true,
-              },
-            }
-          ]
         },
         {
           test: /\.js$/,

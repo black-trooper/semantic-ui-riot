@@ -24,20 +24,21 @@
     // ===================================================================================
     //                                                                           Lifecycle
     //                                                                           =========
+    // eslint-disable-next-line no-unused-vars
     function onBeforeMount(props, state) {
       init(this, props.max, props.value)
       this.su_id = `su-rating-${index++}`
       this.obs.on(`${this.su_id}-reset`, () => { reset(this) })
     }
 
-    function onMounted(props, state) {
+    function onMounted() {
       this.update()
     }
 
     function onBeforeUpdate(props, state) {
-      if (this.state.lastValue != props.value) {
-        this.state.lastValue = props.value
-        this.state.value = props.value
+      if (state.lastValue != props.value) {
+        state.lastValue = props.value
+        state.value = props.value
       }
       this.readOnly = this.root.classList.contains('read-only')
       this.changed = state.value != state.defaultValue

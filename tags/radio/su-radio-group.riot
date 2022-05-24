@@ -85,7 +85,7 @@
       if (typeof element.getAttribute('value') === 'undefined' || typeof value === 'undefined') {
         return
       }
-      const radio = element[Object.getOwnPropertySymbols(element).find(symbol => symbol.toString() === "Symbol(riot-component)")];
+      const radio = element[Object.getOwnPropertySymbols(element).find(symbol => symbol.toString() === 'Symbol(riot-component)')]
       radio.state.checked = value == element.getAttribute('value')
     }
 

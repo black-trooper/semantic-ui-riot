@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "start": "npm run compile-watch & npm run test-watch",
+    "watch": "npm-watch",
     "dev": "webpack --mode development",
     "prod": "webpack --mode production",
     "clean": "rimraf ./coverage && rimraf ./dist/tags",
@@ -17,6 +18,15 @@
     "test-watch": "karma start --no-single-run",
     "test-run": "karma run",
     "build": "npm run compile && npm run test && npm run dev && npm run prod"
+    "eslint": "eslint **/*.riot"
+  },
+  "watch": {
+    "eslint": {
+      "patterns": [
+        "tags"
+      ],
+      "extensions": "riot"
+    }
   },
   "keywords": [
     "riotjs",
@@ -53,7 +63,6 @@
     "babel-loader": "^8.1.0",
     "chai": "^4.1.2",
     "eslint": "^6.8.0",
-    "eslint-loader": "^3.0.3",
     "eslint-plugin-html": "^6.0.0",
     "istanbul-instrumenter-loader": "^3.0.1",
     "karma": "^4.4.1",
@@ -66,6 +75,7 @@
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^4.0.2",
     "mocha": "^7.1.1",
+    "npm-watch": "^0.11.0",
     "riot": "^4.11.0",
     "sinon": "^9.0.1",
     "sinon-chai": "^3.5.0",
