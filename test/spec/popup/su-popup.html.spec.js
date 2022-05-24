@@ -13,8 +13,8 @@ describe('su-popup.html', function () {
   })
 
   afterEach(function () {
-    spyOnMouseover.reset()
-    spyOnMouseout.reset()
+    spyOnMouseover.resetHistory()
+    spyOnMouseout.resetHistory()
     tag.unmount()
   })
 

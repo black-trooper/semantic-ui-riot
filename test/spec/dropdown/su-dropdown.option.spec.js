@@ -40,11 +40,11 @@ describe('su-dropdown.option', function () {
   })
 
   afterEach(function () {
-    spyOnOpen.reset()
-    spyOnClose.reset()
-    spyOnSelect.reset()
-    spyOnChange.reset()
-    spyOnBlur.reset()
+    spyOnOpen.resetHistory()
+    spyOnClose.resetHistory()
+    spyOnSelect.resetHistory()
+    spyOnChange.resetHistory()
+    spyOnBlur.resetHistory()
     this.clock.restore()
     tag.unmount()
   })

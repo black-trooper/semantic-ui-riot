@@ -1,5 +1,4 @@
 const webpackDateFnsExternals = require('webpack-date-fns-externals');
-const htmlhintRiotRules = require('htmlhint-riot-rules')
 
 module.exports = (env, argv) => {
   return {
@@ -20,49 +19,10 @@ module.exports = (env, argv) => {
           exclude: /node_modules/,
           use: [
             {
-              loader: 'riotjs-loader',
+              loader: 'riot-tag-loader',
               options: {
-                type: 'es6', // transpile the riot tags using babel
                 hot: true
               }
-            },
-            {
-              loader: 'eslint-loader',
-              options: {
-                fix: true,
-                emitWarning: true,
-              }
-            },
-            {
-              loader: 'htmlhint-loader',
-              options: {
-                customRules: htmlhintRiotRules(),
-                // 'file-line-limit': 100,
-                'tag-name-include-hyphen': true,
-                'use-script-inside-tag': true,
-                'tag-expressions-simple': 15,
-                // 'tag-options-primitive': true,
-                'assign-this-to-tag': { force: true },
-                'properties-and-methods-order': { alphabetize: false },
-                'fake-es6-syntax-disabled': true,
-                'tag-parent-disabled': true,
-                'use-each-in-syntax': true
-              }
-            }
-          ]
-
-        },
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          enforce: 'pre',
-          use: [
-            {
-              loader: 'eslint-loader',
-              options: {
-                fix: true,
-                emitWarning: true,
-              },
             }
           ]
         },

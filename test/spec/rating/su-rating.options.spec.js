@@ -18,8 +18,8 @@ describe('su-rating', function () {
   })
 
   afterEach(function () {
-    spyOnClick.reset()
-    spyOnChange.reset()
+    spyOnClick.resetHistory()
+    spyOnChange.resetHistory()
     tag.unmount()
   })
 

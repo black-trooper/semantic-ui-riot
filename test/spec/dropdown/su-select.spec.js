@@ -33,8 +33,8 @@ describe('su-select', function () {
   })
 
   afterEach(function () {
-    spyOnChange.reset()
-    spyOnBlur.reset()
+    spyOnChange.resetHistory()
+    spyOnBlur.resetHistory()
     tag.unmount()
   })
 

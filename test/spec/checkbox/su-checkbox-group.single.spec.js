@@ -14,7 +14,7 @@ describe('su-checkbox-group-single', function () {
   })
 
   afterEach(function () {
-    spyOnChange.reset()
+    spyOnChange.resetHistory()
     tag.unmount()
   })
 

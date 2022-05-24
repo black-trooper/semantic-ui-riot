@@ -15,7 +15,7 @@ describe('su-radio-options', function () {
   })
 
   afterEach(function () {
-    spyOnClick.reset()
+    spyOnClick.resetHistory()
     tag.unmount()
   })
 

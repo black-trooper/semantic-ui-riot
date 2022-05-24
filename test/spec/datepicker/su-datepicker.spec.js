@@ -24,10 +24,10 @@ describe('su-datepicker', function () {
   })
 
   afterEach(function () {
-    spyOnOpen.reset()
-    spyOnClose.reset()
-    spyOnClick.reset()
-    spyOnChange.reset()
+    spyOnOpen.resetHistory()
+    spyOnClose.resetHistory()
+    spyOnClick.resetHistory()
+    spyOnChange.resetHistory()
     tag.unmount()
   })
 
