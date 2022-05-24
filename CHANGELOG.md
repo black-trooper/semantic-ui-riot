@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+##  [2.3.0] - 2022-05-24
+
+### Added
+
+- Add modeless option to su-modal
+- Add search key conversion option to su-dropdown
+- Add search key to su-dropdon items
+- Add datetime option to su-datepicker
+
+### Fixed
+
+- Fix the problem when during IME input
+
 ## [2.2.4] - 2020-07-20
 
 ### Fixed
@@ -342,6 +355,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Add su-rating
 
+[2.3.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v2.2.4...v2.3.0
+[2.2.4]: https://github.com/black-trooper/semantic-ui-riot/compare/v2.2.3...v2.2.4
 [2.2.3]: https://github.com/black-trooper/semantic-ui-riot/compare/v2.2.2...v2.2.3
 [2.2.2]: https://github.com/black-trooper/semantic-ui-riot/compare/v2.2.1...v2.2.2
 [2.2.1]: https://github.com/black-trooper/semantic-ui-riot/compare/v2.1.3...v2.2.1
