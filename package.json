@@ -7,17 +7,13 @@
     "dist"
   ],
   "scripts": {
-    "start": "npm run compile-watch & npm run test-watch",
     "watch": "npm-watch",
     "dev": "webpack --mode development",
     "prod": "webpack --mode production",
     "clean": "rimraf ./coverage && rimraf ./dist/tags",
     "compile": "npm run clean && riot tags --output dist/tags",
-    "compile-watch": "npm run clean && riot -w tags --output dist/tags",
-    "test": "karma start",
-    "test-watch": "karma start --no-single-run",
-    "test-run": "karma run",
-    "build": "npm run compile && npm run test && npm run dev && npm run prod"
+    "test": "npm run compile && karma start",
+    "build": "npm run test && npm run dev && npm run prod",
     "eslint": "eslint **/*.riot"
   },
   "watch": {
@@ -51,8 +47,8 @@
     "q": "^1.5.1"
   },
   "peerDependencies": {
-    "riot": ">=4.11.0",
-    "@riotjs/observable": "^4.0.4"
+    "@riotjs/observable": "^4.0.4",
+    "riot": ">=4.11.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -64,12 +60,9 @@
     "chai": "^4.1.2",
     "eslint": "^6.8.0",
     "eslint-plugin-html": "^6.0.0",
-    "istanbul-instrumenter-loader": "^3.0.1",
-    "karma": "^4.4.1",
+    "karma": "^6.3.20",
     "karma-chrome-launcher": "^3.1.0",
-    "karma-coverage": "^2.0.1",
-    "karma-coverage-istanbul-reporter": "^2.1.1",
-    "karma-mocha": "^1.3.0",
+    "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
     "karma-sinon-chai": "^2.0.2",
     "karma-sourcemap-loader": "^0.3.7",

@@ -1,5 +1,3 @@
-const path = require('path')
-
 module.exports = function (config) {
   config.set({
     basePath: '',
@@ -21,17 +19,6 @@ module.exports = function (config) {
         rules: [
           {
             test: /\.js$/,
-            enforce: 'post',
-            include: path.resolve('dist/tags/'),
-            use: {
-              loader: 'istanbul-instrumenter-loader',
-              options: {
-                esModules: true
-              }
-            }
-          },
-          {
-            test: /\.js$/,
             exclude: /node_modules/,
             use: ['babel-loader']
           }
@@ -42,31 +29,12 @@ module.exports = function (config) {
       stats: 'errors-only',
     },
     logLevel: config.LOG_ERROR,
-    reporters: ['mocha', 'coverage-istanbul'],
+    reporters: ['mocha'],
     mochaReporter: {
       output: 'minimal',
-    },
-    coverageIstanbulReporter: {
-      reports: ['html', 'lcovonly', 'text-summary'],
     },
     browsers: ['ChromeHeadless'],
     browserNoActivityTimeout: 30 * 60 * 1000,
     singleRun: true
   })
-  if (process.env.TRAVIS) {
-    var configuration = {
-      customLaunchers: {
-        chromeTravisCi: {
-          base: 'Chrome',
-          flags: ['--no-sandbox']
-        }
-      },
-      browsers: ['chromeTravisCi'],
-      reporters: ['coverage-istanbul', 'coverage'],
-      coverageIstanbulReporter: {
-        reports: ['lcov'],
-      },
-    }
-    config.set(configuration);
-  }
 }
