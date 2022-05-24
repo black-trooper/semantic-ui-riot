@@ -400,14 +400,24 @@
     function search(target) {
       const convert = opts.searchKeyConvert || toLowerCase
       opts.items.forEach(item => {
-        const searchKey = item.searchKey || item.label || ''
-        item.searched = convert(searchKey).indexOf(convert(target)) >= 0
+        const searchKeys = prepareSearchKey(item)
+        item.searched = searchKeys.some(key => convert(key).indexOf(convert(target)) >= 0)
       })
       tag.filteredItems = opts.items.filter(item => {
         return item.searched
       })
       tag.update()
       tag.trigger('search')
+    }
+
+    function prepareSearchKey(item) {
+      if (typeof item.searchKey === 'undefined') {
+        return [item.label]
+      }
+      if (Array.isArray(item.searchKey)) {
+        return [item.label, ...item.searchKey]
+      }
+      return [item.label, item.searchKey]
     }
 
     function toLowerCase(target) {
