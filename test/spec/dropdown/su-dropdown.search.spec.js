@@ -80,9 +80,9 @@ describe('su-dropdown-search', function () {
   })
 
   afterEach(function () {
-    spyOnOpen.reset()
-    spyOnClose.reset()
-    spyOnSearch.reset()
+    spyOnOpen.resetHistory()
+    spyOnClose.resetHistory()
+    spyOnSearch.resetHistory()
     this.clock.restore()
     tag.unmount()
   })

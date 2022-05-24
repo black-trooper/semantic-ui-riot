@@ -3,19 +3,54 @@
   "version": "1.4.0",
   "description": "Semantic UI for Riot",
   "main": "dist/semantic-ui-riot.min.js",
+  "browser": "semantic-ui-riot.js",
   "files": [
     "dist"
   ],
+  "engines": {
+    "node": ">=10"
+  },
   "scripts": {
-    "start": "npm run dev-watch & npm run compile & npm run test-watch",
+    "start": "npm run watch",
+    "watch": "npm-watch",
     "dev": "webpack --mode development",
-    "dev-watch": "webpack --mode development --watch --hot",
     "prod": "webpack --mode production",
-    "clean": "rimraf ./coverage && rimraf ./dist/tags",
-    "compile": "npm run clean && riot -w tags dist/tags",
+    "clean": "rimraf ./dist/tags",
     "test": "npm run clean && riot tags dist/tags && karma start",
-    "test-watch": "karma start --no-single-run",
-    "build": "npm run test && npm run dev && npm run prod"
+    "build": "npm run test && npm run dev && npm run prod",
+    "eslint": "eslint **/*.tag",
+    "htmlhint": "htmlhint --config .htmllintrc --rulesdir ./node_modules/htmlhint-riot-rules/add_rules 'tags/**/*.tag'",
+    "htmlhint:obseriot": "htmlhint --rules obseriot-must-remove --rulesdir ./scripts/rules/ 'tags/**/*.tag'"
+  },
+  "watch": {
+    "eslint": {
+      "patterns": [
+        "tags"
+      ],
+      "extensions": "tag"
+    },
+    "htmlhint": {
+      "patterns": [
+        "tags"
+      ],
+      "extensions": "tag"
+    },
+    "htmlhint:obseriot": {
+      "patterns": [
+        "tags"
+      ],
+      "extensions": "tag"
+    },
+    "test": {
+      "patterns": [
+        "tags",
+        "test"
+      ],
+      "extensions": [
+        "tag",
+        "spec.js"
+      ]
+    }
   },
   "keywords": [
     "riotjs",
@@ -36,41 +71,36 @@
     "url": "https://github.com/black-trooper/semantic-ui-riot/issues"
   },
   "dependencies": {
-    "date-fns": "^1.29.0",
+    "date-fns": "^1.30.1",
     "q": "^1.5.1",
     "riot": "^3.13.2"
   },
   "devDependencies": {
-    "babel-core": "^6.25.0",
-    "babel-loader": "^7.1.4",
-    "babel-preset-es2015-riot": "^1.1.0",
-    "browserify": "^17.0.0",
-    "chai": "^4.1.2",
-    "eslint": "^4.19.1",
-    "eslint-loader": "^2.0.0",
-    "eslint-plugin-html": "^3.1.1",
-    "htmlhint-loader": "^1.3.1",
-    "htmlhint-riot-rules": "^0.3.14",
-    "istanbul-instrumenter-loader": "^3.0.1",
-    "jquery": "^3.3.1",
-    "karma": "^4.0.1",
-    "karma-browserify": "^8.0.0",
-    "karma-chrome-launcher": "^2.2.0",
-    "karma-coverage": "^2.0.3",
-    "karma-coverage-istanbul-reporter": "^2.0.4",
-    "karma-coveralls": "^2.1.0",
-    "karma-mocha": "^1.3.0",
+    "@babel/core": "^7.18.0",
+    "@babel/preset-env": "^7.18.0",
+    "babel-loader": "^8.2.5",
+    "chai": "^4.3.6",
+    "eslint": "^8.16.0",
+    "eslint-plugin-html": "^6.2.0",
+    "htmlhint": "^1.1.4",
+    "htmlhint-riot-rules": "^0.5.0",
+    "is-fullwidth-code-point": "^4.0.0",
+    "jquery": "^3.6.0",
+    "karma": "^6.3.20",
+    "karma-chrome-launcher": "^3.1.1",
+    "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
     "karma-riot": "^2.0.0",
-    "karma-sinon-chai": "^1.3.4",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^3.0.5",
-    "mocha": "^4.0.1",
-    "riotjs-loader": "^4.0.0",
-    "sinon": "^2.1.0",
-    "sinon-chai": "^2.13.0",
-    "webpack": "^4.8.3",
-    "webpack-cli": "^3.3.0",
+    "karma-sinon-chai": "^2.0.2",
+    "karma-webpack": "^5.0.0",
+    "mocha": "^10.0.0",
+    "npm-watch": "^0.11.0",
+    "regjsparser": "^0.8.4",
+    "riot-tag-loader": "^2.1.0",
+    "sinon": "^14.0.0",
+    "sinon-chai": "^3.7.0",
+    "webpack": "^5.72.1",
+    "webpack-cli": "^4.9.2",
     "webpack-date-fns-externals": "^1.0.2"
   }
 }

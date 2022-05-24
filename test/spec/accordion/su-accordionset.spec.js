@@ -16,7 +16,7 @@ describe('su-accordionset', function () {
   })
 
   afterEach(function () {
-    spyOnClick.reset()
+    spyOnClick.resetHistory()
     tag.unmount()
   })
 

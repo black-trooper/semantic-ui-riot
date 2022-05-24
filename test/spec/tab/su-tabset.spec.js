@@ -18,7 +18,7 @@ describe('su-tabset', function () {
   })
 
   afterEach(function () {
-    spyOnClick.reset()
+    spyOnClick.resetHistory()
     tag.unmount()
   })
 

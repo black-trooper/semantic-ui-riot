@@ -15,7 +15,7 @@ describe('su-checkbox-group-update', function () {
   })
 
   afterEach(function () {
-    spyOnChange.reset()
+    spyOnChange.resetHistory()
     tag.unmount()
   })
 

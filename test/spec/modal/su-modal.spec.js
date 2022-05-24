@@ -20,10 +20,10 @@ describe('su-modal', function () {
   })
 
   afterEach(function () {
-    spyOnShow.reset()
-    spyOnHide.reset()
-    spyOnToggleSize.reset()
-    spyOnToggleMinimize.reset()
+    spyOnShow.resetHistory()
+    spyOnHide.resetHistory()
+    spyOnToggleSize.resetHistory()
+    spyOnToggleMinimize.resetHistory()
     this.clock.restore()
     tag.unmount()
   })

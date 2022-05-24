@@ -16,7 +16,7 @@ describe('su-radio', function () {
   })
 
   afterEach(function () {
-    spyOnClick.reset()
+    spyOnClick.resetHistory()
     this.clock.restore()
     tag1.unmount()
   })

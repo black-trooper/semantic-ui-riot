@@ -11,7 +11,7 @@ describe('su-checkbox', function () {
   })
 
   afterEach(function () {
-    spyOnClick.reset()
+    spyOnClick.resetHistory()
     tag.unmount()
   })
 
