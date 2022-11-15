@@ -1,92 +1,52 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
+		module.exports = factory(require("riot"));
 	else if(typeof define === 'function' && define.amd)
-		define([], factory);
+		define(["riot"], factory);
 	else if(typeof exports === 'object')
-		exports["SemanticUiRiot"] = factory();
+		exports["SemanticUiRiot"] = factory(require("riot"));
 	else
-		root["SemanticUiRiot"] = factory();
-})(window, function() {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.js");
-/******/ })
-/************************************************************************/
-/******/ ({
+		root["SemanticUiRiot"] = factory(root["riot"]);
+})(self, (__WEBPACK_EXTERNAL_MODULE_riot__) => {
+return /******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./node_modules/date-fns/_lib/getTimezoneOffsetInMilliseconds/index.js":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/date-fns/_lib/getTimezoneOffsetInMilliseconds/index.js ***!
+  \*****************************************************************************/
+/***/ ((module) => {
+
+var MILLISECONDS_IN_MINUTE = 60000
+
+/**
+ * Google Chrome as of 67.0.3396.87 introduced timezones with offset that includes seconds.
+ * They usually appear for dates that denote time before the timezones were introduced
+ * (e.g. for 'Europe/Prague' timezone the offset is GMT+00:57:44 before 1 October 1891
+ * and GMT+01:00:00 after that date)
+ *
+ * Date#getTimezoneOffset returns the offset in minutes and would return 57 for the example above,
+ * which would lead to incorrect calculations.
+ *
+ * This function returns the timezone offset in milliseconds that takes seconds in account.
+ */
+module.exports = function getTimezoneOffsetInMilliseconds (dirtyDate) {
+  var date = new Date(dirtyDate.getTime())
+  var baseTimezoneOffset = date.getTimezoneOffset()
+  date.setSeconds(0, 0)
+  var millisecondsPartOfTimezoneOffset = date.getTime() % MILLISECONDS_IN_MINUTE
+
+  return baseTimezoneOffset * MILLISECONDS_IN_MINUTE + millisecondsPartOfTimezoneOffset
+}
+
+
+/***/ }),
 
 /***/ "./node_modules/date-fns/add_days/index.js":
 /*!*************************************************!*\
   !*** ./node_modules/date-fns/add_days/index.js ***!
   \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -122,8 +82,7 @@ module.exports = addDays
 /*!**************************************************!*\
   !*** ./node_modules/date-fns/add_hours/index.js ***!
   \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var addMilliseconds = __webpack_require__(/*! ../add_milliseconds/index.js */ "./node_modules/date-fns/add_milliseconds/index.js")
 
@@ -159,8 +118,7 @@ module.exports = addHours
 /*!******************************************************!*\
   !*** ./node_modules/date-fns/add_iso_years/index.js ***!
   \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var getISOYear = __webpack_require__(/*! ../get_iso_year/index.js */ "./node_modules/date-fns/get_iso_year/index.js")
 var setISOYear = __webpack_require__(/*! ../set_iso_year/index.js */ "./node_modules/date-fns/set_iso_year/index.js")
@@ -197,8 +155,7 @@ module.exports = addISOYears
 /*!*********************************************************!*\
   !*** ./node_modules/date-fns/add_milliseconds/index.js ***!
   \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -233,8 +190,7 @@ module.exports = addMilliseconds
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/add_minutes/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var addMilliseconds = __webpack_require__(/*! ../add_milliseconds/index.js */ "./node_modules/date-fns/add_milliseconds/index.js")
 
@@ -270,8 +226,7 @@ module.exports = addMinutes
 /*!***************************************************!*\
   !*** ./node_modules/date-fns/add_months/index.js ***!
   \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 var getDaysInMonth = __webpack_require__(/*! ../get_days_in_month/index.js */ "./node_modules/date-fns/get_days_in_month/index.js")
@@ -315,8 +270,7 @@ module.exports = addMonths
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/add_quarters/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var addMonths = __webpack_require__(/*! ../add_months/index.js */ "./node_modules/date-fns/add_months/index.js")
 
@@ -351,8 +305,7 @@ module.exports = addQuarters
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/add_seconds/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var addMilliseconds = __webpack_require__(/*! ../add_milliseconds/index.js */ "./node_modules/date-fns/add_milliseconds/index.js")
 
@@ -386,8 +339,7 @@ module.exports = addSeconds
 /*!**************************************************!*\
   !*** ./node_modules/date-fns/add_weeks/index.js ***!
   \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var addDays = __webpack_require__(/*! ../add_days/index.js */ "./node_modules/date-fns/add_days/index.js")
 
@@ -422,8 +374,7 @@ module.exports = addWeeks
 /*!**************************************************!*\
   !*** ./node_modules/date-fns/add_years/index.js ***!
   \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var addMonths = __webpack_require__(/*! ../add_months/index.js */ "./node_modules/date-fns/add_months/index.js")
 
@@ -457,8 +408,7 @@ module.exports = addYears
 /*!***************************************************************!*\
   !*** ./node_modules/date-fns/are_ranges_overlapping/index.js ***!
   \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -512,8 +462,7 @@ module.exports = areRangesOverlapping
 /*!*********************************************************!*\
   !*** ./node_modules/date-fns/closest_index_to/index.js ***!
   \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -572,8 +521,7 @@ module.exports = closestIndexTo
 /*!***************************************************!*\
   !*** ./node_modules/date-fns/closest_to/index.js ***!
   \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -630,8 +578,7 @@ module.exports = closestTo
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/compare_asc/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -692,8 +639,7 @@ module.exports = compareAsc
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/compare_desc/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -754,8 +700,7 @@ module.exports = compareDesc
 /*!********************************************************************!*\
   !*** ./node_modules/date-fns/difference_in_calendar_days/index.js ***!
   \********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var startOfDay = __webpack_require__(/*! ../start_of_day/index.js */ "./node_modules/date-fns/start_of_day/index.js")
 
@@ -806,8 +751,7 @@ module.exports = differenceInCalendarDays
 /*!*************************************************************************!*\
   !*** ./node_modules/date-fns/difference_in_calendar_iso_weeks/index.js ***!
   \*************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var startOfISOWeek = __webpack_require__(/*! ../start_of_iso_week/index.js */ "./node_modules/date-fns/start_of_iso_week/index.js")
 
@@ -859,8 +803,7 @@ module.exports = differenceInCalendarISOWeeks
 /*!*************************************************************************!*\
   !*** ./node_modules/date-fns/difference_in_calendar_iso_years/index.js ***!
   \*************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var getISOYear = __webpack_require__(/*! ../get_iso_year/index.js */ "./node_modules/date-fns/get_iso_year/index.js")
 
@@ -898,8 +841,7 @@ module.exports = differenceInCalendarISOYears
 /*!**********************************************************************!*\
   !*** ./node_modules/date-fns/difference_in_calendar_months/index.js ***!
   \**********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -941,8 +883,7 @@ module.exports = differenceInCalendarMonths
 /*!************************************************************************!*\
   !*** ./node_modules/date-fns/difference_in_calendar_quarters/index.js ***!
   \************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var getQuarter = __webpack_require__(/*! ../get_quarter/index.js */ "./node_modules/date-fns/get_quarter/index.js")
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
@@ -985,8 +926,7 @@ module.exports = differenceInCalendarQuarters
 /*!*********************************************************************!*\
   !*** ./node_modules/date-fns/difference_in_calendar_weeks/index.js ***!
   \*********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var startOfWeek = __webpack_require__(/*! ../start_of_week/index.js */ "./node_modules/date-fns/start_of_week/index.js")
 
@@ -1048,8 +988,7 @@ module.exports = differenceInCalendarWeeks
 /*!*********************************************************************!*\
   !*** ./node_modules/date-fns/difference_in_calendar_years/index.js ***!
   \*********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -1088,8 +1027,7 @@ module.exports = differenceInCalendarYears
 /*!***********************************************************!*\
   !*** ./node_modules/date-fns/difference_in_days/index.js ***!
   \***********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 var differenceInCalendarDays = __webpack_require__(/*! ../difference_in_calendar_days/index.js */ "./node_modules/date-fns/difference_in_calendar_days/index.js")
@@ -1138,8 +1076,7 @@ module.exports = differenceInDays
 /*!************************************************************!*\
   !*** ./node_modules/date-fns/difference_in_hours/index.js ***!
   \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var differenceInMilliseconds = __webpack_require__(/*! ../difference_in_milliseconds/index.js */ "./node_modules/date-fns/difference_in_milliseconds/index.js")
 
@@ -1178,8 +1115,7 @@ module.exports = differenceInHours
 /*!****************************************************************!*\
   !*** ./node_modules/date-fns/difference_in_iso_years/index.js ***!
   \****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 var differenceInCalendarISOYears = __webpack_require__(/*! ../difference_in_calendar_iso_years/index.js */ "./node_modules/date-fns/difference_in_calendar_iso_years/index.js")
@@ -1231,8 +1167,7 @@ module.exports = differenceInISOYears
 /*!*******************************************************************!*\
   !*** ./node_modules/date-fns/difference_in_milliseconds/index.js ***!
   \*******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -1271,8 +1206,7 @@ module.exports = differenceInMilliseconds
 /*!**************************************************************!*\
   !*** ./node_modules/date-fns/difference_in_minutes/index.js ***!
   \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var differenceInMilliseconds = __webpack_require__(/*! ../difference_in_milliseconds/index.js */ "./node_modules/date-fns/difference_in_milliseconds/index.js")
 
@@ -1311,8 +1245,7 @@ module.exports = differenceInMinutes
 /*!*************************************************************!*\
   !*** ./node_modules/date-fns/difference_in_months/index.js ***!
   \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 var differenceInCalendarMonths = __webpack_require__(/*! ../difference_in_calendar_months/index.js */ "./node_modules/date-fns/difference_in_calendar_months/index.js")
@@ -1360,8 +1293,7 @@ module.exports = differenceInMonths
 /*!***************************************************************!*\
   !*** ./node_modules/date-fns/difference_in_quarters/index.js ***!
   \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var differenceInMonths = __webpack_require__(/*! ../difference_in_months/index.js */ "./node_modules/date-fns/difference_in_months/index.js")
 
@@ -1398,8 +1330,7 @@ module.exports = differenceInQuarters
 /*!**************************************************************!*\
   !*** ./node_modules/date-fns/difference_in_seconds/index.js ***!
   \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var differenceInMilliseconds = __webpack_require__(/*! ../difference_in_milliseconds/index.js */ "./node_modules/date-fns/difference_in_milliseconds/index.js")
 
@@ -1437,8 +1368,7 @@ module.exports = differenceInSeconds
 /*!************************************************************!*\
   !*** ./node_modules/date-fns/difference_in_weeks/index.js ***!
   \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var differenceInDays = __webpack_require__(/*! ../difference_in_days/index.js */ "./node_modules/date-fns/difference_in_days/index.js")
 
@@ -1475,8 +1405,7 @@ module.exports = differenceInWeeks
 /*!************************************************************!*\
   !*** ./node_modules/date-fns/difference_in_years/index.js ***!
   \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 var differenceInCalendarYears = __webpack_require__(/*! ../difference_in_calendar_years/index.js */ "./node_modules/date-fns/difference_in_calendar_years/index.js")
@@ -1524,8 +1453,7 @@ module.exports = differenceInYears
 /*!**********************************************************!*\
   !*** ./node_modules/date-fns/distance_in_words/index.js ***!
   \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var compareDesc = __webpack_require__(/*! ../compare_desc/index.js */ "./node_modules/date-fns/compare_desc/index.js")
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
@@ -1738,8 +1666,7 @@ module.exports = distanceInWords
 /*!*****************************************************************!*\
   !*** ./node_modules/date-fns/distance_in_words_strict/index.js ***!
   \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var compareDesc = __webpack_require__(/*! ../compare_desc/index.js */ "./node_modules/date-fns/compare_desc/index.js")
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
@@ -1925,8 +1852,7 @@ module.exports = distanceInWordsStrict
 /*!*****************************************************************!*\
   !*** ./node_modules/date-fns/distance_in_words_to_now/index.js ***!
   \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var distanceInWords = __webpack_require__(/*! ../distance_in_words/index.js */ "./node_modules/date-fns/distance_in_words/index.js")
 
@@ -2021,8 +1947,7 @@ module.exports = distanceInWordsToNow
 /*!*************************************************!*\
   !*** ./node_modules/date-fns/each_day/index.js ***!
   \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -2086,8 +2011,7 @@ module.exports = eachDay
 /*!***************************************************!*\
   !*** ./node_modules/date-fns/end_of_day/index.js ***!
   \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -2122,8 +2046,7 @@ module.exports = endOfDay
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/end_of_hour/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -2158,8 +2081,7 @@ module.exports = endOfHour
 /*!********************************************************!*\
   !*** ./node_modules/date-fns/end_of_iso_week/index.js ***!
   \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var endOfWeek = __webpack_require__(/*! ../end_of_week/index.js */ "./node_modules/date-fns/end_of_week/index.js")
 
@@ -2194,8 +2116,7 @@ module.exports = endOfISOWeek
 /*!********************************************************!*\
   !*** ./node_modules/date-fns/end_of_iso_year/index.js ***!
   \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var getISOYear = __webpack_require__(/*! ../get_iso_year/index.js */ "./node_modules/date-fns/get_iso_year/index.js")
 var startOfISOWeek = __webpack_require__(/*! ../start_of_iso_week/index.js */ "./node_modules/date-fns/start_of_iso_week/index.js")
@@ -2238,8 +2159,7 @@ module.exports = endOfISOYear
 /*!******************************************************!*\
   !*** ./node_modules/date-fns/end_of_minute/index.js ***!
   \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -2274,8 +2194,7 @@ module.exports = endOfMinute
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/end_of_month/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -2312,8 +2231,7 @@ module.exports = endOfMonth
 /*!*******************************************************!*\
   !*** ./node_modules/date-fns/end_of_quarter/index.js ***!
   \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -2351,8 +2269,7 @@ module.exports = endOfQuarter
 /*!******************************************************!*\
   !*** ./node_modules/date-fns/end_of_second/index.js ***!
   \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -2387,8 +2304,7 @@ module.exports = endOfSecond
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/end_of_today/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var endOfDay = __webpack_require__(/*! ../end_of_day/index.js */ "./node_modules/date-fns/end_of_day/index.js")
 
@@ -2419,8 +2335,7 @@ module.exports = endOfToday
 /*!********************************************************!*\
   !*** ./node_modules/date-fns/end_of_tomorrow/index.js ***!
   \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((module) => {
 
 /**
  * @category Day Helpers
@@ -2457,8 +2372,7 @@ module.exports = endOfTomorrow
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/end_of_week/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -2506,8 +2420,7 @@ module.exports = endOfWeek
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/end_of_year/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -2544,8 +2457,7 @@ module.exports = endOfYear
 /*!*********************************************************!*\
   !*** ./node_modules/date-fns/end_of_yesterday/index.js ***!
   \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((module) => {
 
 /**
  * @category Day Helpers
@@ -2582,8 +2494,7 @@ module.exports = endOfYesterday
 /*!***********************************************!*\
   !*** ./node_modules/date-fns/format/index.js ***!
   \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var getDayOfYear = __webpack_require__(/*! ../get_day_of_year/index.js */ "./node_modules/date-fns/get_day_of_year/index.js")
 var getISOWeek = __webpack_require__(/*! ../get_iso_week/index.js */ "./node_modules/date-fns/get_iso_week/index.js")
@@ -2921,8 +2832,7 @@ module.exports = format
 /*!*************************************************!*\
   !*** ./node_modules/date-fns/get_date/index.js ***!
   \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -2956,8 +2866,7 @@ module.exports = getDate
 /*!************************************************!*\
   !*** ./node_modules/date-fns/get_day/index.js ***!
   \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -2991,8 +2900,7 @@ module.exports = getDay
 /*!********************************************************!*\
   !*** ./node_modules/date-fns/get_day_of_year/index.js ***!
   \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 var startOfYear = __webpack_require__(/*! ../start_of_year/index.js */ "./node_modules/date-fns/start_of_year/index.js")
@@ -3029,8 +2937,7 @@ module.exports = getDayOfYear
 /*!**********************************************************!*\
   !*** ./node_modules/date-fns/get_days_in_month/index.js ***!
   \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -3068,8 +2975,7 @@ module.exports = getDaysInMonth
 /*!*********************************************************!*\
   !*** ./node_modules/date-fns/get_days_in_year/index.js ***!
   \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var isLeapYear = __webpack_require__(/*! ../is_leap_year/index.js */ "./node_modules/date-fns/is_leap_year/index.js")
 
@@ -3101,8 +3007,7 @@ module.exports = getDaysInYear
 /*!**************************************************!*\
   !*** ./node_modules/date-fns/get_hours/index.js ***!
   \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -3136,8 +3041,7 @@ module.exports = getHours
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/get_iso_day/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -3179,8 +3083,7 @@ module.exports = getISODay
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/get_iso_week/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 var startOfISOWeek = __webpack_require__(/*! ../start_of_iso_week/index.js */ "./node_modules/date-fns/start_of_iso_week/index.js")
@@ -3224,8 +3127,7 @@ module.exports = getISOWeek
 /*!**************************************************************!*\
   !*** ./node_modules/date-fns/get_iso_weeks_in_year/index.js ***!
   \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var startOfISOYear = __webpack_require__(/*! ../start_of_iso_year/index.js */ "./node_modules/date-fns/start_of_iso_year/index.js")
 var addWeeks = __webpack_require__(/*! ../add_weeks/index.js */ "./node_modules/date-fns/add_weeks/index.js")
@@ -3268,8 +3170,7 @@ module.exports = getISOWeeksInYear
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/get_iso_year/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 var startOfISOWeek = __webpack_require__(/*! ../start_of_iso_week/index.js */ "./node_modules/date-fns/start_of_iso_week/index.js")
@@ -3324,8 +3225,7 @@ module.exports = getISOYear
 /*!*********************************************************!*\
   !*** ./node_modules/date-fns/get_milliseconds/index.js ***!
   \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -3359,8 +3259,7 @@ module.exports = getMilliseconds
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/get_minutes/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -3394,8 +3293,7 @@ module.exports = getMinutes
 /*!**************************************************!*\
   !*** ./node_modules/date-fns/get_month/index.js ***!
   \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -3429,8 +3327,7 @@ module.exports = getMonth
 /*!***********************************************************************!*\
   !*** ./node_modules/date-fns/get_overlapping_days_in_ranges/index.js ***!
   \***********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -3502,8 +3399,7 @@ module.exports = getOverlappingDaysInRanges
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/get_quarter/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -3537,8 +3433,7 @@ module.exports = getQuarter
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/get_seconds/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -3572,8 +3467,7 @@ module.exports = getSeconds
 /*!*************************************************!*\
   !*** ./node_modules/date-fns/get_time/index.js ***!
   \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -3607,8 +3501,7 @@ module.exports = getTime
 /*!*************************************************!*\
   !*** ./node_modules/date-fns/get_year/index.js ***!
   \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -3642,8 +3535,7 @@ module.exports = getYear
 /*!****************************************!*\
   !*** ./node_modules/date-fns/index.js ***!
   \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = {
   addDays: __webpack_require__(/*! ./add_days/index.js */ "./node_modules/date-fns/add_days/index.js"),
@@ -3809,8 +3701,7 @@ module.exports = {
 /*!*************************************************!*\
   !*** ./node_modules/date-fns/is_after/index.js ***!
   \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -3845,8 +3736,7 @@ module.exports = isAfter
 /*!**************************************************!*\
   !*** ./node_modules/date-fns/is_before/index.js ***!
   \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -3881,8 +3771,7 @@ module.exports = isBefore
 /*!************************************************!*\
   !*** ./node_modules/date-fns/is_date/index.js ***!
   \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((module) => {
 
 /**
  * @category Common Helpers
@@ -3912,8 +3801,7 @@ module.exports = isDate
 /*!*************************************************!*\
   !*** ./node_modules/date-fns/is_equal/index.js ***!
   \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -3951,8 +3839,7 @@ module.exports = isEqual
 /*!**************************************************************!*\
   !*** ./node_modules/date-fns/is_first_day_of_month/index.js ***!
   \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -3984,8 +3871,7 @@ module.exports = isFirstDayOfMonth
 /*!**************************************************!*\
   !*** ./node_modules/date-fns/is_friday/index.js ***!
   \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -4017,8 +3903,7 @@ module.exports = isFriday
 /*!**************************************************!*\
   !*** ./node_modules/date-fns/is_future/index.js ***!
   \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -4050,8 +3935,7 @@ module.exports = isFuture
 /*!*************************************************************!*\
   !*** ./node_modules/date-fns/is_last_day_of_month/index.js ***!
   \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 var endOfDay = __webpack_require__(/*! ../end_of_day/index.js */ "./node_modules/date-fns/end_of_day/index.js")
@@ -4086,8 +3970,7 @@ module.exports = isLastDayOfMonth
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/is_leap_year/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -4121,8 +4004,7 @@ module.exports = isLeapYear
 /*!**************************************************!*\
   !*** ./node_modules/date-fns/is_monday/index.js ***!
   \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -4154,8 +4036,7 @@ module.exports = isMonday
 /*!************************************************!*\
   !*** ./node_modules/date-fns/is_past/index.js ***!
   \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -4187,8 +4068,7 @@ module.exports = isPast
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/is_same_day/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var startOfDay = __webpack_require__(/*! ../start_of_day/index.js */ "./node_modules/date-fns/start_of_day/index.js")
 
@@ -4227,8 +4107,7 @@ module.exports = isSameDay
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/is_same_hour/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var startOfHour = __webpack_require__(/*! ../start_of_hour/index.js */ "./node_modules/date-fns/start_of_hour/index.js")
 
@@ -4267,8 +4146,7 @@ module.exports = isSameHour
 /*!*********************************************************!*\
   !*** ./node_modules/date-fns/is_same_iso_week/index.js ***!
   \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var isSameWeek = __webpack_require__(/*! ../is_same_week/index.js */ "./node_modules/date-fns/is_same_week/index.js")
 
@@ -4306,8 +4184,7 @@ module.exports = isSameISOWeek
 /*!*********************************************************!*\
   !*** ./node_modules/date-fns/is_same_iso_year/index.js ***!
   \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var startOfISOYear = __webpack_require__(/*! ../start_of_iso_year/index.js */ "./node_modules/date-fns/start_of_iso_year/index.js")
 
@@ -4348,8 +4225,7 @@ module.exports = isSameISOYear
 /*!*******************************************************!*\
   !*** ./node_modules/date-fns/is_same_minute/index.js ***!
   \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var startOfMinute = __webpack_require__(/*! ../start_of_minute/index.js */ "./node_modules/date-fns/start_of_minute/index.js")
 
@@ -4389,8 +4265,7 @@ module.exports = isSameMinute
 /*!******************************************************!*\
   !*** ./node_modules/date-fns/is_same_month/index.js ***!
   \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -4429,8 +4304,7 @@ module.exports = isSameMonth
 /*!********************************************************!*\
   !*** ./node_modules/date-fns/is_same_quarter/index.js ***!
   \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var startOfQuarter = __webpack_require__(/*! ../start_of_quarter/index.js */ "./node_modules/date-fns/start_of_quarter/index.js")
 
@@ -4469,8 +4343,7 @@ module.exports = isSameQuarter
 /*!*******************************************************!*\
   !*** ./node_modules/date-fns/is_same_second/index.js ***!
   \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var startOfSecond = __webpack_require__(/*! ../start_of_second/index.js */ "./node_modules/date-fns/start_of_second/index.js")
 
@@ -4510,8 +4383,7 @@ module.exports = isSameSecond
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/is_same_week/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var startOfWeek = __webpack_require__(/*! ../start_of_week/index.js */ "./node_modules/date-fns/start_of_week/index.js")
 
@@ -4562,8 +4434,7 @@ module.exports = isSameWeek
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/is_same_year/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -4601,8 +4472,7 @@ module.exports = isSameYear
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/is_saturday/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -4634,8 +4504,7 @@ module.exports = isSaturday
 /*!**************************************************!*\
   !*** ./node_modules/date-fns/is_sunday/index.js ***!
   \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -4667,8 +4536,7 @@ module.exports = isSunday
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/is_this_hour/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var isSameHour = __webpack_require__(/*! ../is_same_hour/index.js */ "./node_modules/date-fns/is_same_hour/index.js")
 
@@ -4701,8 +4569,7 @@ module.exports = isThisHour
 /*!*********************************************************!*\
   !*** ./node_modules/date-fns/is_this_iso_week/index.js ***!
   \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var isSameISOWeek = __webpack_require__(/*! ../is_same_iso_week/index.js */ "./node_modules/date-fns/is_same_iso_week/index.js")
 
@@ -4736,8 +4603,7 @@ module.exports = isThisISOWeek
 /*!*********************************************************!*\
   !*** ./node_modules/date-fns/is_this_iso_year/index.js ***!
   \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var isSameISOYear = __webpack_require__(/*! ../is_same_iso_year/index.js */ "./node_modules/date-fns/is_same_iso_year/index.js")
 
@@ -4772,8 +4638,7 @@ module.exports = isThisISOYear
 /*!*******************************************************!*\
   !*** ./node_modules/date-fns/is_this_minute/index.js ***!
   \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var isSameMinute = __webpack_require__(/*! ../is_same_minute/index.js */ "./node_modules/date-fns/is_same_minute/index.js")
 
@@ -4806,8 +4671,7 @@ module.exports = isThisMinute
 /*!******************************************************!*\
   !*** ./node_modules/date-fns/is_this_month/index.js ***!
   \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var isSameMonth = __webpack_require__(/*! ../is_same_month/index.js */ "./node_modules/date-fns/is_same_month/index.js")
 
@@ -4839,8 +4703,7 @@ module.exports = isThisMonth
 /*!********************************************************!*\
   !*** ./node_modules/date-fns/is_this_quarter/index.js ***!
   \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var isSameQuarter = __webpack_require__(/*! ../is_same_quarter/index.js */ "./node_modules/date-fns/is_same_quarter/index.js")
 
@@ -4872,8 +4735,7 @@ module.exports = isThisQuarter
 /*!*******************************************************!*\
   !*** ./node_modules/date-fns/is_this_second/index.js ***!
   \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var isSameSecond = __webpack_require__(/*! ../is_same_second/index.js */ "./node_modules/date-fns/is_same_second/index.js")
 
@@ -4906,8 +4768,7 @@ module.exports = isThisSecond
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/is_this_week/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var isSameWeek = __webpack_require__(/*! ../is_same_week/index.js */ "./node_modules/date-fns/is_same_week/index.js")
 
@@ -4947,8 +4808,7 @@ module.exports = isThisWeek
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/is_this_year/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var isSameYear = __webpack_require__(/*! ../is_same_year/index.js */ "./node_modules/date-fns/is_same_year/index.js")
 
@@ -4980,8 +4840,7 @@ module.exports = isThisYear
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/is_thursday/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -5013,8 +4872,7 @@ module.exports = isThursday
 /*!*************************************************!*\
   !*** ./node_modules/date-fns/is_today/index.js ***!
   \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var startOfDay = __webpack_require__(/*! ../start_of_day/index.js */ "./node_modules/date-fns/start_of_day/index.js")
 
@@ -5046,8 +4904,7 @@ module.exports = isToday
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/is_tomorrow/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var startOfDay = __webpack_require__(/*! ../start_of_day/index.js */ "./node_modules/date-fns/start_of_day/index.js")
 
@@ -5081,8 +4938,7 @@ module.exports = isTomorrow
 /*!***************************************************!*\
   !*** ./node_modules/date-fns/is_tuesday/index.js ***!
   \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -5114,8 +4970,7 @@ module.exports = isTuesday
 /*!*************************************************!*\
   !*** ./node_modules/date-fns/is_valid/index.js ***!
   \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var isDate = __webpack_require__(/*! ../is_date/index.js */ "./node_modules/date-fns/is_date/index.js")
 
@@ -5160,8 +5015,7 @@ module.exports = isValid
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/is_wednesday/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -5193,8 +5047,7 @@ module.exports = isWednesday
 /*!***************************************************!*\
   !*** ./node_modules/date-fns/is_weekend/index.js ***!
   \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -5228,8 +5081,7 @@ module.exports = isWeekend
 /*!********************************************************!*\
   !*** ./node_modules/date-fns/is_within_range/index.js ***!
   \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -5281,8 +5133,7 @@ module.exports = isWithinRange
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/is_yesterday/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var startOfDay = __webpack_require__(/*! ../start_of_day/index.js */ "./node_modules/date-fns/start_of_day/index.js")
 
@@ -5316,8 +5167,7 @@ module.exports = isYesterday
 /*!*************************************************************!*\
   !*** ./node_modules/date-fns/last_day_of_iso_week/index.js ***!
   \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var lastDayOfWeek = __webpack_require__(/*! ../last_day_of_week/index.js */ "./node_modules/date-fns/last_day_of_week/index.js")
 
@@ -5352,8 +5202,7 @@ module.exports = lastDayOfISOWeek
 /*!*************************************************************!*\
   !*** ./node_modules/date-fns/last_day_of_iso_year/index.js ***!
   \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var getISOYear = __webpack_require__(/*! ../get_iso_year/index.js */ "./node_modules/date-fns/get_iso_year/index.js")
 var startOfISOWeek = __webpack_require__(/*! ../start_of_iso_week/index.js */ "./node_modules/date-fns/start_of_iso_week/index.js")
@@ -5396,8 +5245,7 @@ module.exports = lastDayOfISOYear
 /*!**********************************************************!*\
   !*** ./node_modules/date-fns/last_day_of_month/index.js ***!
   \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -5434,8 +5282,7 @@ module.exports = lastDayOfMonth
 /*!************************************************************!*\
   !*** ./node_modules/date-fns/last_day_of_quarter/index.js ***!
   \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -5473,8 +5320,7 @@ module.exports = lastDayOfQuarter
 /*!*********************************************************!*\
   !*** ./node_modules/date-fns/last_day_of_week/index.js ***!
   \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -5522,8 +5368,7 @@ module.exports = lastDayOfWeek
 /*!*********************************************************!*\
   !*** ./node_modules/date-fns/last_day_of_year/index.js ***!
   \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -5560,8 +5405,7 @@ module.exports = lastDayOfYear
 /*!************************************************************************************!*\
   !*** ./node_modules/date-fns/locale/_lib/build_formatting_tokens_reg_exp/index.js ***!
   \************************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((module) => {
 
 var commonFormatterKeys = [
   'M', 'MM', 'Q', 'D', 'DD', 'DDD', 'DDDD', 'd',
@@ -5599,8 +5443,7 @@ module.exports = buildFormattingTokensRegExp
 /*!*********************************************************************************!*\
   !*** ./node_modules/date-fns/locale/en/build_distance_in_words_locale/index.js ***!
   \*********************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((module) => {
 
 function buildDistanceInWordsLocale () {
   var distanceInWordsLocale = {
@@ -5709,8 +5552,7 @@ module.exports = buildDistanceInWordsLocale
 /*!**********************************************************************!*\
   !*** ./node_modules/date-fns/locale/en/build_format_locale/index.js ***!
   \**********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var buildFormattingTokensRegExp = __webpack_require__(/*! ../../_lib/build_formatting_tokens_reg_exp/index.js */ "./node_modules/date-fns/locale/_lib/build_formatting_tokens_reg_exp/index.js")
 
@@ -5808,8 +5650,7 @@ module.exports = buildFormatLocale
 /*!**************************************************!*\
   !*** ./node_modules/date-fns/locale/en/index.js ***!
   \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var buildDistanceInWordsLocale = __webpack_require__(/*! ./build_distance_in_words_locale/index.js */ "./node_modules/date-fns/locale/en/build_distance_in_words_locale/index.js")
 var buildFormatLocale = __webpack_require__(/*! ./build_format_locale/index.js */ "./node_modules/date-fns/locale/en/build_format_locale/index.js")
@@ -5830,8 +5671,7 @@ module.exports = {
 /*!********************************************!*\
   !*** ./node_modules/date-fns/max/index.js ***!
   \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -5873,8 +5713,7 @@ module.exports = max
 /*!********************************************!*\
   !*** ./node_modules/date-fns/min/index.js ***!
   \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -5916,9 +5755,9 @@ module.exports = min
 /*!**********************************************!*\
   !*** ./node_modules/date-fns/parse/index.js ***!
   \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+var getTimezoneOffsetInMilliseconds = __webpack_require__(/*! ../_lib/getTimezoneOffsetInMilliseconds/index.js */ "./node_modules/date-fns/_lib/getTimezoneOffsetInMilliseconds/index.js")
 var isDate = __webpack_require__(/*! ../is_date/index.js */ "./node_modules/date-fns/is_date/index.js")
 
 var MILLISECONDS_IN_HOUR = 3600000
@@ -6028,14 +5867,25 @@ function parse (argument, dirtyOptions) {
     }
 
     if (dateStrings.timezone) {
-      offset = parseTimezone(dateStrings.timezone)
+      offset = parseTimezone(dateStrings.timezone) * MILLISECONDS_IN_MINUTE
     } else {
-      // get offset accurate to hour in timezones that change offset
-      offset = new Date(timestamp + time).getTimezoneOffset()
-      offset = new Date(timestamp + time + offset * MILLISECONDS_IN_MINUTE).getTimezoneOffset()
+      var fullTime = timestamp + time
+      var fullTimeDate = new Date(fullTime)
+
+      offset = getTimezoneOffsetInMilliseconds(fullTimeDate)
+
+      // Adjust time when it's coming from DST
+      var fullTimeDateNextDay = new Date(fullTime)
+      fullTimeDateNextDay.setDate(fullTimeDate.getDate() + 1)
+      var offsetDiff =
+        getTimezoneOffsetInMilliseconds(fullTimeDateNextDay) -
+        getTimezoneOffsetInMilliseconds(fullTimeDate)
+      if (offsetDiff > 0) {
+        offset += offsetDiff
+      }
     }
 
-    return new Date(timestamp + time + offset * MILLISECONDS_IN_MINUTE)
+    return new Date(timestamp + time + offset)
   } else {
     return new Date(argument)
   }
@@ -6247,8 +6097,7 @@ module.exports = parse
 /*!*************************************************!*\
   !*** ./node_modules/date-fns/set_date/index.js ***!
   \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -6284,8 +6133,7 @@ module.exports = setDate
 /*!************************************************!*\
   !*** ./node_modules/date-fns/set_day/index.js ***!
   \************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 var addDays = __webpack_require__(/*! ../add_days/index.js */ "./node_modules/date-fns/add_days/index.js")
@@ -6335,8 +6183,7 @@ module.exports = setDay
 /*!********************************************************!*\
   !*** ./node_modules/date-fns/set_day_of_year/index.js ***!
   \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -6373,8 +6220,7 @@ module.exports = setDayOfYear
 /*!**************************************************!*\
   !*** ./node_modules/date-fns/set_hours/index.js ***!
   \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -6410,8 +6256,7 @@ module.exports = setHours
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/set_iso_day/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 var addDays = __webpack_require__(/*! ../add_days/index.js */ "./node_modules/date-fns/add_days/index.js")
@@ -6452,8 +6297,7 @@ module.exports = setISODay
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/set_iso_week/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 var getISOWeek = __webpack_require__(/*! ../get_iso_week/index.js */ "./node_modules/date-fns/get_iso_week/index.js")
@@ -6493,8 +6337,7 @@ module.exports = setISOWeek
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/set_iso_year/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 var startOfISOYear = __webpack_require__(/*! ../start_of_iso_year/index.js */ "./node_modules/date-fns/start_of_iso_year/index.js")
@@ -6540,8 +6383,7 @@ module.exports = setISOYear
 /*!*********************************************************!*\
   !*** ./node_modules/date-fns/set_milliseconds/index.js ***!
   \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -6577,8 +6419,7 @@ module.exports = setMilliseconds
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/set_minutes/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -6614,8 +6455,7 @@ module.exports = setMinutes
 /*!**************************************************!*\
   !*** ./node_modules/date-fns/set_month/index.js ***!
   \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 var getDaysInMonth = __webpack_require__(/*! ../get_days_in_month/index.js */ "./node_modules/date-fns/get_days_in_month/index.js")
@@ -6661,8 +6501,7 @@ module.exports = setMonth
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/set_quarter/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 var setMonth = __webpack_require__(/*! ../set_month/index.js */ "./node_modules/date-fns/set_month/index.js")
@@ -6700,8 +6539,7 @@ module.exports = setQuarter
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/set_seconds/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -6737,8 +6575,7 @@ module.exports = setSeconds
 /*!*************************************************!*\
   !*** ./node_modules/date-fns/set_year/index.js ***!
   \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -6774,8 +6611,7 @@ module.exports = setYear
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/start_of_day/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -6810,8 +6646,7 @@ module.exports = startOfDay
 /*!******************************************************!*\
   !*** ./node_modules/date-fns/start_of_hour/index.js ***!
   \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -6846,8 +6681,7 @@ module.exports = startOfHour
 /*!**********************************************************!*\
   !*** ./node_modules/date-fns/start_of_iso_week/index.js ***!
   \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var startOfWeek = __webpack_require__(/*! ../start_of_week/index.js */ "./node_modules/date-fns/start_of_week/index.js")
 
@@ -6882,8 +6716,7 @@ module.exports = startOfISOWeek
 /*!**********************************************************!*\
   !*** ./node_modules/date-fns/start_of_iso_year/index.js ***!
   \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var getISOYear = __webpack_require__(/*! ../get_iso_year/index.js */ "./node_modules/date-fns/get_iso_year/index.js")
 var startOfISOWeek = __webpack_require__(/*! ../start_of_iso_week/index.js */ "./node_modules/date-fns/start_of_iso_week/index.js")
@@ -6925,8 +6758,7 @@ module.exports = startOfISOYear
 /*!********************************************************!*\
   !*** ./node_modules/date-fns/start_of_minute/index.js ***!
   \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -6961,8 +6793,7 @@ module.exports = startOfMinute
 /*!*******************************************************!*\
   !*** ./node_modules/date-fns/start_of_month/index.js ***!
   \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -6998,8 +6829,7 @@ module.exports = startOfMonth
 /*!*********************************************************!*\
   !*** ./node_modules/date-fns/start_of_quarter/index.js ***!
   \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -7037,8 +6867,7 @@ module.exports = startOfQuarter
 /*!********************************************************!*\
   !*** ./node_modules/date-fns/start_of_second/index.js ***!
   \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -7073,8 +6902,7 @@ module.exports = startOfSecond
 /*!*******************************************************!*\
   !*** ./node_modules/date-fns/start_of_today/index.js ***!
   \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var startOfDay = __webpack_require__(/*! ../start_of_day/index.js */ "./node_modules/date-fns/start_of_day/index.js")
 
@@ -7105,8 +6933,7 @@ module.exports = startOfToday
 /*!**********************************************************!*\
   !*** ./node_modules/date-fns/start_of_tomorrow/index.js ***!
   \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((module) => {
 
 /**
  * @category Day Helpers
@@ -7143,8 +6970,7 @@ module.exports = startOfTomorrow
 /*!******************************************************!*\
   !*** ./node_modules/date-fns/start_of_week/index.js ***!
   \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -7192,8 +7018,7 @@ module.exports = startOfWeek
 /*!******************************************************!*\
   !*** ./node_modules/date-fns/start_of_year/index.js ***!
   \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var parse = __webpack_require__(/*! ../parse/index.js */ "./node_modules/date-fns/parse/index.js")
 
@@ -7230,8 +7055,7 @@ module.exports = startOfYear
 /*!***********************************************************!*\
   !*** ./node_modules/date-fns/start_of_yesterday/index.js ***!
   \***********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((module) => {
 
 /**
  * @category Day Helpers
@@ -7268,8 +7092,7 @@ module.exports = startOfYesterday
 /*!*************************************************!*\
   !*** ./node_modules/date-fns/sub_days/index.js ***!
   \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var addDays = __webpack_require__(/*! ../add_days/index.js */ "./node_modules/date-fns/add_days/index.js")
 
@@ -7303,8 +7126,7 @@ module.exports = subDays
 /*!**************************************************!*\
   !*** ./node_modules/date-fns/sub_hours/index.js ***!
   \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var addHours = __webpack_require__(/*! ../add_hours/index.js */ "./node_modules/date-fns/add_hours/index.js")
 
@@ -7338,8 +7160,7 @@ module.exports = subHours
 /*!******************************************************!*\
   !*** ./node_modules/date-fns/sub_iso_years/index.js ***!
   \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var addISOYears = __webpack_require__(/*! ../add_iso_years/index.js */ "./node_modules/date-fns/add_iso_years/index.js")
 
@@ -7375,8 +7196,7 @@ module.exports = subISOYears
 /*!*********************************************************!*\
   !*** ./node_modules/date-fns/sub_milliseconds/index.js ***!
   \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var addMilliseconds = __webpack_require__(/*! ../add_milliseconds/index.js */ "./node_modules/date-fns/add_milliseconds/index.js")
 
@@ -7410,8 +7230,7 @@ module.exports = subMilliseconds
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/sub_minutes/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var addMinutes = __webpack_require__(/*! ../add_minutes/index.js */ "./node_modules/date-fns/add_minutes/index.js")
 
@@ -7445,8 +7264,7 @@ module.exports = subMinutes
 /*!***************************************************!*\
   !*** ./node_modules/date-fns/sub_months/index.js ***!
   \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var addMonths = __webpack_require__(/*! ../add_months/index.js */ "./node_modules/date-fns/add_months/index.js")
 
@@ -7480,8 +7298,7 @@ module.exports = subMonths
 /*!*****************************************************!*\
   !*** ./node_modules/date-fns/sub_quarters/index.js ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var addQuarters = __webpack_require__(/*! ../add_quarters/index.js */ "./node_modules/date-fns/add_quarters/index.js")
 
@@ -7515,8 +7332,7 @@ module.exports = subQuarters
 /*!****************************************************!*\
   !*** ./node_modules/date-fns/sub_seconds/index.js ***!
   \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var addSeconds = __webpack_require__(/*! ../add_seconds/index.js */ "./node_modules/date-fns/add_seconds/index.js")
 
@@ -7550,8 +7366,7 @@ module.exports = subSeconds
 /*!**************************************************!*\
   !*** ./node_modules/date-fns/sub_weeks/index.js ***!
   \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var addWeeks = __webpack_require__(/*! ../add_weeks/index.js */ "./node_modules/date-fns/add_weeks/index.js")
 
@@ -7585,8 +7400,7 @@ module.exports = subWeeks
 /*!**************************************************!*\
   !*** ./node_modules/date-fns/sub_years/index.js ***!
   \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var addYears = __webpack_require__(/*! ../add_years/index.js */ "./node_modules/date-fns/add_years/index.js")
 
@@ -7616,284 +7430,13 @@ module.exports = subYears
 
 /***/ }),
 
-/***/ "./node_modules/node-libs-browser/node_modules/timers-browserify/main.js":
-/*!*******************************************************************************!*\
-  !*** ./node_modules/node-libs-browser/node_modules/timers-browserify/main.js ***!
-  \*******************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
-            (typeof self !== "undefined" && self) ||
-            window;
-var apply = Function.prototype.apply;
-
-// DOM APIs, for completeness
-
-exports.setTimeout = function() {
-  return new Timeout(apply.call(setTimeout, scope, arguments), clearTimeout);
-};
-exports.setInterval = function() {
-  return new Timeout(apply.call(setInterval, scope, arguments), clearInterval);
-};
-exports.clearTimeout =
-exports.clearInterval = function(timeout) {
-  if (timeout) {
-    timeout.close();
-  }
-};
-
-function Timeout(id, clearFn) {
-  this._id = id;
-  this._clearFn = clearFn;
-}
-Timeout.prototype.unref = Timeout.prototype.ref = function() {};
-Timeout.prototype.close = function() {
-  this._clearFn.call(scope, this._id);
-};
-
-// Does not start the time, just sets up the members needed.
-exports.enroll = function(item, msecs) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = msecs;
-};
-
-exports.unenroll = function(item) {
-  clearTimeout(item._idleTimeoutId);
-  item._idleTimeout = -1;
-};
-
-exports._unrefActive = exports.active = function(item) {
-  clearTimeout(item._idleTimeoutId);
-
-  var msecs = item._idleTimeout;
-  if (msecs >= 0) {
-    item._idleTimeoutId = setTimeout(function onTimeout() {
-      if (item._onTimeout)
-        item._onTimeout();
-    }, msecs);
-  }
-};
-
-// setimmediate attaches itself to the global object
-__webpack_require__(/*! setimmediate */ "./node_modules/setimmediate/setImmediate.js");
-// On some exotic environments, it's not clear which object `setimmediate` was
-// able to install onto.  Search each possibility in the same order as the
-// `setimmediate` library.
-exports.setImmediate = (typeof self !== "undefined" && self.setImmediate) ||
-                       (typeof global !== "undefined" && global.setImmediate) ||
-                       (this && this.setImmediate);
-exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
-                         (typeof global !== "undefined" && global.clearImmediate) ||
-                         (this && this.clearImmediate);
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
-
-/***/ }),
-
-/***/ "./node_modules/process/browser.js":
-/*!*****************************************!*\
-  !*** ./node_modules/process/browser.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-
-/***/ }),
-
 /***/ "./node_modules/q/q.js":
 /*!*****************************!*\
   !*** ./node_modules/q/q.js ***!
   \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module) => {
 
-/* WEBPACK VAR INJECTION */(function(process, setImmediate) {// vim:ts=4:sts=4:sw=4:
+// vim:ts=4:sts=4:sw=4:
 /*!
  *
  * Copyright 2009-2017 Kris Kowal under the terms of the MIT
@@ -9939,328 +9482,6 @@ return Q;
 
 });
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../process/browser.js */ "./node_modules/process/browser.js"), __webpack_require__(/*! ./../node-libs-browser/node_modules/timers-browserify/main.js */ "./node_modules/node-libs-browser/node_modules/timers-browserify/main.js").setImmediate))
-
-/***/ }),
-
-/***/ "./node_modules/setimmediate/setImmediate.js":
-/*!***************************************************!*\
-  !*** ./node_modules/setimmediate/setImmediate.js ***!
-  \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
-    "use strict";
-
-    if (global.setImmediate) {
-        return;
-    }
-
-    var nextHandle = 1; // Spec says greater than zero
-    var tasksByHandle = {};
-    var currentlyRunningATask = false;
-    var doc = global.document;
-    var registerImmediate;
-
-    function setImmediate(callback) {
-      // Callback can either be a function or a string
-      if (typeof callback !== "function") {
-        callback = new Function("" + callback);
-      }
-      // Copy function arguments
-      var args = new Array(arguments.length - 1);
-      for (var i = 0; i < args.length; i++) {
-          args[i] = arguments[i + 1];
-      }
-      // Store and register the task
-      var task = { callback: callback, args: args };
-      tasksByHandle[nextHandle] = task;
-      registerImmediate(nextHandle);
-      return nextHandle++;
-    }
-
-    function clearImmediate(handle) {
-        delete tasksByHandle[handle];
-    }
-
-    function run(task) {
-        var callback = task.callback;
-        var args = task.args;
-        switch (args.length) {
-        case 0:
-            callback();
-            break;
-        case 1:
-            callback(args[0]);
-            break;
-        case 2:
-            callback(args[0], args[1]);
-            break;
-        case 3:
-            callback(args[0], args[1], args[2]);
-            break;
-        default:
-            callback.apply(undefined, args);
-            break;
-        }
-    }
-
-    function runIfPresent(handle) {
-        // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
-        // So if we're currently running a task, we'll need to delay this invocation.
-        if (currentlyRunningATask) {
-            // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
-            // "too much recursion" error.
-            setTimeout(runIfPresent, 0, handle);
-        } else {
-            var task = tasksByHandle[handle];
-            if (task) {
-                currentlyRunningATask = true;
-                try {
-                    run(task);
-                } finally {
-                    clearImmediate(handle);
-                    currentlyRunningATask = false;
-                }
-            }
-        }
-    }
-
-    function installNextTickImplementation() {
-        registerImmediate = function(handle) {
-            process.nextTick(function () { runIfPresent(handle); });
-        };
-    }
-
-    function canUsePostMessage() {
-        // The test against `importScripts` prevents this implementation from being installed inside a web worker,
-        // where `global.postMessage` means something completely different and can't be used for this purpose.
-        if (global.postMessage && !global.importScripts) {
-            var postMessageIsAsynchronous = true;
-            var oldOnMessage = global.onmessage;
-            global.onmessage = function() {
-                postMessageIsAsynchronous = false;
-            };
-            global.postMessage("", "*");
-            global.onmessage = oldOnMessage;
-            return postMessageIsAsynchronous;
-        }
-    }
-
-    function installPostMessageImplementation() {
-        // Installs an event handler on `global` for the `message` event: see
-        // * https://developer.mozilla.org/en/DOM/window.postMessage
-        // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
-
-        var messagePrefix = "setImmediate$" + Math.random() + "$";
-        var onGlobalMessage = function(event) {
-            if (event.source === global &&
-                typeof event.data === "string" &&
-                event.data.indexOf(messagePrefix) === 0) {
-                runIfPresent(+event.data.slice(messagePrefix.length));
-            }
-        };
-
-        if (global.addEventListener) {
-            global.addEventListener("message", onGlobalMessage, false);
-        } else {
-            global.attachEvent("onmessage", onGlobalMessage);
-        }
-
-        registerImmediate = function(handle) {
-            global.postMessage(messagePrefix + handle, "*");
-        };
-    }
-
-    function installMessageChannelImplementation() {
-        var channel = new MessageChannel();
-        channel.port1.onmessage = function(event) {
-            var handle = event.data;
-            runIfPresent(handle);
-        };
-
-        registerImmediate = function(handle) {
-            channel.port2.postMessage(handle);
-        };
-    }
-
-    function installReadyStateChangeImplementation() {
-        var html = doc.documentElement;
-        registerImmediate = function(handle) {
-            // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
-            // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
-            var script = doc.createElement("script");
-            script.onreadystatechange = function () {
-                runIfPresent(handle);
-                script.onreadystatechange = null;
-                html.removeChild(script);
-                script = null;
-            };
-            html.appendChild(script);
-        };
-    }
-
-    function installSetTimeoutImplementation() {
-        registerImmediate = function(handle) {
-            setTimeout(runIfPresent, 0, handle);
-        };
-    }
-
-    // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
-    var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
-    attachTo = attachTo && attachTo.setTimeout ? attachTo : global;
-
-    // Don't get fooled by e.g. browserify environments.
-    if ({}.toString.call(global.process) === "[object process]") {
-        // For Node.js before 0.9
-        installNextTickImplementation();
-
-    } else if (canUsePostMessage()) {
-        // For non-IE10 modern browsers
-        installPostMessageImplementation();
-
-    } else if (global.MessageChannel) {
-        // For web workers, where supported
-        installMessageChannelImplementation();
-
-    } else if (doc && "onreadystatechange" in doc.createElement("script")) {
-        // For IE 6–8
-        installReadyStateChangeImplementation();
-
-    } else {
-        // For older browsers
-        installSetTimeoutImplementation();
-    }
-
-    attachTo.setImmediate = setImmediate;
-    attachTo.clearImmediate = clearImmediate;
-}(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
-
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../process/browser.js */ "./node_modules/process/browser.js")))
-
-/***/ }),
-
-/***/ "./node_modules/webpack/buildin/global.js":
-/*!***********************************!*\
-  !*** (webpack)/buildin/global.js ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1, eval)("this");
-} catch (e) {
-	// This works if the window reference is available
-	if (typeof window === "object") g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-
-/***/ "./src/index.js":
-/*!**********************!*\
-  !*** ./src/index.js ***!
-  \**********************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (_options) {
-  options.locale = _options.locale;
-  options.pattern = _options.pattern;
-  options.alert = _options.alert;
-  options.confirm = _options.confirm;
-};
-
-__webpack_require__(/*! ../tags/accordion/su-accordion.tag */ "./tags/accordion/su-accordion.tag");
-
-__webpack_require__(/*! ../tags/accordion/su-accordionset.tag */ "./tags/accordion/su-accordionset.tag");
-
-__webpack_require__(/*! ../tags/alert/su-alert.tag */ "./tags/alert/su-alert.tag");
-
-__webpack_require__(/*! ../tags/checkbox/su-checkbox.tag */ "./tags/checkbox/su-checkbox.tag");
-
-__webpack_require__(/*! ../tags/checkbox/su-checkbox-group.tag */ "./tags/checkbox/su-checkbox-group.tag");
-
-__webpack_require__(/*! ../tags/confirm/su-confirm.tag */ "./tags/confirm/su-confirm.tag");
-
-__webpack_require__(/*! ../tags/datepicker/su-datepicker.tag */ "./tags/datepicker/su-datepicker.tag");
-
-__webpack_require__(/*! ../tags/dropdown/su-dropdown.tag */ "./tags/dropdown/su-dropdown.tag");
-
-__webpack_require__(/*! ../tags/dropdown/su-select.tag */ "./tags/dropdown/su-select.tag");
-
-__webpack_require__(/*! ../tags/loading/su-loading.tag */ "./tags/loading/su-loading.tag");
-
-__webpack_require__(/*! ../tags/modal/su-modal.tag */ "./tags/modal/su-modal.tag");
-
-__webpack_require__(/*! ../tags/pagination/su-pagination.tag */ "./tags/pagination/su-pagination.tag");
-
-__webpack_require__(/*! ../tags/popup/su-popup.tag */ "./tags/popup/su-popup.tag");
-
-__webpack_require__(/*! ../tags/progress/su-progress.tag */ "./tags/progress/su-progress.tag");
-
-__webpack_require__(/*! ../tags/radio/su-radio-group.tag */ "./tags/radio/su-radio-group.tag");
-
-__webpack_require__(/*! ../tags/radio/su-radio.tag */ "./tags/radio/su-radio.tag");
-
-__webpack_require__(/*! ../tags/rating/su-rating.tag */ "./tags/rating/su-rating.tag");
-
-__webpack_require__(/*! ../tags/tab/su-tab-header.tag */ "./tags/tab/su-tab-header.tag");
-
-__webpack_require__(/*! ../tags/tab/su-tab-title.tag */ "./tags/tab/su-tab-title.tag");
-
-__webpack_require__(/*! ../tags/tab/su-tab.tag */ "./tags/tab/su-tab.tag");
-
-__webpack_require__(/*! ../tags/tab/su-tabset.tag */ "./tags/tab/su-tabset.tag");
-
-__webpack_require__(/*! ../tags/table/su-table.tag */ "./tags/table/su-table.tag");
-
-__webpack_require__(/*! ../tags/table/su-th.tag */ "./tags/table/su-th.tag");
-
-__webpack_require__(/*! ../tags/toast/su-toast.tag */ "./tags/toast/su-toast.tag");
-
-__webpack_require__(/*! ../tags/toast/su-toast-item.tag */ "./tags/toast/su-toast-item.tag");
-
-__webpack_require__(/*! ../tags/validation-error/su-validation-error.tag */ "./tags/validation-error/su-validation-error.tag");
-
-var _q = __webpack_require__(/*! q */ "./node_modules/q/q.js");
-
-var _q2 = _interopRequireDefault(_q);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var options = {};
-var obs = riot.observable();
-
-riot.mixin('semantic-ui', {
-  defaultOptions: options,
-  observable: obs,
-  Q: {
-    Promise: _q2.default.Promise
-  }
-});
 
 /***/ }),
 
@@ -10268,34 +9489,24 @@ riot.mixin('semantic-ui', {
 /*!*****************************************!*\
   !*** ./tags/accordion/su-accordion.tag ***!
   \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-accordion', '<div class="title {active: active}" onclick="{click}"> <i class="dropdown icon"></i> {opts.title} </div> <div class="content active {open : active} {close : !active}"> <yield></yield> </div>', '', '', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.active = false;
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-accordion', '<div class="title {active: active}" onclick="{click}"> <i class="dropdown icon"></i> {opts.title} </div> <div class="content active {open : active} {close : !active}"> <yield></yield> </div>', '', '', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.click = click;
+    tag.active = false
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
+    tag.click = click
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function click() {
-  tag.trigger('click', tag);
-}
+    function click() {
+      tag.trigger('click', tag)
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -10303,66 +9514,56 @@ function click() {
 /*!********************************************!*\
   !*** ./tags/accordion/su-accordionset.tag ***!
   \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-accordionset', '<yield></yield>', 'su-accordionset,[data-is="su-accordionset"]{ display: block; } su-accordionset.ui.accordion .title~.content:not(.ui).close,[data-is="su-accordionset"].ui.accordion .title~.content:not(.ui).close{ padding-top: 0; padding-bottom: 0; } su-accordionset .content.close *,[data-is="su-accordionset"] .content.close *{ line-height: 0 !important; opacity: 0 !important; visibility: hidden !important; padding-top: 0 !important; padding-bottom: 0 !important; margin-top: 0 !important; margin-bottom: 0 !important; min-height: 0 !important; transition: all 300ms 0s linear !important; } su-accordionset .content.close .dropdown.icon,[data-is="su-accordionset"] .content.close .dropdown.icon{ height: 0 !important; transition: height 300ms 0s linear !important; } su-accordionset .content.open *,[data-is="su-accordionset"] .content.open *{ line-height: 1.4285; opacity: 1; visibility: visible; transition: all 300ms 0s linear !important; } su-accordionset .content.open .dropdown.icon,[data-is="su-accordionset"] .content.open .dropdown.icon{ height: 1.4285 !important; transition: height 300ms 0s linear !important; }', 'class="ui accordion {opts.class}"', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.accordions = [];
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-accordionset', '<yield></yield>', 'su-accordionset,[data-is="su-accordionset"]{ display: block; } su-accordionset.ui.accordion .title~.content:not(.ui).close,[data-is="su-accordionset"].ui.accordion .title~.content:not(.ui).close{ padding-top: 0; padding-bottom: 0; } su-accordionset .content.close *,[data-is="su-accordionset"] .content.close *{ line-height: 0 !important; opacity: 0 !important; visibility: hidden !important; padding-top: 0 !important; padding-bottom: 0 !important; margin-top: 0 !important; margin-bottom: 0 !important; min-height: 0 !important; transition: all 300ms 0s linear !important; } su-accordionset .content.close .dropdown.icon,[data-is="su-accordionset"] .content.close .dropdown.icon{ height: 0 !important; transition: height 300ms 0s linear !important; } su-accordionset .content.open *,[data-is="su-accordionset"] .content.open *{ line-height: 1.4285; opacity: 1; visibility: visible; transition: all 300ms 0s linear !important; } su-accordionset .content.open .dropdown.icon,[data-is="su-accordionset"] .content.open .dropdown.icon{ height: 1.4285 !important; transition: height 300ms 0s linear !important; }', 'class="ui accordion {opts.class}"', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.on('mount', onMount);
+    tag.accordions = []
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
+    tag.on('mount', onMount)
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onMount() {
-  tag.accordions = tag.tags['su-accordion'];
+    function onMount() {
+      tag.accordions = tag.tags['su-accordion']
 
-  if (!Array.isArray(tag.accordions)) {
-    tag.accordions = [tag.accordions];
-  }
-  var defaultActive = false;
-  tag.accordions.forEach(function (accordion) {
-
-    initializeChild(accordion);
-    if (accordion.opts.active) {
-      defaultActive = true;
-      accordion.active = true;
-    }
-  });
-  if (!defaultActive) {
-    tag.accordions[0].active = true;
-  }
-
-  tag.update();
-}
-
-function initializeChild(child) {
-  child.on('click', function (target) {
-    var active = target.active;
-    tag.accordions.forEach(function (accordion) {
-      if (accordion.active) {
-        accordion.active = false;
+      if (!Array.isArray(tag.accordions)) {
+        tag.accordions = [tag.accordions]
       }
-    });
-    target.active = !active;
-    tag.update();
-    tag.trigger('click', target);
-  });
-}
+      let defaultActive = false
+      tag.accordions.forEach(accordion => {
+
+        initializeChild(accordion)
+        if (accordion.opts.active) {
+          defaultActive = true
+          accordion.active = true
+        }
+      })
+      if (!defaultActive) {
+        tag.accordions[0].active = true
+      }
+
+      tag.update()
+    }
+
+    function initializeChild(child) {
+      child.on('click', target => {
+        const active = target.active
+        tag.accordions.forEach(accordion => {
+          if (accordion.active) {
+            accordion.active = false
+          }
+        })
+        target.active = !active
+        tag.update()
+        tag.trigger('click', target)
+      })
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -10370,116 +9571,108 @@ function initializeChild(child) {
 /*!*********************************!*\
   !*** ./tags/alert/su-alert.tag ***!
   \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-alert', '<su-modal class="tiny" ref="modal" modal="{modal}" title="{title}" messages="{messages}"> <div class="ui icon message"> <i class="info circle icon"></i> <div class="scrolling content"> <div class="header" if="{opts.title}"> {opts.title} </div> <p each="{message in opts.messages}">{message}</p> </div> </div> </su-modal>', 'su-alert .ui.dimmer,[data-is="su-alert"] .ui.dimmer{ z-index: 1020; } su-alert .ui.modal,[data-is="su-alert"] .ui.modal{ z-index: 1021; } su-alert .ui.message,[data-is="su-alert"] .ui.message{ background: none; box-shadow: none; } su-alert .ui.message .header+p,[data-is="su-alert"] .ui.message .header+p{ margin-top: 1em; }', '', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.modal = {
-  closable: false,
-  buttons: []
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-alert', '<su-modal class="tiny" ref="modal" modal="{modal}" title="{title}" messages="{messages}"> <div class="ui icon message"> <i class="info circle icon"></i> <div class="scrolling content"> <div class="header" if="{opts.title}"> {opts.title} </div> <p each="{message in opts.messages}">{message}</p> </div> </div> </su-modal>', 'su-alert .ui.dimmer,[data-is="su-alert"] .ui.dimmer{ z-index: 1020; } su-alert .ui.modal,[data-is="su-alert"] .ui.modal{ z-index: 1021; } su-alert .ui.message,[data-is="su-alert"] .ui.message{ background: none; box-shadow: none; } su-alert .ui.message .header+p,[data-is="su-alert"] .ui.message .header+p{ margin-top: 1em; }', '', function(opts) {
+    const tag = this
 
-  // ===================================================================================
-  //                                                                         Tag Methods
-  //                                                                         ===========
-};tag.mixin('semantic-ui');
-tag.observable.on('showAlert', showAlert);
-tag.on('mount', onMount);
+    tag.modal = {
+      closable: false,
+      buttons: []
+    }
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-var button = {};
-riot.mixin({
-  suAlert: suAlert
+    tag.mixin('semantic-ui')
+    tag.observable.on('showAlert', showAlert)
+    tag.on('mount', onMount)
+
+    const button = {}
+    riot.mixin({
+      suAlert
+    })
+
+    function onMount() {
+      let defaultButton = {}
+      if (tag.defaultOptions && tag.defaultOptions.alert && tag.defaultOptions.alert.button) {
+        defaultButton = tag.defaultOptions.alert.button
+      }
+      if (defaultButton.default) {
+        button.default = true
+      }
+      button.text = defaultButton.text || 'Close'
+      button.type = defaultButton.type || ''
+      button.icon = defaultButton.icon || ''
+
+      tag.refs.modal.on('closeAction', () => {
+        tag.observable.trigger('callbackConfirm')
+      })
+    }
+
+    function setButton(option) {
+      const btn = {
+        text: option.button.text || button.text,
+        type: option.button.type || button.type,
+        icon: option.button.icon || button.icon,
+        action: 'closeAction',
+        closable: false,
+      }
+      if (option.button.default) {
+        btn.default = true
+      } else if (option.button.default === null) {
+        btn.default = button.default
+      }
+
+      tag.modal.buttons.length = 0
+      tag.modal.buttons.push(btn)
+    }
+
+    function showAlert(option) {
+      tag.title = option.title
+      tag.messages = Array.isArray(option.message) ? option.message : [option.message]
+      setButton(option)
+      tag.update()
+      tag.refs.modal.show()
+    }
+
+    function suAlert(param) {
+      const option = {
+        title: null,
+        message: null,
+        button: {
+          text: null,
+          default: null,
+          type: null,
+          icon: null,
+        },
+      }
+
+      if (typeof param === 'string') {
+        option.message = param
+      } else if (param) {
+        if (param.title) {
+          option.title = param.title
+        }
+        if (param.message) {
+          option.message = param.message
+        }
+        if (param.button) {
+          option.button = param.button
+        }
+      }
+
+      return tag.Q.Promise(resolve => {
+        tag.observable.trigger('showAlert', option)
+        tag.observable.on('callbackConfirm', () => {
+          tag.refs.modal.hide()
+          return resolve()
+        })
+      })
+    }
 });
-
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onMount() {
-  var defaultButton = {};
-  if (tag.defaultOptions && tag.defaultOptions.alert && tag.defaultOptions.alert.button) {
-    defaultButton = tag.defaultOptions.alert.button;
-  }
-  if (defaultButton.default) {
-    button.default = true;
-  }
-  button.text = defaultButton.text || 'Close';
-  button.type = defaultButton.type || '';
-  button.icon = defaultButton.icon || '';
-
-  tag.refs.modal.on('closeAction', function () {
-    tag.observable.trigger('callbackConfirm');
-  });
-}
-
-function setButton(option) {
-  var btn = {
-    text: option.button.text || button.text,
-    type: option.button.type || button.type,
-    icon: option.button.icon || button.icon,
-    action: 'closeAction',
-    closable: false
-  };
-  if (option.button.default) {
-    btn.default = true;
-  } else if (option.button.default === null) {
-    btn.default = button.default;
-  }
-
-  tag.modal.buttons.length = 0;
-  tag.modal.buttons.push(btn);
-}
-
-function showAlert(option) {
-  tag.title = option.title;
-  tag.messages = Array.isArray(option.message) ? option.message : [option.message];
-  setButton(option);
-  tag.update();
-  tag.refs.modal.show();
-}
-
-function suAlert(param) {
-  var option = {
-    title: null,
-    message: null,
-    button: {
-      text: null,
-      default: null,
-      type: null,
-      icon: null
-    }
-  };
-
-  if (typeof param === 'string') {
-    option.message = param;
-  } else if (param) {
-    if (param.title) {
-      option.title = param.title;
-    }
-    if (param.message) {
-      option.message = param.message;
-    }
-    if (param.button) {
-      option.button = param.button;
-    }
-  }
-
-  return tag.Q.Promise(function (resolve) {
-    tag.observable.trigger('showAlert', option);
-    tag.observable.on('callbackConfirm', function () {
-      tag.refs.modal.hide();
-      return resolve();
-    });
-  });
-}
-});
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -10487,163 +9680,148 @@ function suAlert(param) {
 /*!*********************************************!*\
   !*** ./tags/checkbox/su-checkbox-group.tag ***!
   \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-checkbox-group', '<yield></yield>', '', '', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.label = '';
-tag.value = '';
-tag.defaultValue = '';
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-checkbox-group', '<yield></yield>', '', '', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.changed = changed;
-tag.on('mount', onMount);
-tag.on('update', onUpdate);
-tag.reset = reset;
+    tag.label = ''
+    tag.value = ''
+    tag.defaultValue = ''
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-var lastValue = void 0;
-var lastOptsValue = void 0;
+    tag.changed = changed
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.reset = reset
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onMount() {
-  if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
-    opts.riotValue = opts.value;
-  }
-  if (tag.value) {
-    opts.riotValue = tag.value;
-  } else {
-    tag.value = opts.riotValue;
-  }
-  if (typeof tag.value !== 'undefined' && !Array.isArray(tag.value)) {
-    tag.value = tag.value.toString().split(/\s+/).join('').split(',');
-  }
-  lastValue = tag.value;
-  lastOptsValue = tag.value;
+    let lastValue
+    let lastOptsValue
 
-  var checkboxes = tag.tags['su-checkbox'];
-  if (checkboxes) {
-    if (!Array.isArray(checkboxes)) {
-      checkboxes = [checkboxes];
+    function onMount() {
+      if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
+        opts.riotValue = opts.value
+      }
+      if (tag.value) {
+        opts.riotValue = tag.value
+      } else {
+        tag.value = opts.riotValue
+      }
+      if (typeof tag.value !== 'undefined' && !Array.isArray(tag.value)) {
+        tag.value = tag.value.toString().split(/\s+/).join('').split(',')
+      }
+      lastValue = tag.value
+      lastOptsValue = tag.value
+
+      let checkboxes = tag.tags['su-checkbox']
+      if (checkboxes) {
+        if (!Array.isArray(checkboxes)) {
+          checkboxes = [checkboxes]
+        }
+        checkboxes.forEach(checkbox => {
+          initializeChild(checkbox)
+          updateState(checkbox)
+        })
+      }
+
+      tag.defaultValue = tag.value
+      parentUpdate()
     }
-    checkboxes.forEach(function (checkbox) {
-      initializeChild(checkbox);
-      updateState(checkbox);
-    });
-  }
 
-  tag.defaultValue = tag.value;
-  parentUpdate();
-}
+    function onUpdate() {
+      let changed = false
+      if (normalizeValue(lastValue) != normalizeValue(tag.value)) {
+        opts.riotValue = tag.value
+        lastOptsValue = tag.value
+        lastValue = tag.value
+        changed = true
+      } else if (normalizeValue(lastOptsValue) != normalizeValue(opts.riotValue)) {
+        tag.value = opts.riotValue
+        lastOptsValue = opts.riotValue
+        lastValue = opts.riotValue
+        changed = true
+      }
+      if (typeof tag.value !== 'undefined' && !Array.isArray(tag.value)) {
+        tag.value = tag.value.toString().split(/\s+/).join('').split(',')
+      }
 
-function onUpdate() {
-  var changed = false;
-  if (normalizeValue(lastValue) != normalizeValue(tag.value)) {
-    opts.riotValue = tag.value;
-    lastOptsValue = tag.value;
-    lastValue = tag.value;
-    changed = true;
-  } else if (normalizeValue(lastOptsValue) != normalizeValue(opts.riotValue)) {
-    tag.value = opts.riotValue;
-    lastOptsValue = opts.riotValue;
-    lastValue = opts.riotValue;
-    changed = true;
-  }
-  if (typeof tag.value !== 'undefined' && !Array.isArray(tag.value)) {
-    tag.value = tag.value.toString().split(/\s+/).join('').split(',');
-  }
-
-  var checkboxes = tag.tags['su-checkbox'];
-  if (checkboxes) {
-    if (!Array.isArray(checkboxes)) {
-      checkboxes = [checkboxes];
+      let checkboxes = tag.tags['su-checkbox']
+      if (checkboxes) {
+        if (!Array.isArray(checkboxes)) {
+          checkboxes = [checkboxes]
+        }
+        checkboxes.forEach(checkbox => {
+          initializeChild(checkbox)
+        })
+        if (changed) {
+          checkboxes.forEach(checkbox => {
+            updateState(checkbox)
+          })
+          tag.trigger('change', tag.value)
+        }
+      }
     }
-    checkboxes.forEach(function (checkbox) {
-      initializeChild(checkbox);
-    });
-    if (changed) {
-      checkboxes.forEach(function (checkbox) {
-        updateState(checkbox);
-      });
-      tag.trigger('change', tag.value);
+
+    function reset() {
+      tag.value = tag.defaultValue
     }
-  }
-}
 
-function reset() {
-  tag.value = tag.defaultValue;
-}
-
-function changed() {
-  return tag.value !== tag.defaultValue;
-}
-
-function updateState(checkbox) {
-  if (typeof checkbox.opts.value === 'undefined' && checkbox.opts.riotValue === 'undefined' || typeof tag.value === 'undefined') {
-    return;
-  }
-  var value = typeof checkbox.opts.value === 'undefined' ? checkbox.opts.riotValue : checkbox.opts.value;
-  checkbox.checked = tag.value.some(function (v) {
-    return v == value;
-  });
-  if (checkbox.checked) {
-    tag.label = checkbox.root.getElementsByTagName('label')[0].innerText;
-  }
-}
-
-function initializeChild(checkbox) {
-  if (checkbox.opts.name) {
-    return;
-  }
-  checkbox.opts.name = getCheckboxName();
-  checkbox.on('click', function () {
-    var checkboxes = tag.tags['su-checkbox'];
-    if (!Array.isArray(checkboxes)) {
-      checkboxes = [checkboxes];
+    function changed() {
+      return tag.value !== tag.defaultValue
     }
-    tag.value = checkboxes.filter(function (_checkbox) {
-      return _checkbox.checked;
-    }).map(function (_checkbox) {
-      return _checkbox.opts.riotValue || _checkbox.opts.value;
-    });
-    tag.update();
-  });
-}
 
-function parentUpdate() {
-  if (tag.parent) {
-    tag.parent.update();
-  } else {
-    tag.update();
-  }
-}
+    function updateState(checkbox) {
+      if (typeof checkbox.opts.value === 'undefined' && checkbox.opts.riotValue === 'undefined' || typeof tag.value === 'undefined') {
+        return
+      }
+      const value = typeof checkbox.opts.value === 'undefined' ? checkbox.opts.riotValue : checkbox.opts.value
+      checkbox.checked = tag.value.some(v => v == value)
+      if (checkbox.checked) {
+        tag.label = checkbox.root.getElementsByTagName('label')[0].innerText
+      }
+    }
 
-function normalizeValue(value) {
-  if (typeof value === 'undefined') {
-    return value;
-  }
-  if (!Array.isArray(value)) {
-    return [value].toString();
-  }
-  return value.toString();
-}
+    function initializeChild(checkbox) {
+      if (checkbox.opts.name) {
+        return
+      }
+      checkbox.opts.name = getCheckboxName()
+      checkbox.on('click', () => {
+        let checkboxes = tag.tags['su-checkbox']
+        if (!Array.isArray(checkboxes)) {
+          checkboxes = [checkboxes]
+        }
+        tag.value = checkboxes.filter(_checkbox => _checkbox.checked).map(_checkbox => _checkbox.opts.riotValue || _checkbox.opts.value)
+        tag.update()
+      })
+    }
 
-function getCheckboxName() {
-  return 'su-checkbox-name-' + tag._riot_id;
-}
+    function parentUpdate() {
+      if (tag.parent) {
+        tag.parent.update()
+      } else {
+        tag.update()
+      }
+    }
+
+    function normalizeValue(value) {
+      if (typeof value === 'undefined') {
+        return value
+      }
+      if (!Array.isArray(value)) {
+        return [value].toString()
+      }
+      return value.toString()
+    }
+
+    function getCheckboxName() {
+      return `su-checkbox-name-${tag._riot_id}`
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -10651,119 +9829,110 @@ function getCheckboxName() {
 /*!***************************************!*\
   !*** ./tags/checkbox/su-checkbox.tag ***!
   \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-checkbox', '<input type="checkbox" checked="{checked}" onclick="{click}" ref="target" disabled="{isDisabled()}" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', 'su-checkbox.ui.checkbox label,[data-is="su-checkbox"].ui.checkbox label{ cursor: pointer; } su-checkbox.ui.read-only input[type="checkbox"],[data-is="su-checkbox"].ui.read-only input[type="checkbox"],su-checkbox.ui.disabled input[type="checkbox"],[data-is="su-checkbox"].ui.disabled input[type="checkbox"]{ cursor: default !important; }', 'class="ui checkbox {opts.class}"', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.checked = false;
-tag.defaultChecked = false;
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-checkbox', '<input type="checkbox" checked="{checked}" onclick="{click}" ref="target" disabled="{isDisabled()}" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', 'su-checkbox.ui.checkbox label,[data-is="su-checkbox"].ui.checkbox label{ cursor: pointer; } su-checkbox.ui.read-only input[type="checkbox"],[data-is="su-checkbox"].ui.read-only input[type="checkbox"],su-checkbox.ui.disabled input[type="checkbox"],[data-is="su-checkbox"].ui.disabled input[type="checkbox"]{ cursor: default !important; }', 'class="ui checkbox {opts.class}"', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.changed = changed;
-tag.click = click;
-tag.getId = getId;
-tag.isDisabled = isDisabled;
-tag.on('mount', onMount);
-tag.on('update', onUpdate);
-tag.reset = reset;
+    tag.checked = false
+    tag.defaultChecked = false
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-var lastChecked = void 0;
-var lastOptsChecked = void 0;
-var shownMessage = false;
+    tag.changed = changed
+    tag.click = click
+    tag.getId = getId
+    tag.isDisabled = isDisabled
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.reset = reset
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onMount() {
-  supportTraditionalOptions();
-  if (tag.checked) {
-    opts.checked = tag.checked;
-  } else {
-    tag.checked = normalizeOptChecked();
-  }
-  lastChecked = tag.checked;
-  lastOptsChecked = tag.checked;
-  tag.defaultChecked = tag.checked;
-  tag.update();
-}
+    let lastChecked
+    let lastOptsChecked
+    let shownMessage = false
 
-function onUpdate() {
-  supportTraditionalOptions();
-  if (lastChecked != tag.checked) {
-    opts.checked = tag.checked;
-    lastChecked = tag.checked;
-    lastOptsChecked = tag.checked;
-    parentUpdate();
-  } else if (lastOptsChecked != normalizeOptChecked()) {
-    tag.checked = normalizeOptChecked();
-    lastChecked = tag.checked;
-    lastOptsChecked = tag.checked;
-    parentUpdate();
-  }
-}
-
-function reset() {
-  tag.checked = tag.defaultChecked;
-}
-
-function changed() {
-  return tag.checked !== tag.defaultChecked;
-}
-
-function click() {
-  if (isReadOnly() || tag.isDisabled()) {
-    event.preventDefault();
-    return;
-  }
-  tag.checked = !tag.checked;
-  parentUpdate();
-  tag.trigger('click', tag.checked);
-}
-
-function getId() {
-  return 'su-checkbox-' + tag._riot_id;
-}
-
-function isDisabled() {
-  return tag.root.classList.contains('disabled');
-}
-
-function isReadOnly() {
-  return tag.root.classList.contains('read-only');
-}
-
-function parentUpdate() {
-  if (tag.parent && !tag.opts.deterParentUpdate) {
-    tag.parent.update();
-  }
-}
-
-function supportTraditionalOptions() {
-  if (typeof opts.check !== 'undefined') {
-    if (!shownMessage) {
-      console.warn('\'check\' attribute is deprecated. Please use \'checked\'.');
+    function onMount() {
+      supportTraditionalOptions()
+      if (tag.checked) {
+        opts.checked = tag.checked
+      } else {
+        tag.checked = normalizeOptChecked()
+      }
+      lastChecked = tag.checked
+      lastOptsChecked = tag.checked
+      tag.defaultChecked = tag.checked
+      tag.update()
     }
-    shownMessage = true;
-    opts.checked = opts.check;
-    opts.check = undefined;
-  }
-}
 
-function normalizeOptChecked() {
-  return opts.checked === true || opts.checked === 'checked' || opts.checked === 'true';
-}
+    function onUpdate() {
+      supportTraditionalOptions()
+      if (lastChecked != tag.checked) {
+        opts.checked = tag.checked
+        lastChecked = tag.checked
+        lastOptsChecked = tag.checked
+        parentUpdate()
+      } else if (lastOptsChecked != normalizeOptChecked()) {
+        tag.checked = normalizeOptChecked()
+        lastChecked = tag.checked
+        lastOptsChecked = tag.checked
+        parentUpdate()
+      }
+    }
+
+    function reset() {
+      tag.checked = tag.defaultChecked
+    }
+
+    function changed() {
+      return tag.checked !== tag.defaultChecked
+    }
+
+    function click() {
+      if (isReadOnly() || tag.isDisabled()) {
+        event.preventDefault()
+        return
+      }
+      tag.checked = !tag.checked
+      parentUpdate()
+      tag.trigger('click', tag.checked)
+    }
+
+    function getId() {
+      return `su-checkbox-${tag._riot_id}`
+    }
+
+    function isDisabled() {
+      return tag.root.classList.contains('disabled')
+    }
+
+    function isReadOnly() {
+      return tag.root.classList.contains('read-only')
+    }
+
+    function parentUpdate() {
+      if (tag.parent && !tag.opts.deterParentUpdate) {
+        tag.parent.update()
+      }
+    }
+
+    function supportTraditionalOptions() {
+      if (typeof opts.check !== 'undefined') {
+        if (!shownMessage) {
+          console.warn('\'check\' attribute is deprecated. Please use \'checked\'.')
+        }
+        shownMessage = true
+        opts.checked = opts.check
+        opts.check = undefined
+      }
+    }
+
+    function normalizeOptChecked() {
+      return opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -10771,171 +9940,163 @@ function normalizeOptChecked() {
 /*!*************************************!*\
   !*** ./tags/confirm/su-confirm.tag ***!
   \*************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-confirm', '<su-modal class="tiny" ref="modal" modal="{modal}" title="{title}" messages="{messages}"> <div class="ui icon message"> <i class="question circle outline icon"></i> <div class="scrolling content"> <div class="header" if="{opts.title}"> {opts.title} </div> <p each="{messsage in opts.messages}">{messsage}</p> </div> </div> </su-modal>', 'su-confirm .ui.dimmer,[data-is="su-confirm"] .ui.dimmer{ z-index: 1010; } su-confirm .ui.modal,[data-is="su-confirm"] .ui.modal{ z-index: 1011; } su-confirm .ui.message,[data-is="su-confirm"] .ui.message{ background: none; box-shadow: none; }', '', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.modal = {
-  closable: false,
-  buttons: []
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-confirm', '<su-modal class="tiny" ref="modal" modal="{modal}" title="{title}" messages="{messages}"> <div class="ui icon message"> <i class="question circle outline icon"></i> <div class="scrolling content"> <div class="header" if="{opts.title}"> {opts.title} </div> <p each="{messsage in opts.messages}">{messsage}</p> </div> </div> </su-modal>', 'su-confirm .ui.dimmer,[data-is="su-confirm"] .ui.dimmer{ z-index: 1010; } su-confirm .ui.modal,[data-is="su-confirm"] .ui.modal{ z-index: 1011; } su-confirm .ui.message,[data-is="su-confirm"] .ui.message{ background: none; box-shadow: none; }', '', function(opts) {
+    const tag = this
 
-  // ===================================================================================
-  //                                                                         Tag Methods
-  //                                                                         ===========
-};tag.mixin('semantic-ui');
-tag.observable.on('showConfirm', showConfirm);
-tag.on('mount', onMount);
+    tag.modal = {
+      closable: false,
+      buttons: []
+    }
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-var reverse = false;
-var cancelButton = {
-  action: 'negativeAction'
-};
-var okButton = {
-  action: 'positiveAction'
-};
-riot.mixin({
-  suConfirm: suConfirm
+    tag.mixin('semantic-ui')
+    tag.observable.on('showConfirm', showConfirm)
+    tag.on('mount', onMount)
+
+    let reverse = false
+    const cancelButton = {
+      action: 'negativeAction'
+    }
+    const okButton = {
+      action: 'positiveAction'
+    }
+    riot.mixin({
+      suConfirm
+    })
+
+    function onMount() {
+      let defaultOkButton = {}
+      let defaultCancelButton = {}
+      reverse = false
+      if (tag.defaultOptions && tag.defaultOptions.confirm) {
+        if (tag.defaultOptions.confirm.reverse) {
+          reverse = tag.defaultOptions.confirm.reverse
+        }
+        if (tag.defaultOptions.confirm.buttons) {
+          if (tag.defaultOptions.confirm.buttons.ok) {
+            defaultOkButton = tag.defaultOptions.confirm.buttons.ok
+          }
+          if (tag.defaultOptions.confirm.buttons.cancel) {
+            defaultCancelButton = tag.defaultOptions.confirm.buttons.cancel
+          }
+        }
+      }
+
+      okButton.text = defaultOkButton.text || 'OK'
+      okButton.type = typeof defaultOkButton.type !== 'undefined' ? defaultOkButton.type : 'primary'
+      okButton.icon = typeof defaultOkButton.icon !== 'undefined' ? defaultOkButton.icon : 'check'
+      cancelButton.text = defaultCancelButton.text || 'Cancel'
+      cancelButton.type = defaultCancelButton.type || ''
+      cancelButton.icon = defaultCancelButton.icon || ''
+
+      if (defaultOkButton.default) {
+        okButton.default = true
+      } else if (defaultCancelButton.default) {
+        cancelButton.default = true
+      } else if (typeof defaultOkButton.default === 'undefined' && typeof defaultOkButton.default === 'undefined') {
+        okButton.default = true
+      }
+
+      tag.refs.modal.on('positiveAction', () => {
+        tag.observable.trigger('callbackConfirm', true)
+      })
+      tag.refs.modal.on('negativeAction', () => {
+        tag.observable.trigger('callbackConfirm', false)
+      })
+    }
+
+    function setButtons(option) {
+      const cancel = {
+        text: option.buttons.cancel.text || cancelButton.text,
+        type: option.buttons.cancel.type !== null ? option.buttons.cancel.type : cancelButton.type,
+        icon: option.buttons.cancel.icon !== null ? option.buttons.cancel.icon : cancelButton.icon,
+        action: cancelButton.action,
+      }
+      const ok = {
+        text: option.buttons.ok.text || okButton.text,
+        type: option.buttons.ok.type !== null ? option.buttons.ok.type : okButton.type,
+        icon: option.buttons.ok.icon !== null ? option.buttons.ok.icon : okButton.icon,
+        action: okButton.action,
+      }
+
+      if (option.buttons.ok.default) {
+        ok.default = true
+      } else if (option.buttons.cancel.default) {
+        cancel.default = true
+      } else if (option.buttons.ok.default === null && option.buttons.cancel.default === null) {
+        ok.default = okButton.default
+        cancel.default = cancelButton.default
+      }
+
+      tag.modal.buttons.length = 0
+      tag.modal.buttons.push((option.reverse || reverse) ? ok : cancel)
+      tag.modal.buttons.push((option.reverse || reverse) ? cancel : ok)
+    }
+
+    function showConfirm(option) {
+      tag.title = option.title
+      tag.messages = Array.isArray(option.message) ? option.message : [option.message]
+      setButtons(option)
+      tag.update()
+      tag.refs.modal.show()
+    }
+
+    function suConfirm(param) {
+      const option = {
+        title: null,
+        message: null,
+        reverse: null,
+        buttons: {
+          ok: {
+            text: null,
+            default: null,
+            type: null,
+            icon: null,
+          },
+          cancel: {
+            text: null,
+            default: null,
+            type: null,
+            icon: null,
+          },
+        },
+      }
+      if (typeof param === 'string') {
+        option.message = param
+      } else if (param) {
+        if (param.title) {
+          option.title = param.title
+        }
+        if (param.message) {
+          option.message = param.message
+        }
+        if (param.reverse) {
+          option.reverse = param.reverse
+        }
+        if (param.buttons) {
+          if (param.buttons.ok) {
+            option.buttons.ok = param.buttons.ok
+          }
+          if (param.buttons.cancel) {
+            option.buttons.cancel = param.buttons.cancel
+          }
+        }
+      }
+
+      return tag.Q.Promise((resolve, reject) => {
+        tag.observable.trigger('showConfirm', option)
+        tag.observable.on('callbackConfirm', result => {
+          return result ? resolve() : reject()
+        })
+      })
+    }
 });
-
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onMount() {
-  var defaultOkButton = {};
-  var defaultCancelButton = {};
-  reverse = false;
-  if (tag.defaultOptions && tag.defaultOptions.confirm) {
-    if (tag.defaultOptions.confirm.reverse) {
-      reverse = tag.defaultOptions.confirm.reverse;
-    }
-    if (tag.defaultOptions.confirm.buttons) {
-      if (tag.defaultOptions.confirm.buttons.ok) {
-        defaultOkButton = tag.defaultOptions.confirm.buttons.ok;
-      }
-      if (tag.defaultOptions.confirm.buttons.cancel) {
-        defaultCancelButton = tag.defaultOptions.confirm.buttons.cancel;
-      }
-    }
-  }
-
-  okButton.text = defaultOkButton.text || 'OK';
-  okButton.type = typeof defaultOkButton.type !== 'undefined' ? defaultOkButton.type : 'primary';
-  okButton.icon = typeof defaultOkButton.icon !== 'undefined' ? defaultOkButton.icon : 'check';
-  cancelButton.text = defaultCancelButton.text || 'Cancel';
-  cancelButton.type = defaultCancelButton.type || '';
-  cancelButton.icon = defaultCancelButton.icon || '';
-
-  if (defaultOkButton.default) {
-    okButton.default = true;
-  } else if (defaultCancelButton.default) {
-    cancelButton.default = true;
-  } else if (typeof defaultOkButton.default === 'undefined' && typeof defaultOkButton.default === 'undefined') {
-    okButton.default = true;
-  }
-
-  tag.refs.modal.on('positiveAction', function () {
-    tag.observable.trigger('callbackConfirm', true);
-  });
-  tag.refs.modal.on('negativeAction', function () {
-    tag.observable.trigger('callbackConfirm', false);
-  });
-}
-
-function setButtons(option) {
-  var cancel = {
-    text: option.buttons.cancel.text || cancelButton.text,
-    type: option.buttons.cancel.type !== null ? option.buttons.cancel.type : cancelButton.type,
-    icon: option.buttons.cancel.icon !== null ? option.buttons.cancel.icon : cancelButton.icon,
-    action: cancelButton.action
-  };
-  var ok = {
-    text: option.buttons.ok.text || okButton.text,
-    type: option.buttons.ok.type !== null ? option.buttons.ok.type : okButton.type,
-    icon: option.buttons.ok.icon !== null ? option.buttons.ok.icon : okButton.icon,
-    action: okButton.action
-  };
-
-  if (option.buttons.ok.default) {
-    ok.default = true;
-  } else if (option.buttons.cancel.default) {
-    cancel.default = true;
-  } else if (option.buttons.ok.default === null && option.buttons.cancel.default === null) {
-    ok.default = okButton.default;
-    cancel.default = cancelButton.default;
-  }
-
-  tag.modal.buttons.length = 0;
-  tag.modal.buttons.push(option.reverse || reverse ? ok : cancel);
-  tag.modal.buttons.push(option.reverse || reverse ? cancel : ok);
-}
-
-function showConfirm(option) {
-  tag.title = option.title;
-  tag.messages = Array.isArray(option.message) ? option.message : [option.message];
-  setButtons(option);
-  tag.update();
-  tag.refs.modal.show();
-}
-
-function suConfirm(param) {
-  var option = {
-    title: null,
-    message: null,
-    reverse: null,
-    buttons: {
-      ok: {
-        text: null,
-        default: null,
-        type: null,
-        icon: null
-      },
-      cancel: {
-        text: null,
-        default: null,
-        type: null,
-        icon: null
-      }
-    }
-  };
-  if (typeof param === 'string') {
-    option.message = param;
-  } else if (param) {
-    if (param.title) {
-      option.title = param.title;
-    }
-    if (param.message) {
-      option.message = param.message;
-    }
-    if (param.reverse) {
-      option.reverse = param.reverse;
-    }
-    if (param.buttons) {
-      if (param.buttons.ok) {
-        option.buttons.ok = param.buttons.ok;
-      }
-      if (param.buttons.cancel) {
-        option.buttons.cancel = param.buttons.cancel;
-      }
-    }
-  }
-
-  return tag.Q.Promise(function (resolve, reject) {
-    tag.observable.trigger('showConfirm', option);
-    tag.observable.on('callbackConfirm', function (result) {
-      return result ? resolve() : reject();
-    });
-  });
-}
-});
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -10943,481 +10104,474 @@ function suConfirm(param) {
 /*!*******************************************!*\
   !*** ./tags/datepicker/su-datepicker.tag ***!
   \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.popup} {upward: upward}"> <div class="ui action input {disabled: isDisabled()}" if="{opts.popup}"> <input type="text" placeholder="{opts.placeholder}" ref="input" onchange="{changeInput}" tabindex="{getTabindex()}" readonly="{isReadOnly()}"> <button class="ui icon button {disabled: isDisabled()}" onclick="{toggle}" onblur="{blur}" type="button"> <i class="calendar icon"></i> </button> </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="{getTabindex()}"> <div class="ui center aligned segment date-picker {datetime-picker : opts.datetime}"> <div class="ui buttons dp-navigation"> <button class="icon tiny ui button {disabled: isDisabled()} prev" onclick="{clickPrevious}" type="button"> <i class="chevron left icon"></i> </button> <button class="ui button {disabled: isDisabled()} month" onclick="{selectMonth}" type="button"> {getCurrentMonthView()} </button> <button class="ui button {disabled: isDisabled()} year" onclick="{selectYear}" type="button"> {getCurrentYear()} </button> <button class="icon tiny ui button {disabled: isDisabled()} next" onclick="{clickNext}" type="button"> <i class="chevron right icon"></i> </button> </div> <div if="{!yearSelecting && !monthSelecting}"> <div class="ui grid"> <div class="{opts.datetime ? \'ten\' : \'sixteen\'} wide column"> <div class="ui seven column padded grid dp-weekday"> <div each="{week in getWeekNames()}" class="column">{week}</div> </div> <div class="ui divider"></div> <div class="ui seven column padded grid dp-day"> <div each="{day in days}" class="column"> <button class="fluid ui button {today: isToday(day) && ! isActive(day)} {primary: isActive(day)} {non-active: !isActive(day)} {disabled: day.getMonth() != getCurrentMonth() || isDisabled()}" onclick="{clickDay}" type="button"> {day.getDate()} </button> </div> </div> <div class="ui divider"></div> <div class="ui two column grid"> <div class="column dp-clear"> <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{clickClear}" type="button"> <i class="times icon"></i> </button> </div> <div class="column dp-today"> <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{clickToday}" type="button"> <i class="calendar check icon"></i> </button> </div> </div> </div> <div class="six wide column" if="{opts.datetime}"> <div class="ui two column padded grid dp-time"> <div class="column" each="{hour, index in hours}"> <button class="fluid ui button {nearly-time: isNearlyTime(index) && ! isActiveTime(index)} {primary: isActiveTime(index)} {disabled: isDisabled()}" onclick="{clickHour}" type="button"> {hour} </button> </div> </div> </div> </div> </div> <div if="{monthSelecting}"> <div class="ui divider"></div> <div class="ui four column padded grid dp-month"> <div each="{month in months}" class="column"> <button class="fluid ui button {disabled : isDisabled()}" onclick="{clickMonth}" type="button"> {month.label} </button> </div> </div> </div> <div if="{yearSelecting}"> <div class="ui divider"></div> <div class="ui four column padded grid dp-month"> <div each="{year in years}" class="column"> <button class="fluid ui button {disabled : isDisabled()}" onclick="{clickYear}" type="button"> {year} </button> </div> </div> </div> </div> </div> </div>', 'su-datepicker .ui.segment,[data-is="su-datepicker"] .ui.segment{ padding-top: 0.5rem; padding-bottom: 0.5rem; } su-datepicker .ui.dropdown .menu,[data-is="su-datepicker"] .ui.dropdown .menu{ display: block; } su-datepicker .ui.dropdown,[data-is="su-datepicker"] .ui.dropdown{ display: block; } su-datepicker .ui.padded.grid>.column:not(.row),[data-is="su-datepicker"] .ui.padded.grid>.column:not(.row){ padding: 0; } su-datepicker .date-picker,[data-is="su-datepicker"] .date-picker{ width: 20rem; } su-datepicker .datetime-picker,[data-is="su-datepicker"] .datetime-picker{ width: 28rem; } su-datepicker .dp-weekday,[data-is="su-datepicker"] .dp-weekday{ color: rgba(0, 0, 0, 0.6); } su-datepicker .dp-time,[data-is="su-datepicker"] .dp-time{ height: 25rem; overflow-y: auto; padding-right: 0.2rem; } su-datepicker .dp-time .ui.button,[data-is="su-datepicker"] .dp-time .ui.button{ padding: 0; height: 2rem; font-weight: normal; } su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ padding: 0; height: 2.5rem; font-weight: normal; } su-datepicker .ui.button.nearly-time,[data-is="su-datepicker"] .ui.button.nearly-time,su-datepicker .dp-day .ui.button.today,[data-is="su-datepicker"] .dp-day .ui.button.today{ background: transparent none; color: rgba(0, 0, 0, 0.6); font-weight: 400; border-radius: 0.28571429rem; text-transform: none; text-shadow: none !important; -webkit-box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.15) inset; box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.15) inset; } su-datepicker .date-picker .ui.button:not(.primary),[data-is="su-datepicker"] .date-picker .ui.button:not(.primary){ background-color: transparent; } su-datepicker .date-picker .ui.button:not(.primary):hover,[data-is="su-datepicker"] .date-picker .ui.button:not(.primary):hover{ background-color: #e0e1e2; } su-datepicker .dp-day .ui.button.disabled,[data-is="su-datepicker"] .dp-day .ui.button.disabled,su-datepicker .dp-time .ui.button.disabled,[data-is="su-datepicker"] .dp-time .ui.button.disabled{ pointer-events: all !important; } su-datepicker .dp-navigation,[data-is="su-datepicker"] .dp-navigation{ width: 100%; margin-bottom: 0.4rem !important; } su-datepicker .dp-navigation .ui.button,[data-is="su-datepicker"] .dp-navigation .ui.button{ width: 20%; } su-datepicker .dp-navigation .ui.button.year,[data-is="su-datepicker"] .dp-navigation .ui.button.year,su-datepicker .dp-navigation .ui.button.month,[data-is="su-datepicker"] .dp-navigation .ui.button.month{ width: 30%; }', '', function(opts) {
-'use strict';
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! date-fns */ "./node_modules/date-fns/index.js");
+/* harmony import */ var date_fns__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(date_fns__WEBPACK_IMPORTED_MODULE_0__);
 
-var _dateFns = __webpack_require__(/*! date-fns */ "./node_modules/date-fns/index.js");
+    var riot = __webpack_require__(/*! riot */ "riot")
+    ;
+riot.tag2('su-datepicker', '<div class="ui {dropdown:opts.dataPopup} {upward: upward}"> <div class="ui action input {disabled: isDisabled()}" if="{opts.dataPopup}"> <input type="text" placeholder="{opts.placeholder}" ref="input" onchange="{changeInput}" tabindex="{getTabindex()}" readonly="{isReadOnly()}"> <button class="ui icon button {disabled: isDisabled()}" onclick="{toggle}" onblur="{blur}" type="button"> <i class="calendar icon"></i> </button> </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="{getTabindex()}"> <div class="ui center aligned segment date-picker {datetime-picker : opts.datetime}"> <div class="ui buttons dp-navigation"> <button class="icon tiny ui button {disabled: isDisabled()} prev" onclick="{clickPrevious}" type="button"> <i class="chevron left icon"></i> </button> <button class="ui button {disabled: isDisabled()} month" onclick="{selectMonth}" type="button"> {getCurrentMonthView()} </button> <button class="ui button {disabled: isDisabled()} year" onclick="{selectYear}" type="button"> {getCurrentYear()} </button> <button class="icon tiny ui button {disabled: isDisabled()} next" onclick="{clickNext}" type="button"> <i class="chevron right icon"></i> </button> </div> <div if="{!yearSelecting && !monthSelecting}"> <div class="ui grid"> <div class="{opts.datetime ? \'ten\' : \'sixteen\'} wide column"> <div class="ui seven column padded grid dp-weekday"> <div each="{week in getWeekNames()}" class="column">{week}</div> </div> <div class="ui divider"></div> <div class="ui seven column padded grid dp-day"> <div each="{day in days}" class="column"> <button class="fluid ui button {today: isToday(day) && ! isActive(day)} {primary: isActive(day)} {non-active: !isActive(day)} {disabled: day.getMonth() != getCurrentMonth() || isDisabled()}" onclick="{clickDay}" type="button"> {day.getDate()} </button> </div> </div> <div class="ui divider"></div> <div class="ui two column grid"> <div class="column dp-clear"> <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{clickClear}" type="button"> <i class="times icon"></i> </button> </div> <div class="column dp-today"> <button class="ui icon fluid button {disabled : isDisabled()}" onclick="{clickToday}" type="button"> <i class="calendar check icon"></i> </button> </div> </div> </div> <div class="six wide column" if="{opts.datetime}"> <div class="ui two column padded grid dp-time"> <div class="column" each="{hour, index in hours}"> <button class="fluid ui button {nearly-time: isNearlyTime(index) && ! isActiveTime(index)} {primary: isActiveTime(index)} {disabled: isDisabled()}" onclick="{clickHour}" type="button"> {hour} </button> </div> </div> </div> </div> </div> <div if="{monthSelecting}"> <div class="ui divider"></div> <div class="ui four column padded grid dp-month"> <div each="{month in months}" class="column"> <button class="fluid ui button {disabled : isDisabled()}" onclick="{clickMonth}" type="button"> {month.label} </button> </div> </div> </div> <div if="{yearSelecting}"> <div class="ui divider"></div> <div class="ui four column padded grid dp-month"> <div each="{year in years}" class="column"> <button class="fluid ui button {disabled : isDisabled()}" onclick="{clickYear}" type="button"> {year} </button> </div> </div> </div> </div> </div> </div>', 'su-datepicker .ui.segment,[data-is="su-datepicker"] .ui.segment{ padding-top: 0.5rem; padding-bottom: 0.5rem; } su-datepicker .ui.dropdown .menu,[data-is="su-datepicker"] .ui.dropdown .menu{ display: block; } su-datepicker .ui.dropdown,[data-is="su-datepicker"] .ui.dropdown{ display: block; } su-datepicker .ui.padded.grid>.column:not(.row),[data-is="su-datepicker"] .ui.padded.grid>.column:not(.row){ padding: 0; } su-datepicker .date-picker,[data-is="su-datepicker"] .date-picker{ width: 20rem; } su-datepicker .datetime-picker,[data-is="su-datepicker"] .datetime-picker{ width: 28rem; } su-datepicker .dp-weekday,[data-is="su-datepicker"] .dp-weekday{ color: rgba(0, 0, 0, 0.6); } su-datepicker .dp-time,[data-is="su-datepicker"] .dp-time{ height: 25rem; overflow-y: auto; padding-right: 0.2rem; } su-datepicker .dp-time .ui.button,[data-is="su-datepicker"] .dp-time .ui.button{ padding: 0; height: 2rem; font-weight: normal; } su-datepicker .dp-day .ui.button,[data-is="su-datepicker"] .dp-day .ui.button,su-datepicker .dp-month .ui.button,[data-is="su-datepicker"] .dp-month .ui.button{ padding: 0; height: 2.5rem; font-weight: normal; } su-datepicker .ui.button.nearly-time,[data-is="su-datepicker"] .ui.button.nearly-time,su-datepicker .dp-day .ui.button.today,[data-is="su-datepicker"] .dp-day .ui.button.today{ background: transparent none; color: rgba(0, 0, 0, 0.6); font-weight: 400; border-radius: 0.28571429rem; text-transform: none; text-shadow: none !important; -webkit-box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.15) inset; box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.15) inset; } su-datepicker .date-picker .ui.button:not(.primary),[data-is="su-datepicker"] .date-picker .ui.button:not(.primary){ background-color: transparent; } su-datepicker .date-picker .ui.button:not(.primary):hover,[data-is="su-datepicker"] .date-picker .ui.button:not(.primary):hover{ background-color: #e0e1e2; } su-datepicker .dp-day .ui.button.disabled,[data-is="su-datepicker"] .dp-day .ui.button.disabled,su-datepicker .dp-time .ui.button.disabled,[data-is="su-datepicker"] .dp-time .ui.button.disabled{ pointer-events: all !important; } su-datepicker .dp-navigation,[data-is="su-datepicker"] .dp-navigation{ width: 100%; margin-bottom: 0.4rem !important; } su-datepicker .dp-navigation .ui.button,[data-is="su-datepicker"] .dp-navigation .ui.button{ width: 20%; } su-datepicker .dp-navigation .ui.button.year,[data-is="su-datepicker"] .dp-navigation .ui.button.year,su-datepicker .dp-navigation .ui.button.month,[data-is="su-datepicker"] .dp-navigation .ui.button.month{ width: 30%; }', '', function(opts) {
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.currentDate = null;
-tag.defaultValue = null;
-tag.transitionStatus = opts.popup ? 'hidden' : 'visible';
-tag.value = null;
-tag.valueAsDate = null;
-tag.milliseconds = null;
-tag.days = [];
-tag.hours = range(48).map(function (index) {
-  return (0, _dateFns.format)((0, _dateFns.addMinutes)(new Date(2020, 3, 22), index * 30), 'HH:mm');
-});
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.mixin('semantic-ui');
-tag.on('mount', onMount);
-tag.on('update', onUpdate);
-tag.reset = reset;
-tag.changed = changed;
-tag.selectMonth = selectMonth;
-tag.selectYear = selectYear;
-tag.clickDay = clickDay;
-tag.clickMonth = clickMonth;
-tag.clickYear = clickYear;
-tag.clickPrevious = clickPrevious;
-tag.clickNext = clickNext;
-tag.clickClear = clickClear;
-tag.clickToday = clickToday;
-tag.clickHour = clickHour;
-tag.toggle = toggle;
-tag.mousedown = mousedown;
-tag.mouseup = mouseup;
-tag.blur = blur;
-tag.changeInput = changeInput;
-tag.getCurrentYear = getCurrentYear;
-tag.getCurrentMonthView = getCurrentMonthView;
-tag.getCurrentMonth = getCurrentMonth;
-tag.getWeekNames = getWeekNames;
-tag.isActive = isActive;
-tag.isActiveTime = isActiveTime;
-tag.isToday = _dateFns.isToday;
-tag.isNearlyTime = isNearlyTime;
-tag.getTabindex = getTabindex;
-tag.isReadOnly = isReadOnly;
-tag.isDisabled = isDisabled;
+    tag.currentDate = null
+    tag.defaultValue = null
+    tag.transitionStatus = opts.dataPopup ? 'hidden' : 'visible'
+    tag.value = null
+    tag.valueAsDate = null
+    tag.milliseconds = null
+    tag.days = []
+    tag.hours = range(48).map(index => (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.format)((0,date_fns__WEBPACK_IMPORTED_MODULE_0__.addMinutes)(new Date(2020, 3, 22), index * 30), 'HH:mm'))
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-var visibleFlg = false;
-var itemActivated = false;
-var lastValue = null;
-var lastOptsValue = null;
-var lastCurrentDate = null;
-var lastOptsCurrentDate = null;
-var yearRange = 20;
+    tag.mixin('semantic-ui')
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.reset = reset
+    tag.changed = changed
+    tag.selectMonth = selectMonth
+    tag.selectYear = selectYear
+    tag.clickDay = clickDay
+    tag.clickMonth = clickMonth
+    tag.clickYear = clickYear
+    tag.clickPrevious = clickPrevious
+    tag.clickNext = clickNext
+    tag.clickClear = clickClear
+    tag.clickToday = clickToday
+    tag.clickHour = clickHour
+    tag.toggle = toggle
+    tag.mousedown = mousedown
+    tag.mouseup = mouseup
+    tag.blur = blur
+    tag.changeInput = changeInput
+    tag.getCurrentYear = getCurrentYear
+    tag.getCurrentMonthView = getCurrentMonthView
+    tag.getCurrentMonth = getCurrentMonth
+    tag.getWeekNames = getWeekNames
+    tag.isActive = isActive
+    tag.isActiveTime = isActiveTime
+    tag.isToday = date_fns__WEBPACK_IMPORTED_MODULE_0__.isToday
+    tag.isNearlyTime = isNearlyTime
+    tag.getTabindex = getTabindex
+    tag.isReadOnly = isReadOnly
+    tag.isDisabled = isDisabled
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onMount() {
-  if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
-    opts.riotValue = opts.value;
-  }
-  if (!tag.valueAsDate) {
-    tag.valueAsDate = copyDate(tag.value || opts.riotValue);
-  }
-  setValueFromValueAsDate();
-  if (tag.refs.input) {
-    tag.refs.input.value = tag.value;
-  }
-  lastValue = copyDate(tag.valueAsDate);
-  lastOptsValue = copyDate(opts.riotValue);
+    let visibleFlg = false
+    let itemActivated = false
+    let lastValue = null
+    let lastOptsValue = null
+    let lastCurrentDate = null
+    let lastOptsCurrentDate = null
+    let yearRange = 20
 
-  tag.currentDate = copyDate(opts.currentDate);
-  if (tag.valueAsDate) {
-    tag.currentDate = copyDate(tag.valueAsDate);
-  }
-  if (!tag.currentDate) {
-    tag.currentDate = new Date();
-  }
-  tag.months = getMonthes();
-  if (opts.yearRange && !isNaN(opts.yearRange) && opts.yearRange > 20) {
-    yearRange = opts.yearRange;
-  }
-  if (opts.startMode === 'year') {
-    tag.selectYear();
-  }
-  tag.update();
-  tag.defaultValue = tag.valueAsDate;
-}
+    function onMount() {
+      supportTraditionalOptions()
+      tag.update()
+      if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
+        opts.riotValue = opts.value
+      }
+      if (!tag.valueAsDate) {
+        tag.valueAsDate = copyDate(tag.value || opts.riotValue)
+      }
+      setValueFromValueAsDate()
+      if (tag.refs.input) {
+        tag.refs.input.value = tag.value
+      }
+      lastValue = copyDate(tag.valueAsDate)
+      lastOptsValue = copyDate(opts.riotValue)
 
-function onUpdate() {
-  var changed = false;
-  if (!isEqualDatetime(lastValue, tag.value)) {
-    tag.valueAsDate = copyDate(tag.value);
-    lastValue = copyDate(tag.value);
-    changed = true;
-  } else if (!isEqualDatetime(lastValue, tag.valueAsDate)) {
-    lastValue = copyDate(tag.valueAsDate);
-    changed = true;
-  } else if (!isEqualDatetime(lastOptsValue, opts.riotValue)) {
-    tag.valueAsDate = copyDate(opts.riotValue);
-    lastOptsValue = copyDate(opts.riotValue);
-    lastValue = copyDate(opts.riotValue);
-    changed = true;
-  }
-  setValueFromValueAsDate();
-  if (changed && tag.refs.input) {
-    tag.refs.input.value = tag.value;
-  }
-
-  if (changed && tag.valueAsDate) {
-    tag.currentDate = copyDate(tag.valueAsDate);
-  }
-  if (!isEqualDatetime(lastOptsCurrentDate, opts.currentDate)) {
-    tag.currentDate = copyDate(opts.currentDate);
-    lastOptsCurrentDate = copyDate(opts.currentDate);
-  }
-  if (!isEqualDatetime(lastCurrentDate, tag.currentDate)) {
-    lastCurrentDate = copyDate(tag.currentDate);
-    generate();
-  }
-}
-
-function reset() {
-  tag.valueAsDate = tag.defaultValue;
-  setValueFromValueAsDate();
-}
-
-function changed() {
-  return !isEqualDatetime(tag.valueAsDate, tag.defaultValue);
-}
-
-function selectMonth() {
-  tag.yearSelecting = false;
-  tag.monthSelecting = !tag.monthSelecting;
-}
-
-function selectYear() {
-  tag.years = getYears();
-  tag.monthSelecting = false;
-  tag.yearSelecting = !tag.yearSelecting;
-}
-
-function clickDay(event) {
-  if (tag.isReadOnly() || tag.isDisabled()) {
-    return;
-  }
-
-  var date = event.item.day;
-  if (tag.milliseconds) {
-    date = (0, _dateFns.addMilliseconds)((0, _dateFns.startOfDay)(date), tag.milliseconds);
-  }
-  setDate(date);
-  tag.trigger('click', tag.valueAsDate);
-}
-
-function clickMonth(event) {
-  tag.currentDate.setMonth(event.item.month.value);
-  tag.monthSelecting = false;
-}
-
-function clickYear(event) {
-  tag.currentDate.setYear(event.item.year);
-  tag.selectMonth();
-}
-
-function clickPrevious() {
-  if (tag.yearSelecting) {
-    addYear(-yearRange);
-  } else {
-    tag.monthSelecting = false;
-    tag.currentDate = (0, _dateFns.addMonths)(tag.currentDate, -1);
-  }
-}
-
-function clickNext() {
-  if (tag.yearSelecting) {
-    addYear(yearRange);
-  } else {
-    tag.monthSelecting = false;
-    tag.currentDate = (0, _dateFns.addMonths)(tag.currentDate, 1);
-  }
-}
-
-function clickClear() {
-  tag.milliseconds = undefined;
-  setDate(null);
-  tag.trigger('clear', tag.valueAsDate);
-}
-
-function clickToday() {
-  var today = new Date();
-  tag.milliseconds = (0, _dateFns.differenceInMilliseconds)(today, (0, _dateFns.startOfDay)(today));
-  setDate(today);
-  tag.trigger('today', tag.valueAsDate);
-}
-
-function clickHour(event) {
-  if (tag.isReadOnly() || tag.isDisabled()) {
-    return;
-  }
-
-  tag.milliseconds = getMilliseconds(event.item.index);
-  if (tag.valueAsDate) {
-    var date = (0, _dateFns.addMilliseconds)((0, _dateFns.startOfDay)(tag.valueAsDate), tag.milliseconds);
-    setDate(date);
-  }
-  tag.trigger('click', tag.valueAsDate);
-}
-
-// -----------------------------------------------------
-//                                          popup option
-//                                          ------------
-function toggle() {
-  if (tag.isReadOnly() || tag.isDisabled()) {
-    return;
-  }
-  if (!visibleFlg) {
-    if (opts.startMode === 'year') {
-      tag.selectYear();
-      tag.yearSelecting = true;
+      tag.currentDate = copyDate(opts.currentDate)
+      if (tag.valueAsDate) {
+        tag.currentDate = copyDate(tag.valueAsDate)
+      }
+      if (!tag.currentDate) {
+        tag.currentDate = new Date()
+      }
+      tag.months = getMonthes()
+      if (opts.yearRange && !isNaN(opts.yearRange) && opts.yearRange > 20) {
+        yearRange = opts.yearRange
+      }
+      if (opts.startMode === 'year') {
+        tag.selectYear()
+      }
+      tag.update()
+      tag.defaultValue = tag.valueAsDate
     }
-    open();
-  } else {
-    close();
-  }
-}
 
-function mousedown() {
-  itemActivated = true;
-}
+    function onUpdate() {
+      let changed = false
+      if (!isEqualDatetime(lastValue, tag.value)) {
+        tag.valueAsDate = copyDate(tag.value)
+        lastValue = copyDate(tag.value)
+        changed = true
+      } else if (!isEqualDatetime(lastValue, tag.valueAsDate)) {
+        lastValue = copyDate(tag.valueAsDate)
+        changed = true
+      } else if (!isEqualDatetime(lastOptsValue, opts.riotValue)) {
+        tag.valueAsDate = copyDate(opts.riotValue)
+        lastOptsValue = copyDate(opts.riotValue)
+        lastValue = copyDate(opts.riotValue)
+        changed = true
+      }
+      setValueFromValueAsDate()
+      if (changed && tag.refs.input) {
+        tag.refs.input.value = tag.value
+      }
 
-function mouseup() {
-  itemActivated = false;
-}
+      if (changed && tag.valueAsDate) {
+        tag.currentDate = copyDate(tag.valueAsDate)
+      }
+      if (!isEqualDatetime(lastOptsCurrentDate, opts.currentDate)) {
+        tag.currentDate = copyDate(opts.currentDate)
+        lastOptsCurrentDate = copyDate(opts.currentDate)
+      }
+      if (!isEqualDatetime(lastCurrentDate, tag.currentDate)) {
+        lastCurrentDate = copyDate(tag.currentDate)
+        generate()
+      }
+    }
 
-function blur() {
-  if (opts.popup && !itemActivated) {
-    close();
-  }
-}
+    function reset() {
+      tag.valueAsDate = tag.defaultValue
+      setValueFromValueAsDate()
+    }
 
-function changeInput() {
-  var value = tag.refs.input.value ? (0, _dateFns.parse)(tag.refs.input.value.replace(/\//g, '-')) : '';
-  if (value != 'Invalid Date') {
-    setDate(value);
-  } else {
-    tag.refs.input.value = tag.value;
-    tag.update();
-  }
-}
+    function changed() {
+      return !isEqualDatetime(tag.valueAsDate, tag.defaultValue)
+    }
 
-function generate() {
-  var startDate = (0, _dateFns.startOfMonth)(tag.currentDate);
-  var baseDate = (0, _dateFns.addDays)(startDate, -startDate.getDay());
-  tag.days = range(42).map(function (index) {
-    return (0, _dateFns.addDays)(baseDate, index);
-  });
-}
+    function selectMonth() {
+      tag.yearSelecting = false
+      tag.monthSelecting = !tag.monthSelecting
+    }
 
-function addYear(year) {
-  tag.years = tag.years.map(function (value) {
-    return value + parseInt(year);
-  });
-}
+    function selectYear() {
+      tag.years = getYears()
+      tag.monthSelecting = false
+      tag.yearSelecting = !tag.yearSelecting
+    }
 
-function getYears() {
-  var startAt = tag.currentDate.getFullYear() - ((yearRange - yearRange % 2) / 2 - 1);
-  return range(parseInt(yearRange), startAt);
-}
+    function clickDay(event) {
+      if (tag.isReadOnly() || tag.isDisabled()) {
+        return
+      }
 
-function getMonthes() {
-  return range(12).map(function (month) {
-    return {
-      label: (0, _dateFns.format)(new Date(2018, month, 1), 'MMM', {
-        locale: getLocale()
-      }),
-      value: month
-    };
-  });
-}
+      let date = event.item.day
+      if (tag.milliseconds) {
+        date = (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.addMilliseconds)((0,date_fns__WEBPACK_IMPORTED_MODULE_0__.startOfDay)(date), tag.milliseconds)
+      }
+      setDate(date)
+      tag.trigger('click', tag.valueAsDate)
+    }
 
-function open() {
-  tag.upward = isUpward();
-  tag.transitionStatus = 'visible';
-  visibleFlg = true;
-  tag.currentDate = copyDate(opts.currentDate);
-  if (tag.valueAsDate) {
-    tag.currentDate = copyDate(tag.valueAsDate);
-  }
-  if (!tag.currentDate) {
-    tag.currentDate = new Date();
-  }
-  tag.trigger('open', tag.valueAsDate);
-}
+    function clickMonth(event) {
+      tag.currentDate.setMonth(event.item.month.value)
+      tag.monthSelecting = false
+    }
 
-function close() {
-  tag.transitionStatus = 'hidden';
-  visibleFlg = false;
-  tag.trigger('close', tag.valueAsDate);
-}
+    function clickYear(event) {
+      tag.currentDate.setYear(event.item.year)
+      tag.selectMonth()
+    }
 
-function setDate(date) {
-  tag.valueAsDate = date;
-  setValueFromValueAsDate();
-  if (tag.refs.input && !opts.datetime) {
-    tag.refs.input.value = tag.value;
-    close();
-  }
-  tag.trigger('change', tag.valueAsDate);
-}
+    function clickPrevious() {
+      if (tag.yearSelecting) {
+        addYear(-yearRange)
+      } else {
+        tag.monthSelecting = false
+        tag.currentDate = (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.addMonths)(tag.currentDate, -1)
+      }
+    }
 
-function setValueFromValueAsDate() {
-  if (tag.valueAsDate) {
-    tag.value = (0, _dateFns.format)(tag.valueAsDate, getPattern(), { locale: getLocale() });
-    tag.milliseconds = (0, _dateFns.differenceInMilliseconds)(tag.valueAsDate, (0, _dateFns.startOfDay)(tag.valueAsDate));
-  } else {
-    tag.value = null;
-    tag.milliseconds = null;
-  }
-}
+    function clickNext() {
+      if (tag.yearSelecting) {
+        addYear(yearRange)
+      } else {
+        tag.monthSelecting = false
+        tag.currentDate = (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.addMonths)(tag.currentDate, 1)
+      }
+    }
 
-function isEqualDatetime(d1, d2) {
-  return isEqualDay(d1, d2) && isEqualTime(d1, d2);
-}
+    function clickClear() {
+      tag.milliseconds = undefined
+      setDate(null)
+      tag.trigger('clear', tag.valueAsDate)
+    }
 
-function isEqualDay(d1, d2) {
-  if (d1 == d2) {
-    return true;
-  }
-  if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
-    return false;
-  }
-  return (0, _dateFns.isSameDay)(d1, d2);
-}
+    function clickToday() {
+      const today = new Date()
+      tag.milliseconds = (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.differenceInMilliseconds)(today, (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.startOfDay)(today))
+      setDate(today)
+      tag.trigger('today', tag.valueAsDate)
+    }
 
-function isEqualTime(d1, d2) {
-  if (d1 == d2) {
-    return true;
-  }
-  if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
-    return false;
-  }
-  return (0, _dateFns.isSameHour)(d1, d2) && (0, _dateFns.isSameMinute)(d1, d2);
-}
+    function clickHour(event) {
+      if (tag.isReadOnly() || tag.isDisabled()) {
+        return
+      }
 
-function copyDate(date) {
-  if (!date) {
-    return date;
-  }
-  return (0, _dateFns.parse)(date);
-}
+      tag.milliseconds = getMilliseconds(event.item.index)
+      if (tag.valueAsDate) {
+        const date = (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.addMilliseconds)((0,date_fns__WEBPACK_IMPORTED_MODULE_0__.startOfDay)(tag.valueAsDate), tag.milliseconds)
+        setDate(date)
+      }
+      tag.trigger('click', tag.valueAsDate)
+    }
 
-function isUpward() {
-  if (opts.direction == 'upward') {
-    return true;
-  }
-  if (opts.direction == 'downward') {
-    return false;
-  }
-  var inputField = tag.root.getBoundingClientRect();
-  var windowHeight = document.documentElement.offsetHeight || document.body.offsetHeight;
-  var menuHeight = tag.root.querySelector('.menu').getBoundingClientRect().height;
-  var above = menuHeight <= inputField.top;
-  var below = windowHeight >= inputField.top + inputField.height + menuHeight;
+    function toggle() {
+      if (tag.isReadOnly() || tag.isDisabled()) {
+        return
+      }
+      if (!visibleFlg) {
+        if (opts.startMode === 'year') {
+          tag.selectYear()
+          tag.yearSelecting = true
+        }
+        open()
+      } else {
+        close()
+      }
+    }
 
-  if (below) {
-    return false;
-  }
-  if (!below && !above) {
-    return false;
-  }
-  return true;
-}
+    function mousedown() {
+      itemActivated = true
+    }
 
-function getCurrentYear() {
-  if (tag.currentDate) {
-    return tag.currentDate.getFullYear();
-  }
-}
+    function mouseup() {
+      itemActivated = false
+    }
 
-function getCurrentMonthView() {
-  if (tag.currentDate) {
-    return (0, _dateFns.format)(tag.currentDate, 'MMM', { locale: getLocale() });
-  }
-}
+    function blur() {
+      if (opts.dataPopup && !itemActivated) {
+        close()
+      }
+    }
 
-function getCurrentMonth() {
-  return tag.currentDate.getMonth();
-}
+    function changeInput() {
+      const value = tag.refs.input.value ? (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.parse)(tag.refs.input.value.replace(/\//g, '-')) : ''
+      if (value != 'Invalid Date') {
+        setDate(value)
+      } else {
+        tag.refs.input.value = tag.value
+        tag.update()
+      }
+    }
 
-function getWeekNames() {
-  return range(7, 1).map(function (day) {
-    return (0, _dateFns.format)(new Date(2018, 6, day), 'dd', { locale: getLocale() });
-  });
-}
+    function generate() {
+      const startDate = (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.startOfMonth)(tag.currentDate)
+      const baseDate = (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.addDays)(startDate, -startDate.getDay())
+      tag.days = range(42).map((index) => (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.addDays)(baseDate, index))
+    }
 
-function isActive(date) {
-  return isEqualDay(tag.valueAsDate, date);
-}
+    function addYear(year) {
+      tag.years = tag.years.map((value) => {
+        return value + parseInt(year)
+      })
+    }
 
-function isActiveTime(index) {
-  return isEqualTime(tag.milliseconds, getMilliseconds(index));
-}
+    function getYears() {
+      const startAt = tag.currentDate.getFullYear() - ((yearRange - (yearRange % 2)) / 2 - 1)
+      return range(parseInt(yearRange), startAt)
+    }
 
-function isNearlyTime(index) {
-  var target = getMilliseconds(index);
-  if (typeof tag.milliseconds === 'undefined' || tag.milliseconds > target) {
-    return false;
-  }
-  return target - tag.milliseconds < 30 * 60 * 1000;
-}
+    function getMonthes() {
+      return range(12).map((month) => {
+        return {
+          label: (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.format)(new Date(2018, month, 1), 'MMM', {
+            locale: getLocale(),
+          }),
+          value: month,
+        }
+      })
+    }
 
-function getMilliseconds(index) {
-  return index * 30 * 60 * 1000;
-}
+    function open() {
+      tag.upward = isUpward()
+      tag.transitionStatus = 'visible'
+      visibleFlg = true
+      tag.currentDate = copyDate(opts.currentDate)
+      if (tag.valueAsDate) {
+        tag.currentDate = copyDate(tag.valueAsDate)
+      }
+      if (!tag.currentDate) {
+        tag.currentDate = new Date()
+      }
+      tag.trigger('open', tag.valueAsDate)
+    }
 
-function getTabindex() {
-  if (!opts.popup) {
-    return false;
-  }
-  if (opts.tabindex) {
-    return opts.tabindex;
-  }
-  return 0;
-}
+    function close() {
+      tag.transitionStatus = 'hidden'
+      visibleFlg = false
+      tag.trigger('close', tag.valueAsDate)
+    }
 
-function isReadOnly() {
-  return tag.root.classList.contains('read-only');
-}
-function isDisabled() {
-  return tag.root.classList.contains('disabled');
-}
+    function setDate(date) {
+      tag.valueAsDate = date
+      setValueFromValueAsDate()
+      if (tag.refs.input && !opts.datetime) {
+        tag.refs.input.value = tag.value
+        close()
+      }
+      tag.trigger('change', tag.valueAsDate)
+    }
 
-function getPattern() {
-  if (opts.pattern) {
-    return opts.pattern;
-  }
-  if (tag.defaultOptions && tag.defaultOptions.pattern) {
-    return tag.defaultOptions.pattern;
-  }
-  return opts.datetime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD';
-}
+    function setValueFromValueAsDate() {
+      if (tag.valueAsDate) {
+        tag.value = (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.format)(tag.valueAsDate, getPattern(), { locale: getLocale() })
+        tag.milliseconds = (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.differenceInMilliseconds)(tag.valueAsDate, (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.startOfDay)(tag.valueAsDate))
+      } else {
+        tag.value = null
+        tag.milliseconds = null
+      }
+    }
 
-function getLocale() {
-  if (opts.locale) {
-    return opts.locale;
-  }
-  if (tag.defaultOptions && tag.defaultOptions.locale) {
-    return tag.defaultOptions.locale;
-  }
-}
+    function isEqualDatetime(d1, d2) {
+      return isEqualDay(d1, d2) && isEqualTime(d1, d2)
+    }
 
-function range(size) {
-  var startAt = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+    function isEqualDay(d1, d2) {
+      if (d1 == d2) {
+        return true
+      }
+      if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
+        return false
+      }
+      return (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.isSameDay)(d1, d2)
+    }
 
-  return Array.from(Array(size).keys()).map(function (i) {
-    return i + startAt;
-  });
-}
+    function isEqualTime(d1, d2) {
+      if (d1 == d2) {
+        return true
+      }
+      if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
+        return false
+      }
+      return (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.isSameHour)(d1, d2) && (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.isSameMinute)(d1, d2)
+    }
+
+    function copyDate(date) {
+      if (!date) {
+        return date
+      }
+      return (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.parse)(date)
+    }
+
+    function isUpward() {
+      if (opts.direction == 'upward') {
+        return true
+      }
+      if (opts.direction == 'downward') {
+        return false
+      }
+      const inputField = tag.root.getBoundingClientRect()
+      const windowHeight = document.documentElement.offsetHeight || document.body.offsetHeight
+      const menuHeight = tag.root.querySelector('.menu').getBoundingClientRect().height
+      const above = menuHeight <= inputField.top
+      const below = windowHeight >= inputField.top + inputField.height + menuHeight
+
+      if (below) {
+        return false
+      }
+      if (!below && !above) {
+        return false
+      }
+      return true
+    }
+
+    function getCurrentYear() {
+      if (tag.currentDate) {
+        return tag.currentDate.getFullYear()
+      }
+    }
+
+    function getCurrentMonthView() {
+      if (tag.currentDate) {
+        return (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.format)(tag.currentDate, 'MMM', { locale: getLocale() })
+      }
+    }
+
+    function getCurrentMonth() {
+      return tag.currentDate.getMonth()
+    }
+
+    function getWeekNames() {
+      return range(7, 1).map((day) => (0,date_fns__WEBPACK_IMPORTED_MODULE_0__.format)(new Date(2018, 6, day), 'dd', { locale: getLocale() }))
+    }
+
+    function isActive(date) {
+      return isEqualDay(tag.valueAsDate, date)
+    }
+
+    function isActiveTime(index) {
+      return isEqualTime(tag.milliseconds, getMilliseconds(index))
+    }
+
+    function isNearlyTime(index) {
+      const target = getMilliseconds(index)
+      if (typeof tag.milliseconds === 'undefined' || tag.milliseconds > target) {
+        return false
+      }
+      return target - tag.milliseconds < 30 * 60 * 1000
+    }
+
+    function getMilliseconds(index) {
+      return index * 30 * 60 * 1000
+    }
+
+    function getTabindex() {
+      if (!opts.dataPopup) {
+        return false
+      }
+      if (opts.tabindex) {
+        return opts.tabindex
+      }
+      return 0
+    }
+
+    function isReadOnly() {
+      return tag.root.classList.contains('read-only')
+    }
+    function isDisabled() {
+      return tag.root.classList.contains('disabled')
+    }
+
+    function getPattern() {
+      if (opts.pattern) {
+        return opts.pattern
+      }
+      if (tag.defaultOptions && tag.defaultOptions.pattern) {
+        return tag.defaultOptions.pattern
+      }
+      return opts.datetime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
+    }
+
+    function getLocale() {
+      if (opts.locale) {
+        return opts.locale
+      }
+      if (tag.defaultOptions && tag.defaultOptions.locale) {
+        return tag.defaultOptions.locale
+      }
+    }
+
+    function range(size, startAt = 0) {
+      return Array.from(Array(size).keys()).map((i) => i + startAt)
+    }
+
+    function supportTraditionalOptions() {
+      if (typeof opts.popup !== 'undefined') {
+        console.warn('\'popup\' attribute is deprecated. Please use \'data-popup\'.')
+        opts.dataPopup = opts.popup
+        opts.popup = undefined
+        tag.transitionStatus = opts.dataPopup ? 'hidden' : 'visible'
+      }
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -11425,510 +10579,459 @@ function range(size) {
 /*!***************************************!*\
   !*** ./tags/dropdown/su-dropdown.tag ***!
   \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="{getTabindex()}" ref="condition" if="{opts.search}" oninput="{input}" onclick="{stopPropagation}" onfocus="{focus}" onblur="{blur}" readonly="{isReadOnly()}"> <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}" onclick="{stopPropagation}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!opts.multiple || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="-1"> <div each="{item in opts.items}" riot-value="{item.value}" default="{item.default}" onmousedown="{mousedown}" onmouseup="{mouseup}" class="{item: isItem(item)} {header: item.header && !filtered} {divider: item.divider && !filtered} {default: item.default} {hover: item.active} {active: item.value == value} {selected: item.value == value} {disabled: item.disabled}" onclick="{itemClick}" if="{isVisible(item)}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div>', 'su-dropdown.ui.dropdown .menu>.item.default,[data-is="su-dropdown"].ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) } su-dropdown.ui.dropdown .menu>.item.hover,[data-is="su-dropdown"].ui.dropdown .menu>.item.hover{ background: rgba(0, 0, 0, .05); color: rgba(0, 0, 0, .95); } su-dropdown.ui.dropdown .menu,[data-is="su-dropdown"].ui.dropdown .menu{ display: block; }', 'class="ui selection {opts.class} {search: opts.search} {multiple: opts.multiple} dropdown {active: isActive()} {visible: isActive()} {upward: upward}" onclick="{toggle}" onfocus="{focus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" onkeydown="{keydown}" onkeyup="{keyup}" tabindex="{opts.search ? -1 : getTabindex()}"', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.defaultValue = '';
-tag.filtered = false;
-tag.label = '';
-tag.selectedFlg = false;
-tag.transitionStatus = 'hidden';
-tag.value = '';
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-dropdown', '<i class="dropdown icon"></i> <input class="search" autocomplete="off" tabindex="{getTabindex()}" ref="condition" if="{opts.search}" oninput="{input}" onclick="{stopPropagation}" onfocus="{focus}" onblur="{blur}" readonly="{isReadOnly()}"> <a each="{item in opts.items}" class="ui label transition visible" style="display: inline-block !important;" if="{item.selected}" onclick="{stopPropagation}"> {item.label} <i class="delete icon" onclick="{unselect}"></i> </a> <div class="{default: default} text {filtered: filtered}" if="{!opts.multiple || !selectedFlg}"> {label} </div> <div class="menu transition {transitionStatus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" tabindex="-1"> <div each="{item in opts.items}" riot-value="{item.value}" default="{item.default}" onmousedown="{mousedown}" onmouseup="{mouseup}" class="{item: isItem(item)} {header: item.header && !filtered} {divider: item.divider && !filtered} {default: item.default} {hover: item.active} {active: item.value == value} {selected: item.value == value} {disabled: item.disabled}" onclick="{itemClick}" if="{isVisible(item)}"> <i class="{item.icon} icon" if="{item.icon}"></i> <img class="ui avatar image" riot-src="{item.image}" if="{item.image}"> <span class="description" if="{item.description}">{item.description}</span> <span class="text">{item.label}</span> </div> <div class="message" if="{filtered && filteredItems.length == 0}">No results found.</div> </div>', 'su-dropdown.ui.dropdown .menu>.item.default,[data-is="su-dropdown"].ui.dropdown .menu>.item.default{ color: rgba(0, 0, 0, 0.4) } su-dropdown.ui.dropdown .menu>.item.hover,[data-is="su-dropdown"].ui.dropdown .menu>.item.hover{ background: rgba(0, 0, 0, .05); color: rgba(0, 0, 0, .95); } su-dropdown.ui.dropdown .menu,[data-is="su-dropdown"].ui.dropdown .menu{ display: block; }', 'class="ui selection {opts.class} {search: opts.search} {multiple: opts.multiple} dropdown {active: isActive()} {visible: isActive()} {upward: upward}" onclick="{toggle}" onfocus="{focus}" onmousedown="{mousedown}" onmouseup="{mouseup}" onblur="{blur}" onkeydown="{keydown}" onkeyup="{keyup}" tabindex="{opts.search ? -1 : getTabindex()}"', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.blur = blur;
-tag.changed = changed;
-tag.focus = focus;
-tag.getTabindex = getTabindex;
-tag.isActive = isActive;
-tag.isDisabled = isDisabled;
-tag.input = input;
-tag.isItem = isItem;
-tag.isReadOnly = isReadOnly;
-tag.isVisible = isVisible;
-tag.itemClick = itemClick;
-tag.keydown = keydown;
-tag.keyup = keyup;
-tag.mousedown = mousedown;
-tag.mouseup = mouseup;
-tag.on('before-mount', onBeforeMount);
-tag.on('mount', onMount);
-tag.on('update', onUpdate);
-tag.reset = reset;
-tag.stopPropagation = stopPropagation;
-tag.toggle = toggle;
-tag.unselect = unselect;
+    tag.defaultValue = ''
+    tag.filtered = false
+    tag.label = ''
+    tag.selectedFlg = false
+    tag.transitionStatus = 'hidden'
+    tag.value = ''
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-var visibleFlg = false;
-var keys = {
-  enter: 13,
-  escape: 27,
-  upArrow: 38,
-  downArrow: 40
-};
-var compositionStarted = false;
+    tag.blur = blur
+    tag.changed = changed
+    tag.focus = focus
+    tag.getTabindex = getTabindex
+    tag.isActive = isActive
+    tag.isDisabled = isDisabled
+    tag.input = input
+    tag.isItem = isItem
+    tag.isReadOnly = isReadOnly
+    tag.isVisible = isVisible
+    tag.itemClick = itemClick
+    tag.keydown = keydown
+    tag.keyup = keyup
+    tag.mousedown = mousedown
+    tag.mouseup = mouseup
+    tag.on('before-mount', onBeforeMount)
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.reset = reset
+    tag.stopPropagation = stopPropagation
+    tag.toggle = toggle
+    tag.unselect = unselect
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onBeforeMount() {
-  if (opts.items && opts.items.length > 0) {
-    tag.label = opts.items[0].label;
-    tag.value = opts.items[0].value;
-    tag.default = opts.items[0].default;
-  }
-}
+    let visibleFlg = false
+    const keys = {
+      enter: 13,
+      escape: 27,
+      upArrow: 38,
+      downArrow: 40,
+    }
+    let compositionStarted = false
 
-function onMount() {
-  if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
-    opts.riotValue = opts.value;
-  }
-  if (typeof opts.riotValue !== 'undefined') {
-    tag.value = opts.riotValue;
-    tag.defaultValue = tag.value;
-    tag.update();
-    parentUpdate();
-  } else {
-    tag.defaultValue = tag.value;
-  }
-
-  if (tag.refs.condition) {
-    tag.refs.condition.addEventListener('compositionstart', function () {
-      return compositionStarted = true;
-    });
-    tag.refs.condition.addEventListener('compositionend', function () {
-      return compositionStarted = false;
-    });
-  }
-}
-
-function onUpdate() {
-  if (opts.multiple) {
-    opts.items.forEach(function (item) {
-      return item.selected = false;
-    });
-    opts.items.filter(function (item) {
-      return tag.value && tag.value.indexOf(item.value) >= 0;
-    }).forEach(function (item) {
-      return item.selected = true;
-    });
-    selectMultiTarget(true);
-  } else if (opts.items) {
-    var selected = opts.items.filter(function (item) {
-      return item.value === tag.value;
-    });
-    if (selected && selected.length > 0) {
-      var target = selected[0];
-      if (tag.label !== target.label) {
-        selectTarget(target, true);
-      }
-    } else if (opts.items && opts.items.length > 0) {
-      if (tag.value != opts.items[0].value) {
-        tag.value = opts.items[0].value;
-      }
-      if (tag.label != opts.items[0].label) {
-        tag.label = opts.items[0].label;
-        tag.default = opts.items[0].default;
+    function onBeforeMount() {
+      if (opts.items && opts.items.length > 0) {
+        tag.label = opts.items[0].label
+        tag.value = opts.items[0].value
+        tag.default = opts.items[0].default
       }
     }
-  }
-}
 
-function reset() {
-  tag.value = tag.defaultValue;
-}
+    function onMount() {
+      if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
+        opts.riotValue = opts.value
+      }
+      if (typeof opts.riotValue !== 'undefined') {
+        tag.value = opts.riotValue
+        tag.defaultValue = tag.value
+        tag.update()
+        parentUpdate()
+      } else {
+        tag.defaultValue = tag.value
+      }
 
-function changed() {
-  if (opts.multiple) {
-    var value = tag.value ? tag.value : [];
-    var defaultValue = tag.defaultValue ? tag.defaultValue : [];
-    return value.toString() !== defaultValue.toString();
-  }
-  return tag.value !== tag.defaultValue;
-}
-
-function toggle() {
-  if (!visibleFlg) {
-    open();
-  } else {
-    close();
-  }
-}
-
-function focus() {
-  open();
-}
-
-function mousedown() {
-  tag.itemActivated = true;
-}
-
-function mouseup() {
-  tag.itemActivated = false;
-}
-
-function blur() {
-  if (!tag.itemActivated) {
-    if (!tag.closing && visibleFlg) {
-      var target = opts.multiple ? opts.items.filter(function (item) {
-        return item.selected;
-      }) : { value: tag.value, label: tag.label, default: tag.default };
-      tag.trigger('blur', target);
+      if (tag.refs.condition) {
+        tag.refs.condition.addEventListener('compositionstart', () => compositionStarted = true)
+        tag.refs.condition.addEventListener('compositionend', () => compositionStarted = false)
+      }
     }
-    close();
-  }
-}
 
-function itemClick(event) {
-  event.stopPropagation();
-  if (!tag.isItem(event.item.item) || event.item.item.disabled) {
-    return;
-  }
-  if (opts.multiple) {
-    if (!event.item.item.default) {
-      event.item.item.selected = true;
+    function onUpdate() {
+      if (opts.multiple) {
+        opts.items.forEach(item => item.selected = false)
+        opts.items.filter(item => tag.value && tag.value.indexOf(item.value) >= 0).forEach(item => item.selected = true)
+        selectMultiTarget(true)
+      } else if (opts.items) {
+        const selected = opts.items.filter(item => item.value === tag.value)
+        if (selected && selected.length > 0) {
+          const target = selected[0]
+          if (tag.label !== target.label) {
+            selectTarget(target, true)
+          }
+        } else if (opts.items && opts.items.length > 0) {
+          if (tag.value != opts.items[0].value) {
+            tag.value = opts.items[0].value
+          }
+          if (tag.label != opts.items[0].label) {
+            tag.label = opts.items[0].label
+            tag.default = opts.items[0].default
+          }
+        }
+      }
     }
-    selectMultiTarget();
-    return;
-  }
-  selectTarget(event.item.item);
-  close();
-}
 
-function keydown(event) {
-  var keyCode = event.keyCode;
-  if (keyCode == keys.escape) {
-    close();
-  }
-  if (keyCode == keys.downArrow) {
-    open();
-  }
-  if (keyCode != keys.upArrow && keyCode != keys.downArrow) {
-    return;
-  }
-
-  event.preventDefault();
-  var searchedItems = opts.items.filter(function (item) {
-    if (opts.search && !item.searched) {
-      return false;
+    function reset() {
+      tag.value = tag.defaultValue
     }
-    if (opts.multiple && (item.default || item.selected)) {
-      return false;
+
+    function changed() {
+      if (opts.multiple) {
+        const value = tag.value ? tag.value : []
+        const defaultValue = tag.defaultValue ? tag.defaultValue : []
+        return value.toString() !== defaultValue.toString()
+      }
+      return tag.value !== tag.defaultValue
     }
-    return true;
-  });
-  if (searchedItems.length == 0) {
-    return;
-  }
-  if (searchedItems.every(function (item) {
-    return !item.active;
-  })) {
-    searchedItems[0].active = true;
-    return;
-  }
 
-  var activeIndex = parseInt(searchedItems.map(function (item, index) {
-    return item.active ? index : -1;
-  }).filter(function (index) {
-    return index >= 0;
-  }));
-  if (keyCode == keys.upArrow) {
-    var nextActiveItem = searchedItems.filter(function (item, index) {
-      return index < activeIndex && !item.header && !item.divider && !item.disabled;
-    });
-    if (nextActiveItem.length > 0) {
-      searchedItems[activeIndex].active = false;
-      nextActiveItem[nextActiveItem.length - 1].active = true;
+    function toggle() {
+      if (!visibleFlg) {
+        open()
+      } else {
+        close()
+      }
     }
-  } else if (keyCode == keys.downArrow) {
-    var _nextActiveItem = searchedItems.filter(function (item, index) {
-      return index > activeIndex && !item.header && !item.divider && !item.disabled;
-    });
 
-    if (_nextActiveItem.length > 0) {
-      searchedItems[activeIndex].active = false;
-      _nextActiveItem[0].active = true;
+    function focus() {
+      open()
     }
-  }
-  tag.update();
-  scrollPosition();
-}
 
-function keyup(event) {
-  var keyCode = event.keyCode;
-  if (keyCode != keys.enter || compositionStarted) {
-    return;
-  }
-  var searchedItems = opts.items.filter(function (item) {
-    return item.searched && !item.selected;
-  });
-  var index = parseInt(searchedItems.map(function (item, index) {
-    return item.active ? index : -1;
-  }).filter(function (index) {
-    return index >= 0;
-  }));
-  var activeItem = searchedItems[index];
-  if (!activeItem) {
-    return;
-  }
-
-  if (opts.multiple) {
-    activeItem.selected = true;
-    activeItem.active = false;
-    if (index < searchedItems.length - 1) {
-      searchedItems[index + 1].active = true;
-    } else if (index > 0) {
-      searchedItems[index - 1].active = true;
+    function mousedown() {
+      tag.itemActivated = true
     }
-    selectMultiTarget();
-  } else {
-    activeItem.active = false;
-    selectTarget(activeItem);
-    close();
-  }
-}
 
-function stopPropagation(event) {
-  event.stopPropagation();
-}
-
-// -----------------------------------------------------
-//                                         search option
-//                                         -------------
-function input(event) {
-  var value = event.target.value;
-  tag.filtered = value.length > 0;
-  search(value);
-}
-
-// -----------------------------------------------------
-//                                       multiple option
-//                                       ---------------
-function unselect(event) {
-  event.stopPropagation();
-  event.item.item.selected = false;
-  selectMultiTarget();
-}
-
-function open() {
-  if (tag.opening || tag.closing || visibleFlg || tag.isReadOnly() || tag.isDisabled()) {
-    return;
-  }
-  tag.opening = true;
-  search('');
-  tag.upward = isUpward();
-  tag.transitionStatus = 'visible animating in slide ' + (tag.upward ? 'up' : 'down');
-  opts.items.forEach(function (item) {
-    return item.active = false;
-  });
-  setTimeout(function () {
-    tag.opening = false;
-    visibleFlg = true;
-    tag.transitionStatus = 'visible';
-    tag.update();
-  }, 300);
-
-  if (opts.search) {
-    tag.refs.condition.focus();
-  }
-  tag.update();
-  scrollPosition();
-  tag.trigger('open');
-}
-
-function close() {
-  if (tag.closing || !visibleFlg) {
-    return;
-  }
-  tag.closing = true;
-  tag.transitionStatus = 'visible animating out slide ' + (tag.upward ? 'up' : 'down');
-  setTimeout(function () {
-    tag.closing = false;
-    visibleFlg = false;
-    tag.transitionStatus = 'hidden';
-    tag.update();
-  }, 300);
-
-  if (opts.search) {
-    tag.refs.condition.blur();
-    if (tag.filtered && tag.filteredItems.length > 0) {
-      selectTarget(tag.filteredItems[0]);
-    } else {
-      tag.refs.condition.value = '';
-      tag.filtered = false;
+    function mouseup() {
+      tag.itemActivated = false
     }
-  }
-  tag.update();
-  tag.trigger('close');
-}
 
-function selectTarget(target, updating) {
-  if (tag.value === target.value && tag.label === target.label && tag.default === target.default) {
-    if (!updating) {
-      tag.trigger('select', target);
+    function blur() {
+      if (!tag.itemActivated) {
+        if (!tag.closing && visibleFlg) {
+          const target = opts.multiple ? opts.items.filter(item => item.selected) : { value: tag.value, label: tag.label, default: tag.default }
+          tag.trigger('blur', target)
+        }
+        close()
+      }
     }
-    return;
-  }
-  tag.value = target.value;
-  tag.label = target.label;
-  tag.default = target.default;
-  if (opts.search) {
-    tag.refs.condition.value = '';
-    tag.filtered = false;
-  }
-  if (!updating) {
-    tag.update();
-    parentUpdate();
-    tag.trigger('select', target);
-    tag.trigger('change', target);
-  }
-}
 
-function selectMultiTarget(updating) {
-  if (JSON.stringify(tag.value) == JSON.stringify(opts.items.filter(function (item) {
-    return item.selected;
-  }).map(function (item) {
-    return item.value;
-  })) && tag.selectedFlg == opts.items.some(function (item) {
-    return item.selected;
-  })) {
-    if (!updating) {
-      tag.trigger('select', opts.items.filter(function (item) {
-        return item.selected;
-      }));
+    function itemClick(event) {
+      event.stopPropagation()
+      if (!tag.isItem(event.item.item) || event.item.item.disabled) {
+        return
+      }
+      if (opts.multiple) {
+        if (!event.item.item.default) {
+          event.item.item.selected = true
+        }
+        selectMultiTarget()
+        return
+      }
+      selectTarget(event.item.item)
+      close()
     }
-    return;
-  }
-  tag.value = opts.items.filter(function (item) {
-    return item.selected;
-  }).map(function (item) {
-    return item.value;
-  });
-  tag.selectedFlg = opts.items.some(function (item) {
-    return item.selected;
-  });
-  if (!updating) {
-    tag.update();
-    parentUpdate();
-    tag.trigger('select', opts.items.filter(function (item) {
-      return item.selected;
-    }));
-    tag.trigger('change', opts.items.filter(function (item) {
-      return item.selected;
-    }));
-  }
-}
 
-function search(target) {
-  var convert = opts.searchKeyConvert || toLowerCase;
-  opts.items.forEach(function (item) {
-    var searchKey = item.searchKey || item.label || '';
-    item.searched = convert(searchKey).indexOf(convert(target)) >= 0;
-  });
-  tag.filteredItems = opts.items.filter(function (item) {
-    return item.searched;
-  });
-  tag.update();
-  tag.trigger('search');
-}
+    function keydown(event) {
+      const keyCode = event.keyCode
+      if (keyCode == keys.escape) {
+        close()
+      }
+      if (keyCode == keys.downArrow) {
+        open()
+      }
+      if (keyCode != keys.upArrow && keyCode != keys.downArrow) {
+        return
+      }
 
-function toLowerCase(target) {
-  return target.toLowerCase();
-}
+      event.preventDefault()
+      const searchedItems = opts.items.filter(item => {
+        if (opts.search && !item.searched) {
+          return false
+        }
+        if (opts.multiple && (item.default || item.selected)) {
+          return false
+        }
+        return true
+      })
+      if (searchedItems.length == 0) {
+        return
+      }
+      if (searchedItems.every(item => !item.active)) {
+        searchedItems[0].active = true
+        return
+      }
 
-function scrollPosition() {
-  var menu = tag.root.querySelector('.menu');
-  var item = tag.root.querySelector('.item.hover');
+      const activeIndex = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0))
+      if (keyCode == keys.upArrow) {
+        const nextActiveItem = searchedItems.filter((item, index) => index < activeIndex && !item.header && !item.divider && !item.disabled)
+        if (nextActiveItem.length > 0) {
+          searchedItems[activeIndex].active = false
+          nextActiveItem[nextActiveItem.length - 1].active = true
+        }
+      }
+      else if (keyCode == keys.downArrow) {
+        const nextActiveItem = searchedItems.filter((item, index) => index > activeIndex && !item.header && !item.divider && !item.disabled)
 
-  if (menu && item) {
-    var menuScroll = menu.scrollTop;
-    var itemOffset = item.offsetTop;
-    var itemHeight = parseInt(document.defaultView.getComputedStyle(item, null).height.replace('px', ''));
-    var menuHeight = parseInt(document.defaultView.getComputedStyle(menu, null).height.replace('px', ''));
-    var belowPage = menuScroll + menuHeight < itemOffset + itemHeight;
-    var abovePage = itemOffset < menuScroll;
-    if (abovePage || belowPage) {
-      menu.scrollTop = itemOffset;
+        if (nextActiveItem.length > 0) {
+          searchedItems[activeIndex].active = false
+          nextActiveItem[0].active = true
+        }
+      }
+      tag.update()
+      scrollPosition()
     }
-  }
-}
 
-function parentUpdate() {
-  if (tag.parent) {
-    tag.parent.update();
-  }
-}
+    function keyup(event) {
+      const keyCode = event.keyCode
+      if (keyCode != keys.enter || compositionStarted) {
+        return
+      }
+      const searchedItems = opts.items.filter(item => item.searched && !item.selected)
+      const index = parseInt(searchedItems.map((item, index) => item.active ? index : -1).filter(index => index >= 0))
+      const activeItem = searchedItems[index]
+      if (!activeItem) {
+        return
+      }
 
-function isUpward() {
-  if (opts.direction == 'upward') {
-    return true;
-  }
-  if (opts.direction == 'downward') {
-    return false;
-  }
-  var dropdown = tag.root.getBoundingClientRect();
-  var windowHeight = document.documentElement.offsetHeight || document.body.offsetHeight;
-  var menuHeight = tag.root.querySelector('.menu').getBoundingClientRect().height;
-  var above = menuHeight <= dropdown.top;
-  var below = windowHeight >= dropdown.top + dropdown.height + menuHeight;
+      if (opts.multiple) {
+        activeItem.selected = true
+        activeItem.active = false
+        if (index < searchedItems.length - 1) {
+          searchedItems[index + 1].active = true
+        } else if (index > 0) {
+          searchedItems[index - 1].active = true
+        }
+        selectMultiTarget()
+      } else {
+        activeItem.active = false
+        selectTarget(activeItem)
+        close()
+      }
+    }
 
-  if (below) {
-    return false;
-  }
-  if (!below && !above) {
-    return false;
-  }
-  return true;
-}
+    function stopPropagation(event) {
+      event.stopPropagation()
+    }
 
-function isItem(item) {
-  return item.searched && !item.header && !item.divider;
-}
+    function input(event) {
+      const value = event.target.value
+      tag.filtered = value.length > 0
+      search(value)
+    }
 
-function isActive() {
-  if (tag.closing) {
-    return false;
-  }
-  return tag.opening || visibleFlg;
-}
+    function unselect(event) {
+      event.stopPropagation()
+      event.item.item.selected = false
+      selectMultiTarget()
+    }
 
-function getTabindex() {
-  if (opts.tabindex) {
-    return opts.tabindex;
-  }
-  return 0;
-}
+    function open() {
+      if (tag.opening || tag.closing || visibleFlg || tag.isReadOnly() || tag.isDisabled()) {
+        return
+      }
+      tag.opening = true
+      search('')
+      tag.upward = isUpward()
+      tag.transitionStatus = `visible animating in slide ${tag.upward ? 'up' : 'down'}`
+      opts.items.forEach(item => item.active = false)
+      setTimeout(() => {
+        tag.opening = false
+        visibleFlg = true
+        tag.transitionStatus = 'visible'
+        tag.update()
+      }, 300)
 
-function isReadOnly() {
-  return tag.root.classList.contains('read-only');
-}
+      if (opts.search) {
+        tag.refs.condition.focus()
+      }
+      tag.update()
+      scrollPosition()
+      tag.trigger('open')
+    }
 
-function isDisabled() {
-  return tag.root.classList.contains('disabled');
-}
+    function close() {
+      if (tag.closing || !visibleFlg) {
+        return
+      }
+      tag.closing = true
+      tag.transitionStatus = `visible animating out slide ${tag.upward ? 'up' : 'down'}`
+      setTimeout(() => {
+        tag.closing = false
+        visibleFlg = false
+        tag.transitionStatus = 'hidden'
+        tag.update()
+      }, 300)
 
-function isVisible(item) {
-  if (opts.multiple && item.default) {
-    return false;
-  }
-  if (item.selected) {
-    return false;
-  }
-  return item.searched || item.divider || item.header;
-}
+      if (opts.search) {
+        tag.refs.condition.blur()
+        if (tag.filtered && tag.filteredItems.length > 0) {
+          selectTarget(tag.filteredItems[0])
+        } else {
+          tag.refs.condition.value = ''
+          tag.filtered = false
+        }
+      }
+      tag.update()
+      tag.trigger('close')
+    }
+
+    function selectTarget(target, updating) {
+      if (tag.value === target.value &&
+        tag.label === target.label &&
+        tag.default === target.default) {
+        if (!updating) {
+          tag.trigger('select', target)
+        }
+        return
+      }
+      tag.value = target.value
+      tag.label = target.label
+      tag.default = target.default
+      if (opts.search) {
+        tag.refs.condition.value = ''
+        tag.filtered = false
+      }
+      if (!updating) {
+        tag.update()
+        parentUpdate()
+        tag.trigger('select', target)
+        tag.trigger('change', target)
+      }
+    }
+
+    function selectMultiTarget(updating) {
+      if (JSON.stringify(tag.value) == JSON.stringify(opts.items.filter(item => item.selected).map(item => item.value))
+        && tag.selectedFlg == opts.items.some(item => item.selected)) {
+        if (!updating) {
+          tag.trigger('select', opts.items.filter(item => item.selected))
+        }
+        return
+      }
+      tag.value = opts.items.filter(item => item.selected).map(item => item.value)
+      tag.selectedFlg = opts.items.some(item => item.selected)
+      if (!updating) {
+        tag.update()
+        parentUpdate()
+        tag.trigger('select', opts.items.filter(item => item.selected))
+        tag.trigger('change', opts.items.filter(item => item.selected))
+      }
+    }
+
+    function search(target) {
+      const convert = opts.searchKeyConvert || toLowerCase
+      opts.items.forEach(item => {
+        const searchKeys = prepareSearchKey(item)
+        item.searched = searchKeys.some(key => convert(key).indexOf(convert(target)) >= 0)
+      })
+      tag.filteredItems = opts.items.filter(item => {
+        return item.searched
+      })
+      tag.update()
+      tag.trigger('search')
+    }
+
+    function prepareSearchKey(item) {
+      if (typeof item.searchKey === 'undefined') {
+        return [item.label]
+      }
+      if (Array.isArray(item.searchKey)) {
+        return [item.label, ...item.searchKey]
+      }
+      return [item.label, item.searchKey]
+    }
+
+    function toLowerCase(target) {
+      return target.toLowerCase()
+    }
+
+    function scrollPosition() {
+      const menu = tag.root.querySelector('.menu')
+      const item = tag.root.querySelector('.item.hover')
+
+      if (menu && item) {
+        const menuScroll = menu.scrollTop
+        const itemOffset = item.offsetTop
+        const itemHeight = parseInt(document.defaultView.getComputedStyle(item, null).height.replace('px', ''))
+        const menuHeight = parseInt(document.defaultView.getComputedStyle(menu, null).height.replace('px', ''))
+        const belowPage = menuScroll + menuHeight < itemOffset + itemHeight
+        const abovePage = itemOffset < menuScroll
+        if (abovePage || belowPage) {
+          menu.scrollTop = itemOffset
+        }
+      }
+    }
+
+    function parentUpdate() {
+      if (tag.parent) {
+        tag.parent.update()
+      }
+    }
+
+    function isUpward() {
+      if (opts.direction == 'upward') {
+        return true
+      }
+      if (opts.direction == 'downward') {
+        return false
+      }
+      const dropdown = tag.root.getBoundingClientRect()
+      const windowHeight = document.documentElement.offsetHeight || document.body.offsetHeight
+      const menuHeight = tag.root.querySelector('.menu').getBoundingClientRect().height
+      const above = menuHeight <= dropdown.top
+      const below = windowHeight >= dropdown.top + dropdown.height + menuHeight
+
+      if (below) {
+        return false
+      }
+      if (!below && !above) {
+        return false
+      }
+      return true
+    }
+
+    function isItem(item) {
+      return item.searched && !item.header && !item.divider
+    }
+
+    function isActive() {
+      if (tag.closing) {
+        return false
+      }
+      return tag.opening || visibleFlg
+    }
+
+    function getTabindex() {
+      if (opts.tabindex) {
+        return opts.tabindex
+      }
+      return 0
+    }
+
+    function isReadOnly() {
+      return tag.root.classList.contains('read-only')
+    }
+
+    function isDisabled() {
+      return tag.root.classList.contains('disabled')
+    }
+
+    function isVisible(item) {
+      if (opts.multiple && item.default) {
+        return false
+      }
+      if (item.selected) {
+        return false
+      }
+      return item.searched || item.divider || item.header
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -11936,159 +11039,120 @@ function isVisible(item) {
 /*!*************************************!*\
   !*** ./tags/dropdown/su-select.tag ***!
   \*************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-select', '<select onchange="{change}" onblur="{blur}" class="{default: default} text"> <option each="{item in opts.items}" riot-value="{item.value}" if="{!item.items}"> {item.label} </option> <optgroup label="{item.label}" each="{item in opts.items}" if="{item.items}"> <option each="{child in item.items}" riot-value="{child.value}"> {child.label} </option> </optgroup> </select> <i class="dropdown icon"></i>', 'su-select.ui.selection.dropdown,[data-is="su-select"].ui.selection.dropdown{ padding: 0; } su-select.ui.selection.dropdown>select:focus,[data-is="su-select"].ui.selection.dropdown>select:focus{ outline: 0; border-color: #96c8da; } su-select.ui.selection.dropdown>select,[data-is="su-select"].ui.selection.dropdown>select{ display: block !important; padding: .78571429em 2.1em .78571429em 1em; background: 0 0 !important; position: relative; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; -webkit-appearance: none; -moz-appearance: none; -webkit-box-sizing: border-box; box-sizing: border-box; border: none; width: 100%; z-index: 2; font-family: Lato, \'Helvetica Neue\', Arial, Helvetica, sans-serif; } su-select.ui.selection.dropdown>.dropdown.icon,[data-is="su-select"].ui.selection.dropdown>.dropdown.icon{ z-index: 1; }', 'class="ui selection dropdown"', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.defaultValue = '';
-tag.value = '';
-tag.label = '';
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-select', '<select onchange="{change}" onblur="{blur}" class="{default: default} text"> <option each="{item in opts.items}" riot-value="{item.value}" if="{!item.items}"> {item.label} </option> <optgroup label="{item.label}" each="{item in opts.items}" if="{item.items}"> <option each="{child in item.items}" riot-value="{child.value}"> {child.label} </option> </optgroup> </select> <i class="dropdown icon"></i>', 'su-select.ui.selection.dropdown,[data-is="su-select"].ui.selection.dropdown{ padding: 0; } su-select.ui.selection.dropdown>select:focus,[data-is="su-select"].ui.selection.dropdown>select:focus{ outline: 0; border-color: #96c8da; } su-select.ui.selection.dropdown>select,[data-is="su-select"].ui.selection.dropdown>select{ display: block !important; padding: .78571429em 2.1em .78571429em 1em; background: 0 0 !important; position: relative; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; -webkit-appearance: none; -moz-appearance: none; -webkit-box-sizing: border-box; box-sizing: border-box; border: none; width: 100%; z-index: 2; font-family: Lato, \'Helvetica Neue\', Arial, Helvetica, sans-serif; } su-select.ui.selection.dropdown>.dropdown.icon,[data-is="su-select"].ui.selection.dropdown>.dropdown.icon{ z-index: 1; }', 'class="ui selection dropdown"', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.blur = blur;
-tag.change = change;
-tag.changed = changed;
-tag.changeValues = changeValues;
-tag.reset = reset;
-tag.on('before-mount', onBeforeMount);
-tag.on('mount', onMount);
-tag.on('update', onUpdate);
+    tag.defaultValue = ''
+    tag.value = ''
+    tag.label = ''
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
+    tag.blur = blur
+    tag.change = change
+    tag.changed = changed
+    tag.changeValues = changeValues
+    tag.reset = reset
+    tag.on('before-mount', onBeforeMount)
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onBeforeMount() {
-  if (opts.items && opts.items.length > 0) {
-    tag.label = opts.items[0].label;
-    tag.value = opts.items[0].value;
-    tag.default = opts.items[0].default;
-  }
-}
-
-function onMount() {
-  if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
-    opts.riotValue = opts.value;
-  }
-  if (typeof opts.riotValue !== 'undefined') {
-    tag.value = opts.riotValue;
-    tag.defaultValue = tag.value;
-    tag.update();
-  } else {
-    tag.defaultValue = tag.value;
-  }
-}
-
-function onUpdate() {
-  if (opts.items) {
-    var selected = opts.items.filter(function (item) {
-      return item.value === tag.value;
-    });
-    if (!selected || selected.length == 0) {
-      var childItems = flatMap(opts.items.filter(function (item) {
-        return item.items;
-      }), function (item) {
-        return item.items;
-      });
-      selected = childItems.filter(function (item) {
-        return item.value == tag.value;
-      });
-    }
-
-    if (selected && selected.length > 0) {
-      var target = selected[0];
-      if (tag.label !== target.label) {
-        tag.changeValues(tag.value, true);
-      }
-    } else if (opts.items && opts.items.length > 0) {
-      if (tag.value != opts.items[0].value) {
-        tag.value = opts.items[0].value;
-      }
-      if (tag.label != opts.items[0].label) {
-        tag.label = opts.items[0].label;
-        tag.default = opts.items[0].default;
+    function onBeforeMount() {
+      if (opts.items && opts.items.length > 0) {
+        tag.label = opts.items[0].label
+        tag.value = opts.items[0].value
+        tag.default = opts.items[0].default
       }
     }
-  }
-}
 
-// ===================================================================================
-//                                                                               State
-//                                                                               =====
-function reset() {
-  tag.value = tag.defaultValue;
-}
-
-function changed() {
-  return tag.value !== tag.defaultValue;
-}
-
-// ===================================================================================
-//                                                                               Event
-//                                                                               =====
-function blur() {
-  tag.trigger('blur');
-}
-
-function change(target) {
-  tag.changeValues(target.target.value);
-}
-
-function changeValues(value, updating) {
-  var item = void 0;
-  if (opts.items.some(function (item) {
-    return item.value == value || item.label == value;
-  })) {
-    item = opts.items.filter(function (item) {
-      return item.value == value || item.label == value;
-    })[0];
-    tag.label = item.label;
-    tag.value = item.value;
-    tag.default = item.default;
-  } else {
-    var childItems = flatMap(opts.items.filter(function (item) {
-      return item.items;
-    }), function (item) {
-      return item.items;
-    });
-    if (childItems.some(function (item) {
-      return item.value == value || item.label == value;
-    })) {
-      item = childItems.filter(function (item) {
-        return item.value == value || item.label == value;
-      })[0];
-      tag.label = item.label;
-      tag.value = item.value;
-      tag.default = item.default;
+    function onMount() {
+      if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
+        opts.riotValue = opts.value
+      }
+      if (typeof opts.riotValue !== 'undefined') {
+        tag.value = opts.riotValue
+        tag.defaultValue = tag.value
+        tag.update()
+      } else {
+        tag.defaultValue = tag.value
+      }
     }
-  }
 
-  if (!updating) {
-    tag.update();
-    tag.trigger('change', item);
-  }
-}
+    function onUpdate() {
+      if (opts.items) {
+        let selected = opts.items.filter(item => item.value === tag.value)
+        if (!selected || selected.length == 0) {
+          const childItems = flatMap(opts.items.filter(item => item.items), item => item.items)
+          selected = childItems.filter(item => item.value == tag.value)
+        }
 
-// ===================================================================================
-//                                                                               Logic
-//                                                                               =====
-function flatMap(xs, f) {
-  return xs.reduce(function (ys, x) {
-    return ys.concat(f(x));
-  }, []);
-}
+        if (selected && selected.length > 0) {
+          const target = selected[0]
+          if (tag.label !== target.label) {
+            tag.changeValues(tag.value, true)
+          }
+        } else if (opts.items && opts.items.length > 0) {
+          if (tag.value != opts.items[0].value) {
+            tag.value = opts.items[0].value
+          }
+          if (tag.label != opts.items[0].label) {
+            tag.label = opts.items[0].label
+            tag.default = opts.items[0].default
+          }
+        }
+      }
+    }
+
+    function reset() {
+      tag.value = tag.defaultValue
+    }
+
+    function changed() {
+      return tag.value !== tag.defaultValue
+    }
+
+    function blur() {
+      tag.trigger('blur')
+    }
+
+    function change(target) {
+      tag.changeValues(target.target.value)
+    }
+
+    function changeValues(value, updating) {
+      let item
+      if (opts.items.some(item => item.value == value || item.label == value)) {
+        item = opts.items.filter(item => item.value == value || item.label == value)[0]
+        tag.label = item.label
+        tag.value = item.value
+        tag.default = item.default
+      } else {
+        const childItems = flatMap(opts.items.filter(item => item.items), item => item.items)
+        if (childItems.some(item => item.value == value || item.label == value)) {
+          item = childItems.filter(item => item.value == value || item.label == value)[0]
+          tag.label = item.label
+          tag.value = item.value
+          tag.default = item.default
+        }
+      }
+
+      if (!updating) {
+        tag.update()
+        tag.trigger('change', item)
+      }
+    }
+
+    function flatMap(xs, f) {
+      return xs.reduce(function (ys, x) {
+        return ys.concat(f(x))
+      }, [])
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -12096,47 +11160,38 @@ function flatMap(xs, f) {
 /*!*************************************!*\
   !*** ./tags/loading/su-loading.tag ***!
   \*************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-loading', '<div class="ui page dimmer inverted {active: counter > 0}"> <div class="ui huge text loader">Loading</div> </div>', 'su-loading .ui.dimmer,[data-is="su-loading"] .ui.dimmer{ z-index: 20000 }', '', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.counter = 0;
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-loading', '<div class="ui page dimmer inverted {active: counter > 0}"> <div class="ui huge text loader">Loading</div> </div>', 'su-loading .ui.dimmer,[data-is="su-loading"] .ui.dimmer{ z-index: 20000 }', '', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.mixin('semantic-ui');
-tag.observable.on('showLoading', showLoading);
+    tag.counter = 0
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-riot.mixin({
-  suLoading: suLoading
+    tag.mixin('semantic-ui')
+    tag.observable.on('showLoading', showLoading)
+
+    riot.mixin({
+      suLoading
+    })
+
+    function showLoading(visible) {
+      if (visible) {
+        tag.counter++
+      } else {
+        tag.counter--
+      }
+      tag.update()
+    }
+
+    function suLoading(visible) {
+      tag.observable.trigger('showLoading', visible)
+    }
 });
-
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function showLoading(visible) {
-  if (visible) {
-    tag.counter++;
-  } else {
-    tag.counter--;
-  }
-  tag.update();
-}
-
-function suLoading(visible) {
-  tag.observable.trigger('showLoading', visible);
-}
-});
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -12144,224 +11199,209 @@ function suLoading(visible) {
 /*!*********************************!*\
   !*** ./tags/modal/su-modal.tag ***!
   \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionStatus} {modeless: isDimmerModeless()}"> <div class="ui modal transition visible active {getClass()}" onclick="{clickModal}" id="{getId()}"> <div class="ui header {icon: opts.modal.header.icon}" if="{opts.modal.header}"> <i class="icon {opts.modal.header.icon}" if="{opts.modal.header.icon}"></i> {getTitle()} </div> <virtual if="{isModeless() && !isBasic()}"> <i class="window minimize icon" if="{isMinimizeable()}" onclick="{toggleMinimize}"></i> <i class="window restore icon" if="{isResizeable() && maximized}" onclick="{toggleSize}"></i> <i class="window maximize icon" if="{isResizeable() && !maximized}" onclick="{toggleSize}"></i> </virtual> <i class="close icon" if="{opts.modal.closable && !isBasic()}" onclick="{hide}"></i> <div class="content {image: isImageContent()} {scrolling: isScrollingContent()}" ref="content"> <yield></yield> </div> <div class="actions"> <button each="{button in opts.modal.buttons}" onclick="{click.bind(this, button)}" ref="button_{button.text}" type="button" class="ui button {button.type} {labeled: button.icon && button.text} {icon: button.icon} {inverted: isBasic()} {disabled: button.disabled}"> {button.text} <i class="icon {button.icon}" if="{button.icon}"></i> </button> </div> </div> </div> <a class="ui grey big label unminimize" if="{minimized}" onclick="{toggleMinimize}"> <i class="angle double up icon"></i> {opts.modal.header} </a>', 'su-modal .ui.dimmer.visible.transition,[data-is="su-modal"] .ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; } su-modal .ui.fullscreen.modal,[data-is="su-modal"] .ui.fullscreen.modal{ left: 0 !important; } @media only screen and (min-width: 768px) { su-modal .ui.modal>.close,[data-is="su-modal"] .ui.modal>.close{ display: none; } su-modal .ui.fullscreen.modal>.close,[data-is="su-modal"] .ui.fullscreen.modal>.close{ display: inline; } } su-modal .ui.dimmer.modeless.visible.transition,[data-is="su-modal"] .ui.dimmer.modeless.visible.transition{ visibility: hidden !important; display: block !important; } su-modal .ui.dimmer.modeless>.ui.modal,[data-is="su-modal"] .ui.dimmer.modeless>.ui.modal{ position: absolute; right: 0; bottom: 0; } su-modal .ui.modal>.restore,[data-is="su-modal"] .ui.modal>.restore,su-modal .ui.modal>.maximize,[data-is="su-modal"] .ui.modal>.maximize{ right: 1rem; } su-modal .ui.modal>.minimize,[data-is="su-modal"] .ui.modal>.minimize{ right: 4rem; } su-modal .ui.modal>.icon,[data-is="su-modal"] .ui.modal>.icon{ display: inline; top: 1.0535rem; color: rgba(0, 0, 0, .87); cursor: pointer; position: absolute; z-index: 1; opacity: 0.8; font-size: 1.25em; width: 2.25rem; height: 2.25rem; padding: 0.625rem 0rem 0rem 0rem; } su-modal .unminimize.label,[data-is="su-modal"] .unminimize.label{ position: fixed; right: 0; bottom: -6px; padding-bottom: 1rem; z-index: 1000; }', 'onclick="{dimmerClose}"', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.transitionStatus = '';
-tag.minimized = false;
-tag.maximized = true;
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-modal', '<div class="ui dimmer modals page transition {transitionStatus} {modeless: isDimmerModeless()}"> <div class="ui modal transition visible active {getClass()}" onclick="{clickModal}" id="{getId()}"> <div class="ui header {icon: opts.modal.header.icon}" if="{opts.modal.header}"> <i class="icon {opts.modal.header.icon}" if="{opts.modal.header.icon}"></i> {getTitle()} </div> <virtual if="{isModeless() && !isBasic()}"> <i class="window minimize icon" if="{isMinimizeable()}" onclick="{toggleMinimize}"></i> <i class="window restore icon" if="{isResizeable() && maximized}" onclick="{toggleSize}"></i> <i class="window maximize icon" if="{isResizeable() && !maximized}" onclick="{toggleSize}"></i> </virtual> <i class="close icon" if="{opts.modal.closable && !isBasic()}" onclick="{hide}"></i> <div class="content {image: isImageContent()} {scrolling: isScrollingContent()}" ref="content"> <yield></yield> </div> <div class="actions"> <button each="{button in opts.modal.buttons}" onclick="{click.bind(this, button)}" ref="button_{button.text}" type="button" class="ui button {button.type} {labeled: button.icon && button.text} {icon: button.icon} {inverted: isBasic()} {disabled: button.disabled}"> {button.text} <i class="icon {button.icon}" if="{button.icon}"></i> </button> </div> </div> </div> <a class="ui grey big label unminimize" if="{minimized}" onclick="{toggleMinimize}"> <i class="angle double up icon"></i> {opts.modal.header} </a>', 'su-modal .ui.dimmer.visible.transition,[data-is="su-modal"] .ui.dimmer.visible.transition{ display: flex !important; align-items: center; justify-content: center; } su-modal .ui.modal,[data-is="su-modal"] .ui.modal{ top: auto; left: auto; position: relative; margin: 0 !important; } su-modal .ui.fullscreen.modal,[data-is="su-modal"] .ui.fullscreen.modal{ left: 0 !important; } @media only screen and (min-width: 768px) { su-modal .ui.modal>.close,[data-is="su-modal"] .ui.modal>.close{ display: none; } su-modal .ui.fullscreen.modal>.close,[data-is="su-modal"] .ui.fullscreen.modal>.close{ display: inline; } } su-modal .ui.dimmer.modeless.visible.transition,[data-is="su-modal"] .ui.dimmer.modeless.visible.transition{ visibility: hidden !important; display: block !important; } su-modal .ui.dimmer.modeless>.ui.modal,[data-is="su-modal"] .ui.dimmer.modeless>.ui.modal{ position: absolute; right: 0; bottom: 0; } su-modal .ui.modal>.restore,[data-is="su-modal"] .ui.modal>.restore,su-modal .ui.modal>.maximize,[data-is="su-modal"] .ui.modal>.maximize{ right: 1rem; } su-modal .ui.modal>.minimize,[data-is="su-modal"] .ui.modal>.minimize{ right: 4rem; } su-modal .ui.modal>.icon,[data-is="su-modal"] .ui.modal>.icon{ display: inline; top: 1.0535rem; color: rgba(0, 0, 0, .87); cursor: pointer; position: absolute; z-index: 1; opacity: 0.8; font-size: 1.25em; width: 2.25rem; height: 2.25rem; padding: 0.625rem 0rem 0rem 0rem; } su-modal .unminimize.label,[data-is="su-modal"] .unminimize.label{ position: fixed; right: 0; bottom: -6px; padding-bottom: 1rem; z-index: 1000; }', 'onclick="{dimmerClose}"', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.click = click;
-tag.clickModal = clickModal;
-tag.dimmerClose = dimmerClose;
-tag.getClass = getClass;
-tag.getId = getId;
-tag.getTitle = getTitle;
-tag.hide = hide;
-tag.isBasic = isBasic;
-tag.isImageContent = isImageContent;
-tag.isModeless = isModeless;
-tag.isDimmerModeless = isDimmerModeless;
-tag.isMinimizeable = isMinimizeable;
-tag.isResizeable = isResizeable;
-tag.isScrollingContent = isScrollingContent;
-tag.toggleSize = toggleSize;
-tag.toggleMinimize = toggleMinimize;
-tag.show = show;
-tag.on('before-mount', onBeforeMount);
-tag.on('mount', onMount);
-tag.on('update', onUpdate);
+    tag.transitionStatus = ''
+    tag.minimized = false
+    tag.maximized = true
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-var image_content = false;
-var scrolling_content = false;
-var openning = void 0,
-    closing = void 0,
-    visible = void 0;
+    tag.click = click
+    tag.clickModal = clickModal
+    tag.dimmerClose = dimmerClose
+    tag.getClass = getClass
+    tag.getId = getId
+    tag.getTitle = getTitle
+    tag.hide = hide
+    tag.isBasic = isBasic
+    tag.isImageContent = isImageContent
+    tag.isModeless = isModeless
+    tag.isDimmerModeless = isDimmerModeless
+    tag.isMinimizeable = isMinimizeable
+    tag.isResizeable = isResizeable
+    tag.isScrollingContent = isScrollingContent
+    tag.toggleSize = toggleSize
+    tag.toggleMinimize = toggleMinimize
+    tag.show = show
+    tag.on('before-mount', onBeforeMount)
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onBeforeMount() {
-  if (!opts.modal) {
-    opts.modal = {};
-  }
-}
+    let image_content = false
+    let scrolling_content = false
+    let openning, closing, visible
 
-function onMount() {
-  if (typeof opts.modal.closable === 'undefined') {
-    opts.modal.closable = true;
-  }
-  if (opts.modal.modeless === true) {
-    opts.modal.modeless = {};
-  }
-  if (opts.modal.modeless) {
-    if (typeof opts.modal.modeless.minimize === 'undefined') {
-      opts.modal.modeless.minimize = true;
+    function onBeforeMount() {
+      if (!opts.modal) {
+        opts.modal = {}
+      }
     }
-    if (typeof opts.modal.modeless.resize === 'undefined') {
-      opts.modal.modeless.resize = true;
+
+    function onMount() {
+      if (typeof opts.modal.closable === 'undefined') {
+        opts.modal.closable = true
+      }
+      if (opts.modal.modeless === true) {
+        opts.modal.modeless = {}
+      }
+      if (opts.modal.modeless) {
+        if (typeof opts.modal.modeless.minimize === 'undefined') {
+          opts.modal.modeless.minimize = true
+        }
+        if (typeof opts.modal.modeless.resize === 'undefined') {
+          opts.modal.modeless.resize = true
+        }
+      }
     }
-  }
-}
 
-function onUpdate() {
-  image_content = tag.refs.content.getElementsByTagName('img').length > 0;
-  scrolling_content = hasClass('scrolling');
-}
+    function onUpdate() {
+      image_content = tag.refs.content.getElementsByTagName('img').length > 0
+      scrolling_content = hasClass('scrolling')
+    }
 
-function show() {
-  if (openning || closing || visible) {
-    return;
-  }
-  openning = true;
-  tag.transitionStatus = 'animating fade in visible';
-  tag.update();
-  setDefaultFocus();
-  tag.trigger('show');
+    function show() {
+      if (openning || closing || visible) {
+        return
+      }
+      openning = true
+      tag.transitionStatus = 'animating fade in visible'
+      tag.update()
+      setDefaultFocus()
+      tag.trigger('show')
 
-  setTimeout(function () {
-    openning = false;
-    visible = true;
-    tag.transitionStatus = 'visible active';
-    tag.update();
-  }, 500);
-}
+      setTimeout(() => {
+        openning = false
+        visible = true
+        tag.transitionStatus = 'visible active'
+        tag.update()
+      }, 500)
+    }
 
-function click(item) {
-  tag.trigger(item.action || item.text);
-  if (typeof item.closable === 'undefined' || item.closable) {
-    tag.hide();
-  }
-}
+    function click(item) {
+      tag.trigger(item.action || item.text)
+      if (typeof item.closable === 'undefined' || item.closable) {
+        tag.hide()
+      }
+    }
 
-function dimmerClose() {
-  if (opts.modal.closable && !tag.isBasic()) {
-    tag.hide();
-  }
-}
+    function dimmerClose() {
+      if (opts.modal.closable && !tag.isBasic()) {
+        tag.hide()
+      }
+    }
 
-function clickModal(event) {
-  event.stopPropagation();
-}
+    function clickModal(event) {
+      event.stopPropagation()
+    }
 
-function hide() {
-  if (openning || closing || !visible) {
-    return;
-  }
-  closing = true;
-  tag.transitionStatus = 'animating fade out visible active';
-  tag.update();
-  tag.trigger('hide');
+    function hide() {
+      if (openning || closing || !visible) {
+        return
+      }
+      closing = true
+      tag.transitionStatus = 'animating fade out visible active'
+      tag.update()
+      tag.trigger('hide')
 
-  setTimeout(function () {
-    closing = false;
-    visible = false;
-    tag.transitionStatus = '';
-    tag.update();
-  }, 300);
-}
+      setTimeout(() => {
+        closing = false
+        visible = false
+        tag.transitionStatus = ''
+        tag.update()
+      }, 300)
+    }
 
-function toggleSize() {
-  tag.maximized = !tag.maximized;
-  tag.update();
-  tag.trigger('toggleSize', tag.maximized);
-}
+    function toggleSize() {
+      tag.maximized = !tag.maximized
+      tag.update()
+      tag.trigger('toggleSize', tag.maximized)
+    }
 
-function toggleMinimize() {
-  tag.minimized = !tag.minimized;
-  tag.transitionStatus = tag.minimized ? '' : 'visible active';
-  tag.update();
-  tag.trigger('toggleMinimize', tag.minimized);
-}
+    function toggleMinimize() {
+      tag.minimized = !tag.minimized
+      tag.transitionStatus = tag.minimized ? '' : 'visible active'
+      tag.update()
+      tag.trigger('toggleMinimize', tag.minimized)
+    }
 
-function isContainsClassName(className) {
-  var modalElement = document.getElementById(tag.getId());
-  if (!modalElement) {
-    return false;
-  }
-  return modalElement.classList.contains(className);
-}
+    function isContainsClassName(className) {
+      const modalElement = document.getElementById(tag.getId())
+      if (!modalElement) {
+        return false
+      }
+      return modalElement.classList.contains(className)
+    }
 
-function setDefaultFocus() {
-  if (!opts.modal || !opts.modal.buttons || opts.modal.buttons.length == 0) {
-    return;
-  }
-  if (opts.modal.buttons.some(function (button) {
-    return button.default;
-  })) {
-    var text = opts.modal.buttons.filter(function (button) {
-      return button.default;
-    })[0].text;
-    tag.refs['button_' + text].focus();
-  }
-}
+    function setDefaultFocus() {
+      if (!opts.modal || !opts.modal.buttons || opts.modal.buttons.length == 0) {
+        return
+      }
+      if (opts.modal.buttons.some(button => button.default)) {
+        const text = opts.modal.buttons.filter(button => button.default)[0].text
+        tag.refs[`button_${text}`].focus()
+      }
+    }
 
-function getClass() {
-  if (!tag.maximized && isModeless() && opts.modal.modeless.class) {
-    return opts.modal.modeless.class;
-  }
-  return opts.class;
-}
+    function getClass() {
+      if (!tag.maximized && isModeless() && opts.modal.modeless.class) {
+        return opts.modal.modeless.class
+      }
+      return opts.class
+    }
 
-function getTitle() {
-  if (opts.modal.header.text) {
-    return opts.modal.header.text;
-  }
-  return opts.modal.header;
-}
+    function getTitle() {
+      if (opts.modal.header.text) {
+        return opts.modal.header.text
+      }
+      return opts.modal.header
+    }
 
-function getId() {
-  return 'su-modal-' + tag._riot_id;
-}
+    function getId() {
+      return `su-modal-${tag._riot_id}`
+    }
 
-function isBasic() {
-  return isContainsClassName('basic');
-}
+    function isBasic() {
+      return isContainsClassName('basic')
+    }
 
-function isImageContent() {
-  return image_content;
-}
+    function isImageContent() {
+      return image_content
+    }
 
-function isModeless() {
-  return !tag.opts.modal.closable && tag.opts.modal.modeless;
-}
+    function isModeless() {
+      return !tag.opts.modal.closable && tag.opts.modal.modeless
+    }
 
-function isDimmerModeless() {
-  return isModeless() && !tag.minimized && !tag.maximized;
-}
+    function isDimmerModeless() {
+      return isModeless() && !tag.minimized && !tag.maximized
+    }
 
-function isMinimizeable() {
-  return tag.opts.modal.modeless.minimize;
-}
+    function isMinimizeable() {
+      return tag.opts.modal.modeless.minimize
+    }
 
-function isResizeable() {
-  return tag.opts.modal.modeless.resize;
-}
+    function isResizeable() {
+      return tag.opts.modal.modeless.resize
+    }
 
-function isScrollingContent() {
-  if (!tag.maximized && isModeless() && opts.modal.modeless.class) {
-    return isContainsClassName('scrolling');
-  }
-  return scrolling_content;
-}
+    function isScrollingContent() {
+      if (!tag.maximized && isModeless() && opts.modal.modeless.class) {
+        return isContainsClassName('scrolling')
+      }
+      return scrolling_content
+    }
 
-function hasClass(className) {
-  return tag.root.classList.contains(className);
-}
+    function hasClass(className) {
+      return tag.root.classList.contains(className)
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -12369,128 +11409,119 @@ function hasClass(className) {
 /*!*******************************************!*\
   !*** ./tags/pagination/su-pagination.tag ***!
   \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-pagination', '<div class="ui pagination menu {opts.class}"> <a class="icon item {disabled: activePage <= 1}" onclick="{clickPage.bind(this,1)}"> <i aria-hidden="true" class="angle double left icon"></i> </a> <a class="icon item {disabled: activePage <= 1}" onclick="{clickPage.bind(this,activePage - 1)}"> <i class="angle left icon"></i> </a> <virtual each="{page in pages}"> <a class="item" onclick="{clickPage.bind(this,page.number)}" if="{!page.active && !page.disabled}"> {page.number} </a> <a class="active item" if="{page.active}">{page.number}</a> <div class="disabled icon item" if="{page.disabled}"> <i class="ellipsis horizontal icon"></i> </div> </virtual> <a class="icon item {disabled: activePage >= totalPages}" onclick="{clickPage.bind(this,activePage + 1)}"> <i class="angle right icon"></i> </a> <a class="icon item {disabled: activePage >= totalPages}" onclick="{clickPage.bind(this,totalPages )}"> <i aria-hidden="true" class="angle double right icon"></i> </a> </div>', '', '', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.activePage = 1;
-tag.pages = [];
-tag.totalPages = 1;
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-pagination', '<div class="ui pagination menu {opts.class}"> <a class="icon item {disabled: activePage <= 1}" onclick="{clickPage.bind(this,1)}"> <i aria-hidden="true" class="angle double left icon"></i> </a> <a class="icon item {disabled: activePage <= 1}" onclick="{clickPage.bind(this,activePage - 1)}"> <i class="angle left icon"></i> </a> <virtual each="{page in pages}"> <a class="item" onclick="{clickPage.bind(this,page.number)}" if="{!page.active && !page.disabled}"> {page.number} </a> <a class="active item" if="{page.active}">{page.number}</a> <div class="disabled icon item" if="{page.disabled}"> <i class="ellipsis horizontal icon"></i> </div> </virtual> <a class="icon item {disabled: activePage >= totalPages}" onclick="{clickPage.bind(this,activePage + 1)}"> <i class="angle right icon"></i> </a> <a class="icon item {disabled: activePage >= totalPages}" onclick="{clickPage.bind(this,totalPages )}"> <i aria-hidden="true" class="angle double right icon"></i> </a> </div>', '', '', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.clickPage = clickPage;
-tag.on('mount', onMount);
-tag.on('update', onUpdate);
+    tag.activePage = 1
+    tag.pages = []
+    tag.totalPages = 1
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-var lastActivePage = null;
-var lastOptsTotalPages = null;
-var lastOptsActivePage = null;
-var lastTotalPages = null;
+    tag.clickPage = clickPage
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onMount() {
-  tag.update();
-}
+    let lastActivePage = null
+    let lastOptsTotalPages = null
+    let lastOptsActivePage = null
+    let lastTotalPages = null
 
-function onUpdate() {
-  var needsRegenerate = false;
-  if (opts.activePage != lastOptsActivePage) {
-    lastOptsActivePage = opts.activePage;
-    tag.activePage = opts.activePage;
-    lastActivePage = tag.activePage;
-    needsRegenerate = true;
-  } else if (tag.activePage != lastActivePage) {
-    lastActivePage = tag.activePage;
-    needsRegenerate = true;
-  }
-  if (opts.totalPages != lastOptsTotalPages) {
-    lastOptsTotalPages = opts.totalPages;
-    tag.totalPages = opts.totalPages;
-    lastTotalPages = tag.totalPages;
-    needsRegenerate = true;
-  } else if (tag.totalPages != lastTotalPages) {
-    lastTotalPages = tag.totalPages;
-    opts.totalPages = tag.totalPages;
-    lastOptsTotalPages = opts.totalPages;
-    needsRegenerate = true;
-  }
+    function onMount() {
+      tag.update()
+    }
 
-  if (needsRegenerate) {
-    generatePagination();
-  }
-}
+    function onUpdate() {
+      let needsRegenerate = false
+      if (opts.activePage != lastOptsActivePage) {
+        lastOptsActivePage = opts.activePage
+        tag.activePage = opts.activePage
+        lastActivePage = tag.activePage
+        needsRegenerate = true
+      } else if (tag.activePage != lastActivePage) {
+        lastActivePage = tag.activePage
+        needsRegenerate = true
+      }
+      if (opts.totalPages != lastOptsTotalPages) {
+        lastOptsTotalPages = opts.totalPages
+        tag.totalPages = opts.totalPages
+        lastTotalPages = tag.totalPages
+        needsRegenerate = true
+      } else if (tag.totalPages != lastTotalPages) {
+        lastTotalPages = tag.totalPages
+        opts.totalPages = tag.totalPages
+        lastOptsTotalPages = opts.totalPages
+        needsRegenerate = true
+      }
 
-function clickPage(pageNum, e) {
-  e.preventDefault();
-  if (pageNum < 1 || pageNum > tag.totalPages) {
-    return;
-  }
-  tag.activePage = pageNum;
-  tag.update();
-  tag.trigger('change', pageNum);
-}
+      if (needsRegenerate) {
+        generatePagination()
+      }
+    }
 
-function generatePagination() {
-  tag.pages = [];
-  var activePage = parseInt(tag.activePage || 1);
-  var totalPages = parseInt(tag.totalPages || 1);
-  var pageSize = calcPageSize();
-  var index = calcIndex(pageSize);
+    function clickPage(pageNum, e) {
+      e.preventDefault()
+      if (pageNum < 1 || pageNum > tag.totalPages) {
+        return
+      }
+      tag.activePage = pageNum
+      tag.update()
+      tag.trigger('change', pageNum)
+    }
 
-  if (pageSize < 1) {
-    tag.update();
-    return;
-  }
+    function generatePagination() {
+      tag.pages = []
+      const activePage = parseInt(tag.activePage || 1)
+      const totalPages = parseInt(tag.totalPages || 1)
+      const pageSize = calcPageSize()
+      const index = calcIndex(pageSize)
 
-  for (var i = 0; i < pageSize; i++) {
-    tag.pages.push({
-      number: i + index,
-      active: i + index == activePage
-    });
-  }
-  tag.pages[0].number = 1;
-  tag.pages[pageSize - 1].number = totalPages;
-  if (pageSize > 1) {
-    tag.pages[1].disabled = index != 1;
-  }
-  if (pageSize > 2) {
-    tag.pages[pageSize - 2].disabled = index != totalPages - pageSize + 1;
-  }
+      if (pageSize < 1) {
+        tag.update()
+        return
+      }
 
-  tag.update();
-}
+      for (let i = 0; i < pageSize; i++) {
+        tag.pages.push({
+          number: i + index,
+          active: i + index == activePage,
+        })
+      }
+      tag.pages[0].number = 1
+      tag.pages[pageSize - 1].number = totalPages
+      if (pageSize > 1) {
+        tag.pages[1].disabled = index != 1
+      }
+      if (pageSize > 2) {
+        tag.pages[pageSize - 2].disabled = index != totalPages - pageSize + 1
+      }
 
-function calcPageSize() {
-  var pageSize = parseInt(opts.pageSize || 7);
-  return pageSize < tag.totalPages ? pageSize : tag.totalPages;
-}
+      tag.update()
+    }
 
-function calcIndex(pageSize) {
-  var activePage = parseInt(tag.activePage || 1);
-  var totalPages = parseInt(tag.totalPages || 1);
-  var prevPageSize = (pageSize - pageSize % 2) / 2;
-  if (activePage + prevPageSize > totalPages) {
-    return totalPages - pageSize + 1;
-  }
-  if (activePage > prevPageSize) {
-    return activePage - prevPageSize;
-  }
-  return 1;
-}
+    function calcPageSize() {
+      const pageSize = parseInt(opts.pageSize || 7)
+      return pageSize < tag.totalPages ? pageSize : tag.totalPages
+    }
+
+    function calcIndex(pageSize) {
+      const activePage = parseInt(tag.activePage || 1)
+      const totalPages = parseInt(tag.totalPages || 1)
+      const prevPageSize = (pageSize - pageSize % 2) / 2
+      if (activePage + prevPageSize > totalPages) {
+        return totalPages - pageSize + 1
+      }
+      if (activePage > prevPageSize) {
+        return activePage - prevPageSize
+      }
+      return 1
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -12498,84 +11529,75 @@ function calcIndex(pageSize) {
 /*!*********************************!*\
   !*** ./tags/popup/su-popup.tag ***!
   \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-popup', '<div id="{getId()}" onmouseover="{stopPropagation}" onmouseout="{stopPropagation}" class="ui popup {position} {dataVariation} transition {transitionStatus} {nowrap: isNowrap()}"> </div> <yield></yield>', 'su-popup,[data-is="su-popup"]{ position: relative; } su-popup .ui.popup,[data-is="su-popup"] .ui.popup{ position: absolute; } su-popup .ui.popup.nowrap,[data-is="su-popup"] .ui.popup.nowrap{ white-space: nowrap; } su-popup .ui.popup.wide,[data-is="su-popup"] .ui.popup.wide{ width: 350px; } su-popup .ui.popup.very.wide,[data-is="su-popup"] .ui.popup.very.wide{ width: 550px; } su-popup .ui.popup.top.left,[data-is="su-popup"] .ui.popup.top.left{ top: auto; bottom: 100%; left: 1em; right: auto; margin-left: -1rem; } su-popup .ui.popup.bottom.left,[data-is="su-popup"] .ui.popup.bottom.left{ top: 100%; bottom: auto; left: 1em; right: auto; margin-left: -1rem; } su-popup .ui.popup.top.center,[data-is="su-popup"] .ui.popup.top.center{ top: auto; bottom: 100%; left: 50%; right: auto; -webkit-transform: translateX(-50%); transform: translateX(-50%); } su-popup .ui.popup.bottom.center,[data-is="su-popup"] .ui.popup.bottom.center{ top: 100%; bottom: auto; left: 50%; right: auto; -webkit-transform: translateX(-50%); transform: translateX(-50%); } su-popup .ui.popup.top.center.scale.transition.in,[data-is="su-popup"] .ui.popup.top.center.scale.transition.in,su-popup .ui.popup.bottom.center.scale.transition.in,[data-is="su-popup"] .ui.popup.bottom.center.scale.transition.in{ animation-name: xScaleIn } su-popup .ui.popup.top.right,[data-is="su-popup"] .ui.popup.top.right{ top: auto; bottom: 100%; left: auto; right: 1em; margin-right: -1rem; } su-popup .ui.popup.bottom.right,[data-is="su-popup"] .ui.popup.bottom.right{ top: 100%; bottom: auto; left: auto; right: 1em; margin-right: -1rem; } su-popup .ui.popup.left.center,[data-is="su-popup"] .ui.popup.left.center{ left: auto; right: 100%; top: 50%; -webkit-transform: translateY(-50%); transform: translateY(-50%); } su-popup .ui.popup.right.center,[data-is="su-popup"] .ui.popup.right.center{ left: 100%; right: auto; top: 50%; -webkit-transform: translateY(-50%); transform: translateY(-50%); } su-popup .ui.popup.left.center.scale.transition.in,[data-is="su-popup"] .ui.popup.left.center.scale.transition.in,su-popup .ui.popup.right.center.scale.transition.in,[data-is="su-popup"] .ui.popup.right.center.scale.transition.in{ animation-name: yScaleIn } @-webkit-keyframes xScaleIn { 0% { opacity: 0; -webkit-transform: scale(0.8) translateX(-50%); transform: scale(0.8) translateX(-50%); } 100% { opacity: 1; -webkit-transform: scale(1) translateX(-50%); transform: scale(1) translateX(-50%); } } @keyframes xScaleIn { 0% { opacity: 0; -webkit-transform: scale(0.8) translateX(-50%); transform: scale(0.8) translateX(-50%); } 100% { opacity: 1; -webkit-transform: scale(1) translateX(-50%); transform: scale(1) translateX(-50%); } } @-webkit-keyframes yScaleIn { 0% { opacity: 0; -webkit-transform: scale(0.8) translateY(-50%); transform: scale(0.8) translateY(-50%); } 100% { opacity: 1; -webkit-transform: scale(1) translateY(-50%); transform: scale(1) translateY(-50%); } } @keyframes yScaleIn { 0% { opacity: 0; -webkit-transform: scale(0.8) translateY(-50%); transform: scale(0.8) translateY(-50%); } 100% { opacity: 1; -webkit-transform: scale(1) translateY(-50%); transform: scale(1) translateY(-50%); } }', 'onmouseover="{mouseover}" onmouseout="{mouseout}"', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.content = '';
-tag.dataVariation = opts.dataVariation || '';
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-popup', '<div id="{getId()}" onmouseover="{stopPropagation}" onmouseout="{stopPropagation}" class="ui popup {position} {dataVariation} transition {transitionStatus} {nowrap: isNowrap()}"> </div> <yield></yield>', 'su-popup,[data-is="su-popup"]{ position: relative; } su-popup .ui.popup,[data-is="su-popup"] .ui.popup{ position: absolute; } su-popup .ui.popup.nowrap,[data-is="su-popup"] .ui.popup.nowrap{ white-space: nowrap; } su-popup .ui.popup.wide,[data-is="su-popup"] .ui.popup.wide{ width: 350px; } su-popup .ui.popup.very.wide,[data-is="su-popup"] .ui.popup.very.wide{ width: 550px; } su-popup .ui.popup.top.left,[data-is="su-popup"] .ui.popup.top.left{ top: auto; bottom: 100%; left: 1em; right: auto; margin-left: -1rem; } su-popup .ui.popup.bottom.left,[data-is="su-popup"] .ui.popup.bottom.left{ top: 100%; bottom: auto; left: 1em; right: auto; margin-left: -1rem; } su-popup .ui.popup.top.center,[data-is="su-popup"] .ui.popup.top.center{ top: auto; bottom: 100%; left: 50%; right: auto; -webkit-transform: translateX(-50%); transform: translateX(-50%); } su-popup .ui.popup.bottom.center,[data-is="su-popup"] .ui.popup.bottom.center{ top: 100%; bottom: auto; left: 50%; right: auto; -webkit-transform: translateX(-50%); transform: translateX(-50%); } su-popup .ui.popup.top.center.scale.transition.in,[data-is="su-popup"] .ui.popup.top.center.scale.transition.in,su-popup .ui.popup.bottom.center.scale.transition.in,[data-is="su-popup"] .ui.popup.bottom.center.scale.transition.in{ animation-name: xScaleIn } su-popup .ui.popup.top.right,[data-is="su-popup"] .ui.popup.top.right{ top: auto; bottom: 100%; left: auto; right: 1em; margin-right: -1rem; } su-popup .ui.popup.bottom.right,[data-is="su-popup"] .ui.popup.bottom.right{ top: 100%; bottom: auto; left: auto; right: 1em; margin-right: -1rem; } su-popup .ui.popup.left.center,[data-is="su-popup"] .ui.popup.left.center{ left: auto; right: 100%; top: 50%; -webkit-transform: translateY(-50%); transform: translateY(-50%); } su-popup .ui.popup.right.center,[data-is="su-popup"] .ui.popup.right.center{ left: 100%; right: auto; top: 50%; -webkit-transform: translateY(-50%); transform: translateY(-50%); } su-popup .ui.popup.left.center.scale.transition.in,[data-is="su-popup"] .ui.popup.left.center.scale.transition.in,su-popup .ui.popup.right.center.scale.transition.in,[data-is="su-popup"] .ui.popup.right.center.scale.transition.in{ animation-name: yScaleIn } @-webkit-keyframes xScaleIn { 0% { opacity: 0; -webkit-transform: scale(0.8) translateX(-50%); transform: scale(0.8) translateX(-50%); } 100% { opacity: 1; -webkit-transform: scale(1) translateX(-50%); transform: scale(1) translateX(-50%); } } @keyframes xScaleIn { 0% { opacity: 0; -webkit-transform: scale(0.8) translateX(-50%); transform: scale(0.8) translateX(-50%); } 100% { opacity: 1; -webkit-transform: scale(1) translateX(-50%); transform: scale(1) translateX(-50%); } } @-webkit-keyframes yScaleIn { 0% { opacity: 0; -webkit-transform: scale(0.8) translateY(-50%); transform: scale(0.8) translateY(-50%); } 100% { opacity: 1; -webkit-transform: scale(1) translateY(-50%); transform: scale(1) translateY(-50%); } } @keyframes yScaleIn { 0% { opacity: 0; -webkit-transform: scale(0.8) translateY(-50%); transform: scale(0.8) translateY(-50%); } 100% { opacity: 1; -webkit-transform: scale(1) translateY(-50%); transform: scale(1) translateY(-50%); } }', 'onmouseover="{mouseover}" onmouseout="{mouseout}"', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.getId = getId;
-tag.isNowrap = isNowrap;
-tag.mouseover = mouseover;
-tag.mouseout = mouseout;
-tag.on('mount', onMount);
-tag.on('update', onUpdate);
-tag.stopPropagation = stopPropagation;
+    tag.content = ''
+    tag.dataVariation = opts.dataVariation || ''
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
+    tag.getId = getId
+    tag.isNowrap = isNowrap
+    tag.mouseover = mouseover
+    tag.mouseout = mouseout
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.stopPropagation = stopPropagation
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onMount() {
-  if (opts.tooltip) {
-    if (opts.dataTitle) {
-      tag.content = '<div class="header">' + opts.dataTitle + '</div><div class="content">' + opts.tooltip + '</div>';
-    } else {
-      tag.content = opts.tooltip;
+    function onMount() {
+      if (opts.tooltip) {
+        if (opts.dataTitle) {
+          tag.content = `<div class="header">${opts.dataTitle}</div><div class="content">${opts.tooltip}</div>`
+        } else {
+          tag.content = opts.tooltip
+        }
+      }
+      else if (tag.tags['su-popup-content']) {
+        tag.content = tag.tags['su-popup-content'].root.innerHTML
+        tag.tags['su-popup-content'].unmount()
+      }
+      document.getElementById(tag.getId()).innerHTML = tag.content
+      tag.update()
     }
-  } else if (tag.tags['su-popup-content']) {
-    tag.content = tag.tags['su-popup-content'].root.innerHTML;
-    tag.tags['su-popup-content'].unmount();
-  }
-  document.getElementById(tag.getId()).innerHTML = tag.content;
-  tag.update();
-}
 
-function onUpdate() {
-  tag.position = opts.position || 'top left';
-}
+    function onUpdate() {
+      tag.position = opts.position || 'top left'
+    }
 
-function mouseover() {
-  tag.transitionStatus = 'scale in visible';
-  tag.trigger('mouseover');
-}
+    function mouseover() {
+      tag.transitionStatus = 'scale in visible'
+      tag.trigger('mouseover')
+    }
 
-function mouseout() {
-  tag.transitionStatus = 'hidden';
-  tag.trigger('mouseout');
-}
+    function mouseout() {
+      tag.transitionStatus = 'hidden'
+      tag.trigger('mouseout')
+    }
 
-function stopPropagation(event) {
-  event.stopPropagation();
-}
+    function stopPropagation(event) {
+      event.stopPropagation()
+    }
 
-function isNowrap() {
-  if (tag.dataVariation.indexOf('wide') >= 0) {
-    return false;
-  }
-  return true;
-}
+    function isNowrap() {
+      if (tag.dataVariation.indexOf('wide') >= 0) {
+        return false
+      }
+      return true
+    }
 
-function getId() {
-  return 'su-popup-' + tag._riot_id;
-}
+    function getId() {
+      return `su-popup-${tag._riot_id}`
+    }
 });
 
 riot.tag2('su-popup-content', '', '', '', function(opts) {
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -12583,121 +11605,110 @@ riot.tag2('su-popup-content', '', '', '', function(opts) {
 /*!***************************************!*\
   !*** ./tags/progress/su-progress.tag ***!
   \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-progress', '<div class="ui progress {getClass()} {getStates()}" data-percent="{percent}"> <div class="bar" riot-style="transition-duration: 300ms; width: {percent}%;"> <div if="{isProgress()}" class="progress">{percent}%</div> </div> <div class="label"> <yield></yield> </div> </div>', 'su-progress .ui.progress:last-child,[data-is="su-progress"] .ui.progress:last-child{ margin: 0 0 2.5em; } su-progress.attached,[data-is="su-progress"].attached{ display: block; height: 0.2rem; padding: 0px; overflow: hidden; border-radius: 0em 0em 0.28571429rem 0.28571429rem; position: absolute; left: 0; width: 100%; } su-progress.top.attached,[data-is="su-progress"].top.attached{ top: 0px; bottom: 100%; border-radius: 0.28571429rem 0.28571429rem 0em 0em; } su-progress.bottom.attached,[data-is="su-progress"].bottom.attached{ top: 100%; bottom: auto; }', 'class="{opts.class}"', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.defaultValue = null;
-tag.value = null;
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-progress', '<div class="ui progress {getClass()} {getStates()}" data-percent="{percent}"> <div class="bar" riot-style="transition-duration: 300ms; width: {percent}%;"> <div if="{isProgress()}" class="progress">{percent}%</div> </div> <div class="label"> <yield></yield> </div> </div>', 'su-progress .ui.progress:last-child,[data-is="su-progress"] .ui.progress:last-child{ margin: 0 0 2.5em; } su-progress.attached,[data-is="su-progress"].attached{ display: block; height: 0.2rem; padding: 0px; overflow: hidden; border-radius: 0em 0em 0.28571429rem 0.28571429rem; position: absolute; left: 0; width: 100%; } su-progress.top.attached,[data-is="su-progress"].top.attached{ top: 0px; bottom: 100%; border-radius: 0.28571429rem 0.28571429rem 0em 0em; } su-progress.bottom.attached,[data-is="su-progress"].bottom.attached{ top: 100%; bottom: auto; }', 'class="{opts.class}"', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.getClass = getClass;
-tag.getStates = getStates;
-tag.isProgress = isProgress;
-tag.on('mount', onMount);
-tag.on('update', onUpdate);
+    tag.defaultValue = null
+    tag.value = null
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-var lastOptsValue = null;
-var lastValue = null;
-var total = 100;
+    tag.getClass = getClass
+    tag.getStates = getStates
+    tag.isProgress = isProgress
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onMount() {
-  if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
-    opts.riotValue = opts.value;
-  }
-  init(opts.riotValue, opts.total);
+    let lastOptsValue = null
+    let lastValue = null
+    let total = 100
 
-  tag.update();
-  tag.defaultValue = tag.value;
-}
+    function onMount() {
+      if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
+        opts.riotValue = opts.value
+      }
+      init(opts.riotValue, opts.total)
 
-function onUpdate() {
-  var changed = false;
-  if (tag.value >= total) {
-    tag.value = total;
-  }
-  if (tag.value <= 0) {
-    tag.value = 0;
-  }
-  if (lastValue != tag.value) {
-    lastValue = tag.value;
-    changed = true;
-  } else if (lastOptsValue != opts.riotValue) {
-    tag.value = opts.riotValue;
-    lastOptsValue = opts.riotValue;
-    lastValue = opts.riotValue;
-    changed = true;
-  }
+      tag.update()
+      tag.defaultValue = tag.value
+    }
 
-  if (changed) {
-    tag.percent = getPercent();
-  }
-}
+    function onUpdate() {
+      let changed = false
+      if (tag.value >= total) {
+        tag.value = total
+      }
+      if (tag.value <= 0) {
+        tag.value = 0
+      }
+      if (lastValue != tag.value) {
+        lastValue = tag.value
+        changed = true
+      } else if (lastOptsValue != opts.riotValue) {
+        tag.value = opts.riotValue
+        lastOptsValue = opts.riotValue
+        lastValue = opts.riotValue
+        changed = true
+      }
 
-function getClass() {
-  var excludeClasses = ['progress', 'active'];
-  return Array.apply(null, tag.root.classList).filter(function (clazz) {
-    return !excludeClasses.some(function (excludeClass) {
-      return excludeClass == clazz;
-    });
-  }).join(' ');
-}
+      if (changed) {
+        tag.percent = getPercent()
+      }
+    }
 
-function getStates() {
-  if (isSuccess()) {
-    return 'success';
-  }
-  if (isActive()) {
-    return 'active';
-  }
-}
+    function getClass() {
+      const excludeClasses = ['progress', 'active']
+      return Array.apply(null, tag.root.classList).filter(clazz => {
+        return !excludeClasses.some(excludeClass => excludeClass == clazz)
+      }).join(' ')
+    }
 
-function isProgress() {
-  return hasClass('progress');
-}
+    function getStates() {
+      if (isSuccess()) {
+        return 'success'
+      }
+      if (isActive()) {
+        return 'active'
+      }
+    }
 
-function init(optsValue, optsTotal) {
-  if (tag.value == null) {
-    tag.value = optsValue || 0;
-  }
-  if (optsTotal > 0) {
-    total = optsTotal;
-  }
-  tag.percent = getPercent();
-  lastValue = tag.value;
-  lastOptsValue = optsValue;
-}
+    function isProgress() {
+      return hasClass('progress')
+    }
 
-function getPercent() {
-  return parseInt(tag.value / total * 100);
-}
+    function init(optsValue, optsTotal) {
+      if (tag.value == null) {
+        tag.value = optsValue || 0
+      }
+      if (optsTotal > 0) {
+        total = optsTotal
+      }
+      tag.percent = getPercent()
+      lastValue = tag.value
+      lastOptsValue = optsValue
+    }
 
-function isActive() {
-  return hasClass('active') && tag.percent > 0 && tag.percent < 100;
-}
+    function getPercent() {
+      return parseInt(tag.value / total * 100)
+    }
 
-function isSuccess() {
-  return tag.percent == 100;
-}
+    function isActive() {
+      return hasClass('active') && tag.percent > 0 && tag.percent < 100
+    }
 
-function hasClass(className) {
-  return tag.root.classList.contains(className);
-}
+    function isSuccess() {
+      return tag.percent == 100
+    }
+
+    function hasClass(className) {
+      return tag.root.classList.contains(className)
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -12705,127 +11716,118 @@ function hasClass(className) {
 /*!***************************************!*\
   !*** ./tags/radio/su-radio-group.tag ***!
   \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.defaultValue = '';
-tag.label = '';
-tag.value = '';
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-radio-group', '<yield></yield>', '', '', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.changed = changed;
-tag.on('mount', onMount);
-tag.on('update', onUpdate);
-tag.reset = reset;
+    tag.defaultValue = ''
+    tag.label = ''
+    tag.value = ''
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-var lastOptsValue = void 0;
-var lastValue = void 0;
+    tag.changed = changed
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+    tag.reset = reset
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onMount() {
-  if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
-    opts.riotValue = opts.value;
-  }
-  if (tag.value) {
-    opts.riotValue = tag.value;
-  } else {
-    tag.value = opts.riotValue;
-  }
-  lastValue = tag.value;
-  lastOptsValue = tag.value;
+    let lastOptsValue
+    let lastValue
 
-  var radios = tag.tags['su-radio'];
-  if (radios) {
-    if (!Array.isArray(radios)) {
-      radios = [radios];
+    function onMount() {
+      if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
+        opts.riotValue = opts.value
+      }
+      if (tag.value) {
+        opts.riotValue = tag.value
+      } else {
+        tag.value = opts.riotValue
+      }
+      lastValue = tag.value
+      lastOptsValue = tag.value
+
+      let radios = tag.tags['su-radio']
+      if (radios) {
+        if (!Array.isArray(radios)) {
+          radios = [radios]
+        }
+        radios.forEach(radio => {
+          initializeChild(radio)
+        })
+      }
+
+      tag.defaultValue = tag.value
+      tag.update()
     }
-    radios.forEach(function (radio) {
-      initializeChild(radio);
-    });
-  }
 
-  tag.defaultValue = tag.value;
-  tag.update();
-}
+    function onUpdate() {
+      let changed = false
+      if (lastValue != tag.value) {
+        opts.riotValue = tag.value
+        lastOptsValue = tag.value
+        lastValue = tag.value
+        changed = true
+      } else if (lastOptsValue != opts.riotValue) {
+        tag.value = opts.riotValue
+        lastOptsValue = opts.riotValue
+        lastValue = opts.riotValue
+        changed = true
+      }
 
-function onUpdate() {
-  var changed = false;
-  if (lastValue != tag.value) {
-    opts.riotValue = tag.value;
-    lastOptsValue = tag.value;
-    lastValue = tag.value;
-    changed = true;
-  } else if (lastOptsValue != opts.riotValue) {
-    tag.value = opts.riotValue;
-    lastOptsValue = opts.riotValue;
-    lastValue = opts.riotValue;
-    changed = true;
-  }
+      let radios = tag.tags['su-radio']
+      if (radios) {
+        if (!Array.isArray(radios)) {
+          radios = [radios]
+        }
+        radios.forEach(radio => {
+          initializeChild(radio)
+          updateState(radio)
+        })
+      }
 
-  var radios = tag.tags['su-radio'];
-  if (radios) {
-    if (!Array.isArray(radios)) {
-      radios = [radios];
+      if (changed) {
+        tag.trigger('change', tag.value)
+      }
     }
-    radios.forEach(function (radio) {
-      initializeChild(radio);
-      updateState(radio);
-    });
-  }
 
-  if (changed) {
-    tag.trigger('change', tag.value);
-  }
-}
+    function reset() {
+      tag.value = tag.defaultValue
+    }
 
-function reset() {
-  tag.value = tag.defaultValue;
-}
+    function changed() {
+      return tag.value !== tag.defaultValue
+    }
 
-function changed() {
-  return tag.value !== tag.defaultValue;
-}
+    function updateState(radio) {
+      if (typeof radio.opts.value === 'undefined' && typeof radio.opts.riotValue === 'undefined') {
+        return
+      }
+      const value = typeof radio.opts.value === 'undefined' ? radio.opts.riotValue : radio.opts.value
+      radio.checked = tag.value == value
+      if (radio.checked) {
+        tag.label = radio.root.getElementsByTagName('label')[0].innerText
+      }
+    }
 
-function updateState(radio) {
-  if (typeof radio.opts.value === 'undefined' && typeof radio.opts.riotValue === 'undefined') {
-    return;
-  }
-  var value = typeof radio.opts.value === 'undefined' ? radio.opts.riotValue : radio.opts.value;
-  radio.checked = tag.value == value;
-  if (radio.checked) {
-    tag.label = radio.root.getElementsByTagName('label')[0].innerText;
-  }
-}
+    function initializeChild(radio) {
+      if (radio.opts.name) {
+        return
+      }
+      radio.opts.name = getRadioName()
+      radio.on('click', value => {
+        tag.value = value
+        tag.update()
+      })
+    }
 
-function initializeChild(radio) {
-  if (radio.opts.name) {
-    return;
-  }
-  radio.opts.name = getRadioName();
-  radio.on('click', function (value) {
-    tag.value = value;
-    tag.update();
-  });
-}
-
-function getRadioName() {
-  return 'su-radio-name-' + tag._riot_id;
-}
+    function getRadioName() {
+      return `su-radio-name-${tag._riot_id}`
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -12833,86 +11835,77 @@ function getRadioName() {
 /*!*********************************!*\
   !*** ./tags/radio/su-radio.tag ***!
   \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', 'su-radio.ui.checkbox label,[data-is="su-radio"].ui.checkbox label{ cursor: pointer; } su-radio.ui.read-only input[type="radio"],[data-is="su-radio"].ui.read-only input[type="radio"],su-radio.ui.disabled input[type="radio"],[data-is="su-radio"].ui.disabled input[type="radio"]{ cursor: default !important; }', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.checked = false;
-tag.name = '';
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-radio', '<input type="radio" name="{name}" riot-value="{value}" checked="{checked}" onclick="{click}" ref="target" id="{getId()}"> <label if="{!opts.label}" for="{getId()}"><yield></yield></label> <label if="{opts.label}" for="{getId()}">{opts.label}</label>', 'su-radio.ui.checkbox label,[data-is="su-radio"].ui.checkbox label{ cursor: pointer; } su-radio.ui.read-only input[type="radio"],[data-is="su-radio"].ui.read-only input[type="radio"],su-radio.ui.disabled input[type="radio"],[data-is="su-radio"].ui.disabled input[type="radio"]{ cursor: default !important; }', 'class="ui {radio: isRadio()} checkbox {opts.class}"', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.click = click;
-tag.getId = getId;
-tag.isDisabled = isDisabled;
-tag.isRadio = isRadio;
-tag.on('mount', onMount);
-tag.on('update', onUpdate);
+    tag.checked = false
+    tag.name = ''
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-var lastChecked = void 0;
-var lastOptsCheck = void 0;
+    tag.click = click
+    tag.getId = getId
+    tag.isDisabled = isDisabled
+    tag.isRadio = isRadio
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onMount() {
-  if (tag.checked) {
-    opts.checked = tag.checked;
-  } else {
-    tag.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true';
-  }
-  lastChecked = tag.checked;
-  lastOptsCheck = opts.checked;
-  tag.update();
-}
+    let lastChecked
+    let lastOptsCheck
 
-function onUpdate() {
-  tag.name = opts.name;
-  tag.value = opts.riotValue || opts.value;
-  if (lastChecked != tag.checked) {
-    opts.checked = tag.checked;
-    lastChecked = tag.checked;
-  } else if (lastOptsCheck != opts.checked) {
-    tag.checked = opts.checked;
-    lastOptsCheck = opts.checked;
-  }
-}
+    function onMount() {
+      if (tag.checked) {
+        opts.checked = tag.checked
+      } else {
+        tag.checked = opts.checked === true || opts.checked === 'checked' || opts.checked === 'true'
+      }
+      lastChecked = tag.checked
+      lastOptsCheck = opts.checked
+      tag.update()
+    }
 
-function click(event) {
-  if (isReadOnly() || tag.isDisabled()) {
-    event.preventDefault();
-    return;
-  }
-  tag.checked = event.target.checked;
-  tag.trigger('click', event.target.value);
-}
+    function onUpdate() {
+      tag.name = opts.name
+      tag.value = opts.riotValue || opts.value
+      if (lastChecked != tag.checked) {
+        opts.checked = tag.checked
+        lastChecked = tag.checked
+      } else if (lastOptsCheck != opts.checked) {
+        tag.checked = opts.checked
+        lastOptsCheck = opts.checked
+      }
+    }
 
-function isReadOnly() {
-  return tag.root.classList.contains('read-only');
-}
+    function click(event) {
+      if (isReadOnly() || tag.isDisabled()) {
+        event.preventDefault()
+        return
+      }
+      tag.checked = event.target.checked
+      tag.trigger('click', event.target.value)
+    }
 
-function getId() {
-  return 'su-radio-' + tag._riot_id;
-}
+    function isReadOnly() {
+      return tag.root.classList.contains('read-only')
+    }
 
-function isDisabled() {
-  return tag.root.classList.contains('disabled');
-}
+    function getId() {
+      return `su-radio-${tag._riot_id}`
+    }
 
-function isRadio() {
-  return !tag.root.classList.contains('slider');
-}
+    function isDisabled() {
+      return tag.root.classList.contains('disabled')
+    }
+
+    function isRadio() {
+      return !tag.root.classList.contains('slider')
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -12920,118 +11913,105 @@ function isRadio() {
 /*!***********************************!*\
   !*** ./tags/rating/su-rating.tag ***!
   \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-rating', '<i class="icon {active: item.active} {selected: item.selected}" each="{item in items}" onclick="{click.bind(this, item)}" onmouseover="{mouseover.bind(this, item)}" onmouseout="{mouseout}"></i>', '', 'class="ui rating {opts.class}"', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.items = [];
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-rating', '<i class="icon {active: item.active} {selected: item.selected}" each="{item in items}" onclick="{click.bind(this, item)}" onmouseover="{mouseover.bind(this, item)}" onmouseout="{mouseout}"></i>', '', 'class="ui rating {opts.class}"', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.reset = reset;
-tag.changed = changed;
-tag.click = click;
-tag.mouseout = mouseout;
-tag.mouseover = mouseover;
-tag.on('mount', onMount);
-tag.on('update', onUpdate);
+    tag.items = []
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
+    tag.reset = reset
+    tag.changed = changed
+    tag.click = click
+    tag.mouseout = mouseout
+    tag.mouseover = mouseover
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onMount() {
-  init(opts.max, opts.value);
-}
+    function onMount() {
+      init(opts.max, opts.value)
+    }
 
-function onUpdate() {
-  updateView();
-}
+    function onUpdate() {
+      updateView()
+    }
 
-function reset() {
-  tag.value = tag.defaultValue;
-}
+    function reset() {
+      tag.value = tag.defaultValue
+    }
 
-function changed() {
-  return tag.value != tag.defaultValue;
-}
+    function changed() {
+      return tag.value != tag.defaultValue
+    }
 
-function click(target) {
-  if (isReadOnly()) {
-    return;
-  }
-  var valueChanged = false;
-  var beforeValue = void 0;
-  if (tag.value != target.value) {
-    beforeValue = tag.value;
-    valueChanged = true;
-  }
-  tag.value = target.value;
-  updateView();
-  parentUpdate();
-  tag.trigger('click', target.value);
-  if (valueChanged) {
-    tag.trigger('change', { value: tag.value, beforeValue: beforeValue });
-  }
-}
+    function click(target) {
+      if (isReadOnly()) {
+        return
+      }
+      let valueChanged = false
+      let beforeValue
+      if (tag.value != target.value) {
+        beforeValue = tag.value
+        valueChanged = true
+      }
+      tag.value = target.value
+      updateView()
+      parentUpdate()
+      tag.trigger('click', target.value)
+      if (valueChanged) {
+        tag.trigger('change', { value: tag.value, beforeValue: beforeValue })
+      }
+    }
 
-function mouseover(target) {
-  if (isReadOnly()) {
-    return;
-  }
-  tag.items.forEach(function (item) {
-    item.selected = item.value <= target.value;
-  });
-}
+    function mouseover(target) {
+      if (isReadOnly()) {
+        return
+      }
+      tag.items.forEach(item => {
+        item.selected = item.value <= target.value
+      })
+    }
 
-function mouseout() {
-  tag.items.forEach(function (item) {
-    item.selected = false;
-  });
-}
+    function mouseout() {
+      tag.items.forEach(item => {
+        item.selected = false
+      })
+    }
 
-function isReadOnly() {
-  return tag.root.classList.contains('read-only');
-}
+    function isReadOnly() {
+      return tag.root.classList.contains('read-only')
+    }
 
-function init() {
-  var max = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 5;
-  var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+    function init(max = 5, value = 0) {
+      tag.value = value
+      tag.defaultValue = value
+      tag.items.length = 0
+      for (let i = 0; i < max; i++) {
+        tag.items[i] = { value: i + 1, active: false, selected: false }
+      }
+      updateView()
+      parentUpdate()
+    }
 
-  tag.value = value;
-  tag.defaultValue = value;
-  tag.items.length = 0;
-  for (var i = 0; i < max; i++) {
-    tag.items[i] = { value: i + 1, active: false, selected: false };
-  }
-  updateView();
-  parentUpdate();
-}
+    function updateView() {
+      tag.items.forEach(item => {
+        item.active = item.value <= tag.value
+      })
+    }
 
-function updateView() {
-  tag.items.forEach(function (item) {
-    item.active = item.value <= tag.value;
-  });
-}
-
-function parentUpdate() {
-  if (tag.parent) {
-    tag.parent.update();
-  } else {
-    tag.update();
-  }
-}
+    function parentUpdate() {
+      if (tag.parent) {
+        tag.parent.update()
+      } else {
+        tag.update()
+      }
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -13039,11 +12019,15 @@ function parentUpdate() {
 /*!************************************!*\
   !*** ./tags/tab/su-tab-header.tag ***!
   \************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-tab-header', '<yield></yield>', '', 'class="ui {opts.class} menu"', function(opts) {
+
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-tab-header', '<yield></yield>', '', 'class="ui {opts.class} menu"', function(opts) {
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -13051,34 +12035,24 @@ riot.tag2('su-tab-header', '<yield></yield>', '', 'class="ui {opts.class} menu"'
 /*!***********************************!*\
   !*** ./tags/tab/su-tab-title.tag ***!
   \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-tab-title', '<a class="{opts.class} {active: active} item" onclick="{click}" ref="item"> <yield></yield> </a>', '', '', function(opts) {
-"use strict";
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.active = false;
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-tab-title', '<a class="{opts.class} {active: active} item" onclick="{click}" ref="item"> <yield></yield> </a>', '', '', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.click = click;
+    tag.active = false
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
+    tag.click = click
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function click() {
-  tag.parent.parent.clickForTitle(tag.refs.item.innerText);
-}
+    function click() {
+      tag.parent.parent.clickForTitle(tag.refs.item.innerText)
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -13086,41 +12060,31 @@ function click() {
 /*!*****************************!*\
   !*** ./tags/tab/su-tab.tag ***!
   \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-tab', '<virtual if="{mounted}"><yield></yield></virtual>', 'su-tab.ui.segment,[data-is="su-tab"].ui.segment{ margin-top: 0; margin-bottom: 0; } su-tab.ui.segment.top.attached,[data-is="su-tab"].ui.segment.top.attached{ margin-top: 0 } su-tab.ui.segment.bottom.attached,[data-is="su-tab"].ui.segment.bottom.attached{ margin-bottom: 0 }', 'class="ui {opts.class} {active: active} tab"', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.active = false;
-tag.mounted = false;
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-tab', '<virtual if="{mounted}"><yield></yield></virtual>', 'su-tab.ui.segment,[data-is="su-tab"].ui.segment{ margin-top: 0; margin-bottom: 0; } su-tab.ui.segment.top.attached,[data-is="su-tab"].ui.segment.top.attached{ margin-top: 0 } su-tab.ui.segment.bottom.attached,[data-is="su-tab"].ui.segment.bottom.attached{ margin-bottom: 0 }', 'class="ui {opts.class} {active: active} tab"', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.on('mount', onMount);
-tag.on('update', onUpdate);
+    tag.active = false
+    tag.mounted = false
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onMount() {
-  tag.update();
-}
-function onUpdate() {
-  if (tag.active && !tag.mounted) {
-    tag.mounted = true;
-  }
-}
+    function onMount() {
+      tag.update()
+    }
+    function onUpdate() {
+      if (tag.active && !tag.mounted) {
+        tag.mounted = true
+      }
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -13128,209 +12092,194 @@ function onUpdate() {
 /*!********************************!*\
   !*** ./tags/tab/su-tabset.tag ***!
   \********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.label}</a> </div> <yield></yield> <div class="ui {opts.class} {getClass()} menu" if="{isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.label}</a> </div>', '', '', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.tabs = [];
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-tabset', '<div class="ui {opts.class} {getClass()} menu" if="{!isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.label}</a> </div> <yield></yield> <div class="ui {opts.class} {getClass()} menu" if="{isBottom() && !hasTitle()}"> <a each="{tab, i in tabs}" class="{tab.opts.titleClass} {active: tab.active} item" onclick="{click}">{tab.opts.label}</a> </div>', '', '', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.click = click;
-tag.clickForTitle = clickForTitle;
-tag.getClass = getClass;
-tag.hasTitle = hasTitle;
-tag.isBottom = isBottom;
-tag.on('mount', onMount);
-tag.on('update', onUpdate);
+    tag.tabs = []
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-var lastOptsActive = void 0,
-    lastActive = void 0,
-    active = void 0;
-var shownMessage = false;
+    tag.click = click
+    tag.clickForTitle = clickForTitle
+    tag.getClass = getClass
+    tag.hasTitle = hasTitle
+    tag.isBottom = isBottom
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onMount() {
-  if (tag.tags['su-tab-header']) {
-    tag.tags['su-tab-header'].opts.class = getTitleClass();
-  }
+    let lastOptsActive, lastActive, active
+    let shownMessage = false
 
-  tag.tabs = tag.tags['su-tab'];
-  if (typeof tag.tabs === 'undefined') {
-    return;
-  }
-  if (!Array.isArray(tag.tabs)) {
-    tag.tabs = [tag.tabs];
-  }
-  supportTraditionalOptions();
+    function onMount() {
+      if (tag.tags['su-tab-header']) {
+        tag.tags['su-tab-header'].opts.class = getTitleClass()
+      }
 
-  if (typeof opts.active === 'undefined') {
-    var titles = tag.hasTitle();
-    if (titles) {
-      opts.active = titles[0].root.innerText.trim();
-    } else {
-      opts.active = tag.tabs[0].opts.label;
-    }
-  }
+      tag.tabs = tag.tags['su-tab']
+      if (typeof tag.tabs === 'undefined') {
+        return
+      }
+      if (!Array.isArray(tag.tabs)) {
+        tag.tabs = [tag.tabs]
+      }
+      supportTraditionalOptions()
 
-  tag.tabs.forEach(function (tab) {
-    initializeChild(tab);
-  });
-
-  tag.update();
-}
-
-function onUpdate() {
-  supportTraditionalOptions();
-  var changed = false;
-  if (lastOptsActive != opts.active) {
-    lastOptsActive = opts.active;
-    active = opts.active;
-    changed = true;
-  }
-  if (lastActive != active) {
-    lastActive = active;
-    changed = true;
-  }
-
-  if (changed) {
-    var titles = tag.hasTitle();
-    if (titles) {
-      var index = void 0;
-      titles.forEach(function (title, i) {
-        title.active = false;
-        if (title.root.innerText.trim() === active.trim()) {
-          title.active = true;
-          index = i;
+      if (typeof opts.active === 'undefined') {
+        const titles = tag.hasTitle()
+        if (titles) {
+          opts.active = titles[0].root.innerText.trim()
+        } else {
+          opts.active = tag.tabs[0].opts.label
         }
-      });
-      if (!titles.some(function (title) {
-        return title.active;
-      })) {
-        titles[0].active = true;
-        index = 0;
       }
-      tag.tabs.forEach(function (tab, i) {
-        tab.active = index == i;
-      });
-    } else {
-      tag.tabs.forEach(function (tab) {
-        tab.active = tab.opts.label == active;
-      });
-      if (!tag.tabs.some(function (tab) {
-        return tab.active;
-      })) {
-        tag.tabs[0].active = true;
+
+      tag.tabs.forEach(tab => {
+        initializeChild(tab)
+      })
+
+      tag.update()
+    }
+
+    function onUpdate() {
+      supportTraditionalOptions()
+      let changed = false
+      if (lastOptsActive != opts.active) {
+        lastOptsActive = opts.active
+        active = opts.active
+        changed = true
+      }
+      if (lastActive != active) {
+        lastActive = active
+        changed = true
+      }
+
+      if (changed) {
+        const titles = tag.hasTitle()
+        if (titles) {
+          let index
+          titles.forEach((title, i) => {
+            title.active = false
+            if (title.root.innerText.trim() === active.trim()) {
+              title.active = true
+              index = i
+            }
+          })
+          if (!titles.some(title => title.active)) {
+            titles[0].active = true
+            index = 0
+          }
+          tag.tabs.forEach((tab, i) => {
+            tab.active = index == i
+          })
+        } else {
+          tag.tabs.forEach(tab => {
+            tab.active = tab.opts.label == active
+          })
+          if (!tag.tabs.some(tab => tab.active)) {
+            tag.tabs[0].active = true
+          }
+        }
       }
     }
-  }
-}
 
-function click(event) {
-  active = event.item.tab.opts.label;
-  tag.update();
-  tag.trigger('click', active);
-}
-
-function clickForTitle(title) {
-  active = title;
-  tag.update();
-  tag.trigger('click', active);
-}
-
-function isBottom() {
-  return hasClass('bottom');
-}
-
-function hasTitle() {
-  if (!tag.tags['su-tab-header']) {
-    return false;
-  }
-  var titles = tag.tags['su-tab-header'].tags['su-tab-title'];
-  if (!titles) {
-    return false;
-  }
-
-  if (!Array.isArray(titles)) {
-    return [titles];
-  }
-  return titles;
-}
-
-function getClass() {
-  if (hasClass('tabular') && !hasClass('attached')) {
-    return 'attached';
-  }
-}
-
-function initializeChild(tab) {
-  tab.mounted = !opts.lazyMount;
-  if (tab.opts.class) {
-    return;
-  }
-  var classList = hasClass('no-segment') ? [] : ['segment'];
-  if (hasClass('tabular')) {
-    classList.push('tabular');
-  }
-  if ((hasClass('attached') || hasClass('tabular')) && !hasClass('left') && !hasClass('right')) {
-    if (hasClass('bottom')) {
-      classList.push('top');
-    } else {
-      classList.push('bottom');
+    function click(event) {
+      active = event.item.tab.opts.label
+      tag.update()
+      tag.trigger('click', active)
     }
-    classList.push('attached');
-  }
-  tab.opts.class = classList.join(' ');
-}
 
-function getTitleClass() {
-  var classList = [];
-  if (hasClass('left') || hasClass('right')) {
-    classList.push('vertical');
-    classList.push('fluid');
-  }
-  if (hasClass('left')) {
-    classList.push('left');
-  }
-  if (hasClass('right')) {
-    classList.push('right');
-  }
-  if (hasClass('tabular')) {
-    classList.push('tabular');
-  }
-  return classList.join(' ');
-}
+    function clickForTitle(title) {
+      active = title
+      tag.update()
+      tag.trigger('click', active)
+    }
 
-function hasClass(className) {
+    function isBottom() {
+      return hasClass('bottom')
+    }
 
-  return tag.root.classList.contains(className);
-}
-
-function supportTraditionalOptions() {
-  tag.tabs.forEach(function (tab) {
-    if (typeof tab.opts.title !== 'undefined') {
-      if (!shownMessage) {
-        console.warn('\'title\' attribute is deprecated. Please use \'label\'.');
+    function hasTitle() {
+      if (!tag.tags['su-tab-header']) {
+        return false
       }
-      shownMessage = true;
-      tab.opts.label = tab.opts.title;
-      tab.opts.title = undefined;
+      const titles = tag.tags['su-tab-header'].tags['su-tab-title']
+      if (!titles) {
+        return false
+      }
+
+      if (!Array.isArray(titles)) {
+        return [titles]
+      }
+      return titles
     }
-  });
-}
+
+    function getClass() {
+      if (hasClass('tabular') && !hasClass('attached')) {
+        return 'attached'
+      }
+    }
+
+    function initializeChild(tab) {
+      tab.mounted = !opts.lazyMount
+      if (tab.opts.class) {
+        return
+      }
+      let classList = hasClass('no-segment') ? [] : ['segment']
+      if (hasClass('tabular')) {
+        classList.push('tabular')
+      }
+      if ((hasClass('attached') || hasClass('tabular')) && !hasClass('left') && !hasClass('right')) {
+        if (hasClass('bottom')) {
+          classList.push('top')
+        } else {
+          classList.push('bottom')
+        }
+        classList.push('attached')
+      }
+      tab.opts.class = classList.join(' ')
+    }
+
+    function getTitleClass() {
+      const classList = []
+      if (hasClass('left') || hasClass('right')) {
+        classList.push('vertical')
+        classList.push('fluid')
+      }
+      if (hasClass('left')) {
+        classList.push('left')
+      }
+      if (hasClass('right')) {
+        classList.push('right')
+      }
+      if (hasClass('tabular')) {
+        classList.push('tabular')
+      }
+      return classList.join(' ')
+    }
+
+    function hasClass(className) {
+
+      return tag.root.classList.contains(className)
+    }
+
+    function supportTraditionalOptions() {
+      tag.tabs.forEach(tab => {
+        if (typeof tab.opts.title !== 'undefined') {
+          if (!shownMessage) {
+            console.warn('\'title\' attribute is deprecated. Please use \'label\'.')
+          }
+          shownMessage = true
+          tab.opts.label = tab.opts.title
+          tab.opts.title = undefined
+        }
+      })
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -13338,134 +12287,124 @@ function supportTraditionalOptions() {
 /*!*********************************!*\
   !*** ./tags/table/su-table.tag ***!
   \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-table', '', '', '', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-table', '', '', '', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.on('mount', onMount);
-tag.on('update', onUpdate);
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-var lastData = void 0;
-var lastCondition = {};
-var headers = void 0;
-var suTableIndex = 'su-table-index';
+    let lastData
+    let lastCondition = {}
+    let headers
+    const suTableIndex = 'su-table-index'
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onMount() {
-  headers = tag.tags['su-th'];
-  if (!Array.isArray(headers)) {
-    headers = headers ? [headers] : [];
-  }
-
-  headers.forEach(function (th) {
-    th.on('click', function (field) {
-      sort(field);
-
-      headers.forEach(function (th) {
-        th.sorted = th.opts.field == lastCondition.field;
-        th.reverse = lastCondition.reverse;
-      });
-      tag.update();
-    });
-  });
-  tag.update();
-}
-
-function onUpdate() {
-  if (JSON.stringify(lastData) != JSON.stringify(opts.data)) {
-    lastData = opts.data;
-    lastCondition = {
-      field: suTableIndex,
-      reverse: false
-    };
-
-    if (opts.defaultSortField) {
-      if (opts.defaultSortReverse) {
-        lastCondition.field = opts.defaultSortField;
-        lastCondition.reverse = false;
+    function onMount() {
+      headers = tag.tags['su-th']
+      if (!Array.isArray(headers)) {
+        headers = headers ? [headers] : []
       }
-      sort(opts.defaultSortField);
 
-      headers.forEach(function (th) {
-        th.sorted = th.opts.field == lastCondition.field;
-        th.reverse = lastCondition.reverse;
-      });
-      tag.update();
-    }
-  }
-}
+      headers.forEach(th => {
+        th.on('click', field => {
+          sort(field)
 
-function sort(field) {
-  addIndexField(opts.data);
-  var condition = generateCondition(field, lastCondition);
-  opts.data.sort(sortBy(condition));
-  lastCondition = condition;
-}
-
-function generateCondition(field, condition) {
-  if (condition.field === field) {
-    if (!condition.reverse) {
-      condition.reverse = true;
-    } else {
-      condition.reverse = false;
-      condition.field = suTableIndex;
-    }
-  } else {
-    condition.reverse = false;
-    condition.field = field;
-  }
-
-  return condition;
-}
-
-function sortBy(condition) {
-  var field = condition.field;
-  var reverse = condition.reverse ? -1 : 1;
-  var nullsFirst = opts.nullsFirst ? -1 : 1;
-  return function (ason, bson) {
-    var a = ason[field];
-    var b = bson[field];
-
-    if (a == null) {
-      return reverse * nullsFirst;
-    }
-    if (b == null) {
-      return reverse * nullsFirst * -1;
-    }
-    if (a < b) {
-      return reverse * -1;
-    }
-    if (a > b) {
-      return reverse;
+          headers.forEach(th => {
+            th.sorted = th.opts.field == lastCondition.field
+            th.reverse = lastCondition.reverse
+          })
+          tag.update()
+        })
+      })
+      tag.update()
     }
 
-    return ason[suTableIndex] - bson[suTableIndex];
-  };
-}
+    function onUpdate() {
+      if (JSON.stringify(lastData) != JSON.stringify(opts.data)) {
+        lastData = opts.data
+        lastCondition = {
+          field: suTableIndex,
+          reverse: false,
+        }
 
-function addIndexField(json) {
-  json.forEach(function (data, index) {
-    if (data[suTableIndex] === undefined) {
-      data[suTableIndex] = index;
+        if (opts.defaultSortField) {
+          if (opts.defaultSortReverse) {
+            lastCondition.field = opts.defaultSortField
+            lastCondition.reverse = false
+          }
+          sort(opts.defaultSortField)
+
+          headers.forEach(th => {
+            th.sorted = th.opts.field == lastCondition.field
+            th.reverse = lastCondition.reverse
+          })
+          tag.update()
+        }
+      }
     }
-  });
-}
+
+    function sort(field) {
+      addIndexField(opts.data)
+      const condition = generateCondition(field, lastCondition)
+      opts.data.sort(sortBy(condition))
+      lastCondition = condition
+    }
+
+    function generateCondition(field, condition) {
+      if (condition.field === field) {
+        if (!condition.reverse) {
+          condition.reverse = true
+        } else {
+          condition.reverse = false
+          condition.field = suTableIndex
+        }
+      } else {
+        condition.reverse = false
+        condition.field = field
+      }
+
+      return condition
+    }
+
+    function sortBy(condition) {
+      const field = condition.field
+      const reverse = condition.reverse ? -1 : 1
+      const nullsFirst = opts.nullsFirst ? -1 : 1
+      return (ason, bson) => {
+        const a = ason[field]
+        const b = bson[field]
+
+        if (a == null) {
+          return reverse * nullsFirst
+        }
+        if (b == null) {
+          return reverse * nullsFirst * -1
+        }
+        if (a < b) {
+          return reverse * -1
+        }
+        if (a > b) {
+          return reverse
+        }
+
+        return ason[suTableIndex] - bson[suTableIndex]
+      }
+    }
+
+    function addIndexField(json) {
+      json.forEach((data, index) => {
+        if (data[suTableIndex] === undefined) {
+          data[suTableIndex] = index
+        }
+      })
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -13473,33 +12412,22 @@ function addIndexField(json) {
 /*!******************************!*\
   !*** ./tags/table/su-th.tag ***!
   \******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-th', '', '', 'onclick="{click}" class="{sorted: sorted} {ascending: sorted && !reverse} {descending: sorted && reverse}"', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-th', '', '', 'onclick="{click}" class="{sorted: sorted} {ascending: sorted && !reverse} {descending: sorted && reverse}"', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.click = click;
+    tag.click = click
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function click() {
-  tag.trigger('click', opts.field);
-}
+    function click() {
+      tag.trigger('click', opts.field)
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -13507,66 +12435,56 @@ function click() {
 /*!**************************************!*\
   !*** ./tags/toast/su-toast-item.tag ***!
   \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-toast-item', '<div class=" {position} floated" if="{!hide}"> <div class="ui attached active progress {className} top" if="{progress == \'top\'}"> <div class="bar"></div> </div> <div class="ui {icon: icon} {className} floating compact message"> <i class="close icon" onclick="{close}"></i> <i class="{icon} icon" if="{icon}"></i> <div class="content"> <div class="header" if="{title}"> {title} </div> <p each="{message in messages}">{message}</p> </div> </div> <div class="ui attached active progress {className} bottom" if="{progress == \'bottom\'}"> <div class="bar"></div> </div> </div>', 'su-toast-item .ui.message,[data-is="su-toast-item"] .ui.message{ margin: 0 } @-webkit-keyframes progress-active { 0% { -webkit-transform: scale(0, 1); transform: scale(0, 1); } 100% { -webkit-transform: scale(1); transform: scale(1); } } @keyframes progress-active { 0% { -webkit-transform: scale(0, 1); transform: scale(0, 1); } 100% { -webkit-transform: scale(1); transform: scale(1); } } su-toast-item .attached.progress,[data-is="su-toast-item"] .attached.progress{ z-index: 1; } su-toast-item .attached.progress .bar,[data-is="su-toast-item"] .attached.progress .bar{ min-width: 0%; width: 100%; } su-toast-item .active.progress .bar:after,[data-is="su-toast-item"] .active.progress .bar:after,su-toast-item .ui.progress.success .bar:after,[data-is="su-toast-item"] .ui.progress.success .bar:after,su-toast-item .ui.progress.warning .bar:after,[data-is="su-toast-item"] .ui.progress.warning .bar:after,su-toast-item .ui.progress.error .bar:after,[data-is="su-toast-item"] .ui.progress.error .bar:after{ animation: progress-active 3.5s infinite !important; -webkit-transform-origin: left; transform-origin: left; opacity: 0.3 !important; } su-toast-item .bottom.attached.progress,[data-is="su-toast-item"] .bottom.attached.progress{ margin: -3px 0 6px; } su-toast-item .top.attached.progress,[data-is="su-toast-item"] .top.attached.progress{ margin: 6px 0 -3px; }', 'class="item {transition}"', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.position = isRight() ? 'right' : 'left';
-tag.direction = isRight() ? 'left' : 'right';
-tag.icon = opts.icon;
-tag.progress = opts.progress;
-tag.className = opts.className;
-tag.transition = 'transition animating in fade ' + tag.direction;
-tag.title = opts.title;
-tag.messages = opts.messages;
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-toast-item', '<div class=" {position} floated" if="{!hide}"> <div class="ui attached active progress {className} top" if="{progress == \'top\'}"> <div class="bar"></div> </div> <div class="ui {icon: icon} {className} floating compact message"> <i class="close icon" onclick="{close}"></i> <i class="{icon} icon" if="{icon}"></i> <div class="content"> <div class="header" if="{title}"> {title} </div> <p each="{message in messages}">{message}</p> </div> </div> <div class="ui attached active progress {className} bottom" if="{progress == \'bottom\'}"> <div class="bar"></div> </div> </div>', 'su-toast-item .ui.message,[data-is="su-toast-item"] .ui.message{ margin: 0 } @-webkit-keyframes progress-active { 0% { -webkit-transform: scale(0, 1); transform: scale(0, 1); } 100% { -webkit-transform: scale(1); transform: scale(1); } } @keyframes progress-active { 0% { -webkit-transform: scale(0, 1); transform: scale(0, 1); } 100% { -webkit-transform: scale(1); transform: scale(1); } } su-toast-item .attached.progress,[data-is="su-toast-item"] .attached.progress{ z-index: 1; } su-toast-item .attached.progress .bar,[data-is="su-toast-item"] .attached.progress .bar{ min-width: 0%; width: 100%; } su-toast-item .active.progress .bar:after,[data-is="su-toast-item"] .active.progress .bar:after,su-toast-item .ui.progress.success .bar:after,[data-is="su-toast-item"] .ui.progress.success .bar:after,su-toast-item .ui.progress.warning .bar:after,[data-is="su-toast-item"] .ui.progress.warning .bar:after,su-toast-item .ui.progress.error .bar:after,[data-is="su-toast-item"] .ui.progress.error .bar:after{ animation: progress-active 3.5s infinite !important; -webkit-transform-origin: left; transform-origin: left; opacity: 0.3 !important; } su-toast-item .bottom.attached.progress,[data-is="su-toast-item"] .bottom.attached.progress{ margin: -3px 0 6px; } su-toast-item .top.attached.progress,[data-is="su-toast-item"] .top.attached.progress{ margin: 6px 0 -3px; }', 'class="item {transition}"', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.close = close;
-tag.on('mount', onMount);
+    tag.position = isRight() ? 'right' : 'left'
+    tag.direction = isRight() ? 'left' : 'right'
+    tag.icon = opts.icon
+    tag.progress = opts.progress
+    tag.className = opts.className
+    tag.transition = `transition animating in fade ${tag.direction}`
+    tag.title = opts.title
+    tag.messages = opts.messages
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
+    tag.close = close
+    tag.on('mount', onMount)
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function close() {
-  tag.hide = true;
-  tag.update();
-}
+    function close() {
+      tag.hide = true
+      tag.update()
+    }
 
-function onMount() {
-  setTimeout(function () {
-    tag.transition = '';
-    tag.update();
-  }, 300);
+    function onMount() {
+      setTimeout(() => {
+        tag.transition = ''
+        tag.update()
+      }, 300)
 
-  setTimeout(function () {
-    tag.transition = 'transition animating out fade ' + tag.direction;
-    tag.update();
-  }, 3000);
+      setTimeout(() => {
+        tag.transition = `transition animating out fade ${tag.direction}`
+        tag.update()
+      }, 3000)
 
-  setTimeout(function () {
-    tag.transition = 'transition hidden';
-    tag.hide = true;
-    tag.update();
-  }, 3500);
-}
+      setTimeout(() => {
+        tag.transition = 'transition hidden'
+        tag.hide = true
+        tag.update()
+      }, 3500)
+    }
 
-function isRight() {
-  var position = opts.position || '';
-  return position.indexOf('right') >= 0;
-}
+    function isRight() {
+      const position = opts.position || ''
+      return position.indexOf('right') >= 0
+    }
 });
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -13574,92 +12492,83 @@ function isRight() {
 /*!*********************************!*\
   !*** ./tags/toast/su-toast.tag ***!
   \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-toast', '<div class="ui list"> <su-toast-item each="{item in items}" icon="{item.icon}" progress="{item.progress}" class-name="{item.class}" title="{item.title}" messages="{item.messages}" position="{position}"></su-toast-item> </div>', 'su-toast,[data-is="su-toast"]{ position: fixed; padding: 1rem; z-index: 3000; } su-toast.right,[data-is="su-toast"].right{ right: 0; } su-toast.left,[data-is="su-toast"].left{ left: 0; } su-toast.top,[data-is="su-toast"].top{ top: 0; } su-toast.bottom,[data-is="su-toast"].bottom{ bottom: 0; } su-toast.middle,[data-is="su-toast"].middle{ top: 50%; margin-top: -35px; } su-toast.center,[data-is="su-toast"].center{ left: 50%; margin-left: 150px; } su-toast .ui.message,[data-is="su-toast"] .ui.message{ min-width: 20rem; position: relative; padding-right: 2.5rem; } su-toast .ui.icon.message,[data-is="su-toast"] .ui.icon.message{ width: auto !important; }', 'class="{position}"', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
-tag.items = [];
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-toast', '<div class="ui list"> <su-toast-item each="{item in items}" icon="{item.icon}" progress="{item.progress}" class-name="{item.class}" title="{item.title}" messages="{item.messages}" position="{position}"></su-toast-item> </div>', 'su-toast,[data-is="su-toast"]{ position: fixed; padding: 1rem; z-index: 3000; } su-toast.right,[data-is="su-toast"].right{ right: 0; } su-toast.left,[data-is="su-toast"].left{ left: 0; } su-toast.top,[data-is="su-toast"].top{ top: 0; } su-toast.bottom,[data-is="su-toast"].bottom{ bottom: 0; } su-toast.middle,[data-is="su-toast"].middle{ top: 50%; margin-top: -35px; } su-toast.center,[data-is="su-toast"].center{ left: 50%; margin-left: 150px; } su-toast .ui.message,[data-is="su-toast"] .ui.message{ min-width: 20rem; position: relative; padding-right: 2.5rem; } su-toast .ui.icon.message,[data-is="su-toast"] .ui.icon.message{ width: auto !important; }', 'class="{position}"', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.mixin('semantic-ui');
-tag.observable.on('showToast', showToast);
-tag.on('mount', onMount);
-tag.on('update', onUpdate);
+    tag.items = []
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
-riot.mixin({
-  suToast: suToast
+    tag.mixin('semantic-ui')
+    tag.observable.on('showToast', showToast)
+    tag.on('mount', onMount)
+    tag.on('update', onUpdate)
+
+    riot.mixin({
+      suToast
+    })
+
+    function onMount() {
+      tag.update()
+    }
+
+    function onUpdate() {
+      tag.position = opts.position || 'bottom right'
+    }
+
+    function showToast(option) {
+      const item = {
+        title: option.title,
+        messages: Array.isArray(option.message) ? option.message : [option.message],
+        icon: option.icon,
+        progress: option.progress,
+        class: option.class
+      }
+      tag.items.push(item)
+      tag.update()
+
+      setTimeout(() => {
+        tag.items.shift()
+        tag.update()
+      }, 5000)
+    }
+
+    function suToast(param) {
+      const option = {
+        title: null,
+        message: null,
+        icon: null,
+        progress: null,
+        class: null,
+      }
+
+      if (typeof param === 'string') {
+        option.message = param
+      } else if (param) {
+        if (param.title) {
+          option.title = param.title
+        }
+        if (param.message) {
+          option.message = param.message
+        }
+        if (param.icon) {
+          option.icon = param.icon
+        }
+        if (param.progress) {
+          option.progress = param.progress
+        }
+        if (param.class) {
+          option.class = param.class
+        }
+      }
+      tag.observable.trigger('showToast', option)
+    }
 });
-
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function onMount() {
-  tag.update();
-}
-
-function onUpdate() {
-  tag.position = opts.position || 'bottom right';
-}
-
-function showToast(option) {
-  var item = {
-    title: option.title,
-    messages: Array.isArray(option.message) ? option.message : [option.message],
-    icon: option.icon,
-    progress: option.progress,
-    class: option.class
-  };
-  tag.items.push(item);
-  tag.update();
-
-  setTimeout(function () {
-    tag.items.shift();
-    tag.update();
-  }, 5000);
-}
-
-function suToast(param) {
-  var option = {
-    title: null,
-    message: null,
-    icon: null,
-    progress: null,
-    class: null
-  };
-
-  if (typeof param === 'string') {
-    option.message = param;
-  } else if (param) {
-    if (param.title) {
-      option.title = param.title;
-    }
-    if (param.message) {
-      option.message = param.message;
-    }
-    if (param.icon) {
-      option.icon = param.icon;
-    }
-    if (param.progress) {
-      option.progress = param.progress;
-    }
-    if (param.class) {
-      option.class = param.class;
-    }
-  }
-  tag.observable.trigger('showToast', option);
-}
-});
+    
+  if (false) {}
+  
 
 /***/ }),
 
@@ -13667,43 +12576,221 @@ function suToast(param) {
 /*!*******************************************************!*\
   !*** ./tags/validation-error/su-validation-error.tag ***!
   \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-riot.tag2('su-validation-error', '<div if="{opts.errors && opts.errors[opts.name]}" class="ui basic pointing prompt label transition visible"> <div each="{message in opts.errors[opts.name]}">{message}</div> </div> <ul if="{!isEmptyErrors() && !opts.name}" class="list"> <virtual each="{errors in opts.errors}"> <li each="{message in errors}">{message}</li> </virtual> </ul>', 'su-validation-error.ui.error.message,[data-is="su-validation-error"].ui.error.message{ display: block !important; }', 'class="{getClass()}"', function(opts) {
-'use strict';
 
-var tag = this;
-// ===================================================================================
-//                                                                      Tag Properties
-//                                                                      ==============
+    var riot = __webpack_require__(/*! riot */ "riot")
+    riot.tag2('su-validation-error', '<div if="{opts.errors && opts.errors[opts.name]}" class="ui basic pointing prompt label transition visible"> <div each="{message in opts.errors[opts.name]}">{message}</div> </div> <ul if="{!isEmptyErrors() && !opts.name}" class="list"> <virtual each="{errors in opts.errors}"> <li each="{message in errors}">{message}</li> </virtual> </ul>', 'su-validation-error.ui.error.message,[data-is="su-validation-error"].ui.error.message{ display: block !important; }', 'class="{getClass()}"', function(opts) {
+    const tag = this
 
-// ===================================================================================
-//                                                                         Tag Methods
-//                                                                         ===========
-tag.getClass = getClass;
-tag.isEmptyErrors = isEmptyErrors;
+    tag.getClass = getClass
+    tag.isEmptyErrors = isEmptyErrors
 
-// ===================================================================================
-//                                                                          Properties
-//                                                                          ==========
+    function getClass() {
+      if (opts.name || tag.isEmptyErrors()) {
+        return ''
+      }
+      return 'ui error message'
+    }
 
-// ===================================================================================
-//                                                                             Methods
-//                                                                             =======
-function getClass() {
-  if (opts.name || tag.isEmptyErrors()) {
-    return '';
-  }
-  return 'ui error message';
-}
-
-function isEmptyErrors() {
-  return !opts.errors || Object.keys(opts.errors).length == 0;
-}
+    function isEmptyErrors() {
+      return !opts.errors || Object.keys(opts.errors).length == 0
+    }
 });
+    
+  if (false) {}
+  
+
+/***/ }),
+
+/***/ "riot":
+/*!***********************!*\
+  !*** external "riot" ***!
+  \***********************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = __WEBPACK_EXTERNAL_MODULE_riot__;
 
 /***/ })
 
-/******/ });
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+(() => {
+"use strict";
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* export default binding */ __WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _tags_accordion_su_accordion_tag__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../tags/accordion/su-accordion.tag */ "./tags/accordion/su-accordion.tag");
+/* harmony import */ var _tags_accordion_su_accordion_tag__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_tags_accordion_su_accordion_tag__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _tags_accordion_su_accordionset_tag__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../tags/accordion/su-accordionset.tag */ "./tags/accordion/su-accordionset.tag");
+/* harmony import */ var _tags_accordion_su_accordionset_tag__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_tags_accordion_su_accordionset_tag__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _tags_alert_su_alert_tag__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../tags/alert/su-alert.tag */ "./tags/alert/su-alert.tag");
+/* harmony import */ var _tags_alert_su_alert_tag__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_tags_alert_su_alert_tag__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _tags_checkbox_su_checkbox_tag__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../tags/checkbox/su-checkbox.tag */ "./tags/checkbox/su-checkbox.tag");
+/* harmony import */ var _tags_checkbox_su_checkbox_tag__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_tags_checkbox_su_checkbox_tag__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _tags_checkbox_su_checkbox_group_tag__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../tags/checkbox/su-checkbox-group.tag */ "./tags/checkbox/su-checkbox-group.tag");
+/* harmony import */ var _tags_checkbox_su_checkbox_group_tag__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_tags_checkbox_su_checkbox_group_tag__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _tags_confirm_su_confirm_tag__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../tags/confirm/su-confirm.tag */ "./tags/confirm/su-confirm.tag");
+/* harmony import */ var _tags_confirm_su_confirm_tag__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_tags_confirm_su_confirm_tag__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _tags_datepicker_su_datepicker_tag__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../tags/datepicker/su-datepicker.tag */ "./tags/datepicker/su-datepicker.tag");
+/* harmony import */ var _tags_dropdown_su_dropdown_tag__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../tags/dropdown/su-dropdown.tag */ "./tags/dropdown/su-dropdown.tag");
+/* harmony import */ var _tags_dropdown_su_dropdown_tag__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_tags_dropdown_su_dropdown_tag__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _tags_dropdown_su_select_tag__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../tags/dropdown/su-select.tag */ "./tags/dropdown/su-select.tag");
+/* harmony import */ var _tags_dropdown_su_select_tag__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_tags_dropdown_su_select_tag__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _tags_loading_su_loading_tag__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../tags/loading/su-loading.tag */ "./tags/loading/su-loading.tag");
+/* harmony import */ var _tags_loading_su_loading_tag__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_tags_loading_su_loading_tag__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _tags_modal_su_modal_tag__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../tags/modal/su-modal.tag */ "./tags/modal/su-modal.tag");
+/* harmony import */ var _tags_modal_su_modal_tag__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_tags_modal_su_modal_tag__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _tags_pagination_su_pagination_tag__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../tags/pagination/su-pagination.tag */ "./tags/pagination/su-pagination.tag");
+/* harmony import */ var _tags_pagination_su_pagination_tag__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_tags_pagination_su_pagination_tag__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _tags_popup_su_popup_tag__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../tags/popup/su-popup.tag */ "./tags/popup/su-popup.tag");
+/* harmony import */ var _tags_popup_su_popup_tag__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_tags_popup_su_popup_tag__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _tags_progress_su_progress_tag__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../tags/progress/su-progress.tag */ "./tags/progress/su-progress.tag");
+/* harmony import */ var _tags_progress_su_progress_tag__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_tags_progress_su_progress_tag__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var _tags_radio_su_radio_group_tag__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../tags/radio/su-radio-group.tag */ "./tags/radio/su-radio-group.tag");
+/* harmony import */ var _tags_radio_su_radio_group_tag__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_tags_radio_su_radio_group_tag__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var _tags_radio_su_radio_tag__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../tags/radio/su-radio.tag */ "./tags/radio/su-radio.tag");
+/* harmony import */ var _tags_radio_su_radio_tag__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_tags_radio_su_radio_tag__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _tags_rating_su_rating_tag__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../tags/rating/su-rating.tag */ "./tags/rating/su-rating.tag");
+/* harmony import */ var _tags_rating_su_rating_tag__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_tags_rating_su_rating_tag__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var _tags_tab_su_tab_header_tag__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../tags/tab/su-tab-header.tag */ "./tags/tab/su-tab-header.tag");
+/* harmony import */ var _tags_tab_su_tab_header_tag__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(_tags_tab_su_tab_header_tag__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var _tags_tab_su_tab_title_tag__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../tags/tab/su-tab-title.tag */ "./tags/tab/su-tab-title.tag");
+/* harmony import */ var _tags_tab_su_tab_title_tag__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(_tags_tab_su_tab_title_tag__WEBPACK_IMPORTED_MODULE_18__);
+/* harmony import */ var _tags_tab_su_tab_tag__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../tags/tab/su-tab.tag */ "./tags/tab/su-tab.tag");
+/* harmony import */ var _tags_tab_su_tab_tag__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(_tags_tab_su_tab_tag__WEBPACK_IMPORTED_MODULE_19__);
+/* harmony import */ var _tags_tab_su_tabset_tag__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../tags/tab/su-tabset.tag */ "./tags/tab/su-tabset.tag");
+/* harmony import */ var _tags_tab_su_tabset_tag__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(_tags_tab_su_tabset_tag__WEBPACK_IMPORTED_MODULE_20__);
+/* harmony import */ var _tags_table_su_table_tag__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../tags/table/su-table.tag */ "./tags/table/su-table.tag");
+/* harmony import */ var _tags_table_su_table_tag__WEBPACK_IMPORTED_MODULE_21___default = /*#__PURE__*/__webpack_require__.n(_tags_table_su_table_tag__WEBPACK_IMPORTED_MODULE_21__);
+/* harmony import */ var _tags_table_su_th_tag__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../tags/table/su-th.tag */ "./tags/table/su-th.tag");
+/* harmony import */ var _tags_table_su_th_tag__WEBPACK_IMPORTED_MODULE_22___default = /*#__PURE__*/__webpack_require__.n(_tags_table_su_th_tag__WEBPACK_IMPORTED_MODULE_22__);
+/* harmony import */ var _tags_toast_su_toast_tag__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ../tags/toast/su-toast.tag */ "./tags/toast/su-toast.tag");
+/* harmony import */ var _tags_toast_su_toast_tag__WEBPACK_IMPORTED_MODULE_23___default = /*#__PURE__*/__webpack_require__.n(_tags_toast_su_toast_tag__WEBPACK_IMPORTED_MODULE_23__);
+/* harmony import */ var _tags_toast_su_toast_item_tag__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ../tags/toast/su-toast-item.tag */ "./tags/toast/su-toast-item.tag");
+/* harmony import */ var _tags_toast_su_toast_item_tag__WEBPACK_IMPORTED_MODULE_24___default = /*#__PURE__*/__webpack_require__.n(_tags_toast_su_toast_item_tag__WEBPACK_IMPORTED_MODULE_24__);
+/* harmony import */ var _tags_validation_error_su_validation_error_tag__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ../tags/validation-error/su-validation-error.tag */ "./tags/validation-error/su-validation-error.tag");
+/* harmony import */ var _tags_validation_error_su_validation_error_tag__WEBPACK_IMPORTED_MODULE_25___default = /*#__PURE__*/__webpack_require__.n(_tags_validation_error_su_validation_error_tag__WEBPACK_IMPORTED_MODULE_25__);
+/* harmony import */ var q__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! q */ "./node_modules/q/q.js");
+/* harmony import */ var q__WEBPACK_IMPORTED_MODULE_26___default = /*#__PURE__*/__webpack_require__.n(q__WEBPACK_IMPORTED_MODULE_26__);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* harmony default export */ function __WEBPACK_DEFAULT_EXPORT__(_options) {
+  options.locale = _options.locale;
+  options.pattern = _options.pattern;
+  options.alert = _options.alert;
+  options.confirm = _options.confirm;
+}
+var options = {};
+var obs = riot.observable();
+riot.mixin('semantic-ui', {
+  defaultOptions: options,
+  observable: obs,
+  Q: {
+    Promise: (q__WEBPACK_IMPORTED_MODULE_26___default().Promise)
+  }
+});
+})();
+
+/******/ 	return __webpack_exports__;
+/******/ })()
+;
 });
