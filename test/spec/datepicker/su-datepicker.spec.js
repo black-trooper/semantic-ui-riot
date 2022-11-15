@@ -23,7 +23,7 @@ describe('su-datepicker', function () {
           onclose="{ () => dispatch('close') }"
           onclick="{ () => dispatch('click') }"
           onchange="{ () => dispatch('change') }"
-          popup="{ props.popup }"
+          data-popup="{ props.popup }"
           current-date="{ props.currentDate }"
           value="{ value || props.value }"
           placeholder="{ props.placeholder }"

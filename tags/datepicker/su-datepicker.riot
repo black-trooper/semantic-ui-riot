@@ -1,6 +1,6 @@
 <su-datepicker value="{ state.value }" formated-value="{ state.formatedValue }" changed="{ changed }" id="{ su_id }">
-  <div class="ui { props.popup ? 'dropdown' : '' } { upward ? 'upward' : '' }">
-    <div class="ui action input { disabled }" if="{ props.popup }">
+  <div class="ui { popup ? 'dropdown' : '' } { upward ? 'upward' : '' }">
+    <div class="ui action input { disabled }" if="{ popup }">
       <input type="text" placeholder="{ props.placeholder }" onchange="{ onChangeInput }" tabindex="{ tabIndex }" readonly="{ readOnly }"
       />
       <button class="ui icon button { disabled }" onclick="{ toggle }" onblur="{ onBlur }" type="button">
@@ -247,7 +247,8 @@
     //                                                                           Lifecycle
     //                                                                           =========
     function onBeforeMount(props, state) {
-      state.transitionStatus = props.popup ? 'hidden' : 'visible'
+      this.popup = getPopup(this)
+      state.transitionStatus = this.popup ? 'hidden' : 'visible'
       this.weeks = []
       this.pattern = getPattern(this)
       this.locale = getLocale(this)
@@ -265,7 +266,7 @@
         state.value = format(copyDate(state.value), 'YYYY-MM-DD')
       }
       state.formatedValue = formatViewDate(this, state.value)
-      if (props.popup) {
+      if (this.popup) {
         this.$('input').value = state.formatedValue
       }
       this.lastValue = copyDate(state.value)
@@ -306,7 +307,7 @@
       }
       if (changed) {
         state.formatedValue = formatViewDate(this, state.value)
-        if (props.popup) {
+        if (this.popup) {
           this.$('input').value = state.formatedValue
         }
         parentUpdate(this)
@@ -459,7 +460,7 @@
     }
 
     function onBlur() {
-      if (this.props.popup && !this.itemActivated) {
+      if (this.popup && !this.itemActivated) {
         close(this)
         this.update()
       }
@@ -567,7 +568,7 @@
 
     function setDate(tag, date) {
       tag.state.value = date ? format(date, 'YYYY-MM-DD') : null
-      if (tag.props.popup && !tag.props.datetime) {
+      if (tag.popup && !tag.props.datetime) {
         tag.$('input').value = tag.state.value
         close(tag)
       }
@@ -632,7 +633,7 @@
     }
 
     function getTabindex(tag) {
-      if (!tag.props.popup) {
+      if (!tag.popup) {
         return false
       }
       if (tag.props.tabindex) {
@@ -658,6 +659,14 @@
       if (tag.defaultOptions && tag.defaultOptions.locale) {
         return tag.defaultOptions.locale
       }
+    }
+
+    function getPopup(tag) {
+      if (typeof tag.props.popup !== 'undefined') {
+        console.warn('\'popup\' attribute is deprecated. Please use \'data-popup\'.')
+        return tag.props.popup
+      }
+      return tag.props.dataPopup
     }
 
     function range(size, startAt = 0) {
