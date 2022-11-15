@@ -43,7 +43,7 @@ describe('su-datepicker', function () {
 
   it('opens/closes datepicker and triggers open/close event', function () {
     $('body').append('<su-datepicker />')
-    mount({ popup: true })
+    mount({ dataPopup: true })
     $('su-datepicker .menu').css('visibility').should.equal('hidden')
 
     fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
@@ -139,7 +139,7 @@ describe('su-datepicker', function () {
   it('popup datepicker', function () {
     $('body').append('<su-datepicker />')
     mount({
-      popup: true,
+      dataPopup: true,
       currentDate: new Date(2017, 11, 1)
     })
     $('su-datepicker .menu').css('visibility').should.equal('hidden')
@@ -161,7 +161,7 @@ describe('su-datepicker', function () {
   it('popup datepicker option', function () {
     $('body').append('<su-datepicker />')
     mount({
-      popup: true,
+      dataPopup: true,
       currentDate: new Date(2017, 11, 1),
       placeholder: 'YYYY/MM/DD',
       pattern: 'YYYY/MM/DD',
@@ -187,7 +187,7 @@ describe('su-datepicker', function () {
   it('popup datepicker default value', function () {
     $('body').append('<su-datepicker />')
     mount({
-      popup: true,
+      dataPopup: true,
       pattern: 'YYYY/MM/DD',
       value: '2017/12/01',
     })
@@ -196,7 +196,7 @@ describe('su-datepicker', function () {
 
   it('year first option', function () {
     $('body').append('<su-datepicker />')
-    mount({ currentDate: new Date(2017, 11, 1), popup: true, startMode: "year" })
+    mount({ currentDate: new Date(2017, 11, 1), dataPopup: true, startMode: "year" })
     tag.currentDate.getTime().should.equal(new Date(2017, 11, 1).getTime())
 
     fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
@@ -352,7 +352,7 @@ describe('su-datepicker', function () {
   it('popup datepicker update input value', function () {
     $('body').append('<su-datepicker />')
     mount({
-      popup: true,
+      dataPopup: true,
       pattern: 'YYYY/MM/DD',
       value: '2017/12/01',
     })
@@ -384,7 +384,7 @@ describe('su-datepicker', function () {
   it('popup datepicker clear input value', function () {
     $('body').append('<su-datepicker />')
     mount({
-      popup: true,
+      dataPopup: true,
       pattern: 'YYYY/MM/DD',
       value: '2017/12/01',
     })
@@ -412,7 +412,7 @@ describe('su-datepicker', function () {
   it('popup datepicker read-only option', function () {
     $('body').append('<su-datepicker class="read-only" />')
     mount({
-      popup: true
+      dataPopup: true
     })
     $('su-datepicker .menu').css('visibility').should.equal('hidden')
 
@@ -424,7 +424,7 @@ describe('su-datepicker', function () {
   it('today and clear event', function () {
     $('body').append('<su-datepicker />')
     mount({
-      popup: true
+      dataPopup: true
     })
     fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
     spyOnOpen.should.have.been.calledOnce
@@ -452,7 +452,7 @@ describe('su-datepicker', function () {
   it('upward', function () {
     $('body').append('<su-datepicker />')
     mount({
-      popup: true,
+      dataPopup: true,
       direction: 'upward'
     })
 
@@ -463,6 +463,18 @@ describe('su-datepicker', function () {
   })
 
   it('downward', function () {
+    $('body').append('<su-datepicker />')
+    mount({
+      dataPopup: true,
+      direction: 'downward'
+    })
+    $('su-datepicker').hasClass('upward').should.equal(false)
+
+    fireEvent($('su-datepicker button.ui.icon.button')[0], 'click')
+    $('su-datepicker .ui.dropdown').hasClass('upward').should.equal(false)
+  })
+
+  it('support traditional options', function () {
     $('body').append('<su-datepicker />')
     mount({
       popup: true,
@@ -592,3 +604,4 @@ describe('su-datepicker', function () {
     tag.changed().should.equal(false)
   })
 })
+

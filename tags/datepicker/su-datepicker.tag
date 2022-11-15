@@ -1,6 +1,6 @@
 <su-datepicker>
-  <div class="ui { dropdown:opts.popup } { upward: upward }">
-    <div class="ui action input { disabled: isDisabled() }" if="{ opts.popup }">
+  <div class="ui { dropdown:opts.dataPopup } { upward: upward }">
+    <div class="ui action input { disabled: isDisabled() }" if="{ opts.dataPopup }">
       <input type="text" placeholder="{ opts.placeholder }" ref="input" onchange="{ changeInput }" tabindex="{ getTabindex() }" readonly="{ isReadOnly() }" />
       <button class="ui icon button { disabled: isDisabled() }" onclick="{ toggle }" onblur="{ blur }" type="button">
         <i class="calendar icon"></i>
@@ -215,7 +215,7 @@
     //                                                                      ==============
     tag.currentDate = null
     tag.defaultValue = null
-    tag.transitionStatus = opts.popup ? 'hidden' : 'visible'
+    tag.transitionStatus = opts.dataPopup ? 'hidden' : 'visible'
     tag.value = null
     tag.valueAsDate = null
     tag.milliseconds = null
@@ -272,6 +272,8 @@
     //                                                                             Methods
     //                                                                             =======
     function onMount() {
+      supportTraditionalOptions()
+      tag.update()
       if (typeof opts.riotValue === 'undefined' && typeof opts.value !== 'undefined') {
         opts.riotValue = opts.value
       }
@@ -450,7 +452,7 @@
     }
 
     function blur() {
-      if (opts.popup && !itemActivated) {
+      if (opts.dataPopup && !itemActivated) {
         close()
       }
     }
@@ -627,7 +629,7 @@
     }
 
     function getTabindex() {
-      if (!opts.popup) {
+      if (!opts.dataPopup) {
         return false
       }
       if (opts.tabindex) {
@@ -664,6 +666,15 @@
 
     function range(size, startAt = 0) {
       return Array.from(Array(size).keys()).map((i) => i + startAt)
+    }
+
+    function supportTraditionalOptions() {
+      if (typeof opts.popup !== 'undefined') {
+        console.warn('\'popup\' attribute is deprecated. Please use \'data-popup\'.')
+        opts.dataPopup = opts.popup
+        opts.popup = undefined
+        tag.transitionStatus = opts.dataPopup ? 'hidden' : 'visible'
+      }
     }
   </script>
 </su-datepicker>
