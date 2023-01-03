@@ -55,7 +55,7 @@
     "@riotjs/cli": "^4.0.3",
     "@riotjs/compiler": "4.8.2",
     "@riotjs/observable": "^4.0.4",
-    "@riotjs/webpack-loader": "^4.0.3",
+    "@riotjs/webpack-loader": "^6.0.0",
     "babel-loader": "^8.1.0",
     "chai": "^4.1.2",
     "eslint": "^6.8.0",
@@ -66,15 +66,15 @@
     "karma-mocha-reporter": "^2.2.5",
     "karma-sinon-chai": "^2.0.2",
     "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^4.0.2",
+    "karma-webpack": "^5.0.0",
     "mocha": "^7.1.1",
     "npm-watch": "^0.11.0",
     "riot": "^4.11.0",
     "sinon": "^9.0.1",
     "sinon-chai": "^3.5.0",
     "uuid": "^7.0.2",
-    "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
     "webpack-date-fns-externals": "^1.0.2"
   }
 }
