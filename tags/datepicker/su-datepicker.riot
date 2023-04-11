@@ -38,48 +38,48 @@
                     onclick="{ () => clickDay(day) }" type="button">{day.getDate()}</button>
                 </div>
               </div>
-            </div>
-            <!-- footer -->
-            <div class="ui divider"></div>
-            <div class="ui two column grid">
-              <div class="column dp-clear">
-                <button class="ui icon fluid button { disabled }" onclick="{ clickClear }" type="button"><i class="times icon"></i></button>
+              <!-- footer -->
+              <div class="ui divider"></div>
+              <div class="ui two column grid">
+                <div class="column dp-clear">
+                  <button class="ui icon fluid button { disabled }" onclick="{ clickClear }" type="button"><i class="times icon"></i></button>
+                </div>
+                <div class="column dp-today">
+                  <button class="ui icon fluid button { disabled }" onclick="{ clickToday }" type="button"><i class="calendar check icon"></i></button>
+                </div>
               </div>
-              <div class="column dp-today">
-                <button class="ui icon fluid button { disabled }" onclick="{ clickToday }" type="button"><i class="calendar check icon"></i></button>
-              </div>
             </div>
-          </div>
-          <!-- time -->
-          <div class="six wide column" if="{ props.datetime }">
-            <div class="ui two column padded grid dp-time">
-              <div class="column" each="{ (hour, index) in state.hours }">
-                <button
+            <!-- time -->
+            <div class="six wide column" if="{ props.datetime }">
+              <div class="ui two column padded grid dp-time">
+                <div class="column" each="{ (hour, index) in state.hours }">
+                  <button
                   class="fluid ui  button { isNearlyTime(index) && ! isActiveTime(index) ? 'nearly-time' : '' } { isActiveTime(index) ? 'primary': '' } { disabled }"
                   onclick="{ clickHour }"
                   type="button">
                   { hour }
                 </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- month -->
-      <div if="{ monthSelecting }">
-        <div class="ui divider"></div>
-        <div class="ui four column padded grid dp-month">
-          <div each="{ month in state.months}" class="column">
-            <button class="fluid ui button { disabled }" onclick="{ () => clickMonth(month) }" type="button">{month.label}</button>
+        <!-- month -->
+        <div if="{ monthSelecting }">
+          <div class="ui divider"></div>
+          <div class="ui four column padded grid dp-month">
+            <div each="{ month in state.months}" class="column">
+              <button class="fluid ui button { disabled }" onclick="{ () => clickMonth(month) }" type="button">{month.label}</button>
+            </div>
           </div>
         </div>
-      </div>
-      <!-- year -->
-      <div if="{ yearSelecting }">
-        <div class="ui divider"></div>
-        <div class="ui four column padded grid dp-month">
-          <div each="{ year in state.years}" class="column">
-            <button class="fluid ui button { disabled }" onclick="{ () => clickYear(year) }" type="button">{year}</button>
+        <!-- year -->
+        <div if="{ yearSelecting }">
+          <div class="ui divider"></div>
+          <div class="ui four column padded grid dp-month">
+            <div each="{ year in state.years}" class="column">
+              <button class="fluid ui button { disabled }" onclick="{ () => clickYear(year) }" type="button">{year}</button>
+            </div>
           </div>
         </div>
       </div>
