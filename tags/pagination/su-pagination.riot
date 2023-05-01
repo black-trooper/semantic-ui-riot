@@ -40,7 +40,7 @@
       lastActivePage: null,
 
       onMounted,
-      onUpdated,
+      onBeforeUpdate,
       onClickPage,
     }
 
@@ -54,7 +54,7 @@
       })
     }
 
-    function onUpdated(props, state) {
+    function onBeforeUpdate(props, state) {
       let needsRegenerate = false
       if (props.activePage != this.lastpropsActivePage) {
         state.activePage = parseInt(props.activePage || 1)
