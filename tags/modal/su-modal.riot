@@ -5,11 +5,11 @@
         <i class="icon { header.icon }" if="{ header.icon }"></i>
         { title }
       </div>
-      <virtual if="{ modeless && !basic }">
+      <template if="{ modeless && !basic }">
         <i class="window minimize icon" if="{ minimizable }" onclick="{ onToggleMinimize }"></i>
         <i class="window restore icon" if="{ resizable && maximized }" onclick="{ onToggleSize }"></i>
         <i class="window maximize icon" if="{ resizable && !maximized }" onclick="{ onToggleSize }"></i>
-      </virtual>
+      </template>
       <i class="close icon" if="{ closable && !basic }" onclick="{ onClickHide }"></i>
       <div class="content { contentClass }">
         <slot />
