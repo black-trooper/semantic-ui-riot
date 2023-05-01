@@ -1,10 +1,12 @@
 <su-popup>
-  <div id="{ su_id }" onmouseover="{ onMouseOver }" onmouseout="{ onMouseOut }"
-    class="ui popup { state.position } { state.dataVariation } transition { state.transitionStatus } { state.nowrap }">
-    <div class="header" if="{props.dataTitle}">{props.dataTitle}</div>
-    <div class="content"></div>
+  <div class="su-popup-target" onmouseover="{ onMouseOver }" onmouseout="{ onMouseOut }">
+    <div id="{ su_id }"
+      class="ui popup { state.position } { state.dataVariation } transition { state.transitionStatus } { state.nowrap }">
+      <div class="header" if="{props.dataTitle}">{props.dataTitle}</div>
+      <div class="content"></div>
+    </div>
+    <slot />
   </div>
-  <slot />
 
   <style>
     :host {
@@ -183,7 +185,7 @@
       }
       else if (this.$('su-popup-content')) {
         state.content = this.$('su-popup-content').innerHTML
-        this.root.removeChild(this.$('su-popup-content'))
+        this.$('.su-popup-target').removeChild(this.$('su-popup-content'))
       }
       this.update()
       this.$('.content').innerHTML = state.content

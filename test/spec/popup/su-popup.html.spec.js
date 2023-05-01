@@ -15,8 +15,6 @@ describe('su-popup', function () {
           tooltip="{ props.tooltip }"
           data-title="{ props.dataTitle }"
           data-variation="{ props.dataVariation }"
-          onmouseover="{ () => dispatch('mouseover') }"
-          onmouseout="{ () => dispatch('mouseout') }"
         >
           <i class="add icon"></i>
           <su-popup-content>
