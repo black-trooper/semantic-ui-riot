@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+##  [2.4.2] - 2023-05-01
+
+### Fixed
+
+- Fixed an issue in su-modal where the icon was not displayed correctly in modeless mode
+- Fixed an issue in su-pagination where there was a problem with the initial display
+- Fixed an issue in su-popup where the popup was not displayed
+
+##  [2.4.1] - 2023-04-11
+
+### Added
+
+- Added ability to specify class for su-tab-header
+
+### Fixed
+
+- Fixed layout issue in su-datepicker
+
+##  [2.4.0] - 2022-11-15
+
+### Added
+
+- Support data-popup attribute on su-datepicker
+
 ##  [2.3.0] - 2022-05-24
 
 ### Added
