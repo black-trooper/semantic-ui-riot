@@ -1,4 +1,4 @@
-<su-datepicker value="{ state.value }" formated-value="{ state.formatedValue }" changed="{ changed }" id="{ su_id }">
+<su-datepicker value="{ state.value }" formatted-value="{ state.formattedValue }" changed="{ changed }" id="{ su_id }">
   <div class="ui { popup ? 'dropdown' : '' } { upward ? 'upward' : '' }">
     <div class="ui action input { disabled }" if="{ popup }">
       <input type="text" placeholder="{ props.placeholder }" onchange="{ onChangeInput }" tabindex="{ tabIndex }" readonly="{ readOnly }"
@@ -265,9 +265,9 @@
       if (state.value) {
         state.value = format(copyDate(state.value), 'YYYY-MM-DD')
       }
-      state.formatedValue = formatViewDate(this, state.value)
+      state.formattedValue = formatViewDate(this, state.value)
       if (this.popup) {
-        this.$('input').value = state.formatedValue
+        this.$('input').value = state.formattedValue
       }
       this.lastValue = copyDate(state.value)
       this.lastPropsValue = copyDate(props.value)
@@ -279,7 +279,7 @@
       if (!state.currentDate) {
         state.currentDate = new Date()
       }
-      state.months = getMonthes(this)
+      state.months = getMonths(this)
       if (props.yearRange && !isNaN(props.yearRange) && props.yearRange > 20) {
         this.yearRange = props.yearRange
       }
@@ -306,9 +306,9 @@
         changed = true
       }
       if (changed) {
-        state.formatedValue = formatViewDate(this, state.value)
+        state.formattedValue = formatViewDate(this, state.value)
         if (this.popup) {
-          this.$('input').value = state.formatedValue
+          this.$('input').value = state.formattedValue
         }
         parentUpdate(this)
       }
@@ -535,7 +535,7 @@
       return range(parseInt(tag.yearRange), startAt)
     }
 
-    function getMonthes(tag) {
+    function getMonths(tag) {
       return range(12).map(month => {
         return {
           label: format(new Date(2018, month, 1), 'MMM', {

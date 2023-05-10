@@ -294,21 +294,21 @@ describe('su-datepicker', function () {
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Dec')
     expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2017')
     expect(component.$('su-datepicker').getAttribute('value')).to.equal('2017-12-01')
-    expect(component.$('su-datepicker').getAttribute('formated-value')).to.equal('2017/12/01')
+    expect(component.$('su-datepicker').getAttribute('formatted-value')).to.equal('2017/12/01')
 
     component.value = "2018/01/01"
     component.update()
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
     expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2018')
     expect(component.$('su-datepicker').getAttribute('value')).to.equal('2018-01-01')
-    expect(component.$('su-datepicker').getAttribute('formated-value')).to.equal('2018/01/01')
+    expect(component.$('su-datepicker').getAttribute('formatted-value')).to.equal('2018/01/01')
 
     component.value = new Date(2018, 0, 2)
     component.update()
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
     expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2018')
     expect(component.$('su-datepicker').getAttribute('value')).to.equal('2018-01-02')
-    expect(component.$('su-datepicker').getAttribute('formated-value')).to.equal('2018/01/02')
+    expect(component.$('su-datepicker').getAttribute('formatted-value')).to.equal('2018/01/02')
   })
 
   // it('update value same day', function () {
@@ -339,21 +339,21 @@ describe('su-datepicker', function () {
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Dec')
     expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2017')
     expect(component.$('su-datepicker').getAttribute('value')).to.equal('2017-12-01')
-    expect(component.$('su-datepicker').getAttribute('formated-value')).to.equal('December 1, 2017')
+    expect(component.$('su-datepicker').getAttribute('formatted-value')).to.equal('December 1, 2017')
 
     component.value = "January 1, 2018"
     component.update()
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
     expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2018')
     expect(component.$('su-datepicker').getAttribute('value')).to.equal('2018-01-01')
-    expect(component.$('su-datepicker').getAttribute('formated-value')).to.equal('January 1, 2018')
+    expect(component.$('su-datepicker').getAttribute('formatted-value')).to.equal('January 1, 2018')
 
     component.value = new Date(2018, 0, 2)
     component.update()
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
     expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2018')
     expect(component.$('su-datepicker').getAttribute('value')).to.equal('2018-01-02')
-    expect(component.$('su-datepicker').getAttribute('formated-value')).to.equal('January 2, 2018')
+    expect(component.$('su-datepicker').getAttribute('formatted-value')).to.equal('January 2, 2018')
   })
 
   it('popup datepicker update input value', function () {
@@ -431,10 +431,7 @@ describe('su-datepicker', function () {
     fireEvent(component.$('.dp-today .button'), 'click')
     const today = new Date()
     expect(component.$('su-datepicker').getAttribute('value')).to.equal(`${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())}`)
-    expect(component.$('su-datepicker').getAttribute('formated-value')).to.equal(`${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())}`)
-    // tag.valueAsDate.getFullYear().to.equal(today.getFullYear())
-    // tag.valueAsDate.getMonth().to.equal(today.getMonth())
-    // tag.valueAsDate.getDate().to.equal(today.getDate())
+    expect(component.$('su-datepicker').getAttribute('formatted-value')).to.equal(`${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())}`)
     expect(spyOnClick).to.have.been.not.called
     expect(spyOnChange).to.have.been.calledOnce
     expect(spyOnClose).to.have.been.calledOnce
@@ -444,7 +441,7 @@ describe('su-datepicker', function () {
 
     fireEvent(component.$('.dp-clear .button'), 'click')
     expect(component.$('su-datepicker').getAttribute('value')).to.be.null
-    expect(component.$('su-datepicker').getAttribute('formated-value')).to.be.null
+    expect(component.$('su-datepicker').getAttribute('formatted-value')).to.be.null
     expect(spyOnClick).to.have.been.not.called
     expect(spyOnChange).to.have.been.calledTwice
     expect(spyOnClose).to.have.been.calledTwice
@@ -476,18 +473,18 @@ describe('su-datepicker', function () {
   it('reset value', function () {
     mount()
     expect(component.$('su-datepicker').getAttribute('value')).to.be.null
-    expect(component.$('su-datepicker').getAttribute('formated-value')).to.be.null
+    expect(component.$('su-datepicker').getAttribute('formatted-value')).to.be.null
     expect(component.$('su-datepicker').getAttribute('changed')).to.be.not.ok
 
     fireEvent(component.$('.dp-today .button'), 'click')
     const today = new Date()
     expect(component.$('su-datepicker').getAttribute('value')).to.equal(`${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())}`)
-    expect(component.$('su-datepicker').getAttribute('formated-value')).to.equal(`${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())}`)
+    expect(component.$('su-datepicker').getAttribute('formatted-value')).to.equal(`${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())}`)
     expect(component.$('su-datepicker').getAttribute('changed')).to.be.ok
 
     fireEvent(component.$('#reset'), 'click')
     expect(component.$('su-datepicker').getAttribute('value')).to.be.null
-    expect(component.$('su-datepicker').getAttribute('formated-value')).to.be.null
+    expect(component.$('su-datepicker').getAttribute('formatted-value')).to.be.null
     expect(component.$('su-datepicker').getAttribute('changed')).to.be.not.ok
   })
 
@@ -498,18 +495,18 @@ describe('su-datepicker', function () {
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
     expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2017')
     expect(component.$('su-datepicker').getAttribute('value')).to.equal('2017-01-01')
-    expect(component.$('su-datepicker').getAttribute('formated-value')).to.equal('2017-01-01')
+    expect(component.$('su-datepicker').getAttribute('formatted-value')).to.equal('2017-01-01')
     expect(component.$('su-datepicker').getAttribute('changed')).to.be.not.ok
 
     fireEvent(component.$('.dp-today .button'), 'click')
     const today = new Date()
     expect(component.$('su-datepicker').getAttribute('value')).to.equal(`${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())}`)
-    expect(component.$('su-datepicker').getAttribute('formated-value')).to.equal(`${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())}`)
+    expect(component.$('su-datepicker').getAttribute('formatted-value')).to.equal(`${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())}`)
     expect(component.$('su-datepicker').getAttribute('changed')).to.be.ok
 
     fireEvent(component.$('#reset'), 'click')
     expect(component.$('su-datepicker').getAttribute('value')).to.equal('2017-01-01')
-    expect(component.$('su-datepicker').getAttribute('formated-value')).to.equal('2017-01-01')
+    expect(component.$('su-datepicker').getAttribute('formatted-value')).to.equal('2017-01-01')
     expect(component.$('su-datepicker').getAttribute('changed')).to.be.not.ok
   })
 })
