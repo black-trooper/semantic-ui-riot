@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+##  [2.4.3] - 2023-05-10
+
+### Fixed
+
+- Fixed an issue in su-datepicker where the year and month could not be switched when a value was selected.
+- Fixed a typo in su-datepicker. It should be "formatted-value".
+
 ##  [2.4.2] - 2023-05-01
 
 ### Fixed
@@ -379,6 +386,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Add su-rating
 
+[2.4.3]: https://github.com/black-trooper/semantic-ui-riot/compare/v2.4.2...v2.4.3
+[2.4.2]: https://github.com/black-trooper/semantic-ui-riot/compare/v2.4.1...v2.4.2
+[2.4.1]: https://github.com/black-trooper/semantic-ui-riot/compare/v2.4.0...v2.4.1
+[2.4.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v2.3.0...v2.4.0
 [2.3.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v2.2.4...v2.3.0
 [2.2.4]: https://github.com/black-trooper/semantic-ui-riot/compare/v2.2.3...v2.2.4
 [2.2.3]: https://github.com/black-trooper/semantic-ui-riot/compare/v2.2.2...v2.2.3
