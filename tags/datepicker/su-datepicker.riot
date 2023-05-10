@@ -1,11 +1,10 @@
 <su-datepicker value="{ state.value }" formatted-value="{ state.formattedValue }" changed="{ changed }" id="{ su_id }">
   <div class="ui { popup ? 'dropdown' : '' } { upward ? 'upward' : '' }">
     <div class="ui action input { disabled }" if="{ popup }">
-      <input type="text" placeholder="{ props.placeholder }" onchange="{ onChangeInput }" tabindex="{ tabIndex }" readonly="{ readOnly }"
-      />
+      <input type="text" placeholder="{ props.placeholder }" onchange="{ onChangeInput }" tabindex="{ tabIndex }" readonly="{ readOnly }" />
       <button class="ui icon button { disabled }" onclick="{ toggle }" onblur="{ onBlur }" type="button">
-        <i class="calendar icon"></i>
-      </button>
+                <i class="calendar icon"></i>
+            </button>
     </div>
     <div class="menu transition { state.transitionStatus }" onmousedown="{ onMouseDown }" onmouseup="{ onMouseUp }"
       onblur="{ onBlur }" tabindex="{ tabIndex }">
@@ -13,13 +12,13 @@
         <!-- header -->
         <div class="ui buttons dp-navigation">
           <button class="icon tiny ui button { disabled } prev" onclick="{ clickPrevious }" type="button">
-            <i class="chevron left icon"></i>
-          </button>
+                        <i class="chevron left icon"></i>
+                    </button>
           <button class="ui button { disabled } month" onclick="{ selectMonth }" type="button">{ getCurrentMonthView() }</button>
           <button class="ui button { disabled } year" onclick="{ selectYear }" type="button">{ getCurrentYear() }</button>
           <button class="icon tiny ui button { disabled } next" onclick="{ clickNext }" type="button">
-            <i class="chevron right icon"></i>
-          </button>
+                        <i class="chevron right icon"></i>
+                    </button>
         </div>
         <!-- date -->
         <div if="{ !yearSelecting && !monthSelecting }">
@@ -34,8 +33,8 @@
               <div class="ui seven column padded grid dp-day">
                 <div each="{ day in state.days}" class="column">
                   <button
-                    class="fluid ui button { isToday(day) ? 'today' : ''  } { isActive(day) ? 'primary' : 'non-active' } { day.getMonth() != getCurrentMonth() || disabled ? 'disabled' : '' }"
-                    onclick="{ () => clickDay(day) }" type="button">{day.getDate()}</button>
+                                        class="fluid ui button { isToday(day) ? 'today' : ''  } { isActive(day) ? 'primary' : 'non-active' } { day.getMonth() != getCurrentMonth() || disabled ? 'disabled' : '' }"
+                                        onclick="{ () => clickDay(day) }" type="button">{day.getDate()}</button>
                 </div>
               </div>
               <!-- footer -->
@@ -54,11 +53,10 @@
               <div class="ui two column padded grid dp-time">
                 <div class="column" each="{ (hour, index) in state.hours }">
                   <button
-                  class="fluid ui  button { isNearlyTime(index) && ! isActiveTime(index) ? 'nearly-time' : '' } { isActiveTime(index) ? 'primary': '' } { disabled }"
-                  onclick="{ clickHour }"
-                  type="button">
-                  { hour }
-                </button>
+                                        class="fluid ui  button { isNearlyTime(index) && ! isActiveTime(index) ? 'nearly-time' : '' } { isActiveTime(index) ? 'primary': '' } { disabled }"
+                                        onclick="{ clickHour }" type="button">
+                                        { hour }
+                                    </button>
                 </div>
               </div>
             </div>
@@ -185,13 +183,16 @@
       addMonths,
       differenceInMilliseconds,
       format,
+      isDate,
       isSameDay,
       isSameHour,
       isSameMinute,
       isToday,
       parse,
+      parseISO,
       startOfDay,
       startOfMonth,
+      toDate,
     } from 'date-fns'
 
     export default {
@@ -260,21 +261,21 @@
 
     function onMounted(props, state) {
       if (!state.value) {
-        state.value = copyDate(props.value)
+        state.value = copyDate(props.value, this.pattern)
       }
       if (state.value) {
-        state.value = format(copyDate(state.value), 'YYYY-MM-DD')
+        state.value = format(copyDate(state.value, this.pattern), 'yyyy-MM-dd')
       }
       state.formattedValue = formatViewDate(this, state.value)
       if (this.popup) {
         this.$('input').value = state.formattedValue
       }
-      this.lastValue = copyDate(state.value)
-      this.lastPropsValue = copyDate(props.value)
+      this.lastValue = copyDate(state.value, this.pattern)
+      this.lastPropsValue = copyDate(props.value, this.pattern)
 
-      state.currentDate = copyDate(props.currentDate)
+      state.currentDate = copyDate(props.currentDate, this.pattern)
       if (state.value) {
-        state.currentDate = copyDate(state.value)
+        state.currentDate = copyDate(state.value, this.pattern)
       }
       if (!state.currentDate) {
         state.currentDate = new Date()
@@ -297,12 +298,12 @@
 
       let changed = false
       if (!isEqualDatetime(this.lastValue, state.value)) {
-        this.lastValue = copyDate(state.value)
+        this.lastValue = copyDate(state.value, 'yyyy-MM-dd')
         changed = true
-      } else if (this.lastPropsValue !== props.value) {
-        state.value = props.value ? format(copyDate(props.value), 'YYYY-MM-DD') : null
-        this.lastPropsValue = copyDate(props.value)
-        this.lastValue = copyDate(props.value)
+      } else if (!isEqualDatetime(this.lastPropsValue, props.value)) {
+        state.value = props.value ? format(copyDate(props.value, this.pattern), 'yyyy-MM-dd') : null
+        this.lastPropsValue = copyDate(props.value, this.pattern)
+        this.lastValue = copyDate(props.value, this.pattern)
         changed = true
       }
       if (changed) {
@@ -314,14 +315,14 @@
       }
 
       if (changed && state.value) {
-        state.currentDate = copyDate(state.value)
+        state.currentDate = copyDate(state.value, 'yyyy-MM-dd')
       }
       if (!isEqualDatetime(this.lastPropsCurrentDate, props.currentDate)) {
-        state.currentDate = copyDate(props.currentDate)
-        this.lastPropsCurrentDate = copyDate(props.currentDate)
+        state.currentDate = copyDate(props.currentDate, this.pattern)
+        this.lastPropsCurrentDate = copyDate(props.currentDate, this.pattern)
       }
       if (!isEqualDatetime(this.lastCurrentDate, state.currentDate)) {
-        this.lastCurrentDate = copyDate(state.currentDate)
+        this.lastCurrentDate = copyDate(state.currentDate, this.pattern)
         generate(this)
       }
       this.changed = !isEqualDatetime(state.value, state.defaultValue)
@@ -467,7 +468,7 @@
     }
 
     function onChangeInput() {
-      const value = this.$('input').value ? parse(this.$('input').value.replace(/\//g, '-')) : ''
+      const value = this.$('input').value ? parseISO(this.$('input').value.replace(/\//g, '-')) : ''
       if (value != 'Invalid Date') {
         setDate(this, value)
       } else {
@@ -496,7 +497,7 @@
     }
 
     function isActive(date) {
-      return isEqualDay(this.state.value, date)
+      return isEqualDay(parseISO(this.state.value), date)
     }
 
     function isActiveTime(index) {
@@ -550,9 +551,9 @@
       tag.upward = isUpward(tag)
       tag.state.transitionStatus = 'visible'
       tag.visibleFlg = true
-      tag.state.currentDate = copyDate(tag.props.currentDate)
+      tag.state.currentDate = copyDate(tag.props.currentDate, tag.pattern)
       if (tag.state.value) {
-        tag.state.currentDate = copyDate(tag.state.value)
+        tag.state.currentDate = copyDate(tag.state.value, tag.pattern)
       }
       if (!tag.state.currentDate) {
         tag.state.currentDate = new Date()
@@ -567,7 +568,7 @@
     }
 
     function setDate(tag, date) {
-      tag.state.value = date ? format(date, 'YYYY-MM-DD') : null
+      tag.state.value = date ? format(date, 'yyyy-MM-dd') : null
       if (tag.popup && !tag.props.datetime) {
         tag.$('input').value = tag.state.value
         close(tag)
@@ -586,6 +587,8 @@
       if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
         return false
       }
+      d1 = copyDate(d1, 'yyyy-MM-dd')
+      d2 = copyDate(d2, 'yyyy-MM-dd')
       return isSameDay(d1, d2)
     }
 
@@ -596,14 +599,19 @@
       if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
         return false
       }
+      d1 = copyDate(d1, 'yyyy-MM-dd')
+      d2 = copyDate(d2, 'yyyy-MM-dd')
       return isSameHour(d1, d2) && isSameMinute(d1, d2)
     }
 
-    function copyDate(date) {
+    function copyDate(date, pattern) {
       if (!date) {
         return date
       }
-      return parse(date)
+      if (isDate(date)) {
+        return toDate(date)
+      }
+      return parse(date, pattern, new Date())
     }
 
     function isUpward(tag) {
@@ -629,7 +637,7 @@
     }
 
     function getWeekNames(tag) {
-      return range(7, 1).map(day => format(new Date(2018, 6, day), 'dd', { locale: tag.locale }))
+      return range(7, 1).map(day => format(new Date(2018, 6, day), 'eee', { locale: tag.locale }))
     }
 
     function getTabindex(tag) {
@@ -649,7 +657,7 @@
       if (tag.defaultOptions && tag.defaultOptions.pattern) {
         return tag.defaultOptions.pattern
       }
-      return tag.props.datetime ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD'
+      return tag.props.datetime ? 'yyyy-MM-dd HH:mm:ss' : 'yyyy-MM-dd'
     }
 
     function getLocale(tag) {
@@ -662,10 +670,6 @@
     }
 
     function getPopup(tag) {
-      if (typeof tag.props.popup !== 'undefined') {
-        console.warn('\'popup\' attribute is deprecated. Please use \'data-popup\'.')
-        return tag.props.popup
-      }
       return tag.props.dataPopup
     }
 
@@ -674,7 +678,7 @@
     }
 
     function formatViewDate(tag, value) {
-      const viewDate = copyDate(value)
+      const viewDate = copyDate(value, 'yyyy-MM-dd')
       return viewDate ? format(viewDate, tag.pattern, { locale: tag.locale }) : null
     }
 

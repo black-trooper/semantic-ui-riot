@@ -43,7 +43,7 @@
     "url": "https://github.com/black-trooper/semantic-ui-riot/issues"
   },
   "dependencies": {
-    "date-fns": "^1.29.0",
+    "date-fns": "^2.30.0",
     "q": "^1.5.1"
   },
   "peerDependencies": {

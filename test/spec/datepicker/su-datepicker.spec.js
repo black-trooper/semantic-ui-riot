@@ -1,6 +1,7 @@
 import * as riot from 'riot'
 import { init, compile } from '../../helpers/'
 import TargetComponent from '../../../dist/tags/datepicker/su-datepicker.js'
+import locale from 'date-fns/locale/ja'
 
 describe('su-datepicker', function () {
   let element, component
@@ -167,15 +168,15 @@ describe('su-datepicker', function () {
     expect(component.$('.dp-month .button').innerText).to.be.equal('2008')
 
     fireEvent(component.$('.dp-navigation .next'), 'click')
-    // expect(component.$('.dp-month .button').innerText).to.be.equal('2028')
+    expect(component.$('.dp-month .button').innerText).to.be.equal('2028')
 
-    // fireEvent(component.$('.dp-navigation .prev'), 'click')
-    // expect(component.$('.dp-month .button').innerText).to.be.equal('2008')
+    fireEvent(component.$('.dp-navigation .prev'), 'click')
+    expect(component.$('.dp-month .button').innerText).to.be.equal('2008')
 
-    // fireEvent(component.$('.dp-month .button'), 'click')
+    fireEvent(component.$('.dp-month .button'), 'click')
 
-    // expect(component.$('.dp-day')).to.be.undefined
-    // expect(component.$$('.dp-month .button').length).to.be.equal(12)
+    expect(component.$('.dp-day')).to.be.undefined
+    expect(component.$$('.dp-month .button').length).to.be.equal(12)
   })
 
   it('popup datepicker', function () {
@@ -203,9 +204,9 @@ describe('su-datepicker', function () {
     mount({
       popup: true,
       currentDate: new Date(2017, 11, 1),
-      placeholder: 'YYYY/MM/DD',
-      pattern: 'YYYY/MM/DD',
-      locale: require('date-fns/locale/ja'),
+      placeholder: 'yyyy/MM/dd',
+      pattern: 'yyyy/MM/dd',
+      locale,
       tabindex: 10
     })
     expect(component.$('.menu').classList.contains('hidden')).to.be.ok
@@ -215,7 +216,7 @@ describe('su-datepicker', function () {
     fireEvent(component.$('button.ui.icon.button'), 'click')
     expect(spyOnOpen).to.have.been.calledOnce
     expect(component.$('.menu').classList.contains('visible')).to.be.ok
-    expect(component.$('input').getAttribute('placeholder')).to.equal('YYYY/MM/DD')
+    expect(component.$('input').getAttribute('placeholder')).to.equal('yyyy/MM/dd')
     expect(component.$('input').getAttribute('tabindex')).to.equal('10')
 
     fireEvent(component.$$('.dp-day .ui.button')[5], 'click')
@@ -227,7 +228,7 @@ describe('su-datepicker', function () {
   it('popup datepicker default value', function () {
     mount({
       popup: true,
-      pattern: 'YYYY/MM/DD',
+      pattern: 'yyyy/MM/dd',
       value: '2017/12/01',
     })
     expect(component.$('input').value).to.equal('2017/12/01')
@@ -287,7 +288,7 @@ describe('su-datepicker', function () {
 
   it('update value', function () {
     mount({
-      pattern: 'YYYY/MM/DD',
+      pattern: 'yyyy/MM/dd',
       value: new Date(2017, 11, 1)
     })
 
@@ -311,28 +312,9 @@ describe('su-datepicker', function () {
     expect(component.$('su-datepicker').getAttribute('formatted-value')).to.equal('2018/01/02')
   })
 
-  // it('update value same day', function () {
-  //   mount({
-  //     pattern: 'YYYY/MM/DD',
-  //     value: new Date(2018, 0, 1)
-  //   })
-
-  //   expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
-  //   expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2018')
-  //   expect(component.$('su-datepicker').getAttribute('value')).to.equal('2018-01-01')
-  //   expect(component.$('su-datepicker').getAttribute('formated-value')).to.equal('2018/01/01')
-
-  //   component.value = "2018/01/01"
-  //   component.update()
-  //   expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
-  //   expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2018')
-  //   expect(component.$('su-datepicker').getAttribute('value')).to.equal('2018-01-01')
-  //   expect(component.$('su-datepicker').getAttribute('formated-value')).to.equal('2018/01/01')
-  // })
-
   it('update value with pattern', function () {
     mount({
-      pattern: 'MMMM D, YYYY',
+      pattern: 'MMMM d, yyyy',
       value: new Date(2017, 11, 1)
     })
 
@@ -359,7 +341,7 @@ describe('su-datepicker', function () {
   it('popup datepicker update input value', function () {
     mount({
       popup: true,
-      pattern: 'YYYY/MM/DD',
+      pattern: 'yyyy/MM/dd',
       value: '2017/12/01',
     })
     component.$('input').value = '2017/12/02'
@@ -368,23 +350,17 @@ describe('su-datepicker', function () {
     expect(component.$('input').value).to.equal('2017/12/02')
     expect(spyOnChange).to.have.been.calledOnce
 
-    component.$('input').value = '2017-12-00'
+    component.$('input').value = '2017-11-30'
     fireEvent(component.$('input'), 'change')
     expect(component.$('su-datepicker').getAttribute('value')).to.equal('2017-11-30')
     expect(component.$('input').value).to.equal('2017/11/30')
     expect(spyOnChange).to.have.been.calledTwice
-
-    component.$('input').value = '2017/11/00'
-    fireEvent(component.$('input'), 'change')
-    expect(component.$('su-datepicker').getAttribute('value')).to.equal('2017-10-31')
-    expect(component.$('input').value).to.equal('2017/10/31')
-    expect(spyOnChange).to.have.been.callCount(3)
   })
 
   it('popup datepicker clear input value', function () {
     mount({
       popup: true,
-      pattern: 'YYYY/MM/DD',
+      pattern: 'yyyy/MM/dd',
       value: '2017/12/01',
     })
     component.$('input').value = ''
