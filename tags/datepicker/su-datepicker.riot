@@ -188,7 +188,6 @@
       isSameHour,
       isSameMinute,
       isToday,
-      parse,
       parseISO,
       startOfDay,
       startOfMonth,
@@ -261,23 +260,18 @@
 
     function onMounted(props, state) {
       if (!state.value) {
-        state.value = copyDate(props.value, this.pattern)
+        state.value = props.value
       }
-      if (state.value) {
-        state.value = format(copyDate(state.value, this.pattern), 'yyyy-MM-dd')
-      }
-      state.formattedValue = formatViewDate(this, state.value)
+      state.formattedValue = formatViewDate(this)
       if (this.popup) {
         this.$('input').value = state.formattedValue
       }
-      this.lastValue = copyDate(state.value, this.pattern)
-      this.lastPropsValue = copyDate(props.value, this.pattern)
+      this.lastValue = state.value
+      this.lastPropsValue = props.value
 
-      state.currentDate = copyDate(props.currentDate, this.pattern)
-      if (state.value) {
-        state.currentDate = copyDate(state.value, this.pattern)
-      }
-      if (!state.currentDate) {
+      if (state.value || props.currentDate) {
+        state.currentDate = parseISO(state.value || props.currentDate)
+      } else {
         state.currentDate = new Date()
       }
       state.months = getMonths(this)
@@ -298,16 +292,16 @@
 
       let changed = false
       if (!isEqualDatetime(this.lastValue, state.value)) {
-        this.lastValue = copyDate(state.value, 'yyyy-MM-dd')
+        this.lastValue = state.value
         changed = true
       } else if (!isEqualDatetime(this.lastPropsValue, props.value)) {
-        state.value = props.value ? format(copyDate(props.value, this.pattern), 'yyyy-MM-dd') : null
-        this.lastPropsValue = copyDate(props.value, this.pattern)
-        this.lastValue = copyDate(props.value, this.pattern)
+        state.value = props.value
+        this.lastPropsValue = props.value
+        this.lastValue = props.value
         changed = true
       }
       if (changed) {
-        state.formattedValue = formatViewDate(this, state.value)
+        state.formattedValue = formatViewDate(this)
         if (this.popup) {
           this.$('input').value = state.formattedValue
         }
@@ -315,14 +309,14 @@
       }
 
       if (changed && state.value) {
-        state.currentDate = copyDate(state.value, 'yyyy-MM-dd')
+        state.currentDate = parseISO(state.value)
       }
       if (!isEqualDatetime(this.lastPropsCurrentDate, props.currentDate)) {
-        state.currentDate = copyDate(props.currentDate, this.pattern)
-        this.lastPropsCurrentDate = copyDate(props.currentDate, this.pattern)
+        state.currentDate = parseISO(props.currentDate)
+        this.lastPropsCurrentDate = props.currentDate
       }
       if (!isEqualDatetime(this.lastCurrentDate, state.currentDate)) {
-        this.lastCurrentDate = copyDate(state.currentDate, this.pattern)
+        this.lastCurrentDate = toDate(state.currentDate)
         generate(this)
       }
       this.changed = !isEqualDatetime(state.value, state.defaultValue)
@@ -519,6 +513,11 @@
     // ===================================================================================
     //                                                                               Logic
     //                                                                               =====
+    function formatViewDate(tag) {
+      const viewDate = tag.state.value
+      return viewDate ? format(parseISO(viewDate), tag.pattern, { locale: tag.locale }) : null
+    }
+
     function generate(tag) {
       const startDate = startOfMonth(tag.state.currentDate)
       const baseDate = addDays(startDate, - startDate.getDay())
@@ -551,11 +550,9 @@
       tag.upward = isUpward(tag)
       tag.state.transitionStatus = 'visible'
       tag.visibleFlg = true
-      tag.state.currentDate = copyDate(tag.props.currentDate, tag.pattern)
-      if (tag.state.value) {
-        tag.state.currentDate = copyDate(tag.state.value, tag.pattern)
-      }
-      if (!tag.state.currentDate) {
+      if (tag.state.value || tag.props.currentDate) {
+        tag.state.currentDate = parseISO(tag.state.value || tag.props.currentDate)
+      } else {
         tag.state.currentDate = new Date()
       }
       tag.dispatch('open', tag.state.value)
@@ -584,11 +581,11 @@
       if (d1 == d2) {
         return true
       }
-      if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
+      if (!d1 || !d2) {
         return false
       }
-      d1 = copyDate(d1, 'yyyy-MM-dd')
-      d2 = copyDate(d2, 'yyyy-MM-dd')
+      d1 = parse(d1)
+      d2 = parse(d2)
       return isSameDay(d1, d2)
     }
 
@@ -596,22 +593,22 @@
       if (d1 == d2) {
         return true
       }
-      if (typeof d1 === 'undefined' || typeof d2 === 'undefined' || d1 === null || d2 === null) {
+      if (!d1 || !d2) {
         return false
       }
-      d1 = copyDate(d1, 'yyyy-MM-dd')
-      d2 = copyDate(d2, 'yyyy-MM-dd')
+      d1 = parse(d1)
+      d2 = parse(d2)
       return isSameHour(d1, d2) && isSameMinute(d1, d2)
     }
 
-    function copyDate(date, pattern) {
+    function parse(date) {
       if (!date) {
         return date
       }
       if (isDate(date)) {
         return toDate(date)
       }
-      return parse(date, pattern, new Date())
+      return parseISO(date)
     }
 
     function isUpward(tag) {
@@ -675,11 +672,6 @@
 
     function range(size, startAt = 0) {
       return Array.from(Array(size).keys()).map(i => i + startAt)
-    }
-
-    function formatViewDate(tag, value) {
-      const viewDate = copyDate(value, 'yyyy-MM-dd')
-      return viewDate ? format(viewDate, tag.pattern, { locale: tag.locale }) : null
     }
 
     function parentUpdate(tag) {

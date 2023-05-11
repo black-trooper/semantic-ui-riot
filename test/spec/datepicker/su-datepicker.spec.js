@@ -116,7 +116,7 @@ describe('su-datepicker', function () {
 
   it('select month event', function () {
     mount({
-      currentDate: new Date(2017, 11, 1)
+      currentDate: '2017-12-01'
     })
     expect(component.$('.dp-navigation .year').innerText).to.equal('2017')
     expect(component.$('.dp-navigation .month').innerText).to.equal('Dec')
@@ -136,7 +136,7 @@ describe('su-datepicker', function () {
 
   it('next/prev month event', function () {
     mount({
-      currentDate: new Date(2017, 11, 1)
+      currentDate: '2017-12-01'
     })
     expect(component.$('.dp-day .button').innerText).to.be.equal('26')
     expect(component.$('.dp-navigation .year').innerText).to.equal('2017')
@@ -157,7 +157,7 @@ describe('su-datepicker', function () {
 
   it('select year event', function () {
     mount({
-      currentDate: new Date(2017, 11, 1)
+      currentDate: '2017-12-01'
     })
     expect(component.$('.dp-navigation .year').innerText).to.equal('2017')
     expect(component.$('.dp-navigation .month').innerText).to.equal('Dec')
@@ -182,7 +182,7 @@ describe('su-datepicker', function () {
   it('popup datepicker', function () {
     mount({
       popup: true,
-      currentDate: new Date(2017, 11, 1)
+      currentDate: '2017-12-01'
     })
     expect(component.$('.menu').classList.contains('hidden')).to.be.ok
 
@@ -195,7 +195,7 @@ describe('su-datepicker', function () {
     expect(component.$('.menu').classList.contains('hidden')).to.be.ok
     expect(component.$('input').value).to.equal('2017-12-01')
 
-    component.value = new Date(2018, 11, 1)
+    component.value = '2018-12-01'
     component.update()
     expect(component.$('input').value).to.equal('2018-12-01')
   })
@@ -203,7 +203,7 @@ describe('su-datepicker', function () {
   it('popup datepicker option', function () {
     mount({
       popup: true,
-      currentDate: new Date(2017, 11, 1),
+      currentDate: '2017-12-01',
       placeholder: 'yyyy/MM/dd',
       pattern: 'yyyy/MM/dd',
       locale,
@@ -229,13 +229,13 @@ describe('su-datepicker', function () {
     mount({
       popup: true,
       pattern: 'yyyy/MM/dd',
-      value: '2017/12/01',
+      value: '2017-12-01',
     })
     expect(component.$('input').value).to.equal('2017/12/01')
   })
 
   it('year first option', function () {
-    mount({ currentDate: new Date(2017, 11, 1), popup: true, startMode: "year" })
+    mount({ currentDate: '2017-12-01', popup: true, startMode: "year" })
     expect(component.$('.dp-navigation .year').innerText).to.equal('2017')
     expect(component.$('.dp-navigation .month').innerText).to.equal('Dec')
 
@@ -264,7 +264,7 @@ describe('su-datepicker', function () {
   })
 
   it('year range option', function () {
-    mount({ currentDate: new Date(2017, 11, 1), startMode: "year", yearRange: "40" })
+    mount({ currentDate: '2017-12-01', startMode: "year", yearRange: "40" })
     expect(component.$('.dp-navigation .year').innerText).to.equal('2017')
     expect(component.$('.dp-navigation .month').innerText).to.equal('Dec')
 
@@ -289,7 +289,7 @@ describe('su-datepicker', function () {
   it('update value', function () {
     mount({
       pattern: 'yyyy/MM/dd',
-      value: new Date(2017, 11, 1)
+      value: '2017-12-01'
     })
 
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Dec')
@@ -297,14 +297,14 @@ describe('su-datepicker', function () {
     expect(component.$('su-datepicker').getAttribute('value')).to.equal('2017-12-01')
     expect(component.$('su-datepicker').getAttribute('formatted-value')).to.equal('2017/12/01')
 
-    component.value = "2018/01/01"
+    component.value = "2018-01-01"
     component.update()
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
     expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2018')
     expect(component.$('su-datepicker').getAttribute('value')).to.equal('2018-01-01')
     expect(component.$('su-datepicker').getAttribute('formatted-value')).to.equal('2018/01/01')
 
-    component.value = new Date(2018, 0, 2)
+    component.value = '2018-01-02'
     component.update()
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
     expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2018')
@@ -315,7 +315,7 @@ describe('su-datepicker', function () {
   it('update value with pattern', function () {
     mount({
       pattern: 'MMMM d, yyyy',
-      value: new Date(2017, 11, 1)
+      value: '2017-12-01'
     })
 
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Dec')
@@ -323,14 +323,14 @@ describe('su-datepicker', function () {
     expect(component.$('su-datepicker').getAttribute('value')).to.equal('2017-12-01')
     expect(component.$('su-datepicker').getAttribute('formatted-value')).to.equal('December 1, 2017')
 
-    component.value = "January 1, 2018"
+    component.value = "2018-01-01"
     component.update()
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
     expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2018')
     expect(component.$('su-datepicker').getAttribute('value')).to.equal('2018-01-01')
     expect(component.$('su-datepicker').getAttribute('formatted-value')).to.equal('January 1, 2018')
 
-    component.value = new Date(2018, 0, 2)
+    component.value = '2018-01-02'
     component.update()
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
     expect(component.$('.dp-navigation .year').innerText.trim()).to.equal('2018')
@@ -342,7 +342,7 @@ describe('su-datepicker', function () {
     mount({
       popup: true,
       pattern: 'yyyy/MM/dd',
-      value: '2017/12/01',
+      value: '2017-12-01',
     })
     component.$('input').value = '2017/12/02'
     fireEvent(component.$('input'), 'change')
@@ -361,7 +361,7 @@ describe('su-datepicker', function () {
     mount({
       popup: true,
       pattern: 'yyyy/MM/dd',
-      value: '2017/12/01',
+      value: '2017-12-01',
     })
     component.$('input').value = ''
     fireEvent(component.$('input'), 'change')
@@ -465,7 +465,7 @@ describe('su-datepicker', function () {
   })
 
   it('reset default value', function () {
-    const date = new Date(2017, 0, 1)
+    const date = '2017-01-01'
     mount({ value: date })
 
     expect(component.$('.dp-navigation .month').innerText.trim()).to.equal('Jan')
