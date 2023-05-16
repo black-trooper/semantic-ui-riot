@@ -11,7 +11,7 @@
       headers: [],
       onBeforeMount,
       onMounted,
-      onUpdated,
+      onBeforeUpdate,
     }
 
     // ===================================================================================
@@ -40,7 +40,7 @@
       this.update()
     }
 
-    function onUpdated(props, state) {
+    function onBeforeUpdate(props, state) {
       if (JSON.stringify(this.lastData) != JSON.stringify(props.data)) {
         this.lastData = props.data
         this.lastCondition = {
