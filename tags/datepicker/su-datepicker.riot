@@ -462,7 +462,7 @@
     }
 
     function onChangeInput() {
-      const value = this.$('input').value ? parseISO(this.$('input').value.replace(/\//g, '-')) : ''
+      const value = this.$('input').value ? parse(this.$('input').value) : ''
       if (value != 'Invalid Date') {
         setDate(this, value)
       } else {
@@ -608,7 +608,11 @@
       if (isDate(date)) {
         return toDate(date)
       }
-      return parseISO(date)
+      const parsed = parseISO(date)
+      if (parsed != 'Invalid Date') {
+        return parsed
+      }
+      return new Date(date)
     }
 
     function isUpward(tag) {
