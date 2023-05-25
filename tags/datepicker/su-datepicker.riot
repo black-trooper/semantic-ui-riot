@@ -300,11 +300,11 @@
         this.lastValue = props.value
         changed = true
       }
+      state.formattedValue = formatViewDate(this)
+      if (this.popup) {
+        this.$('input').value = state.formattedValue
+      }
       if (changed) {
-        state.formattedValue = formatViewDate(this)
-        if (this.popup) {
-          this.$('input').value = state.formattedValue
-        }
         parentUpdate(this)
       }
 
