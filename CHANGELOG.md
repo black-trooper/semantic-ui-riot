@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+##  [2.5.3] - 2023-07-19
+
+### Fixed
+- Fixed an issue where setting a class on su-tab did not apply the su-tabset class.
+
 ##  [2.5.2] - 2023-05-25
 
 ### Changed
@@ -404,6 +409,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Add su-rating
 
+[2.5.3]: https://github.com/black-trooper/semantic-ui-riot/compare/v2.5.2...v2.5.3
+[2.5.2]: https://github.com/black-trooper/semantic-ui-riot/compare/v2.5.1...v2.5.2
 [2.5.1]: https://github.com/black-trooper/semantic-ui-riot/compare/v2.5.0...v2.5.1
 [2.5.0]: https://github.com/black-trooper/semantic-ui-riot/compare/v2.4.2...v2.5.0
 [2.4.2]: https://github.com/black-trooper/semantic-ui-riot/compare/v2.4.1...v2.4.2

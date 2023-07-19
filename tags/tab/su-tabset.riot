@@ -143,11 +143,6 @@
       if (!tag.props.lazyMount) {
         tag.obs.trigger(`${tab.id}-mount`)
       }
-      if (Array.from(tab.classList.values()).some(clazz => {
-        return clazz != 'ui' && clazz != 'tab' && clazz != 'active'
-      })) {
-        return
-      }
       let classList = hasClass(tag, 'no-segment') ? [] : ['segment']
       if (hasClass(tag, 'tabular')) {
         classList.push('tabular')

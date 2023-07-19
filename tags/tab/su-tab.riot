@@ -1,7 +1,7 @@
-<su-tab class="ui { state.classes } { state.active ? 'active' : '' } tab" id="{ su_id }">
-  <span if="{ state.mounted }">
+<su-tab class="ui { state.tabset_classes } { state.classes } { state.active ? 'active' : '' } tab" id="{ su_id }">
+  <template if="{ state.mounted }">
     <slot />
-  </span>
+  </template>
 
   <style>
     :host.ui.segment {
@@ -45,9 +45,9 @@
           active
         })
       })
-      this.obs.on(`${this.su_id}-add-class`, classes => {
+      this.obs.on(`${this.su_id}-add-class`, clazz => {
         this.update({
-          classes
+          tabset_classes: clazz
         })
       })
       this.obs.on(`${this.su_id}-mount`, () => {

@@ -41,15 +41,15 @@ describe('su-tabset-options', function () {
     mount(`
       <app>
         <su-tabset>
-          <su-tab label="Home" class="none">Home content</su-tab>
-          <su-tab label="Message" class="none">Messages content</su-tab>
+          <su-tab label="Home">Home content</su-tab>
+          <su-tab label="Message" class="disabled">Messages content</su-tab>
         </su-tabset>
       </app>`)
 
-    expect(component.$$('su-tab')[0].classList.contains('none')).to.equal(true)
-    expect(component.$$('su-tab')[0].classList.contains('segment')).to.equal(false)
-    expect(component.$$('su-tab')[1].classList.contains('none')).to.equal(true)
-    expect(component.$$('su-tab')[1].classList.contains('segment')).to.equal(false)
+    expect(component.$$('su-tab')[0].classList.contains('disabled')).to.equal(false)
+    expect(component.$$('su-tab')[0].classList.contains('segment')).to.equal(true)
+    expect(component.$$('su-tab')[1].classList.contains('disabled')).to.equal(true)
+    expect(component.$$('su-tab')[1].classList.contains('segment')).to.equal(true)
   })
 
   it('no segment', function () {
@@ -71,7 +71,7 @@ describe('su-tabset-options', function () {
       <app>
         <su-tabset class="top tabular">
           <su-tab label="Home">Home content</su-tab>
-          <su-tab label="Messages">Messages content</su-tab>
+          <su-tab label="Messages" class="disabled">Messages content</su-tab>
         </su-tabset>
       </app>
     `)
